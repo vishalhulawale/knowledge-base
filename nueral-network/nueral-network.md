@@ -134,6 +134,10 @@ SigmoidGradient = NeuronOutput × (1 - NeuronOutput)
 
 ---
 
+## CNN - Convolutional Nueral Networks
+## RNN - Recurrent Nueral Networks
+
+
 ## References
 
 - [Google Colab Notebook](https://colab.research.google.com/drive/1-lbGiUqYh43GlXt0-WlFOgVqIMouah9L?usp=sharing)  
