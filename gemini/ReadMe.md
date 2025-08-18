@@ -71,7 +71,7 @@ The theory and development of computer systems able to perform tasks normally re
     - Example: Spam email detection, disease diagnosis, sentiment analysis
 
 ## ML model creation steps:
- ![alt text](image.png)
+ ![alt text](image-2.png)
 
 ## ML Process
 1. Trainig: 
@@ -278,3 +278,28 @@ Example:
 - Temperature: Controls randomness in the response. Lower values (e.g., 0.2) make the output more focused and deterministic, while higher values (e.g., 0.8) introduce more randomness and creativity.
 - Top_p: Controls diversity in the response. It limits the model to consider only the top p% of probable next tokens, ensuring a balance between creativity and coherence.
 - Top_k: Limits the model to consider only the top k most probable next tokens, enhancing response quality and relevance.
+
+### Embedings
+![alt text](image-1.png)
+- Embeddings are vector representations of words in a high-dimensional space.
+- Captures semantic relationships and contextual information.
+- Eample - you can use dimentions to represent animals:
+   - Habitat: Aquatic, Terrestrial, Aerial
+   - Diet: Carnivore, Herbivore, Omnivore
+   - Size: Small, Medium, Large
+   - Movement: Walking, Flying, Swimming
+- Widely used in natural language processing tasks
+  - TYext Similarity - Measure semantic similarity between words or phrases
+  - Recommendation Systems - Recommend items based on user preferences
+  - Clustering - Group similar texts
+  - Oulier Detection - Find text that doesn't fit the group
+  - Example: Similarity calculation
+    - Given two sentences:
+      - "The cat sat on the mat."
+      - "The dog lay on the rug."
+    - Calculate similarity between the two sentences using embeddings.
+    - Higher similarity indicates that the sentences are more related in meaning.
+
+### Langchain
+- Build flexible applications with language models
+- It's an abstract framework that allows you to build applications using language models.
