@@ -3,8 +3,6 @@ Discipline within Artificial Intelligence that teaches computers how to make pre
 
 ![alt text](machine-learning.drawio.png)
 
-[Machine Learning Playbook](../../../Downloads/Playbook-Executive-Briefing-Artificial-Intelligence.pdf)
-
 # Supervised Learning
 - Type of machine learning where the model is trained on labeled data.
 - The model learns to map inputs to outputs based on the provided labels.
@@ -101,3 +99,24 @@ https://platform.openai.com/tokenizer
 - The context window is the maximum number of tokens that an LLM can process at once.
 - It determines how much information the model can consider when generating responses.
 ![alt text](image-3.png)
+
+## Masked Language Modeling
+- A training technique where the model learns to predict missing words in a sentence.
+![alt text](image-4.png)
+
+## Improving and Adapting LLMs
+1. Contextual Prompting
+- Prompt Engineering - Crafting specific prompts to guide the model's responses.
+- Articulate as clearly as possible what you want the model to do.
+- This is most cost effective way to improve the model's performance.
+
+2. Retrieval-Augmented Generation (RAG)
+- Combines LLMs with external knowledge sources to enhance responses.
+- Bettter in handlign private or sensitive data.
+- One of drawback of RAG is limitation of the context window.
+![alt text](image-5.png)
+
+3. Fine-Tuning
+- Process of training a pre-trained model on a smaller, task-specific dataset.
+
+## References
