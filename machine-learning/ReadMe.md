@@ -20,8 +20,19 @@ Discipline within Artificial Intelligence that teaches computers how to make pre
     - Support Vector Machines (SVM) - A supervised learning model that finds the hyperplane that best separates different classes in the feature space.
     ![alt text](image.png)
 
-## Clustering
-- Branch of machine learning focused on grouping similar data points together without predefined labels.
+# Unsupervised Learning
+- Type of machine learning where the model is trained on unlabeled data.
+    ## Clustering
+    - Branch of machine learning focused on grouping similar data points together without predefined labels.
+    - Use cases include customer segmentation, anomaly detection, and image compression.
+
+    ## Dimensionality Reduction
+    - Branch of machine learning focused on reducing the number of features in a dataset while preserving its essential structure.
+    - In supervised l;earning, one BIG challenge is to handle the number of features that the algorithm has to deal with.
+
+# Reinforcement Learning
+- Type of machine learning where an agent learns to make decisions by taking actions in an environment to maximize a reward signal.
+- Perform complex objectives while performing multiple sequence of actions.
 
 ## Association Rule Learning
 - Branch of machine learning focused on discovering interesting relationships between variables in large datasets.
@@ -33,3 +44,24 @@ Discipline within Artificial Intelligence that teaches computers how to make pre
 
 ## Shallow Learning
 - Refers to traditional machine learning techniques that do not involve deep neural networks.
+
+## Artificial Neural Networks (ANN)
+![alt text](image-1.png)
+
+- Input data is divided into features.
+- Each feature is assigned a weight.
+- The weighted sum of the features is passed through an activation function to produce an output.
+- The model is trained by adjusting the weights based on the error between the predicted output and the actual output.
+
+## Deep Learning Architectures
+### Recurrent Neural Networks (RNN)
+- Type of neural network designed to handle sequential data.
+- Processes input data sequentially, meaning it takes into account the order of the data points. Slowly adjusting the internal state based on the input sequence.
+
+### Convolutional Neural Networks (CNN)
+- Type of neural network designed to process grid-like data, such as images.
+
+### Transformer
+- Process input data in parallel rather than sequentially.
+- Leverage GPUs for faster training and inference.
+- Attention Mechanism - Allows the model to focus on different parts of the input sequence when making predictions.
