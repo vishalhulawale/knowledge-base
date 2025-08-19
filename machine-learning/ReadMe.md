@@ -16,3 +16,11 @@ Discipline within Artificial Intelligence that teaches computers how to make pre
 
 ## Association Rule Learning
 - Branch of machine learning focused on discovering interesting relationships between variables in large datasets.
+
+## Deep Learning
+- Subset of machine learning that uses neural networks with many layers to analyze various factors of data.
+- Complex Algorithms
+- More computing resources required
+
+## Shallow Learning
+- Refers to traditional machine learning techniques that do not involve deep neural networks.
