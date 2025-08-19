@@ -119,4 +119,12 @@ https://platform.openai.com/tokenizer
 3. Fine-Tuning
 - Process of training a pre-trained model on a smaller, task-specific dataset.
 
-## References
+## Limitations of Gen AI
+1. Prompt Sensitivity: LLMs can produce different outputs based on slight variations in prompts. Prompt engineering is crucial for achieving desired results.
+2. Knowledge Limitations: LLMs may not have access to the most up-to-date information or specialized knowledge. They are trained on data available up to a certain point and may not be aware of recent developments or niche topics. Retrain the model with updated data or use retrieval-augmented generation (RAG) to address this limitation.
+3. Not Deterministic: LLMs can produce different outputs for the same input due to their probabilistic nature. This can lead to variability in responses, which may not always be desirable. Randomness can be controlled by adjusting parameters like temperature and top-k sampling.
+4. Structured Data Handling: LLMs are primarily designed for unstructured text data. They may struggle with structured data formats like tables or databases. Use specialized models or techniques for structured data processing.
+5. Hallucination: LLMs can sometimes generate plausible-sounding but incorrect or nonsensical answers. This is known as hallucination and can be a significant issue for applications requiring high accuracy.
+6. Lack of Common Sense: LLMs may not possess common sense reasoning or understanding of real-world concepts. They rely on patterns learned from training data, which may not always align with human intuition.
+7. Bias and Fairness: LLMs can inherit biases present in their training data, leading to biased or unfair outputs. Addressing bias requires careful dataset curation and model evaluation.
+8. Data Privacy And Security: LLMs may inadvertently expose sensitive information from their training data. Ensuring data privacy and security is crucial, especially in applications involving personal or confidential information.
