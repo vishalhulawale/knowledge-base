@@ -33,6 +33,8 @@
 - Common source control systems include Git, Subversion (SVN), and Mercurial.
 
 ## SDLC Roadblocks
-- *Pinpointing the Root Issue*: Accurately identifying the initial problem is crucial for effective resolution.
-- *Environment Conflicts*: Solving "It works on my machine" issues by ensuring consistent environments across development, testing, and production.
-- *Overcoming Delivery Delays*: Streamlining the software release process to avoid bottlenecks and ensure timely delivery.
+- **Pinpointing the Root Issue***: Accurately identifying the initial problem is crucial for effective resolution.
+- ***Environment Conflicts***: Solving "It works on my machine" issues by ensuring consistent environments across development, testing, and production.
+- ***Overcoming Delivery Delays***: Streamlining the software release process to avoid bottlenecks and ensure timely delivery.
+- ***User Centered Development***: Focusing on user needs and feedback throughout the development process to create a product that meets user expectations.
+- ***Competitive Advantage***: Leveraging unique features and capabilities to differentiate the software in the market.
