@@ -38,3 +38,15 @@
 - ***Overcoming Delivery Delays***: Streamlining the software release process to avoid bottlenecks and ensure timely delivery.
 - ***User Centered Development***: Focusing on user needs and feedback throughout the development process to create a product that meets user expectations.
 - ***Competitive Advantage***: Leveraging unique features and capabilities to differentiate the software in the market.
+
+## DevOps
+- It is a philosophy tha, a set of rules and practices that define a culture that aims to bridge the gap between development and operations teams.
+- Purpose of DevOps is to facilitate and encourage collaboration between departments.
+
+## Cagen's 4 questions for Product Discovery
+1. Will the user but this?
+2. Can the user figure out how to use it?   
+3. Can our engineers build it?
+4. Can our stakeholders support it?
+
+These questions help in validating the product idea and ensuring that it meets user needs, is technically feasible, and has stakeholder support.
