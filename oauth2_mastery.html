@@ -1,0 +1,1886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OAuth2 & OIDC Mastery — Interview Prep for Senior Engineers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c0f; --bg2: #0f1217; --bg3: #141820;
+    --panel: #1a1f2e; --panel2: #1e2433;
+    --border: #2a3042; --border2: #333d52;
+    --text: #cdd6f4; --text2: #a6adc8; --text3: #6c7086;
+    --accent: #89b4fa; --accent2: #74c7ec;
+    --green: #a6e3a1; --yellow: #f9e2af; --red: #f38ba8;
+    --orange: #fab387; --pink: #f5c2e7; --teal: #94e2d5;
+    --mauve: #cba6f7; --blue2: #b4befe;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 14px; line-height: 1.7; display: flex; }
+  #sidebar { position: fixed; top: 0; left: 0; width: 270px; height: 100vh; background: var(--bg2); border-right: 1px solid var(--border); overflow-y: auto; z-index: 100; display: flex; flex-direction: column; }
+  #sidebar::-webkit-scrollbar { width: 4px; }
+  #sidebar::-webkit-scrollbar-track { background: var(--bg2); }
+  #sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+  .sidebar-header { padding: 24px 20px 16px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg2); z-index: 10; }
+  .sidebar-header .logo { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
+  .sidebar-header .logo span { color: var(--teal); }
+  .sidebar-header .sub { font-size: 10px; color: var(--text3); margin-top: 4px; text-transform: uppercase; letter-spacing: 1.5px; }
+  .nav-section { padding: 8px 12px 4px; }
+  .nav-label { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: var(--text3); padding: 10px 8px 4px; display: block; }
+  .nav-item { display: flex; align-items: center; gap: 8px; padding: 7px 8px; border-radius: 6px; color: var(--text2); text-decoration: none; font-size: 12px; cursor: pointer; transition: all 0.15s; border: 1px solid transparent; }
+  .nav-item:hover { background: var(--panel); color: var(--text); border-color: var(--border); }
+  .nav-item.active { background: var(--panel2); color: var(--accent); border-color: var(--border2); }
+  .nav-item .num { font-size: 10px; color: var(--text3); min-width: 18px; }
+  #main { margin-left: 270px; flex: 1; min-height: 100vh; }
+  .hero { background: var(--bg3); border-bottom: 1px solid var(--border); padding: 60px 60px 48px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -40px; right: -40px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(148,226,213,0.07) 0%, transparent 70%); pointer-events: none; }
+  .hero::after { content: 'OAuth2'; position: absolute; bottom: -20px; right: 40px; font-family: 'Syne', sans-serif; font-size: 120px; font-weight: 800; color: rgba(148,226,213,0.04); pointer-events: none; white-space: nowrap; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(148,226,213,0.1); border: 1px solid rgba(148,226,213,0.3); color: var(--teal); padding: 4px 12px; border-radius: 20px; font-size: 11px; margin-bottom: 20px; }
+  .hero h1 { font-family: 'Syne', sans-serif; font-size: 42px; font-weight: 800; color: #fff; line-height: 1.1; letter-spacing: -1px; margin-bottom: 16px; }
+  .hero h1 span { color: var(--teal); }
+  .hero p { color: var(--text2); max-width: 560px; font-size: 13px; margin-bottom: 28px; }
+  .hero-stats { display: flex; gap: 32px; }
+  .hero-stat .val { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: var(--teal); }
+  .hero-stat .lbl { font-size: 11px; color: var(--text3); margin-top: 2px; }
+  .content { padding: 0 60px 80px; }
+  .section { padding-top: 64px; }
+  .section-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+  .section-num { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; color: var(--text3); background: var(--panel); border: 1px solid var(--border); padding: 4px 10px; border-radius: 4px; white-space: nowrap; margin-top: 6px; }
+  .section-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 700; color: #fff; line-height: 1.2; }
+  .section-desc { color: var(--text2); font-size: 12px; margin-top: 6px; }
+  h3 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 600; color: var(--teal); margin: 32px 0 14px; display: flex; align-items: center; gap: 10px; }
+  h3::before { content: '▸'; color: var(--accent); font-size: 12px; }
+  h4 { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; color: var(--yellow); margin: 22px 0 10px; }
+  p { color: var(--text2); margin-bottom: 12px; font-size: 13px; }
+  .code-block { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; margin: 16px 0; overflow: hidden; }
+  .code-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; background: var(--panel); border-bottom: 1px solid var(--border); }
+  .code-lang { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text3); }
+  .code-label { font-size: 11px; color: var(--accent2); }
+  pre { padding: 20px; overflow-x: auto; font-size: 12.5px; line-height: 1.8; }
+  pre::-webkit-scrollbar { height: 4px; }
+  pre::-webkit-scrollbar-track { background: var(--bg2); }
+  pre::-webkit-scrollbar-thumb { background: var(--border2); }
+  .kw { color: var(--mauve); font-weight: 600; }
+  .fn { color: var(--teal); }
+  .str { color: var(--green); }
+  .num { color: var(--orange); }
+  .cmt { color: var(--text3); font-style: italic; }
+  .type { color: var(--yellow); }
+  .op { color: var(--red); }
+  .ann { color: var(--pink); }
+  .cls { color: var(--accent); }
+  .prop { color: var(--blue2); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 16px 0; }
+  .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; margin: 16px 0; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 20px; transition: border-color 0.2s; }
+  .card:hover { border-color: var(--border2); }
+  .card-title { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 8px; }
+  .card p { font-size: 12px; color: var(--text2); margin: 0; }
+  .callout { border-radius: 8px; padding: 16px 20px; margin: 16px 0; display: flex; gap: 12px; font-size: 13px; }
+  .callout .icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .callout p { margin: 0; }
+  .callout.tip { background: rgba(166,227,161,0.08); border: 1px solid rgba(166,227,161,0.25); }
+  .callout.tip p { color: var(--green); }
+  .callout.warn { background: rgba(249,226,175,0.08); border: 1px solid rgba(249,226,175,0.25); }
+  .callout.warn p { color: var(--yellow); }
+  .callout.danger { background: rgba(243,139,168,0.08); border: 1px solid rgba(243,139,168,0.25); }
+  .callout.danger p { color: var(--red); }
+  .callout.info { background: rgba(137,180,250,0.08); border: 1px solid rgba(137,180,250,0.25); }
+  .callout.info p { color: var(--accent); }
+  .tbl-wrap { overflow-x: auto; margin: 16px 0; border-radius: 8px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  thead tr { background: var(--panel); }
+  th { padding: 10px 16px; text-align: left; color: var(--text3); font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  td { padding: 10px 16px; color: var(--text2); border-bottom: 1px solid var(--border); }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: rgba(255,255,255,0.02); }
+  td code, th code { background: var(--panel); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; font-size: 11px; color: var(--accent2); }
+  :not(pre) > code { background: var(--panel); border: 1px solid var(--border); padding: 1px 7px; border-radius: 4px; font-size: 12px; color: var(--teal); }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; }
+  .tag.basic { background: rgba(166,227,161,0.15); color: var(--green); }
+  .tag.inter { background: rgba(249,226,175,0.15); color: var(--yellow); }
+  .tag.adv { background: rgba(243,139,168,0.15); color: var(--red); }
+  .tag.expert { background: rgba(203,166,247,0.15); color: var(--mauve); }
+  ul, ol { padding-left: 20px; margin-bottom: 12px; }
+  li { color: var(--text2); font-size: 13px; margin-bottom: 6px; line-height: 1.6; }
+  li strong { color: var(--text); }
+  li code { background: var(--panel); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; font-size: 11.5px; color: var(--teal); }
+  hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+  .flow-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin: 16px 0; font-size: 12.5px; color: var(--text2); line-height: 2.2; }
+  .flow-box .arrow { color: var(--teal); font-weight: 600; }
+  .flow-box .actor { color: var(--accent); font-weight: 600; }
+  .flow-box .data { color: var(--green); }
+  .progress-header { padding: 12px 20px; border-bottom: 1px solid var(--border); }
+  .progress-bar-wrap { height: 3px; background: var(--border); border-radius: 2px; margin-top: 8px; }
+  .progress-bar { height: 3px; background: linear-gradient(90deg, var(--teal), var(--accent)); border-radius: 2px; width: 0%; transition: width 0.3s; }
+  .scroll-top { position: fixed; bottom: 30px; right: 30px; background: var(--panel2); border: 1px solid var(--border2); color: var(--teal); padding: 10px 14px; border-radius: 8px; cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 12px; opacity: 0; transition: opacity 0.2s; z-index: 200; }
+  .scroll-top.visible { opacity: 1; }
+  .scroll-top:hover { background: var(--border2); }
+  @media (max-width: 900px) {
+    #sidebar { width: 220px; } #main { margin-left: 220px; }
+    .hero { padding: 40px 30px 36px; } .content { padding: 0 30px 60px; }
+    .hero h1 { font-size: 30px; } .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">OAuth<span>2</span> + OIDC</div>
+    <div class="sub">Mastery Guide · Senior Engineers</div>
+  </div>
+  <div class="progress-header">
+    <span style="font-size:10px;color:var(--text3)">READING PROGRESS</span>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+  </div>
+  <div class="nav-section">
+    <span class="nav-label">Foundations</span>
+    <a class="nav-item" href="#s1"><span class="num">01</span> Fundamentals & Why OAuth2</a>
+    <a class="nav-item" href="#s2"><span class="num">02</span> Roles, Actors & Terminology</a>
+    <a class="nav-item" href="#s3"><span class="num">03</span> Grant Types — Complete Map</a>
+    <a class="nav-item" href="#s4"><span class="num">04</span> Auth Code + PKCE Flow</a>
+    <a class="nav-item" href="#s5"><span class="num">05</span> Client Credentials (M2M)</a>
+
+    <span class="nav-label">Tokens & OIDC</span>
+    <a class="nav-item" href="#s6"><span class="num">06</span> JWT Deep Dive</a>
+    <a class="nav-item" href="#s7"><span class="num">07</span> OpenID Connect (OIDC)</a>
+    <a class="nav-item" href="#s8"><span class="num">08</span> Token Lifecycle & Rotation</a>
+    <a class="nav-item" href="#s9"><span class="num">09</span> Scopes, Claims & Audiences</a>
+    <a class="nav-item" href="#s10"><span class="num">10</span> Security Attacks & Mitigations</a>
+
+    <span class="nav-label">Spring Boot + Okta</span>
+    <a class="nav-item" href="#s11"><span class="num">11</span> Spring Boot Resource Server</a>
+    <a class="nav-item" href="#s12"><span class="num">12</span> Spring Boot OAuth2 Client</a>
+    <a class="nav-item" href="#s13"><span class="num">13</span> Okta Integration — Hands-On</a>
+    <a class="nav-item" href="#s14"><span class="num">14</span> Custom Claims & Role Mapping</a>
+
+    <span class="nav-label">Advanced & Production</span>
+    <a class="nav-item" href="#s15"><span class="num">15</span> Microservices JWT Propagation</a>
+    <a class="nav-item" href="#s16"><span class="num">16</span> BFF Pattern & SPA Security</a>
+    <a class="nav-item" href="#s17"><span class="num">17</span> Token Storage Best Practices</a>
+    <a class="nav-item" href="#s18"><span class="num">18</span> DPoP, mTLS & PAR</a>
+    <a class="nav-item" href="#s19"><span class="num">19</span> FAPI & High-Security Profiles</a>
+    <a class="nav-item" href="#s20"><span class="num">20</span> Production: JWKS, Monitoring & Ops</a>
+  </div>
+</nav>
+
+<div id="main">
+  <div class="hero">
+    <div class="hero-badge">● Interview Prep · 2025</div>
+    <h1>Master <span>OAuth2 & OIDC</span><br>End-to-End</h1>
+    <p>Every concept from grant types to PKCE, JWT internals, Okta + Spring Boot hands-on, microservice patterns, BFF, DPoP, FAPI, and production operations — built for senior engineers who interview at depth.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="val">20</div><div class="lbl">Topics</div></div>
+      <div class="hero-stat"><div class="val">80+</div><div class="lbl">Code Examples</div></div>
+      <div class="hero-stat"><div class="val">Okta Ready</div><div class="lbl">Spring Boot 3.x</div></div>
+    </div>
+  </div>
+
+  <div class="content">
+
+<!-- ═══════════════ S1 — FUNDAMENTALS ═══════════════ -->
+<div class="section" id="s1">
+  <div class="section-header">
+    <div class="section-num">01</div>
+    <div>
+      <div class="section-title">Fundamentals & Why OAuth2</div>
+      <div class="section-desc">The problem OAuth2 solves, what it is and isn't, RFC 6749 basics</div>
+    </div>
+  </div>
+
+  <h3>The Problem OAuth2 Solves</h3>
+  <p>Before OAuth2, delegated access meant sharing passwords. If you wanted a third-party app to read your Gmail, you gave it your Google password. The app now had full, permanent, irrevocable access to everything — and you couldn't take it back without changing your password, which affected all other apps too.</p>
+  <p><strong>OAuth2 (RFC 6749) is an authorization framework</strong> — not an authentication protocol — that enables an application to obtain limited access to a user's account on another service, <em>without</em> sharing credentials. It does this by issuing short-lived, scope-limited tokens on behalf of the user after explicit consent.</p>
+
+  <div class="callout info"><span class="icon">💡</span><p><strong>OAuth2 is NOT authentication.</strong> It answers "what can this app do?" not "who is this user?" Authentication (verifying identity) is layered on top via OpenID Connect (OIDC). This distinction is the #1 interview point — OAuth2 without OIDC tells you nothing about who the user is, only that they consented.</p></div>
+
+  <h3>What OAuth2 Is and Isn't</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">OAuth2 IS</div>
+      <p>An authorization framework (RFC 6749). A delegation protocol. A standard for issuing limited-scope access tokens. A way for third-party apps to act on a user's behalf. A mechanism for machine-to-machine API access.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">OAuth2 is NOT</div>
+      <p>An authentication protocol. A definition of token format (that's JWT). A security protocol by itself (needs PKCE, state, nonce). A user management system. A substitute for proper API security design.</p>
+    </div>
+  </div>
+
+  <h3>OAuth2 vs OAuth1</h3>
+  <p>OAuth1 required cryptographic signing of every request (HMAC-SHA1) — complex to implement and nearly impossible to use without a library. OAuth2 relies entirely on HTTPS for transport security, removes request signing, and introduces bearer tokens. Much simpler but requires TLS everywhere. OAuth1 is effectively dead; all modern systems use OAuth2.</p>
+
+  <h3>Core Token Types</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Token</th><th>Purpose</th><th>Lifetime</th><th>Format</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Access Token</strong></td><td>Presented to resource servers to access protected APIs</td><td>Short (minutes–hours)</td><td>JWT or opaque</td></tr>
+      <tr><td><strong>Refresh Token</strong></td><td>Obtain new access tokens without re-authenticating</td><td>Long (hours–days)</td><td>Opaque (mostly)</td></tr>
+      <tr><td><strong>ID Token</strong></td><td>Prove identity of the user (OIDC only)</td><td>Short (minutes)</td><td>Always JWT</td></tr>
+      <tr><td><strong>Authorization Code</strong></td><td>Single-use, short-lived code exchanged for tokens</td><td>Seconds (60s max)</td><td>Opaque string</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout warn"><span class="icon">⚠️</span><p><strong>Bearer tokens are dangerous if leaked.</strong> Anyone who possesses an access token can use it — there's no signature verification by the caller. This is why short expiry, HTTPS everywhere, and token binding (DPoP, mTLS) exist. "Bearer" means "whoever holds it can use it."</p></div>
+
+  <h3>The Trust Model</h3>
+  <p>OAuth2 works because the <strong>Authorization Server (AS)</strong> is the single trusted issuer. Resource servers trust the AS to issue valid tokens. Clients trust the AS to enforce user consent. The user trusts the AS (Okta, Google, etc.) as their identity provider. The AS is the security anchor of the entire system — its compromise breaks everything.</p>
+</div>
+
+<!-- ═══════════════ S2 — ROLES ═══════════════ -->
+<div class="section" id="s2">
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <div>
+      <div class="section-title">Roles, Actors & Terminology</div>
+      <div class="section-desc">Resource Owner, Client, Authorization Server, Resource Server — and how they interact</div>
+    </div>
+  </div>
+
+  <h3>The Four Roles (RFC 6749 §1.1)</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Resource Owner (RO)</div>
+      <p>The entity that owns the protected resource — usually the end user. Can grant or deny access to their data. In machine-to-machine flows, the resource owner may be the system itself.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Client</div>
+      <p>The application requesting access (web app, mobile app, CLI, microservice). Does NOT see the user's credentials. Classified as confidential (can keep a secret) or public (cannot keep a secret — SPA, mobile app).</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Authorization Server (AS)</div>
+      <p>Issues tokens after authenticating the user and obtaining consent. Validates client identity, enforces scopes. Examples: Okta, Auth0, Keycloak, Google, AWS Cognito. The AS is the trust anchor.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Resource Server (RS)</div>
+      <p>Hosts the protected APIs. Validates access tokens (locally via JWT signature, or via introspection). Enforces scope-based authorization. Often the AS and RS are different services.</p>
+    </div>
+  </div>
+
+  <h3>Confidential vs Public Clients</h3>
+  <p>This distinction drives which flows and security features are available:</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Property</th><th>Confidential Client</th><th>Public Client</th></tr></thead>
+    <tbody>
+      <tr><td>Can keep a client_secret?</td><td>Yes (server-side app)</td><td>No (SPA, mobile, native)</td></tr>
+      <tr><td>Authentication method</td><td>client_secret_post, client_secret_jwt, private_key_jwt</td><td>None (uses PKCE instead)</td></tr>
+      <tr><td>Examples</td><td>Spring Boot API, Node.js server, background service</td><td>React SPA, iOS app, CLI tool</td></tr>
+      <tr><td>Refresh tokens</td><td>Yes, with rotation optional</td><td>Yes, but MUST use rotation</td></tr>
+      <tr><td>PKCE required?</td><td>Recommended (RFC 9700)</td><td>Mandatory</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout info"><span class="icon">💡</span><p><strong>RFC 9700 (OAuth 2.1 draft)</strong> makes PKCE mandatory for ALL clients — even confidential ones — and removes the implicit grant and ROPC grant entirely. While still a draft, most modern AS implementations follow these recommendations. Interview tip: mention OAuth 2.1 to signal currency.</p></div>
+
+  <h3>Client Authentication Methods</h3>
+  <p>How a confidential client proves its identity to the token endpoint:</p>
+  <ul>
+    <li><strong>client_secret_basic</strong>: HTTP Basic Auth header with base64(client_id:client_secret). Simple but the secret travels in every request.</li>
+    <li><strong>client_secret_post</strong>: client_id and client_secret in POST body. Slightly worse than basic (body logging more common).</li>
+    <li><strong>client_secret_jwt</strong>: Client generates a JWT signed with the shared secret. Time-limited, replay-resistant. Better than raw secret transmission.</li>
+    <li><strong>private_key_jwt</strong>: Client signs a JWT with its private key; AS verifies with client's registered public key. Most secure — secret never transmitted. Used in FAPI.</li>
+    <li><strong>tls_client_auth / self_signed_tls_client_auth</strong>: Mutual TLS — client presents a certificate. Used in banking/FAPI environments.</li>
+  </ul>
+
+  <h3>Key Endpoints</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Endpoint</th><th>Purpose</th><th>RFC</th></tr></thead>
+    <tbody>
+      <tr><td><code>/authorize</code></td><td>Start auth flow, redirect user to AS login/consent</td><td>RFC 6749</td></tr>
+      <tr><td><code>/token</code></td><td>Exchange code, refresh token, or credentials for tokens</td><td>RFC 6749</td></tr>
+      <tr><td><code>/introspect</code></td><td>Validate opaque token, get metadata</td><td>RFC 7662</td></tr>
+      <tr><td><code>/revoke</code></td><td>Invalidate a token or refresh token family</td><td>RFC 7009</td></tr>
+      <tr><td><code>/userinfo</code></td><td>Return claims about authenticated user (OIDC)</td><td>OIDC Core</td></tr>
+      <tr><td><code>/.well-known/openid-configuration</code></td><td>Discovery document — all AS endpoint URLs + capabilities</td><td>OIDC Discovery</td></tr>
+      <tr><td><code>/.well-known/jwks.json</code></td><td>Public keys for JWT signature verification</td><td>RFC 7517</td></tr>
+      <tr><td><code>/par</code></td><td>Pushed Authorization Requests — pre-register auth params</td><td>RFC 9126</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ═══════════════ S3 — GRANT TYPES ═══════════════ -->
+<div class="section" id="s3">
+  <div class="section-header">
+    <div class="section-num">03</div>
+    <div>
+      <div class="section-title">Grant Types — Complete Map</div>
+      <div class="section-desc">When to use each flow, what's deprecated, and why</div>
+    </div>
+  </div>
+
+  <h3>Grant Type Decision Matrix</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Grant Type</th><th>Use Case</th><th>User Involved?</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Authorization Code + PKCE</strong></td><td>Web app, SPA, mobile — user-facing</td><td>Yes</td><td>✅ Recommended (all clients)</td></tr>
+      <tr><td><strong>Client Credentials</strong></td><td>Machine-to-machine, service APIs</td><td>No</td><td>✅ Standard M2M</td></tr>
+      <tr><td><strong>Device Authorization</strong></td><td>Smart TV, CLI, devices with no browser</td><td>Yes (on another device)</td><td>✅ RFC 8628</td></tr>
+      <tr><td><strong>Refresh Token</strong></td><td>Silent access token renewal</td><td>No (after initial auth)</td><td>✅ Standard</td></tr>
+      <tr><td><strong>Token Exchange</strong></td><td>Microservice impersonation, delegation</td><td>No</td><td>✅ RFC 8693</td></tr>
+      <tr><td>~~Implicit~~</td><td>Replaced by Auth Code + PKCE for SPAs</td><td>Yes</td><td>❌ Deprecated (RFC 9700)</td></tr>
+      <tr><td>~~ROPC~~</td><td>Direct username/password exchange</td><td>Yes (credentials shared)</td><td>❌ Deprecated (RFC 9700)</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Why Implicit Grant Was Deprecated</h3>
+  <p>Implicit returned the access token directly in the URL fragment (<code>#access_token=…</code>) after the redirect — no code exchange step. This was designed for SPAs before CORS was widely supported. Problems:</p>
+  <ul>
+    <li>Token in URL fragment appears in browser history, referrer headers, server logs, and proxy logs</li>
+    <li>No way to authenticate the client — any app could impersonate the client_id</li>
+    <li>Cannot issue refresh tokens (tokens in fragments are tab-local)</li>
+    <li>Open to token injection attacks — attacker can inject their token into your app's redirect</li>
+  </ul>
+  <p>Auth Code + PKCE solves all of these by keeping the token exchange server-side and authenticating via the PKCE code_verifier.</p>
+
+  <h3>Why ROPC (Resource Owner Password Credentials) Was Deprecated</h3>
+  <p>ROPC had the client collect the user's username and password directly and send them to the AS. This defeats the entire purpose of OAuth2 — the user's credentials are exposed to the client, which might be a third-party app. It also prevents multi-factor authentication and social login. Modern guidance: never use ROPC; use the Authorization Code flow even for first-party apps.</p>
+
+  <h3>Device Authorization Grant (RFC 8628)</h3>
+  <p>For devices with limited input (Smart TVs, IoT, CLI tools). The device polls the token endpoint while displaying a user code; the user visits a verification URL on a separate device (phone/laptop) and approves.</p>
+  <div class="flow-box">
+    <span class="actor">Device</span> <span class="arrow">→ POST /device_authorization →</span> <span class="actor">AS</span><br>
+    <span class="actor">AS</span> <span class="arrow">→</span> <span class="data">{ device_code, user_code, verification_uri, interval }</span><br>
+    <span class="actor">Device</span> displays: <span class="data">"Visit example.okta.com/activate, enter code BDFH-JKQR"</span><br>
+    <span class="actor">Device</span> <span class="arrow">→ polls POST /token (device_code) every interval →</span> <span class="actor">AS</span><br>
+    <span class="actor">User</span> visits URL on phone, authenticates, approves<br>
+    <span class="actor">AS</span> <span class="arrow">→</span> <span class="data">{ access_token, refresh_token }</span> on next poll
+  </div>
+</div>
+
+<!-- ═══════════════ S4 — AUTH CODE + PKCE ═══════════════ -->
+<div class="section" id="s4">
+  <div class="section-header">
+    <div class="section-num">04</div>
+    <div>
+      <div class="section-title">Authorization Code + PKCE Flow</div>
+      <div class="section-desc">Step-by-step mechanics, state, nonce, code_verifier — the recommended flow for all user-facing clients</div>
+    </div>
+  </div>
+
+  <h3>Full Authorization Code + PKCE Flow</h3>
+  <div class="flow-box">
+    <strong style="color:var(--text)">Step 1 — Client generates PKCE parameters</strong><br>
+    <span class="data">code_verifier</span> = cryptographically random 43–128 char string<br>
+    <span class="data">code_challenge</span> = BASE64URL(SHA256(code_verifier))  <span class="cmt">← S256 method</span><br>
+    <span class="data">state</span> = cryptographically random string  <span class="cmt">← CSRF protection</span><br>
+    <br>
+    <strong style="color:var(--text)">Step 2 — Redirect to Authorization Endpoint</strong><br>
+    <span class="actor">Browser</span> <span class="arrow">→ GET /authorize?</span><br>
+    &nbsp;&nbsp;<span class="prop">response_type</span>=<span class="data">code</span><br>
+    &nbsp;&nbsp;<span class="prop">client_id</span>=<span class="data">my-app</span><br>
+    &nbsp;&nbsp;<span class="prop">redirect_uri</span>=<span class="data">https://app.example.com/callback</span><br>
+    &nbsp;&nbsp;<span class="prop">scope</span>=<span class="data">openid profile email</span><br>
+    &nbsp;&nbsp;<span class="prop">state</span>=<span class="data">abc123xyz</span><br>
+    &nbsp;&nbsp;<span class="prop">code_challenge</span>=<span class="data">E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM</span><br>
+    &nbsp;&nbsp;<span class="prop">code_challenge_method</span>=<span class="data">S256</span><br>
+    <br>
+    <strong style="color:var(--text)">Step 3 — User authenticates &amp; consents at AS</strong><br>
+    <span class="actor">AS</span> shows login page → user enters credentials → MFA → consent screen<br>
+    <br>
+    <strong style="color:var(--text)">Step 4 — AS redirects back with authorization code</strong><br>
+    <span class="actor">AS</span> <span class="arrow">→ 302 redirect →</span> <span class="data">https://app.example.com/callback?code=AUTH_CODE&amp;state=abc123xyz</span><br>
+    Client <strong>MUST</strong> verify state matches what was sent (CSRF check)<br>
+    <br>
+    <strong style="color:var(--text)">Step 5 — Exchange code for tokens (back-channel)</strong><br>
+    <span class="actor">Server</span> <span class="arrow">→ POST /token →</span> <span class="actor">AS</span><br>
+    &nbsp;&nbsp;<span class="prop">grant_type</span>=<span class="data">authorization_code</span><br>
+    &nbsp;&nbsp;<span class="prop">code</span>=<span class="data">AUTH_CODE</span><br>
+    &nbsp;&nbsp;<span class="prop">redirect_uri</span>=<span class="data">https://app.example.com/callback</span><br>
+    &nbsp;&nbsp;<span class="prop">code_verifier</span>=<span class="data">(original random string)</span>  <span class="cmt">← AS hashes and compares to challenge</span><br>
+    &nbsp;&nbsp;<span class="prop">client_id</span>=<span class="data">my-app</span>  [+ client_secret for confidential clients]<br>
+    <br>
+    <strong style="color:var(--text)">Step 6 — AS returns tokens</strong><br>
+    <span class="data">{ access_token, token_type: "Bearer", expires_in, refresh_token, id_token }</span>
+  </div>
+
+  <h3>PKCE — Why It Works</h3>
+  <p>PKCE (Proof Key for Code Exchange, RFC 7636) prevents <strong>authorization code interception attacks</strong>. Scenario: on mobile, a malicious app registers the same custom URL scheme as your app and steals the authorization code from the redirect. Without PKCE, the attacker can exchange that code for tokens. With PKCE, they can't — because they don't have the <code>code_verifier</code> that was generated in your app's memory and sent with the token exchange.</p>
+  <p>The AS stores the <code>code_challenge</code> (hash of verifier) alongside the issued code. When the token exchange arrives with <code>code_verifier</code>, the AS computes SHA256(code_verifier) and compares it — only the original requester can produce the matching verifier.</p>
+
+  <div class="callout tip"><span class="icon">✅</span><p><strong>Always use S256</strong> (SHA-256) as <code>code_challenge_method</code>, never <code>plain</code>. The <code>plain</code> method sends the verifier directly, defeating the purpose — an interceptor gets both the code AND the verifier.</p></div>
+
+  <h3>State Parameter — CSRF Protection</h3>
+  <p>The <code>state</code> parameter binds the authorization request to the user's session. Before redirecting to the AS, store the state value in the session (or a signed cookie). After the callback, verify the returned state matches. This prevents CSRF attacks where an attacker tricks a user's browser into completing an OAuth flow initiated by the attacker.</p>
+
+  <h3>Nonce — Replay Protection for ID Tokens</h3>
+  <p>The <code>nonce</code> parameter is included in the authorization request and must appear in the returned ID Token's <code>nonce</code> claim. The client verifies this after receiving the ID Token. This prevents replay attacks where an attacker captures an ID Token and replays it to another session.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">HTTP</span><span class="code-label">Authorization request with all security parameters</span></div>
+    <pre><span class="cmt">GET /oauth2/v1/authorize HTTP/1.1
+Host: dev-12345.okta.com</span>
+
+<span class="prop">response_type</span>=<span class="str">code</span>
+<span class="prop">&client_id</span>=<span class="str">0oa1b2c3d4e5f6g7h8i9</span>
+<span class="prop">&redirect_uri</span>=<span class="str">https%3A%2F%2Fapp.example.com%2Fcallback</span>
+<span class="prop">&scope</span>=<span class="str">openid+profile+email+offline_access</span>
+<span class="prop">&state</span>=<span class="str">J7CvSx9mNqR8pZkL4wTyH2oB</span>        <span class="cmt">← CSRF token (32 random bytes)</span>
+<span class="prop">&nonce</span>=<span class="str">aP9kX3mQ7nZ1eW8vF4tY5sL</span>         <span class="cmt">← Replay protection for ID token</span>
+<span class="prop">&code_challenge</span>=<span class="str">E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM</span>
+<span class="prop">&code_challenge_method</span>=<span class="str">S256</span>
+<span class="prop">&prompt</span>=<span class="str">consent</span>                        <span class="cmt">← Force consent screen re-display</span>
+<span class="prop">&max_age</span>=<span class="str">3600</span>                          <span class="cmt">← Max seconds since last user auth</span></pre>
+  </div>
+</div>
+
+<!-- ═══════════════ S5 — CLIENT CREDENTIALS ═══════════════ -->
+<div class="section" id="s5">
+  <div class="section-header">
+    <div class="section-num">05</div>
+    <div>
+      <div class="section-title">Client Credentials — Machine-to-Machine</div>
+      <div class="section-desc">Service-to-service auth, no user involved, scopes as permissions</div>
+    </div>
+  </div>
+
+  <h3>Client Credentials Flow</h3>
+  <p>The simplest OAuth2 flow — no user, no browser redirect. The client authenticates directly with the AS using its own credentials and receives an access token representing the client itself (not any user). Used for: service-to-service API calls, background jobs, daemons, microservice-to-microservice communication.</p>
+  <div class="flow-box">
+    <span class="actor">Service A</span> <span class="arrow">→ POST /token →</span> <span class="actor">AS</span><br>
+    &nbsp;&nbsp;<span class="prop">grant_type</span>=<span class="data">client_credentials</span><br>
+    &nbsp;&nbsp;<span class="prop">client_id</span>=<span class="data">service-a-client</span><br>
+    &nbsp;&nbsp;<span class="prop">client_secret</span>=<span class="data">s3cr3t</span>  <span class="cmt">← or private_key_jwt for higher security</span><br>
+    &nbsp;&nbsp;<span class="prop">scope</span>=<span class="data">inventory:read orders:write</span><br>
+    <br>
+    <span class="actor">AS</span> <span class="arrow">→</span> <span class="data">{ access_token, token_type, expires_in, scope }</span><br>
+    <span class="cmt">Note: NO refresh_token — just get a new one when this expires</span><br>
+    <br>
+    <span class="actor">Service A</span> <span class="arrow">→ GET /api/inventory →</span> <span class="actor">Service B (RS)</span><br>
+    &nbsp;&nbsp;<span class="prop">Authorization: Bearer</span> <span class="data">&lt;access_token&gt;</span>
+  </div>
+
+  <h3>Token Caching for Client Credentials</h3>
+  <p>Client credentials tokens have no user session — they can and should be cached for their full lifetime. Fetching a new token on every API call is wasteful and adds latency. Cache the token until <code>expires_in - buffer</code> (typically subtract 30–60 seconds as buffer for clock skew).</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Java</span><span class="code-label">Token cache for client credentials (Spring)</span></div>
+    <pre><span class="ann">@Component</span>
+<span class="kw">public class</span> <span class="cls">ClientCredentialsTokenProvider</span> {
+
+    <span class="kw">private final</span> <span class="type">OAuth2AuthorizedClientManager</span> clientManager;
+    <span class="kw">private volatile</span> <span class="type">OAuth2AccessToken</span> cachedToken;
+
+    <span class="kw">public</span> <span class="type">String</span> <span class="fn">getAccessToken</span>() {
+        <span class="kw">if</span> (isTokenValid()) <span class="kw">return</span> cachedToken.getTokenValue();
+
+        <span class="type">OAuth2AuthorizeRequest</span> request = <span class="cls">OAuth2AuthorizeRequest</span>
+            .withClientRegistrationId(<span class="str">"okta-m2m"</span>)
+            .principal(<span class="str">"service-account"</span>)
+            .build();
+
+        <span class="type">OAuth2AuthorizedClient</span> client = clientManager.authorize(request);
+        cachedToken = client.getAccessToken();
+        <span class="kw">return</span> cachedToken.getTokenValue();
+    }
+
+    <span class="kw">private boolean</span> <span class="fn">isTokenValid</span>() {
+        <span class="kw">if</span> (cachedToken == <span class="kw">null</span>) <span class="kw">return false</span>;
+        <span class="type">Instant</span> expiry = cachedToken.getExpiresAt();
+        <span class="kw">return</span> expiry != <span class="kw">null</span> &&
+               expiry.isAfter(<span class="cls">Instant</span>.now().plusSeconds(<span class="num">60</span>)); <span class="cmt">// 60s buffer</span>
+    }
+}</pre>
+  </div>
+
+  <h3>Scopes in Client Credentials</h3>
+  <p>In client credentials flow, scopes represent the permissions of the service itself — not delegated user permissions. Define them to express what APIs the service can call. Okta supports custom scopes on API authorization servers. A good design uses verb-noun scopes: <code>inventory:read</code>, <code>orders:write</code>, <code>payments:process</code>. Validate these on the resource server.</p>
+
+  <div class="callout warn"><span class="icon">⚠️</span><p><strong>Rotate client secrets regularly.</strong> A leaked client secret in a client credentials flow gives full API access with no user to be suspicious. Use private_key_jwt or mTLS for high-security services — no secret travels over the wire. Store secrets in a vault (HashiCorp Vault, AWS Secrets Manager), not in environment variables or config files.</p></div>
+</div>
+
+<!-- ═══════════════ S6 — JWT DEEP DIVE ═══════════════ -->
+<div class="section" id="s6">
+  <div class="section-header">
+    <div class="section-num">06</div>
+    <div>
+      <div class="section-title">JWT Deep Dive</div>
+      <div class="section-desc">Structure, signing algorithms, validation, JWKS, attack vectors</div>
+    </div>
+  </div>
+
+  <h3>JWT Structure</h3>
+  <p>A JWT (JSON Web Token, RFC 7519) is three Base64URL-encoded JSON objects separated by dots: <code>HEADER.PAYLOAD.SIGNATURE</code>. None of it is encrypted by default (that's JWE) — it's signed, not secret. <strong>Never put sensitive data in a JWT payload unless using JWE.</strong></p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">JWT</span><span class="code-label">Decoded JWT structure</span></div>
+    <pre><span class="cmt">── HEADER (algorithm + token type) ──────────────────</span>
+{
+  <span class="prop">"alg"</span>: <span class="str">"RS256"</span>,        <span class="cmt">// Signing algorithm</span>
+  <span class="prop">"typ"</span>: <span class="str">"JWT"</span>,          <span class="cmt">// Token type</span>
+  <span class="prop">"kid"</span>: <span class="str">"abc123"</span>        <span class="cmt">// Key ID — used to find the right key in JWKS</span>
+}
+
+<span class="cmt">── PAYLOAD (claims) ──────────────────────────────────</span>
+{
+  <span class="prop">"iss"</span>: <span class="str">"https://dev-123.okta.com/oauth2/default"</span>,  <span class="cmt">// Issuer</span>
+  <span class="prop">"sub"</span>: <span class="str">"00u1a2b3c4d5e6f7"</span>,       <span class="cmt">// Subject (user ID)</span>
+  <span class="prop">"aud"</span>: <span class="str">"https://api.example.com"</span>, <span class="cmt">// Audience (MUST match RS)</span>
+  <span class="prop">"iat"</span>: <span class="num">1718000000</span>,              <span class="cmt">// Issued At (Unix timestamp)</span>
+  <span class="prop">"exp"</span>: <span class="num">1718003600</span>,              <span class="cmt">// Expiration (iat + 3600s)</span>
+  <span class="prop">"nbf"</span>: <span class="num">1718000000</span>,              <span class="cmt">// Not Before</span>
+  <span class="prop">"jti"</span>: <span class="str">"k9f2mX3nP7qR"</span>,          <span class="cmt">// JWT ID — unique per token (replay prevention)</span>
+  <span class="prop">"scope"</span>: <span class="str">"openid profile email"</span>,
+  <span class="prop">"scp"</span>: [<span class="str">"openid"</span>, <span class="str">"profile"</span>, <span class="str">"email"</span>],  <span class="cmt">// Okta uses array</span>
+  <span class="prop">"groups"</span>: [<span class="str">"ROLE_ADMIN"</span>, <span class="str">"ROLE_USER"</span>],   <span class="cmt">// Custom claim from Okta</span>
+  <span class="prop">"email"</span>: <span class="str">"alice@example.com"</span>
+}
+
+<span class="cmt">── SIGNATURE ─────────────────────────────────────────</span>
+RSASHA256(
+  base64url(header) + "." + base64url(payload),
+  privateKey     <span class="cmt">← AS signs with private key</span>
+)                <span class="cmt">← RS verifies with AS's public key (from JWKS)</span></pre>
+  </div>
+
+  <h3>Signing Algorithms</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Algorithm</th><th>Type</th><th>Key</th><th>Use Case</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><strong>RS256</strong></td><td>Asymmetric</td><td>RSA 2048+</td><td>Most common for AS-issued tokens</td><td>AS signs with private key; anyone can verify with public key (JWKS)</td></tr>
+      <tr><td><strong>RS384/RS512</strong></td><td>Asymmetric</td><td>RSA 3072/4096</td><td>Higher security requirements</td><td>Slower, larger signatures</td></tr>
+      <tr><td><strong>ES256</strong></td><td>Asymmetric</td><td>ECDSA P-256</td><td>Modern, compact tokens</td><td>Smaller signatures than RSA, faster verification</td></tr>
+      <tr><td><strong>PS256</strong></td><td>Asymmetric</td><td>RSA-PSS</td><td>FAPI, high-security</td><td>Probabilistic, more secure than PKCS1v15</td></tr>
+      <tr><td><strong>HS256</strong></td><td>Symmetric</td><td>Shared secret</td><td>Internal services only</td><td>NEVER for AS-issued tokens — secret must be shared with every RS</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout danger"><span class="icon">🔴</span><p><strong>Never accept "alg: none".</strong> A critical JWT vulnerability: set alg=none in the header and strip the signature — some libraries accept this if not explicitly configured to reject it. Always whitelist accepted algorithms explicitly. Also never accept HS256 when RS256 is expected — an attacker could take an RS256 public key, use it as an HS256 secret, and forge tokens.</p></div>
+
+  <h3>Complete JWT Validation Checklist</h3>
+  <p>Resource servers MUST validate every incoming JWT on every request:</p>
+  <ol>
+    <li><strong>Signature</strong>: Verify using the public key fetched from the AS's JWKS endpoint, matched by <code>kid</code> header claim</li>
+    <li><strong>Algorithm</strong>: Confirm <code>alg</code> is in your allowed list (never none, never unexpected algorithm)</li>
+    <li><strong>Expiry (<code>exp</code>)</strong>: Reject if current time ≥ exp (allow small clock skew, e.g., 5 seconds)</li>
+    <li><strong>Not Before (<code>nbf</code>)</strong>: Reject if current time &lt; nbf</li>
+    <li><strong>Issuer (<code>iss</code>)</strong>: Must exactly match your expected AS URL</li>
+    <li><strong>Audience (<code>aud</code>)</strong>: Must contain your resource server's identifier</li>
+    <li><strong>Token Type (<code>typ</code>)</strong>: For access tokens, should be "at+JWT" (RFC 9068) or "JWT"</li>
+  </ol>
+
+  <h3>JWKS — JSON Web Key Set</h3>
+  <p>The AS publishes its public keys at a <code>/.well-known/jwks.json</code> endpoint. Resource servers fetch these keys to verify JWT signatures. Keys have a <code>kid</code> (Key ID) that matches the JWT header's <code>kid</code> — this tells the RS exactly which key to use for verification.</p>
+  <p>Cache JWKS with a reasonable TTL (5–60 minutes). When you receive a JWT with an unknown <code>kid</code>, refresh the JWKS once (the AS may have rotated keys). If still not found, reject the token. Spring Security handles JWKS caching automatically via <code>NimbusJwtDecoder</code>.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">JSON</span><span class="code-label">JWKS endpoint response</span></div>
+    <pre>{
+  <span class="prop">"keys"</span>: [
+    {
+      <span class="prop">"kty"</span>: <span class="str">"RSA"</span>,           <span class="cmt">// Key type</span>
+      <span class="prop">"alg"</span>: <span class="str">"RS256"</span>,        <span class="cmt">// Algorithm</span>
+      <span class="prop">"use"</span>: <span class="str">"sig"</span>,          <span class="cmt">// Usage: sig (signing) or enc (encryption)</span>
+      <span class="prop">"kid"</span>: <span class="str">"abc123"</span>,       <span class="cmt">// Key ID — match against JWT header</span>
+      <span class="prop">"n"</span>: <span class="str">"sj8qL..."</span>,       <span class="cmt">// RSA modulus (base64url)</span>
+      <span class="prop">"e"</span>: <span class="str">"AQAB"</span>,           <span class="cmt">// RSA exponent</span>
+      <span class="prop">"x5c"</span>: [<span class="str">"MIICpD..."</span>]  <span class="cmt">// X.509 certificate chain (optional)</span>
+    },
+    {
+      <span class="prop">"kid"</span>: <span class="str">"xyz789"</span>,       <span class="cmt">// Previous key (kept during rotation window)</span>
+      <span class="prop">"kty"</span>: <span class="str">"EC"</span>,
+      <span class="prop">"alg"</span>: <span class="str">"ES256"</span>,
+      <span class="prop">"crv"</span>: <span class="str">"P-256"</span>,
+      <span class="prop">"x"</span>: <span class="str">"f83OJ3D2x..."</span>,
+      <span class="prop">"y"</span>: <span class="str">"x_FEzRu9m..."</span>
+    }
+  ]
+}</pre>
+  </div>
+</div>
+
+<!-- ═══════════════ S7 — OIDC ═══════════════ -->
+<div class="section" id="s7">
+  <div class="section-header">
+    <div class="section-num">07</div>
+    <div>
+      <div class="section-title">OpenID Connect (OIDC)</div>
+      <div class="section-desc">Identity layer on OAuth2 — ID tokens, UserInfo, discovery, claims</div>
+    </div>
+  </div>
+
+  <h3>OIDC = OAuth2 + Identity Layer</h3>
+  <p>OpenID Connect (OIDC) is a thin identity layer built on top of OAuth2. It adds:</p>
+  <ul>
+    <li><strong>ID Token</strong>: A JWT containing claims about the authenticated user, returned alongside the access token</li>
+    <li><strong>UserInfo Endpoint</strong>: An API that returns user profile claims using the access token</li>
+    <li><strong>Standard Claims</strong>: A defined set of user attributes (sub, name, email, picture, etc.)</li>
+    <li><strong>Discovery</strong>: <code>/.well-known/openid-configuration</code> — machine-readable AS capabilities</li>
+    <li><strong>Dynamic Client Registration</strong> (RFC 7591): Register clients programmatically</li>
+  </ul>
+  <p>To trigger OIDC, include <code>openid</code> in the scope. The AS then issues an ID Token alongside the access token.</p>
+
+  <h3>ID Token vs Access Token</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Property</th><th>ID Token</th><th>Access Token</th></tr></thead>
+    <tbody>
+      <tr><td>Purpose</td><td>Prove who the user is (authentication)</td><td>Access protected resources (authorization)</td></tr>
+      <tr><td>Consumer</td><td>The client application</td><td>Resource servers</td></tr>
+      <tr><td>Format</td><td>Always JWT (OIDC requires it)</td><td>JWT or opaque</td></tr>
+      <tr><td>Contains</td><td>Identity claims (sub, email, name, nonce)</td><td>Authorization claims (scp, aud, groups)</td></tr>
+      <tr><td>Should be sent to APIs?</td><td><strong>No — never send ID token to APIs</strong></td><td>Yes, in Authorization: Bearer header</td></tr>
+      <tr><td>Audience (aud)</td><td>Must be the client_id</td><td>Must be the resource server identifier</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout danger"><span class="icon">🔴</span><p><strong>Never send an ID token to your API.</strong> The ID token is meant for the client application to verify identity — it's not an access credential for resource servers. APIs should only receive access tokens. This is a common mistake in poorly designed OAuth integrations.</p></div>
+
+  <h3>Standard OIDC Claims</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Claim</th><th>Scope Required</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>sub</code></td><td>openid</td><td>Unique subject identifier — stable, never changes for a user at this AS</td></tr>
+      <tr><td><code>name</code></td><td>profile</td><td>Full display name</td></tr>
+      <tr><td><code>given_name</code></td><td>profile</td><td>First name</td></tr>
+      <tr><td><code>family_name</code></td><td>profile</td><td>Last name</td></tr>
+      <tr><td><code>picture</code></td><td>profile</td><td>Profile photo URL</td></tr>
+      <tr><td><code>email</code></td><td>email</td><td>Email address</td></tr>
+      <tr><td><code>email_verified</code></td><td>email</td><td>Boolean — has email been verified</td></tr>
+      <tr><td><code>phone_number</code></td><td>phone</td><td>E.164 format phone number</td></tr>
+      <tr><td><code>address</code></td><td>address</td><td>Physical mailing address object</td></tr>
+      <tr><td><code>updated_at</code></td><td>profile</td><td>Unix timestamp of last profile update</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>OIDC Discovery Document</h3>
+  <p>Every OIDC provider publishes a discovery document at <code>{issuer}/.well-known/openid-configuration</code>. This JSON document contains all endpoints, supported algorithms, supported scopes, and capabilities. Spring Security and all modern OAuth2 clients use this for auto-configuration — you only need to provide the issuer URL.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">JSON</span><span class="code-label">Okta discovery document (abridged)</span></div>
+    <pre><span class="cmt">GET https://dev-123.okta.com/oauth2/default/.well-known/openid-configuration</span>
+
+{
+  <span class="prop">"issuer"</span>: <span class="str">"https://dev-123.okta.com/oauth2/default"</span>,
+  <span class="prop">"authorization_endpoint"</span>: <span class="str">"https://dev-123.okta.com/oauth2/default/v1/authorize"</span>,
+  <span class="prop">"token_endpoint"</span>: <span class="str">"https://dev-123.okta.com/oauth2/default/v1/token"</span>,
+  <span class="prop">"userinfo_endpoint"</span>: <span class="str">"https://dev-123.okta.com/oauth2/default/v1/userinfo"</span>,
+  <span class="prop">"jwks_uri"</span>: <span class="str">"https://dev-123.okta.com/oauth2/default/v1/keys"</span>,
+  <span class="prop">"introspection_endpoint"</span>: <span class="str">"https://dev-123.okta.com/oauth2/default/v1/introspect"</span>,
+  <span class="prop">"revocation_endpoint"</span>: <span class="str">"https://dev-123.okta.com/oauth2/default/v1/revoke"</span>,
+  <span class="prop">"response_types_supported"</span>: [<span class="str">"code"</span>],
+  <span class="prop">"grant_types_supported"</span>: [<span class="str">"authorization_code"</span>, <span class="str">"refresh_token"</span>, <span class="str">"client_credentials"</span>],
+  <span class="prop">"subject_types_supported"</span>: [<span class="str">"public"</span>],
+  <span class="prop">"id_token_signing_alg_values_supported"</span>: [<span class="str">"RS256"</span>],
+  <span class="prop">"scopes_supported"</span>: [<span class="str">"openid"</span>, <span class="str">"email"</span>, <span class="str">"profile"</span>, <span class="str">"offline_access"</span>],
+  <span class="prop">"claims_supported"</span>: [<span class="str">"sub"</span>, <span class="str">"iss"</span>, <span class="str">"aud"</span>, <span class="str">"iat"</span>, <span class="str">"exp"</span>, <span class="str">"email"</span>, <span class="str">"name"</span>],
+  <span class="prop">"code_challenge_methods_supported"</span>: [<span class="str">"S256"</span>],
+  <span class="prop">"dpop_signing_alg_values_supported"</span>: [<span class="str">"RS256"</span>, <span class="str">"ES256"</span>]
+}</pre>
+  </div>
+
+  <h3>UserInfo Endpoint</h3>
+  <p>The UserInfo endpoint returns claims about the authenticated user based on the scopes granted. Use it when claims are too large to embed in the access token, or when you need fresh data. Protected by the access token (Bearer header). Response is a JSON object or a JWT (if <code>userinfo_signed_response_alg</code> is configured).</p>
+</div>
+
+
+<!-- ═══════════════ S8 — TOKEN LIFECYCLE ═══════════════ -->
+<div class="section" id="s8">
+  <div class="section-header">
+    <div class="section-num">08</div>
+    <div>
+      <div class="section-title">Token Lifecycle — Refresh, Rotation & Revocation</div>
+      <div class="section-desc">Refresh token mechanics, silent renewal, rotation strategies, revocation (RFC 7009)</div>
+    </div>
+  </div>
+
+  <h3>Access Token Expiry & Silent Renewal</h3>
+  <p>Access tokens are intentionally short-lived (minutes to hours). When an access token expires, the client uses its refresh token to get a new access token without asking the user to log in again. This is "silent renewal" — transparent to the user. The refresh token itself has a longer lifetime (hours to days) and is typically opaque (not a JWT) so it can be revoked server-side.</p>
+
+  <div class="flow-box">
+    <span class="actor">Client</span> <span class="arrow">→ POST /token →</span> <span class="actor">AS</span><br>
+    &nbsp;&nbsp;<span class="prop">grant_type</span>=<span class="data">refresh_token</span><br>
+    &nbsp;&nbsp;<span class="prop">refresh_token</span>=<span class="data">&lt;opaque refresh token&gt;</span><br>
+    &nbsp;&nbsp;<span class="prop">client_id</span>=<span class="data">my-app</span>  [+ client_secret for confidential clients]<br>
+    <br>
+    <span class="actor">AS</span> <span class="arrow">→</span> <span class="data">{ access_token, expires_in, refresh_token (new, if rotation enabled) }</span>
+  </div>
+
+  <h3>Refresh Token Rotation</h3>
+  <p>With rotation, every refresh token use issues a <strong>new refresh token</strong> and invalidates the old one. This enables detection of refresh token theft — if an attacker steals and uses a refresh token, the legitimate client's next use will fail (old token rejected). The AS should detect this reuse and revoke the entire token family (all tokens issued from the same original grant).</p>
+
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Strategy</th><th>Behavior</th><th>When to Use</th></tr></thead>
+    <tbody>
+      <tr><td><strong>No Rotation</strong></td><td>Same refresh token reused until expiry</td><td>Confidential clients in controlled environments only</td></tr>
+      <tr><td><strong>Rotation without Reuse Detection</strong></td><td>New token each use, old invalidated</td><td>Public clients — minimum baseline</td></tr>
+      <tr><td><strong>Rotation + Reuse Detection</strong></td><td>Reuse of old token triggers family revocation</td><td>All public clients — recommended standard</td></tr>
+      <tr><td><strong>Absolute Lifetime</strong></td><td>Refresh token expires regardless of activity</td><td>Security-sensitive applications (banking)</td></tr>
+      <tr><td><strong>Idle Lifetime</strong></td><td>Expires if not used within N days</td><td>Consumer apps — balance UX vs security</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout warn"><span class="icon">⚠️</span><p><strong>Refresh token reuse detection race condition</strong>: In high-concurrency scenarios (multiple browser tabs refreshing simultaneously), legitimate clients can trigger reuse detection. Implement a short grace period (a few seconds) or use a distributed lock before revoking the family. Okta's token rotation handles this with a reuse window.</p></div>
+
+  <h3>Token Revocation (RFC 7009)</h3>
+  <p>Revocation allows invalidating a token before its natural expiry. Essential for logout, compromised credential handling, and permission changes. The client POSTs the token to the revocation endpoint. For opaque tokens, the AS marks it invalid immediately. For JWTs, revocation requires either a token blocklist (denylist) or short expiry as the fallback.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">HTTP</span><span class="code-label">Revocation request (RFC 7009)</span></div>
+    <pre><span class="kw">POST</span> /oauth2/v1/revoke HTTP/1.1
+Host: dev-123.okta.com
+Content-Type: application/x-www-form-urlencoded
+Authorization: Basic <span class="str">base64(client_id:client_secret)</span>
+
+<span class="prop">token</span>=<span class="str">&lt;refresh_token_or_access_token&gt;</span>
+<span class="prop">&token_type_hint</span>=<span class="str">refresh_token</span>   <span class="cmt">← hint for AS performance, not mandatory</span>
+
+<span class="cmt">Response: 200 OK (even if token was already invalid — prevents oracle attacks)</span></pre>
+  </div>
+
+  <h3>Token Introspection (RFC 7662)</h3>
+  <p>Introspection allows a resource server to validate an opaque token by asking the AS. The AS returns the token's metadata: whether it's active, its claims, expiry, and scope. More expensive than JWT local validation (requires a network call per request) but necessary for opaque tokens. Use caching with a short TTL to reduce load on the AS.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">HTTP</span><span class="code-label">Token introspection (RFC 7662)</span></div>
+    <pre><span class="kw">POST</span> /oauth2/v1/introspect HTTP/1.1
+Host: dev-123.okta.com
+Authorization: Basic <span class="str">base64(rs_client_id:rs_client_secret)</span>
+
+<span class="prop">token</span>=<span class="str">&lt;opaque_access_token&gt;</span>
+
+<span class="cmt">Response:</span>
+{
+  <span class="prop">"active"</span>: <span class="kw">true</span>,
+  <span class="prop">"sub"</span>: <span class="str">"00u1a2b3"</span>,
+  <span class="prop">"scope"</span>: <span class="str">"openid profile email"</span>,
+  <span class="prop">"client_id"</span>: <span class="str">"my-app"</span>,
+  <span class="prop">"exp"</span>: <span class="num">1718003600</span>,
+  <span class="prop">"iat"</span>: <span class="num">1718000000</span>,
+  <span class="prop">"iss"</span>: <span class="str">"https://dev-123.okta.com/oauth2/default"</span>
+}</pre>
+  </div>
+
+  <h3>Logout — Front-Channel vs Back-Channel</h3>
+  <p><strong>RP-Initiated Logout (OIDC)</strong>: The client redirects the user to the AS's end_session_endpoint with the id_token_hint. The AS logs the user out and redirects back to post_logout_redirect_uri. Clears the AS session.</p>
+  <p><strong>Back-Channel Logout (OIDC)</strong>: The AS sends a signed logout token (JWT) directly to each client's registered backchannel_logout_uri when a session ends (even from another client). Enables true SSO logout across all client applications without browser-mediated redirects. More reliable than front-channel.</p>
+</div>
+
+<!-- ═══════════════ S9 — SCOPES & CLAIMS ═══════════════ -->
+<div class="section" id="s9">
+  <div class="section-header">
+    <div class="section-num">09</div>
+    <div>
+      <div class="section-title">Scopes, Claims & Audience Validation</div>
+      <div class="section-desc">Scope design, claim mapping, audience binding, resource indicators (RFC 8707)</div>
+    </div>
+  </div>
+
+  <h3>Scopes — What They Are and Aren't</h3>
+  <p>Scopes are <strong>strings the client requests</strong> that represent delegated permissions. They appear in both the authorization request and the issued access token. Important distinction: scopes are requested by the client, but the AS enforces them — the AS may grant fewer scopes than requested, and the user's consent matters.</p>
+  <p>Scopes are NOT fine-grained authorization. They answer "is this client allowed to do X in general?" not "can this user do X to this specific resource?" Fine-grained authorization (can user A delete document B?) is the resource server's responsibility, using claims from the token combined with application-level rules.</p>
+
+  <h3>Scope Design Patterns</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Verb-Noun Scopes</div>
+      <p>Most readable. <code>orders:read</code>, <code>orders:write</code>, <code>payments:process</code>, <code>users:admin</code>. Granular, composable, maps to API operations. Recommended for custom APIs.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Resource-Based Scopes</div>
+      <p><code>api://myapp/Order.Read</code>, <code>api://myapp/User.Admin</code> (Azure AD style). Namespaced to prevent collisions across services. Useful in large orgs.</p>
+    </div>
+  </div>
+  <div class="callout info"><span class="icon">💡</span><p>Define the minimum set of scopes needed (principle of least privilege). Don't create mega-scopes like <code>admin:everything</code>. Token claims should carry enough information for authorization decisions — scopes gate the API category, claims inside the token carry the user's specific attributes and roles.</p></div>
+
+  <h3>Audience (aud) — Token Binding</h3>
+  <p>The <code>aud</code> (audience) claim binds an access token to a specific resource server. A token issued for API A should be rejected by API B. Resource servers MUST validate that the <code>aud</code> claim contains their own identifier. Without audience validation, a token stolen from one API can be replayed to any other API that trusts the same AS.</p>
+
+  <h3>Resource Indicators (RFC 8707)</h3>
+  <p>In a multi-resource environment, a client requests scopes for a specific resource using the <code>resource</code> parameter. The AS issues a token with that resource's identifier as the <code>aud</code>. This prevents tokens from being usable across resources even if they share the same scope name.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">HTTP</span><span class="code-label">Resource indicator in authorization request</span></div>
+    <pre><span class="kw">GET</span> /authorize?
+  <span class="prop">response_type</span>=<span class="str">code</span>
+  <span class="prop">&client_id</span>=<span class="str">my-app</span>
+  <span class="prop">&scope</span>=<span class="str">openid orders:read</span>
+  <span class="prop">&resource</span>=<span class="str">https://orders-api.example.com</span>   <span class="cmt">← RFC 8707</span>
+  <span class="prop">&resource</span>=<span class="str">https://inventory-api.example.com</span>  <span class="cmt">← multiple resources</span>
+
+<span class="cmt">Resulting access token aud:</span>
+{
+  <span class="prop">"aud"</span>: [<span class="str">"https://orders-api.example.com"</span>, <span class="str">"https://inventory-api.example.com"</span>],
+  <span class="prop">"scope"</span>: <span class="str">"orders:read"</span>
+}</pre>
+  </div>
+
+  <h3>Claims-Based Authorization</h3>
+  <p>Beyond scopes, tokens carry claims that resource servers use for authorization decisions. Common patterns:</p>
+  <ul>
+    <li><strong>Roles/Groups</strong>: <code>"groups": ["ROLE_ADMIN", "ROLE_USER"]</code> — map to Spring Security authorities</li>
+    <li><strong>Tenant ID</strong>: <code>"tid": "acme-corp"</code> — multi-tenant data isolation</li>
+    <li><strong>Custom attributes</strong>: <code>"subscription_tier": "pro"</code>, <code>"department": "engineering"</code></li>
+    <li><strong>Delegated subject</strong>: <code>"act": {"sub": "service-a"}</code> — RFC 8693 token exchange indicator</li>
+  </ul>
+</div>
+
+<!-- ═══════════════ S10 — SECURITY ═══════════════ -->
+<div class="section" id="s10">
+  <div class="section-header">
+    <div class="section-num">10</div>
+    <div>
+      <div class="section-title">Security Attacks & Mitigations</div>
+      <div class="section-desc">CSRF, PKCE interception, open redirects, token leakage, mix-up attacks</div>
+    </div>
+  </div>
+
+  <h3>OAuth2 Threat Model (RFC 6819)</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Attack</th><th>Target</th><th>Mitigation</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Authorization Code Interception</strong></td><td>Authorization code stolen from redirect</td><td>PKCE (code_verifier/challenge)</td></tr>
+      <tr><td><strong>CSRF on Redirect URI</strong></td><td>Attacker completes flow in victim's session</td><td>State parameter bound to session</td></tr>
+      <tr><td><strong>Open Redirect</strong></td><td>AS redirects to attacker-controlled URL</td><td>Strict redirect_uri registration; exact match only</td></tr>
+      <tr><td><strong>Token Leakage via Referrer</strong></td><td>Token in URL sent in Referrer header</td><td>Never put tokens in URLs; use POST body or headers</td></tr>
+      <tr><td><strong>Mix-Up Attack</strong></td><td>Client confuses which AS issued the token</td><td>Validate iss claim; use per-AS state values</td></tr>
+      <tr><td><strong>JWT Algorithm Confusion</strong></td><td>Forge tokens with wrong algorithm</td><td>Whitelist allowed algorithms; never accept "none"</td></tr>
+      <tr><td><strong>Refresh Token Theft</strong></td><td>Long-lived token stolen from storage</td><td>Rotation + reuse detection; sender-constrained tokens (DPoP/mTLS)</td></tr>
+      <tr><td><strong>Access Token Replay</strong></td><td>Stolen bearer token used by attacker</td><td>Short expiry; DPoP/mTLS binding; audience restriction</td></tr>
+      <tr><td><strong>Client Impersonation</strong></td><td>Attacker registers same client_id</td><td>PKCE; private_key_jwt; redirect_uri exact match</td></tr>
+      <tr><td><strong>Clickjacking on Auth Page</strong></td><td>User clicks consent on hidden AS page</td><td>X-Frame-Options / CSP frame-ancestors on AS</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Open Redirect — The Nastiest Misconfiguration</h3>
+  <p>If the AS accepts wildcard redirect URIs (e.g., <code>https://example.com/*</code>), an attacker can craft an authorization request with <code>redirect_uri=https://example.com/attacker-page</code>. After the user consents, the AS sends the authorization code to the attacker's URL. They exchange it for tokens.</p>
+  <p>Mitigation: <strong>Always register exact redirect URIs</strong>. No wildcards. No subdomain patterns. The AS must do exact string matching, not prefix matching. This is also why Okta enforces exact URI matching by default.</p>
+
+  <h3>Mix-Up Attack</h3>
+  <p>In a multi-AS environment (a client configured for both Google and Okta), an attacker intercepts the request to Google and substitutes Okta's authorization endpoint. The user authenticates with Okta, gets a code. The client thinks it's a Google code and sends it to Google's token endpoint — which fails, but the attacker intercepts the request and gets the Okta code.</p>
+  <p>Mitigation: The AS must include an <code>iss</code> parameter in the authorization response (RFC 9207). The client must verify this matches the expected AS before proceeding with the token exchange.</p>
+
+  <div class="callout danger"><span class="icon">🔴</span><p><strong>Never log access tokens or authorization codes.</strong> They are credentials. Even logging the first/last few characters can help attackers narrow down brute-force attempts. Use structured logging that explicitly masks Authorization headers. Audit your log pipelines for token leakage.</p></div>
+
+  <h3>Redirect URI Manipulation</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">HTTP</span><span class="code-label">Malicious redirect URI variations to block</span></div>
+    <pre><span class="cmt">Registered: https://app.example.com/callback</span>
+
+<span class="cmt">❌ Should be rejected:</span>
+redirect_uri=<span class="str">https://app.example.com/callback?injected=param</span>  <span class="cmt">← query param added</span>
+redirect_uri=<span class="str">https://app.example.com/callback#fragment</span>        <span class="cmt">← fragment added</span>
+redirect_uri=<span class="str">https://attacker.example.com/callback</span>             <span class="cmt">← different host</span>
+redirect_uri=<span class="str">https://app.example.com.evil.com/callback</span>          <span class="cmt">← subdomain trick</span>
+redirect_uri=<span class="str">https://app.example.com/%2Fcallback</span>               <span class="cmt">← URL encoding</span>
+redirect_uri=<span class="str">https://APP.EXAMPLE.COM/callback</span>                  <span class="cmt">← case variation</span>
+
+<span class="cmt">✅ AS must do exact byte-for-byte comparison after normalization</span></pre>
+  </div>
+</div>
+
+<!-- ═══════════════ S11 — SPRING BOOT RESOURCE SERVER ═══════════════ -->
+<div class="section" id="s11">
+  <div class="section-header">
+    <div class="section-num">11</div>
+    <div>
+      <div class="section-title">Spring Boot Resource Server</div>
+      <div class="section-desc">Spring Security 6.x JWT validation, SecurityFilterChain, method security, custom converters</div>
+    </div>
+  </div>
+
+  <h3>Resource Server Architecture</h3>
+  <p>A Spring Boot resource server is an API that accepts Bearer tokens. Spring Security intercepts every request, extracts the token from the <code>Authorization: Bearer</code> header, validates it (signature, expiry, issuer, audience), and populates the SecurityContext with the authenticated principal. All this happens before your controller code runs.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">XML</span><span class="code-label">pom.xml — Resource Server dependencies</span></div>
+    <pre><span class="cmt">&lt;!-- Spring Boot 3.x + Spring Security 6.x --&gt;</span>
+&lt;<span class="kw">dependency</span>&gt;
+  &lt;<span class="prop">groupId</span>&gt;org.springframework.boot&lt;/<span class="prop">groupId</span>&gt;
+  &lt;<span class="prop">artifactId</span>&gt;spring-boot-starter-security&lt;/<span class="prop">artifactId</span>&gt;
+&lt;/<span class="kw">dependency</span>&gt;
+&lt;<span class="kw">dependency</span>&gt;
+  &lt;<span class="prop">groupId</span>&gt;org.springframework.boot&lt;/<span class="prop">groupId</span>&gt;
+  &lt;<span class="prop">artifactId</span>&gt;spring-boot-starter-oauth2-resource-server&lt;/<span class="prop">artifactId</span>&gt;
+&lt;/<span class="kw">dependency</span>&gt;
+&lt;<span class="kw">dependency</span>&gt;
+  &lt;<span class="prop">groupId</span>&gt;org.springframework.boot&lt;/<span class="prop">groupId</span>&gt;
+  &lt;<span class="prop">artifactId</span>&gt;spring-boot-starter-web&lt;/<span class="prop">artifactId</span>&gt;
+&lt;/<span class="kw">dependency</span>&gt;</pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">YAML</span><span class="code-label">application.yml — Resource Server (JWT)</span></div>
+    <pre><span class="prop">spring</span>:
+  <span class="prop">security</span>:
+    <span class="prop">oauth2</span>:
+      <span class="prop">resourceserver</span>:
+        <span class="prop">jwt</span>:
+          <span class="prop">issuer-uri</span>: <span class="str">https://dev-123.okta.com/oauth2/default</span>
+          <span class="cmt"># Spring auto-fetches JWKS from issuer/.well-known/openid-configuration</span>
+          <span class="cmt"># Explicit JWKS URI (if issuer-uri discovery is not available):</span>
+          <span class="prop">jwk-set-uri</span>: <span class="str">https://dev-123.okta.com/oauth2/default/v1/keys</span>
+          <span class="cmt"># Optional: restrict accepted audiences</span>
+          <span class="prop">audiences</span>: <span class="str">https://api.example.com</span></pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Java</span><span class="code-label">SecurityConfig.java — Spring Security 6.x (no WebSecurityConfigurerAdapter)</span></div>
+    <pre><span class="ann">@Configuration</span>
+<span class="ann">@EnableWebSecurity</span>
+<span class="ann">@EnableMethodSecurity</span>   <span class="cmt">// enables @PreAuthorize, @PostAuthorize</span>
+<span class="kw">public class</span> <span class="cls">SecurityConfig</span> {
+
+    <span class="ann">@Bean</span>
+    <span class="kw">public</span> <span class="type">SecurityFilterChain</span> <span class="fn">securityFilterChain</span>(<span class="type">HttpSecurity</span> http) <span class="kw">throws</span> <span class="type">Exception</span> {
+        http
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(<span class="str">"/actuator/health"</span>, <span class="str">"/api/public/**"</span>).permitAll()
+                .requestMatchers(<span class="str">"/api/admin/**"</span>).hasAuthority(<span class="str">"SCOPE_admin:read"</span>)
+                .anyRequest().authenticated()
+            )
+            .oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(jwt -> jwt
+                    .jwtAuthenticationConverter(<span class="fn">jwtAuthenticationConverter</span>())
+                )
+            )
+            <span class="cmt">// Resource servers are stateless — disable session and CSRF</span>
+            .sessionManagement(s -> s.sessionCreationPolicy(<span class="cls">SessionCreationPolicy</span>.STATELESS))
+            .csrf(csrf -> csrf.disable());
+
+        <span class="kw">return</span> http.build();
+    }
+
+    <span class="ann">@Bean</span>
+    <span class="kw">public</span> <span class="type">JwtAuthenticationConverter</span> <span class="fn">jwtAuthenticationConverter</span>() {
+        <span class="type">JwtGrantedAuthoritiesConverter</span> scopeConverter = <span class="kw">new</span> <span class="cls">JwtGrantedAuthoritiesConverter</span>();
+        scopeConverter.setAuthorityPrefix(<span class="str">"SCOPE_"</span>);         <span class="cmt">// SCOPE_openid, SCOPE_email</span>
+        scopeConverter.setAuthoritiesClaimName(<span class="str">"scp"</span>);       <span class="cmt">// Okta uses "scp" array claim</span>
+
+        <span class="type">JwtAuthenticationConverter</span> converter = <span class="kw">new</span> <span class="cls">JwtAuthenticationConverter</span>();
+        converter.setJwtGrantedAuthoritiesConverter(scopeConverter);
+        <span class="kw">return</span> converter;
+    }
+
+    <span class="cmt">// Optional: customize JwtDecoder for extra validation</span>
+    <span class="ann">@Bean</span>
+    <span class="kw">public</span> <span class="type">JwtDecoder</span> <span class="fn">jwtDecoder</span>(<span class="type">OAuth2ResourceServerProperties</span> properties) {
+        <span class="type">NimbusJwtDecoder</span> decoder = <span class="cls">NimbusJwtDecoder</span>
+            .withJwkSetUri(properties.getJwt().getJwkSetUri())
+            .build();
+
+        <span class="type">OAuth2TokenValidator</span>&lt;<span class="type">Jwt</span>&gt; withIssuer =
+            <span class="cls">JwtValidators</span>.createDefaultWithIssuer(properties.getJwt().getIssuerUri());
+        <span class="type">OAuth2TokenValidator</span>&lt;<span class="type">Jwt</span>&gt; withAudience = <span class="kw">new</span> <span class="cls">JwtClaimValidator</span>&lt;&gt;(
+            <span class="str">"aud"</span>, aud -> aud.contains(<span class="str">"https://api.example.com"</span>));
+
+        decoder.setJwtValidator(<span class="kw">new</span> <span class="cls">DelegatingOAuth2TokenValidator</span>&lt;&gt;(
+            withIssuer, withAudience));
+        <span class="kw">return</span> decoder;
+    }
+}</pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Java</span><span class="code-label">Controller — accessing JWT claims</span></div>
+    <pre><span class="ann">@RestController</span>
+<span class="ann">@RequestMapping</span>(<span class="str">"/api/orders"</span>)
+<span class="kw">public class</span> <span class="cls">OrderController</span> {
+
+    <span class="cmt">// Get the full JWT and extract any claim</span>
+    <span class="ann">@GetMapping</span>
+    <span class="kw">public</span> <span class="type">List</span>&lt;<span class="type">Order</span>&gt; <span class="fn">getOrders</span>(<span class="ann">@AuthenticationPrincipal</span> <span class="type">Jwt</span> jwt) {
+        <span class="type">String</span> userId = jwt.<span class="fn">getSubject</span>();
+        <span class="type">String</span> email  = jwt.<span class="fn">getClaimAsString</span>(<span class="str">"email"</span>);
+        <span class="type">List</span>&lt;<span class="type">String</span>&gt; groups = jwt.<span class="fn">getClaimAsStringList</span>(<span class="str">"groups"</span>);
+        <span class="kw">return</span> orderService.<span class="fn">findByUserId</span>(userId);
+    }
+
+    <span class="cmt">// Method-level security with scope check</span>
+    <span class="ann">@DeleteMapping</span>(<span class="str">"/{id}"</span>)
+    <span class="ann">@PreAuthorize</span>(<span class="str">"hasAuthority('SCOPE_orders:write')"</span>)
+    <span class="kw">public void</span> <span class="fn">deleteOrder</span>(<span class="ann">@PathVariable</span> <span class="type">Long</span> id) {
+        orderService.<span class="fn">delete</span>(id);
+    }
+
+    <span class="cmt">// Combined scope + role check</span>
+    <span class="ann">@PostMapping</span>(<span class="str">"/admin/bulk-cancel"</span>)
+    <span class="ann">@PreAuthorize</span>(<span class="str">"hasAuthority('SCOPE_orders:write') and hasRole('ADMIN')"</span>)
+    <span class="kw">public void</span> <span class="fn">bulkCancel</span>(<span class="ann">@RequestBody</span> <span class="type">List</span>&lt;<span class="type">Long</span>&gt; orderIds) {
+        orderService.<span class="fn">cancelAll</span>(orderIds);
+    }
+}</pre>
+  </div>
+</div>
+
+<!-- ═══════════════ S12 — SPRING OAUTH2 CLIENT ═══════════════ -->
+<div class="section" id="s12">
+  <div class="section-header">
+    <div class="section-num">12</div>
+    <div>
+      <div class="section-title">Spring Boot OAuth2 Client</div>
+      <div class="section-desc">Login flow, session management, client registration, authorized client manager</div>
+    </div>
+  </div>
+
+  <h3>OAuth2 Client vs Resource Server</h3>
+  <p>A <strong>Resource Server</strong> validates tokens on inbound requests (it's an API). An <strong>OAuth2 Client</strong> initiates the auth flow, redirects users to the AS, handles the callback, stores tokens in session, and uses them to call downstream APIs. A full-stack Spring Boot app often plays both roles: client for the user-facing login flow, resource server for its own exposed APIs.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">XML</span><span class="code-label">pom.xml — OAuth2 Client dependencies</span></div>
+    <pre>&lt;<span class="kw">dependency</span>&gt;
+  &lt;<span class="prop">groupId</span>&gt;org.springframework.boot&lt;/<span class="prop">groupId</span>&gt;
+  &lt;<span class="prop">artifactId</span>&gt;spring-boot-starter-oauth2-client&lt;/<span class="prop">artifactId</span>&gt;
+&lt;/<span class="kw">dependency</span>&gt;
+&lt;<span class="kw">dependency</span>&gt;
+  &lt;<span class="prop">groupId</span>&gt;org.springframework.boot&lt;/<span class="prop">groupId</span>&gt;
+  &lt;<span class="prop">artifactId</span>&gt;spring-boot-starter-thymeleaf&lt;/<span class="prop">artifactId</span>&gt;
+&lt;/<span class="kw">dependency</span>&gt;
+&lt;<span class="kw">dependency</span>&gt;
+  &lt;<span class="prop">groupId</span>&gt;org.thymeleaf.extras&lt;/<span class="prop">groupId</span>&gt;
+  &lt;<span class="prop">artifactId</span>&gt;thymeleaf-extras-springsecurity6&lt;/<span class="prop">artifactId</span>&gt;
+&lt;/<span class="kw">dependency</span>&gt;</pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">YAML</span><span class="code-label">application.yml — OAuth2 Client registration</span></div>
+    <pre><span class="prop">spring</span>:
+  <span class="prop">security</span>:
+    <span class="prop">oauth2</span>:
+      <span class="prop">client</span>:
+        <span class="prop">registration</span>:
+          <span class="prop">okta</span>:
+            <span class="prop">client-id</span>: <span class="str">${OKTA_CLIENT_ID}</span>
+            <span class="prop">client-secret</span>: <span class="str">${OKTA_CLIENT_SECRET}</span>
+            <span class="prop">scope</span>: <span class="str">openid, profile, email, offline_access</span>
+            <span class="prop">authorization-grant-type</span>: <span class="str">authorization_code</span>
+            <span class="prop">redirect-uri</span>: <span class="str">"{baseUrl}/login/oauth2/code/{registrationId}"</span>
+            <span class="prop">client-authentication-method</span>: <span class="str">client_secret_basic</span>
+        <span class="prop">provider</span>:
+          <span class="prop">okta</span>:
+            <span class="prop">issuer-uri</span>: <span class="str">https://dev-123.okta.com/oauth2/default</span>
+            <span class="cmt"># Spring auto-discovers all endpoints from issuer-uri</span></pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Java</span><span class="code-label">SecurityConfig.java — OAuth2 Client login flow</span></div>
+    <pre><span class="ann">@Configuration</span>
+<span class="ann">@EnableWebSecurity</span>
+<span class="kw">public class</span> <span class="cls">ClientSecurityConfig</span> {
+
+    <span class="ann">@Bean</span>
+    <span class="kw">public</span> <span class="type">SecurityFilterChain</span> <span class="fn">filterChain</span>(<span class="type">HttpSecurity</span> http) <span class="kw">throws</span> <span class="type">Exception</span> {
+        http
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(<span class="str">"/"</span>, <span class="str">"/error"</span>).permitAll()
+                .anyRequest().authenticated()
+            )
+            .oauth2Login(login -> login
+                .loginPage(<span class="str">"/login"</span>)
+                .defaultSuccessUrl(<span class="str">"/dashboard"</span>, <span class="kw">true</span>)
+                .userInfoEndpoint(ui -> ui
+                    .oidcUserService(<span class="fn">customOidcUserService</span>()) <span class="cmt">// custom claims mapping</span>
+                )
+            )
+            .logout(logout -> logout
+                .logoutSuccessUrl(<span class="str">"/"</span>)
+                .deleteCookies(<span class="str">"JSESSIONID"</span>)
+                <span class="cmt">// OIDC RP-initiated logout (redirects to Okta end_session_endpoint)</span>
+                .logoutSuccessHandler(<span class="fn">oidcLogoutSuccessHandler</span>())
+            );
+        <span class="kw">return</span> http.build();
+    }
+
+    <span class="ann">@Bean</span>
+    <span class="kw">public</span> <span class="type">OidcClientInitiatedLogoutSuccessHandler</span> <span class="fn">oidcLogoutSuccessHandler</span>() {
+        <span class="type">OidcClientInitiatedLogoutSuccessHandler</span> handler =
+            <span class="kw">new</span> <span class="cls">OidcClientInitiatedLogoutSuccessHandler</span>(clientRegistrationRepository);
+        handler.<span class="fn">setPostLogoutRedirectUri</span>(<span class="str">"{baseUrl}"</span>);
+        <span class="kw">return</span> handler;
+    }
+}</pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Java</span><span class="code-label">Controller — accessing user info and calling downstream APIs</span></div>
+    <pre><span class="ann">@Controller</span>
+<span class="kw">public class</span> <span class="cls">DashboardController</span> {
+
+    <span class="kw">private final</span> <span class="type">WebClient</span> webClient;
+
+    <span class="ann">@GetMapping</span>(<span class="str">"/dashboard"</span>)
+    <span class="kw">public</span> <span class="type">String</span> <span class="fn">dashboard</span>(<span class="ann">@AuthenticationPrincipal</span> <span class="type">OidcUser</span> user,
+                             <span class="type">Model</span> model) {
+        model.<span class="fn">addAttribute</span>(<span class="str">"name"</span>,   user.<span class="fn">getFullName</span>());
+        model.<span class="fn">addAttribute</span>(<span class="str">"email"</span>,  user.<span class="fn">getEmail</span>());
+        model.<span class="fn">addAttribute</span>(<span class="str">"sub"</span>,    user.<span class="fn">getSubject</span>());
+        model.<span class="fn">addAttribute</span>(<span class="str">"groups"</span>, user.<span class="fn">getClaimAsStringList</span>(<span class="str">"groups"</span>));
+        <span class="kw">return</span> <span class="str">"dashboard"</span>;
+    }
+
+    <span class="cmt">// Call a downstream API with the user's access token (token relay)</span>
+    <span class="ann">@GetMapping</span>(<span class="str">"/orders"</span>)
+    <span class="kw">public</span> <span class="type">String</span> <span class="fn">orders</span>(<span class="ann">@RegisteredOAuth2AuthorizedClient</span>(<span class="str">"okta"</span>)
+                          <span class="type">OAuth2AuthorizedClient</span> authorizedClient,
+                          <span class="type">Model</span> model) {
+        <span class="type">String</span> accessToken = authorizedClient.<span class="fn">getAccessToken</span>().<span class="fn">getTokenValue</span>();
+        <span class="type">List</span> orders = webClient.get()
+            .<span class="fn">uri</span>(<span class="str">"https://orders-api.example.com/api/orders"</span>)
+            .<span class="fn">header</span>(<span class="str">"Authorization"</span>, <span class="str">"Bearer "</span> + accessToken)
+            .<span class="fn">retrieve</span>()
+            .<span class="fn">bodyToMono</span>(<span class="cls">List</span>.<span class="kw">class</span>)
+            .<span class="fn">block</span>();
+        model.<span class="fn">addAttribute</span>(<span class="str">"orders"</span>, orders);
+        <span class="kw">return</span> <span class="str">"orders"</span>;
+    }
+}</pre>
+  </div>
+</div>
+
+<!-- ═══════════════ S13 — OKTA HANDS-ON ═══════════════ -->
+<div class="section" id="s13">
+  <div class="section-header">
+    <div class="section-num">13</div>
+    <div>
+      <div class="section-title">Okta Integration — Hands-On</div>
+      <div class="section-desc">Okta developer setup, Spring Boot Starter, authorization servers, API scopes, full working config</div>
+    </div>
+  </div>
+
+  <h3>Okta Concepts You Must Know</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Okta Authorization Server Types</div>
+      <p><strong>Org AS</strong>: Built-in, issues tokens for Okta itself (admin API). Cannot customize. <strong>Custom AS</strong> (recommended): Full control over scopes, claims, policies, and token lifetimes. Create at: Security → API → Authorization Servers. Each has its own issuer URI.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Okta Application Types</div>
+      <p><strong>Web</strong> (confidential): Server-side apps. Gets client_secret. <strong>SPA</strong> (public): React/Angular. No secret, uses PKCE. <strong>Native</strong> (public): Mobile apps. <strong>Service</strong> (M2M): Client credentials only. No user involved.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Scopes in Okta</div>
+      <p>Two types: <strong>OIDC scopes</strong> (openid, profile, email — built-in) and <strong>Custom scopes</strong> defined on a Custom Authorization Server. Custom scopes appear in the <code>scp</code> array claim in the access token.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Claims in Okta</div>
+      <p>Add custom claims to tokens via token inline hooks or claim mappings in the Custom AS. Map Okta user profile attributes, group memberships, or app-level metadata into JWT claims.</p>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">XML</span><span class="code-label">pom.xml — Okta Spring Boot Starter (recommended)</span></div>
+    <pre><span class="cmt">&lt;!-- Okta starter auto-configures everything from application.yml --&gt;</span>
+&lt;<span class="kw">dependency</span>&gt;
+  &lt;<span class="prop">groupId</span>&gt;com.okta.spring&lt;/<span class="prop">groupId</span>&gt;
+  &lt;<span class="prop">artifactId</span>&gt;okta-spring-boot-starter&lt;/<span class="prop">artifactId</span>&gt;
+  &lt;<span class="prop">version</span>&gt;<span class="str">3.0.7</span>&lt;/<span class="prop">version</span>&gt;
+&lt;/<span class="kw">dependency</span>&gt;
+<span class="cmt">&lt;!-- Includes spring-boot-starter-oauth2-client AND resource-server --&gt;
+&lt;!-- Adds Okta-specific token validation defaults --&gt;</span></pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">YAML</span><span class="code-label">application.yml — Complete Okta configuration</span></div>
+    <pre><span class="prop">okta</span>:
+  <span class="prop">oauth2</span>:
+    <span class="prop">issuer</span>: <span class="str">https://dev-123456.okta.com/oauth2/default</span>
+    <span class="prop">client-id</span>: <span class="str">${OKTA_CLIENT_ID}</span>
+    <span class="prop">client-secret</span>: <span class="str">${OKTA_CLIENT_SECRET}</span>
+    <span class="prop">scopes</span>: <span class="str">openid, profile, email, offline_access</span>
+    <span class="cmt"># For Resource Server (API): audience must match what Okta issues</span>
+    <span class="prop">audience</span>: <span class="str">https://api.example.com</span>
+    <span class="cmt"># For groups-based roles:</span>
+    <span class="prop">groups-claim</span>: <span class="str">groups</span>
+
+<span class="prop">spring</span>:
+  <span class="prop">security</span>:
+    <span class="prop">oauth2</span>:
+      <span class="prop">resourceserver</span>:
+        <span class="prop">jwt</span>:
+          <span class="prop">issuer-uri</span>: <span class="str">https://dev-123456.okta.com/oauth2/default</span></pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Java</span><span class="code-label">Full production SecurityConfig with Okta Starter</span></div>
+    <pre><span class="ann">@Configuration</span>
+<span class="ann">@EnableWebSecurity</span>
+<span class="ann">@EnableMethodSecurity</span>
+<span class="kw">public class</span> <span class="cls">OktaSecurityConfig</span> {
+
+    <span class="ann">@Bean</span>
+    <span class="kw">public</span> <span class="type">SecurityFilterChain</span> <span class="fn">securityFilterChain</span>(<span class="type">HttpSecurity</span> http) <span class="kw">throws</span> <span class="type">Exception</span> {
+        http
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(<span class="str">"/api/public/**"</span>, <span class="str">"/actuator/health"</span>).permitAll()
+                .requestMatchers(<span class="str">"/api/admin/**"</span>).hasRole(<span class="str">"ADMIN"</span>)
+                .anyRequest().authenticated()
+            )
+            <span class="cmt">// Okta Starter auto-configures jwt() with issuer from okta.oauth2.issuer</span>
+            .oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(<span class="cls">Customizer</span>.<span class="fn">withDefaults</span>())
+            )
+            .sessionManagement(s -> s
+                .sessionCreationPolicy(<span class="cls">SessionCreationPolicy</span>.STATELESS))
+            .csrf(<span class="cls">AbstractHttpConfigurer</span>::disable);
+
+        <span class="kw">return</span> http.build();
+    }
+
+    <span class="cmt">// Okta groups → Spring Security roles</span>
+    <span class="ann">@Bean</span>
+    <span class="kw">public</span> <span class="type">OktaOAuth2ResourceServerAutoConfiguration</span>
+            <span class="fn">resourceServerConfig</span>(<span class="type">OktaOAuth2Properties</span> props) {
+        <span class="kw">return new</span> <span class="cls">OktaOAuth2ResourceServerAutoConfiguration</span>(props);
+    }
+}</pre>
+  </div>
+
+  <h3>Setting Up Okta Custom Authorization Server (Step-by-Step)</h3>
+  <ol>
+    <li>Sign up at <strong>developer.okta.com</strong> → free dev org</li>
+    <li>Security → API → Authorization Servers → Add Authorization Server</li>
+    <li>Set <strong>Audience</strong> = your API identifier (e.g., <code>https://api.example.com</code>)</li>
+    <li>Scopes tab → Add Scope: <code>orders:read</code>, <code>orders:write</code>, etc.</li>
+    <li>Claims tab → Add Claim: <strong>groups</strong>, include in <em>Access Token</em>, value type <em>Groups</em>, filter matches <code>.*</code></li>
+    <li>Applications → Create App Integration → Choose type (Web/SPA/Service)</li>
+    <li>Copy <strong>Client ID</strong> and <strong>Client Secret</strong> to application.yml (via env vars)</li>
+    <li>Add redirect URIs: <code>http://localhost:8080/login/oauth2/code/okta</code></li>
+    <li>Assign app to users or groups</li>
+  </ol>
+
+  <div class="callout tip"><span class="icon">✅</span><p>Use Okta's <strong>Access Policy Rules</strong> on your Custom AS to control which clients can request which scopes, and set per-client token lifetimes. This is where you implement "short-lived tokens for public clients, longer for confidential clients."</p></div>
+</div>
+
+<!-- ═══════════════ S14 — CUSTOM CLAIMS & ROLES ═══════════════ -->
+<div class="section" id="s14">
+  <div class="section-header">
+    <div class="section-num">14</div>
+    <div>
+      <div class="section-title">Custom Claims & Role-Based Access</div>
+      <div class="section-desc">Okta groups → JWT claims → Spring Security authorities, custom JwtAuthenticationConverter</div>
+    </div>
+  </div>
+
+  <h3>How Okta Groups Become Spring Security Roles</h3>
+  <p>The pipeline: Okta groups → configured as a custom claim in the Custom AS → appear in JWT payload as <code>"groups": ["ADMIN", "USER"]</code> → Spring Security's <code>JwtAuthenticationConverter</code> extracts them → converted to <code>GrantedAuthority</code> objects with a prefix (e.g., <code>ROLE_ADMIN</code>) → available in <code>@PreAuthorize</code> and <code>hasRole()</code> checks.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Java</span><span class="code-label">Custom JwtAuthenticationConverter — groups + scopes as authorities</span></div>
+    <pre><span class="ann">@Component</span>
+<span class="kw">public class</span> <span class="cls">OktaJwtAuthenticationConverter</span>
+        <span class="kw">implements</span> <span class="type">Converter</span>&lt;<span class="type">Jwt</span>, <span class="type">AbstractAuthenticationToken</span>&gt; {
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="type">AbstractAuthenticationToken</span> <span class="fn">convert</span>(<span class="type">Jwt</span> jwt) {
+        <span class="type">Collection</span>&lt;<span class="type">GrantedAuthority</span>&gt; authorities = <span class="kw">new</span> <span class="cls">ArrayList</span>&lt;&gt;();
+
+        <span class="cmt">// 1. Extract scopes → SCOPE_ prefix</span>
+        <span class="type">List</span>&lt;<span class="type">String</span>&gt; scopes = jwt.<span class="fn">getClaimAsStringList</span>(<span class="str">"scp"</span>); <span class="cmt">// Okta: "scp" not "scope"</span>
+        <span class="kw">if</span> (scopes != <span class="kw">null</span>) {
+            scopes.<span class="fn">stream</span>()
+                .<span class="fn">map</span>(s -> <span class="kw">new</span> <span class="cls">SimpleGrantedAuthority</span>(<span class="str">"SCOPE_"</span> + s))
+                .<span class="fn">forEach</span>(authorities::add);
+        }
+
+        <span class="cmt">// 2. Extract Okta groups → ROLE_ prefix</span>
+        <span class="type">List</span>&lt;<span class="type">String</span>&gt; groups = jwt.<span class="fn">getClaimAsStringList</span>(<span class="str">"groups"</span>);
+        <span class="kw">if</span> (groups != <span class="kw">null</span>) {
+            groups.<span class="fn">stream</span>()
+                .<span class="fn">map</span>(g -> <span class="kw">new</span> <span class="cls">SimpleGrantedAuthority</span>(<span class="str">"ROLE_"</span> + g))
+                .<span class="fn">forEach</span>(authorities::add);
+        }
+
+        <span class="kw">return new</span> <span class="cls">JwtAuthenticationToken</span>(jwt, authorities);
+    }
+}
+
+<span class="cmt">// Register it in SecurityConfig:</span>
+.oauth2ResourceServer(oauth2 -> oauth2
+    .jwt(jwt -> jwt.jwtAuthenticationConverter(<span class="kw">new</span> <span class="cls">OktaJwtAuthenticationConverter</span>()))
+)</pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Java</span><span class="code-label">Fine-grained method security with SpEL</span></div>
+    <pre><span class="ann">@Service</span>
+<span class="kw">public class</span> <span class="cls">OrderService</span> {
+
+    <span class="cmt">// Must have SCOPE_orders:read</span>
+    <span class="ann">@PreAuthorize</span>(<span class="str">"hasAuthority('SCOPE_orders:read')"</span>)
+    <span class="kw">public</span> <span class="type">List</span>&lt;<span class="type">Order</span>&gt; <span class="fn">findAll</span>() { ... }
+
+    <span class="cmt">// Must be in Okta group "ADMIN"</span>
+    <span class="ann">@PreAuthorize</span>(<span class="str">"hasRole('ADMIN')"</span>)
+    <span class="kw">public void</span> <span class="fn">deleteAll</span>() { ... }
+
+    <span class="cmt">// Owner check: sub from JWT must match order's owner</span>
+    <span class="ann">@PreAuthorize</span>(<span class="str">"#order.ownerSub == authentication.token.subject"</span>)
+    <span class="kw">public void</span> <span class="fn">update</span>(<span class="type">Order</span> order) { ... }
+
+    <span class="cmt">// Post-filter: only return orders owned by caller</span>
+    <span class="ann">@PostFilter</span>(<span class="str">"filterObject.ownerSub == authentication.token.subject"</span>)
+    <span class="kw">public</span> <span class="type">List</span>&lt;<span class="type">Order</span>&gt; <span class="fn">findByUser</span>(<span class="type">String</span> userId) { ... }
+}</pre>
+  </div>
+
+  <h3>Okta Token Inline Hook — Dynamic Claims</h3>
+  <p>For claims that require database lookups or complex logic (e.g., subscription tier from your own DB), use an <strong>Okta Token Inline Hook</strong>. Okta calls your HTTPS endpoint during token issuance, you return additional claims to embed, and Okta includes them in the final token. This keeps Okta as the authority but lets you inject application-specific context.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Java</span><span class="code-label">Okta Token Inline Hook handler</span></div>
+    <pre><span class="ann">@RestController</span>
+<span class="ann">@RequestMapping</span>(<span class="str">"/hooks/okta/token"</span>)
+<span class="kw">public class</span> <span class="cls">OktaTokenHookController</span> {
+
+    <span class="ann">@PostMapping</span>
+    <span class="kw">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">Map</span>&gt; <span class="fn">handleTokenHook</span>(
+            <span class="ann">@RequestBody</span> <span class="type">OktaTokenHookRequest</span> request,
+            <span class="ann">@RequestHeader</span>(<span class="str">"Authorization"</span>) <span class="type">String</span> auth) {
+
+        <span class="cmt">// Verify hook secret from Okta header</span>
+        <span class="fn">verifyHookSecret</span>(auth);
+
+        <span class="type">String</span> userId = request.<span class="fn">getData</span>().<span class="fn">getContext</span>().<span class="fn">getUser</span>().<span class="fn">getId</span>();
+        <span class="type">String</span> tier = subscriptionService.<span class="fn">getTier</span>(userId); <span class="cmt">// your DB lookup</span>
+
+        <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Object</span>&gt; commands = <span class="cls">Map</span>.<span class="fn">of</span>(
+            <span class="str">"commands"</span>, <span class="cls">List</span>.<span class="fn">of</span>(<span class="cls">Map</span>.<span class="fn">of</span>(
+                <span class="str">"type"</span>, <span class="str">"com.okta.tokens.claims.add"</span>,
+                <span class="str">"value"</span>, <span class="cls">Map</span>.<span class="fn">of</span>(<span class="str">"name"</span>, <span class="str">"subscription_tier"</span>, <span class="str">"value"</span>, tier)
+            ))
+        );
+        <span class="kw">return</span> <span class="cls">ResponseEntity</span>.<span class="fn">ok</span>(commands);
+    }
+}</pre>
+  </div>
+</div>
+
+<!-- ═══════════════ S15 — MICROSERVICES JWT PROPAGATION ═══════════════ -->
+<div class="section" id="s15">
+  <div class="section-header">
+    <div class="section-num">15</div>
+    <div>
+      <div class="section-title">Microservices — JWT Propagation & Token Exchange</div>
+      <div class="section-desc">Token relay, WebClient with OAuth2, Token Exchange (RFC 8693), service identity</div>
+    </div>
+  </div>
+
+  <h3>Token Propagation Patterns</h3>
+  <p>In a microservices architecture, when Service A calls Service B on behalf of a user, it must pass the user's identity. Three main patterns:</p>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title">Token Relay (Pass-Through)</div>
+      <p>Service A forwards the incoming user access token to Service B. Simple. Service B sees the original user. Risk: a compromised Service A gets the user's full token. Works well for trusted internal services.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Client Credentials + User Context in Headers</div>
+      <p>Service A uses its own M2M token to call Service B, but passes the user's sub/claims as a custom header. Service B trusts Service A's identity and the header. Requires careful input validation on the header.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Token Exchange (RFC 8693)</div>
+      <p>Service A exchanges the user's token at the AS for a new token with reduced scope or different audience. Produces an actor/subject chain. Most secure and auditable. Full standard impersonation and delegation support.</p>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Java</span><span class="code-label">WebClient with automatic token relay (Spring Security)</span></div>
+    <pre><span class="ann">@Configuration</span>
+<span class="kw">public class</span> <span class="cls">WebClientConfig</span> {
+
+    <span class="ann">@Bean</span>
+    <span class="kw">public</span> <span class="type">WebClient</span> <span class="fn">downstreamWebClient</span>(
+            <span class="type">OAuth2AuthorizedClientManager</span> authorizedClientManager) {
+
+        <span class="type">ServletOAuth2AuthorizedClientExchangeFilterFunction</span> oauth2 =
+            <span class="kw">new</span> <span class="cls">ServletOAuth2AuthorizedClientExchangeFilterFunction</span>(authorizedClientManager);
+
+        <span class="cmt">// Relay the current user's access token to downstream APIs</span>
+        oauth2.<span class="fn">setDefaultOAuth2AuthorizedClient</span>(<span class="kw">true</span>);
+
+        <span class="kw">return</span> <span class="cls">WebClient</span>.builder()
+            .filter(oauth2)
+            .baseUrl(<span class="str">"https://orders-api.internal"</span>)
+            .build();
+    }
+
+    <span class="ann">@Bean</span>
+    <span class="kw">public</span> <span class="type">OAuth2AuthorizedClientManager</span> <span class="fn">authorizedClientManager</span>(
+            <span class="type">ClientRegistrationRepository</span> clientRegistrationRepository,
+            <span class="type">OAuth2AuthorizedClientRepository</span> authorizedClientRepository) {
+
+        <span class="type">DefaultOAuth2AuthorizedClientManager</span> manager =
+            <span class="kw">new</span> <span class="cls">DefaultOAuth2AuthorizedClientManager</span>(
+                clientRegistrationRepository, authorizedClientRepository);
+
+        <span class="cmt">// Auto-refresh expired access tokens using refresh token</span>
+        manager.<span class="fn">setAuthorizedClientProvider</span>(
+            <span class="cls">OAuth2AuthorizedClientProviderBuilder</span>.builder()
+                .authorizationCode()
+                .refreshToken()
+                .clientCredentials()
+                .build()
+        );
+        <span class="kw">return</span> manager;
+    }
+}
+
+<span class="cmt">// Usage in service:</span>
+<span class="kw">public</span> <span class="type">List</span>&lt;<span class="type">Order</span>&gt; <span class="fn">getOrders</span>(<span class="type">String</span> userId) {
+    <span class="kw">return</span> webClient.get()
+        .<span class="fn">uri</span>(<span class="str">"/api/orders?userId={id}"</span>, userId)
+        .attributes(<span class="fn">clientRegistrationId</span>(<span class="str">"okta"</span>)) <span class="cmt">// which client registration to use</span>
+        .<span class="fn">retrieve</span>()
+        .<span class="fn">bodyToFlux</span>(<span class="cls">Order</span>.<span class="kw">class</span>)
+        .<span class="fn">collectList</span>()
+        .<span class="fn">block</span>();
+}</pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">HTTP</span><span class="code-label">Token Exchange (RFC 8693) — impersonation</span></div>
+    <pre><span class="kw">POST</span> /oauth2/v1/token HTTP/1.1
+Host: dev-123.okta.com
+Content-Type: application/x-www-form-urlencoded
+Authorization: Basic <span class="str">base64(service-a-id:service-a-secret)</span>
+
+<span class="prop">grant_type</span>=<span class="str">urn:ietf:params:oauth:grant-type:token-exchange</span>
+<span class="prop">&subject_token</span>=<span class="str">&lt;user access token&gt;</span>
+<span class="prop">&subject_token_type</span>=<span class="str">urn:ietf:params:oauth:token-type:access_token</span>
+<span class="prop">&requested_token_type</span>=<span class="str">urn:ietf:params:oauth:token-type:access_token</span>
+<span class="prop">&audience</span>=<span class="str">https://service-b.internal</span>
+<span class="prop">&scope</span>=<span class="str">inventory:read</span>   <span class="cmt">← reduced scope (downscoping)</span>
+
+<span class="cmt">Response token contains:</span>
+{
+  <span class="prop">"sub"</span>: <span class="str">"user-123"</span>,           <span class="cmt">← original user still the subject</span>
+  <span class="prop">"act"</span>: { <span class="prop">"sub"</span>: <span class="str">"service-a"</span> }, <span class="cmt">← actor chain (delegation audit trail)</span>
+  <span class="prop">"aud"</span>: <span class="str">"https://service-b.internal"</span>,
+  <span class="prop">"scope"</span>: <span class="str">"inventory:read"</span>
+}</pre>
+  </div>
+
+  <h3>Service-to-Service Identity Best Practices</h3>
+  <ul>
+    <li>Each microservice has its own <strong>Client Credentials</strong> registration — never share client secrets between services</li>
+    <li>Use <strong>Workload Identity</strong> (SPIFFE/SPIRE, AWS IAM roles for service accounts, Kubernetes projected tokens) instead of static secrets in cloud environments</li>
+    <li>Bind tokens to the calling service via <strong>mTLS</strong> or <strong>DPoP</strong> to prevent token relay attacks where a compromised service forwards tokens to other services</li>
+    <li>Log the <code>jti</code> claim on every API call for full audit trail correlation across service boundaries</li>
+  </ul>
+</div>
+
+<!-- ═══════════════ S16 — BFF PATTERN ═══════════════ -->
+<div class="section" id="s16">
+  <div class="section-header">
+    <div class="section-num">16</div>
+    <div>
+      <div class="section-title">BFF Pattern & SPA Security</div>
+      <div class="section-desc">Backend for Frontend, token storage in httpOnly cookies, Spring Cloud Gateway as BFF</div>
+    </div>
+  </div>
+
+  <h3>The Problem with Tokens in the Browser</h3>
+  <p>A Single Page Application (SPA) running in the browser has no secure, isolated storage. <code>localStorage</code> is readable by any JavaScript on the page — including injected scripts from XSS attacks. Even <code>sessionStorage</code> is accessible to JavaScript. An XSS vulnerability in a SPA that stores tokens in JS-accessible storage is a full token exfiltration.</p>
+
+  <h3>The Backend for Frontend (BFF) Pattern</h3>
+  <p>The BFF pattern moves the OAuth2 Client role to a server-side component that the SPA trusts. The flow:</p>
+  <div class="flow-box">
+    <span class="actor">SPA</span> <span class="arrow">→ GET /api/login →</span> <span class="actor">BFF (Spring Cloud Gateway)</span><br>
+    <span class="actor">BFF</span> <span class="arrow">→ redirects browser →</span> <span class="actor">Okta /authorize</span><br>
+    <span class="actor">Okta</span> <span class="arrow">→ code →</span> <span class="actor">BFF /callback</span><br>
+    <span class="actor">BFF</span> exchanges code for tokens, stores tokens in <span class="data">server-side session</span><br>
+    <span class="actor">BFF</span> <span class="arrow">→ sets httpOnly, Secure, SameSite=Strict session cookie →</span> <span class="actor">Browser</span><br>
+    <span class="actor">SPA</span> <span class="arrow">→ calls /api/* with session cookie →</span> <span class="actor">BFF</span><br>
+    <span class="actor">BFF</span> <span class="arrow">→ retrieves token from session, forwards request →</span> <span class="actor">Resource Servers</span>
+  </div>
+  <p>The SPA <strong>never sees the access token</strong>. Tokens live only in server-side session storage (Redis). XSS in the SPA can't steal tokens — it can only make authenticated requests through the BFF, which can apply rate limiting, anomaly detection, and audit logging.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">YAML</span><span class="code-label">Spring Cloud Gateway as BFF (application.yml)</span></div>
+    <pre><span class="prop">spring</span>:
+  <span class="prop">cloud</span>:
+    <span class="prop">gateway</span>:
+      <span class="prop">routes</span>:
+        - <span class="prop">id</span>: <span class="str">orders-api</span>
+          <span class="prop">uri</span>: <span class="str">https://orders-api.internal</span>
+          <span class="prop">predicates</span>:
+            - <span class="str">Path=/api/orders/**</span>
+          <span class="prop">filters</span>:
+            - <span class="str">TokenRelay=</span>    <span class="cmt"># Automatically relays OAuth2 access token</span>
+        - <span class="prop">id</span>: <span class="str">inventory-api</span>
+          <span class="prop">uri</span>: <span class="str">https://inventory.internal</span>
+          <span class="prop">predicates</span>:
+            - <span class="str">Path=/api/inventory/**</span>
+          <span class="prop">filters</span>:
+            - <span class="str">TokenRelay=</span>
+
+  <span class="prop">security</span>:
+    <span class="prop">oauth2</span>:
+      <span class="prop">client</span>:
+        <span class="prop">registration</span>:
+          <span class="prop">okta</span>:
+            <span class="prop">client-id</span>: <span class="str">${OKTA_CLIENT_ID}</span>
+            <span class="prop">client-secret</span>: <span class="str">${OKTA_CLIENT_SECRET}</span>
+            <span class="prop">scope</span>: <span class="str">openid, profile, email, offline_access</span>
+        <span class="prop">provider</span>:
+          <span class="prop">okta</span>:
+            <span class="prop">issuer-uri</span>: <span class="str">https://dev-123.okta.com/oauth2/default</span>
+
+  <span class="prop">session</span>:
+    <span class="prop">store-type</span>: <span class="str">redis</span>       <span class="cmt"># Tokens stored in Redis, not browser</span>
+    <span class="prop">timeout</span>: <span class="str">30m</span>
+
+<span class="cmt"># CSRF protection for the BFF (SPA sends XSRF-TOKEN cookie)</span>
+<span class="prop">server</span>:
+  <span class="prop">servlet</span>:
+    <span class="prop">session</span>:
+      <span class="prop">cookie</span>:
+        <span class="prop">http-only</span>: <span class="kw">true</span>
+        <span class="prop">secure</span>: <span class="kw">true</span>
+        <span class="prop">same-site</span>: <span class="str">Strict</span></pre>
+  </div>
+
+  <div class="callout tip"><span class="icon">✅</span><p>The BFF pattern is the <strong>current recommended approach</strong> for SPA security per the OAuth2 Security BCP (RFC 9700). It eliminates token exposure to JavaScript while providing a clean API surface. The SPA stays simple (no token management), and security concerns are centralized in the BFF.</p></div>
+</div>
+
+<!-- ═══════════════ S17 — TOKEN STORAGE ═══════════════ -->
+<div class="section" id="s17">
+  <div class="section-header">
+    <div class="section-num">17</div>
+    <div>
+      <div class="section-title">Token Storage Best Practices</div>
+      <div class="section-desc">Where to store tokens in SPAs, mobile, native apps, server-side — the definitive guide</div>
+    </div>
+  </div>
+
+  <h3>Storage Options — Risk Comparison</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Storage</th><th>Accessible to JS?</th><th>XSS Risk</th><th>CSRF Risk</th><th>Recommendation</th></tr></thead>
+    <tbody>
+      <tr><td>localStorage</td><td>Yes</td><td>High — stolen on any XSS</td><td>Low (manual header)</td><td>❌ Never for sensitive tokens</td></tr>
+      <tr><td>sessionStorage</td><td>Yes</td><td>High — same as localStorage</td><td>Low</td><td>❌ Same problem as localStorage</td></tr>
+      <tr><td>In-memory (JS variable)</td><td>Yes (but no persistence)</td><td>Medium — lost on tab close</td><td>Low</td><td>⚠️ Acceptable for short-lived access tokens only</td></tr>
+      <tr><td>httpOnly Cookie</td><td>No — immune to JS</td><td>Low</td><td>Medium (mitigate with SameSite)</td><td>✅ Best for refresh tokens via BFF</td></tr>
+      <tr><td>Server-side Session (Redis)</td><td>No</td><td>None</td><td>Mitigated by SameSite+CSRF token</td><td>✅ Best overall — BFF pattern</td></tr>
+      <tr><td>OS Keychain (mobile/native)</td><td>No — OS-protected</td><td>N/A</td><td>N/A</td><td>✅ Best for mobile/desktop apps</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Recommended Strategy by App Type</h3>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title">SPA (React/Angular/Vue)</div>
+      <p>Use BFF pattern. Session cookie for BFF auth. Access token in memory only (never persisted). Refresh via BFF on page load. Never localStorage. Never send tokens to analytics/logging.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Mobile (iOS/Android)</div>
+      <p>iOS: Keychain Services. Android: EncryptedSharedPreferences or Android Keystore. Use AppAuth library (implements PKCE). Refresh token rotation mandatory. Certificate pinning for token endpoint calls.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Server-Side Web App</div>
+      <p>Tokens in server-side session (Redis, database). httpOnly, Secure, SameSite=Strict session cookie. CSRF token for state-changing requests. Log rotation events for audit trail.</p>
+    </div>
+  </div>
+
+  <h3>The In-Memory SPA Pattern (When BFF is Not an Option)</h3>
+  <p>If you must handle tokens in the SPA without a BFF:</p>
+  <ol>
+    <li>Store access token in a JS module variable (in-memory, never persisted)</li>
+    <li>Store refresh token in a <strong>Secure httpOnly cookie</strong> set by a minimal token endpoint on your own domain</li>
+    <li>On page load / token expiry, silently refresh via a hidden iframe or service worker calling your token endpoint</li>
+    <li>Implement a strict CSP (Content Security Policy) to mitigate XSS risk</li>
+    <li>Set short access token TTL (5–15 minutes)</li>
+  </ol>
+
+  <div class="callout danger"><span class="icon">🔴</span><p><strong>Content Security Policy is your XSS last line of defense.</strong> Even if a token is in memory, a relaxed CSP allows injected scripts to exfiltrate it via <code>fetch()</code> to an attacker domain. Set <code>default-src 'self'</code>, restrict <code>script-src</code>, and use nonces or hashes for inline scripts. Test your CSP with the <code>Content-Security-Policy-Report-Only</code> header before enforcing.</p></div>
+</div>
+
+<!-- ═══════════════ S18 — DPOP, MTLS, PAR ═══════════════ -->
+<div class="section" id="s18">
+  <div class="section-header">
+    <div class="section-num">18</div>
+    <div>
+      <div class="section-title">DPoP, mTLS & Pushed Authorization Requests</div>
+      <div class="section-desc">Sender-constrained tokens, certificate binding, PAR — modern token security primitives</div>
+    </div>
+  </div>
+
+  <h3>DPoP — Demonstrating Proof of Possession (RFC 9449)</h3>
+  <p>Bearer tokens are dangerous because anyone who gets the token can use it. <strong>DPoP (Demonstrating Proof of Possession)</strong> binds the access token to a cryptographic key pair held by the client. Even if the token is stolen, it's useless without the private key that signed the DPoP proof.</p>
+  <p>How it works: The client generates an asymmetric key pair. When requesting a token, it includes a <strong>DPoP proof JWT</strong> — a short-lived JWT signed with its private key, containing the HTTP method and URL of the request. The AS binds the access token to the client's public key (stored in the <code>cnf.jkt</code> claim). For every API call, the client sends both the access token and a fresh DPoP proof. The RS verifies that the proof's signature matches the public key in the token's <code>cnf</code> claim.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">HTTP</span><span class="code-label">DPoP — token request + API call</span></div>
+    <pre><span class="cmt">── Token Request with DPoP proof ────────────────────</span>
+<span class="kw">POST</span> /oauth2/v1/token
+<span class="prop">DPoP</span>: <span class="str">eyJ0eXAiOiJkcG9wK2p3dCIsImFsZyI6IkVTMjU2IiwiandrIjp7Li4ufX0</span>
+     <span class="cmt">. (JWT signed by client's private key, contains htm+htu claims)</span>
+
+<span class="cmt">DPoP proof header:</span>
+{ <span class="prop">"typ"</span>: <span class="str">"dpop+jwt"</span>, <span class="prop">"alg"</span>: <span class="str">"ES256"</span>, <span class="prop">"jwk"</span>: { <span class="cmt">client's public key</span> } }
+
+<span class="cmt">DPoP proof payload:</span>
+{
+  <span class="prop">"jti"</span>: <span class="str">"unique-id"</span>,    <span class="cmt">← replay prevention</span>
+  <span class="prop">"htm"</span>: <span class="str">"POST"</span>,         <span class="cmt">← HTTP method</span>
+  <span class="prop">"htu"</span>: <span class="str">"https://as.example.com/token"</span>,  <span class="cmt">← URL</span>
+  <span class="prop">"iat"</span>: <span class="num">1718000000</span>     <span class="cmt">← must be recent (short-lived proof)</span>
+}
+
+<span class="cmt">── Issued access token contains cnf (confirmation) claim ──</span>
+{
+  <span class="prop">"cnf"</span>: {
+    <span class="prop">"jkt"</span>: <span class="str">"JWK SHA-256 thumbprint of client's public key"</span>
+  }
+}
+
+<span class="cmt">── API call with DPoP-bound token ───────────────────</span>
+<span class="kw">GET</span> /api/orders HTTP/1.1
+<span class="prop">Authorization</span>: DPoP <span class="str">&lt;access_token&gt;</span>    <span class="cmt">← "DPoP" not "Bearer"</span>
+<span class="prop">DPoP</span>: <span class="str">&lt;new DPoP proof for this specific request&gt;</span>
+<span class="cmt"># Each API call needs a fresh DPoP proof (htm + htu must match this request)</span></pre>
+  </div>
+
+  <h3>Mutual TLS (mTLS) Token Binding (RFC 8705)</h3>
+  <p>mTLS uses TLS client certificates to bind tokens. The client presents a certificate during the TLS handshake to the AS. The AS stores a hash of the certificate's public key in the token's <code>cnf.x5t#S256</code> claim. Resource servers verify that the TLS connection's client certificate matches the token's binding. Extremely strong — requires attackers to steal both the token AND the private key of the TLS certificate.</p>
+  <p>Used in: open banking (FAPI), enterprise service meshes (Istio mTLS), financial institutions. Operationally complex — requires PKI infrastructure, certificate lifecycle management, and mTLS-aware load balancers.</p>
+
+  <h3>Pushed Authorization Requests — PAR (RFC 9126)</h3>
+  <p>In standard Auth Code flow, the authorization request parameters travel in the URL — visible in browser history, server logs, and proxy logs. PAR pushes the request body directly to the AS (authenticated, server-to-server), receiving a <code>request_uri</code> that references the pre-registered parameters. The browser redirect only carries the opaque <code>request_uri</code>.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">HTTP</span><span class="code-label">PAR flow (RFC 9126)</span></div>
+    <pre><span class="cmt">Step 1: Push auth params to AS (server-to-server, authenticated)</span>
+<span class="kw">POST</span> /oauth2/v1/par
+Authorization: Basic <span class="str">base64(client_id:client_secret)</span>
+
+<span class="prop">response_type</span>=<span class="str">code</span>
+<span class="prop">&client_id</span>=<span class="str">my-app</span>
+<span class="prop">&redirect_uri</span>=<span class="str">https://app.example.com/callback</span>
+<span class="prop">&scope</span>=<span class="str">openid orders:read</span>
+<span class="prop">&state</span>=<span class="str">abc123</span>
+<span class="prop">&code_challenge</span>=<span class="str">E9Melhoa...</span>
+<span class="prop">&code_challenge_method</span>=<span class="str">S256</span>
+
+<span class="cmt">Response:</span>
+{
+  <span class="prop">"request_uri"</span>: <span class="str">"urn:ietf:params:oauth:request_uri:bwc4JDEhenoX0-7q4M70lg"</span>,
+  <span class="prop">"expires_in"</span>: <span class="num">60</span>
+}
+
+<span class="cmt">Step 2: Redirect browser with only the request_uri (short, opaque)</span>
+<span class="kw">GET</span> /oauth2/v1/authorize?
+  <span class="prop">client_id</span>=<span class="str">my-app</span>
+  <span class="prop">&request_uri</span>=<span class="str">urn:ietf:params:oauth:request_uri:bwc4JDEhenoX0-7q4M70lg</span>
+<span class="cmt"># No sensitive parameters in the URL!</span></pre>
+  </div>
+
+  <div class="callout info"><span class="icon">💡</span><p><strong>PAR + PKCE + DPoP</strong> is the gold standard for high-security authorization flows. PAR prevents request tampering (parameters are AS-authenticated before the redirect), PKCE prevents code interception, and DPoP prevents token misuse even if stolen. This combination is required by FAPI 2.0.</p></div>
+</div>
+
+<!-- ═══════════════ S19 — FAPI ═══════════════ -->
+<div class="section" id="s19">
+  <div class="section-header">
+    <div class="section-num">19</div>
+    <div>
+      <div class="section-title">FAPI & High-Security OAuth2 Profiles</div>
+      <div class="section-desc">Financial-grade API security, FAPI 1.0/2.0, signed requests, CIBA</div>
+    </div>
+  </div>
+
+  <h3>What is FAPI?</h3>
+  <p>FAPI (Financial-grade API) is a set of security profiles for OAuth2 and OIDC designed for high-risk, high-value API access — initially banking (Open Banking UK, PSD2), now extended to healthcare, government, and other regulated industries. FAPI defines stricter requirements on top of standard OAuth2.</p>
+
+  <h3>FAPI 2.0 Security Profile Requirements</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Requirement</th><th>Standard OAuth2</th><th>FAPI 2.0</th></tr></thead>
+    <tbody>
+      <tr><td>Client authentication</td><td>client_secret_basic/post</td><td>private_key_jwt OR mTLS only — no shared secrets</td></tr>
+      <tr><td>Authorization request</td><td>URL parameters</td><td>PAR (Pushed Authorization Requests) mandatory</td></tr>
+      <tr><td>Token binding</td><td>Bearer (no binding)</td><td>DPoP or mTLS sender-constrained tokens mandatory</td></tr>
+      <tr><td>Signing algorithm</td><td>RS256 (minimum)</td><td>PS256 or ES256 — stronger algorithms</td></tr>
+      <tr><td>Token lifetime</td><td>Configurable</td><td>Short (≤5 min access tokens recommended)</td></tr>
+      <tr><td>PKCE</td><td>Optional</td><td>Mandatory (S256 only)</td></tr>
+      <tr><td>Response type</td><td>code or code id_token</td><td>code only (fragment responses banned)</td></tr>
+      <tr><td>Redirect URI</td><td>Registered, exact match</td><td>Exact match + HTTPS only (no localhost in prod)</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>CIBA — Client-Initiated Backchannel Authentication (RFC Implementer's Draft)</h3>
+  <p>CIBA decouples authentication from the device requesting access. A service initiates an authentication request; the user approves on their phone (push notification via authenticator app). Used for: call center agents initiating actions on behalf of a user, IoT devices, decoupled front-end/back-end flows.</p>
+  <div class="flow-box">
+    <span class="actor">Service</span> <span class="arrow">→ POST /bc-authorize →</span> <span class="actor">AS</span>  <span class="cmt">(login_hint: user@example.com)</span><br>
+    <span class="actor">AS</span> <span class="arrow">→ push notification →</span> <span class="actor">User's Phone</span><br>
+    <span class="actor">User</span> approves on authenticator app<br>
+    <span class="actor">Service</span> <span class="arrow">→ polls POST /token (auth_req_id) →</span> <span class="actor">AS</span><br>
+    <span class="actor">AS</span> <span class="arrow">→</span> <span class="data">{ access_token, id_token }</span>
+  </div>
+
+  <h3>Signed Request Objects (JAR — RFC 9101)</h3>
+  <p>JWT-Secured Authorization Requests (JAR) allow the client to package the entire authorization request as a signed JWT. This ensures the AS receives exactly what the client sent — no parameter tampering by a malicious redirect or proxy. Combined with PAR, the signed request is POSTed to the AS, providing both integrity and confidentiality.</p>
+
+  <div class="callout info"><span class="icon">💡</span><p>Most commercial OAuth2 providers (Okta, Auth0, Azure AD, Keycloak) support FAPI profiles or can be configured to enforce FAPI-level security. For regulated industries, explicitly verify FAPI 2.0 certification at the Open ID Foundation certification page before selecting an AS.</p></div>
+</div>
+
+<!-- ═══════════════ S20 — PRODUCTION OPS ═══════════════ -->
+<div class="section" id="s20">
+  <div class="section-header">
+    <div class="section-num">20</div>
+    <div>
+      <div class="section-title">Production: JWKS Rotation, Monitoring & Ops</div>
+      <div class="section-desc">Key rotation, token observability, performance, incident response, Okta production config</div>
+    </div>
+  </div>
+
+  <h3>JWKS Key Rotation</h3>
+  <p>Authorization Servers rotate their signing keys periodically (Okta rotates automatically every 90 days by default). The rotation process must be <strong>zero-downtime</strong>:</p>
+  <ol>
+    <li>AS generates new key pair, adds new public key to JWKS (both old and new keys present)</li>
+    <li>AS starts signing new tokens with the new private key (new <code>kid</code>)</li>
+    <li>Old tokens (signed with old key) are still valid until they expire</li>
+    <li>Resource servers see an unknown <code>kid</code>, refresh their JWKS cache, find the new key</li>
+    <li>After old token expiry window, AS removes the old key from JWKS</li>
+  </ol>
+  <p>Spring Security's <code>NimbusJwtDecoder</code> handles this automatically — on unknown <code>kid</code>, it refreshes the JWKS and retries. Configure a sensible cache TTL and ensure your JWKS fetch has a timeout and retry with exponential backoff.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Java</span><span class="code-label">Custom NimbusJwtDecoder with cache tuning</span></div>
+    <pre><span class="ann">@Bean</span>
+<span class="kw">public</span> <span class="type">JwtDecoder</span> <span class="fn">jwtDecoder</span>() {
+    <span class="type">NimbusJwtDecoder</span> decoder = <span class="cls">NimbusJwtDecoder</span>
+        .withJwkSetUri(<span class="str">"https://dev-123.okta.com/oauth2/default/v1/keys"</span>)
+        .jwsAlgorithm(<span class="cls">SignatureAlgorithm</span>.RS256)
+        .jwsAlgorithm(<span class="cls">SignatureAlgorithm</span>.ES256)
+        .cache(<span class="cls">Caffeine</span>.newBuilder()
+            .maximumSize(<span class="num">10</span>)
+            .expireAfterWrite(<span class="cls">Duration</span>.ofMinutes(<span class="num">10</span>))
+            .build())
+        .restOperations(<span class="fn">jwksRestTemplate</span>())   <span class="cmt">// custom timeouts</span>
+        .build();
+
+    <span class="cmt">// Custom validator chain</span>
+    <span class="type">List</span>&lt;<span class="type">OAuth2TokenValidator</span>&lt;<span class="type">Jwt</span>&gt;&gt; validators = <span class="cls">List</span>.<span class="fn">of</span>(
+        <span class="kw">new</span> <span class="cls">JwtTimestampValidator</span>(<span class="cls">Duration</span>.ofSeconds(<span class="num">10</span>)),  <span class="cmt">// 10s clock skew</span>
+        <span class="kw">new</span> <span class="cls">JwtIssuerValidator</span>(<span class="str">"https://dev-123.okta.com/oauth2/default"</span>),
+        <span class="kw">new</span> <span class="cls">JwtClaimValidator</span>&lt;&gt;(<span class="str">"aud"</span>,
+            aud -> ((List&lt;?&gt;) aud).contains(<span class="str">"https://api.example.com"</span>))
+    );
+    decoder.<span class="fn">setJwtValidator</span>(<span class="kw">new</span> <span class="cls">DelegatingOAuth2TokenValidator</span>&lt;&gt;(validators));
+    <span class="kw">return</span> decoder;
+}
+
+<span class="kw">private</span> <span class="type">RestOperations</span> <span class="fn">jwksRestTemplate</span>() {
+    <span class="type">SimpleClientHttpRequestFactory</span> factory = <span class="kw">new</span> <span class="cls">SimpleClientHttpRequestFactory</span>();
+    factory.<span class="fn">setConnectTimeout</span>(<span class="num">2000</span>);
+    factory.<span class="fn">setReadTimeout</span>(<span class="num">5000</span>);
+    <span class="kw">return new</span> <span class="cls">RestTemplate</span>(factory);
+}</pre>
+  </div>
+
+  <h3>Observability — What to Monitor</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Metric / Log</th><th>What to Watch For</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td>JWT validation failures</td><td>Spike in 401s, unknown kid errors</td><td>Check JWKS cache refresh; alert on sustained failure</td></tr>
+      <tr><td>Token expiry errors</td><td>High rate of expired token rejections</td><td>Check clock sync (NTP); review token lifetime config</td></tr>
+      <tr><td>Refresh token reuse</td><td>Reuse detection triggers</td><td>Potential token theft — alert security team, revoke family</td></tr>
+      <tr><td>JWKS fetch latency/errors</td><td>Slow or failing JWKS requests</td><td>Circuit breaker; local fallback cache; alert on AS unavailability</td></tr>
+      <tr><td>Unusual token issuance rate</td><td>Spike in /token requests</td><td>Rate limiting bypass or credential stuffing attack</td></tr>
+      <tr><td>Failed auth attempts</td><td>Pattern of invalid client_id or client_secret</td><td>Block IP, alert — potential brute-force on client credentials</td></tr>
+      <tr><td>Long-lived session anomalies</td><td>Refresh tokens used after absolute lifetime</td><td>Configuration bug or token theft — investigate</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Production Okta Configuration Checklist</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Checklist</span><span class="code-label">Okta production hardening</span></div>
+    <pre><span class="cmt">Authorization Server</span>
+✅ Use Custom AS (not Org AS) for all application tokens
+✅ Set audience to your API identifier (not "api://default")
+✅ Access Token lifetime: 1 hour max (5–15 min for high-security)
+✅ Refresh Token lifetime: 1 day idle / 7 days absolute
+✅ Enable Refresh Token Rotation + Reuse Detection
+✅ Add groups claim → Access Token (for RBAC)
+✅ Enable rate limiting on /token endpoint
+
+<span class="cmt">Application Settings</span>
+✅ Login redirect URIs: exact production URL only
+✅ Logout redirect URIs: exact production URL only
+✅ Initiate login URI set (prevents phishing via OAuth flow)
+✅ PKCE required for all public clients
+✅ Grant types: only what's needed (no implicit, no ROPC)
+✅ Token endpoint auth method: client_secret_jwt or private_key_jwt
+
+<span class="cmt">Network & Infrastructure</span>
+✅ Okta ThreatInsight enabled (bot detection, anomalous login)
+✅ Network zones configured (restrict AS access to known IPs)
+✅ Okta System Log streamed to SIEM (Splunk, Datadog)
+✅ Webhooks/inline hooks served over HTTPS with mutual auth
+✅ API rate limits monitored via Okta Rate Limit dashboard
+
+<span class="cmt">Spring Boot Application</span>
+✅ OKTA_CLIENT_SECRET via Vault/Secrets Manager (not env var in code)
+✅ JWKS cache configured with fallback (circuit breaker)
+✅ All JWT validation claims explicitly checked (iss, aud, exp, alg)
+✅ Structured logging redacts Authorization headers
+✅ /actuator endpoints secured (not publicly accessible)
+✅ HTTPS enforced (spring.security.require-ssl=true)
+✅ HSTS header set in production</pre>
+  </div>
+
+  <h3>Incident Response — Token Compromise Playbook</h3>
+  <ol>
+    <li><strong>Revoke immediately</strong>: Call <code>POST /oauth2/v1/revoke</code> with the compromised token. If refresh token family, revoke all tokens in the family.</li>
+    <li><strong>Force re-authentication</strong>: Terminate all sessions for the affected user/service account via Okta Admin API.</li>
+    <li><strong>Rotate secrets</strong>: If client_secret was compromised, generate a new one in Okta immediately. Update all deployments.</li>
+    <li><strong>Analyze blast radius</strong>: Query Okta System Log for all API calls made with the compromised token. What data was accessed?</li>
+    <li><strong>Key rotation</strong>: If signing key was compromised (unlikely for hosted AS), coordinate emergency key rotation with the AS operator.</li>
+    <li><strong>Post-mortem</strong>: How was the token leaked? Log pipeline? Referrer header? Browser storage? XSS? Fix the root cause, not just the symptom.</li>
+  </ol>
+
+  <hr>
+
+  <h3>Quick Reference — OAuth2 Interview Cheat Sheet</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Grant Type Selection</div>
+      <p>User + browser app? → Auth Code + PKCE. Machine to machine? → Client Credentials. TV/CLI? → Device Authorization. Microservice delegation? → Token Exchange. Never: Implicit (deprecated), ROPC (deprecated).</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Token Type Selection</div>
+      <p>Call an API? → Access Token (Bearer). Prove who the user is? → ID Token (client-side only). Get new access tokens? → Refresh Token. Cross-service? → Token Exchange. Opaque token? → Introspect it.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Security Primitives</div>
+      <p>PKCE: code interception. State: CSRF. Nonce: ID token replay. PAR: parameter tampering. DPoP/mTLS: bearer token theft. Rotation+reuse: refresh token theft. aud validation: cross-service token replay.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Spring Security Quick Config</div>
+      <p>Resource Server: <code>oauth2ResourceServer().jwt()</code> + <code>issuer-uri</code>. Client: <code>oauth2Login()</code> + registration. Roles from Okta: custom <code>JwtAuthenticationConverter</code> extracting <code>groups</code> claim with <code>ROLE_</code> prefix.</p>
+    </div>
+  </div>
+</div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ TOP</button>
+
+<script>
+const bar = document.getElementById('progressBar');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  bar.style.width = pct + '%';
+  document.getElementById('scrollTop').classList.toggle('visible', h.scrollTop > 400);
+});
+
+const sections = document.querySelectorAll('.section');
+const navItems = document.querySelectorAll('.nav-item');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navItems.forEach(n => n.classList.remove('active'));
+      const active = document.querySelector(`.nav-item[href="#${e.target.id}"]`);
+      if (active) {
+        active.classList.add('active');
+        active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    }
+  });
+}, { threshold: 0.15, rootMargin: '-60px 0px -60% 0px' });
+sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
