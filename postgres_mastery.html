@@ -585,7 +585,7 @@
   </div>
 
   <h3>Process Model</h3>
-  <p>PostgreSQL uses a <strong>multi-process</strong> model (not multi-threaded). Each client connection spawns a dedicated backend process. The postmaster is the main daemon that manages lifecycle.</p>
+  <p>PostgreSQL uses a <strong>multi-process</strong> model (not multi-threaded). Each client connection spawns a dedicated backend process. The postmaster is the main daemon that manages lifecycle. This design means a crash in one backend can't corrupt memory of other backends — but it also means each connection costs an OS process (~5–10 MB RAM), making connection pooling essential at scale.</p>
   <div class="grid-2">
     <div class="card"><div class="card-title">🏠 Postmaster</div><p>The parent process. Listens for connections, forks backend processes, manages shared memory init.</p></div>
     <div class="card"><div class="card-title">⚙️ Backend Process</div><p>One per client. Executes queries, holds locks, manages its own portal and memory context.</p></div>
@@ -623,9 +623,14 @@
 <span class="kw">SELECT</span> xmin, xmax, ctid, * <span class="kw">FROM</span> <span class="tbl">orders</span> <span class="kw">LIMIT</span> <span class="num">5</span>;</pre>
   </div>
 
+  <h3>WAL — Write-Ahead Log</h3>
+  <p>Every data modification is first written to the <strong>WAL</strong> (an append-only sequential log on disk), then applied to heap pages in shared_buffers. On crash, Postgres replays WAL from the last checkpoint to recover. This guarantees durability (the D in ACID) even if the server crashes mid-write. WAL is organized into 16 MB segments and is also the basis for both streaming and logical replication.</p>
+  <p><strong>Checkpoints</strong> flush dirty shared_buffer pages to disk and write a checkpoint record to WAL. They limit crash recovery time by bounding how much WAL must be replayed. <code>checkpoint_completion_target = 0.9</code> spreads the flush I/O over 90% of the checkpoint interval to avoid I/O spikes. <code>max_wal_size</code> controls how much WAL can accumulate before forcing a checkpoint.</p>
+
   <h3>MVCC — Multi-Version Concurrency Control</h3>
-  <p>PostgreSQL never overwrites rows in place. Each UPDATE inserts a new version and marks the old one with <code>xmax</code>. Dead tuples accumulate and are cleaned by <strong>VACUUM</strong>.</p>
-  <div class="callout info"><span class="icon">💡</span><p>MVCC means readers never block writers and writers never block readers — the foundation of Postgres concurrency.</p></div>
+  <p>PostgreSQL never overwrites rows in place. Each UPDATE inserts a new row version and marks the old one dead by stamping its <code>xmax</code> with the updating transaction's ID. <code>xmin</code> is set when the row is created. A row is visible to a transaction only if <code>xmin</code> is committed and &lt; the transaction's snapshot, and <code>xmax</code> is either not committed or &gt; the snapshot. This is how multiple concurrent readers each see a consistent, point-in-time view with zero locking.</p>
+  <p>Dead tuples accumulate over time (every UPDATE leaves a dead version) and are cleaned by <strong>VACUUM</strong>. Transaction ID wraparound (the 32-bit XID counter cycling) is a real production risk — monitor <code>age(datfrozenxid)</code> and ensure autovacuum freezes old tuples before XID age approaches 2 billion.</p>
+  <div class="callout info"><span class="icon">💡</span><p>MVCC means readers never block writers and writers never block readers — the foundation of Postgres concurrency. This is fundamentally different from MySQL's InnoDB undo-log MVCC model.</p></div>
 
   <div class="code-block">
     <div class="code-header"><span class="code-lang">SQL</span><span class="code-label">MVCC visibility</span></div>
@@ -653,6 +658,16 @@
       <div class="section-desc">Rich type system — choose wisely, performance depends on it</div>
     </div>
   </div>
+
+  <h3>Type Selection Principles</h3>
+  <p>Choosing the right type affects storage efficiency, index size, query performance, and correctness. Critical distinctions that come up in interviews:</p>
+  <ul>
+    <li><strong>text vs varchar(n)</strong>: Functionally identical in PostgreSQL — both use the same storage engine (TOAST for large values). A length limit in <code>varchar(n)</code> is enforced at write time but provides <em>no</em> performance or storage benefit. Prefer <code>text</code> with a <code>CHECK(length(...) &lt;= n)</code> constraint for flexibility.</li>
+    <li><strong>timestamptz vs timestamp</strong>: <code>timestamptz</code> stores UTC internally and converts to/from the session timezone on display. <code>timestamp</code> stores the literal value with no timezone — a footgun for any multi-timezone application. Always use <code>timestamptz</code> for application data.</li>
+    <li><strong>numeric vs float</strong>: <code>float</code>/<code>double precision</code> uses binary floating point — 0.1 + 0.2 ≠ 0.3. <code>numeric(p,s)</code> is exact decimal arithmetic, slower but correct. Always use <code>numeric</code> for money, and anything requiring exact decimal arithmetic.</li>
+    <li><strong>uuid vs bigint</strong>: UUIDs (16 bytes) are globally unique with no coordination — safe for distributed ID generation. But random UUIDs (v4) cause B-tree index fragmentation at high insert rates. Use <strong>UUIDv7</strong> (time-ordered) or <code>bigint IDENTITY</code> sequences for high-write tables.</li>
+    <li><strong>GENERATED ALWAYS AS IDENTITY vs serial</strong>: <code>serial</code> is syntactic sugar that creates a sequence and sets a default — it's not a real type. <code>GENERATED ALWAYS AS IDENTITY</code> (SQL standard, PG10+) is explicit about generation intent and prevents accidental inserts of arbitrary values. Prefer IDENTITY for all new schemas.</li>
+  </ul>
 
   <div class="tbl-wrap"><table>
     <thead><tr><th>Category</th><th>Types</th><th>Notes</th></tr></thead>
@@ -709,6 +724,15 @@
       <div class="section-desc">Tables, constraints, sequences, schemas, inheritance</div>
     </div>
   </div>
+
+  <h3>Schema Design Principles</h3>
+  <p>Good schema design is the highest-leverage decision in a PostgreSQL system — bad schemas require expensive migrations, cause query plan problems, and limit scalability. Key principles:</p>
+  <ul>
+    <li><strong>Constraints are documentation + correctness</strong>: NOT NULL, UNIQUE, CHECK, and FK constraints are enforced at the database level, not just the application. They also give the query planner stronger guarantees, enabling better optimizations.</li>
+    <li><strong>Foreign Key locking</strong>: FK references hold a <code>ROW SHARE</code> lock on the referenced row during the transaction. ON DELETE CASCADE is convenient but can cause surprising performance on mass deletes. Consider soft deletes or explicit child deletion for large datasets.</li>
+    <li><strong>Generated columns</strong> (PG12+) are computed and stored — they're always consistent with the source columns and can be indexed like regular columns. Useful for computed keys (e.g., <code>lower(email)</code> for case-insensitive lookups).</li>
+  </ul>
+  <div class="callout warn"><span class="icon">⚠️</span><p><strong>Zero-downtime migrations</strong>: Most ALTER TABLE operations take an <code>ACCESS EXCLUSIVE</code> lock, blocking all reads and writes on the table. On a 100M-row table, even a millisecond operation causes queued queries to pile up. Always use <code>CREATE INDEX CONCURRENTLY</code>, <code>ADD COLUMN … NOT VALID</code> + <code>VALIDATE CONSTRAINT</code> separately, and <code>pg_repack</code> for table rewrites.</p></div>
 
   <h3>Table Creation & Constraints</h3>
   <div class="code-block">
@@ -792,6 +816,13 @@
     </div>
   </div>
 
+  <h3>DML Core Concepts</h3>
+  <p><strong>RETURNING</strong> eliminates a round-trip: instead of INSERT then SELECT, you get back generated IDs, defaults, or any column in a single network call. Essential for high-throughput APIs. RETURNING works on INSERT, UPDATE, and DELETE.</p>
+  <p><strong>UPSERT (ON CONFLICT)</strong> is atomic at the row level — no race condition between the SELECT-then-INSERT pattern. The <code>EXCLUDED</code> pseudo-table holds the values that <em>would</em> have been inserted. Use <code>ON CONFLICT DO NOTHING</code> to silently skip duplicates. Use <code>(xmax = 0) AS was_inserted</code> in RETURNING to distinguish inserts from updates — xmax is 0 for freshly inserted rows.</p>
+  <p><strong>UPDATE … FROM</strong> is PostgreSQL's join-based update — far more efficient than a correlated subquery <code>UPDATE … SET x = (SELECT …)</code>. The FROM clause participates in a single hash/merge join, not a per-row subquery execution.</p>
+  <p><strong>Writable CTEs</strong> (WITH … DELETE/INSERT) execute atomically as a single statement. The classic archive pattern — DELETE returning rows, then INSERT into archive — is safe and consistent within one transaction without extra locking.</p>
+  <div class="callout tip"><span class="icon">💡</span><p><strong>COPY is 10–100× faster than INSERT for bulk loads</strong> — it bypasses the expression evaluator, uses binary protocol, defers constraint checks, and minimizes WAL traffic. Use <code>COPY FROM STDIN</code> with binary format from application code (e.g., pgx CopyFrom in Go, psycopg2 copy_from in Python) for maximum ingestion throughput.</p></div>
+
   <div class="code-block">
     <div class="code-header"><span class="code-lang">SQL</span><span class="code-label">Advanced DML patterns</span></div>
     <pre><span class="cmt">── INSERT with RETURNING ──────────────────────────────</span>
@@ -847,6 +878,17 @@ COPY <span class="tbl">orders</span> <span class="kw">TO STDOUT</span> <span cla
     </div>
   </div>
 
+  <h3>Advanced Query Mechanics</h3>
+  <p><strong>Keyset pagination</strong> (cursor-based) uses a compound WHERE predicate on indexed columns: <code>WHERE (created_at, id) &lt; (prev_created_at, prev_id)</code>. It stays O(log n) regardless of page depth because the planner uses the index to jump directly to the cursor position. OFFSET-based pagination degrades linearly — page 1000 requires scanning and discarding 999 × page_size rows. At scale, high-offset queries are full table scans in disguise.</p>
+  <p><strong>ROLLUP vs CUBE vs GROUPING SETS</strong> all produce multi-level aggregations in one pass:</p>
+  <ul>
+    <li><code>ROLLUP(a, b)</code> produces groupings: (a, b), (a), () — left-to-right subtotals + grand total. Perfect for hierarchical reports (year → month → day).</li>
+    <li><code>CUBE(a, b)</code> produces all 2ⁿ combinations: (a, b), (a), (b), () — every possible cross-tab subtotal.</li>
+    <li><code>GROUPING SETS((a,b),(a),())</code> — explicit control over exactly which groupings you need. NULL in the result means "aggregated across that dimension"; use <code>GROUPING(col)</code> to distinguish NULL-as-grouping from NULL-as-data.</li>
+  </ul>
+  <p><strong>DISTINCT ON</strong> is PostgreSQL-specific and maps to a single Unique plan node — cheaper than a window function for "first row per group." The ORDER BY must start with the DISTINCT ON columns; the rest of ORDER BY controls which row is "first" within each group.</p>
+  <p><strong>FILTER in aggregates</strong> replaces the verbose <code>SUM(CASE WHEN … END)</code> pattern. It's cleaner and allows the planner to optimize each condition independently. Multiple filtered aggregates over the same table scan in one pass — no subqueries needed.</p>
+
   <div class="code-block">
     <div class="code-header"><span class="code-lang">SQL</span><span class="code-label">Advanced SELECT patterns</span></div>
     <pre><span class="cmt">── Keyset pagination (efficient, no OFFSET degradation) ─</span>
@@ -891,6 +933,17 @@ COPY <span class="tbl">orders</span> <span class="kw">TO STDOUT</span> <span cla
       <div class="section-desc">JOIN types, LATERAL, set operators, anti-joins</div>
     </div>
   </div>
+
+  <h3>Join Mechanics & Physical Algorithms</h3>
+  <p>PostgreSQL chooses between three physical join algorithms based on cost estimates:</p>
+  <ul>
+    <li><strong>Nested Loop</strong>: For each outer row, scan the inner relation. O(n×m) worst case. Best when the inner relation is small or accessed via an index (Index Nested Loop). The planner prefers this for selective joins with a good inner index.</li>
+    <li><strong>Hash Join</strong>: Build an in-memory hash table on the smaller (inner) relation, then probe with each outer row. O(n+m). Best for large unsorted relations — dominant algorithm for analytical joins. Limited by <code>work_mem</code>; if hash table exceeds work_mem it spills to disk in batches.</li>
+    <li><strong>Merge Join</strong>: Requires both inputs sorted on the join key (from an index or explicit Sort node). Very efficient when both inputs arrive pre-sorted. Preferred when sorted output is also needed downstream.</li>
+  </ul>
+  <p><strong>Anti-join</strong>: Finding rows in A with no matching rows in B. The LEFT JOIN … WHERE b.id IS NULL pattern is NULL-safe and compiles to an anti-join plan node (equivalent to NOT EXISTS). Avoid <code>NOT IN (SELECT …)</code> — if the subquery returns any NULL, the entire NOT IN returns zero rows due to three-valued logic. This is a classic interview trap.</p>
+  <p><strong>LATERAL JOIN</strong> is a correlated subquery promoted to a join position. The subquery can reference columns from tables to its left — like a for-each loop that executes a subquery per outer row, but implemented as a join. Key use case: "for each user, get their 3 most recent orders" without window functions. The ON TRUE is required because LATERAL produces rows, not a scalar.</p>
+  <div class="callout info"><span class="icon">💡</span><p><strong>UNION vs UNION ALL</strong>: UNION deduplicates (sort + unique step, O(n log n)). UNION ALL concatenates without dedup. Always use UNION ALL unless deduplication is explicitly required. INTERSECT and EXCEPT have ALL variants too. Set operations require matching column counts and compatible types.</p></div>
 
   <div class="code-block">
     <div class="code-header"><span class="code-lang">SQL</span><span class="code-label">Join patterns every senior dev should know</span></div>
@@ -947,6 +1000,20 @@ COPY <span class="tbl">orders</span> <span class="kw">TO STDOUT</span> <span cla
       <div class="section-desc">GROUP BY, HAVING, OVER, PARTITION BY, FRAME clauses</div>
     </div>
   </div>
+
+  <h3>Window Function Architecture</h3>
+  <p>Window functions compute a value across a <strong>window of rows related to the current row</strong>, without collapsing rows like GROUP BY does. Critical execution-order fact: window functions run <em>after</em> WHERE, GROUP BY, and HAVING but <em>before</em> the final ORDER BY and LIMIT. This means you cannot filter on window function results in a WHERE clause — wrap the query in a CTE or subquery.</p>
+  <p><strong>PARTITION BY</strong> divides rows into independent groups (like GROUP BY, but keeps every row). <strong>ORDER BY inside OVER</strong> defines the sort within each partition and implicitly activates a default frame. Without ORDER BY, the frame is the entire partition. With ORDER BY, the default frame is <code>RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code> — which includes all peers (rows with equal ORDER BY values) in the "current row" boundary.</p>
+  <p><strong>Frame clauses</strong> — the most misunderstood part of window functions:</p>
+  <ul>
+    <li><code>ROWS BETWEEN N PRECEDING AND CURRENT ROW</code>: Exactly N rows by physical position. Predictable for moving averages.</li>
+    <li><code>RANGE BETWEEN N PRECEDING AND CURRENT ROW</code>: All rows within N units of the current ORDER BY value (peer-group aware). Required for date-based ranges like "7 days prior."</li>
+    <li><code>ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING</code>: Full partition. <strong>Required</strong> for LAST_VALUE to work correctly — without it, LAST_VALUE returns the current row.</li>
+    <li><code>GROUPS</code> mode (PG11+): Counts peer groups rather than rows — useful for ranked data where ties should be treated as one unit.</li>
+  </ul>
+  <p><strong>RANK vs DENSE_RANK vs ROW_NUMBER</strong>: <code>rank()</code> ties share the same rank, leaving gaps (1, 2, 2, 4). <code>dense_rank()</code> has no gaps (1, 2, 2, 3). <code>row_number()</code> always unique regardless of ties. Use <code>row_number()</code> for deduplication/pagination, <code>rank()</code> for competition-style leaderboards, <code>dense_rank()</code> for reporting where gaps would confuse users.</p>
+  <div class="callout warn"><span class="icon">⚠️</span><p><strong>LAST_VALUE gotcha</strong>: The default frame ends at CURRENT ROW, so LAST_VALUE returns the current row's value — not the partition's last value. Always add <code>ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING</code> when using LAST_VALUE or NTH_VALUE.</p></div>
+  <p>The <code>WINDOW w AS (…)</code> clause defines a named window reused across multiple functions — avoids repetition and ensures all functions use the identical window definition.</p>
 
   <div class="code-block">
     <div class="code-header"><span class="code-lang">SQL</span><span class="code-label">Window functions — the most powerful SQL feature</span></div>
@@ -1017,6 +1084,16 @@ COPY <span class="tbl">orders</span> <span class="kw">TO STDOUT</span> <span cla
     </div>
   </div>
 
+  <h3>Index Internals & Strategy</h3>
+  <p><strong>B-Tree</strong> is a balanced tree where leaf pages contain indexed values in sorted order, linked as a doubly-linked list. This makes both point lookups and range scans cheap. Height is typically 3–4 levels even for tables with hundreds of millions of rows — all searches are O(log n). B-Tree is the right default choice for 95% of indexes.</p>
+  <p><strong>Multi-column index key order matters</strong>: an index on <code>(a, b, c)</code> supports queries filtering on <code>(a)</code>, <code>(a, b)</code>, or <code>(a, b, c)</code>, but NOT on <code>(b)</code> or <code>(c)</code> alone — the leftmost prefix rule. For mixed predicate types, put equality columns first, then range columns: <code>(status, created_at)</code> for <code>WHERE status = 'active' AND created_at > X</code>.</p>
+  <p><strong>Covering indexes (INCLUDE)</strong> store extra columns in B-Tree leaf pages without including them in the key. The planner can satisfy queries entirely from the index (Index Only Scan), skipping the heap entirely. This eliminates expensive random-access heap fetches on hot read paths. The INCLUDE columns don't affect sort order and can't be used in WHERE — they're payload.</p>
+  <p><strong>Partial indexes</strong> index only rows matching a WHERE clause. They're smaller (faster to scan, fits in cache), cheaper to update (skip rows that don't match), and can enforce conditional uniqueness. The WHERE predicate must use immutable expressions and your queries must reference the same expression for the planner to consider the index.</p>
+  <p><strong>Expression indexes</strong> index a computed expression rather than a raw column. The query must use the exact same expression — <code>WHERE lower(email) = ...</code> requires <code>CREATE INDEX ON users(lower(email))</code>. The expression must be immutable.</p>
+  <div class="callout warn"><span class="icon">⚠️</span><p><strong>When NOT to index</strong>: Low-cardinality columns (boolean flags, a status with 3 values — the planner may prefer a seq scan anyway), very small tables (&lt;1000 rows), write-heavy tables where index maintenance overhead dominates. Every index slows INSERT/UPDATE/DELETE and increases VACUUM workload. Monitor <code>pg_stat_user_indexes</code> for indexes with <code>idx_scan = 0</code>.</p></div>
+  <p><strong>GIN (Generalized Inverted Index)</strong> stores an inverted posting list: each element (JSONB key/value, array element, tsvector lexeme) maps to the set of row IDs containing it. Excellent for containment queries (<code>@&gt;</code>, <code>?</code>, <code>@@</code>). Slower to build and update than B-Tree due to posting list maintenance. Use <code>gin_pending_list_limit</code> to control insert buffering.</p>
+  <p><strong>BRIN (Block Range Index)</strong> stores min/max values per range of pages (128 pages by default), not per row. Tiny size (~handful of KB for massive tables), near-zero insert overhead. Only useful when data has strong physical correlation with the indexed column — e.g., an append-only log table where <code>created_at</code> increases monotonically with physical page order.</p>
+
   <div class="tbl-wrap"><table>
     <thead><tr><th>Type</th><th>Best For</th><th>Operators</th></tr></thead>
     <tbody>
@@ -1076,6 +1153,15 @@ COPY <span class="tbl">orders</span> <span class="kw">TO STDOUT</span> <span cla
     </div>
   </div>
 
+  <h3>Concurrency Control Deep Dive</h3>
+  <p>PostgreSQL implements MVCC (see Section 1) so readers never block writers. Isolation levels control what concurrent writes a transaction can observe.</p>
+  <ul>
+    <li><strong>Read Committed (default)</strong>: Each statement gets a fresh snapshot. You can see data committed by other transactions between statements in the same transaction. A long-running report can see a moving target. Good enough for most OLTP but can cause non-repeatable reads within a transaction.</li>
+    <li><strong>Repeatable Read</strong>: Snapshot is taken at the first statement of the transaction and held throughout. You always see the database as it was when your transaction started. PostgreSQL's implementation also prevents phantom reads (stronger than ANSI SQL requires). Use this for analytics queries requiring a consistent view.</li>
+    <li><strong>Serializable (SSI)</strong>: PostgreSQL uses <em>Serializable Snapshot Isolation</em> — detects read/write dependency cycles that would make concurrent transactions non-serializable and aborts one with a serialization failure (<code>ERROR: could not serialize access</code>). Applications must retry on this error. Zero blocking overhead — conflicts are detected, not prevented. Use for financial ledgers, inventory counters, and any "check-then-act" pattern.</li>
+  </ul>
+  <p><strong>Lock mode hierarchy</strong> (lightest to heaviest): <code>ACCESS SHARE</code> (SELECT) → <code>ROW SHARE</code> (SELECT FOR UPDATE/SHARE) → <code>ROW EXCLUSIVE</code> (INSERT/UPDATE/DELETE) → <code>SHARE UPDATE EXCLUSIVE</code> (VACUUM, CREATE INDEX CONCURRENTLY) → <code>SHARE</code> (CREATE INDEX non-concurrent) → <code>ACCESS EXCLUSIVE</code> (DROP, most ALTER TABLE). The key production insight: a queued <code>ACCESS EXCLUSIVE</code> blocks all subsequent queries, so even a fast DDL on a busy table causes a thundering herd of blocked connections.</p>
+
   <h3>Isolation Levels</h3>
   <div class="tbl-wrap"><table>
     <thead><tr><th>Level</th><th>Dirty Read</th><th>Non-repeatable Read</th><th>Phantom Read</th><th>Serialization Anomaly</th></tr></thead>
@@ -1128,8 +1214,9 @@ COPY <span class="tbl">orders</span> <span class="kw">TO STDOUT</span> <span cla
   </div>
 
   <h3>Deadlock Detection</h3>
-  <p>Postgres auto-detects deadlocks (deadlock_timeout default 1s) and rolls back one transaction. Prevent by always acquiring locks in the same order across transactions.</p>
-  <div class="callout danger"><span class="icon">🔴</span><p>Always order your UPDATE/SELECT FOR UPDATE statements consistently across transactions to prevent deadlocks. Never hold a transaction open while waiting for user input.</p></div>
+  <p>Postgres auto-detects deadlocks (default <code>deadlock_timeout = 1s</code> — the interval before the deadlock checker runs) and rolls back one transaction with <code>ERROR: deadlock detected</code>. Prevention: always acquire locks in the same consistent order across all code paths. Never hold a transaction open while waiting for user input, an HTTP call, or any external I/O.</p>
+  <div class="callout danger"><span class="icon">🔴</span><p>Always order UPDATE/SELECT FOR UPDATE statements consistently across transactions. A classic deadlock: Transaction A locks row 1 then row 2; Transaction B locks row 2 then row 1. Fix: both must lock row 1 first. Use advisory locks as a higher-level mutex for cross-table workflows.</p></div>
+  <div class="callout tip"><span class="icon">✅</span><p><strong>FOR UPDATE SKIP LOCKED</strong> is the correct pattern for distributed job queues. Multiple workers compete for pending rows — SKIP LOCKED causes each worker to skip rows already locked by a peer, instead of blocking. Combine with LIMIT to atomically claim a batch of jobs with zero contention.</p></div>
 </div>
 
 <!-- ═══════════════════════════════════════════
@@ -1143,6 +1230,13 @@ COPY <span class="tbl">orders</span> <span class="kw">TO STDOUT</span> <span cla
       <div class="section-desc">Materialized views, recursive CTEs, lateral subqueries</div>
     </div>
   </div>
+
+  <h3>CTEs, Views & Subquery Concepts</h3>
+  <p><strong>CTE inlining (PG12+ change)</strong>: In PostgreSQL 11 and earlier, every CTE was always materialized as an optimization fence — the planner could NOT push predicates through it. In PG12+, CTEs are inlined by default and the planner can optimize through them. This changes performance characteristics of existing queries on upgrade. Force materialization explicitly with <code>WITH data AS MATERIALIZED (…)</code> when you want guaranteed single evaluation (e.g., expensive aggregation reused twice). Force inlining with <code>NOT MATERIALIZED</code>.</p>
+  <p><strong>Recursive CTEs</strong> use a "working table" algorithm: (1) execute the anchor query once, seed the working table; (2) execute the recursive term against the working table, append results to the accumulator and replace the working table with the new rows; (3) repeat until the recursive term produces no rows. The path array trick — <code>WHERE NOT (e.id = ANY(path))</code> — prevents infinite loops on cyclic graphs. This is how tree traversals, graph BFS, and date-range generation work.</p>
+  <p><strong>Materialized Views</strong> trade staleness for query speed. <code>REFRESH MATERIALIZED VIEW</code> takes an <code>ACCESS EXCLUSIVE</code> lock, blocking all reads. <code>REFRESH MATERIALIZED VIEW CONCURRENTLY</code> computes a diff against the existing data (requires a unique index) and applies changes with minimal locking — reads continue during refresh. Trigger refreshes from the application after significant data changes, or schedule via pg_cron.</p>
+  <p><strong>Views</strong> are stored queries — no data stored. Simple views (single table, no aggregates/DISTINCT/LIMIT) are automatically updatable. <code>WITH CHECK OPTION</code> prevents inserts/updates through the view that would produce rows invisible to the view's WHERE clause — enforces the view as a row-level constraint.</p>
+  <div class="callout info"><span class="icon">💡</span><p><strong>CTE as a readable pipeline</strong>: Chain named CTEs to build step-by-step transformations that read like a data flow. Each CTE is a named result set reusable within the query — far clearer than deeply nested subqueries. The optimizer sees them as a single query in PG12+.</p></div>
 
   <div class="code-block">
     <div class="code-header"><span class="code-lang">SQL</span><span class="code-label">CTEs, recursive queries, materialized views</span></div>
@@ -1212,6 +1306,18 @@ COPY <span class="tbl">orders</span> <span class="kw">TO STDOUT</span> <span cla
     </div>
   </div>
 
+  <h3>How the Query Planner Works</h3>
+  <p>PostgreSQL uses a <strong>cost-based optimizer</strong>. It enumerates possible plans (within join reordering limits — <code>geqo_threshold</code>) and estimates the cost of each. Costs are in abstract units: <code>seq_page_cost = 1.0</code> (baseline), <code>random_page_cost = 4.0</code> (HDD, use 1.1 for SSD/NVMe), CPU costs are fractional. Total cost = (page fetch cost × pages) + (CPU cost × rows). The planner picks the lowest-cost plan.</p>
+  <p><strong>Statistics</strong> drive cost estimates. Key stats in <code>pg_stats</code>:</p>
+  <ul>
+    <li><code>n_distinct</code>: Estimated distinct value count. Negative = fraction of table rows. Affects cardinality estimates for GROUP BY, joins.</li>
+    <li><code>correlation</code>: Physical ordering correlation (-1 to 1). High correlation means heap pages are accessed nearly sequentially → index scan is efficient. Low correlation → random I/O → planner prefers Bitmap Heap Scan or Seq Scan.</li>
+    <li><code>most_common_vals / most_common_freqs</code>: Histogram for selective predicate estimates. Stale stats → bad row count estimates → wrong plan. Run ANALYZE after large bulk loads.</li>
+  </ul>
+  <p><strong>Extended statistics</strong> (<code>CREATE STATISTICS … (dependencies, ndistinct, mcv)</code>) teach the planner about correlations between columns — e.g., city and zip_code are not independent. Without this, the planner multiplies individual selectivities and dramatically underestimates row counts for combined predicates.</p>
+  <p><strong>Reading EXPLAIN output</strong>: Each node shows <code>cost=startup..total rows=estimate width=bytes</code>. With ANALYZE: actual rows and actual time. Large discrepancies between estimated and actual rows signal stale statistics or a statistics gap. The most expensive node is usually where to focus optimization. BUFFERS shows <code>shared hit/read</code> — reads mean disk I/O; hits mean served from shared_buffers.</p>
+  <div class="callout warn"><span class="icon">⚠️</span><p><strong>Never use planner disabling flags in production</strong> (<code>enable_seqscan=off</code>, <code>enable_hashjoin=off</code>). They're for diagnosis only. If the planner makes a wrong choice, fix the root cause: update statistics, add an index, create extended statistics, or adjust <code>random_page_cost</code>. Disabled flags cause fragile, hard-to-explain plan behavior.</p></div>
+
   <div class="code-block">
     <div class="code-header"><span class="code-lang">SQL</span><span class="code-label">EXPLAIN mastery</span></div>
     <pre><span class="cmt">── Full execution analysis ───────────────────────────</span>
@@ -1273,6 +1379,18 @@ COPY <span class="tbl">orders</span> <span class="kw">TO STDOUT</span> <span cla
     </div>
   </div>
 
+  <h3>Partitioning: When, Why & How</h3>
+  <p>Declarative partitioning (PG10+) splits one logical table into multiple physical child tables. The parent is a routing shell — all data lives in partitions. The planner uses <strong>partition pruning</strong> to skip partitions whose bounds cannot satisfy the query's predicate, turning a 3-year table scan into a single-month scan — but only when the partition key appears in the WHERE clause with a constant or parameter.</p>
+  <p><strong>Partitioning strategies</strong>:</p>
+  <ul>
+    <li><strong>RANGE</strong>: Best for time-series and temporal data. Old partitions can be <code>DETACH</code>ed (instant, non-blocking in PG14+) then archived or dropped — far cheaper than DELETE on huge tables. New partitions must be created in advance (pg_partman automates this).</li>
+    <li><strong>LIST</strong>: Best for known discrete values (country, region, tenant). Each partition maps to an explicit set of values. Enables routing queries to a single partition when filtering by that value.</li>
+    <li><strong>HASH</strong>: Best for even distribution of high-cardinality keys (user_id, UUID) with no natural affinity. Prevents hot spots but offers no pruning benefit unless the exact hash value is known.</li>
+  </ul>
+  <p><strong>Indexes on partitioned tables</strong>: Indexes are created per-partition — there are no true global unique indexes across partitions (except when the unique constraint includes the partition key). Cross-partition uniqueness must be enforced at the application layer or via an additional lookup table.</p>
+  <p><strong>When partitioning helps</strong>: Tables &gt;50–100 GB where queries target a time window; easy partition-level DROP for archival; autovacuum can work per-partition in parallel; partial indexes per partition. <strong>When it hurts</strong>: Small tables (planning overhead outweighs benefit); queries with no partition key in WHERE (full fan-out across all partitions); too many partitions (1000+ slows planning); complex FK relationships (each partition needs its own FK index).</p>
+  <div class="callout tip"><span class="icon">✅</span><p><strong>Partition detach before drop</strong>: <code>ALTER TABLE events DETACH PARTITION events_2022 CONCURRENTLY</code> (PG14+) is near-instant and non-blocking. The detached partition becomes a standalone table — archive it to cold storage, copy it out, then DROP it without impacting the live table.</p></div>
+
   <div class="code-block">
     <div class="code-header"><span class="code-lang">SQL</span><span class="code-label">Declarative partitioning (PG 10+)</span></div>
     <pre><span class="cmt">── Range partitioning (e.g., by month) ───────────────</span>
@@ -1324,6 +1442,18 @@ COPY <span class="tbl">orders</span> <span class="kw">TO STDOUT</span> <span cla
       <div class="section-desc">PL/pgSQL, set-returning, security definer, procedures with COMMIT</div>
     </div>
   </div>
+
+  <h3>Functions & Procedures: Architecture</h3>
+  <p><strong>Volatility categories</strong> are one of the most important concepts for function performance and correctness:</p>
+  <ul>
+    <li><strong>IMMUTABLE</strong>: Same inputs → same output, no DB access, no side effects. The planner can constant-fold calls at plan time, and you can build expression indexes on IMMUTABLE functions. Example: <code>lower()</code>, <code>abs()</code>, mathematical functions.</li>
+    <li><strong>STABLE</strong>: Same result within a single query/transaction, may read from the DB. The planner can call it once per query and reuse the result. Example: <code>now()</code>, <code>current_user</code>, functions reading configuration tables.</li>
+    <li><strong>VOLATILE</strong> (default): Can return different results per call, may have side effects. Called once per row per reference. Example: <code>random()</code>, <code>nextval()</code>, functions that write to tables.</li>
+  </ul>
+  <p><strong>Language choice</strong>: <code>LANGUAGE sql</code> is a transparent wrapper — the planner inlines the function body and optimizes it alongside the calling query. <code>LANGUAGE plpgsql</code> is a fully procedural language with variables, loops, cursors, and exception handling, but is opaque to the planner (no inlining). Use SQL functions for simple expressions meant to be inlined; use PL/pgSQL for complex logic.</p>
+  <p><strong>Functions vs Procedures (PG11+)</strong>: Functions return a value and run inside the caller's transaction. Procedures (called via <code>CALL</code>) can execute <code>COMMIT</code>/<code>ROLLBACK</code> mid-execution — essential for long-running batch jobs that must checkpoint progress without holding one enormous transaction open for minutes.</p>
+  <p><strong>SECURITY DEFINER</strong> functions run with the <em>owner's</em> privileges rather than the caller's. Useful for controlled privilege escalation (e.g., let app users call a function that accesses an admin table). Critical security requirement: always set <code>search_path = schema, pg_temp</code> explicitly to prevent search path injection attacks where a malicious user creates objects in a schema that shadows pg_catalog.</p>
+  <div class="callout tip"><span class="icon">✅</span><p><strong>PARALLEL SAFE/UNSAFE/RESTRICTED</strong>: Marking functions correctly enables the planner to use parallel workers. PARALLEL SAFE = can be called in parallel workers. PARALLEL RESTRICTED = only in leader process. PARALLEL UNSAFE (default) = disables parallelism for the entire query.</p></div>
 
   <div class="code-block">
     <div class="code-header"><span class="code-lang">PL/pgSQL</span><span class="code-label">Functions & procedures</span></div>
@@ -1397,6 +1527,18 @@ $$;
     </div>
   </div>
 
+  <h3>Trigger Mechanics & Timing</h3>
+  <p>Triggers fire on DML events (INSERT, UPDATE, DELETE, TRUNCATE) or DDL events. The combination of timing and scope gives eight distinct trigger types:</p>
+  <ul>
+    <li><strong>BEFORE ROW</strong>: Fires before each affected row is written. Can modify <code>NEW</code> (for INSERT/UPDATE) to alter the stored value, or return NULL to skip the row entirely. Used for: auto-setting timestamps, normalizing input, enforcing complex business rules.</li>
+    <li><strong>AFTER ROW</strong>: Fires after each row is written. Cannot change the stored data but sees the committed row. Used for: audit logs, cascading updates, sending notifications. The most common production trigger type.</li>
+    <li><strong>BEFORE/AFTER STATEMENT</strong>: Fires once per SQL statement regardless of rows affected (even zero rows). No OLD/NEW row variables. Use transition tables (<code>REFERENCING NEW TABLE AS new_data</code>) for bulk access to changed rows.</li>
+    <li><strong>INSTEAD OF</strong>: Only on views. Replaces the INSERT/UPDATE/DELETE entirely. Enables updatable views with arbitrary complexity.</li>
+  </ul>
+  <p><strong>Trigger execution order</strong>: BEFORE triggers run before AFTER triggers. Multiple triggers on the same event/timing fire in alphabetical order by name. Plan trigger names accordingly when order matters.</p>
+  <p><strong>OLD and NEW records</strong>: Row-level triggers receive <code>OLD</code> (pre-change row, NULL on INSERT) and <code>NEW</code> (post-change row, NULL on DELETE) as implicit variables in PL/pgSQL. <code>TG_TABLE_NAME</code>, <code>TG_OP</code>, <code>TG_WHEN</code> provide context about the triggering event.</p>
+  <div class="callout warn"><span class="icon">⚠️</span><p><strong>Trigger anti-patterns</strong>: Triggers create hidden side effects that make debugging and reasoning about the system hard. Cascading triggers (A fires DML that fires B that fires C) create performance nightmares and obscure execution paths. Triggers that call external services or do heavy computation block the originating transaction. Prefer explicit application logic or deferred background jobs for complex workflows. Use triggers only for tightly-scoped, database-internal concerns like audit logs and timestamp maintenance.</p></div>
+
   <div class="code-block">
     <div class="code-header"><span class="code-lang">PL/pgSQL</span><span class="code-label">Trigger patterns</span></div>
     <pre><span class="cmt">── Auto-update updated_at ────────────────────────────</span>
@@ -1464,6 +1606,19 @@ $$;
     </div>
   </div>
 
+  <h3>JSON vs JSONB: Architecture & Tradeoffs</h3>
+  <p><strong>json</strong> stores the raw text verbatim. It preserves key insertion order, whitespace, and duplicate keys. Every access re-parses the entire string — O(n) per query. Cannot be indexed. The only valid use case for <code>json</code> over <code>jsonb</code> is when you specifically need to preserve exact formatting or duplicate keys (extremely rare).</p>
+  <p><strong>jsonb</strong> stores a decomposed binary format — keys are sorted, deduplicated (last write wins for duplicates), and accessed via binary search: O(log n) per key. Supports all jsonb operators. Can be indexed with GIN. Slightly larger than json for simple documents due to the binary encoding overhead, but vastly faster for read-heavy workloads. <strong>Always prefer jsonb.</strong></p>
+  <p><strong>When to use JSONB vs relational columns</strong>:</p>
+  <ul>
+    <li>Use JSONB for truly schemaless data: user-defined fields, event/audit payloads, third-party API responses, per-row config that varies in structure.</li>
+    <li>Use relational columns for any field you'll filter, sort, join, or aggregate frequently. Relational columns get type-specific statistics, can have their own indexes, and the planner understands them semantically.</li>
+    <li>Hybrid: keep core business columns relational (user_id, status, created_at), use JSONB for extensible metadata. Never put primary keys or FK relationships inside JSONB.</li>
+  </ul>
+  <p><strong>GIN indexing strategies</strong>: <code>jsonb_ops</code> (default) indexes every key and every value — supports <code>@&gt;</code>, <code>?</code>, <code>?|</code>, <code>?&amp;</code>. <code>jsonb_path_ops</code> hashes key paths to values only — supports only <code>@&gt;</code> but is smaller and faster for containment queries. Choose based on your query patterns.</p>
+  <p><strong>jsonpath (PG12+)</strong>: A full XPath-like query language for navigating JSONB. Supports filters, arithmetic, and type predicates. More expressive than operator chains for deeply nested structures. <code>@@</code> operator returns boolean; <code>jsonb_path_query</code> returns matching elements as a set.</p>
+  <div class="callout info"><span class="icon">💡</span><p><strong>Deep update pattern</strong>: <code>||</code> does a shallow merge (top-level keys only). For nested updates use <code>jsonb_set(doc, '{path,to,key}', value)</code>. PG14+ supports subscript assignment: <code>metadata['address']['city'] = '"Mumbai"'::jsonb</code>. Remove a key with <code>metadata - 'key'</code> or <code>metadata #- '{nested,key}'</code>.</p></div>
+
   <div class="code-block">
     <div class="code-header"><span class="code-lang">SQL</span><span class="code-label">JSONB operators & functions</span></div>
     <pre><span class="cmt">── Operators ─────────────────────────────────────────</span>
@@ -1522,6 +1677,18 @@ $$;
     </div>
   </div>
 
+  <h3>Replication Architecture Deep Dive</h3>
+  <p><strong>WAL is the backbone</strong> of both durability and replication. Every data change is written to WAL segments (16 MB files by default). Streaming replication sends these WAL bytes to standbys in real time. Logical replication decodes the WAL into row-level change events via the <code>pgoutput</code> (or other) decoder plugin.</p>
+  <p><strong>Synchronous commit modes</strong> (set via <code>synchronous_commit</code>):</p>
+  <ul>
+    <li><code>off</code>: WAL written asynchronously — fastest, but up to ~1 WAL buffer (~64KB) of recent commits can be lost on crash.</li>
+    <li><code>local</code> (default when no sync standbys): WAL flushed to local disk before commit returns.</li>
+    <li><code>remote_write</code>: WAL received by standby (written to OS buffer) before commit returns. Fast failover but standby OS crash can lose data.</li>
+    <li><code>remote_apply</code>: WAL applied by standby before commit returns. True zero-RPO. Adds standby apply latency to every write commit.</li>
+    <li><code>on</code>: WAL flushed by standby (fsync'd) before commit returns. Maximum durability guarantee.</li>
+  </ul>
+  <div class="callout danger"><span class="icon">🔴</span><p><strong>Replication slot danger</strong>: Slots prevent WAL segment deletion until the subscriber has consumed them. If a subscriber disconnects or falls behind, WAL accumulates on disk indefinitely — a disk-full crash on the primary is a real production incident. Always monitor <code>pg_replication_slots.confirmed_flush_lsn</code> lag. Set <code>max_slot_wal_keep_size</code> (PG13+) as a hard cap on WAL retention per slot.</p></div>
+
   <div class="grid-2">
     <div class="card"><div class="card-title">Physical (Streaming) Replication</div><p>Binary WAL stream. Replica is exact byte-for-byte copy. Best for HA standby and read replicas. Synchronous or asynchronous.</p></div>
     <div class="card"><div class="card-title">Logical Replication</div><p>Row-level changes via publication/subscription. Can replicate specific tables across versions or to different schemas. Used for zero-downtime upgrades.</p></div>
@@ -1572,6 +1739,16 @@ synchronous_commit = on      <span class="cmt">-- or remote_write / remote_apply
     </div>
   </div>
 
+  <h3>Connection Overhead & Pooling</h3>
+  <p>Each PostgreSQL connection spawns a dedicated OS process (5–10 MB RSS). At 200 connections, you're burning 1–2 GB just for process overhead before any query runs. With 1000+ application connections (common in microservices), direct connections will exhaust memory and trigger OS scheduling overhead.</p>
+  <p><strong>PgBouncer pool modes</strong> — choose based on your application's usage patterns:</p>
+  <ul>
+    <li><strong>session</strong>: One server connection per client session. Equivalent to no pooling. Supports all PostgreSQL features (prepared statements, SET variables, advisory locks, LISTEN/NOTIFY). Use only for apps that maintain long-lived connections.</li>
+    <li><strong>transaction</strong>: Server connection held only for the duration of a transaction block, then returned to pool. Best throughput. Incompatible with session-scoped features (prepared statements by name, <code>SET</code> that must persist). Standard choice for most web applications.</li>
+    <li><strong>statement</strong>: Connection returned after every statement — cannot use multi-statement transactions at all. Rarely used.</li>
+  </ul>
+  <div class="callout info"><span class="icon">💡</span><p><strong>Parallel query</strong>: PostgreSQL can use multiple background worker processes to execute a single query (Gather/Gather Merge plan nodes). Only beneficial for large seq scans and aggregations — not index lookups. Configure with <code>max_parallel_workers_per_gather</code>. Each parallel worker uses its own <code>work_mem</code> allocation.</p></div>
+
   <h3>Key Configuration Parameters</h3>
   <div class="tbl-wrap"><table>
     <thead><tr><th>Parameter</th><th>Recommended</th><th>Impact</th></tr></thead>
@@ -1587,6 +1764,15 @@ synchronous_commit = on      <span class="cmt">-- or remote_write / remote_apply
       <tr><td><code>max_parallel_workers_per_gather</code></td><td>2–4</td><td>Parallel query workers per node</td></tr>
     </tbody>
   </table></div>
+
+  <h3>Autovacuum: The Hidden Engine</h3>
+  <p>Autovacuum is not optional — it is critical for both correctness and performance. It performs two jobs:</p>
+  <ul>
+    <li><strong>VACUUM</strong>: Marks dead tuples (from MVCC updates/deletes) as free space for reuse. Without it, tables grow indefinitely (bloat). Also updates the visibility map for Index Only Scans and freezes old transaction IDs to prevent XID wraparound.</li>
+    <li><strong>ANALYZE</strong>: Updates table statistics for the query planner. Stale stats lead to bad query plans.</li>
+  </ul>
+  <p>Autovacuum triggers when dead tuples exceed <code>autovacuum_vacuum_threshold + autovacuum_vacuum_scale_factor × n_live_tup</code>. Default scale factor is 20% — on a 100M row table, that's 20M dead tuples before autovacuum fires. High-churn tables need much lower thresholds (1–5%). The autovacuum cost delay (<code>autovacuum_vacuum_cost_delay</code>) throttles I/O to avoid impacting production — reduce it for tables that need faster cleanup.</p>
+  <p><strong>Table bloat</strong> builds when autovacuum can't keep up with write rate or when transactions hold old snapshots (preventing dead tuple reclamation). <code>pg_repack</code> rebuilds bloated tables and indexes online without ACCESS EXCLUSIVE lock.</p>
 
   <h3>Autovacuum Tuning</h3>
   <div class="code-block">
@@ -1643,6 +1829,20 @@ server_idle_timeout = 600
     </div>
   </div>
 
+  <h3>PostgreSQL Security Model</h3>
+  <p><strong>Role hierarchy</strong>: PostgreSQL uses roles for both users (roles with LOGIN) and groups (roles without LOGIN). Roles inherit privileges from parent roles by default (<code>INHERIT</code> attribute). You can model least-privilege access: create a read-only group role, grant it SELECT on tables, then grant the group role to individual user roles. Use <code>SET ROLE app_readonly</code> to explicitly switch context, or rely on <code>INHERIT</code> for automatic privilege inheritance.</p>
+  <p><strong>Privilege layers</strong> from coarsest to finest:</p>
+  <ul>
+    <li>Cluster: CREATEDB, CREATEROLE, REPLICATION, SUPERUSER</li>
+    <li>Database: CONNECT, TEMPORARY, CREATE (schema)</li>
+    <li>Schema: USAGE (see objects), CREATE (add objects)</li>
+    <li>Table: SELECT, INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER</li>
+    <li>Column: SELECT, INSERT, UPDATE on specific columns</li>
+  </ul>
+  <p>Always grant minimum necessary privileges. Use <code>ALTER DEFAULT PRIVILEGES</code> to ensure future objects created in a schema automatically get the right grants — without this, new tables are invisible to application roles until manually granted.</p>
+  <p><strong>Row-Level Security (RLS)</strong> is implemented as a query rewrite rule — every SELECT/INSERT/UPDATE/DELETE on an RLS-enabled table has the policy's USING/WITH CHECK expression invisibly appended. The application writes <code>SELECT * FROM orders</code> and only sees its own rows. Set application context via <code>SET LOCAL app.tenant_id = '42'</code> at the start of each transaction (or connection for PgBouncer session mode).</p>
+  <div class="callout danger"><span class="icon">🔴</span><p><strong>SECURITY DEFINER risk</strong>: The function runs with owner privileges, bypassing the caller's permission model. An attacker with EXECUTE permission can potentially exploit it to access tables they shouldn't. Always: (1) set <code>search_path = public, pg_temp</code> to prevent schema injection, (2) validate all inputs, (3) grant EXECUTE only to specific roles. Audit all SECURITY DEFINER functions regularly.</p></div>
+
   <div class="code-block">
     <div class="code-header"><span class="code-lang">SQL</span><span class="code-label">Production security setup</span></div>
     <pre><span class="cmt">── Role-based access control ─────────────────────────</span>
@@ -1694,6 +1894,14 @@ server_idle_timeout = 600
       <div class="section-desc">pg_trgm, uuid-ossp, PostGIS, timescaledb, fdw, pg_cron</div>
     </div>
   </div>
+
+  <h3>Extensions: How They Work</h3>
+  <p>PostgreSQL extensions package SQL objects (functions, types, operators, indexes), C code, and configuration together. <code>CREATE EXTENSION</code> installs them into the current database. Extensions are schema-namespaced and versionable. Key extensions every senior engineer should know:</p>
+  <ul>
+    <li><strong>pg_stat_statements</strong>: The most important production monitoring extension. Tracks execution stats per query fingerprint (normalized, parameter-stripped). Use it to identify top consumers by total time, mean time, or I/O. Essential for query performance analysis.</li>
+    <li><strong>pg_trgm</strong>: Trigram-based similarity. A trigram is a set of 3 consecutive characters. The extension creates GIN/GiST indexes on these trigrams, enabling fast <code>LIKE '%substring%'</code> and fuzzy (<code>similarity()</code>) searches without a full-text search stack.</li>
+    <li><strong>pgvector</strong>: Adds a <code>vector(n)</code> type and approximate nearest-neighbor indexes (IVFFLAT — inverted file with flat quantization; HNSW — hierarchical navigable small world graph, faster but more memory). Used for semantic similarity search over ML embeddings. HNSW has better query performance; IVFFLAT builds faster.</li>
+  </ul>
 
   <div class="tbl-wrap"><table>
     <thead><tr><th>Extension</th><th>Purpose</th><th>Key Feature</th></tr></thead>
@@ -1760,6 +1968,20 @@ server_idle_timeout = 600
       <div class="section-desc">pg_dump, pg_basebackup, WAL-E/pgBackRest, point-in-time recovery</div>
     </div>
   </div>
+
+  <h3>Backup Strategies & PITR Concepts</h3>
+  <p><strong>Logical backups</strong> (<code>pg_dump</code>) export data as SQL or binary format. Portable across major versions, selective (table/schema-level), compressible. Slow for large databases (must read every row), and require a running, accessible cluster. The <code>-Fc</code> (custom format) with <code>-j N</code> (N parallel workers) is the standard approach: parallel dump reduces wall time; <code>pg_restore -j</code> parallelizes restore.</p>
+  <p><strong>Physical backups</strong> (<code>pg_basebackup</code>, pgBackRest) copy the entire data directory at the filesystem level. Much faster for large databases, required for PITR, but tied to the same major PostgreSQL version.</p>
+  <p><strong>Point-in-Time Recovery (PITR)</strong> is the combination of a base backup + continuous WAL archiving. Recovery process:</p>
+  <ol>
+    <li>Restore the base backup to the data directory</li>
+    <li>Configure <code>restore_command</code> (copies WAL segments from archive to the recovery directory)</li>
+    <li>Set <code>recovery_target_time</code> (or LSN, or transaction ID)</li>
+    <li>Start PostgreSQL — it replays WAL segments from the archive until it hits the target, then promotes</li>
+  </ol>
+  <p>PITR lets you recover from logical disasters (accidental <code>DROP TABLE</code>, mass bad update) to within seconds of any point in your WAL retention window.</p>
+  <p><strong>RPO vs RTO</strong>: <em>Recovery Point Objective</em> — how much data can you afford to lose? Async replication: RPO = seconds. Synchronous: RPO = zero. <em>Recovery Time Objective</em> — how fast must you recover? PITR with pgBackRest parallel restore typically achieves RTO in minutes for most workloads. Test your RTO regularly — it's always longer than you estimate.</p>
+  <div class="callout tip"><span class="icon">✅</span><p><strong>pgBackRest</strong> is the production standard: parallel backup/restore, incremental/differential backups, built-in S3/GCS/Azure support, retention management, and a <code>--verify</code> command to confirm backup integrity without a full restore. Replaces both WAL-E and custom archiving scripts.</p></div>
 
   <div class="code-block">
     <div class="code-header"><span class="code-lang">BASH + SQL</span><span class="code-label">Backup & recovery commands</span></div>
