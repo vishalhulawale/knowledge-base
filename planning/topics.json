@@ -436,55 +436,55 @@
           "title": "GraphQL fundamentals vs REST; schema, types, queries, mutations, subscriptions",
           "slug": "01-graphql-fundamentals-vs-rest-schema-types-queries-mutations",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Schema design best practices (nullability, pagination, errors, versioning)",
           "slug": "02-schema-design-best-practices",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Resolvers & execution model; Spring for GraphQL / DGS",
           "slug": "03-resolvers-and-execution-model-spring-for-graphql-dgs",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "N+1 problem & DataLoader batching",
           "slug": "04-n-plus-1-problem-and-dataloader-batching",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Aggregating multiple upstream systems: orchestration, timeouts, partial failures",
           "slug": "05-aggregating-multiple-upstream-systems-orchestration-timeouts",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Federation vs schema stitching",
           "slug": "06-federation-vs-schema-stitching",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Caching (client, server, persisted queries)",
           "slug": "07-caching",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Security: auth, query depth/complexity limits, introspection",
           "slug": "08-security-auth-query-depth-complexity-limits-introspection",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Performance & observability of GraphQL services",
           "slug": "09-performance-and-observability-of-graphql-services",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },

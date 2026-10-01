@@ -118,6 +118,15 @@ nav:
   - "GraphQL":
       - "GraphQL":
           - Overview: graphql/index.md
+          - "GraphQL Fundamentals vs REST": graphql/01-graphql-fundamentals-vs-rest-schema-types-queries-mutations.md
+          - "GraphQL Schema Design Best Practices": graphql/02-schema-design-best-practices.md
+          - "Resolvers & Execution Model (Spring for GraphQL / DGS)": graphql/03-resolvers-and-execution-model-spring-for-graphql-dgs.md
+          - "The N+1 Problem & DataLoader Batching": graphql/04-n-plus-1-problem-and-dataloader-batching.md
+          - "Aggregating Multiple Upstream Systems: Orchestration, Timeouts & Partial Failures": graphql/05-aggregating-multiple-upstream-systems-orchestration-timeouts.md
+          - "Federation vs Schema Stitching": graphql/06-federation-vs-schema-stitching.md
+          - "Caching in GraphQL (Client, Server, Persisted Queries)": graphql/07-caching.md
+          - "GraphQL Security: Auth, Depth/Complexity Limits & Introspection": graphql/08-security-auth-query-depth-complexity-limits-introspection.md
+          - "Performance & Observability of GraphQL Services": graphql/09-performance-and-observability-of-graphql-services.md
   - "Frontend":
       - "ReactJS":
           - Overview: react/index.md
