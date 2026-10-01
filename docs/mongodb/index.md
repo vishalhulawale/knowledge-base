@@ -1,0 +1,15 @@
+# MongoDB
+
+**Priority:** P1 — strong working knowledge
+
+| # | Subtopic | Resume link | Status |
+|---|---|---|---|
+| 1 | Document model & schema design (embed vs reference) | ★ | :material-progress-clock: To do |
+| 2 | CRUD, query operators & aggregation pipeline |  | :material-progress-clock: To do |
+| 3 | Indexing (compound, multikey, TTL) & explain plans | ★ | :material-progress-clock: To do |
+| 4 | Replica sets, read/write concerns |  | :material-progress-clock: To do |
+| 5 | Sharding & shard key selection |  | :material-progress-clock: To do |
+| 6 | Transactions & consistency |  | :material-progress-clock: To do |
+| 7 | Spring Data MongoDB | ★ | :material-progress-clock: To do |
+
+★ = tied to a resume claim; expect deep follow-up questions.

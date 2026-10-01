@@ -1,0 +1,177 @@
+site_name: Interview Prep Knowledge Base
+site_description: Senior / Lead Engineer interview preparation — Java, Spring, Kafka, GraphQL, React, AWS, System Design
+site_author: Vishal Hulawale
+repo_url: https://github.com/vishalhulawale/knowledge-base
+repo_name: vishalhulawale/knowledge-base
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer
+    - navigation.instant
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - toc.follow
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+nav:
+  - Home: index.md
+  - Study Plan: study-plan.md
+  - "Java":
+      - "Core Java":
+          - Overview: core-java/index.md
+      - "Java Concurrency & JVM":
+          - Overview: java-concurrency-jvm/index.md
+  - "Spring":
+      - "Spring Boot & Spring Core":
+          - Overview: spring-boot/index.md
+      - "Spring Security, OAuth2/OIDC & JWT":
+          - Overview: spring-security-oauth2/index.md
+      - "JPA / Hibernate":
+          - Overview: jpa-hibernate/index.md
+      - "Reactive Programming & Spring WebFlux":
+          - Overview: reactive-webflux/index.md
+  - "Architecture":
+      - "Microservices Architecture & Patterns":
+          - Overview: microservices/index.md
+      - "Domain-Driven Design & Clean Architecture":
+          - Overview: ddd-clean-architecture/index.md
+      - "Distributed Systems Concepts":
+          - Overview: distributed-systems/index.md
+      - "API Design":
+          - Overview: api-design/index.md
+      - "Real-time & Inter-service Communication":
+          - Overview: realtime-communication/index.md
+      - "Service Mesh & Cloud-Native Platform":
+          - Overview: service-mesh-cloud-native/index.md
+  - "Messaging":
+      - "Apache Kafka & Event-Driven Architecture":
+          - Overview: kafka/index.md
+          - "Error Handling: Retry, DLQ & Replay": kafka/07-error-handling-retry-topics-dlq-poison-messages-replay.md
+      - "Messaging Alternatives":
+          - Overview: messaging-alternatives/index.md
+  - "GraphQL":
+      - "GraphQL":
+          - Overview: graphql/index.md
+  - "Frontend":
+      - "ReactJS":
+          - Overview: react/index.md
+      - "JavaScript & TypeScript":
+          - Overview: javascript-typescript/index.md
+      - "Frontend Architecture":
+          - Overview: frontend-architecture/index.md
+      - "Browser, HTML/CSS & Web Performance":
+          - Overview: browser-web-performance/index.md
+      - "Next.js & SSR":
+          - Overview: nextjs-ssr/index.md
+  - "Data":
+      - "PostgreSQL / SQL":
+          - Overview: postgresql-sql/index.md
+      - "MongoDB":
+          - Overview: mongodb/index.md
+      - "Redis & Caching":
+          - Overview: redis-caching/index.md
+      - "Data Modelling & Database Selection":
+          - Overview: data-modelling/index.md
+      - "Elasticsearch & DynamoDB":
+          - Overview: elasticsearch-dynamodb/index.md
+  - "Cloud & DevOps":
+      - "AWS":
+          - Overview: aws/index.md
+      - "Docker & Kubernetes":
+          - Overview: docker-kubernetes/index.md
+      - "CI/CD & DevOps":
+          - Overview: cicd-devops/index.md
+      - "Azure":
+          - Overview: azure/index.md
+      - "Observability & Production Support":
+          - Overview: observability/index.md
+  - "Security":
+      - "Application Security":
+          - Overview: application-security/index.md
+      - "Cryptography & Key Management":
+          - Overview: cryptography-key-management/index.md
+      - "Compliance & Data Privacy":
+          - Overview: compliance-privacy/index.md
+  - "System Design":
+      - "System Design \u2014 HLD":
+          - Overview: system-design/index.md
+      - "Low-Level Design & Design Patterns":
+          - Overview: lld-design-patterns/index.md
+      - "Performance Engineering":
+          - Overview: performance-engineering/index.md
+      - "Networking & Web Fundamentals":
+          - Overview: networking/index.md
+  - "Coding (DSA)":
+      - "Data Structures & Algorithms":
+          - Overview: dsa/index.md
+  - "Testing & Practices":
+      - "Testing Strategy":
+          - Overview: testing/index.md
+      - "Engineering Practices":
+          - Overview: engineering-practices/index.md
+      - "Agile Delivery & Estimation":
+          - Overview: agile-delivery/index.md
+  - "GenAI":
+      - "GenAI for Engineers":
+          - Overview: genai/index.md
+  - "Python":
+      - "Python":
+          - Overview: python/index.md
+  - "Leadership":
+      - "Leadership & Behavioral":
+          - Overview: leadership-behavioral/index.md

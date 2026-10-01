@@ -1,0 +1,2150 @@
+{
+  "topics": [
+    {
+      "num": 1,
+      "title": "Core Java",
+      "slug": "core-java",
+      "priority": "P0",
+      "subtopics": [
+        {
+          "title": "OOP principles, `equals`/`hashCode` contract, immutability",
+          "slug": "01-oop-principles-equals-hashcode-contract-immutability",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "String internals (pool, immutability, StringBuilder)",
+          "slug": "02-string-internals",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Collections framework (List/Set/Map/Queue implementations and complexity)",
+          "slug": "03-collections-framework",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "HashMap & ConcurrentHashMap internals",
+          "slug": "04-hashmap-and-concurrenthashmap-internals",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Generics (wildcards, PECS, type erasure)",
+          "slug": "05-generics",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Exceptions (checked vs unchecked, try-with-resources, best practices)",
+          "slug": "06-exceptions",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Functional Java: lambdas, functional interfaces, Streams, Optional",
+          "slug": "07-functional-java-lambdas-functional-interfaces-streams-option",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Modern Java 9–25: records, sealed classes, pattern matching, switch expressions, text blocks",
+          "slug": "08-modern-java-9-25-records-sealed-classes-pattern-matching-swi",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Serialization, reflection & annotations",
+          "slug": "09-serialization-reflection-and-annotations",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Java memory basics: stack vs heap, pass-by-value, object lifecycle",
+          "slug": "10-java-memory-basics-stack-vs-heap-pass-by-value-object-lifecy",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Java Concurrency & JVM",
+      "slug": "java-concurrency-jvm",
+      "priority": "P0",
+      "subtopics": [
+        {
+          "title": "Threads, lifecycle, `Runnable`/`Callable`",
+          "slug": "01-threads-lifecycle-runnable-callable",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Synchronization, `volatile`, Java Memory Model, happens-before",
+          "slug": "02-synchronization-volatile-java-memory-model-happens-before",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Locks: ReentrantLock, ReadWriteLock, StampedLock; deadlock/livelock/starvation",
+          "slug": "03-locks-reentrantlock-readwritelock-stampedlock-deadlock-livel",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Executors & thread pools (sizing, rejection policies, ForkJoinPool)",
+          "slug": "04-executors-and-thread-pools",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "CompletableFuture & async composition",
+          "slug": "05-completablefuture-and-async-composition",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Concurrent collections & atomics (CAS, LongAdder)",
+          "slug": "06-concurrent-collections-and-atomics",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Virtual threads (Project Loom) & structured concurrency",
+          "slug": "07-virtual-threads-and-structured-concurrency",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "JVM architecture: class loading, JIT, memory areas",
+          "slug": "08-jvm-architecture-class-loading-jit-memory-areas",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Garbage collection (G1, ZGC, tuning, GC logs)",
+          "slug": "09-garbage-collection",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Diagnosing production issues: thread dumps, heap dumps, memory leaks",
+          "slug": "10-diagnosing-production-issues-thread-dumps-heap-dumps-memory",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Spring Boot & Spring Core",
+      "slug": "spring-boot",
+      "priority": "P0",
+      "subtopics": [
+        {
+          "title": "IoC & dependency injection, bean scopes & lifecycle",
+          "slug": "01-ioc-and-dependency-injection-bean-scopes-and-lifecycle",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Auto-configuration & starters (how Boot works internally)",
+          "slug": "02-auto-configuration-and-starters",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Configuration: properties, profiles, `@ConfigurationProperties`",
+          "slug": "03-configuration-properties-profiles-configurationproperties",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "AOP & proxies (JDK vs CGLIB, self-invocation pitfall)",
+          "slug": "04-aop-and-proxies",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Spring MVC request lifecycle, filters vs interceptors, exception handling",
+          "slug": "05-spring-mvc-request-lifecycle-filters-vs-interceptors-excepti",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Transactions: `@Transactional`, propagation, isolation, rollback rules",
+          "slug": "06-transactions-transactional-propagation-isolation-rollback-ru",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Spring Data (repositories, projections, pagination)",
+          "slug": "07-spring-data",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Actuator, health checks, metrics (Micrometer)",
+          "slug": "08-actuator-health-checks-metrics",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Validation, REST clients (RestClient, WebClient, Feign)",
+          "slug": "09-validation-rest-clients",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Spring Boot 3.x: Jakarta EE, GraalVM native image, virtual threads, observability",
+          "slug": "10-spring-boot-3-x-jakarta-ee-graalvm-native-image-virtual-thre",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "Spring Security, OAuth2/OIDC & JWT",
+      "slug": "spring-security-oauth2",
+      "priority": "P0",
+      "subtopics": [
+        {
+          "title": "Spring Security architecture: filter chain, SecurityContext, authentication providers",
+          "slug": "01-spring-security-architecture-filter-chain-securitycontext-au",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Authentication vs authorization; method security",
+          "slug": "02-authentication-vs-authorization-method-security",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Sessions vs tokens; CSRF & CORS in Spring",
+          "slug": "03-sessions-vs-tokens-csrf-and-cors-in-spring",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "JWT: structure, signing (HS256 vs RS256), validation, revocation",
+          "slug": "04-jwt-structure-signing-validation-revocation",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "OAuth2 roles & grant types (auth code + PKCE, client credentials, refresh token)",
+          "slug": "05-oauth2-roles-and-grant-types",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "OpenID Connect: ID token, userinfo, discovery",
+          "slug": "06-openid-connect-id-token-userinfo-discovery",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Resource server & client configuration in Spring",
+          "slug": "07-resource-server-and-client-configuration-in-spring",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "SSO, SAML vs OIDC, enterprise IdPs (PingFederate, Active Directory/Entra ID)",
+          "slug": "08-sso-saml-vs-oidc-enterprise-idps",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Service-to-service auth (mTLS, token exchange, propagation through gateways)",
+          "slug": "09-service-to-service-auth",
+          "resume": true,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 5,
+      "title": "Microservices Architecture & Patterns",
+      "slug": "microservices",
+      "priority": "P0",
+      "subtopics": [
+        {
+          "title": "Monolith vs microservices; when not to use microservices",
+          "slug": "01-monolith-vs-microservices-when-not-to-use-microservices",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Decomposition strategies & monolith migration (strangler fig)",
+          "slug": "02-decomposition-strategies-and-monolith-migration",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "API gateway & BFF pattern",
+          "slug": "03-api-gateway-and-bff-pattern",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Service discovery & client-side load balancing",
+          "slug": "04-service-discovery-and-client-side-load-balancing",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Inter-service communication: sync vs async",
+          "slug": "05-inter-service-communication-sync-vs-async",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Resilience: circuit breaker, retry, bulkhead, timeout, rate limiter (Resilience4j)",
+          "slug": "06-resilience-circuit-breaker-retry-bulkhead-timeout-rate-limit",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Distributed transactions: Saga (choreography vs orchestration), outbox pattern",
+          "slug": "07-distributed-transactions-saga-outbox-pattern",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "CQRS & event sourcing",
+          "slug": "08-cqrs-and-event-sourcing",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Configuration & secrets management (Spring Cloud Config, Vault)",
+          "slug": "09-configuration-and-secrets-management",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Distributed tracing & correlation IDs",
+          "slug": "10-distributed-tracing-and-correlation-ids",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Deployment strategies: blue-green, canary, feature flags",
+          "slug": "11-deployment-strategies-blue-green-canary-feature-flags",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Microservice testing strategy & contract testing",
+          "slug": "12-microservice-testing-strategy-and-contract-testing",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 6,
+      "title": "Apache Kafka & Event-Driven Architecture",
+      "slug": "kafka",
+      "priority": "P0",
+      "subtopics": [
+        {
+          "title": "Event-driven architecture fundamentals (events vs commands, pub/sub, choreography)",
+          "slug": "01-event-driven-architecture-fundamentals",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Kafka architecture: brokers, topics, partitions, replication, ISR, KRaft",
+          "slug": "02-kafka-architecture-brokers-topics-partitions-replication-isr",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Producers: acks, batching, idempotent producer, keys & partitioning",
+          "slug": "03-producers-acks-batching-idempotent-producer-keys-and-partiti",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Consumers: consumer groups, rebalancing, offset management, commit strategies",
+          "slug": "04-consumers-consumer-groups-rebalancing-offset-management-comm",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Delivery semantics: at-most/at-least/exactly-once, transactions",
+          "slug": "05-delivery-semantics-at-most-at-least-exactly-once-transaction",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Ordering guarantees & partition key design",
+          "slug": "06-ordering-guarantees-and-partition-key-design",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Error handling: retry topics, DLQ, poison messages, replay",
+          "slug": "07-error-handling-retry-topics-dlq-poison-messages-replay",
+          "resume": true,
+          "status": "done"
+        },
+        {
+          "title": "Idempotent consumers & deduplication",
+          "slug": "08-idempotent-consumers-and-deduplication",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Spring Kafka (listeners, error handlers, `@RetryableTopic`)",
+          "slug": "09-spring-kafka",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Schema management: Avro/Protobuf, Schema Registry, compatibility",
+          "slug": "10-schema-management-avro-protobuf-schema-registry-compatibilit",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Kafka Streams & Kafka Connect (overview)",
+          "slug": "11-kafka-streams-and-kafka-connect",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Performance tuning, consumer lag & monitoring",
+          "slug": "12-performance-tuning-consumer-lag-and-monitoring",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 7,
+      "title": "GraphQL",
+      "slug": "graphql",
+      "priority": "P0",
+      "subtopics": [
+        {
+          "title": "GraphQL fundamentals vs REST; schema, types, queries, mutations, subscriptions",
+          "slug": "01-graphql-fundamentals-vs-rest-schema-types-queries-mutations",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Schema design best practices (nullability, pagination, errors, versioning)",
+          "slug": "02-schema-design-best-practices",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Resolvers & execution model; Spring for GraphQL / DGS",
+          "slug": "03-resolvers-and-execution-model-spring-for-graphql-dgs",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "N+1 problem & DataLoader batching",
+          "slug": "04-n-plus-1-problem-and-dataloader-batching",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Aggregating multiple upstream systems: orchestration, timeouts, partial failures",
+          "slug": "05-aggregating-multiple-upstream-systems-orchestration-timeouts",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Federation vs schema stitching",
+          "slug": "06-federation-vs-schema-stitching",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Caching (client, server, persisted queries)",
+          "slug": "07-caching",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Security: auth, query depth/complexity limits, introspection",
+          "slug": "08-security-auth-query-depth-complexity-limits-introspection",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Performance & observability of GraphQL services",
+          "slug": "09-performance-and-observability-of-graphql-services",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 8,
+      "title": "ReactJS",
+      "slug": "react",
+      "priority": "P0",
+      "subtopics": [
+        {
+          "title": "JSX, components, props vs state, reconciliation & virtual DOM",
+          "slug": "01-jsx-components-props-vs-state-reconciliation-and-virtual-dom",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Hooks deep dive: useState, useEffect, useRef, useMemo, useCallback, custom hooks",
+          "slug": "02-hooks-deep-dive-usestate-useeffect-useref-usememo-usecallbac",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Rendering behaviour: re-render triggers, keys, batching",
+          "slug": "03-rendering-behaviour-re-render-triggers-keys-batching",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Context API & component composition patterns",
+          "slug": "04-context-api-and-component-composition-patterns",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Forms & controlled vs uncontrolled components",
+          "slug": "05-forms-and-controlled-vs-uncontrolled-components",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Performance optimisation: memoization, code splitting, lazy loading, virtualization",
+          "slug": "06-performance-optimisation-memoization-code-splitting-lazy-loa",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Error boundaries & Suspense",
+          "slug": "07-error-boundaries-and-suspense",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "React 18/19: concurrent rendering, transitions, Actions, `use`, React Compiler",
+          "slug": "08-react-18-19-concurrent-rendering-transitions-actions-use-rea",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Routing (React Router) & auth-protected routes",
+          "slug": "09-routing-and-auth-protected-routes",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Testing React (Jest, React Testing Library)",
+          "slug": "10-testing-react",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 9,
+      "title": "JavaScript & TypeScript",
+      "slug": "javascript-typescript",
+      "priority": "P0",
+      "subtopics": [
+        {
+          "title": "Scope, hoisting, closures, `this`, prototypes & inheritance",
+          "slug": "01-scope-hoisting-closures-this-prototypes-and-inheritance",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Event loop, microtasks vs macrotasks",
+          "slug": "02-event-loop-microtasks-vs-macrotasks",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Promises, async/await, error handling",
+          "slug": "03-promises-async-await-error-handling",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "ES6+ features (destructuring, modules, spread, optional chaining, iterators/generators)",
+          "slug": "04-es6-plus-features",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Equality, type coercion, immutability, shallow vs deep copy",
+          "slug": "05-equality-type-coercion-immutability-shallow-vs-deep-copy",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Debounce, throttle, memoization & common JS coding questions",
+          "slug": "06-debounce-throttle-memoization-and-common-js-coding-questions",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "TypeScript type system: interfaces vs types, generics, unions, narrowing",
+          "slug": "07-typescript-type-system-interfaces-vs-types-generics-unions-n",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Advanced TypeScript: utility, mapped & conditional types",
+          "slug": "08-advanced-typescript-utility-mapped-and-conditional-types",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Output-prediction & \"gotcha\" questions",
+          "slug": "09-output-prediction-and-gotcha-questions",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 15,
+      "title": "AWS",
+      "slug": "aws",
+      "priority": "P0",
+      "subtopics": [
+        {
+          "title": "Global infrastructure, Well-Architected Framework",
+          "slug": "01-global-infrastructure-well-architected-framework",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "IAM: users, roles, policies, least privilege",
+          "slug": "02-iam-users-roles-policies-least-privilege",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Compute: EC2, Auto Scaling, ELB/ALB/NLB",
+          "slug": "03-compute-ec2-auto-scaling-elb-alb-nlb",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Containers: ECS vs EKS vs Fargate",
+          "slug": "04-containers-ecs-vs-eks-vs-fargate",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Serverless: Lambda (cold starts, concurrency, limits), API Gateway",
+          "slug": "05-serverless-lambda-api-gateway",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Storage: S3 (classes, consistency, security), EBS vs EFS",
+          "slug": "06-storage-s3-ebs-vs-efs",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Databases: RDS/Aurora, DynamoDB (keys, GSI/LSI, capacity)",
+          "slug": "07-databases-rds-aurora-dynamodb",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Messaging: SQS vs SNS vs EventBridge vs Kinesis",
+          "slug": "08-messaging-sqs-vs-sns-vs-eventbridge-vs-kinesis",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Networking: VPC, subnets, security groups vs NACLs, Route 53, CloudFront",
+          "slug": "09-networking-vpc-subnets-security-groups-vs-nacls-route-53-clo",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Security: KMS, Secrets Manager, encryption at rest/in transit",
+          "slug": "10-security-kms-secrets-manager-encryption-at-rest-in-transit",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Observability: CloudWatch, X-Ray",
+          "slug": "11-observability-cloudwatch-x-ray",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Architecture scenarios: HA, DR strategies, cost optimisation",
+          "slug": "12-architecture-scenarios-ha-dr-strategies-cost-optimisation",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 24,
+      "title": "System Design — HLD",
+      "slug": "system-design",
+      "priority": "P0",
+      "subtopics": [
+        {
+          "title": "Approach & framework for the design interview",
+          "slug": "01-approach-and-framework-for-the-design-interview",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Back-of-the-envelope estimation",
+          "slug": "02-back-of-the-envelope-estimation",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Scalability: vertical vs horizontal, stateless services, load balancing",
+          "slug": "03-scalability-vertical-vs-horizontal-stateless-services-load-b",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Caching strategies & CDN",
+          "slug": "04-caching-strategies-and-cdn",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Database scaling: replication, sharding, partitioning, consistent hashing",
+          "slug": "05-database-scaling-replication-sharding-partitioning-consisten",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "CAP & PACELC, consistency models",
+          "slug": "06-cap-and-pacelc-consistency-models",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Message queues & async processing",
+          "slug": "07-message-queues-and-async-processing",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Rate limiting & API gateway design",
+          "slug": "08-rate-limiting-and-api-gateway-design",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Availability, fault tolerance, disaster recovery",
+          "slug": "09-availability-fault-tolerance-disaster-recovery",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Case studies: URL shortener, rate limiter, notification system, news feed, chat, payment system, healthcare/prescription platform",
+          "slug": "10-case-studies-url-shortener-rate-limiter-notification-system",
+          "resume": true,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 25,
+      "title": "Low-Level Design & Design Patterns",
+      "slug": "lld-design-patterns",
+      "priority": "P0",
+      "subtopics": [
+        {
+          "title": "SOLID, DRY, KISS, YAGNI, composition over inheritance",
+          "slug": "01-solid-dry-kiss-yagni-composition-over-inheritance",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Creational patterns (Singleton, Factory, Builder, Prototype)",
+          "slug": "02-creational-patterns",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Structural patterns (Adapter, Decorator, Proxy, Facade, Composite)",
+          "slug": "03-structural-patterns",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Behavioural patterns (Strategy, Observer, Template, Chain of Responsibility, Command, State)",
+          "slug": "04-behavioural-patterns",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "UML & class diagram basics for interviews",
+          "slug": "05-uml-and-class-diagram-basics-for-interviews",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "LLD approach: requirements → entities → relationships → APIs",
+          "slug": "06-lld-approach-requirements-entities-relationships-apis",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Case studies: parking lot, LRU cache, rate limiter, elevator, splitwise, library system",
+          "slug": "07-case-studies-parking-lot-lru-cache-rate-limiter-elevator-spl",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 26,
+      "title": "Distributed Systems Concepts",
+      "slug": "distributed-systems",
+      "priority": "P0",
+      "subtopics": [
+        {
+          "title": "Fallacies of distributed computing, failure modes",
+          "slug": "01-fallacies-of-distributed-computing-failure-modes",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Consistency models & replication (leader/follower, quorum)",
+          "slug": "02-consistency-models-and-replication",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Consensus basics (Raft, leader election)",
+          "slug": "03-consensus-basics",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Idempotency & idempotency keys",
+          "slug": "04-idempotency-and-idempotency-keys",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Retries, backoff, jitter, timeouts",
+          "slug": "05-retries-backoff-jitter-timeouts",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Distributed transactions: 2PC vs Saga",
+          "slug": "06-distributed-transactions-2pc-vs-saga",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Exactly-once processing in practice",
+          "slug": "07-exactly-once-processing-in-practice",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Clocks, ordering, distributed locks",
+          "slug": "08-clocks-ordering-distributed-locks",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Backpressure & load shedding",
+          "slug": "09-backpressure-and-load-shedding",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 31,
+      "title": "Leadership & Behavioral",
+      "slug": "leadership-behavioral",
+      "priority": "P0",
+      "subtopics": [
+        {
+          "title": "STAR framework & building a story bank",
+          "slug": "01-star-framework-and-building-a-story-bank",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "\"Tell me about yourself\" & project deep-dive narrative (OptumRx Meteor)",
+          "slug": "02-tell-me-about-yourself-and-project-deep-dive-narrative",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Leading a team of 8–10: delegation, ownership, accountability",
+          "slug": "03-leading-a-team-of-8-10-delegation-ownership-accountability",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Mentoring & growing engineers",
+          "slug": "04-mentoring-and-growing-engineers",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Handling conflict & technical disagreements (incl. with architects)",
+          "slug": "05-handling-conflict-and-technical-disagreements",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Managing underperformance & difficult conversations",
+          "slug": "06-managing-underperformance-and-difficult-conversations",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Estimation, deadlines & stakeholder management",
+          "slug": "07-estimation-deadlines-and-stakeholder-management",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Production incidents & postmortems",
+          "slug": "08-production-incidents-and-postmortems",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Hiring & interviewing others",
+          "slug": "09-hiring-and-interviewing-others",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Driving engineering standards & technical decisions",
+          "slug": "10-driving-engineering-standards-and-technical-decisions",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Failures, mistakes & lessons learned",
+          "slug": "11-failures-mistakes-and-lessons-learned",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Questions to ask the interviewer; salary/role conversations",
+          "slug": "12-questions-to-ask-the-interviewer-salary-role-conversations",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 10,
+      "title": "Frontend Architecture",
+      "slug": "frontend-architecture",
+      "priority": "P1",
+      "subtopics": [
+        {
+          "title": "Micro-frontends: approaches (Module Federation, single-spa, iframes) & trade-offs",
+          "slug": "01-micro-frontends-approaches-and-trade-offs",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Shared dependencies, routing & communication between micro-frontends",
+          "slug": "02-shared-dependencies-routing-and-communication-between-micro",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "State management: Redux Toolkit, React Query/TanStack Query, when to use which",
+          "slug": "03-state-management-redux-toolkit-react-query-tanstack-query-wh",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Design systems & component libraries (Storybook, MUI)",
+          "slug": "04-design-systems-and-component-libraries",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Frontend security (XSS, token storage, CSP)",
+          "slug": "05-frontend-security",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Frontend CI/CD & monorepos",
+          "slug": "06-frontend-ci-cd-and-monorepos",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 11,
+      "title": "Redis & Caching",
+      "slug": "redis-caching",
+      "priority": "P1",
+      "subtopics": [
+        {
+          "title": "Redis data structures & use cases",
+          "slug": "01-redis-data-structures-and-use-cases",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Caching patterns: cache-aside, read/write-through, write-behind",
+          "slug": "02-caching-patterns-cache-aside-read-write-through-write-behind",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "TTL, eviction policies & invalidation strategies",
+          "slug": "03-ttl-eviction-policies-and-invalidation-strategies",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Cache stampede, penetration & avalanche",
+          "slug": "04-cache-stampede-penetration-and-avalanche",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Spring Cache abstraction with Redis",
+          "slug": "05-spring-cache-abstraction-with-redis",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Persistence (RDB/AOF), replication, Sentinel & Cluster",
+          "slug": "06-persistence-replication-sentinel-and-cluster",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Distributed locks, rate limiting & pub/sub with Redis",
+          "slug": "07-distributed-locks-rate-limiting-and-pub-sub-with-redis",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 12,
+      "title": "MongoDB",
+      "slug": "mongodb",
+      "priority": "P1",
+      "subtopics": [
+        {
+          "title": "Document model & schema design (embed vs reference)",
+          "slug": "01-document-model-and-schema-design",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "CRUD, query operators & aggregation pipeline",
+          "slug": "02-crud-query-operators-and-aggregation-pipeline",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Indexing (compound, multikey, TTL) & explain plans",
+          "slug": "03-indexing-and-explain-plans",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Replica sets, read/write concerns",
+          "slug": "04-replica-sets-read-write-concerns",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Sharding & shard key selection",
+          "slug": "05-sharding-and-shard-key-selection",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Transactions & consistency",
+          "slug": "06-transactions-and-consistency",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Spring Data MongoDB",
+          "slug": "07-spring-data-mongodb",
+          "resume": true,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 13,
+      "title": "PostgreSQL / SQL",
+      "slug": "postgresql-sql",
+      "priority": "P1",
+      "subtopics": [
+        {
+          "title": "SQL essentials: joins, group by, window functions, CTEs",
+          "slug": "01-sql-essentials-joins-group-by-window-functions-ctes",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Indexes (B-tree, hash, GIN, partial, composite) & EXPLAIN ANALYZE",
+          "slug": "02-indexes-and-explain-analyze",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Transactions, ACID & isolation levels (anomalies)",
+          "slug": "03-transactions-acid-and-isolation-levels",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "MVCC, locking & deadlocks",
+          "slug": "04-mvcc-locking-and-deadlocks",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Normalisation vs denormalisation",
+          "slug": "05-normalisation-vs-denormalisation",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Query optimisation & common performance issues",
+          "slug": "06-query-optimisation-and-common-performance-issues",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Partitioning, replication & connection pooling (HikariCP)",
+          "slug": "07-partitioning-replication-and-connection-pooling",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Common SQL interview queries (nth highest salary, etc.)",
+          "slug": "08-common-sql-interview-queries",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 14,
+      "title": "JPA / Hibernate",
+      "slug": "jpa-hibernate",
+      "priority": "P1",
+      "subtopics": [
+        {
+          "title": "Entity lifecycle & persistence context",
+          "slug": "01-entity-lifecycle-and-persistence-context",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Relationships & fetching (lazy vs eager)",
+          "slug": "02-relationships-and-fetching",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "N+1 problem & solutions (fetch joins, entity graphs, batch size)",
+          "slug": "03-n-plus-1-problem-and-solutions",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "First- and second-level cache",
+          "slug": "04-first-and-second-level-cache",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Optimistic vs pessimistic locking",
+          "slug": "05-optimistic-vs-pessimistic-locking",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Schema migration with Liquibase/Flyway",
+          "slug": "06-schema-migration-with-liquibase-flyway",
+          "resume": true,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 16,
+      "title": "Docker & Kubernetes",
+      "slug": "docker-kubernetes",
+      "priority": "P1",
+      "subtopics": [
+        {
+          "title": "Containers vs VMs; Docker images, layers, multi-stage builds",
+          "slug": "01-containers-vs-vms-docker-images-layers-multi-stage-builds",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Kubernetes architecture: control plane, nodes, etcd",
+          "slug": "02-kubernetes-architecture-control-plane-nodes-etcd",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Pods, Deployments, ReplicaSets, StatefulSets, DaemonSets",
+          "slug": "03-pods-deployments-replicasets-statefulsets-daemonsets",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Services, Ingress & networking",
+          "slug": "04-services-ingress-and-networking",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "ConfigMaps, Secrets & volumes",
+          "slug": "05-configmaps-secrets-and-volumes",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Probes, resource requests/limits, autoscaling (HPA)",
+          "slug": "06-probes-resource-requests-limits-autoscaling",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Rolling updates, rollbacks & Helm",
+          "slug": "07-rolling-updates-rollbacks-and-helm",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "EKS/AKS specifics & troubleshooting pods",
+          "slug": "08-eks-aks-specifics-and-troubleshooting-pods",
+          "resume": true,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 18,
+      "title": "Testing Strategy",
+      "slug": "testing",
+      "priority": "P1",
+      "subtopics": [
+        {
+          "title": "Test pyramid & testing strategy for microservices",
+          "slug": "01-test-pyramid-and-testing-strategy-for-microservices",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "JUnit 5 & Mockito",
+          "slug": "02-junit-5-and-mockito",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Spring Boot test slices & integration tests",
+          "slug": "03-spring-boot-test-slices-and-integration-tests",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Testcontainers",
+          "slug": "04-testcontainers",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Contract testing (Spring Cloud Contract, Pact)",
+          "slug": "05-contract-testing",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Frontend testing: Jest, React Testing Library, E2E (Playwright/Cypress)",
+          "slug": "06-frontend-testing-jest-react-testing-library-e2e",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "TDD, coverage & quality gates (SonarQube)",
+          "slug": "07-tdd-coverage-and-quality-gates",
+          "resume": true,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 19,
+      "title": "Cryptography & Key Management",
+      "slug": "cryptography-key-management",
+      "priority": "P1",
+      "subtopics": [
+        {
+          "title": "Symmetric vs asymmetric encryption, hashing, MAC, digital signatures",
+          "slug": "01-symmetric-vs-asymmetric-encryption-hashing-mac-digital-signa",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "TLS & certificates (PKI, mTLS)",
+          "slug": "02-tls-and-certificates",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Envelope encryption & data keys",
+          "slug": "03-envelope-encryption-and-data-keys",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Cloud KMS (AWS KMS, Azure Key Vault, GCP KMS)",
+          "slug": "04-cloud-kms",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "HSMs & BYOK/HYOK",
+          "slug": "05-hsms-and-byok-hyok",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Key rotation strategies without downtime",
+          "slug": "06-key-rotation-strategies-without-downtime",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Password hashing & secrets management",
+          "slug": "07-password-hashing-and-secrets-management",
+          "resume": true,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 27,
+      "title": "Data Structures & Algorithms",
+      "slug": "dsa",
+      "priority": "P1",
+      "subtopics": [
+        {
+          "title": "Complexity analysis (Big-O)",
+          "slug": "01-complexity-analysis",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Arrays & strings (two pointers, sliding window, prefix sums)",
+          "slug": "02-arrays-and-strings",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Hashing patterns",
+          "slug": "03-hashing-patterns",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Linked lists, stacks & queues",
+          "slug": "04-linked-lists-stacks-and-queues",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Trees & BST; tree traversal patterns",
+          "slug": "05-trees-and-bst-tree-traversal-patterns",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Heaps & priority queues (top-K)",
+          "slug": "06-heaps-and-priority-queues",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Graphs: BFS, DFS, topological sort, shortest path",
+          "slug": "07-graphs-bfs-dfs-topological-sort-shortest-path",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Binary search patterns",
+          "slug": "08-binary-search-patterns",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Recursion & backtracking",
+          "slug": "09-recursion-and-backtracking",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Dynamic programming patterns",
+          "slug": "10-dynamic-programming-patterns",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Greedy & intervals",
+          "slug": "11-greedy-and-intervals",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 28,
+      "title": "API Design",
+      "slug": "api-design",
+      "priority": "P1",
+      "subtopics": [
+        {
+          "title": "REST principles, resource modelling & HTTP semantics",
+          "slug": "01-rest-principles-resource-modelling-and-http-semantics",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Status codes & error format (RFC 9457 problem details)",
+          "slug": "02-status-codes-and-error-format",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Pagination, filtering & sorting",
+          "slug": "03-pagination-filtering-and-sorting",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Versioning strategies",
+          "slug": "04-versioning-strategies",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Idempotency keys & safe retries",
+          "slug": "05-idempotency-keys-and-safe-retries",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "API security & rate limiting",
+          "slug": "06-api-security-and-rate-limiting",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "OpenAPI & API-first development",
+          "slug": "07-openapi-and-api-first-development",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "REST vs GraphQL vs gRPC",
+          "slug": "08-rest-vs-graphql-vs-grpc",
+          "resume": true,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 29,
+      "title": "Observability & Production Support",
+      "slug": "observability",
+      "priority": "P1",
+      "subtopics": [
+        {
+          "title": "Logs, metrics & traces (three pillars)",
+          "slug": "01-logs-metrics-and-traces",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Structured logging & correlation IDs",
+          "slug": "02-structured-logging-and-correlation-ids",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Metrics with Micrometer/Prometheus & dashboards (Grafana)",
+          "slug": "03-metrics-with-micrometer-prometheus-and-dashboards",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Distributed tracing with OpenTelemetry",
+          "slug": "04-distributed-tracing-with-opentelemetry",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "SLIs, SLOs, SLAs & error budgets",
+          "slug": "05-slis-slos-slas-and-error-budgets",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Alerting & on-call",
+          "slug": "06-alerting-and-on-call",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Incident management & postmortems",
+          "slug": "07-incident-management-and-postmortems",
+          "resume": true,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 30,
+      "title": "Application Security",
+      "slug": "application-security",
+      "priority": "P1",
+      "subtopics": [
+        {
+          "title": "OWASP Top 10",
+          "slug": "01-owasp-top-10",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "XSS, CSRF, SQL injection & prevention",
+          "slug": "02-xss-csrf-sql-injection-and-prevention",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "CORS explained",
+          "slug": "03-cors-explained",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Input validation & output encoding",
+          "slug": "04-input-validation-and-output-encoding",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Secrets management & secure configuration",
+          "slug": "05-secrets-management-and-secure-configuration",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Security headers & dependency scanning",
+          "slug": "06-security-headers-and-dependency-scanning",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Threat modelling basics",
+          "slug": "07-threat-modelling-basics",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 32,
+      "title": "Domain-Driven Design & Clean Architecture",
+      "slug": "ddd-clean-architecture",
+      "priority": "P1",
+      "subtopics": [
+        {
+          "title": "Strategic DDD: bounded contexts, ubiquitous language, context mapping",
+          "slug": "01-strategic-ddd-bounded-contexts-ubiquitous-language-context-m",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Tactical DDD: entities, value objects, aggregates, domain events",
+          "slug": "02-tactical-ddd-entities-value-objects-aggregates-domain-events",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Hexagonal / ports-and-adapters & clean architecture",
+          "slug": "03-hexagonal-ports-and-adapters-and-clean-architecture",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Using DDD to define microservice boundaries",
+          "slug": "04-using-ddd-to-define-microservice-boundaries",
+          "resume": true,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 33,
+      "title": "Performance Engineering",
+      "slug": "performance-engineering",
+      "priority": "P1",
+      "subtopics": [
+        {
+          "title": "Performance methodology: measure, profile, fix, verify",
+          "slug": "01-performance-methodology-measure-profile-fix-verify",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "JVM profiling (JFR, async-profiler, VisualVM)",
+          "slug": "02-jvm-profiling",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Memory leaks & GC tuning in practice",
+          "slug": "03-memory-leaks-and-gc-tuning-in-practice",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Database & query performance",
+          "slug": "04-database-and-query-performance",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Load testing (JMeter, Gatling, k6) & capacity planning",
+          "slug": "05-load-testing-and-capacity-planning",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Latency: percentiles, tail latency",
+          "slug": "06-latency-percentiles-tail-latency",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 34,
+      "title": "Networking & Web Fundamentals",
+      "slug": "networking",
+      "priority": "P1",
+      "subtopics": [
+        {
+          "title": "OSI/TCP-IP, TCP vs UDP",
+          "slug": "01-osi-tcp-ip-tcp-vs-udp",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "HTTP/1.1 vs HTTP/2 vs HTTP/3",
+          "slug": "02-http-1-1-vs-http-2-vs-http-3",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "TLS handshake",
+          "slug": "03-tls-handshake",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "DNS resolution",
+          "slug": "04-dns-resolution",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Load balancers (L4 vs L7), reverse proxies & CDNs",
+          "slug": "05-load-balancers-reverse-proxies-and-cdns",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "\"What happens when you type a URL\"",
+          "slug": "06-what-happens-when-you-type-a-url",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 36,
+      "title": "GenAI for Engineers",
+      "slug": "genai",
+      "priority": "P1",
+      "subtopics": [
+        {
+          "title": "LLM fundamentals: tokens, context window, temperature, hallucination",
+          "slug": "01-llm-fundamentals-tokens-context-window-temperature-hallucina",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Prompt engineering & structured output",
+          "slug": "02-prompt-engineering-and-structured-output",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Embeddings & vector databases",
+          "slug": "03-embeddings-and-vector-databases",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "RAG architecture",
+          "slug": "04-rag-architecture",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Spring AI & LLM API integration",
+          "slug": "05-spring-ai-and-llm-api-integration",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Agents & tool calling",
+          "slug": "06-agents-and-tool-calling",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "AI-assisted development, evaluation & responsible AI",
+          "slug": "07-ai-assisted-development-evaluation-and-responsible-ai",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 37,
+      "title": "Browser, HTML/CSS & Web Performance",
+      "slug": "browser-web-performance",
+      "priority": "P1",
+      "subtopics": [
+        {
+          "title": "Browser rendering pipeline, reflow vs repaint",
+          "slug": "01-browser-rendering-pipeline-reflow-vs-repaint",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "HTML semantics & accessibility (WCAG, ARIA)",
+          "slug": "02-html-semantics-and-accessibility",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "CSS layout: box model, flexbox, grid, specificity",
+          "slug": "03-css-layout-box-model-flexbox-grid-specificity",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Core Web Vitals & performance optimisation",
+          "slug": "04-core-web-vitals-and-performance-optimisation",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Bundlers & build tooling (Vite, Webpack)",
+          "slug": "05-bundlers-and-build-tooling",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Browser storage, cookies & caching",
+          "slug": "06-browser-storage-cookies-and-caching",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 40,
+      "title": "Data Modelling & Database Selection",
+      "slug": "data-modelling",
+      "priority": "P1",
+      "subtopics": [
+        {
+          "title": "SQL vs NoSQL: choosing the right database",
+          "slug": "01-sql-vs-nosql-choosing-the-right-database",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Data modelling for relational, document, key-value & wide-column stores",
+          "slug": "02-data-modelling-for-relational-document-key-value-and-wide-co",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Replication, partitioning & indexing trade-offs",
+          "slug": "03-replication-partitioning-and-indexing-trade-offs",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Schema evolution & zero-downtime migrations",
+          "slug": "04-schema-evolution-and-zero-downtime-migrations",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Polyglot persistence in microservices",
+          "slug": "05-polyglot-persistence-in-microservices",
+          "resume": true,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 42,
+      "title": "Engineering Practices",
+      "slug": "engineering-practices",
+      "priority": "P1",
+      "subtopics": [
+        {
+          "title": "Git internals & branching strategies (GitFlow vs trunk-based)",
+          "slug": "01-git-internals-and-branching-strategies",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Code review best practices",
+          "slug": "02-code-review-best-practices",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Technical debt management",
+          "slug": "03-technical-debt-management",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Architecture Decision Records & documentation",
+          "slug": "04-architecture-decision-records-and-documentation",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "DORA metrics & engineering effectiveness",
+          "slug": "05-dora-metrics-and-engineering-effectiveness",
+          "resume": true,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 17,
+      "title": "CI/CD & DevOps",
+      "slug": "cicd-devops",
+      "priority": "P2",
+      "subtopics": [
+        {
+          "title": "CI/CD pipeline design (GitLab CI, Jenkins, GitHub Actions)",
+          "slug": "01-ci-cd-pipeline-design",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Terraform fundamentals: state, modules, plan/apply",
+          "slug": "02-terraform-fundamentals-state-modules-plan-apply",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Infrastructure as Code best practices",
+          "slug": "03-infrastructure-as-code-best-practices",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "GitOps & deployment strategies",
+          "slug": "04-gitops-and-deployment-strategies",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 20,
+      "title": "Azure",
+      "slug": "azure",
+      "priority": "P2",
+      "subtopics": [
+        {
+          "title": "Core services mapped to AWS equivalents",
+          "slug": "01-core-services-mapped-to-aws-equivalents",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "AKS, App Service & Azure Functions",
+          "slug": "02-aks-app-service-and-azure-functions",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Entra ID & Key Vault",
+          "slug": "03-entra-id-and-key-vault",
+          "resume": true,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 21,
+      "title": "Messaging Alternatives",
+      "slug": "messaging-alternatives",
+      "priority": "P2",
+      "subtopics": [
+        {
+          "title": "RabbitMQ: exchanges, queues, routing",
+          "slug": "01-rabbitmq-exchanges-queues-routing",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Kafka vs RabbitMQ vs SQS — choosing",
+          "slug": "02-kafka-vs-rabbitmq-vs-sqs-choosing",
+          "resume": true,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 22,
+      "title": "Elasticsearch & DynamoDB",
+      "slug": "elasticsearch-dynamodb",
+      "priority": "P2",
+      "subtopics": [
+        {
+          "title": "Elasticsearch: inverted index, analyzers, relevance, sharding",
+          "slug": "01-elasticsearch-inverted-index-analyzers-relevance-sharding",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "DynamoDB data modelling & single-table design",
+          "slug": "02-dynamodb-data-modelling-and-single-table-design",
+          "resume": true,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 23,
+      "title": "Python",
+      "slug": "python",
+      "priority": "P2",
+      "subtopics": [
+        {
+          "title": "Python essentials for Java developers",
+          "slug": "01-python-essentials-for-java-developers",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Common Python interview questions",
+          "slug": "02-common-python-interview-questions",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 35,
+      "title": "Reactive Programming & Spring WebFlux",
+      "slug": "reactive-webflux",
+      "priority": "P2",
+      "subtopics": [
+        {
+          "title": "Reactive Streams & Project Reactor (Mono/Flux)",
+          "slug": "01-reactive-streams-and-project-reactor",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Backpressure",
+          "slug": "02-backpressure",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "WebFlux vs MVC vs virtual threads — when to choose",
+          "slug": "03-webflux-vs-mvc-vs-virtual-threads-when-to-choose",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 38,
+      "title": "Next.js & SSR",
+      "slug": "nextjs-ssr",
+      "priority": "P2",
+      "subtopics": [
+        {
+          "title": "Rendering strategies: CSR, SSR, SSG, ISR",
+          "slug": "01-rendering-strategies-csr-ssr-ssg-isr",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "App Router & React Server Components",
+          "slug": "02-app-router-and-react-server-components",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Data fetching & caching in Next.js",
+          "slug": "03-data-fetching-and-caching-in-next-js",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 39,
+      "title": "Real-time & Inter-service Communication",
+      "slug": "realtime-communication",
+      "priority": "P2",
+      "subtopics": [
+        {
+          "title": "gRPC & Protocol Buffers",
+          "slug": "01-grpc-and-protocol-buffers",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "WebSockets vs SSE vs long polling",
+          "slug": "02-websockets-vs-sse-vs-long-polling",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Webhooks design",
+          "slug": "03-webhooks-design",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 41,
+      "title": "Service Mesh & Cloud-Native Platform",
+      "slug": "service-mesh-cloud-native",
+      "priority": "P2",
+      "subtopics": [
+        {
+          "title": "Service mesh concepts (Istio/Linkerd), sidecar vs ambient",
+          "slug": "01-service-mesh-concepts-sidecar-vs-ambient",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "12-factor apps & cloud-native principles",
+          "slug": "02-12-factor-apps-and-cloud-native-principles",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 43,
+      "title": "Agile Delivery & Estimation",
+      "slug": "agile-delivery",
+      "priority": "P2",
+      "subtopics": [
+        {
+          "title": "Scrum vs Kanban",
+          "slug": "01-scrum-vs-kanban",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Estimation techniques & planning",
+          "slug": "02-estimation-techniques-and-planning",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Release & risk management",
+          "slug": "03-release-and-risk-management",
+          "resume": true,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 44,
+      "title": "Compliance & Data Privacy",
+      "slug": "compliance-privacy",
+      "priority": "P2",
+      "subtopics": [
+        {
+          "title": "HIPAA & PHI handling",
+          "slug": "01-hipaa-and-phi-handling",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "PCI-DSS, GDPR & PII",
+          "slug": "02-pci-dss-gdpr-and-pii",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Audit logging & data retention",
+          "slug": "03-audit-logging-and-data-retention",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    }
+  ]
+}
