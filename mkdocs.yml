@@ -71,6 +71,7 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Study Plan: study-plan.md
+  - Progress: progress/tracker.md
   - "Java":
       - "Core Java":
           - Overview: core-java/index.md
