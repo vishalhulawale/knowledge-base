@@ -10,61 +10,61 @@
           "title": "OOP principles, `equals`/`hashCode` contract, immutability",
           "slug": "01-oop-principles-equals-hashcode-contract-immutability",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "String internals (pool, immutability, StringBuilder)",
           "slug": "02-string-internals",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Collections framework (List/Set/Map/Queue implementations and complexity)",
           "slug": "03-collections-framework",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "HashMap & ConcurrentHashMap internals",
           "slug": "04-hashmap-and-concurrenthashmap-internals",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Generics (wildcards, PECS, type erasure)",
           "slug": "05-generics",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Exceptions (checked vs unchecked, try-with-resources, best practices)",
           "slug": "06-exceptions",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Functional Java: lambdas, functional interfaces, Streams, Optional",
           "slug": "07-functional-java-lambdas-functional-interfaces-streams-option",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Modern Java 9–25: records, sealed classes, pattern matching, switch expressions, text blocks",
           "slug": "08-modern-java-9-25-records-sealed-classes-pattern-matching-swi",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Serialization, reflection & annotations",
           "slug": "09-serialization-reflection-and-annotations",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Java memory basics: stack vs heap, pass-by-value, object lifecycle",
           "slug": "10-java-memory-basics-stack-vs-heap-pass-by-value-object-lifecy",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },

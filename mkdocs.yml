@@ -75,6 +75,16 @@ nav:
   - "Java":
       - "Core Java":
           - Overview: core-java/index.md
+          - "OOP Principles, equals/hashCode Contract & Immutability": core-java/01-oop-principles-equals-hashcode-contract-immutability.md
+          - "String Internals (Pool, Immutability, StringBuilder)": core-java/02-string-internals.md
+          - "Collections Framework (List/Set/Map/Queue Implementations and Complexity)": core-java/03-collections-framework.md
+          - "HashMap & ConcurrentHashMap Internals": core-java/04-hashmap-and-concurrenthashmap-internals.md
+          - "Generics (Wildcards, PECS, Type Erasure)": core-java/05-generics.md
+          - "Exceptions: Checked vs Unchecked, try-with-resources, Best Practices": core-java/06-exceptions.md
+          - "Functional Java: Lambdas, Functional Interfaces, Streams, Optional": core-java/07-functional-java-lambdas-functional-interfaces-streams-option.md
+          - "Modern Java 9\u201325: Records, Sealed Classes, Pattern Matching, Switch Expressions, Text Blocks": core-java/08-modern-java-9-25-records-sealed-classes-pattern-matching-swi.md
+          - "Serialization, Reflection & Annotations": core-java/09-serialization-reflection-and-annotations.md
+          - "Java Memory Basics: Stack vs Heap, Pass-by-Value, Object Lifecycle": core-java/10-java-memory-basics-stack-vs-heap-pass-by-value-object-lifecy.md
       - "Java Concurrency & JVM":
           - Overview: java-concurrency-jvm/index.md
   - "Spring":
