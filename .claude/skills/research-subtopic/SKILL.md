@@ -39,7 +39,7 @@ Writes one page of the interview-prep knowledge base (Zensical/MkDocs site in th
    - In `docs/<topic-slug>/index.md`, turn the subtopic name into a link and set status to `:material-check-circle: Done`.
    - Set the subtopic's `status` to `done` in `planning/topics.json`.
    - Shortcut for all three: `python3 .claude/skills/research-subtopic/mark_done.py <topic-slug>` (syncs nav, index table and status from pages on disk).
-6. **Verify**: run `zensical build` (install with `pip install zensical` if missing). Fix any warnings, broken links or Mermaid syntax errors.
+6. **Verify**: run `zensical build` (install with `pip install zensical` if missing) and fix warnings or broken links. Validate diagrams with `bash .claude/skills/research-subtopic/validate_mermaid.sh docs/<topic>/*.md` (needs mermaid-cli). Mermaid pitfalls: avoid participant IDs that are keywords (`In`, `Off`, `end`, `loop`); quote labels containing `()`, `:` or `/`.
 7. **Report** back in 3–5 lines: page path, key sources, anything marked *[confirm]*.
 
 ## Batch mode

@@ -45,17 +45,17 @@ flowchart TD
 sequenceDiagram
     participant App as Consume-transform-produce app
     participant TC as Transaction coordinator
-    participant In as input topic
+    participant INP as input topic
     participant Out as output topic(s)
-    participant Off as __consumer_offsets
+    participant OFS as __consumer_offsets
     App->>TC: initTransactions(transactional.id) → fences older instances (epoch++)
-    App->>In: poll records
+    App->>INP: poll records
     App->>TC: beginTransaction
     App->>Out: send results (marked as transactional)
-    App->>Off: sendOffsetsToTransaction(input offsets)
+    App->>OFS: sendOffsetsToTransaction(input offsets)
     App->>TC: commitTransaction
     TC->>Out: write COMMIT markers
-    TC->>Off: write COMMIT marker
+    TC->>OFS: write COMMIT marker
     Note over Out: read_committed consumers now see the results
 ```
 *Notice that the output records and the input offset commit live in the same transaction. Either both become visible or neither does, so a crash can't produce output without the matching offset commit.*
