@@ -101,7 +101,18 @@ nav:
   - "Messaging":
       - "Apache Kafka & Event-Driven Architecture":
           - Overview: kafka/index.md
-          - "Error Handling: Retry, DLQ & Replay": kafka/07-error-handling-retry-topics-dlq-poison-messages-replay.md
+          - "Event-Driven Architecture Fundamentals": kafka/01-event-driven-architecture-fundamentals.md
+          - "Kafka Architecture: Brokers, Topics, Partitions, Replication & KRaft": kafka/02-kafka-architecture-brokers-topics-partitions-replication-isr.md
+          - "Producers: acks, Batching, Idempotence, Keys & Partitioning": kafka/03-producers-acks-batching-idempotent-producer-keys-and-partiti.md
+          - "Consumers: Groups, Rebalancing & Offset Management": kafka/04-consumers-consumer-groups-rebalancing-offset-management-comm.md
+          - "Delivery Semantics & Kafka Transactions (Exactly-Once)": kafka/05-delivery-semantics-at-most-at-least-exactly-once-transaction.md
+          - "Ordering Guarantees & Partition Key Design": kafka/06-ordering-guarantees-and-partition-key-design.md
+          - "Error Handling: Retry Topics, DLQ, Poison Messages & Replay": kafka/07-error-handling-retry-topics-dlq-poison-messages-replay.md
+          - "Idempotent Consumers & Deduplication": kafka/08-idempotent-consumers-and-deduplication.md
+          - "Spring Kafka in Practice": kafka/09-spring-kafka.md
+          - "Schema Management: Avro, Protobuf, JSON Schema & Schema Registry": kafka/10-schema-management-avro-protobuf-schema-registry-compatibilit.md
+          - "Kafka Streams & Kafka Connect (Overview)": kafka/11-kafka-streams-and-kafka-connect.md
+          - "Performance Tuning, Consumer Lag & Monitoring": kafka/12-performance-tuning-consumer-lag-and-monitoring.md
       - "Messaging Alternatives":
           - Overview: messaging-alternatives/index.md
   - "GraphQL":

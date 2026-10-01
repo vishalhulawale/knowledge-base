@@ -356,37 +356,37 @@
           "title": "Event-driven architecture fundamentals (events vs commands, pub/sub, choreography)",
           "slug": "01-event-driven-architecture-fundamentals",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Kafka architecture: brokers, topics, partitions, replication, ISR, KRaft",
           "slug": "02-kafka-architecture-brokers-topics-partitions-replication-isr",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Producers: acks, batching, idempotent producer, keys & partitioning",
           "slug": "03-producers-acks-batching-idempotent-producer-keys-and-partiti",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Consumers: consumer groups, rebalancing, offset management, commit strategies",
           "slug": "04-consumers-consumer-groups-rebalancing-offset-management-comm",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Delivery semantics: at-most/at-least/exactly-once, transactions",
           "slug": "05-delivery-semantics-at-most-at-least-exactly-once-transaction",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Ordering guarantees & partition key design",
           "slug": "06-ordering-guarantees-and-partition-key-design",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Error handling: retry topics, DLQ, poison messages, replay",
@@ -398,31 +398,31 @@
           "title": "Idempotent consumers & deduplication",
           "slug": "08-idempotent-consumers-and-deduplication",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Spring Kafka (listeners, error handlers, `@RetryableTopic`)",
           "slug": "09-spring-kafka",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Schema management: Avro/Protobuf, Schema Registry, compatibility",
           "slug": "10-schema-management-avro-protobuf-schema-registry-compatibilit",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Kafka Streams & Kafka Connect (overview)",
           "slug": "11-kafka-streams-and-kafka-connect",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Performance tuning, consumer lag & monitoring",
           "slug": "12-performance-tuning-consumer-lag-and-monitoring",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
