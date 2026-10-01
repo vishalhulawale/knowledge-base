@@ -1,4 +1,4 @@
-name: Build & deploy to Cloudflare Pages
+name: Build & deploy to Cloudflare
 
 on:
   push:
@@ -9,15 +9,10 @@ on:
 
 permissions:
   contents: read
-  deployments: write          # lets wrangler-action create GitHub deployment entries
-  pull-requests: write
 
 concurrency:
-  group: pages-${{ github.ref }}
+  group: deploy-${{ github.ref }}
   cancel-in-progress: true
-
-env:
-  CF_PAGES_PROJECT: interview-prep-kb   # must match the Cloudflare Pages project name
 
 jobs:
   build-deploy:
@@ -38,17 +33,11 @@ jobs:
       - name: Build site
         run: zensical build
 
-      - name: Deploy to Cloudflare Pages
-        # Fork PRs don't get secrets; skip deploy there (build still validates the site)
-        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+      # PRs: build only (validates the site). main / manual runs: deploy the Worker.
+      - name: Deploy Worker (static assets)
+        if: github.event_name != 'pull_request'
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          # main → production; PR branches → preview URLs (<branch>.<project>.pages.dev)
-          command: >-
-            pages deploy site
-            --project-name=${{ env.CF_PAGES_PROJECT }}
-            --branch=${{ github.head_ref || github.ref_name }}
-            --commit-hash=${{ github.event.pull_request.head.sha || github.sha }}
+          command: deploy          # uses wrangler.jsonc → Worker "knowledge-base", assets from ./site
