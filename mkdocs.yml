@@ -209,6 +209,7 @@ nav:
           - "Debounce, Throttle, Memoization & Common JS Coding Questions": javascript-typescript/06-debounce-throttle-memoization-and-common-js-coding-questions.md
           - "TypeScript Type System: Interfaces vs Types, Generics, Unions, Narrowing": javascript-typescript/07-typescript-type-system-interfaces-vs-types-generics-unions-n.md
           - "Advanced TypeScript: Utility, Mapped & Conditional Types": javascript-typescript/08-advanced-typescript-utility-mapped-and-conditional-types.md
+          - "Output-Prediction & \\\"Gotcha\\\" Questions": javascript-typescript/09-output-prediction-and-gotcha-questions.md
       - "Frontend Architecture":
           - Overview: frontend-architecture/index.md
       - "Browser, HTML/CSS & Web Performance":
