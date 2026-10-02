@@ -260,6 +260,13 @@ nav:
   - "System Design":
       - "System Design \u2014 HLD":
           - Overview: system-design/index.md
+          - "Approach & Framework for the Design Interview": system-design/01-approach-and-framework-for-the-design-interview.md
+          - "Back-of-the-Envelope Estimation": system-design/02-back-of-the-envelope-estimation.md
+          - "Scalability: Vertical vs Horizontal, Stateless Services, Load Balancing": system-design/03-scalability-vertical-vs-horizontal-stateless-services-load-b.md
+          - "Caching Strategies & CDN": system-design/04-caching-strategies-and-cdn.md
+          - "Database Scaling: Replication, Sharding, Partitioning, Consistent Hashing": system-design/05-database-scaling-replication-sharding-partitioning-consisten.md
+          - "CAP & PACELC, Consistency Models": system-design/06-cap-and-pacelc-consistency-models.md
+          - "Message Queues & Async Processing": system-design/07-message-queues-and-async-processing.md
       - "Low-Level Design & Design Patterns":
           - Overview: lld-design-patterns/index.md
       - "Performance Engineering":

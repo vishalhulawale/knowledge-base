@@ -708,43 +708,43 @@
           "title": "Approach & framework for the design interview",
           "slug": "01-approach-and-framework-for-the-design-interview",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Back-of-the-envelope estimation",
           "slug": "02-back-of-the-envelope-estimation",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Scalability: vertical vs horizontal, stateless services, load balancing",
           "slug": "03-scalability-vertical-vs-horizontal-stateless-services-load-b",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Caching strategies & CDN",
           "slug": "04-caching-strategies-and-cdn",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Database scaling: replication, sharding, partitioning, consistent hashing",
           "slug": "05-database-scaling-replication-sharding-partitioning-consisten",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "CAP & PACELC, consistency models",
           "slug": "06-cap-and-pacelc-consistency-models",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Message queues & async processing",
           "slug": "07-message-queues-and-async-processing",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Rate limiting & API gateway design",
