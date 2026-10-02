@@ -628,73 +628,73 @@
           "title": "Global infrastructure, Well-Architected Framework",
           "slug": "01-global-infrastructure-well-architected-framework",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "IAM: users, roles, policies, least privilege",
           "slug": "02-iam-users-roles-policies-least-privilege",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Compute: EC2, Auto Scaling, ELB/ALB/NLB",
           "slug": "03-compute-ec2-auto-scaling-elb-alb-nlb",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Containers: ECS vs EKS vs Fargate",
           "slug": "04-containers-ecs-vs-eks-vs-fargate",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Serverless: Lambda (cold starts, concurrency, limits), API Gateway",
           "slug": "05-serverless-lambda-api-gateway",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Storage: S3 (classes, consistency, security), EBS vs EFS",
           "slug": "06-storage-s3-ebs-vs-efs",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Databases: RDS/Aurora, DynamoDB (keys, GSI/LSI, capacity)",
           "slug": "07-databases-rds-aurora-dynamodb",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Messaging: SQS vs SNS vs EventBridge vs Kinesis",
           "slug": "08-messaging-sqs-vs-sns-vs-eventbridge-vs-kinesis",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Networking: VPC, subnets, security groups vs NACLs, Route 53, CloudFront",
           "slug": "09-networking-vpc-subnets-security-groups-vs-nacls-route-53-clo",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Security: KMS, Secrets Manager, encryption at rest/in transit",
           "slug": "10-security-kms-secrets-manager-encryption-at-rest-in-transit",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Observability: CloudWatch, X-Ray",
           "slug": "11-observability-cloudwatch-x-ray",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Architecture scenarios: HA, DR strategies, cost optimisation",
           "slug": "12-architecture-scenarios-ha-dr-strategies-cost-optimisation",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },

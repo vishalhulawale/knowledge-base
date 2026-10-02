@@ -230,6 +230,18 @@ nav:
   - "Cloud & DevOps":
       - "AWS":
           - Overview: aws/index.md
+          - "Global Infrastructure & Well-Architected Framework": aws/01-global-infrastructure-well-architected-framework.md
+          - "IAM: Users, Roles, Policies & Least Privilege": aws/02-iam-users-roles-policies-least-privilege.md
+          - "Compute: EC2, Auto Scaling, ELB/ALB/NLB": aws/03-compute-ec2-auto-scaling-elb-alb-nlb.md
+          - "Containers: ECS vs EKS vs Fargate": aws/04-containers-ecs-vs-eks-vs-fargate.md
+          - "Serverless: Lambda (Cold Starts, Concurrency, Limits) & API Gateway": aws/05-serverless-lambda-api-gateway.md
+          - "Storage: S3 (Classes, Consistency, Security), EBS vs EFS": aws/06-storage-s3-ebs-vs-efs.md
+          - "Databases: RDS/Aurora, DynamoDB (Keys, GSI/LSI, Capacity)": aws/07-databases-rds-aurora-dynamodb.md
+          - "Messaging: SQS vs SNS vs EventBridge vs Kinesis": aws/08-messaging-sqs-vs-sns-vs-eventbridge-vs-kinesis.md
+          - "Networking: VPC, Subnets, Security Groups vs NACLs, Route 53, CloudFront": aws/09-networking-vpc-subnets-security-groups-vs-nacls-route-53-clo.md
+          - "Security: KMS, Secrets Manager, Encryption at Rest & in Transit": aws/10-security-kms-secrets-manager-encryption-at-rest-in-transit.md
+          - "Observability: CloudWatch, X-Ray": aws/11-observability-cloudwatch-x-ray.md
+          - "Architecture Scenarios: HA, DR Strategies, Cost Optimisation": aws/12-architecture-scenarios-ha-dr-strategies-cost-optimisation.md
       - "Docker & Kubernetes":
           - Overview: docker-kubernetes/index.md
       - "CI/CD & DevOps":
