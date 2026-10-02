@@ -7,7 +7,7 @@ tags: [kafka, P0]
 # Error Handling: Retry Topics, DLQ, Poison Messages & Replay
 
 !!! abstract "TL;DR"
-    - Kafka has **no built-in consumer DLQ**. Retries and dead-lettering are patterns you build (Spring Kafka gives you most of the machinery).
+    - Kafka has **no built-in DLQ for plain consumers**. Retries and dead-lettering are patterns you build (Spring Kafka gives you most of the machinery). Only Kafka Connect sinks and, since Kafka 4.2, Kafka Streams ship a DLQ setting.
     - First **classify the failure**: *transient* (retry it), *permanent* (don't retry, dead-letter it), *poison pill* (can't even deserialize it, dead-letter it immediately).
     - **Blocking retries** (`DefaultErrorHandler`) keep ordering but stall the partition. **Non-blocking retries** (retry topics, `@RetryableTopic`) keep the partition flowing but **lose ordering**.
     - A DLQ is only useful with **alerting, root-cause triage and a safe replay path**. Otherwise it's a black hole.
@@ -77,7 +77,8 @@ Key facts (Spring Kafka):
 
 - Default backoff is `FixedBackOff(0L, 9)`: **no delay, 9 retries, 10 delivery attempts**. You almost always want to override this.
 - Some exceptions are **not retried by default** because retrying can't help: `DeserializationException`, `MessageConversionException`, `ConversionException`, `MethodArgumentResolutionException`, `NoSuchMethodException`, `ClassCastException`. Add your own with `addNotRetryableExceptions(...)`.
-- Long blocking backoffs are dangerous. If the poll loop stalls past `max.poll.interval.ms` (default 5 minutes), the broker evicts the consumer and triggers a **rebalance**. Spring's `ContainerPausingBackOffHandler` pauses the container instead of sleeping, so it keeps polling during long delays.
+- Long blocking backoffs are dangerous. If the gap between two `poll()` calls exceeds `max.poll.interval.ms` (default 5 minutes), the consumer is considered failed: the client proactively leaves the group and its partitions are **rebalanced** to other members. So each individual back-off must stay well below that limit. Spring's `ContainerPausingBackOffHandler` (passed as the third constructor argument of `DefaultErrorHandler`) pauses the listener container instead of sleeping, so the consumer keeps polling during long delays.
+- When the listener container runs in a **Kafka transaction**, no error handler is used by default: the exception rolls the transaction back and the `AfterRollbackProcessor` (`DefaultAfterRollbackProcessor`) does the retry/recover job instead.
 
 **Use blocking retries when** per-key ordering is a hard requirement (e.g. account balance events, status transitions) and failures are short-lived.
 
@@ -101,6 +102,8 @@ flowchart LR
 
 This is the same pattern Uber described for its reprocessing pipeline: a chain of retry queues with increasing delays, ending in a DLQ that engineers inspect and replay.
 
+Two details interviewers probe: the delay is a **minimum**, not exact (the retry consumer pauses the partition until the record's due timestamp, so a backlog on a retry topic delays later records further), and `@RetryableTopic` works with **record listeners only**, not batch listeners.
+
 With Spring's `@RetryableTopic`, exponential backoff of 1000 ms × 2 with 4 attempts creates `main-topic-retry-1000`, `-retry-2000`, `-retry-4000` and `main-topic-dlt`. The docs state it plainly: *"By using this strategy you lose Kafka's ordering guarantees for that topic."*
 
 ### 4. Blocking vs non-blocking: choosing
@@ -114,7 +117,7 @@ With Spring's `@RetryableTopic`, exponential backoff of 1000 ms × 2 with 4 atte
 | Best for | Short transient errors, strict ordering | Slow/flaky downstreams, independent events |
 
 !!! tip "Hybrid (common in production)"
-    Do a few **fast blocking retries** for blips (e.g. 3 × 200 ms), then hand off to **non-blocking retry topics** for longer waits, then the DLT.
+    Do a few **fast blocking retries** for blips (e.g. 3 × 200 ms), then hand off to **non-blocking retry topics** for longer waits, then the DLT. In Spring Kafka you enable this by extending `RetryTopicConfigurationSupport` and overriding `configureBlockingRetries(...)` to name the exceptions and back-off that should be retried in place first.
 
 ### 5. Preserving ordering when you must use retry topics
 
@@ -130,7 +133,7 @@ If deserialization fails *inside the Kafka client*, your listener never runs, so
 
 ### 7. The dead-letter topic (DLT/DLQ)
 
-Spring's `DeadLetterPublishingRecoverer` publishes the failed record to `<originalTopic>-dlt`, **on the same partition** by default. That means the DLT needs **at least as many partitions** as the source topic. It adds diagnostic headers (original topic, partition, offset, timestamp, exception class, message and stack trace) so you can triage without hunting through logs.
+Spring's `DeadLetterPublishingRecoverer` publishes the failed record to `<originalTopic>-dlt`, **on the same partition** by default. That means the DLT needs **at least as many partitions** as the source topic. It adds diagnostic headers (original topic, partition, offset, timestamp, consumer group, exception class, message and stack trace) so you can triage without hunting through logs. With a plain `DeadLetterPublishingRecoverer` these are the `KafkaHeaders.DLT_*` constants (`kafka_dlt-original-topic`, `kafka_dlt-exception-message`, …). The retry-topic machinery (`@RetryableTopic`) uses the un-prefixed variants instead (`KafkaHeaders.ORIGINAL_TOPIC`, `KafkaHeaders.EXCEPTION_MESSAGE`, …).
 
 A DLT is an **operational process**, not just a topic:
 
@@ -203,6 +206,9 @@ class KafkaErrorHandlingConfig {
 
 Spring Boot wires a single `CommonErrorHandler` bean into the auto-configured listener container factory.
 
+!!! note "If the DLT publish itself fails"
+    The recoverer throws, the record is **not** skipped, and it's redelivered on the next poll. That's the safe default (no silent loss), but it means a missing DLT topic or a DLT with too few partitions turns into a stuck partition. Alert on it.
+
 ### Guarding against poison pills
 
 ```yaml
@@ -217,7 +223,12 @@ spring:
         spring.json.trusted.packages: "com.example.events"
 ```
 
+!!! note "Spring Kafka 4.x"
+    Spring for Apache Kafka 4.0 added Jackson 3 support and deprecated the Jackson 2 classes. On 4.x, use `JacksonJsonDeserializer` (same package) as the delegate instead of `JsonDeserializer`. `ErrorHandlingDeserializer` itself is unchanged.
+
 ### Non-blocking retries with `@RetryableTopic`
+
+The example uses Spring Kafka 3.x syntax (Spring Boot 3.x). Spring Kafka 4.0 dropped the Spring Retry dependency, so the attribute and annotation were renamed: `backoff = @Backoff(...)` becomes `backOff = @BackOff(...)` (`org.springframework.kafka.annotation.BackOff`). The numeric attributes `delay`, `multiplier` and `maxDelay` keep their names.
 
 ```java
 @Component
@@ -225,8 +236,9 @@ class OrderEventsListener {
 
     @RetryableTopic(
         attempts = "4",                                   // 1 original + 3 retries
-        backoff = @Backoff(delay = 1_000, multiplier = 2.0, maxDelay = 10_000),
+        backoff = @Backoff(delay = 1_000, multiplier = 2.0, maxDelay = 10_000), // 4.x: backOff = @BackOff(...)
         exclude = { ValidationException.class },          // permanent → straight to DLT
+        traversingCauses = "true",                        // also match when it's a wrapped cause
         dltStrategy = DltStrategy.FAIL_ON_ERROR,          // if the DLT handler fails, stop (don't loop)
         autoCreateTopics = "false")                       // create topics via IaC in production
     @KafkaListener(topics = "orders", groupId = "fulfilment")
@@ -238,6 +250,7 @@ class OrderEventsListener {
     void onDeadLetter(OrderEvent event,
                       @Header(KafkaHeaders.ORIGINAL_TOPIC) String topic,
                       @Header(KafkaHeaders.EXCEPTION_MESSAGE) String error) {
+        // Retry-topic DLTs carry ORIGINAL_* / EXCEPTION_* headers (not the DLT_* ones)
         deadLetterRepository.save(DeadLetter.of(event, topic, error)); // for triage + replay
         alerts.raise("orders-dlt", event.orderId(), error);
     }
@@ -288,7 +301,7 @@ public void process(OrderEvent e) {
 ## Real-world usage
 
 - **Uber** built reprocessing with **multiple retry queues of increasing delay plus a DLQ**, so a failing message doesn't block the queue while it's retried later. That's the pattern Spring's `@RetryableTopic` automates.
-- **Kafka Connect** is the one place Kafka ships a DLQ option: sink connectors can route bad records to `errors.deadletterqueue.topic.name` with `errors.tolerance=all`.
+- **Kafka Connect** has long shipped a DLQ option: sink connectors can route bad records to `errors.deadletterqueue.topic.name` with `errors.tolerance=all`. **Kafka Streams** gained one in Kafka 4.2 (KIP-1034, `errors.dead.letter.queue.topic.name`). Plain consumers still have none.
 - **Healthcare and banking** systems often require **no silent data loss** and an **audit trail**. A DLT with persisted headers, alerting and a controlled replay tool usually satisfies both engineering and compliance reviewers.
 - **Common incident:** a schema change on the producer side makes every consumer fail deserialization. Without `ErrorHandlingDeserializer`, consumers loop forever and lag explodes. With it, records flow to the DLT and an alert fires.
 
@@ -305,18 +318,20 @@ public void process(OrderEvent e) {
     - **DLT partitions < source partitions** → publishing to the DLT fails when using the default same-partition resolver.
     - **Retrying permanent errors** wastes the whole retry budget and delays everything behind it.
     - **Blocking backoff longer than `max.poll.interval.ms`** → rebalance storms.
+    - **`@RetryableTopic` on a batch listener** isn't supported. Batch listeners use `DefaultErrorHandler` and should throw `BatchListenerFailedException` to say which record failed.
+    - **Retry topics multiply consumers.** Each retry topic and the DLT gets its own listener container, so thread count and connections grow with the number of retry levels.
     - **Retry topics need monitoring too.** Lag on `-retry-*` topics is an early warning signal.
     - **DLT handler throwing** → with `ALWAYS_RETRY_ON_ERROR` it can loop. `FAIL_ON_ERROR` stops and logs instead.
     - **Duplicates are guaranteed** under retries. Non-idempotent side effects (emails, payments) must be deduplicated.
 
 ## How this connects to my experience
 
-- **Where I used it:** OptumRx Meteor (Publicis Sapient). *"Designed Kafka-based event-driven workflows with retry and DLQ handling."* Also event-driven healthcare analytics at Deloitte.
+- **Where I used it:** OptumRx Meteor (Publicis Sapient). *"Designed Kafka-based event-driven workflows with retry and DLQ handling."* Related: event-driven healthcare analytics workflows at Deloitte (ConvergeHealth Data Asset Explorer), where the resume lists SQS/SNS rather than Kafka. *[confirm: whether Kafka or SQS dead-letter queues were used there before mentioning it]*
 - **Talking points:**
     - Classified failures: transient errors retried with exponential backoff, validation and business errors sent straight to the DLQ. *[confirm: which approach — DefaultErrorHandler, @RetryableTopic or custom]*
     - DLQ records persisted with original topic, partition, offset and error, then alerted on for triage. *[confirm: tooling — dashboard, Splunk, DB table]*
     - Consumers made idempotent (eventId dedupe / upserts) so replays and retries were safe. *[confirm]*
-    - Healthcare context: no silent loss of member or prescription events, plus auditability.
+    - Healthcare context: no silent loss of member or prescription events, plus auditability. *[confirm: which event types and whether audit was an explicit requirement]*
 - **Likely follow-up chain:**
     1. *"Blocking or non-blocking retries, and why?"* → Tie the answer to ordering needs per flow.
     2. *"Didn't non-blocking retries break ordering?"* → Explain where ordering mattered and how you protected it (park the key / versioning), or why those events were independent.
@@ -329,7 +344,7 @@ public void process(OrderEvent e) {
 ### Fundamentals
 
 ??? question "Q1. Does Kafka have a dead-letter queue?"
-    **Answer:** Not for regular consumers. The broker has no concept of a failed message. A DLQ is a pattern: a separate topic you publish failed records to. Frameworks implement it (Spring Kafka's `DeadLetterPublishingRecoverer`). The exception is Kafka Connect, which has a built-in DLQ setting for sink connectors.
+    **Answer:** Not for regular consumers. The broker has no concept of a failed message. A DLQ is a pattern: a separate topic you publish failed records to. Frameworks implement it (Spring Kafka's `DeadLetterPublishingRecoverer`). The exceptions are Kafka Connect, which has a built-in DLQ setting for sink connectors (`errors.deadletterqueue.topic.name`), and Kafka Streams, which added one in Kafka 4.2 (KIP-1034).
 
     **Interviewer listens for:** Knowing it's application-level, and naming how you implemented it.
 
@@ -362,7 +377,9 @@ public void process(OrderEvent e) {
     **Interviewer listens for:** Ordering vs throughput framed as the core trade-off.
 
 ??? question "Q6. How do you avoid a rebalance when retry delays are long?"
-    **Answer:** Don't sleep in the poll thread. Use pausing back-off (Spring's `ContainerPausingBackOffHandler`), which pauses partitions but keeps polling. Or move long waits to non-blocking retry topics. Tuning `max.poll.interval.ms` and `max.poll.records` helps but doesn't fix the root problem.
+    **Answer:** Don't sleep in the poll thread. Use pausing back-off (Spring's `ContainerPausingBackOffHandler`), which pauses the listener container but keeps calling `poll()`, so the consumer stays in the group. Or move long waits to non-blocking retry topics. Tuning `max.poll.interval.ms` and `max.poll.records` helps but doesn't fix the root problem.
+
+    **Interviewer listens for:** Knowing that liveness is tied to `poll()` (`max.poll.interval.ms`), separately from heartbeats (`session.timeout.ms`), and that a paused consumer still polls.
 
 ??? question "Q7. Which errors should not be retried?"
     **Answer:** Errors that will fail identically every time: deserialization and conversion failures, validation errors, business-rule violations, missing mandatory references (unless it's an eventual-consistency race). Map them to non-retryable exceptions so they go straight to the DLT.
@@ -370,14 +387,27 @@ public void process(OrderEvent e) {
     **Common wrong answer:** "Retry everything 3 times to be safe."
 
 ??? question "Q8. What metadata do you keep with a dead-lettered record?"
-    **Answer:** The original topic, partition, offset, timestamp and key; the exception class, message and stack trace; the retry count; the consumer group; and a correlation/event ID. Spring adds most of these as `kafka_dlt-*` headers automatically. Persisting them enables triage, auditing and targeted replay.
+    **Answer:** The original topic, partition, offset, timestamp and key; the exception class, message and stack trace; the retry count; the consumer group; and a correlation/event ID. Spring's `DeadLetterPublishingRecoverer` adds most of these as `kafka_dlt-*` headers automatically (retry topics use `kafka_original-*` / `kafka_exception-*` names and add an attempts header). Header values are raw bytes, so the offset and timestamp need decoding. Persisting them enables triage, auditing and targeted replay.
+
+    **Interviewer listens for:** Enough metadata to find the original record and to replay selectively, without relying on logs.
 
 ??? question "Q9. Why is idempotency mandatory once you add retries?"
     **Answer:** Retries, rebalances (before an offset commit) and replays all redeliver records, so at-least-once delivery means duplicates. Without idempotency, you double-charge, double-ship or double-notify. Use natural idempotency (upserts), a dedupe table keyed by eventId in the same transaction, or Kafka transactions for Kafka-to-Kafka pipelines.
 
+    **Interviewer listens for:** That the dedupe marker and the business write commit atomically. A separate "check then write" has a race.
+
+    **Common wrong answer:** "We enabled `enable.idempotence` on the producer." That only removes duplicates caused by producer retries to the broker. It does nothing for consumer redelivery.
+
+??? question "Q10. How does `@RetryableTopic` delay a record without blocking the main consumer?"
+    **Answer:** When the listener throws, a `DeadLetterPublishingRecoverer` publishes the record to the next retry topic with a header holding the timestamp at which it's due, and the main topic's offset moves on. Each retry topic has its own listener container. When that container receives a record that isn't due yet, it **pauses that partition**, seeks back to the record and keeps polling (so no rebalance), then resumes when the time is reached. After the last attempt the record goes to the DLT. Consequences: the delay is a minimum, ordering is lost, and each retry level adds a topic and a consumer.
+
+    **Interviewer listens for:** Pause/resume of the partition instead of `Thread.sleep`, and the due-timestamp header.
+
+    **Common wrong answer:** "Kafka delivers the message after a delay." Kafka has no delayed delivery.
+
 ### Senior
 
-??? question "Q10. You use retry topics, but events for the same patient must be processed in order. What do you do?"
+??? question "Q11. You use retry topics, but events for the same patient must be processed in order. What do you do?"
     **Answer:** Options:
 
     1. Use blocking retries for this topic, accepting lower throughput during failures.
@@ -389,22 +419,39 @@ public void process(OrderEvent e) {
 
     **Interviewer listens for:** Not pretending retry topics preserve order; per-key thinking.
 
-??? question "Q11. A downstream service is down for an hour. What happens to your DLQ?"
-    **Answer:** With naive retries, every record exhausts its retries and floods the DLQ: thousands of records, and an expensive bulk replay. Better: detect systemic failure (circuit breaker open, error-rate threshold) and **pause the consumer** (`KafkaListenerEndpointRegistry` → `pause()`), then resume when healthy. Lag grows, but nothing is lost and order is preserved. Alert on lag instead.
+??? question "Q12. A downstream service is down for an hour. What happens to your DLQ?"
+    **Answer:** With naive retries, every record exhausts its retries and floods the DLQ: thousands of records, and an expensive bulk replay. Better: detect systemic failure (circuit breaker open, error-rate threshold) and **pause the consumer** (`KafkaListenerEndpointRegistry` → `pause()`), then resume when healthy. Lag grows, but nothing is lost and order is preserved. Alert on lag instead. Check that topic retention comfortably exceeds the longest outage you plan to ride out, otherwise unread records can age out. Resume gradually (or rate-limit) so the backlog doesn't knock the recovering service over again.
 
-??? question "Q12. Design a safe DLQ replay process."
-    **Answer:** Fix the root cause first. Select records by filter (exception type, time window). Republish with the **original key** to the main topic or a dedicated replay topic, adding `replay-count`/`replayed-by` headers. Rate-limit the replay. Consumers are idempotent and version-aware so stale or duplicate events are harmless. Track the outcome and leave an audit log. Make it a tool or runbook, not ad-hoc scripts.
+    **Interviewer listens for:** Distinguishing a per-record failure from a systemic one, and using back-pressure (pause) instead of dead-lettering.
 
-??? question "Q13. How do retries interact with exactly-once semantics?"
-    **Answer:** Kafka EOS (transactions + `read_committed`) covers *consume-transform-produce within Kafka*. A failed transaction aborts and the input is re-consumed, so retries are safe inside that boundary. Side effects outside Kafka (DB writes, HTTP calls) aren't covered, so you still need idempotency or the outbox pattern there. Publishing to a DLT can be part of the transaction so the "move to DLT + commit offset" step is atomic.
+    **Common wrong answer:** "They all go to the DLQ and we replay them later."
+
+??? question "Q13. Design a safe DLQ replay process."
+    **Answer:** Fix the root cause first. Select records by filter (exception type, time window). Republish with the **original key** to the main topic or a dedicated replay topic, adding `replay-count`/`replayed-by` headers. Rate-limit the replay. Consumers are idempotent and version-aware so stale or duplicate events are harmless. Track the outcome and leave an audit log. Make it a tool or runbook, not ad-hoc scripts. If only one consumer group failed, replaying to the shared main topic makes every other group see the record again, so prefer a replay topic that only the failed group reads (or rely on all consumers being idempotent).
+
+    **Interviewer listens for:** Root cause first, key preservation, idempotency, rate limiting, auditability, and awareness of other consumer groups.
+
+??? question "Q14. How do retries interact with exactly-once semantics?"
+    **Answer:** Kafka EOS (transactions + `read_committed`) covers *consume-transform-produce within Kafka*. A failed transaction aborts and the input is re-consumed, so retries are safe inside that boundary. Side effects outside Kafka (DB writes, HTTP calls) aren't covered, so you still need idempotency or the outbox pattern there. Publishing to a DLT can be part of the transaction so the "move to DLT + commit offset" step is atomic. In Spring Kafka, a transactional container doesn't use the `DefaultErrorHandler` by default. The exception rolls back the transaction and the `DefaultAfterRollbackProcessor` re-seeks, applies the back-off and calls the recoverer.
+
+    **Interviewer listens for:** The boundary of EOS (Kafka-only), and that external side effects still need idempotency or an outbox.
 
 ### Scenario-based
 
-??? question "Q14. Consumer lag on one partition is climbing and the others are fine. How do you debug it?"
-    **Answer:** Suspect a stuck record. Check the logs for repeated failures at the same offset (blocking retries or a poison pill). Check the consumer is alive (no rebalance loop). Check for a hot key (skew) versus a failure. Fixes: route permanent errors to the DLT, add `ErrorHandlingDeserializer`, add a retry cap, and split hot keys if it's skew. Add alerting on per-partition lag and on the DLT rate.
+??? question "Q15. Consumer lag on one partition is climbing and the others are fine. How do you debug it?"
+    **Answer:** Suspect a stuck record. Check the logs for repeated failures at the same offset (blocking retries or a poison pill). Check the consumer is alive (no rebalance loop). Check for a hot key (skew) versus a failure. Fixes: route permanent errors to the DLT, add `ErrorHandlingDeserializer`, add a retry cap, and split hot keys if it's skew. Add alerting on per-partition lag and on the DLT rate. Useful tools: `kafka-consumer-groups.sh --describe --group <group>` shows the committed offset, log-end offset and lag per partition. If the committed offset isn't moving, it's a stuck record. If it's moving but slower than the others, it's skew or a slow path.
 
-??? question "Q15. Walk me through the retry and DLQ design you built."
-    **Answer structure (use STAR):** context (flow, volume, ordering needs) → failure classification → retry strategy and why → DLQ handling, alerting and replay → idempotency → an outcome or metric (e.g. no lost events, triage time). Be ready for Q10–Q12 as follow-ups. *[Fill in from your OptumRx implementation.]*
+    **Interviewer listens for:** A structured approach: stuck offset vs slow progress, then failure vs skew.
+
+??? question "Q16. Your listener consumes in batches of 500 and record 137 fails. What happens, and how should it be handled?"
+    **Answer:** With a batch listener the framework doesn't know which record failed. If you throw a plain exception, the `DefaultErrorHandler` falls back to retrying the **whole batch**, so records 0–136 are processed again (duplicates) and one bad record can block the batch indefinitely. Throw `BatchListenerFailedException` with the failed record or its index instead. The handler then commits the offsets of the records before it, retries from the failed record with the back-off, and after retries are exhausted sends just that record to the recoverer/DLT and carries on with the rest. Non-blocking retry topics aren't available for batch listeners, and the batch's DB work must be idempotent because partial reprocessing is normal.
+
+    **Interviewer listens for:** `BatchListenerFailedException`, partial commit, and idempotency of batch writes.
+
+    **Common wrong answer:** "Catch the exception per record inside the loop and continue." That silently drops the record unless you dead-letter it yourself.
+
+??? question "Q17. Walk me through the retry and DLQ design you built."
+    **Answer structure (use STAR):** context (flow, volume, ordering needs) → failure classification → retry strategy and why → DLQ handling, alerting and replay → idempotency → an outcome or metric (e.g. no lost events, triage time). Be ready for Q11–Q13 as follow-ups. *[Fill in from your OptumRx implementation.]*
 
 ## Cheat sheet
 
@@ -417,6 +464,10 @@ public void process(OrderEvent e) {
 | Blocking | Order ✅, throughput ❌, rebalance risk on long backoff |
 | Non-blocking | Throughput ✅, order ❌, extra topics |
 | Rebalance limit | `max.poll.interval.ms` default 5 min |
+| Spring Kafka 4.x | `backOff = @BackOff(...)` (3.x: `backoff = @Backoff(...)`); `JacksonJsonDeserializer` replaces `JsonDeserializer` |
+| Built-in DLQ | Connect sinks (`errors.deadletterqueue.topic.name`), Streams since 4.2 (KIP-1034); plain consumers: none |
+| Batch listener | Throw `BatchListenerFailedException`; no `@RetryableTopic` |
+| Transactions | `DefaultAfterRollbackProcessor` replaces the error handler |
 | Downstream fully down | Pause the consumer / circuit-break; don't flood the DLQ |
 | Always | Idempotent consumers, DLT alerting, replay with the original key |
 
@@ -428,3 +479,6 @@ public void process(OrderEvent e) {
 4. [Uber Engineering: Building Reliable Reprocessing and Dead Letter Queues with Apache Kafka](https://www.uber.com/us/en/blog/reliable-reprocessing/): retry-queue chain + DLQ pattern in production.
 5. [Kai Waehner: Error Handling via Dead Letter Queue in Apache Kafka](https://www.kai-waehner.de/blog/2022/05/30/error-handling-via-dead-letter-queue-in-apache-kafka/): DLQ patterns, Kafka Connect DLQ, when not to use a DLQ.
 6. [Apache Kafka consumer configs](https://kafka.apache.org/documentation/#consumerconfigs): `max.poll.interval.ms`, `max.poll.records`.
+7. [Spring for Apache Kafka: Non-Blocking Retries, Features](https://docs.spring.io/spring-kafka/reference/retrytopic/features.html): back-off configuration, exception classification, combining blocking and non-blocking retries.
+8. [Spring for Apache Kafka: Change History](https://docs.spring.io/spring-kafka/reference/appendix/change-history.html): 4.0 removal of Spring Retry (`@BackOff`), Jackson 3 classes.
+9. [KIP-1034: Dead letter queue in Kafka Streams](https://cwiki.apache.org/confluence/display/KAFKA/KIP-1034:+Dead+letter+queue+in+Kafka+Streams): Streams DLQ config.
