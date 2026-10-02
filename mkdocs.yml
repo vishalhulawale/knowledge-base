@@ -87,6 +87,16 @@ nav:
           - "Java Memory Basics: Stack vs Heap, Pass-by-Value, Object Lifecycle": core-java/10-java-memory-basics-stack-vs-heap-pass-by-value-object-lifecy.md
       - "Java Concurrency & JVM":
           - Overview: java-concurrency-jvm/index.md
+          - "Threads, Lifecycle, Runnable/Callable": java-concurrency-jvm/01-threads-lifecycle-runnable-callable.md
+          - "Synchronization, volatile, Java Memory Model, happens-before": java-concurrency-jvm/02-synchronization-volatile-java-memory-model-happens-before.md
+          - "Locks: ReentrantLock, ReadWriteLock, StampedLock; Deadlock, Livelock, Starvation": java-concurrency-jvm/03-locks-reentrantlock-readwritelock-stampedlock-deadlock-livel.md
+          - "Executors & Thread Pools (Sizing, Rejection Policies, ForkJoinPool)": java-concurrency-jvm/04-executors-and-thread-pools.md
+          - "CompletableFuture & Async Composition": java-concurrency-jvm/05-completablefuture-and-async-composition.md
+          - "Concurrent Collections & Atomics (CAS, LongAdder)": java-concurrency-jvm/06-concurrent-collections-and-atomics.md
+          - "Virtual Threads (Project Loom) & Structured Concurrency": java-concurrency-jvm/07-virtual-threads-and-structured-concurrency.md
+          - "JVM Architecture: Class Loading, JIT, Memory Areas": java-concurrency-jvm/08-jvm-architecture-class-loading-jit-memory-areas.md
+          - "Garbage Collection (G1, ZGC, Tuning, GC Logs)": java-concurrency-jvm/09-garbage-collection.md
+          - "Diagnosing Production Issues: Thread Dumps, Heap Dumps, Memory Leaks": java-concurrency-jvm/10-diagnosing-production-issues-thread-dumps-heap-dumps-memory.md
   - "Spring":
       - "Spring Boot & Spring Core":
           - Overview: spring-boot/index.md

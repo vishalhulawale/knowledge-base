@@ -78,61 +78,61 @@
           "title": "Threads, lifecycle, `Runnable`/`Callable`",
           "slug": "01-threads-lifecycle-runnable-callable",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Synchronization, `volatile`, Java Memory Model, happens-before",
           "slug": "02-synchronization-volatile-java-memory-model-happens-before",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Locks: ReentrantLock, ReadWriteLock, StampedLock; deadlock/livelock/starvation",
           "slug": "03-locks-reentrantlock-readwritelock-stampedlock-deadlock-livel",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Executors & thread pools (sizing, rejection policies, ForkJoinPool)",
           "slug": "04-executors-and-thread-pools",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "CompletableFuture & async composition",
           "slug": "05-completablefuture-and-async-composition",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Concurrent collections & atomics (CAS, LongAdder)",
           "slug": "06-concurrent-collections-and-atomics",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Virtual threads (Project Loom) & structured concurrency",
           "slug": "07-virtual-threads-and-structured-concurrency",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "JVM architecture: class loading, JIT, memory areas",
           "slug": "08-jvm-architecture-class-loading-jit-memory-areas",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Garbage collection (G1, ZGC, tuning, GC logs)",
           "slug": "09-garbage-collection",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Diagnosing production issues: thread dumps, heap dumps, memory leaks",
           "slug": "10-diagnosing-production-issues-thread-dumps-heap-dumps-memory",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
