@@ -6,10 +6,6 @@ tags: [spring-boot, P0]
 
 # Spring Boot 3.x: Jakarta EE, GraalVM Native Image, Virtual Threads, Observability
 
-!!! warning "Draft: not yet fact-checked"
-    This page was written but its independent review pass has not run yet. Verify version numbers and defaults against the linked sources.
-
-
 !!! abstract "TL;DR"
     - **Boot 3.0 = Spring Framework 6 + Java 17 baseline + Jakarta EE 9/10.** Every `javax.servlet`, `javax.persistence`, `javax.validation` import becomes `jakarta.*`. JDK packages such as `javax.sql` and `javax.crypto` do **not** change.
     - **Native image** compiles the app ahead of time under a **closed-world assumption**. Spring's **AOT engine** runs at build time, fixes the bean graph, and generates hints for reflection, proxies and resources. You gain fast startup and low memory. You lose runtime flexibility and pay with long builds.
@@ -53,7 +49,7 @@ Spring Framework 6 moved its baseline to Jakarta EE 9+, so Boot 3 did too. That 
 Three points catch people out:
 
 - **Not every `javax` moves.** `javax.sql.DataSource`, `javax.crypto`, `javax.net.ssl` and `javax.naming` are part of the JDK, not Java EE. They stay.
-- **It is binary, not just source.** A third-party JAR compiled against `javax.servlet.Filter` will compile into your build but fail at runtime with `ClassNotFoundException` or simply never be registered. Every transitive dependency needs a Jakarta-compatible version.
+- **It is binary, not just source.** A third-party JAR compiled against `javax.servlet.Filter` will resolve into your build but fail at runtime with `NoClassDefFoundError` / `ClassNotFoundException`, or simply never be registered. Every transitive dependency needs a Jakarta-compatible version.
 - **The rename travels with behaviour changes.** Hibernate 6 changes SQL generation and type mappings. Spring Security 6 removes `WebSecurityConfigurerAdapter` and `antMatchers`. Boot 3 stops matching trailing slashes (`/users/` no longer maps to `/users`). Auto-configurations must be listed in `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports`, not in `spring.factories` (see [auto-configuration](02-auto-configuration-and-starters.md)).
 
 **Migration order that works:** upgrade to Java 17 → upgrade to Boot 2.7 and clear all deprecations (move Security to the component-based `SecurityFilterChain` style while still on 2.7) → add `spring-boot-properties-migrator` → run the OpenRewrite `UpgradeSpringBoot_3_0` recipe for the mechanical rename → fix the libraries that have no Jakarta version → test heavily around JPA queries and security rules.
@@ -257,8 +253,8 @@ Spring infers hints for its own annotations (`@Controller` arguments, `@Configur
     ```java
     @Service
     class AuditMapper {
-        // Works on the JVM. In a native image: ClassNotFoundException or an empty JSON object,
-        // because nothing told GraalVM that AuditEvent is used reflectively.
+        // Works on the JVM. In a native image: ClassNotFoundException, or Jackson cannot see
+        // the fields/constructors, because nothing told GraalVM that AuditEvent is used reflectively.
         Object parse(String json, String type) throws Exception {
             Class<?> clazz = Class.forName("com.acme.audit." + type);
             return objectMapper.readValue(json, clazz);
@@ -300,7 +296,7 @@ Spring infers hints for its own annotations (`@Controller` arguments, `@Configur
     }
     ```
 
-For profiles, build the image with the profile active (`-Dspring.profiles.active=prod` during AOT processing), or better, select behaviour with property **values** rather than conditional **beans**.
+For profiles, activate the profile for the AOT step itself (the `profiles` setting of the Maven plugin's `process-aot` execution, or the `processAot` task arguments in Gradle), not only at runtime. Or better, select behaviour with property **values** rather than conditional **beans**.
 
 ### Observability
 
@@ -391,7 +387,7 @@ For Reactor pipelines set `spring.reactor.context-propagation=auto` so the trace
 
 ## Real-world usage
 
-- **Netflix and virtual threads.** Netflix published a case study (*Java 21 Virtual Threads - Dude, Where's My Lock?*) about Spring Boot 3 services on embedded Tomcat that stopped serving traffic while the JVM stayed up. Virtual threads were pinned inside `synchronized` blocks while waiting for a `ReentrantLock`. All carrier threads were pinned, so the thread that could release the lock never got to run. It is the standard reference for why pinning mattered on JDK 21, and why JEP 491 was needed.
+- **Netflix and virtual threads.** Netflix published a case study (*Java 21 Virtual Threads - Dude, Where's My Lock?*) about Spring Boot 3 services on embedded Tomcat that stopped serving traffic while the JVM stayed up. Virtual threads were pinned inside `synchronized` blocks while waiting for a `ReentrantLock`. All carrier threads were pinned, so when the lock was released, the virtual thread next in line to take it had no carrier to run on and nothing made progress. It is the standard reference for why pinning mattered on JDK 21, and why JEP 491 was needed.
 - **Native image in serverless.** Native executables are used where cold start dominates: AWS Lambda, Knative and Cloud Run scale-to-zero, CLI tools. On AWS Lambda the main alternative for Java is **SnapStart**, which restores a snapshot of an initialised JVM and needs no native build.
 - **Framework competition.** Quarkus and Micronaut were designed around build-time processing from the start. Spring's AOT engine is the answer to that, with the trade-off that Spring's very dynamic model needs more hints.
 - **Sleuth migration.** Spring Cloud Sleuth does not work with Boot 3. Its tracing core moved to Micrometer Tracing. Teams that upgraded service by service had to keep **B3 and W3C** propagation compatible during the transition so traces did not split.
@@ -421,10 +417,10 @@ For Reactor pipelines set `spring.reactor.context-propagation=auto` so the trace
 ## How this connects to my experience
 
 - **Where I used it:**
-    - **OptumRx Meteor (Publicis Sapient, Jan 2023 - present):** "Designed and developed microservices using Java, Spring Boot, Kafka, MongoDB, Redis, and GraphQL." The project started just after Boot 3.0 was released, so the services were either built on 3.x or migrated to it. *[confirm the Boot and Java versions, and whether you led a 2.7 → 3.x migration]*
+    - **OptumRx Meteor (Publicis Sapient, Jan 2023 - present):** "Designed and developed microservices using Java, Spring Boot, Kafka, MongoDB, Redis, and GraphQL." The project started just after Boot 3.0 was released, so the services may have been built on 3.x or migrated to it later. The resume does not state the version. *[confirm the Boot and Java versions, and whether you led a 2.7 → 3.x migration]*
     - **GraphQL Consumer Service** integrating **5 upstream systems**: this is the textbook fit for virtual threads (blocking fan-out to several upstreams per request) and for distributed tracing (one request crossing six services). *[confirm whether virtual threads were enabled, or whether it used WebFlux / CompletableFuture]*
     - **Kafka workflows with retry and DLQ:** trace context has to travel in Kafka record headers so a message can be followed through retry topics to the DLQ. *[confirm whether `observation-enabled` or another tracing tool was used]*
-    - **Coriolis CCKM (2018 - 2021) and Johnson Controls Metasys (2017 - 2018):** Spring Boot REST APIs and Spring Security in the `javax` era (Boot 1.x / 2.x). *[confirm versions]* This gives a credible "before and after" view of the Jakarta and Security 6 changes.
+    - **Coriolis CCKM (2018 - 2021) and Johnson Controls Metasys (2017 - 2018):** Spring Boot REST APIs at Coriolis, and Spring Security authorization with JWT/SSO at Johnson Controls, both in the `javax` era given the dates (Boot 1.x / 2.x). *[confirm versions]* This gives a credible "before and after" view of the Jakarta and Security 6 changes.
     - **Deloitte ConvergeHealth (2021 - 2023):** AWS Lambda and ECS/EKS. The resume does not say Java ran on Lambda, so use it only as context for cold-start trade-offs. *[confirm Lambda runtime language]*
 - **Talking points:**
     - "As tech lead I treat a major framework upgrade as a project: inventory `javax` dependencies, upgrade to the last 2.7 first, automate the rename with OpenRewrite, and put the risk budget into JPA and security regression tests." *[confirm you can back this with a real upgrade]*
@@ -524,12 +520,12 @@ For Reactor pipelines set `spring.reactor.context-propagation=auto` so the trace
 ### Scenario-based
 
 ??? question "Q15. After enabling virtual threads, the service sometimes stops responding. CPU is near zero, the JVM is up, and a classic thread dump shows only a few idle threads. What do you check?"
-    **Answer:** This pattern points to pinned carriers. Classic `jstack` output does not show virtual threads, so take `jcmd <pid> Thread.dump_to_file -format=json` to see them. Look for virtual threads blocked inside `synchronized` frames, often in an older library (a JDBC driver, an HTTP client, a tracing reporter). Confirm with `jdk.VirtualThreadPinned` JFR events. Short term: disable virtual threads or upgrade the offending library. Long term: JDK 24+ or 25, which removes `synchronized` pinning. Also check for pool starvation: all virtual threads waiting on a connection pool whose holders are themselves waiting.
+    **Answer:** This pattern points to pinned carriers. Classic `jstack` output does not show virtual threads, so take `jcmd <pid> Thread.dump_to_file -format=json <file>` to see them. Look for virtual threads blocked inside `synchronized` frames, often in an older library (a JDBC driver, an HTTP client, a tracing reporter). Confirm with `jdk.VirtualThreadPinned` JFR events. Short term: disable virtual threads or upgrade the offending library. Long term: JDK 24+ or 25, which removes `synchronized` pinning. Also check for pool starvation: all virtual threads waiting on a connection pool whose holders are themselves waiting.
 
     **Interviewer listens for:** knowing that normal thread dumps hide virtual threads, and a mitigation plus a root fix.
 
 ??? question "Q16. The service works on the JVM, but the native image returns `{}` for one REST response and throws `ClassNotFoundException` in another path. Why, and how do you fix and prevent it?"
-    **Answer:** Both are missing reachability metadata. Jackson serialises by reflection, and with no reflection hint for that DTO it sees no properties, so it writes an empty object. The `ClassNotFoundException` comes from `Class.forName` on a class the static analysis never saw. Fix with `@RegisterReflectionForBinding` for DTOs that Spring cannot infer (for example types used only through `Object` or generics), and a `RuntimeHintsRegistrar` for the dynamic class. Prevent it by running the suite with `nativeTest` in CI, testing hints with `RuntimeHintsPredicates`, and running the GraalVM tracing agent against integration tests to discover third-party needs.
+    **Answer:** Both are missing reachability metadata. Jackson serialises by reflection, and with no reflection hint for that DTO it sees no properties, so it writes an empty object (or fails with a "no properties discovered" error, depending on configuration). The `ClassNotFoundException` comes from `Class.forName` on a class the static analysis never saw. Fix with `@RegisterReflectionForBinding` for DTOs that Spring cannot infer (for example types used only through `Object` or generics), and a `RuntimeHintsRegistrar` for the dynamic class. Prevent it by running the suite with `nativeTest` in CI, testing hints with `RuntimeHintsPredicates`, and running the GraalVM tracing agent against integration tests to discover third-party needs.
 
 ??? question "Q17. Traces break between two services: service A shows a trace, service B starts a new one. Logs in B's `@Async` method have no traceId. What are the likely causes?"
     **Answer:** For the broken hop: A's client was created with `new RestTemplate()` or `RestClient.create()` instead of the auto-configured builder, so no header is injected. Or the two services use different propagation formats (B3 on a Sleuth-era service, W3C on the Boot 3 one). Or a gateway strips `traceparent`. For the missing log IDs: the context is a thread local and `@Async` runs on another thread, so add a `ContextPropagatingTaskDecorator`. I would also verify sampling: an unsampled trace is not exported, but IDs should still appear in logs.

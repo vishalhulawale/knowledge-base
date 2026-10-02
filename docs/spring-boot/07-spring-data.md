@@ -6,10 +6,6 @@ tags: [spring-boot, P0]
 
 # Spring Data (repositories, projections, pagination)
 
-!!! warning "Draft: not yet fact-checked"
-    This page was written but its independent review pass has not run yet. Verify version numbers and defaults against the linked sources.
-
-
 !!! abstract "TL;DR"
     - A repository is **an interface with no implementation**. At startup Spring Data builds a **JDK proxy** that routes each call to a base class (`SimpleJpaRepository`, `SimpleMongoRepository`), a parsed query method, or your custom fragment.
     - **Derived queries** (`findByStatusAndCreatedAtAfter`) are parsed and validated **at startup**, so a typo fails the boot, not production. Use `@Query` when the method name gets unreadable.
@@ -51,14 +47,14 @@ There is no generated source code at runtime (in the classic mode). The steps ar
 2. For each one it registers a `JpaRepositoryFactoryBean`.
 3. The factory creates a **JDK dynamic proxy** (see [AOP & proxies](04-aop-and-proxies.md)) whose target is `SimpleJpaRepository`.
 4. For every query method it builds a `RepositoryQuery` object using the `QueryLookupStrategy`. The default, `CREATE_IF_NOT_FOUND`, looks for a declared query first (`@Query`, then a named query) and otherwise derives one from the method name.
-5. Interceptors are added: exception translation, transactions, and the query-executing interceptor.
+5. Interceptors are added, in this order: exception translation, transactions, and the query-executing interceptor.
 
 ```mermaid
 flowchart TD
     C["Service calls repo.findByStatus(ACTIVE, pageable)"] --> P["JDK dynamic proxy"]
-    P --> T["Transaction interceptor<br/>readOnly = true by default"]
-    T --> E["Exception translation<br/>to DataAccessException"]
-    E --> D{"Which kind of method?"}
+    P --> E["Exception translation<br/>to DataAccessException"]
+    E --> T["Transaction interceptor<br/>CRUD reads: readOnly = true"]
+    T --> D{"Which kind of method?"}
     D -->|"CRUD method"| S["SimpleJpaRepository"]
     D -->|"Query method"| Q["RepositoryQuery<br/>PartTree or @Query"]
     D -->|"Custom fragment"| F["Your OrderRepositoryImpl"]
@@ -67,12 +63,12 @@ flowchart TD
     F --> EM
     EM --> DB[("Database")]
 ```
-*Notice that one proxy dispatches to three different implementations, and that transactions and exception translation wrap all of them without any annotation on your interface.*
+*Notice that one proxy dispatches to three different implementations, and that exception translation and the transaction interceptor sit in front of all of them. Exception translation is the outer one, so a failure at commit is translated too. Only the inherited CRUD methods carry transaction settings out of the box.*
 
 Three consequences follow from this design:
 
 - **Fail fast.** A derived query that references a missing property (`findByStatu`) throws at startup, because the method name is parsed against the entity metamodel when the proxy is built.
-- **Transactions come for free.** `SimpleJpaRepository` is annotated `@Transactional(readOnly = true)` at class level, and the write methods (`save`, `delete`) override it with a plain `@Transactional`. Your own query methods inherit the read-only setting. Service-level boundaries are still your job; see [transactions](06-transactions-transactional-propagation-isolation-rollback-ru.md).
+- **Transactions come for free, but only for the inherited CRUD methods.** `SimpleJpaRepository` is annotated `@Transactional(readOnly = true)` at class level, and the write methods (`save`, `delete`) override it with a plain `@Transactional`. **Query methods you declare yourself get no transaction configuration by default** (the reference documentation says so explicitly). A declared read works without one, but a `@Modifying` query called with no surrounding transaction fails with `TransactionRequiredException`. Put `@Transactional` on the repository interface or method, or call it from a transactional service. Service-level boundaries are still your job; see [transactions](06-transactions-transactional-propagation-isolation-rollback-ru.md).
 - **Consistent exceptions.** A JPA `PersistenceException` or a Mongo driver exception becomes a Spring `DataAccessException` subclass (`DataIntegrityViolationException`, `OptimisticLockingFailureException`), so services do not depend on the store.
 
 Spring Data 2025.1 (the train used by Spring Boot 4) adds **AOT repositories**, which generate the query method implementations at build time. That improves startup and makes the queries visible as source. The runtime behaviour is the same.
@@ -218,7 +214,9 @@ public interface OrderRepository extends JpaRepository<Order, Long>, OrderReposi
     // Dynamic projection: caller chooses the shape
     <T> Optional<T> findById(Long id, Class<T> type);
 
-    // Bulk update: bypasses the persistence context, so clear it afterwards
+    // Bulk update: bypasses the persistence context, so clear it afterwards.
+    // Declared query methods are not transactional by default, hence the explicit @Transactional
+    @Transactional
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("update Order o set o.status = :to where o.status = :from and o.createdAt < :cutoff")
     int bulkTransition(@Param("from") OrderStatus from, @Param("to") OrderStatus to,
@@ -300,8 +298,10 @@ public final class OrderSpecs {
 
 // Optional filters compose without string concatenation
 Page<Order> page = orderRepository.findAll(
-        Specification.where(hasStatus(status)).and(createdAfter(from)), pageable);
+        Specification.allOf(hasStatus(status), createdAfter(from)), pageable);
 ```
+
+`Specification.allOf(...)`/`anyOf(...)` exist since Spring Data JPA 3.0. Older code uses `Specification.where(spec).and(...)`; that `where(Specification)` overload was deprecated in 3.5 and is gone in 4.0, where the lighter `PredicateSpecification` was added for plain predicates.
 
 ### Custom fragment for what the interface cannot express
 
@@ -402,7 +402,7 @@ The same rules apply: `skip()` on a large collection walks the skipped documents
 | Projection / DTO | Fewer columns, no lazy loading, safe to serialise | Read-only, one more type to maintain | Read use cases |
 
 !!! warning "Gotchas"
-    - **HHH000104**: `JOIN FETCH` of a collection plus `Pageable` pages **in memory**. Set `hibernate.query.fail_on_pagination_over_collection_fetch=true` so it fails instead of silently loading the table.
+    - **HHH000104** (logged as **HHH90003004** by Hibernate 6+, same message text): `JOIN FETCH` of a collection plus `Pageable` pages **in memory**. Set `hibernate.query.fail_on_pagination_over_collection_fetch=true` so it fails instead of silently loading the table.
     - **`save()` returns the managed instance.** After `merge`, the object you passed in is still detached. Always use the return value.
     - **Derived `deleteBy…` loads the entities first** and deletes them one at a time, so lifecycle callbacks and cascades run. For bulk deletes use `@Modifying @Query("delete …")`, and know that it bypasses cascades and the persistence context.
     - **`@Modifying` queries leave stale entities** in the persistence context. Use `clearAutomatically = true` or you will read old state in the same transaction.
@@ -486,9 +486,11 @@ The same rules apply: `skip()` on a large collection walks the skipped documents
     **Common wrong answer:** "Add `DISTINCT`." That removes duplicate parents in the result but does not make the limit work in SQL.
 
 ??? question "Q8. How do transactions work on repository methods if I never write `@Transactional`?"
-    **Answer:** `SimpleJpaRepository` is `@Transactional(readOnly = true)` at class level and its write methods are `@Transactional`. So each repository call runs in its own transaction if none exists, or joins the caller's. That means two repository calls from a non-transactional service are two separate transactions and are not atomic. Declare the boundary on the service method. A `@Modifying` query method you declare yourself inherits the read-only default, so it needs its own `@Transactional` or a transactional caller.
+    **Answer:** `SimpleJpaRepository` is `@Transactional(readOnly = true)` at class level and its write methods are `@Transactional`. So each inherited CRUD call runs in its own transaction if none exists, or joins the caller's. That means two repository calls from a non-transactional service are two separate transactions and are not atomic. Declare the boundary on the service method. Query methods you declare yourself (derived or `@Query`) get **no** transaction configuration by default. A read still works, but a `@Modifying` query with no active transaction throws `TransactionRequiredException`, so it needs its own `@Transactional` or a transactional caller.
 
-    **Interviewer listens for:** default propagation `REQUIRED`, boundary belongs in the service, the read-only trap on custom modifying queries.
+    **Interviewer listens for:** default propagation `REQUIRED`, boundary belongs in the service, declared query methods are not transactional by default.
+
+    **Common wrong answer:** "Every repository method is transactional." Only the methods implemented by `SimpleJpaRepository` are.
 
 ??? question "Q9. What does `@Modifying(clearAutomatically = true)` solve?"
     **Answer:** A JPQL `update` or `delete` goes straight to the database and does not touch entities already loaded in the persistence context. Those entities are now stale, and a later `findById` in the same transaction returns the cached, old state. `clearAutomatically` clears the persistence context after the query. `flushAutomatically` flushes pending changes first so they are not lost by the clear.
@@ -547,7 +549,7 @@ The same rules apply: `skip()` on a large collection walks the skipped documents
 | Repository bean | JDK proxy → `SimpleJpaRepository` / `RepositoryQuery` / custom fragment |
 | Query lookup | `CREATE_IF_NOT_FOUND`: declared query first, then derive from the name |
 | Validation | Derived and JPQL queries are checked at startup |
-| Default transactions | Reads `readOnly = true`, writes `@Transactional`, per call unless a service transaction exists |
+| Default transactions | Inherited CRUD: reads `readOnly = true`, writes `@Transactional`, per call unless a service transaction exists. Declared query methods: none by default |
 | `save()` | New → `persist`. Otherwise `merge` (possible extra `SELECT`), returns the managed copy |
 | "Is new?" | `Persistable` → `@Version` null → `@Id` null |
 | Closed projection / record DTO | Narrows the `SELECT`, read-only |
@@ -571,5 +573,5 @@ The same rules apply: `skip()` on a large collection walks the skipped documents
 4. [Spring Data JPA reference: Projections](https://docs.spring.io/spring-data/jpa/reference/repositories/projections.html): closed, open, class-based and dynamic projections and their query optimisation.
 5. [Spring Data JPA reference: Scrolling](https://docs.spring.io/spring-data/jpa/reference/repositories/scrolling.html): `Window`, `ScrollPosition`, offset vs keyset scrolling.
 6. [Spring Data Commons reference: Spring Data extensions (web support)](https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html): `Pageable` resolution, `PagedModel` and `pageSerializationMode = VIA_DTO`.
-7. [Spring Data JPA reference: Transactionality](https://docs.spring.io/spring-data/jpa/reference/jpa/transactions.html): default read-only transactions on repositories and transactional query methods.
+7. [Spring Data JPA reference: Transactionality](https://docs.spring.io/spring-data/jpa/reference/jpa/transactions.html): default transactions on inherited CRUD methods, and the statement that declared query methods get none by default.
 8. [Vlad Mihalcea: Fixing the HHH000104 in-memory pagination warning](https://vladmihalcea.com/fix-hibernate-hhh000104-entity-fetch-pagination-warning-message/): why collection fetch plus pagination pages in memory and how to fix it.

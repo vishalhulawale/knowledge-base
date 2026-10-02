@@ -6,10 +6,6 @@ tags: [spring-boot, P0]
 
 # Transactions: `@Transactional`, propagation, isolation, rollback rules
 
-!!! warning "Draft: not yet fact-checked"
-    This page was written but its independent review pass has not run yet. Verify version numbers and defaults against the linked sources.
-
-
 !!! abstract "TL;DR"
     - `@Transactional` is **AOP around advice**: a proxy asks a `PlatformTransactionManager` to begin, then commits or rolls back after your method returns. No proxy call (self-invocation, private method, object created with `new`) means **no transaction**.
     - Defaults: propagation **`REQUIRED`**, isolation **`DEFAULT`** (whatever the database uses), not read-only, no timeout, rollback on **`RuntimeException` and `Error` only**. Checked exceptions **commit**.
@@ -70,7 +66,7 @@ sequenceDiagram
 Consequences of this design:
 
 - **The call must go through the proxy.** `this.otherMethod()` bypasses it. See [AOP & proxies](04-aop-and-proxies.md) for JDK vs CGLIB proxies and the self-invocation pitfall.
-- **Method visibility.** With class-based (CGLIB) proxies, Spring Framework 6.0+ also honours `protected` and package-visible methods. Before 6.0 only `public` worked. `private` and `final` methods are never intercepted, and nothing warns you.
+- **Method visibility.** With class-based (CGLIB) proxies, Spring Framework 6.0+ also honours `protected` and package-visible methods. Before 6.0 only `public` worked. `private` and `final` methods are never intercepted, and nothing fails at startup. A `final` method is worse than a no-op: CGLIB cannot override it, so the call runs on the proxy instance itself, whose injected fields are `null`, and you typically get a `NullPointerException`.
 - **The transaction is tied to a thread.** It does not follow work into `@Async` methods, `CompletableFuture.supplyAsync`, parallel streams or a new virtual thread. Each of those starts with no transaction.
 - **Reactive code is different.** WebFlux uses `ReactiveTransactionManager` and carries the transaction in the Reactor context, not a `ThreadLocal`.
 
@@ -179,6 +175,7 @@ The default comes from EJB conventions: unchecked exceptions are unexpected fail
 
 === "❌ Common mistake"
     ```java
+    @Slf4j
     @Service
     @RequiredArgsConstructor
     public class PaymentService {

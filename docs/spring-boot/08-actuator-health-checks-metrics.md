@@ -6,10 +6,6 @@ tags: [spring-boot, P0]
 
 # Actuator, Health Checks & Metrics (Micrometer)
 
-!!! warning "Draft: not yet fact-checked"
-    This page was written but its independent review pass has not run yet. Verify version numbers and defaults against the linked sources.
-
-
 !!! abstract "TL;DR"
     - **Actuator** = production endpoints (`/actuator/health`, `metrics`, `prometheus`, `env`, `loggers`, ...). Over HTTP, **only `health` is exposed by default**. Everything else is opt-in via `management.endpoints.web.exposure.include`.
     - **Health** is a tree of `HealthIndicator`s combined by a `StatusAggregator` (`DOWN` > `OUT_OF_SERVICE` > `UP` > `UNKNOWN`). `DOWN` and `OUT_OF_SERVICE` return **HTTP 503**.
@@ -44,7 +40,7 @@ An endpoint is usable only when two independent conditions hold:
 
 Defaults worth knowing:
 
-- All endpoints except `shutdown` are enabled, but **only `health` is exposed over HTTP**. (Before Boot 2.5, `info` was exposed too.)
+- All endpoints except `shutdown` are enabled, but **only `health` is exposed over HTTP**. (Before Boot 2.5, `info` was exposed too.) From Boot 3.5, `heapdump` also defaults to `access=none`, so it must be switched on explicitly as well as exposed.
 - The base path is `/actuator`. Change it with `management.endpoints.web.base-path`.
 - `management.server.port` moves all endpoints to a separate port with its own embedded server context, so the public ingress never routes to them.
 
@@ -58,7 +54,7 @@ Commonly used endpoints:
 | `prometheus` | Scrape format for Prometheus | Medium |
 | `loggers` | Read **and change** log levels at runtime | High (write operation) |
 | `env`, `configprops` | Resolved configuration | High (values are masked by default in Boot 3) |
-| `threaddump`, `heapdump` | Diagnostics | **Critical**: a heap dump contains secrets, tokens and patient data in plain memory |
+| `threaddump`, `heapdump` | Diagnostics | **Critical**: a heap dump contains secrets, tokens and patient data in plain memory (`heapdump` access is `none` by default from Boot 3.5) |
 | `shutdown` | Stops the app | Critical (disabled by default) |
 
 ### Health: indicators, aggregation, groups
@@ -127,7 +123,7 @@ stateDiagram-v2
 
 ### Micrometer: the metrics facade
 
-Micrometer gives you one API and many backends. The central type is `MeterRegistry`. Boot auto-configures a `CompositeMeterRegistry` and adds one concrete registry for each `micrometer-registry-*` dependency on the classpath.
+Micrometer gives you one API and many backends. The central type is `MeterRegistry`. Boot auto-configures one concrete registry for each `micrometer-registry-*` dependency on the classpath. With exactly one, that registry is the `MeterRegistry` bean you inject. With several, Boot wraps them in a primary `CompositeMeterRegistry`. With none, it falls back to an in-memory `SimpleMeterRegistry`, which is what backs `/actuator/metrics`.
 
 A **meter** is identified by a **name plus a set of tags** (key-value pairs). This is the *dimensional* model: one meter name `http.server.requests` with tags `method`, `uri`, `status`, `outcome`, instead of hundreds of hierarchical names like `http.orders.get.200`. Each unique tag combination is a separate time series in the backend.
 
@@ -164,7 +160,7 @@ sequenceDiagram
 ```
 *Notice that the application only keeps cumulative numbers in memory. Rates and percentiles are computed later in the backend, which is why you can aggregate them across pods.*
 
-Prometheus **pulls**. Datadog, CloudWatch, OTLP and others are **push** registries that publish on a step interval (one minute by default). For push registries Micrometer converts cumulative values to per-step rates before sending.
+Prometheus **pulls**. Datadog, CloudWatch, OTLP and others are **push** registries that publish on a step interval (one minute by default). For step-based registries such as Datadog and CloudWatch, Micrometer converts cumulative values to per-step rates before sending. The OTLP registry is the exception: it sends cumulative values by default, and delta is an opt-in aggregation temporality.
 
 ### Percentiles and histograms
 
@@ -386,7 +382,7 @@ Annotation style, when you only need timing around a method:
 public Eligibility check(String memberId) { ... }
 ```
 
-`@Observed`, `@Timed` and `@Counted` work through AOP aspects. You need `spring-boot-starter-aop` and, from Boot 3.2, `management.observations.annotations.enabled=true` (before that you declared the `ObservedAspect` / `TimedAspect` beans yourself). Because they are proxies, the **self-invocation pitfall** applies: a call from another method in the same class is not measured (see [AOP & proxies](04-aop-and-proxies.md)).
+`@Observed`, `@Timed` and `@Counted` work through AOP aspects. You need `spring-boot-starter-aop` (renamed `spring-boot-starter-aspectj` in Boot 4) and, from Boot 3.2, `management.observations.annotations.enabled=true` (before that you declared the `ObservedAspect` / `TimedAspect` beans yourself). Because they are proxies, the **self-invocation pitfall** applies: a call from another method in the same class is not measured (see [AOP & proxies](04-aop-and-proxies.md)).
 
 A guard against cardinality explosions:
 
@@ -416,11 +412,13 @@ SecurityFilterChain actuatorChain(HttpSecurity http) throws Exception {
 
 `EndpointRequest` is better than hard-coded paths because it follows `base-path` and path-mapping changes.
 
+One trap: `EndpointRequest.toAnyEndpoint()` does **not** match the additional probe paths `/livez` and `/readyz` on the main port. Those requests go through the application's main security chain, so that chain must permit them (`EndpointRequest.toAdditionalPaths(WebServerNamespace.SERVER, HealthEndpoint.class)` or plain path matchers). If it does not, the kubelet gets 401 and the pod never becomes ready.
+
 ## Real-world usage
 
 - **Kubernetes probes** are the main consumer of health groups. The Spring Boot reference documentation itself warns against putting external systems into liveness and asks you to think carefully before putting shared ones into readiness.
 - **Prometheus + Grafana** is the most common pairing with Micrometer. Micrometer came out of the Spring team at Pivotal and carries ideas from Netflix's Spectator and Atlas, where dimensional metrics were used at very large scale.
-- **RED and USE dashboards**: Rate, Errors, Duration per endpoint come directly from `http.server.requests`. Utilisation and saturation come from `hikaricp.connections.*`, `tomcat.threads.*`, `jvm.memory.*` and `executor.*`.
+- **RED and USE dashboards**: Rate, Errors, Duration per endpoint come directly from `http.server.requests`. Utilisation and saturation come from `hikaricp.connections.*`, `tomcat.threads.*` (only published when `server.tomcat.mbeanregistry.enabled=true`), `jvm.memory.*` and `executor.*`.
 - **Security incidents**: exposed Actuator endpoints are a well-known finding in penetration tests and bug bounty reports. A public `/actuator/heapdump` gives an attacker every secret in memory, and `/actuator/env` leaked credentials in Boot 1.x and 2.x setups where masking was weak. **CVE-2022-22947** was remote code execution through the Spring Cloud Gateway actuator endpoint when it was exposed and unsecured.
 - **Healthcare and banking**: details in health responses and metric tags are data. A member ID or account number in a tag or in a health detail is PHI or PII stored in a monitoring system that usually has weaker access control and longer retention than the main database. Keep identifiers in audited logs and traces with proper controls, not in tags.
 - **Runtime log levels**: `POST /actuator/loggers/com.acme.rx` with `{"configuredLevel":"DEBUG"}` during an incident avoids a redeploy. It is one of the most useful and least known operational features, and one that must be behind authentication.
@@ -439,7 +437,7 @@ SecurityFilterChain actuatorChain(HttpSecurity http) throws Exception {
 | Push (OTLP, Datadog, CloudWatch) | Works for batch and serverless, no inbound port | A silent app looks the same as a dead one | Lambda, jobs, managed SaaS backends |
 
 !!! warning "Gotchas"
-    - **`exposure.include: "*"`** copied from a tutorial into production exposes `heapdump`, `env`, `threaddump` and `loggers`. Use an explicit allow-list.
+    - **`exposure.include: "*"`** copied from a tutorial into production exposes `env`, `threaddump`, `loggers` and, before Boot 3.5 or wherever its access was switched on, `heapdump`. Use an explicit allow-list.
     - **Liveness with external checks** causes fleet-wide restart storms during a dependency outage.
     - **Slow health indicators**: indicators run on the request thread and the probe has a timeout (1 second by default in Kubernetes). One slow upstream check makes the whole health call time out, and the probe fails. Use short timeouts and cache the result.
     - **High-cardinality tags** (user ID, order ID, raw path, exception message) create unbounded time series. Memory grows in the app *and* in Prometheus. Boot protects the built-in `uri` tag by using the path **template** (`/orders/{id}`), not the raw path.
@@ -456,6 +454,7 @@ SecurityFilterChain actuatorChain(HttpSecurity http) throws Exception {
 !!! question "Interview angle: version differences"
     - **Boot 2.x → 3.x**: Sleuth replaced by Micrometer Tracing, the Observation API introduced, `httptrace` renamed to `httpexchanges`, `env` and `configprops` values fully masked by default (`show-values: never`), only `health` exposed over JMX by default.
     - **Boot 3.4**: `management.endpoint.<id>.access` replaces `enabled`, and graceful shutdown becomes the default.
+    - **Boot 3.5**: `heapdump` defaults to `access=none`.
     - **Boot 4.x**: liveness and readiness probes enabled by default, and the health API moved to its own module with new package names. Check the migration guide before quoting package names.
 
 ## How this connects to my experience
@@ -471,7 +470,7 @@ The resume does not name Actuator or Micrometer, so the honest position is: "sta
     - "Per-upstream latency and error-rate timers with an `upstream` tag are the first dashboard I look at in an incident, because the service is only as fast as its slowest upstream." *[confirm dashboards and alert thresholds]*
     - "For Kafka retry and DLQ flows, the key signals are consumer lag and a DLQ counter tagged by topic and error type. A DLQ rate above zero should alert." *[confirm what was actually alerted on]*
     - "Redis cache hit ratio (`cache.gets` with `result=hit|miss`) shows whether the caching I added is paying off." *[confirm whether cache metrics were enabled]*
-    - "In a healthcare system I keep member identifiers out of metric tags and health details, because the monitoring stack is not a PHI store."
+    - "In a healthcare system I keep member identifiers out of metric tags and health details, because the monitoring stack is not a PHI store." *[confirm this was the actual practice on Meteor]*
     - As a lead: "I made a standard Actuator configuration (allow-listed endpoints, separate port, probe groups) part of the service template so teams do not reinvent it." *[confirm, fits the "established engineering standards" bullet]*
 - **Likely follow-up chain:** "How did you monitor the GraphQL service?" → "What was in your readiness probe, and why not the upstreams?" → "An upstream gets slow: what do your metrics show and what alerts fire?" → "How do you get p99 across 10 pods?" → "How did you keep the Actuator endpoints secure?"
     - Answer path: RED metrics per operation and per upstream → readiness holds only local state, upstream failures are handled by timeouts and circuit breakers → upstream timer p99 rises, thread or connection pool gauges saturate, then server-side p99 rises → histogram buckets summed in the backend, not averaged percentiles → allow-list, separate port, Spring Security on the rest.
@@ -628,15 +627,15 @@ The resume does not name Actuator or Micrometer, so the honest position is: "sta
 
 | Concept | Remember |
 |---|---|
-| Default exposure | Only `health` over HTTP. `shutdown` disabled |
+| Default exposure | Only `health` over HTTP. `shutdown` disabled (and `heapdump` from Boot 3.5) |
 | Expose | `management.endpoints.web.exposure.include=health,info,prometheus` |
-| Enable (3.4+) | `management.endpoint.<id>.access=none|read-only|unrestricted` |
+| Enable (3.4+) | `management.endpoint.<id>.access` = `none`, `read-only` or `unrestricted` |
 | Status order | `DOWN` > `OUT_OF_SERVICE` > `UP` > `UNKNOWN`. First two give 503 |
 | Details | `show-details`: `never` (default), `when-authorized`, `always` |
 | Probes | `/actuator/health/liveness`, `/actuator/health/readiness`. `/livez`, `/readyz` on main port with `add-additional-paths` |
 | Liveness | Internal state only. Failure means restart |
 | Readiness | Failure means no traffic. Add dependencies with care |
-| Change state | `AvailabilityChangeEvent.publish(ctx, source, state)` |
+| Change state | `AvailabilityChangeEvent.publish(publisher, source, state)` |
 | Custom health | Implement `HealthIndicator`. Fast, bounded, cached |
 | No Kafka indicator | Write your own or watch consumer lag metrics |
 | Meter identity | Name + tags. Each tag combination is one series |
