@@ -566,49 +566,49 @@
           "title": "Scope, hoisting, closures, `this`, prototypes & inheritance",
           "slug": "01-scope-hoisting-closures-this-prototypes-and-inheritance",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Event loop, microtasks vs macrotasks",
           "slug": "02-event-loop-microtasks-vs-macrotasks",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Promises, async/await, error handling",
           "slug": "03-promises-async-await-error-handling",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "ES6+ features (destructuring, modules, spread, optional chaining, iterators/generators)",
           "slug": "04-es6-plus-features",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Equality, type coercion, immutability, shallow vs deep copy",
           "slug": "05-equality-type-coercion-immutability-shallow-vs-deep-copy",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Debounce, throttle, memoization & common JS coding questions",
           "slug": "06-debounce-throttle-memoization-and-common-js-coding-questions",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "TypeScript type system: interfaces vs types, generics, unions, narrowing",
           "slug": "07-typescript-type-system-interfaces-vs-types-generics-unions-n",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Advanced TypeScript: utility, mapped & conditional types",
           "slug": "08-advanced-typescript-utility-mapped-and-conditional-types",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Output-prediction & \"gotcha\" questions",

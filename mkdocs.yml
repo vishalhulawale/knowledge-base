@@ -201,6 +201,14 @@ nav:
           - "Testing React (Jest, React Testing Library)": react/10-testing-react.md
       - "JavaScript & TypeScript":
           - Overview: javascript-typescript/index.md
+          - "Scope, Hoisting, Closures, `this`, Prototypes & Inheritance": javascript-typescript/01-scope-hoisting-closures-this-prototypes-and-inheritance.md
+          - "Event Loop, Microtasks vs Macrotasks": javascript-typescript/02-event-loop-microtasks-vs-macrotasks.md
+          - "Promises, async/await & Error Handling": javascript-typescript/03-promises-async-await-error-handling.md
+          - "ES6+ Features (Destructuring, Modules, Spread, Optional Chaining, Iterators/Generators)": javascript-typescript/04-es6-plus-features.md
+          - "Equality, Type Coercion, Immutability, Shallow vs Deep Copy": javascript-typescript/05-equality-type-coercion-immutability-shallow-vs-deep-copy.md
+          - "Debounce, Throttle, Memoization & Common JS Coding Questions": javascript-typescript/06-debounce-throttle-memoization-and-common-js-coding-questions.md
+          - "TypeScript Type System: Interfaces vs Types, Generics, Unions, Narrowing": javascript-typescript/07-typescript-type-system-interfaces-vs-types-generics-unions-n.md
+          - "Advanced TypeScript: Utility, Mapped & Conditional Types": javascript-typescript/08-advanced-typescript-utility-mapped-and-conditional-types.md
       - "Frontend Architecture":
           - Overview: frontend-architecture/index.md
       - "Browser, HTML/CSS & Web Performance":
