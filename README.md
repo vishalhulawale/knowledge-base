@@ -31,7 +31,7 @@ The site is protected by Cloudflare Access (Zero Trust), so only allowed identit
 - `.claude/skills/`: research and learning skills
 
 ## Look and feel
-The site shares one theme with the NeuroTrade docs ([vishalhulawale/neuro-trade](https://github.com/vishalhulawale/neuro-trade)): Zensical's `modern` variant with Inter / JetBrains Mono, Lucide icons and a light / dark / system switch. The two sites must stay identical in style and UI behaviour, so every theme change is made in both repos (see `CLAUDE.md`).
+The site shares one theme with the NeuroTrade docs ([vishalhulawale/neuro-trade](https://github.com/vishalhulawale/neuro-trade)): Zensical's `modern` variant with Figtree (body) / JetBrains Mono (code), Lucide icons and a light / dark / system switch. The two sites must stay identical in style and UI behaviour, so every theme change is made in both repos (see `CLAUDE.md`).
 
 | Shared with NeuroTrade | Rule |
 |---|---|

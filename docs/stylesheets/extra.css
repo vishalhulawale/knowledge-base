@@ -37,8 +37,8 @@
 
 /* ---------- Typography ---------- */
 
+/* Figtree (body, set in mkdocs.yml): open, rounded letterforms and a tall x-height for long reading. */
 .md-typeset {
-  font-feature-settings: "cv11", "ss01", "ss03";
   line-height: 1.7;
 }
 

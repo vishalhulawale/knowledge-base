@@ -11,7 +11,7 @@ theme:
   variant: modern
   language: en
   font:
-    text: Inter
+    text: Figtree
     code: JetBrains Mono
   icon:
     logo: lucide/graduation-cap
