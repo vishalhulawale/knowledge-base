@@ -888,73 +888,73 @@
           "title": "STAR framework & building a story bank",
           "slug": "01-star-framework-and-building-a-story-bank",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "\"Tell me about yourself\" & project deep-dive narrative (OptumRx Meteor)",
           "slug": "02-tell-me-about-yourself-and-project-deep-dive-narrative",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Leading a team of 8–10: delegation, ownership, accountability",
           "slug": "03-leading-a-team-of-8-10-delegation-ownership-accountability",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Mentoring & growing engineers",
           "slug": "04-mentoring-and-growing-engineers",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Handling conflict & technical disagreements (incl. with architects)",
           "slug": "05-handling-conflict-and-technical-disagreements",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Managing underperformance & difficult conversations",
           "slug": "06-managing-underperformance-and-difficult-conversations",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Estimation, deadlines & stakeholder management",
           "slug": "07-estimation-deadlines-and-stakeholder-management",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Production incidents & postmortems",
           "slug": "08-production-incidents-and-postmortems",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Hiring & interviewing others",
           "slug": "09-hiring-and-interviewing-others",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Driving engineering standards & technical decisions",
           "slug": "10-driving-engineering-standards-and-technical-decisions",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Failures, mistakes & lessons learned",
           "slug": "11-failures-mistakes-and-lessons-learned",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Questions to ask the interviewer; salary/role conversations",
           "slug": "12-questions-to-ask-the-interviewer-salary-role-conversations",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },

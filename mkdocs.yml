@@ -311,3 +311,15 @@ nav:
   - "Leadership":
       - "Leadership & Behavioral":
           - Overview: leadership-behavioral/index.md
+          - "STAR Framework & Building a Story Bank": leadership-behavioral/01-star-framework-and-building-a-story-bank.md
+          - "\\\"Tell Me About Yourself\\\" & Project Deep-Dive Narrative (OptumRx Meteor)": leadership-behavioral/02-tell-me-about-yourself-and-project-deep-dive-narrative.md
+          - "Leading a Team of 8\u201310: Delegation, Ownership, Accountability": leadership-behavioral/03-leading-a-team-of-8-10-delegation-ownership-accountability.md
+          - "Mentoring & Growing Engineers": leadership-behavioral/04-mentoring-and-growing-engineers.md
+          - "Handling Conflict & Technical Disagreements (incl. with Architects)": leadership-behavioral/05-handling-conflict-and-technical-disagreements.md
+          - "Managing Underperformance & Difficult Conversations": leadership-behavioral/06-managing-underperformance-and-difficult-conversations.md
+          - "Estimation, Deadlines & Stakeholder Management": leadership-behavioral/07-estimation-deadlines-and-stakeholder-management.md
+          - "Production Incidents & Postmortems": leadership-behavioral/08-production-incidents-and-postmortems.md
+          - "Hiring & Interviewing Others": leadership-behavioral/09-hiring-and-interviewing-others.md
+          - "Driving Engineering Standards & Technical Decisions": leadership-behavioral/10-driving-engineering-standards-and-technical-decisions.md
+          - "Failures, Mistakes & Lessons Learned": leadership-behavioral/11-failures-mistakes-and-lessons-learned.md
+          - "Questions to Ask the Interviewer; Salary/Role Conversations": leadership-behavioral/12-questions-to-ask-the-interviewer-salary-role-conversations.md
