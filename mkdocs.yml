@@ -151,6 +151,15 @@ nav:
           - Overview: ddd-clean-architecture/index.md
       - "Distributed Systems Concepts":
           - Overview: distributed-systems/index.md
+          - "Fallacies of Distributed Computing, Failure Modes": distributed-systems/01-fallacies-of-distributed-computing-failure-modes.md
+          - "Consistency Models & Replication (Leader/Follower, Quorum)": distributed-systems/02-consistency-models-and-replication.md
+          - "Consensus Basics (Raft, Leader Election)": distributed-systems/03-consensus-basics.md
+          - "Idempotency & Idempotency Keys": distributed-systems/04-idempotency-and-idempotency-keys.md
+          - "Retries, Backoff, Jitter, Timeouts": distributed-systems/05-retries-backoff-jitter-timeouts.md
+          - "Distributed Transactions: 2PC vs Saga": distributed-systems/06-distributed-transactions-2pc-vs-saga.md
+          - "Exactly-Once Processing in Practice": distributed-systems/07-exactly-once-processing-in-practice.md
+          - "Clocks, Ordering, Distributed Locks": distributed-systems/08-clocks-ordering-distributed-locks.md
+          - "Backpressure & Load Shedding": distributed-systems/09-backpressure-and-load-shedding.md
       - "API Design":
           - Overview: api-design/index.md
       - "Real-time & Inter-service Communication":

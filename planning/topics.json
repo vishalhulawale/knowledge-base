@@ -826,55 +826,55 @@
           "title": "Fallacies of distributed computing, failure modes",
           "slug": "01-fallacies-of-distributed-computing-failure-modes",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Consistency models & replication (leader/follower, quorum)",
           "slug": "02-consistency-models-and-replication",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Consensus basics (Raft, leader election)",
           "slug": "03-consensus-basics",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Idempotency & idempotency keys",
           "slug": "04-idempotency-and-idempotency-keys",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Retries, backoff, jitter, timeouts",
           "slug": "05-retries-backoff-jitter-timeouts",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Distributed transactions: 2PC vs Saga",
           "slug": "06-distributed-transactions-2pc-vs-saga",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Exactly-once processing in practice",
           "slug": "07-exactly-once-processing-in-practice",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Clocks, ordering, distributed locks",
           "slug": "08-clocks-ordering-distributed-locks",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Backpressure & load shedding",
           "slug": "09-backpressure-and-load-shedding",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
