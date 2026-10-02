@@ -94,3 +94,23 @@ Mock-interview results and revision schedule, updated by the `learn-topic` skill
 | 2026-10-02 | JS/TS: 06 Debounce, throttle, memoize | — (studied, mock skipped) | Practise: write debounce/throttle from memory | 2026-10-03 |
 | 2026-10-02 | JS/TS: 07 TS type system | — (studied, mock skipped) | Confirm: TS version and strictness on your projects | 2026-10-03 |
 | 2026-10-02 | JS/TS: 08 Advanced TS | — (studied, mock skipped) | Practise: write Partial/Pick/ReturnType from scratch | 2026-10-03 |
+| 2026-10-02 | JS/TS: 09 Output-prediction & gotchas | — (studied, mock skipped) | Practise: narrate queue order aloud; ESM vs CJS nextTick; `this` call-site rules | 2026-10-03 |
+| 2026-10-02 | AWS: 01 Global infra & Well-Architected | — (studied, mock skipped) | Confirm: Regions used, Multi-AZ RDS, DR setup at Deloitte | 2026-10-03 |
+| 2026-10-02 | AWS: 02 IAM & least privilege ★ | — (studied, mock skipped) | Confirm: IRSA vs Pod Identity; CI auth (OIDC vs keys); external ID in CCKM | 2026-10-03 |
+| 2026-10-02 | AWS: 03 EC2, ASG, ALB/NLB | — (studied, mock skipped) | Confirm: what ran on raw EC2 vs containers; ALB vs NLB | 2026-10-03 |
+| 2026-10-02 | AWS: 04 ECS vs EKS vs Fargate ★ | — (studied, mock skipped) | Confirm: which services on ECS vs EKS and why; deploy strategy; EKS upgrades | 2026-10-03 |
+| 2026-10-02 | AWS: 05 Lambda & API Gateway ★ | — (studied, mock skipped) | Confirm: Lambda workloads; REST vs HTTP API; authoriser; cold-start mitigation | 2026-10-03 |
+| 2026-10-02 | AWS: 06 S3, EBS, EFS ★ | — (studied, mock skipped) | Confirm: upload flow (pre-signed?), S3 event trigger, lifecycle rules | 2026-10-03 |
+| 2026-10-02 | AWS: 07 RDS/Aurora, DynamoDB ★ | — (studied, mock skipped) | Confirm: what lived in RDS vs DynamoDB; engine; key design; Liquibase flow | 2026-10-03 |
+| 2026-10-02 | AWS: 08 SQS/SNS/EventBridge/Kinesis ★ | — (studied, mock skipped) | Confirm: SNS→SQS fan-out; consumer type; outbox usage | 2026-10-03 |
+| 2026-10-02 | AWS: 09 VPC, Route 53, CloudFront | — (studied, mock skipped) | Confirm: VPC endpoints, NAT layout, CDN for Optum React/MFE | 2026-10-03 |
+| 2026-10-02 | AWS: 10 KMS & Secrets Manager ★ | — (studied, mock skipped) | Confirm: CCKM BYOK/XKS scope; rotation at Deloitte; CMK per data class | 2026-10-03 |
+| 2026-10-02 | AWS: 11 CloudWatch & X-Ray | — (studied, mock skipped) | Confirm: monitoring stack (CloudWatch/Splunk/Dynatrace/Datadog); alarms that paged | 2026-10-03 |
+| 2026-10-02 | AWS: 12 HA, DR, cost | — (studied, mock skipped) | Confirm: real DR strategy & test cadence; any cost saving with numbers | 2026-10-03 |
+| 2026-10-02 | System Design: 01 Interview framework | — (studied, mock skipped) | Practise: 6-step framework timed at 45 min; confirm if you ran design interviews | 2026-10-03 |
+| 2026-10-02 | System Design: 02 Estimation | — (studied, mock skipped) | Practise: QPS/storage/cache maths; confirm Optum peak QPS & cache hit ratio | 2026-10-03 |
+| 2026-10-02 | System Design: 03 Scaling & load balancing | — (studied, mock skipped) | Confirm: HPA metric; monolith→microservices session-state step | 2026-10-03 |
+| 2026-10-02 | System Design: 04 Caching & CDN | — (studied, mock skipped) | Confirm: Redis hit ratio, invalidation trigger, PHI-in-cache policy | 2026-10-03 |
+| 2026-10-02 | System Design: 05 Replication & sharding | — (studied, mock skipped) | Confirm: MongoDB replica set vs sharded; read preference/write concern | 2026-10-03 |
+| 2026-10-02 | System Design: 06 CAP & consistency | — (studied, mock skipped) | Re-drill: linearisable vs serialisable; per-operation consistency story | 2026-10-03 |
+| 2026-10-02 | System Design: 07 Queues & async | — (studied, mock skipped) | Confirm: blocking vs @RetryableTopic; dedup store; DLT replay tooling | 2026-10-03 |
