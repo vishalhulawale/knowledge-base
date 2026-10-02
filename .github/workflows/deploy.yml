@@ -30,6 +30,9 @@ jobs:
       - name: Install Zensical
         run: pip install -r requirements.txt
 
+      - name: Stamp deployment time
+        run: echo "window.KB_BUILD_TIME = '$(date -u +%Y-%m-%dT%H:%M:%SZ)';" > docs/assets/build-info.js
+
       - name: Build site
         run: zensical build
 

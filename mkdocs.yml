@@ -39,6 +39,8 @@ theme:
 extra_css:
   - assets/reader.css
 extra_javascript:
+  - assets/build-info.js
+  - assets/last-updated.js
   - assets/reader.js
 
 markdown_extensions:
