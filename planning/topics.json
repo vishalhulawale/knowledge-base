@@ -498,61 +498,61 @@
           "title": "JSX, components, props vs state, reconciliation & virtual DOM",
           "slug": "01-jsx-components-props-vs-state-reconciliation-and-virtual-dom",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Hooks deep dive: useState, useEffect, useRef, useMemo, useCallback, custom hooks",
           "slug": "02-hooks-deep-dive-usestate-useeffect-useref-usememo-usecallbac",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Rendering behaviour: re-render triggers, keys, batching",
           "slug": "03-rendering-behaviour-re-render-triggers-keys-batching",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Context API & component composition patterns",
           "slug": "04-context-api-and-component-composition-patterns",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Forms & controlled vs uncontrolled components",
           "slug": "05-forms-and-controlled-vs-uncontrolled-components",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Performance optimisation: memoization, code splitting, lazy loading, virtualization",
           "slug": "06-performance-optimisation-memoization-code-splitting-lazy-loa",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Error boundaries & Suspense",
           "slug": "07-error-boundaries-and-suspense",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "React 18/19: concurrent rendering, transitions, Actions, `use`, React Compiler",
           "slug": "08-react-18-19-concurrent-rendering-transitions-actions-use-rea",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Routing (React Router) & auth-protected routes",
           "slug": "09-routing-and-auth-protected-routes",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Testing React (Jest, React Testing Library)",
           "slug": "10-testing-react",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },

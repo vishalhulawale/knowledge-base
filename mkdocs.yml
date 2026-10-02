@@ -189,6 +189,16 @@ nav:
   - "Frontend":
       - "ReactJS":
           - Overview: react/index.md
+          - "JSX, Components, Props vs State, Reconciliation & Virtual DOM": react/01-jsx-components-props-vs-state-reconciliation-and-virtual-dom.md
+          - "Hooks Deep Dive: useState, useEffect, useRef, useMemo, useCallback, Custom Hooks": react/02-hooks-deep-dive-usestate-useeffect-useref-usememo-usecallbac.md
+          - "Rendering Behaviour: Re-render Triggers, Keys, Batching": react/03-rendering-behaviour-re-render-triggers-keys-batching.md
+          - "Context API & Component Composition Patterns": react/04-context-api-and-component-composition-patterns.md
+          - "Forms & Controlled vs Uncontrolled Components": react/05-forms-and-controlled-vs-uncontrolled-components.md
+          - "Performance Optimisation: Memoization, Code Splitting, Lazy Loading, Virtualization": react/06-performance-optimisation-memoization-code-splitting-lazy-loa.md
+          - "Error Boundaries & Suspense": react/07-error-boundaries-and-suspense.md
+          - "React 18/19: Concurrent Rendering, Transitions, Actions, use, React Compiler": react/08-react-18-19-concurrent-rendering-transitions-actions-use-rea.md
+          - "Routing (React Router) & Auth-Protected Routes": react/09-routing-and-auth-protected-routes.md
+          - "Testing React (Jest, React Testing Library)": react/10-testing-react.md
       - "JavaScript & TypeScript":
           - Overview: javascript-typescript/index.md
       - "Frontend Architecture":
