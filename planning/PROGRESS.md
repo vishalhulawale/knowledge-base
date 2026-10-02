@@ -8,11 +8,7 @@
 | Core Java | 10/10 |
 | Java Concurrency & JVM | 10/10 |
 | Spring Boot & Spring Core | 10/10 |
-
-## In progress
-| Topic | Pages | Next step |
-|---|---|---|
-| Spring Security, OAuth2/OIDC & JWT | 8/9 (all fact-checked) | Write and check 09 (service-to-service auth) |
+| Spring Security, OAuth2/OIDC & JWT | 9/9 |
 
 ## Not started (P0)
 Microservices (12), ReactJS (10), JavaScript & TypeScript (9), AWS (12), System Design (10), LLD & Design Patterns (7), Distributed Systems (9), Leadership & Behavioral (12)

@@ -262,7 +262,7 @@
           "title": "Service-to-service auth (mTLS, token exchange, propagation through gateways)",
           "slug": "09-service-to-service-auth",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },

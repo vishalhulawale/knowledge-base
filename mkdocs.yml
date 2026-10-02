@@ -120,6 +120,7 @@ nav:
           - "OpenID Connect: ID Token, UserInfo & Discovery": spring-security-oauth2/06-openid-connect-id-token-userinfo-discovery.md
           - "Resource Server & Client Configuration in Spring": spring-security-oauth2/07-resource-server-and-client-configuration-in-spring.md
           - "SSO, SAML vs OIDC & Enterprise IdPs (PingFederate, Active Directory/Entra ID)": spring-security-oauth2/08-sso-saml-vs-oidc-enterprise-idps.md
+          - "Service-to-Service Auth: mTLS, Token Exchange & Propagation Through Gateways": spring-security-oauth2/09-service-to-service-auth.md
       - "JPA / Hibernate":
           - Overview: jpa-hibernate/index.md
       - "Reactive Programming & Spring WebFlux":

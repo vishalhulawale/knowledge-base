@@ -336,7 +336,7 @@ RestClient downstream = builder.requestInterceptor((request, body, execution) ->
 }).build();
 ```
 
-`WebClient` has `ServletBearerExchangeFilterFunction` for the same job. Whether to relay, exchange or replace the token is a design decision covered in service-to-service auth.
+`WebClient` has `ServletBearerExchangeFilterFunction` for the same job. Whether to relay, exchange or replace the token is a design decision covered in [service-to-service auth](09-service-to-service-auth.md).
 
 ### Testing
 
@@ -492,7 +492,7 @@ void adminEndpointNeedsRole() throws Exception {
     **Interviewer listens for:** a reasoned trade-off, not a slogan, plus revocation and audit needs.
 
 ??? question "Q15. In a chain of services A → B → C, should B relay the user's token, use client credentials, or do a token exchange?"
-    **Answer:** Relay is simple and keeps user identity, but the token must list C as an audience, which widens its blast radius, and it may expire mid-flow. Client credentials gives B its own least-privilege token, but C no longer knows the user unless identity is passed separately, and C must trust B's claim about it. Token exchange (RFC 8693) lets B swap the user token for a new one scoped to C that still carries the user and records B as the actor. Spring Security has a token-exchange authorized client provider since 6.3. Choose by what C needs for authorization and audit. Details in service-to-service auth.
+    **Answer:** Relay is simple and keeps user identity, but the token must list C as an audience, which widens its blast radius, and it may expire mid-flow. Client credentials gives B its own least-privilege token, but C no longer knows the user unless identity is passed separately, and C must trust B's claim about it. Token exchange (RFC 8693) lets B swap the user token for a new one scoped to C that still carries the user and records B as the actor. Spring Security has a token-exchange authorized client provider since 6.3. Choose by what C needs for authorization and audit. Details in [service-to-service auth](09-service-to-service-auth.md).
 
     **Interviewer listens for:** audience scoping, confused-deputy awareness, user identity for audit.
 

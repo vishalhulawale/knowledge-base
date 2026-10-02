@@ -12,6 +12,6 @@
 | 6 | [OpenID Connect: ID token, userinfo, discovery](06-openid-connect-id-token-userinfo-discovery.md) |  | :material-check-circle: Done |
 | 7 | [Resource server & client configuration in Spring](07-resource-server-and-client-configuration-in-spring.md) | ★ | :material-check-circle: Done |
 | 8 | [SSO, SAML vs OIDC, enterprise IdPs (PingFederate, Active Directory/Entra ID)](08-sso-saml-vs-oidc-enterprise-idps.md) | ★ | :material-check-circle: Done |
-| 9 | Service-to-service auth (mTLS, token exchange, propagation through gateways) | ★ | :material-progress-clock: To do |
+| 9 | [Service-to-service auth (mTLS, token exchange, propagation through gateways)](09-service-to-service-auth.md) | ★ | :material-check-circle: Done |
 
 ★ = tied to a resume claim; expect deep follow-up questions.
