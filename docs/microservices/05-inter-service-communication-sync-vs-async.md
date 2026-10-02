@@ -213,47 +213,99 @@ Not ★, but central to the OptumRx work.
 ??? question "Q1. Sync vs async communication: trade-offs?"
     **Answer:** Sync is simple and immediate but couples availability and latency (temporal coupling). Async decouples availability, absorbs spikes and supports many consumers, but brings eventual consistency, duplicates, ordering concerns and harder debugging.
 
+    **Interviewer listens for:** temporal coupling, latency chains, eventual consistency, duplicates and ordering, observability cost.
+
+    **Common wrong answer:** "Async is always better because it scales." It moves complexity into consistency, ordering and debugging.
+
 ??? question "Q2. Event vs command?"
     **Answer:** An event states a fact that happened (past tense), has any number of consumers, and the producer doesn't know them. A command asks a specific handler to do something and can be rejected.
 
+    **Interviewer listens for:** past tense fact vs imperative request, unknown vs known receiver, commands can be rejected.
+
+    **Common wrong answer:** Naming commands as events (`SendEmailEvent`). That hides a dependency and couples the producer to one consumer.
+
 ??? question "Q3. REST vs gRPC?"
     **Answer:** REST: HTTP+JSON, universal, readable, cache-friendly. gRPC: HTTP/2, Protobuf, generated typed stubs, streaming, deadlines, lower latency; less browser-friendly. Use gRPC for internal high-volume calls, REST for public APIs.
+
+    **Interviewer listens for:** HTTP/2 + Protobuf, typed contracts, streaming, deadlines; browser and tooling limits; internal vs public use.
+
+    **Common wrong answer:** "gRPC is just faster REST." It is a different contract model with code generation and streaming.
 
 ### Intermediate
 
 ??? question "Q4. What is temporal coupling?"
     **Answer:** Both sides must be available at the same time for the interaction to succeed. Sync calls have it; messaging via a durable broker removes it.
 
+    **Interviewer listens for:** both sides up at the same time, broker removes it, availability multiplies in sync chains.
+
+    **Common wrong answer:** Confusing it with "calls happening in order". It is about availability, not sequencing.
+
 ??? question "Q5. Event notification vs event-carried state transfer?"
     **Answer:** Notification: thin event, consumers call back for data (simpler events, more calls, runtime coupling). State transfer: event carries the data, consumers keep a local copy (no callbacks, duplicated data, larger events, sensitive-data concerns).
+
+    **Interviewer listens for:** thin vs fat events, callback load and coupling, duplicated data, PII in events.
+
+    **Common wrong answer:** "Always put the whole entity in the event." Large events leak data and fix the schema contract for every consumer.
 
 ??? question "Q6. How do you make a synchronous call resilient?"
     **Answer:** Timeouts (connect, read, pool), retries only for idempotent operations with backoff and jitter, circuit breaker, bulkhead, fallback or cached data, and propagate a deadline budget.
 
+    **Interviewer listens for:** timeouts first, idempotent-only retries with jitter, breaker, bulkhead, fallback, deadline propagation.
+
+    **Common wrong answer:** "Add retries." Retries without timeouts and breakers make outages worse.
+
 ??? question "Q7. Kafka vs RabbitMQ/SQS?"
     **Answer:** Kafka is a partitioned, durable log: consumers keep offsets, multiple groups read independently, replay is possible, ordering per partition. RabbitMQ/SQS are queues: messages are removed on ack, good for task distribution and routing; replay isn't native.
+
+    **Interviewer listens for:** log vs queue, retention and replay, consumer groups, per-partition ordering, routing features of RabbitMQ.
+
+    **Common wrong answer:** "Kafka is just a faster RabbitMQ." The log model (retention, replay, offsets) is the real difference.
 
 ### Senior
 
 ??? question "Q8. How do you calculate the availability of a sync chain?"
     **Answer:** Roughly the product of each dependency's availability for serial calls. Five services at 99.9% give about 99.5%. That's why critical paths should minimise sync dependencies.
 
+    **Interviewer listens for:** multiply availabilities for serial calls, worked example, minimise sync hops on critical paths.
+
+    **Common wrong answer:** Taking the minimum ("the chain is as available as its weakest service"). Serial availability is a product, so it is lower than the minimum.
+
 ??? question "Q9. How do you implement request/reply over messaging?"
     **Answer:** Send a request with a correlation id and reply-to destination; the responder sends the result to the reply destination with the same correlation id; the requester matches it (Spring Kafka `ReplyingKafkaTemplate`). Use for long-running work, not to fake sync calls on the request path.
 
+    **Interviewer listens for:** correlation id, reply-to destination, timeouts for the reply, use for long-running work only.
+
+    **Common wrong answer:** Using request/reply over Kafka for every user-facing call, which adds latency and keeps sync coupling.
+
 ??? question "Q10. What can go wrong with event-driven designs?"
     **Answer:** Lost events (dual writes), duplicates, out-of-order processing, poison messages blocking partitions, schema breaks, invisible flows (hard to trace), and consumers building on internal events that then can't change.
+
+    **Interviewer listens for:** dual-write loss, duplicates, ordering, poison messages, schema evolution, observability, internal events as contracts.
+
+    **Common wrong answer:** "Events cannot be lost because Kafka is durable." The loss usually happens before publishing, in the dual write.
 
 ### Scenario-based
 
 ??? question "Q11. Placing an order calls payment, inventory, email and analytics synchronously and is slow and flaky. Redesign it."
     **Answer:** Keep payment authorisation sync (user needs it), make inventory reservation part of a saga if needed, publish `OrderPlaced` via outbox, and let email and analytics consume it asynchronously and idempotently. Return as soon as the order is committed.
 
+    **Interviewer listens for:** sync only for what the user must see, outbox for the event, async idempotent consumers, fast commit.
+
+    **Common wrong answer:** Making everything async, including payment authorisation the user needs to see before confirmation.
+
 ??? question "Q12. A consumer needs member addresses on every event it processes and calls the member service each time. Problem?"
     **Answer:** Runtime coupling and load on the member service. Either include the needed fields in the events (event-carried state) or have the consumer maintain a local read model from member-changed events.
 
+    **Interviewer listens for:** runtime coupling and load, event-carried state transfer, local read model.
+
+    **Common wrong answer:** "Add a cache in front of the member service." It hides the load but keeps the runtime dependency.
+
 ??? question "Q13. Product wants the UI to show 'refill submitted' instantly even though processing takes minutes. How?"
     **Answer:** Accept the request synchronously (validate, persist, return 202 with a status id), process asynchronously, and update the status via polling, websocket/SSE push or notification. Make the state machine explicit (submitted, in progress, completed, failed).
+
+    **Interviewer listens for:** 202 Accepted with status resource, async processing, explicit state machine, polling or push.
+
+    **Common wrong answer:** Holding the HTTP request open for minutes until processing finishes.
 
 ## Cheat sheet
 

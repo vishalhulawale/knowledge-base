@@ -201,47 +201,99 @@ export default defineConfig({
 ??? question "Q1. What is concurrent rendering?"
     **Answer:** React can prepare multiple versions of the UI, interrupt a render for a more urgent update, and discard or resume work, based on priorities. Enabled by createRoot.
 
+    **Interviewer listens for:** interruptible, prioritised rendering, discarded work, createRoot.
+
+    **Common wrong answer:** "Concurrent means multi-threaded." React still renders on one thread; it can pause and resume.
+
 ??? question "Q2. What is automatic batching?"
     **Answer:** React 18 batches state updates from any source in the same tick into one render, not only in React event handlers.
 
+    **Interviewer listens for:** batching from any source in React 18.
+
+    **Common wrong answer:** "Batching changes the final state." It only reduces the number of renders.
+
 ??? question "Q3. What are Actions in React 19?"
     **Answer:** Async functions run in transitions, usable as form actions, with built-in pending state (useActionState, useFormStatus), optimistic updates (useOptimistic), error handling and form reset.
+
+    **Interviewer listens for:** async functions in transitions, pending state, optimistic updates, error handling, form reset.
+
+    **Common wrong answer:** "Actions are a Redux concept." In React 19 they are built-in async transition functions.
 
 ### Intermediate
 
 ??? question "Q4. useTransition vs useDeferredValue?"
     **Answer:** useTransition wraps state updates you trigger, marking them non-urgent and giving isPending. useDeferredValue gives a deferred copy of a value you receive, so dependent rendering lags.
 
+    **Interviewer listens for:** who owns the update, isPending, lagging dependent rendering.
+
+    **Common wrong answer:** Using useDeferredValue on a value you set yourself when useTransition would be clearer.
+
 ??? question "Q5. What does `use` do and how is it different from hooks?"
     **Answer:** Reads a promise (suspending until resolved) or context. Unlike hooks it can be called conditionally and in loops, but must be called during render.
+
+    **Interviewer listens for:** promise or context, conditional call allowed, must be in render, cached promises.
+
+    **Common wrong answer:** "use() can fetch data directly." Creating the promise inside render makes a new request every render.
 
 ??? question "Q6. What happened to forwardRef?"
     **Answer:** In React 19, function components receive `ref` as a normal prop; forwardRef is deprecated (still works).
 
+    **Interviewer listens for:** ref as a prop in React 19, forwardRef deprecated.
+
+    **Common wrong answer:** "forwardRef was removed." It still works; it is deprecated.
+
 ??? question "Q7. What is tearing and how is it prevented?"
     **Answer:** Different parts of the UI showing different values of an external store during an interruptible render. `useSyncExternalStore` forces consistent reads.
+
+    **Interviewer listens for:** inconsistent reads of external stores during interruptible renders, useSyncExternalStore.
+
+    **Common wrong answer:** "Tearing is a CSS layout bug."
 
 ### Senior
 
 ??? question "Q8. Server Components vs SSR?"
     **Answer:** SSR renders client components to HTML on the server, then hydrates them on the client (all JS still shipped). Server Components run only on the server and send serialized output; their code never ships to the client. They combine: RSC output can be SSR'd.
 
+    **Interviewer listens for:** SSR = HTML + hydration with full JS; RSC = server-only code, no client bundle; they combine.
+
+    **Common wrong answer:** "Server Components are just SSR." RSC code never ships to the browser; SSR components do.
+
 ??? question "Q9. What does React Compiler do?"
     **Answer:** At build time, analyses components and hooks and inserts fine-grained memoisation automatically, validates the Rules of React, and reduces the need for manual memo/useMemo/useCallback.
+
+    **Interviewer listens for:** build-time memoisation, Rules of React validation, less manual memo.
+
+    **Common wrong answer:** "It is a new runtime." It is a Babel/build plugin; the runtime is the same React.
 
 ??? question "Q10. What is <Activity>?"
     **Answer:** React 19.2 component that hides a subtree (mode hidden) while preserving its state; effects are cleaned up when hidden and updates deferred, so you can keep tabs alive or pre-render next screens.
 
+    **Interviewer listens for:** hides subtree while keeping state, effects cleaned up, deferred updates, pre-rendering.
+
+    **Common wrong answer:** "It is just `display: none`." Activity also unmounts effects and lowers update priority.
+
 ??? question "Q11. Which APIs were removed in React 19?"
     **Answer:** ReactDOM.render/hydrate, unmountComponentAtNode, string refs, legacy context, propTypes checking, defaultProps for function components, shallow test renderer.
+
+    **Interviewer listens for:** render/hydrate, string refs, legacy context, propTypes checks, function defaultProps, test renderer.
+
+    **Common wrong answer:** "React 19 removed class components." Class components are still supported.
 
 ### Scenario-based
 
 ??? question "Q12. Plan an upgrade of a large app from React 17 to 19."
     **Answer:** Move to createRoot on 18 first, fix Strict Mode effect issues, audit third-party libraries for removed APIs, run codemods (ref as prop, Context provider), upgrade tests (RTL), then 19; canary per micro-frontend; add the compiler later.
 
+    **Interviewer listens for:** 18 first with createRoot, Strict Mode fixes, library audit, codemods, tests, staged rollout, compiler later.
+
+    **Common wrong answer:** Jumping straight from 17 to 19 in one release across all teams.
+
 ??? question "Q13. Switching tabs with heavy content freezes typing."
     **Answer:** Wrap the tab change in startTransition (or defer the heavy value), keep previous content visible with isPending, and consider Activity to keep tab state instead of remounting.
+
+    **Interviewer listens for:** startTransition for the tab switch, isPending, Activity to keep state.
+
+    **Common wrong answer:** "Debounce the tab click."
 
 ## Cheat sheet
 

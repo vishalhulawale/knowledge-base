@@ -453,10 +453,14 @@ On Kubernetes, the total wait must fit inside `terminationGracePeriodSeconds` (3
 
     **Interviewer listens for:** knowing that two of the four lose work silently, and when `CallerRunsPolicy` is a good or bad idea.
 
+    **Common wrong answer:** "CallerRunsPolicy is the default." AbortPolicy is, and it throws.
+
 ??? question "Q5. `shutdown()` vs `shutdownNow()` vs `close()`?"
     **Answer:** `shutdown()` stops accepting new tasks but runs everything already submitted, and returns immediately. `shutdownNow()` also interrupts running workers and returns the list of tasks that never started. It is best effort, because a task that ignores interrupts keeps running. Neither waits, so follow with `awaitTermination`. Since Java 19, `ExecutorService` is `AutoCloseable`: `close()` calls `shutdown()` and waits for termination, which makes try-with-resources possible.
 
     **Common wrong answer:** "`shutdownNow()` kills the threads." Java cannot kill a thread, it can only request interruption.
+
+    **Interviewer listens for:** graceful vs interrupting shutdown, close() in Java 19+ waits, awaitTermination.
 
 ### Intermediate
 
@@ -472,6 +476,8 @@ On Kubernetes, the total wait must fit inside `terminationGracePeriodSeconds` (3
 
     **Interviewer listens for:** the idea that a bounded queue plus rejection is a feature (back-pressure), not a problem.
 
+    **Common wrong answer:** "They are forbidden because they are slow." They are dangerous because they are unbounded (queue or threads).
+
 ??? question "Q8. How do you size a thread pool?"
     **Answer:** First classify the work. CPU-bound: about the number of available cores. I/O-bound: `N_cpu × target utilisation × (1 + wait/compute)`. Then cap it by downstream limits (connection pool size, rate limits, partner SLAs) and check `availableProcessors()` inside the container, because CPU limits reduce it. Size the queue as a latency budget: capacity divided by throughput should be less than the caller's timeout. Finally verify with a load test and watch active threads, queue depth, rejections and latency.
 
@@ -482,15 +488,23 @@ On Kubernetes, the total wait must fit inside `terminationGracePeriodSeconds` (3
 ??? question "Q9. What happens when a task throws an exception inside a pool?"
     **Answer:** With `execute()`, the exception leaves the worker's run loop, the worker thread dies, the `UncaughtExceptionHandler` is called, and the pool creates a replacement thread when needed. With `submit()`, `FutureTask` catches it, the worker survives, and the exception appears only on `Future.get()`. With a scheduled periodic task, the exception is stored in the future and **all later executions are cancelled**. You can also override `afterExecute(Runnable, Throwable)` to log failures centrally.
 
+    **Interviewer listens for:** execute kills the worker and calls the handler; submit stores the exception in the Future.
+
+    **Common wrong answer:** "The pool logs it." Only execute reaches the uncaught exception handler.
+
 ??? question "Q10. How does `ForkJoinPool` differ from `ThreadPoolExecutor`?"
     **Answer:** `ThreadPoolExecutor` has one shared blocking queue and independent tasks. `ForkJoinPool` gives every worker its own deque: the owner pushes and pops at one end (LIFO, good cache locality), idle workers steal from the opposite end (FIFO, largest tasks). A worker that calls `join()` helps run other tasks instead of blocking. This makes it efficient for huge numbers of small, recursive, CPU-bound tasks. Its threads are daemon threads and its size is set as a parallelism level rather than core/max/queue.
 
     **Interviewer listens for:** per-worker deques, LIFO for the owner and FIFO for thieves, and the reason for each.
 
+    **Common wrong answer:** "ForkJoinPool is just a faster ThreadPoolExecutor." It is designed for splitting tasks, not for blocking I/O.
+
 ??? question "Q11. What is the common pool, and why is blocking in it dangerous?"
     **Answer:** `ForkJoinPool.commonPool()` is one static pool per JVM, with default parallelism of available processors minus one. Parallel streams, `CompletableFuture.supplyAsync`/`thenApplyAsync` without an executor, and `Arrays.parallelSort` all use it. It is sized for CPU work, so a few blocking calls can occupy all workers and stall every unrelated parallel operation in the application. In a container with a 1 or 2 CPU limit it has a single worker (and on Java 21, `CompletableFuture` then falls back to a new thread per async task instead of the common pool). For blocking work, pass a dedicated executor to `CompletableFuture`, or run the parallel stream from inside a custom `ForkJoinPool` (a known trick, but it relies on implementation behaviour rather than a documented guarantee).
 
     **Common wrong answer:** "Each parallel stream gets its own pool."
+
+    **Interviewer listens for:** one JVM-wide pool, cores - 1 threads, shared by parallel streams and async CF stages.
 
 ### Senior
 
@@ -499,10 +513,14 @@ On Kubernetes, the total wait must fit inside `terminationGracePeriodSeconds` (3
 
     **Interviewer listens for:** recognising it from a thread dump and knowing it is not a lock deadlock.
 
+    **Common wrong answer:** "Make the pool bigger." It only raises the load needed to trigger the deadlock.
+
 ??? question "Q13. How does `ThreadPoolExecutor` track its state internally, and how does a worker thread end?"
     **Answer:** A single `AtomicInteger` named `ctl` holds the run state in the top 3 bits (`RUNNING`, `SHUTDOWN`, `STOP`, `TIDYING`, `TERMINATED`) and the worker count in the lower 29 bits, so both are updated atomically with one CAS. Workers are kept in a `HashSet` guarded by a `mainLock`. Each `Worker` loops on `getTask()`: it calls `take()` if it should stay, or `poll(keepAliveTime)` if it is allowed to time out (worker count above core, or `allowCoreThreadTimeOut`). When `poll` returns null, `getTask()` returns null and the worker exits. `Worker` itself extends `AbstractQueuedSynchronizer` as a simple non-reentrant lock, so the pool can tell an idle worker from one running a task and interrupt only idle ones during `shutdown()`.
 
     **Interviewer listens for:** `ctl`, the `take` vs `poll` distinction, and that "core" is a count, not a property of specific threads.
+
+    **Common wrong answer:** Thinking idle threads are destroyed immediately. Core threads stay unless allowCoreThreadTimeOut is set.
 
 ??? question "Q14. With virtual threads in Java 21+, do we still need thread pools?"
     **Answer:** For blocking I/O work, pooling threads is no longer needed: virtual threads are cheap, so you create one per task. But the pool was also acting as a **concurrency limiter**, and that need remains. With virtual threads you limit access to a scarce resource with a `Semaphore` or a connection pool. For CPU-bound work, virtual threads give no benefit, because they still run on a small set of carrier threads (a `ForkJoinPool` with parallelism equal to available processors), so a bounded platform pool or `ForkJoinPool` is still correct. On Java 21, also watch for pinning inside `synchronized` blocks, which JDK 24 removed.
@@ -513,6 +531,10 @@ On Kubernetes, the total wait must fit inside `terminationGracePeriodSeconds` (3
 
 ??? question "Q15. What does `CallerRunsPolicy` really do to a system, and when is it harmful?"
     **Answer:** It makes the submitting thread execute the task, so that thread cannot submit more work until it finishes. That slows the producer down to the pool's speed, which is simple back-pressure with no lost tasks. It is harmful when the caller thread must not be blocked: a Netty or WebFlux event-loop thread (stalls all connections on that loop), a Kafka listener thread (risk of exceeding `max.poll.interval.ms` and a rebalance), or a Tomcat request thread when the point of the pool was to isolate slow work from request threads. It also runs the task with the caller's thread context and discards the task if the pool is shut down.
+
+    **Interviewer listens for:** slows the producer, can block request or event-loop threads, simple backpressure.
+
+    **Common wrong answer:** "It is the safest policy because nothing is lost." It can stall the threads that accept requests.
 
 ### Scenario-based
 
@@ -528,8 +550,18 @@ On Kubernetes, the total wait must fit inside `terminationGracePeriodSeconds` (3
 
     **Interviewer listens for:** isolation, timeouts and degraded responses together, and the trade-off that more pools mean more threads and more tuning.
 
+    **Common wrong answer:** "Increase timeouts so the slow upstream can finish." That holds threads even longer.
+
 ??? question "Q18. A nightly `@Scheduled` reconciliation job ran fine for weeks, then silently stopped. The application is healthy and there are no errors in the logs. What do you check?"
-    **Answer:** Three likely causes. (1) The job runs on a raw `ScheduledExecutorService` and threw an exception once: periodic tasks are cancelled after the first uncaught exception and the exception stays in a `ScheduledFuture` nobody reads. Spring's own scheduler logs such errors and keeps going, so check which one is in use. (2) Spring's default scheduler has **one thread**. If another scheduled task is hanging (for example, a call with no timeout), every other scheduled job is blocked behind it. A thread dump shows the `scheduling-1` thread stuck. (3) With several replicas, a distributed lock (for example ShedLock) may be held and never released. Fixes: wrap job bodies in `try/catch` with logging and metrics, set `spring.task.scheduling.pool.size` above 1, add timeouts, and alert on "job has not completed in N hours".
+    **Answer:** Three likely causes:
+
+    1. The job runs on a raw `ScheduledExecutorService` and threw an exception once: periodic tasks are cancelled after the first uncaught exception and the exception stays in a `ScheduledFuture` nobody reads. Spring's own scheduler logs such errors and keeps going, so check which one is in use.
+    2. Spring's default scheduler has **one thread**. If another scheduled task is hanging (for example, a call with no timeout), every other scheduled job is blocked behind it. A thread dump shows the `scheduling-1` thread stuck.
+    3. With several replicas, a distributed lock (for example ShedLock) may be held and never released. Fixes: wrap job bodies in `try/catch` with logging and metrics, set `spring.task.scheduling.pool.size` above 1, add timeouts, and alert on "job has not completed in N hours".
+
+    **Interviewer listens for:** suppressed periodic task, single scheduler thread blocked by a long run, no timeout on a downstream call.
+
+    **Common wrong answer:** "Spring scheduling is unreliable."
 
 ## Cheat sheet
 

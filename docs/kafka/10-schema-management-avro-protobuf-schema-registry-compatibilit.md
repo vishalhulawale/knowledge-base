@@ -241,30 +241,44 @@ CI gate: run a compatibility check before merge (Confluent's `kafka-schema-regis
 
     **Common wrong answer:** "One topic per event type, always." That loses cross-type ordering for an entity.
 
+??? question "Q8. Should producers auto-register schemas in production?"
+    **Answer:** Usually no. With `auto.register.schemas=true` any producer build can register a new version, so an accidental change goes live on the first send. In production, set `auto.register.schemas=false` and `use.latest.version=true` (or pin a version). Register schemas from CI after a compatibility check (`mvn schema-registry:test-compatibility` or the REST `/compatibility` endpoint). Then a breaking change fails the pipeline, not the consumers.
+
+    **Interviewer listens for:** CI-driven registration, compatibility check before deploy, auto-register off, ownership of the subject.
+
+    **Common wrong answer:** "Compatibility mode protects us, so auto-registration is fine." Compatibility only checks against the chosen rule; `NONE` or a wrong subject strategy still lets bad schemas in.
+
 ### Scenario-based
 
-??? question "Q8. A producer deployed a change and all consumers started failing deserialization. Response?"
-    **Answer:** Immediate: roll back the producer. Consumers with `ErrorHandlingDeserializer` + DLT keep flowing (bad records parked). Replay the parked records after a fix. Prevent it with a registry, compatibility mode, CI compatibility checks, disabling runtime auto-registration, and contract tests between teams. In order: (1) Triage: read the exception. `SerializationException` / "Could not find class" / "Error deserializing Avro message for id N" tells me whether it's an incompatible schema, a missing schema, or a non-registry payload. Check the subject's latest versions and who registered them. (2) Stop the bleeding: roll back or pause the producer. (3) Unblock consumers: without `ErrorHandlingDeserializer` the exception is thrown from `poll()` before the listener and the consumer loops on the same offset forever, so lag grows on that partition. If that's the state, either deploy the error-handling deserializer + DLT, or as a last resort move the group's offsets past the bad range with `kafka-consumer-groups --reset-offsets` (group must be stopped) after copying the bad records aside. (4) Recover: the bad records stay on the log, so decide whether a patched consumer can read them or whether they must be re-published in the correct format from the source, and replay the DLT. (5) If a bad schema version was registered, soft-delete that version so `use.latest.version` clients stop picking it up. (6) Post-incident: CI gate, `auto.register.schemas=false`, restrict registry write access, alert on DLT rate.
+??? question "Q9. A producer deployed a change and all consumers started failing deserialization. Response?"
+    **Answer:** Immediate: roll back the producer. Consumers with `ErrorHandlingDeserializer` + DLT keep flowing (bad records parked). Replay the parked records after a fix. Prevent it with a registry, compatibility mode, CI compatibility checks, disabling runtime auto-registration, and contract tests between teams. In order:
+
+    1. Triage: read the exception. `SerializationException` / "Could not find class" / "Error deserializing Avro message for id N" tells me whether it's an incompatible schema, a missing schema, or a non-registry payload. Check the subject's latest versions and who registered them.
+    2. Stop the bleeding: roll back or pause the producer.
+    3. Unblock consumers: without `ErrorHandlingDeserializer` the exception is thrown from `poll()` before the listener and the consumer loops on the same offset forever, so lag grows on that partition. If that's the state, either deploy the error-handling deserializer + DLT, or as a last resort move the group's offsets past the bad range with `kafka-consumer-groups --reset-offsets` (group must be stopped) after copying the bad records aside.
+    4. Recover: the bad records stay on the log, so decide whether a patched consumer can read them or whether they must be re-published in the correct format from the source, and replay the DLT.
+    5. If a bad schema version was registered, soft-delete that version so `use.latest.version` clients stop picking it up.
+    6. Post-incident: CI gate, `auto.register.schemas=false`, restrict registry write access, alert on DLT rate.
 
     **Interviewer listens for:** contain first, then recover data, then prevent; knowing that a deserialization failure blocks the partition without `ErrorHandlingDeserializer`; that rolling back the producer does not remove bad records already written.
 
     **Common wrong answer:** "Roll back the producer and it's fixed", or "restart the consumers".
 
-??? question "Q9. Schema Registry is down. What still works and what breaks?"
+??? question "Q10. Schema Registry is down. What still works and what breaks?"
     **Answer:** Producers and consumers keep working for every schema already in their local cache, because the registry is only called for an unseen schema (producer side) or unseen ID (consumer side). What breaks: a freshly started or restarted client (cold cache), the first message with a new schema version, and any registration or CI compatibility check. Those calls fail and surface as a `SerializationException` from `send()` or from `poll()`. So an outage is often invisible until a deploy or a rebalance-triggered restart, and then it looks like an application failure. Mitigation: run several registry instances behind a load balancer and list them all in `schema.registry.url` (comma-separated). The registry is single-primary: any node serves reads, writes go to the primary, and its state lives in the compacted `_schemas` topic, so that topic needs replication factor 3 and must never be deleted or have its cleanup policy changed. For DR, replicate schemas to the second cluster (Schema Linking or replicating `_schemas`), because consumers there can't decode by ID otherwise.
 
     **Interviewer listens for:** client-side caching; cold start as the failure point; reads vs writes; `_schemas` as the source of truth; HA setup.
 
     **Common wrong answer:** "Everything stops" or the opposite, "nothing is affected because Kafka doesn't depend on it".
 
-??? question "Q10. How does a consumer on schema v1 read a message written with v3? Walk through it."
+??? question "Q11. How does a consumer on schema v1 read a message written with v3? Walk through it."
     **Answer:** The consumer reads the first 5 bytes: magic byte `0x0` and the 4-byte schema ID. It looks the ID up in its cache or fetches it from the registry (`GET /schemas/ids/{id}`). That is the **writer schema**. Avro binary carries no field names or tags, only values in schema order, so decoding is impossible without the exact writer schema. The decoder then applies **schema resolution** against the consumer's **reader schema** (the generated `SpecificRecord` class when `specific.avro.reader=true`, otherwise the writer schema itself as a `GenericRecord`): fields are matched by name (or reader alias), writer-only fields are skipped, reader-only fields take the reader's default, and types may be promoted (int→long). If a reader-only field has no default, or a type can't be promoted, resolution fails with an `AvroTypeException`. A compatibility mode is simply the registry running this same resolution check ahead of time: BACKWARD = "can the new schema, as reader, resolve the old as writer", FORWARD = the reverse.
 
     **Interviewer listens for:** writer vs reader schema; why Avro needs the writer schema; resolution rules; connecting compatibility modes to resolution.
 
     **Common wrong answer:** "The consumer downloads the latest schema and uses that." The ID in the message, not "latest", decides the writer schema.
 
-??? question "Q11. Who owns the schema, and how do you govern changes across teams?"
+??? question "Q12. Who owns the schema, and how do you govern changes across teams?"
     **Answer:** The **producing team owns** the event schema, because the event describes facts in their domain, but consumers are stakeholders. In practice: schemas live in version control (in the producer repo or a shared contracts repo) with CODEOWNERS so consuming teams are reviewers. The pipeline runs the compatibility check against the registry on every PR, and registers the schema on merge, before the producer deploys. Runtime clients run with `auto.register.schemas=false` and read-only registry credentials, so the only write path is the pipeline. Compatibility mode is set per subject (stricter, transitive modes for long-retention or widely consumed topics). Add documentation in the schema (`doc` fields, PII/PHI tags) and a deprecation policy: fields are deprecated with notice, removed only after consumers confirm. Because registry checks are structural only, semantic changes (units, meaning, nullability in practice) still need review and consumer-driven contract tests.
 
     **Interviewer listens for:** clear ownership; schema-as-code with review; CI gate + pipeline registration; locked-down runtime; semantic vs structural compatibility.

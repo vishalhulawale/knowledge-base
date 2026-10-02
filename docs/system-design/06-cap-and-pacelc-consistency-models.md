@@ -190,7 +190,7 @@ SELECT * FROM rx_by_patient WHERE patient_id = ? LIMIT 20;
     - "In the GraphQL aggregation layer, each upstream had different freshness. We decided per field what could come from cache (eventual) and what needed a live call (fresh), and surfaced partial failures instead of blocking the whole response. That's an availability-over-consistency choice per field." *[confirm]*
     - "Kafka gave per-key ordering (partition by entity ID), and consumers were idempotent, so retries didn't create duplicates. That's causal/ordering guarantees without global coordination."
     - "For MongoDB, `majority` write concern for important writes, and primary reads where read-your-writes mattered." *[confirm]*
-- **Likely follow-up chain:** "Is your system CP or AP?" → "What happens during a partition between your service and an upstream?" → "How do you prevent double processing?" → "Where did you need strong consistency?" Answer per operation, not per system: reads degrade to cached or partial data (AP-ish), writes that change prescriptions go to the system of record with idempotency keys and conditional updates (strong per key).
+- **Likely follow-up chain:** "Is your system CP or AP?" → "What happens during a partition between your service and an upstream?" → "How do you prevent double processing?" → "Where did you need strong consistency?" Answer per operation, not per system. Reads degrade to cached or partial data (AP-ish). Writes that change prescriptions go to the system of record with idempotency keys and conditional updates (strong per key).
 
 ## Interview questions
 

@@ -342,10 +342,14 @@ await fetch("/api/orders", {
 
     **Interviewer listens for:** that the two mechanisms use different boundaries, and that a hostile subdomain is same-site.
 
+    **Common wrong answer:** "Same-site and same-origin mean the same." Subdomains are same-site but cross-origin.
+
 ??? question "Q5. Which HTTP methods does Spring Security's CSRF protection apply to, and what status is returned on failure?"
     **Answer:** All methods except `GET`, `HEAD`, `TRACE` and `OPTIONS`. A missing or invalid token results in an `AccessDeniedException` handled as **403 Forbidden**. This is why safe methods must never change state.
 
     **Common wrong answer:** "401 Unauthorized". The user is authenticated. The request is refused.
+
+    **Interviewer listens for:** state-changing methods only, 403 on failure.
 
 ### Intermediate
 
@@ -373,15 +377,21 @@ await fetch("/api/orders", {
 
     **Common wrong answer:** "It works and allows everything." Also wrong: switching to `allowedOriginPatterns("*")` and calling it fixed. That echoes any origin with credentials, which defeats the same-origin policy.
 
+    **Interviewer listens for:** wildcard with credentials is rejected, use allowedOriginPatterns or explicit origins.
+
 ??? question "Q9. How does CSRF protection work for a SPA in Spring Security 6?"
     **Answer:** Use `CookieCsrfTokenRepository.withHttpOnlyFalse()`. Spring writes the token to the `XSRF-TOKEN` cookie, the SPA reads it and returns it in the `X-XSRF-TOKEN` header, and `CsrfFilter` compares them. Two details matter in version 6: the token is loaded lazily, so you need something (a small filter) to touch it so the cookie is written, and the default XOR request handler expects a masked token, so a SPA needs a handler that accepts the raw cookie value from the header. Spring Security 7 wraps this up as `csrf.spa()`.
 
     **Interviewer listens for:** double-submit cookie, why `HttpOnly=false` is acceptable here, deferred token, BREACH/XOR.
 
+    **Common wrong answer:** "Disable CSRF for SPAs." Cookie-based auth still needs CSRF protection.
+
 ??? question "Q10. What do the `SessionCreationPolicy` values mean?"
     **Answer:** `ALWAYS` creates a session every time. `IF_REQUIRED` (default) creates one when needed, for example to store the security context. `NEVER` will not create one but uses an existing one. `STATELESS` neither creates one nor reads the security context from it. `STATELESS` only governs Spring Security. Other code can still call `request.getSession()`.
 
     **Common wrong answer:** Treating `NEVER` and `STATELESS` as the same.
+
+    **Interviewer listens for:** the four policies and that STATELESS still allows a request-scoped context.
 
 ### Senior
 
@@ -397,15 +407,21 @@ await fetch("/api/orders", {
 
     **Interviewer listens for:** site vs origin, GET navigation, layered defence.
 
+    **Common wrong answer:** "Yes, SameSite cookies make CSRF tokens obsolete."
+
 ??? question "Q13. How do you scale and manage sessions across many instances?"
     **Answer:** Options are sticky sessions at the load balancer (simple, but a node loss logs users out and balancing is uneven), container session replication (chatty, rarely used now), or an external store. Spring Session with Redis replaces the container's `HttpSession` through a filter, so any instance can serve any request and sessions survive deployments. Then tune: idle timeout through TTL, an absolute timeout, concurrent session limits, and deleting sessions by principal name for forced logout. Keep the session small because it is serialised on each change.
 
     **Interviewer listens for:** trade-offs of each option, Redis availability as a new dependency, forced logout by principal.
 
+    **Common wrong answer:** "Use sticky sessions and you never need anything else."
+
 ??? question "Q14. Why does the default CSRF token value change on every request in Spring Security 6, even though the session token is the same?"
     **Answer:** `XorCsrfTokenRequestAttributeHandler` XORs the real token with fresh random bytes and sends both, encoded together. The server reverses it before comparing. Because the rendered value is different in every response, an attacker cannot use the BREACH attack, which guesses secrets in compressed HTTPS responses by watching response sizes over many requests. The stored token is unchanged, so multiple tabs keep working.
 
     **Interviewer listens for:** BREACH, masking vs rotating, awareness that this broke some SPAs during the 5.x to 6 upgrade.
+
+    **Common wrong answer:** "The server must store every new token." It is the same token masked differently each time (BREACH protection).
 
 ### Scenario-based
 
@@ -414,20 +430,28 @@ await fetch("/api/orders", {
 
     **Interviewer listens for:** a diagnosis path, knowledge of the version 6 changes, refusing the unsafe shortcut.
 
+    **Common wrong answer:** "CORS is blocking POSTs." The pattern points to CSRF.
+
 ??? question "Q16. The API works from Postman but the browser shows 'blocked by CORS policy'. Walk through your debugging."
     **Answer:** Postman does not enforce the same-origin policy, so this only tells me the endpoint works. In the browser network tab I look at the preflight `OPTIONS`: its status, and whether `Access-Control-Allow-Origin`, `-Methods` and `-Headers` match the real request. Common causes: preflight rejected with 401/403 because CORS runs after security, origin mismatch (trailing slash, `http` vs `https`, port), a custom header not listed in allowed headers, credentials sent while the server answers `*`, the header added twice by gateway and service, or an error response (500 from a filter or a gateway timeout) that carries no CORS headers so the real error is hidden.
 
     **Interviewer listens for:** systematic approach, that CORS errors often mask another failure, gateway duplication.
+
+    **Common wrong answer:** "Add @CrossOrigin("*") everywhere."
 
 ??? question "Q17. Your team stores a JWT in an HttpOnly cookie and has disabled CSRF 'because we use JWT'. What do you say in the review?"
     **Answer:** The cookie is attached by the browser, so the app is open to CSRF whatever the cookie contains. Options: enable CSRF with `CookieCsrfTokenRepository` and send the header from the SPA, set `SameSite=Lax` or `Strict` plus `Secure` and the `__Host-` prefix, and verify `Origin` or `Sec-Fetch-Site` on unsafe methods. I would also check that no `GET` changes state and that the CORS configuration does not reflect arbitrary origins with credentials.
 
     **Interviewer listens for:** correcting the reasoning without blame, concrete layered fixes.
 
+    **Common wrong answer:** "JWTs are immune to CSRF." The cookie transport is what makes CSRF possible.
+
 ??? question "Q18. A user reports that after logout, their old access token still works for several minutes. Is that a bug? How would you design it for a banking app?"
     **Answer:** With self-contained JWTs it is expected: the resource server validates signature and expiry only, so the token is valid until `exp`. For a banking app I would shorten the access token lifetime to a few minutes, revoke the refresh token at logout, and either keep tokens server-side in a BFF so logout destroys the session, or add a revocation check (a deny list of `jti` in Redis, or opaque tokens with introspection) for high-risk operations. That trades some statelessness for control. Details are in [04-jwt-structure-signing-validation-revocation.md](04-jwt-structure-signing-validation-revocation.md).
 
     **Interviewer listens for:** understanding that this is the core trade-off of stateless tokens, and proportionate mitigations.
+
+    **Common wrong answer:** "Logout should revoke the JWT instantly." Self-contained JWTs cannot be revoked without extra infrastructure.
 
 ## Cheat sheet
 

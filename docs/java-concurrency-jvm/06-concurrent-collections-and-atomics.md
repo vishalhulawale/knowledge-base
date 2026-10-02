@@ -369,13 +369,21 @@ boolean publish(AuditEvent event) throws InterruptedException {
 
     **Interviewer listens for:** the difference between visibility and atomicity.
 
+    **Common wrong answer:** "volatile makes ++ atomic."
+
 ??? question "Q3. `Hashtable` vs `Collections.synchronizedMap` vs `ConcurrentHashMap`?"
     **Answer:** The first two guard every method with one lock on the whole map, so all readers and writers are serialised, and iteration needs manual external locking or it throws `ConcurrentModificationException`. `ConcurrentHashMap` has lock-free reads, locks only one bin for a write, offers atomic compound methods, and its iterators are weakly consistent. None of the three allow you to safely do check-then-act with separate calls (with the first two you can wrap the calls in `synchronized (map)`; with `ConcurrentHashMap` you use its atomic compound methods, because external locking on it does not exclude other writers).
 
     **Common wrong answer:** "`ConcurrentHashMap` locks segments." That was Java 7. Since Java 8 it is CAS plus `synchronized` per bin.
 
+    **Interviewer listens for:** one global lock vs per-bin locking and lock-free reads, iteration behaviour.
+
 ??? question "Q4. Why does `ConcurrentHashMap` reject null keys and values?"
     **Answer:** Because of ambiguity. If `get(k)` returns `null`, it must mean "no mapping". In a `HashMap` you can call `containsKey` to distinguish a null value from an absent key, but in a concurrent map another thread can change the mapping between the two calls, so the check is meaningless. Banning null removes the ambiguity. `compute`-style methods also use a `null` return to mean "remove the entry".
+
+    **Interviewer listens for:** ambiguity of null in a concurrent map, no safe containsKey follow-up.
+
+    **Common wrong answer:** "It is a historical accident from Hashtable."
 
 ??? question "Q5. What does this print?"
     ```java
@@ -390,6 +398,8 @@ boolean publish(AuditEvent event) throws InterruptedException {
 
     **Interviewer listens for:** "weakly consistent", no exception, and not claiming a fixed number of iterations.
 
+    **Common wrong answer:** "It throws ConcurrentModificationException." CHM iterators are weakly consistent and never throw it.
+
 ### Intermediate
 
 ??? question "Q6. Walk me through `put` in `ConcurrentHashMap` on Java 8+."
@@ -397,21 +407,35 @@ boolean publish(AuditEvent event) throws InterruptedException {
 
     **Interviewer listens for:** CAS for empty bin, lock on the head node only, treeification thresholds, cooperative resize, striped counting.
 
+    **Common wrong answer:** "put locks the whole segment like Java 7." Java 8+ uses CAS for empty bins and locks a single bin otherwise.
+
 ??? question "Q7. `putIfAbsent` vs `computeIfAbsent`?"
     **Answer:** `putIfAbsent(k, v)` takes a ready value, so the value is constructed on every call even when the key exists, and it returns the **previous** value (`null` if it inserted). `computeIfAbsent(k, fn)` only calls `fn` when the key is missing, guarantees at most one call per key, and returns the **current** value. For expensive values use `computeIfAbsent`. The cost is that `fn` runs under the bin lock, so it must be short and must not touch the same map.
 
     **Common wrong answer:** treating the return value of `putIfAbsent` as the value now in the map. It is `null` on a successful insert.
+
+    **Interviewer listens for:** eager value vs lazy compute, return values, function runs at most once.
 
 ??? question "Q8. When would you choose `LongAdder` over `AtomicLong`, and when not?"
     **Answer:** `LongAdder` when many threads write and reads are rare and can be approximate: request counters, metrics, statistics. It spreads updates over padded cells that threads hash onto (striping), so threads do not contend on one cache line. `AtomicLong` when you need the exact current value as part of a decision: ID generation, `compareAndSet`, a limit check with `incrementAndGet`. `LongAdder.sum()` is not an atomic snapshot and `sumThenReset()` can lose concurrent updates.
 
     **Interviewer listens for:** striping, false sharing and `@Contended`, the read-side weakness, memory cost.
 
+    **Common wrong answer:** "LongAdder is always better." Its sum() is not an atomic snapshot and it uses more memory.
+
 ??? question "Q9. How does `CopyOnWriteArrayList` work and when is it a bad idea?"
     **Answer:** Every mutation takes a lock, copies the entire backing array, applies the change and publishes the new array through a volatile field. Readers and iterators use whichever array they saw, without locking, so iteration is a consistent snapshot and never throws. It is a bad idea for large lists or frequent writes: each `add` is O(n) and creates garbage. Adding n elements one by one is O(n²), so bulk-load with `addAll` or the constructor. Its iterators also do not support `remove`.
 
+    **Interviewer listens for:** copy on every write, snapshot iteration, good for rarely changed listener lists.
+
+    **Common wrong answer:** "It is a general-purpose thread-safe list." Writes copy the whole array.
+
 ??? question "Q10. `ArrayBlockingQueue` vs `LinkedBlockingQueue`?"
     **Answer:** `ArrayBlockingQueue` is a fixed-size array with a single lock for both ends, optional fairness, no allocation per element. `LinkedBlockingQueue` uses separate put and take locks, so a producer and a consumer can work at the same time, but it allocates a node per element and its default capacity is `Integer.MAX_VALUE`, which means effectively unbounded. In a service I choose a bounded queue either way, because the bound is what gives backpressure.
+
+    **Interviewer listens for:** single lock + array vs two locks + nodes, bounded vs optionally unbounded.
+
+    **Common wrong answer:** "LinkedBlockingQueue is always bounded." The default capacity is Integer.MAX_VALUE.
 
 ### Senior
 
@@ -420,21 +444,42 @@ boolean publish(AuditEvent event) throws InterruptedException {
 
     **Interviewer listens for:** a precise definition, why GC helps, and a concrete fix.
 
+    **Common wrong answer:** "Java's GC makes ABA impossible." It prevents memory reuse ABA, not logical ABA on values.
+
 ??? question "Q12. What is false sharing and how does the JDK deal with it?"
     **Answer:** CPUs cache memory in lines of about 64 bytes. If two threads on different cores write to two different variables that sit on the same line, each write invalidates the other core's copy, so they slow each other down although they share no data. `LongAdder` cells and `ConcurrentHashMap` counter cells are annotated with `@Contended`, which makes the JVM pad them so each sits alone on its line. In application code the annotation is in an internal package and needs `-XX:-RestrictContended`, so in practice I reach for `LongAdder` rather than hand-padding.
+
+    **Interviewer listens for:** cache lines, @Contended and padding in LongAdder cells and Thread fields.
+
+    **Common wrong answer:** "volatile prevents false sharing."
 
 ??? question "Q13. Why is `ConcurrentHashMap.size()` only an estimate, and how would you enforce a maximum size?"
     **Answer:** The count is stored as a base plus striped counter cells so that writers do not contend on one counter. `size()` sums them without locking, so concurrent inserts and removes may be half-counted. It is exact only when no writer is active. To enforce a bound I would not write `if (map.size() < max) map.put(...)`, which is both check-then-act and based on an estimate. I would use a cache built for it (Caffeine `maximumSize`), or guard admission with a `Semaphore` or an `AtomicInteger` that is incremented with CAS before the insert and decremented on removal.
 
     **Common wrong answer:** "`size()` locks the map so it is accurate." That was closer to the Java 7 fallback behaviour, not the current design.
 
+    **Interviewer listens for:** striped counters summed without locking, enforce bounds with a semaphore or Caffeine.
+
 ??? question "Q14. What can go wrong with `computeIfAbsent`?"
-    **Answer:** Four things. (1) The function runs under the bin lock, so a slow loader blocks every other key in that bin. (2) If the function modifies the same map, for example a recursive memoised function, Java 8 could hang and Java 9+ throws `IllegalStateException: Recursive update`. (3) If the function returns `null` nothing is stored, so "not found" results are recomputed every time unless you store a sentinel or an `Optional`. (4) If the function throws, nothing is stored and every waiting caller retries, which can hammer a failing upstream. For expensive loads I cache a `CompletableFuture` or use Caffeine's loading cache.
+    **Answer:** Four things:
+
+    1. The function runs under the bin lock, so a slow loader blocks every other key in that bin.
+    2. If the function modifies the same map, for example a recursive memoised function, Java 8 could hang and Java 9+ throws `IllegalStateException: Recursive update`.
+    3. If the function returns `null` nothing is stored, so "not found" results are recomputed every time unless you store a sentinel or an `Optional`.
+    4. If the function throws, nothing is stored and every waiting caller retries, which can hammer a failing upstream.
+
+    For expensive loads I cache a `CompletableFuture` or use Caffeine's loading cache.
 
     **Interviewer listens for:** lock scope, the recursive-update bug, negative caching, failure behaviour.
 
+    **Common wrong answer:** "computeIfAbsent is always safe to use for caching." Slow loaders block other keys and recursion throws.
+
 ??? question "Q15. How do concurrent collections interact with virtual threads?"
     **Answer:** They work unchanged, and the lock-free ones are a natural fit. Two points matter. First, on Java 21 a virtual thread that blocks while inside a `synchronized` block pins its carrier thread. `ConcurrentHashMap` bins are guarded by `synchronized`, so a blocking call inside `compute` or `computeIfAbsent` pins a carrier and can starve the scheduler. JDK 24 (JEP 491) removed that pinning, so Java 25 LTS no longer has the issue, although the bin is still locked. Second, with thousands of virtual threads, unbounded queues and maps grow faster, so bounding and semaphores for concurrency limits become more important than pool size.
+
+    **Interviewer listens for:** lock-free structures fit well, pinning with synchronized on Java 21, fixed in Java 24.
+
+    **Common wrong answer:** "Concurrent collections must be replaced for virtual threads."
 
 ### Scenario-based
 
@@ -443,15 +488,21 @@ boolean publish(AuditEvent event) throws InterruptedException {
 
     **Interviewer listens for:** "the function runs under the bin lock", reads unaffected, future-based fix, timeout.
 
+    **Common wrong answer:** "ConcurrentHashMap is lock-free, so this cannot be the cause."
+
 ??? question "Q17. An in-memory rate limiter does `if (counter.get() < limit) counter.incrementAndGet()` and lets through more requests than the limit under load. Fix it. Then make it work across 8 pods."
     **Answer:** That is check-then-act: many threads pass the check before any of them increments. Single JVM fix: increment first and test the result, `if (counter.incrementAndGet() > limit) { counter.decrementAndGet(); reject; }`, or a CAS loop that only increments while below the limit, or a `Semaphore.tryAcquire()` for concurrent-request limits. `LongAdder` is wrong here because it has no atomic read-and-decide. Across pods no JVM structure helps. Use Redis with an atomic operation (`INCR` with expiry, or a Lua script for a token bucket), or enforce the limit at the API gateway. Per-pod limits of `limit / 8` are a cheap approximation if exactness is not required.
 
     **Common wrong answer:** wrapping the two calls in `synchronized` and calling it done, without noticing the multi-pod problem.
 
+    **Interviewer listens for:** check-then-act race, increment then test, distributed limiter for many pods.
+
 ??? question "Q18. A service keeps a `Map<String, List<Event>>` of pending events per member in a `ConcurrentHashMap`. Occasionally events go missing and once you saw an `ArrayIndexOutOfBoundsException` from `ArrayList.add`. What is happening?"
     **Answer:** The map is thread-safe, the `ArrayList` values are not. Code like `map.computeIfAbsent(id, k -> new ArrayList<>()).add(event)` makes the lookup atomic, but `add` then runs outside the bin lock, and two threads adding to the same list corrupt it: lost elements, or an index past the array during a resize. Fix by mutating inside the atomic method, `map.compute(id, (k, list) -> { if (list == null) list = new ArrayList<>(); list.add(event); return list; })`, and make sure readers also do not iterate the list unguarded, so better still store an immutable list and replace it, or use a concurrent value such as `ConcurrentLinkedQueue`.
 
     **Interviewer listens for:** the map protects mappings and not values, and the reader side of the problem.
+
+    **Common wrong answer:** "The map is concurrent, so the lists are safe too." Thread safety does not extend to the values.
 
 ## Cheat sheet
 

@@ -229,16 +229,23 @@ Users affected: ~N | Duration: HH:MM | Data impact: none/describe | SLO budget u
 
     **Common wrong answer:** "be more careful".
 
+??? question "Q7. Which reliability metrics do you track, and why?"
+    **Answer:** **MTTD** (time to detect) and **MTTR/MTTM** (time to restore or mitigate) show how good alerting and response are. **Change failure rate** and **deployment frequency** (DORA) show whether releases are safe. **SLO attainment and error-budget burn** show user impact. **Incident count by severity and repeat-incident rate** show whether postmortem actions are working. Track trends per quarter, and never use them to rank individuals. *[confirm]*
+
+    **Interviewer listens for:** detection and recovery times, DORA metrics, SLOs and error budgets, repeat incidents, trends not blame.
+
+    **Common wrong answer:** "Number of incidents." A raw count says nothing about severity or recovery and encourages hiding incidents.
+
 ### Senior
 
-??? question "Q7. Why can 5 whys be misleading?"
+??? question "Q8. Why can 5 whys be misleading?"
     **Answer:** It pushes towards a single linear root cause and often ends at a human action. Real incidents have multiple contributing factors (missing tests, alert gaps, deployment process, upstream changes, time pressure). Use a contributing-factors analysis (technical, process, organisational) alongside it.
 
     **Interviewer listens for:** systems thinking.
 
     **Common wrong answer:** "5 whys always finds the root cause".
 
-??? question "Q8. How do you reduce the number and impact of incidents over time?"
+??? question "Q9. How do you reduce the number and impact of incidents over time?"
     **Answer:**
     - SLOs with burn-rate alerts on symptoms.
     - Safe deploys (canary, flags, auto-rollback).
@@ -252,9 +259,16 @@ Users affected: ~N | Duration: HH:MM | Data impact: none/describe | SLO budget u
 
     **Common wrong answer:** "more manual testing".
 
+??? question "Q10. How do you make on-call sustainable for your team?"
+    **Answer:** Every alert must be **actionable and tied to user impact** (SLO-based alerting); delete or fix noisy ones. Give every alert a runbook. Share the rotation fairly with a secondary, hand over at the end of each shift, and respect time off after a bad night. Review pages weekly: repeat causes become backlog items with priority. Track pages per shift and out-of-hours pages as a team health metric. *[confirm]*
+
+    **Interviewer listens for:** actionable alerts, runbooks, fair rotation, weekly review that removes causes, a health metric for on-call.
+
+    **Common wrong answer:** "Seniors handle on-call because they know the system." It burns them out and keeps knowledge concentrated.
+
 ### Scenario-based
 
-??? question "Q9. At 2 a.m. an alert shows PHI may have been exposed through an API bug. What do you do?"
+??? question "Q11. At 2 a.m. an alert shows PHI may have been exposed through an API bug. What do you do?"
     **Answer:**
     1. Treat it as a high-severity security incident.
     2. Contain: disable the endpoint or feature, block access.
@@ -268,7 +282,7 @@ Users affected: ~N | Duration: HH:MM | Data impact: none/describe | SLO budget u
 
     **Common wrong answer:** "fix it quietly and move on".
 
-??? question "Q10. The same Kafka consumer lag incident happens every month. What do you do as lead?"
+??? question "Q12. The same Kafka consumer lag incident happens every month. What do you do as lead?"
     **Answer:**
     1. Pull the past postmortems and look for patterns (traffic peaks, poison messages, slow downstream).
     2. Check whether action items were completed.

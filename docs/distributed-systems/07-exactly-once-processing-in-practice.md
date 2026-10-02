@@ -270,9 +270,24 @@ consumer.subscribe(List.of("readings"), new ConsumerRebalanceListener() {
 
     **Common wrong answer:** "Kafka kills the old process".
 
+??? question "Q8. Where does exactly-once still break even with Kafka EOS turned on?"
+    **Answer:** EOS covers **Kafka in → Kafka out** inside one transaction. It breaks when:
+
+    - The consumer has **external side effects** (database writes, HTTP calls, emails). Those are outside the Kafka transaction.
+    - Downstream consumers read with `read_uncommitted` (the default), so they see aborted records.
+    - A producer elsewhere writes to the topic **without** transactions or idempotence.
+    - Records expire through **retention** before they are processed, or someone resets offsets.
+    - The application is not deterministic, so a retried transaction produces different output.
+
+    For external systems you still need idempotent writes or a dedupe table keyed by event id.
+
+    **Interviewer listens for:** scope of EOS, external side effects, read_committed requirement, other producers, retention and offset resets.
+
+    **Common wrong answer:** "processing.guarantee=exactly_once_v2 makes the whole pipeline exactly-once." Only the Kafka part.
+
 ### Senior
 
-??? question "Q8. What are the costs of turning on Kafka EOS everywhere?"
+??? question "Q9. What are the costs of turning on Kafka EOS everywhere?"
     **Answer:**
     - Higher end-to-end latency (read_committed waits for commit intervals).
     - Lower throughput (markers, coordinator calls).
@@ -286,7 +301,7 @@ consumer.subscribe(List.of("readings"), new ConsumerRebalanceListener() {
 
     **Common wrong answer:** "no downside".
 
-??? question "Q9. How does Flink achieve end-to-end exactly-once?"
+??? question "Q10. How does Flink achieve end-to-end exactly-once?"
     **Answer:** Distributed snapshots (checkpoints) of operator state aligned with source offsets give exactly-once state. For sinks, two-phase commit: pre-commit on each checkpoint, then commit when the checkpoint completes (the Kafka transactional sink). Or idempotent sinks. Recovery restores state + offsets from the last checkpoint.
 
     **Interviewer listens for:** checkpoints + 2PC sinks.
@@ -295,7 +310,7 @@ consumer.subscribe(List.of("readings"), new ConsumerRebalanceListener() {
 
 ### Scenario-based
 
-??? question "Q10. A billing consumer sometimes creates duplicate invoices after deployments. Diagnose and fix."
+??? question "Q11. A billing consumer sometimes creates duplicate invoices after deployments. Diagnose and fix."
     **Answer:**
     - **Diagnosis:** deploys trigger rebalances. In-flight records whose DB writes completed but whose offsets weren't committed get redelivered. Invoices use random IDs and there's no unique constraint, so duplicates appear.
     - **Fix:** a unique constraint on `order_id` (or event ID) with upsert/ON CONFLICT, offset commit after the DB transaction, graceful shutdown (finish the batch, commit offsets), and cooperative rebalancing to reduce churn.
@@ -305,7 +320,7 @@ consumer.subscribe(List.of("readings"), new ConsumerRebalanceListener() {
 
     **Common wrong answer:** "turn off retries".
 
-??? question "Q11. A product manager asks for 'guaranteed exactly-once SMS to patients'. What do you promise and build?"
+??? question "Q12. A product manager asks for 'guaranteed exactly-once SMS to patients'. What do you promise and build?"
     **Answer:** Explain that exactly-once delivery to a phone can't be guaranteed (carriers, provider retries), but the platform can guarantee **we request each notification at most once per logical event**, and retry safely. Build it with:
     - a deterministic notification key (patient + rx + event type + date) with a unique dedup record before sending
     - provider idempotency where supported

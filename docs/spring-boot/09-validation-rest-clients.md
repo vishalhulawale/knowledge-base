@@ -508,9 +508,17 @@ Rules: retry **only idempotent operations** (GET, PUT, DELETE, or POST with an i
     **Common wrong answer:** "Three violations."
 
 ??? question "Q3. I added `@NotBlank` to my DTO and `@Valid` to the controller, but invalid requests still go through. Why?"
-    **Answer:** Check in this order. (1) `spring-boot-starter-validation` is missing: since Boot 2.3 the web starter does not include it. (2) Wrong import after a Boot 3 migration: `javax.validation` annotations are ignored by a Jakarta validator. (3) `@Valid` is missing on the argument or on a nested field. (4) The method declares a `BindingResult` and never checks it. (5) The constraint is in a group that was not requested.
+    **Answer:** Check in this order:
+
+    1. `spring-boot-starter-validation` is missing: since Boot 2.3 the web starter does not include it.
+    2. Wrong import after a Boot 3 migration: `javax.validation` annotations are ignored by a Jakarta validator.
+    3. `@Valid` is missing on the argument or on a nested field.
+    4. The method declares a `BindingResult` and never checks it.
+    5. The constraint is in a group that was not requested.
 
     **Interviewer listens for:** a systematic checklist, the starter and the `javax` → `jakarta` point.
+
+    **Common wrong answer:** "Validation annotations work without any setup." The starter and @Valid are both needed.
 
 ??? question "Q4. What are the options for calling another REST service from Spring Boot, and which do you choose by default?"
     **Answer:** `RestTemplate` (legacy, blocking), `RestClient` (modern blocking, fluent, Spring 6.1+), `WebClient` (reactive, non-blocking), HTTP interface clients (`@HttpExchange`, declarative over either), and Spring Cloud OpenFeign (declarative, feature-complete). Default for a Spring MVC service on Boot 3.2+: `RestClient`, optionally behind an HTTP interface, with virtual threads if concurrency is high. `WebClient` when the app is reactive or needs streaming.
@@ -526,20 +534,28 @@ Rules: retry **only idempotent operations** (GET, PUT, DELETE, or POST with an i
 
     **Interviewer listens for:** the 500 trap, the 6.1 change, binding vs parsing failure.
 
+    **Common wrong answer:** "All validation failures return 500." The right exception maps to 400 by default.
+
 ??? question "Q6. Why does method validation on a service sometimes not run?"
     **Answer:** It is implemented by `MethodValidationPostProcessor`, which wraps the bean in a proxy. It does not run when: the class lacks `@Validated`; the call is a self-invocation (`this.method()` never passes through the proxy); the method is `private` or, with CGLIB, `final`; or the object was created with `new` instead of by the container. Same family of problems as `@Transactional` and `@Cacheable`.
 
     **Interviewer listens for:** "it's a proxy", link to self-invocation.
+
+    **Common wrong answer:** "@Validated on the method is enough." It must be on the class, and the call must go through the proxy.
 
 ??? question "Q7. How do you validate a rule that involves two fields?"
     **Answer:** With a class-level constraint: a custom annotation with `@Target(TYPE)` and a `ConstraintValidator` that receives the whole object. Use `ConstraintValidatorContext` to attach the violation to a specific property so the client knows which field to fix. A quick alternative is an `@AssertTrue` boolean method on the DTO, which is fine for one-off rules but not reusable and reports under the method's property name.
 
     **Interviewer listens for:** class-level constraint, attaching the error to a field node.
 
+    **Common wrong answer:** "Validate it in the controller with if-statements." A class-level constraint keeps rules reusable.
+
 ??? question "Q8. What do `retrieve()` and `exchange()` do differently on `RestClient`?"
     **Answer:** `retrieve()` is the convenient path. It applies status handlers, and by default any 4xx or 5xx throws a `RestClientResponseException` subclass such as `HttpClientErrorException.NotFound`. You customise with `onStatus` or a builder-level `defaultStatusHandler`. `exchange()` hands you the raw request and response so you decide everything, for example mapping 404 to `Optional.empty()`. Status handlers are not applied there. On `WebClient`, the equivalent is `exchangeToMono`, where you must consume or release the body yourself.
 
     **Interviewer listens for:** default exception behaviour, when to drop down to `exchange`.
+
+    **Common wrong answer:** "exchange() is deprecated." It is for full control, but you must handle the status yourself.
 
 ??? question "Q9. What timeouts exist on an HTTP call and what are the defaults?"
     **Answer:** Three waits: **connection acquisition** from the pool, **connect** (TCP + TLS handshake), and **read / response** (waiting for data). Defaults are client-specific and mostly unsafe: JDK `HttpClient` and the `HttpURLConnection` factory have no timeout, Reactor Netty has 30 s connect and no response timeout, Feign has 10 s / 60 s. Set connect low (hundreds of ms to 1-2 s inside a data centre) and set read from the upstream's p99 plus headroom. Also keep the total, including retries, under your own caller's timeout.
@@ -552,6 +568,8 @@ Rules: retry **only idempotent operations** (GET, PUT, DELETE, or POST with an i
     **Answer:** The auto-configured builder is pre-wired by Boot: the application's `HttpMessageConverter`s (same `ObjectMapper` as the server side), the detected request factory, and Micrometer observation, which produces `http.client.requests` metrics and propagates trace headers. `RestClient.create()` has none of that, so calls vanish from traces. The builder bean is prototype-scoped, so each injection gets its own copy to customise.
 
     **Interviewer listens for:** observability and trace propagation, prototype scope.
+
+    **Common wrong answer:** "They are the same." The builder carries Boot's converters, observation and customisers.
 
 ### Senior
 
@@ -567,6 +585,8 @@ Rules: retry **only idempotent operations** (GET, PUT, DELETE, or POST with an i
 
     **Interviewer listens for:** knows Feign's status, pragmatic migration, what actually differs (error decoding, discovery).
 
+    **Common wrong answer:** "Feign is deprecated, so migrate now." It is in maintenance; migrate when touching the clients.
+
 ??? question "Q13. Where should validation live in a layered system?"
     **Answer:** In layers, each with a different job. **Edge DTOs**: syntactic validation (required, length, format) for a fast, friendly 400. **Service or domain**: business invariants that must hold regardless of entry point, because the same service is called by REST, Kafka listeners, GraphQL and batch jobs. I prefer enforcing true invariants in domain constructors so an invalid object cannot exist. **Database constraints**: the final guarantee under concurrency (uniqueness cannot be validated reliably in application code). I avoid validators that call remote services, and I keep one error contract (`ProblemDetail` with field errors) across all paths.
 
@@ -575,9 +595,20 @@ Rules: retry **only idempotent operations** (GET, PUT, DELETE, or POST with an i
     **Common wrong answer:** "Validate in the controller, that's enough."
 
 ??? question "Q14. How do you make outbound calls resilient without making things worse?"
-    **Answer:** Order of importance: (1) timeouts on every wait. (2) Bounded pools or bulkheads per upstream so one dependency cannot take all resources. (3) Circuit breaker to fail fast and give the upstream time to recover. (4) Retries, limited to idempotent operations, 2-3 attempts, exponential backoff with jitter, only on connection errors and 502/503/504, and only at one layer to avoid retry amplification. (5) A fallback that is honest: cached data or a partial response, not fake success. (6) Propagate deadlines so a call is not started when the caller has already given up. Then measure: client latency histograms, error rates, breaker state, pool pending count.
+    **Answer:** Order of importance:
+
+    1. Timeouts on every wait.
+    2. Bounded pools or bulkheads per upstream so one dependency cannot take all resources.
+    3. Circuit breaker to fail fast and give the upstream time to recover.
+    4. Retries, limited to idempotent operations, 2-3 attempts, exponential backoff with jitter, only on connection errors and 502/503/504, and only at one layer to avoid retry amplification.
+    5. A fallback that is honest: cached data or a partial response, not fake success.
+    6. Propagate deadlines so a call is not started when the caller has already given up.
+
+    Then measure: client latency histograms, error rates, breaker state, pool pending count.
 
     **Interviewer listens for:** idempotency, jitter, retry storms, bulkhead, metrics.
+
+    **Common wrong answer:** "Add retries." Retries without timeouts and breakers make outages worse.
 
 ### Scenario-based
 
@@ -586,10 +617,14 @@ Rules: retry **only idempotent operations** (GET, PUT, DELETE, or POST with an i
 
     **Interviewer listens for:** thread dump first, distinguishes pool wait from socket read, mentions classpath-driven auto-detection.
 
+    **Common wrong answer:** "Add more Tomcat threads."
+
 ??? question "Q16. You see intermittent `Connection reset by peer` on the first call after a quiet period. Why, and how do you fix it?"
     **Answer:** A pooled keep-alive connection was closed by an intermediary (load balancer, NAT gateway, service mesh sidecar) or by the server's keep-alive timeout while it sat idle. The client only discovers this when it writes. Fix: set the pool's max idle time and time-to-live below the intermediary's idle timeout, enable stale-connection eviction or validation, and allow one automatic retry for idempotent requests on connection-level failures. Do not "fix" it by disabling pooling, which trades it for TLS handshake cost on every call.
 
     **Interviewer listens for:** idle-timeout mismatch, pool eviction settings, safe retry.
+
+    **Common wrong answer:** "The server is buggy." Idle keep-alive connections were closed by an intermediary.
 
 ??? question "Q17. An endpoint must call five upstream systems and respond within 800 ms. Design the client side."
     **Answer:** Call them concurrently, not in sequence. With virtual threads: submit five `RestClient` calls to a virtual-thread executor (or structured concurrency) and join with a deadline. Reactive: `Mono.zip` over `WebClient` calls. Give each upstream its own timeout below the overall budget (for example 600 ms), its own pool and breaker. Classify upstreams as mandatory or optional: optional ones degrade to cached or empty data on timeout, mandatory ones fail the request with a clear 502/504. Cache slow-changing reference data in Redis. Propagate auth and the correlation ID through an interceptor. Expose per-upstream latency so you can show which dependency eats the budget.
@@ -602,6 +637,8 @@ Rules: retry **only idempotent operations** (GET, PUT, DELETE, or POST with an i
     **Answer:** Option A, validation groups: `@Null(groups = OnCreate.class) @NotNull(groups = OnUpdate.class) Long id`, with `@Validated({OnCreate.class, Default.class})` on the create endpoint so the ungrouped constraints still run. Option B, which I prefer: two small records, `CreateXRequest` and `UpdateXRequest`. It is more explicit, gives a cleaner OpenAPI contract, and avoids the trap where requesting only `OnCreate` silently skips every `Default` constraint. For PATCH with partial bodies, standard validation fits poorly; apply the patch to the current state and validate the result.
 
     **Interviewer listens for:** groups mechanics including the `Default` trap, and a judgement on readability.
+
+    **Common wrong answer:** "Use two copies of the DTO with duplicated fields."
 
 ## Cheat sheet
 

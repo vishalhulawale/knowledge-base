@@ -192,23 +192,30 @@ registry.forTypePair(String.class, Pharmacy.class)
 
     **Common wrong answer:** "DataLoader is a cache" (it is request-scoped memoisation, not a shared cache), or "it joins the data in one query" (it turns N calls into one batched call per level, it does not join).
 
+??? question "Q3. What contract must a batch loader function satisfy?"
+    **Answer:** Given a list of keys, it must return values **for every key, in the same order** (for a `List`-returning loader), using `null` or an error for missing items. If the upstream returns results in a different order or omits some, map them by id first (or use a `MappedBatchLoader`, which returns a `Map<K, V>`). Breaking this contract assigns data to the wrong parent, which in healthcare is a data leak.
+
+    **Interviewer listens for:** same length and order as keys, mapping by id, MappedBatchLoader, missing keys handled.
+
+    **Common wrong answer:** "Return whatever the upstream returns." A shorter or reordered list attaches results to the wrong members.
+
 ### Intermediate
 
-??? question "Q3. How does DataLoader know when to dispatch the batch?"
+??? question "Q4. How does DataLoader know when to dispatch the batch?"
     **Answer:** The GraphQL engine (GraphQL Java's DataLoader dispatch instrumentation/strategy) dispatches registered loaders when it has walked all fields of the current level and is waiting on pending futures. Batches form per level of the query tree. In older GraphQL Java this lived in `DataLoaderDispatcherInstrumentation`. Newer versions do it inside the engine with a per-level dispatch strategy, so no instrumentation has to be registered. (The JavaScript original instead dispatches on the next event-loop tick.) Consequence: a `load()` made later from an async callback, or from another loader's result, misses the dispatch. Keep `load()` calls synchronous in the resolver and do async work in the batch function. GraphQL Java 25+ adds opt-in dispatching for chained DataLoaders.
 
     **Interviewer listens for:** level-by-level dispatch driven by the engine (not a timer), the per-request `DataLoaderRegistry`, and awareness that async hops or chained loaders break batching.
 
     **Common wrong answer:** "It waits a few milliseconds and then sends the batch", or "it batches automatically whenever you call load()".
 
-??? question "Q4. @BatchMapping vs registering a BatchLoader?"
+??? question "Q5. @BatchMapping vs registering a BatchLoader?"
     **Answer:** `@BatchMapping` is a concise annotation: a method taking the list of parents and returning a `Map` or `List` of values, with the loader auto-registered. `BatchLoaderRegistry` gives full control (key types, options like max batch size, reactive loaders, reuse across fields). Key difference: with `@BatchMapping` the **parent objects** are the keys, so the same pharmacy referenced from two different parents is deduped only if your method does it. With a registered loader keyed by ID, `load(pharmacyId)` from any field in the request shares one batch and one cache entry. Under the hood `@BatchMapping` is a shortcut that registers a loader and a `DataFetcher` that calls it.
 
     **Interviewer listens for:** knowing what the keys are in each style, when the loader is reused across fields, and the supported return types.
 
     **Common wrong answer:** "They are the same thing", or believing `@BatchMapping` needs no `equals`/`hashCode` on the parent type.
 
-??? question "Q5. DataLoader cache vs application cache?"
+??? question "Q6. DataLoader cache vs application cache?"
     **Answer:** The DataLoader cache is per request (consistency and dedupe within one response, no staleness concerns). An application cache (Redis/Caffeine) spans requests and needs TTL and invalidation. They complement each other: the batch function can consult Redis first (`MGET`) and call the upstream only for the misses.
 
     **Interviewer listens for:** request scope vs cross-request scope, why request scope avoids staleness and data leaks, and how the two layers compose.
@@ -217,37 +224,53 @@ registry.forTypePair(String.class, Pharmacy.class)
 
 ### Senior
 
-??? question "Q6. The upstream only supports single-item GET. What do you do?"
+??? question "Q7. The upstream only supports single-item GET. What do you do?"
     **Answer:** Short term: a batch loader that fans out in parallel with bounded concurrency, plus dedupe, plus a short-TTL cache for reference data. Long term: request a bulk endpoint from the owning team (an API contract change), or subscribe to their events and keep a local read model. Protect the upstream either way: a concurrency limit, timeouts, a circuit breaker, and a cap on list size (pagination or query complexity limits) so one query cannot fan out into thousands of calls.
 
     **Interviewer listens for:** an honest "this is still N calls", bounded concurrency, protecting the upstream, and driving the contract change as a lead.
 
     **Common wrong answer:** "DataLoader fixes it anyway", or unbounded parallel calls that move the problem to the upstream.
 
-??? question "Q7. How do you detect N+1 in production?"
+??? question "Q8. How do you detect N+1 in production?"
     **Answer:** Instrument upstream client calls with the GraphQL operation name and trace ID. Track calls-per-operation and latency per resolver (GraphQL Java instrumentation / Micrometer observations). Alert when calls-per-operation exceed a threshold. Load-test with realistic list sizes. In a distributed trace N+1 has a recognisable shape: one parent span with many sequential, near-identical child spans to the same upstream. Catch it earlier with an integration test that asserts the number of upstream calls for a list query (WireMock/MockWebServer verify counts).
 
     **Interviewer listens for:** a concrete metric (upstream calls per operation), tracing, and prevention in tests or code review, not only detection.
 
     **Common wrong answer:** "We would see it in slow response times", with no way to attribute the latency to a resolver.
 
+??? question "Q9. A page requests 2,000 members' plans in one query. How do you stop the batch from overwhelming the upstream?"
+    **Answer:** Set `maxBatchSize` in `DataLoaderOptions` to match what the upstream accepts (for example 100 ids). DataLoader then splits the 2,000 keys into chunks, which you can call with bounded concurrency. Also cap the page size in the schema (`first` ≤ 100), and apply query cost limits so one request cannot ask for unbounded fan-out.
+
+    **Interviewer listens for:** maxBatchSize, upstream limits, bounded concurrency, page-size and cost limits in the schema.
+
+    **Common wrong answer:** "DataLoader always sends one call, which is what we want." One call with 2,000 ids can time out or be rejected.
+
 ### Scenario-based
 
-??? question "Q8. After adding DataLoader, some users saw another user's pharmacy details. What happened?"
+??? question "Q10. After adding DataLoader, some users saw another user's pharmacy details. What happened?"
     **Answer:** The loader or its cache was shared across requests (singleton bean holding a DataLoader or a static map), so a cached value from user A was served to user B. DataLoaders must be request-scoped (use the framework's registry), and any cross-request cache must key on authorisation scope if data is user-specific. Immediate response: treat it as a security incident (in healthcare, a potential PHI exposure), roll back or disable the cache, then fix the scope and add a test that runs two users' requests through the same instance.
 
     **Interviewer listens for:** request scoping as the root cause, treating it as a security incident, and a regression test.
 
     **Common wrong answer:** "Add a TTL to the cache". Expiry does not fix a scoping bug.
 
-??? question "Q9. You added a DataLoader but the upstream still receives one call per item. Why might batching not be happening?"
-    **Answer:** Work through the usual causes. (1) The `load()` call happens after an async hop (`supplyAsync`, a reactive chain, another loader's callback), so it misses the level dispatch. (2) The batch function itself loops and calls the single-item endpoint. (3) A new `DataLoader` is created per resolver call instead of being taken from the request's registry, so each one holds a single key. (4) `maxBatchSize` is set to 1 or batching is disabled in the options. (5) The field is still wired to a plain `@SchemaMapping` that never calls the loader. (6) The parents arrive through different paths or levels, so they legitimately form separate batches. Confirm by logging the size of the key set in the batch function.
+??? question "Q11. You added a DataLoader but the upstream still receives one call per item. Why might batching not be happening?"
+    **Answer:** Work through the usual causes:
+
+    1. The `load()` call happens after an async hop (`supplyAsync`, a reactive chain, another loader's callback), so it misses the level dispatch.
+    2. The batch function itself loops and calls the single-item endpoint.
+    3. A new `DataLoader` is created per resolver call instead of being taken from the request's registry, so each one holds a single key.
+    4. `maxBatchSize` is set to 1 or batching is disabled in the options.
+    5. The field is still wired to a plain `@SchemaMapping` that never calls the loader.
+    6. The parents arrive through different paths or levels, so they legitimately form separate batches.
+
+    Confirm by logging the size of the key set in the batch function.
 
     **Interviewer listens for:** a systematic checklist, knowledge of the dispatch timing, and verifying with evidence (batch size logs, traces).
 
     **Common wrong answer:** "DataLoader must be broken", or raising timeouts without checking the batch size.
 
-??? question "Q10. The child field takes arguments, e.g. `prescriptions(status: ACTIVE, first: 10)` on each member. How do you batch it?"
+??? question "Q12. The child field takes arguments, e.g. `prescriptions(status: ACTIVE, first: 10)` on each member. How do you batch it?"
     **Answer:** The key must capture everything that changes the result, so use a composite key such as `record RxKey(String memberId, Status status, int first)` with value semantics. The batch function groups keys by argument set and makes one bulk call per distinct argument combination (usually one, because every sibling gets the same arguments). Paginated children need an upstream that supports "top N per parent" in bulk. If it does not, fall back to bounded parallel calls or restrict pagination on nested lists. `@BatchMapping` cannot read field arguments, so this case needs a registered loader plus a `@SchemaMapping` that builds the key.
 
     **Interviewer listens for:** arguments in the key, the alias problem (same field, different arguments, same request), and the per-parent pagination limitation.

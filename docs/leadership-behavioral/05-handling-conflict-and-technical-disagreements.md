@@ -212,9 +212,16 @@ Option 3. Patient-specific data always live; reference data cached 10 min with e
 
     **Common wrong answer:** "whenever I disagree with someone senior".
 
+??? question "Q8. How do you handle disagreements in code reviews?"
+    **Answer:** Separate **must-fix** issues (correctness, security, standards the team agreed) from **preferences**, and label them ("nit:", "suggestion:"). Explain the why, link to the standard or an example, and ask questions before asserting. If a thread goes back and forth more than twice, move to a call; then write the decision back on the PR. Recurring disagreements become a team discussion and possibly a lint rule or ADR, so the same argument doesn't repeat in every PR. *[confirm]*
+
+    **Interviewer listens for:** blocking vs non-blocking labels, reasons and links, switch to a call, recurring issues turned into standards.
+
+    **Common wrong answer:** "I am the lead, so my comment wins." Authority ends the thread but teaches nothing.
+
 ### Senior
 
-??? question "Q8. An architect mandates a pattern you believe will hurt your team's delivery. How do you handle it?"
+??? question "Q9. An architect mandates a pattern you believe will hurt your team's delivery. How do you handle it?"
     **Answer:**
     1. Understand their goal (consistency, security, roadmap).
     2. Quantify the impact on your team (effort, latency, operability) with evidence.
@@ -226,7 +233,7 @@ Option 3. Patient-specific data always live; reference data cached 10 min with e
 
     **Common wrong answer:** "ignore the mandate".
 
-??? question "Q9. How do you create a team culture where people disagree openly?"
+??? question "Q10. How do you create a team culture where people disagree openly?"
     **Answer:**
     - Model it: ask for critique of your own designs and thank people for it.
     - Separate ideas from people.
@@ -241,7 +248,7 @@ Option 3. Patient-specific data always live; reference data cached 10 min with e
 
 ### Scenario-based
 
-??? question "Q10. An upstream team refuses to add a batch endpoint your GraphQL layer needs for performance. What do you do?"
+??? question "Q11. An upstream team refuses to add a batch endpoint your GraphQL layer needs for performance. What do you do?"
     **Answer:**
     1. Understand their constraints (capacity, ownership, roadmap).
     2. Quantify the shared benefit (fewer calls, less load on them).
@@ -255,7 +262,7 @@ Option 3. Patient-specific data always live; reference data cached 10 min with e
 
     **Common wrong answer:** "complain to management".
 
-??? question "Q11. During an incident, a senior engineer insists on a risky fix while you prefer rolling back. What do you do?"
+??? question "Q12. During an incident, a senior engineer insists on a risky fix while you prefer rolling back. What do you do?"
     **Answer:** During incidents, the incident commander decides. Mitigation first: prefer the safest, fastest reversible action (roll back, feature flag off). Acknowledge their idea and test it after stabilising. Discuss calmly in the post-incident review.
 
     **Interviewer listens for:** incident roles and reversibility.

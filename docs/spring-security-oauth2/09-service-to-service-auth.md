@@ -410,13 +410,21 @@ With a mesh, the same policy is declared outside the code. In Istio: `PeerAuthen
 
     **Interviewer listens for:** Clear separation of the two, and that they are proven by different mechanisms.
 
+    **Common wrong answer:** "Only the user matters." The calling service's identity matters for authorisation too.
+
 ??? question "Q3. When do you use the client credentials grant between services?"
     **Answer:** When the service acts as itself with no user involved: schedulers, Kafka consumers, cache refresh, service-owned reference data. The service authenticates to the authorization server and gets a token whose subject is the client. It is the wrong choice when a user triggered the call and the downstream needs per-user authorisation, because the user is lost.
 
     **Common wrong answer:** Using client credentials everywhere and passing the user id in a header, then calling it "secure".
 
+    **Interviewer listens for:** the service acts as itself, no user, scheduled and async work.
+
 ??? question "Q4. What is token relay?"
     **Answer:** Forwarding the access token you received, unchanged, on your outgoing call. Spring Cloud Gateway's `TokenRelay` filter does this at the edge. It keeps the user identity and is simple, but the token must be accepted by every service on the path, so it ends up with a wide audience and can be replayed by any service that sees it.
+
+    **Interviewer listens for:** forward unchanged, keeps user identity, audience widening risk.
+
+    **Common wrong answer:** "Token relay creates a new token for the downstream."
 
 ### Intermediate
 
@@ -430,20 +438,30 @@ With a mesh, the same policy is declared outside the code. In Istio: `PeerAuthen
 ??? question "Q6. Impersonation vs delegation: what is the difference and why does it matter?"
     **Answer:** With impersonation the downstream service sees only the user, as if the user called directly. With delegation the token records both: the user in `sub` and the acting service in `act` (nested for longer chains). Delegation is better for audit and for policies like "this user, but only via the orders service". Impersonation is simpler but hides the intermediary.
 
+    **Interviewer listens for:** who appears as the caller, act claim, audit and authorisation differences.
+
+    **Common wrong answer:** "They are the same."
+
 ??? question "Q7. Why is audience validation important, and does Spring do it by default?"
     **Answer:** The `aud` claim says which service a token is meant for. If a service does not check it, a token issued for a low-value service can be replayed against a high-value one that trusts the same issuer. Spring Security's default JWT validators check the signature, timestamps and (when configured) the issuer, but not the audience. You add a `JwtClaimValidator` on `aud` or set `spring.security.oauth2.resourceserver.jwt.audiences`.
 
     **Interviewer listens for:** The phrase "confused deputy" or the replay scenario, and knowing the default.
+
+    **Common wrong answer:** "Spring checks audience by default." You must configure it.
 
 ??? question "Q8. Your `@Scheduled` job calls another service with an OAuth2 `RestClient` and fails with an error about a missing servlet request. Why?"
     **Answer:** The default `OAuth2AuthorizedClientManager` (`DefaultOAuth2AuthorizedClientManager`) is designed to run inside an HTTP request and stores authorized clients against the request. A scheduler thread has no request. Use `AuthorizedClientServiceOAuth2AuthorizedClientManager`, which works outside a request context and stores tokens in an `OAuth2AuthorizedClientService`.
 
     **Interviewer listens for:** That you have actually hit this. It is a very common real-world bug.
 
+    **Common wrong answer:** "OAuth2 does not work in scheduled jobs."
+
 ??? question "Q9. A gateway validates the JWT. Should downstream services validate it again?"
     **Answer:** Yes. Validation is cheap (local signature check with cached JWKS) and it removes the assumption that nothing can reach the service except through the gateway. Internal callers, misconfigured network policies, SSRF and other services all bypass the gateway. The gateway is a first line of defence and a place for cross-cutting concerns, not the only check.
 
     **Common wrong answer:** "No, the gateway already did it, validating again is wasted latency."
+
+    **Interviewer listens for:** cheap local validation, zero-trust assumption, bypass risk.
 
 ### Senior
 
@@ -452,21 +470,43 @@ With a mesh, the same policy is declared outside the code. In Istio: `PeerAuthen
 
     **Interviewer listens for:** Refusing the false choice, naming the layer each works at, and the limits of each.
 
+    **Common wrong answer:** "mTLS replaces JWT." mTLS has no user identity.
+
 ??? question "Q11. What are the risks of forwarding the same user token through a chain of six services?"
-    **Answer:** (1) The token needs an audience and scopes that cover all six, which breaks least privilege. (2) Any one of the six, if compromised or simply buggy, can use the token against the others. (3) The token may expire mid-chain, especially with retries or queues. (4) An external-facing token is now in internal logs and traces. (5) Downstream services cannot tell which service called them. Mitigations: token exchange per hop with a narrow audience, or an internal token minted at the edge, combined with mTLS so service identity is known.
+    **Answer:**
+
+    1. The token needs an audience and scopes that cover all six, which breaks least privilege.
+    2. Any one of the six, if compromised or simply buggy, can use the token against the others.
+    3. The token may expire mid-chain, especially with retries or queues.
+    4. An external-facing token is now in internal logs and traces.
+    5. Downstream services cannot tell which service called them.
+
+    Mitigations: token exchange per hop with a narrow audience, or an internal token minted at the edge, combined with mTLS so service identity is known.
+
+    **Interviewer listens for:** broad audience, blast radius, expiry mid-chain, confused deputy, token exchange as fix.
+
+    **Common wrong answer:** "There is no risk if all services are internal."
 
 ??? question "Q12. How do you manage certificates for mTLS across hundreds of services?"
     **Answer:** Automate everything. A private CA (or mesh CA / SPIRE) issues short-lived certificates to workloads based on an attested identity such as the Kubernetes service account. Rotation happens well before expiry without restarts (mesh sidecars do it, Spring Boot SSL bundles support reload). Trust bundles are distributed centrally so the CA itself can be rotated with an overlap period. Monitor days-to-expiry and alert. Short lifetimes mean you do not rely on revocation lists.
 
     **Interviewer listens for:** Short-lived certs, automated rotation, CA rotation with overlap, expiry monitoring, and awareness that expired certs cause outages.
 
+    **Common wrong answer:** "Generate certificates manually with a one-year expiry."
+
 ??? question "Q13. What is a sender-constrained token and when would you need one?"
     **Answer:** A token bound to a key held by the client, so a stolen token is useless without that key. RFC 8705 binds the token to the client's mTLS certificate through a `cnf` claim holding the certificate thumbprint (`x5t#S256`). The resource server compares it with the certificate on the connection. DPoP (RFC 9449) does the same with a signed proof header. You need it for high-value APIs such as payments and open banking (FAPI requires it), and it is a strong answer to "what if a token leaks?".
+
+    **Interviewer listens for:** token bound to a key (mTLS or DPoP), stolen token useless alone.
+
+    **Common wrong answer:** "It is a token encrypted for one service."
 
 ??? question "Q14. How do you propagate identity across an asynchronous boundary such as Kafka?"
     **Answer:** Do not put the user's access token in the message. It will expire before consumption, and it becomes a long-lived secret stored in the log. Instead, put the user id (and tenant, correlation id) in the event as data. The producer was authorised when it published. The consumer acts with its own service identity (client credentials) and applies its own rules. Protect the topic with ACLs so only authorised producers can write, because the consumer is trusting the event content. If a downstream truly needs a user-scoped token, the consumer obtains one at processing time through a grant designed for it.
 
     **Common wrong answer:** "Put the JWT in a Kafka header and validate it in the consumer."
+
+    **Interviewer listens for:** no raw access tokens in messages, user id/claims in signed context, service identity for the consumer.
 
 ### Scenario-based
 
@@ -475,18 +515,37 @@ With a mesh, the same policy is declared outside the code. In Istio: `PeerAuthen
 
     **Interviewer listens for:** Per-upstream reasoning instead of one mechanism for all, token caching, fan-out awareness, defence in depth.
 
+    **Common wrong answer:** "Use one service account token for all five upstreams." That loses user identity and least privilege.
+
 ??? question "Q16. A partner reports that calling your internal service directly with the header `X-User-Id: admin` returns admin data. What went wrong and how do you fix it?"
     **Answer:** The service trusts a plain header that the gateway normally sets, and the service is reachable without going through the gateway (or the gateway does not strip the inbound header). Immediate fix: block direct access with network policy and make the gateway remove client-supplied identity headers. Proper fix: the service must derive identity from something it can verify, a signed JWT it validates itself, and require mTLS so only known workloads can connect. Then review every service for the same pattern and add a test that sends spoofed headers.
 
     **Interviewer listens for:** Root cause (unverifiable identity), both the quick containment and the structural fix.
 
+    **Common wrong answer:** "Ask partners not to send that header." The service must not trust unauthenticated headers.
+
 ??? question "Q17. Internal calls fail with intermittent 401s only for long-running requests. How do you debug?"
     **Answer:** Suspect token expiry inside the chain. Check the token's `exp` against the request duration, including retries and queue time. Other candidates: clock skew between nodes (compare with the 60-second default tolerance), JWKS key rotation where one instance has a stale key cache, or a cached client token that is reused after it expired because the cache does not refresh early. Fixes: refresh or exchange tokens shortly before expiry, keep clocks in sync, make sure the JWKS cache refetches on an unknown `kid`, and avoid holding a user token across slow async work.
 
+    **Interviewer listens for:** token expiry during long chains, clock skew, refresh or exchange per hop.
+
+    **Common wrong answer:** "The IdP is flaky."
+
 ??? question "Q18. You must move 40 services from 'trusted network' to zero trust without downtime. What is your plan?"
-    **Answer:** Do it in phases with a permissive step first. (1) Inventory who calls whom. (2) Turn on mesh mTLS in **permissive** mode so services accept both plain and mTLS traffic, and watch metrics until all traffic is mTLS. (3) Switch to **strict** namespace by namespace. (4) Add resource-server JWT validation to each service in log-only mode, fix callers that send no token, then enforce. (5) Add audience checks and workload authorisation policies, starting with the most sensitive services. (6) Introduce token exchange where relay gives too much privilege. Throughout: dashboards for rejected requests, a fast rollback switch, and certificate expiry alerts.
+    **Answer:** Do it in phases with a permissive step first:
+
+    1. Inventory who calls whom.
+    2. Turn on mesh mTLS in **permissive** mode so services accept both plain and mTLS traffic, and watch metrics until all traffic is mTLS.
+    3. Switch to **strict** namespace by namespace.
+    4. Add resource-server JWT validation to each service in log-only mode, fix callers that send no token, then enforce.
+    5. Add audience checks and workload authorisation policies, starting with the most sensitive services.
+    6. Introduce token exchange where relay gives too much privilege.
+
+    Throughout: dashboards for rejected requests, a fast rollback switch, and certificate expiry alerts.
 
     **Interviewer listens for:** Incremental rollout, observe-then-enforce, rollback, prioritising by data sensitivity. This is a leadership question as much as a technical one.
+
+    **Common wrong answer:** "Flip all services to strict mTLS on one day."
 
 ## Cheat sheet
 

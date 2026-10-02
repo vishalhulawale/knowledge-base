@@ -457,18 +457,28 @@ class WithJwtSubjectFactory implements WithSecurityContextFactory<WithJwtSubject
 
     **Interviewer listens for:** That an access-denied for an anonymous user becomes 401, and the names of the two handlers.
 
+    **Common wrong answer:** "401 means forbidden and 403 means not logged in." It is the other way round.
+
 ??? question "Q3. What is the difference between `hasRole` and `hasAuthority`?"
     **Answer:** Both compare against the `GrantedAuthority` strings. `hasAuthority('X')` looks for exactly `X`. `hasRole('X')` adds the default prefix and looks for `ROLE_X`. So `hasRole('ADMIN')` equals `hasAuthority('ROLE_ADMIN')`. The prefix can be changed with a `GrantedAuthorityDefaults` bean. OAuth2 scopes become `SCOPE_x` authorities, so they need `hasAuthority('SCOPE_x')`.
 
     **Common wrong answer:** "Roles and authorities are stored in different places." They are the same collection. Only the naming convention differs.
+
+    **Interviewer listens for:** ROLE_ prefix difference, scopes as SCOPE_ authorities.
 
 ??? question "Q4. Which method security annotations exist and what does each do?"
     **Answer:** `@PreAuthorize` decides before the call. `@PostAuthorize` decides after the call and can inspect `returnObject`. `@PreFilter` removes elements from a collection argument. `@PostFilter` removes elements from the returned collection using `filterObject`. All four support SpEL and are on by default with `@EnableMethodSecurity`. `@Secured` (Spring) and `@RolesAllowed` / `@PermitAll` / `@DenyAll` (JSR-250) only take role names and must be enabled with `securedEnabled = true` or `jsr250Enabled = true`.
 
     **Interviewer listens for:** That `@PostAuthorize` does not prevent the method from running.
 
+    **Common wrong answer:** "@PostAuthorize prevents the method from running." It runs the method first, then decides.
+
 ??? question "Q5. What does `@EnableMethodSecurity` do, and how is it different from `@EnableGlobalMethodSecurity`?"
     **Answer:** It registers AOP advisors, one per annotation type, each backed by an `AuthorizationManager`. Differences from the old annotation: pre/post annotations are enabled by default, it uses the `AuthorizationManager` API instead of `AccessDecisionManager` and voters, it follows JSR-250 semantics properly, and each interceptor is a separate bean you can override or reorder. `@EnableGlobalMethodSecurity` is deprecated in 6.x, and in 7 the voter-based Access API it relies on has been moved out to the legacy `spring-security-access` module.
+
+    **Interviewer listens for:** AuthorizationManager-based, pre/post on by default, replaces the deprecated annotation.
+
+    **Common wrong answer:** "They are the same with a new name."
 
 ### Intermediate
 
@@ -492,23 +502,37 @@ class WithJwtSubjectFactory implements WithSecurityContextFactory<WithJwtSubject
 ??? question "Q7. Why would you keep URL rules if you already have method security (or the reverse)?"
     **Answer:** They fail in different ways. URL rules are central and can be deny-by-default with `anyRequest().authenticated()`, and they reject bad requests before any deserialisation or controller code runs. But they can't see method arguments or data, and they miss non-HTTP entry points. Method security covers every caller and can do object-level checks, but it is allow-by-default and has proxy pitfalls. Used together, a forgotten annotation is still covered by the URL rule, and a URL pattern mistake is still covered by the method rule. This is defence in depth.
 
+    **Interviewer listens for:** defence in depth, URL rules for early deny, method rules for domain context.
+
+    **Common wrong answer:** "One layer is enough, the other is redundant."
+
 ??? question "Q8. `@PreAuthorize` vs `@PostAuthorize` for an ownership check. Which do you choose?"
     **Answer:** Prefer `@PreAuthorize` whenever the owner can be derived from the arguments or a cheap lookup, because the method does not run for denied callers. Use `@PostAuthorize` only for reads where the owner is known only after loading the object. Never use it on methods that write, send messages or call other systems, because those effects have already happened, and by default even the transaction has already committed when the denial is thrown.
 
     **Common wrong answer:** "They are equivalent, it is a style choice."
+
+    **Interviewer listens for:** pre when owner is known from args, post when the result is needed, side effects on denied calls.
 
 ??? question "Q9. How do you write a rule like 'a user can only read their own orders'?"
     **Answer:** Put the logic in a bean and reference it: `@PreAuthorize("@orderAuthz.canRead(authentication, #orderId)")`. The bean loads the minimal ownership data and returns a boolean. It fails closed for unknown principal types. For lists, add the owner or tenant to the query rather than filtering afterwards. For a uniform model across domain types, implement `PermissionEvaluator` and use `hasPermission(#orderId, 'Order', 'read')`. Add a negative test with a different user.
 
     **Interviewer listens for:** Naming the vulnerability (IDOR / BOLA), and not putting complex logic in a SpEL string.
 
+    **Common wrong answer:** Embedding long SpEL logic directly in the annotation string.
+
 ??? question "Q10. A JWT contains `\"scope\": \"read write\"` and `\"roles\": [\"ADMIN\"]`. With default resource server settings, does `hasRole('ADMIN')` pass?"
     **Answer:** No. The default `JwtGrantedAuthoritiesConverter` reads only `scope` or `scp` and creates `SCOPE_read` and `SCOPE_write`. The `roles` claim is ignored. To use it, configure a `JwtAuthenticationConverter` whose authorities converter reads the `roles` claim with the prefix `ROLE_`, usually combined with the scope converter.
 
     **Common wrong answer:** "Yes, Spring maps roles automatically." Each IdP uses a different claim name (`roles`, `groups`, `realm_access.roles`), so there is no safe default.
 
+    **Interviewer listens for:** default converter reads scope/scp only, custom JwtAuthenticationConverter for roles.
+
 ??? question "Q11. Why does `@PreAuthorize(\"#id == authentication.name\")` sometimes fail with a null `#id`?"
     **Answer:** SpEL resolves `#id` from the parameter name. Since Spring Framework 6.1, names come only from the `-parameters` compiler flag, not from debug information. If the class was compiled without it, the name is unknown and the variable is null, so the expression is false and every call is denied. Fix the compiler setting, or annotate the parameter with `@P("id")`. Annotations declared on an interface have the same issue for the interface's parameters.
+
+    **Interviewer listens for:** parameter names need -parameters since Spring 6.1, @P or @Param as alternatives.
+
+    **Common wrong answer:** "SpEL does not support method parameters."
 
 ### Senior
 
@@ -517,21 +541,43 @@ class WithJwtSubjectFactory implements WithSecurityContextFactory<WithJwtSubject
 
     **Interviewer listens for:** Advisor/pointcut, interceptor order, expression handler, where `Authentication` comes from, and how the exception becomes a status code.
 
+    **Common wrong answer:** "The annotation is checked by the compiler." A proxy enforces it at runtime.
+
 ??? question "Q13. How does authorization behave with `@Async`, `CompletableFuture` and reactive code?"
     **Answer:** The default `SecurityContextHolder` strategy is a `ThreadLocal`. A new thread has no context, so a `@PreAuthorize` there sees no authentication and fails with `AuthenticationCredentialsNotFoundException`, or code reading the principal gets null. Options: wrap the executor in `DelegatingSecurityContextAsyncTaskExecutor` so the context is copied per task, resolve the needed identity before going async and pass it as an argument, or do the authorization check before the hand-off. `MODE_INHERITABLETHREADLOCAL` is unsafe with thread pools, because a pooled thread keeps the context of whoever created it. In WebFlux the context lives in the Reactor context and `@EnableReactiveMethodSecurity` reads it from there. Methods must return `Mono` / `Flux` for that to work.
 
     **Common wrong answer:** "Use `MODE_INHERITABLETHREADLOCAL`." With pools this can leak one user's identity to another user's task.
 
+    **Interviewer listens for:** ThreadLocal context missing on new threads, DelegatingSecurityContext executors, reactive context.
+
 ??? question "Q14. How would you design authorization for a GraphQL service that aggregates several upstream systems?"
-    **Answer:** Layer it. (1) URL level: `/graphql` requires a valid token. (2) Operation level: `@PreAuthorize` on `@QueryMapping` / `@MutationMapping` methods or the services they call, using meta-annotations. (3) Object level: an authorization bean that checks the requested member or account against the caller's identity and tenant, applied before upstream calls so denied users cost nothing. (4) Field level for sensitive fields, either a secured `@SchemaMapping` or `@HandleAuthorizationDenied` to mask values. (5) Propagate the user's identity to upstream systems so they can enforce their own rules, rather than calling them with an all-powerful service account. Batch loaders need care: keys in one batch must all be authorised for the same caller, and the loader must be request-scoped. Finally, map authorization errors to GraphQL errors with a `FORBIDDEN` classification rather than failing the whole response.
+    **Answer:** Layer it:
+
+    1. URL level: `/graphql` requires a valid token.
+    2. Operation level: `@PreAuthorize` on `@QueryMapping` / `@MutationMapping` methods or the services they call, using meta-annotations.
+    3. Object level: an authorization bean that checks the requested member or account against the caller's identity and tenant, applied before upstream calls so denied users cost nothing.
+    4. Field level for sensitive fields, either a secured `@SchemaMapping` or `@HandleAuthorizationDenied` to mask values.
+    5. Propagate the user's identity to upstream systems so they can enforce their own rules, rather than calling them with an all-powerful service account.
+
+    Batch loaders need care: keys in one batch must all be authorised for the same caller, and the loader must be request-scoped. Finally, map authorization errors to GraphQL errors with a `FORBIDDEN` classification rather than failing the whole response.
 
     **Interviewer listens for:** That URL rules are insufficient, the confused-deputy risk of service accounts, and the DataLoader interaction.
+
+    **Common wrong answer:** "Secure the /graphql endpoint and you are done." Field- and object-level checks are still needed.
 
 ??? question "Q15. RBAC, ABAC, ReBAC. How do you choose, and when do you externalise policy?"
     **Answer:** Start with RBAC for coarse operation rights because it is simple to audit. Add ABAC rules in code for ownership, tenant, amount limits and maker-checker. Consider ReBAC (relationship based, Zanzibar style) when access depends on graphs of relationships, such as sharing, delegation and organisational hierarchies. Externalise to a policy engine when many services in several languages must share one policy, when non-developers must review or change policy, or when audit requires a single decision log. The cost is a network hop on the hot path, a new dependency that must fail closed, and keeping the engine's data in sync. Mitigate with a sidecar or embedded engine and short-lived decision caching.
 
+    **Interviewer listens for:** RBAC for coarse rights, ABAC for context, ReBAC for relationships, external policy when shared or audited.
+
+    **Common wrong answer:** "Use only roles; they are enough."
+
 ??? question "Q16. Role explosion: the product now has 60 roles and `@PreAuthorize` strings with eight `or` clauses. What do you do?"
     **Answer:** Stop checking roles in code. Check **permissions** (`claims:approve`) and let roles be a data-level mapping to permissions, resolved when the `Authentication` is built or through a `RoleHierarchy`. Then new roles need no code change. Replace SpEL strings with meta-annotations or one authorization bean per domain. Keep the token small: put role or group names in the token and expand them to permissions in the service, cached, rather than putting hundreds of permissions in a JWT.
+
+    **Interviewer listens for:** permissions instead of roles in code, role-to-permission mapping as data.
+
+    **Common wrong answer:** "Add more roles to cover the new cases."
 
 ### Scenario-based
 
@@ -540,16 +586,40 @@ class WithJwtSubjectFactory implements WithSecurityContextFactory<WithJwtSubject
 
     **Interviewer listens for:** Root cause named correctly, a systemic fix and not only one endpoint, tests, and the incident-response angle.
 
+    **Common wrong answer:** "The endpoint requires authentication, so it is secure." Object-level authorisation is missing.
+
 ??? question "Q18. After a refactor, admin-only operations became available to all logged-in users. No security code changed. What do you check?"
-    **Answer:** Likely causes, in order: (1) the secured method is now called from another method of the same class, or was made private or final, so the proxy is bypassed. (2) The class is now created with `new` or by a factory instead of being a Spring bean. (3) The annotation stayed on an interface or parent while the method signature changed, so it no longer matches. (4) `@EnableMethodSecurity` was on a configuration class that was removed or is no longer scanned, so all annotations are silently ignored. (5) A matcher such as `requestMatchers("/api/**").authenticated()` was moved above the more specific admin rule, and first match wins. Verify with a test using a non-admin user, and add a build-time guard: an ArchUnit rule plus a test asserting that the bean is an AOP proxy.
+    **Answer:** Likely causes, in order:
+
+    1. The secured method is now called from another method of the same class, or was made private or final, so the proxy is bypassed.
+    2. The class is now created with `new` or by a factory instead of being a Spring bean.
+    3. The annotation stayed on an interface or parent while the method signature changed, so it no longer matches.
+    4. `@EnableMethodSecurity` was on a configuration class that was removed or is no longer scanned, so all annotations are silently ignored.
+    5. A matcher such as `requestMatchers("/api/**").authenticated()` was moved above the more specific admin rule, and first match wins.
+
+    Verify with a test using a non-admin user, and add a build-time guard: an ArchUnit rule plus a test asserting that the bean is an AOP proxy.
+
+    **Interviewer listens for:** proxy bypass after refactor, missing @EnableMethodSecurity, chain or matcher changes.
+
+    **Common wrong answer:** "Spring Security is unreliable."
 
 ??? question "Q19. `GET /claims?page=0&size=20` uses `@PostFilter` to remove other tenants' claims. Users complain pages have 3 or 7 items. Why, and what is the fix?"
     **Answer:** The database returned 20 rows for the page, then `@PostFilter` removed the ones the user may not see. Page sizes and total counts are now wrong, and the service loaded data it should never have read. `@PostFilter` also iterates in memory, so it does not scale. Fix: move the rule into the query. Pass the tenant or owner from the `Authentication` into the repository predicate (Spring Data supports `?#{authentication.name}` style SpEL in `@Query` through the security-data integration, or pass it explicitly). Keep method security for the operation-level check.
 
+    **Interviewer listens for:** post-filtering after paging, filter in the query instead.
+
+    **Common wrong answer:** "Increase the page size to compensate."
+
 ??? question "Q20. A Kafka listener calls a service method protected by `@PreAuthorize(\"hasRole('SUPERVISOR')\")` and fails for every message. How do you fix it properly?"
-    **Answer:** The listener thread has no `SecurityContext`, because nobody authenticated. Options: (1) Separate the paths. The user-facing method keeps the annotation, and the listener calls an internal method on a bean that is not exposed to user traffic, with the authorization decision made when the event was produced. (2) If the consumer must act as a principal, authenticate the message: carry a verifiable identity (for example a token or signed header), validate it, and set a context for the duration of the handler, clearing it in `finally`. (3) For pure system jobs, run as an explicit system principal with narrowly scoped authorities. What not to do: disable the check or set a hard-coded admin context globally. Whichever option is chosen, record who originally requested the action for the audit trail.
+    **Answer:** The listener thread has no `SecurityContext`, because nobody authenticated. Options:
+
+    1. Separate the paths. The user-facing method keeps the annotation, and the listener calls an internal method on a bean that is not exposed to user traffic, with the authorization decision made when the event was produced.
+    2. If the consumer must act as a principal, authenticate the message: carry a verifiable identity (for example a token or signed header), validate it, and set a context for the duration of the handler, clearing it in `finally`.
+    3. For pure system jobs, run as an explicit system principal with narrowly scoped authorities. What not to do: disable the check or set a hard-coded admin context globally. Whichever option is chosen, record who originally requested the action for the audit trail.
 
     **Interviewer listens for:** That an event header is untrusted unless verified, and that the context must be cleared on pooled threads.
+
+    **Common wrong answer:** "Disable method security for Kafka listeners." Use a clear system identity or a separate method.
 
 ## Cheat sheet
 

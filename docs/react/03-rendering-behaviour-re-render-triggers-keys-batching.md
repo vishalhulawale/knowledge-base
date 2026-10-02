@@ -197,44 +197,97 @@ function addAndScroll(item: Item) {
 
     **Common wrong answer:** "When its props change" (props change because the parent re-rendered).
 
+    **Interviewer listens for:** four triggers: own state, parent render, context, external store.
+
 ??? question "Q2. Does re-rendering mean the DOM is updated?"
     **Answer:** No. Render computes the new tree; commit only applies the differences. A re-render with identical output changes nothing in the DOM.
+
+    **Interviewer listens for:** render vs commit, only differences committed.
+
+    **Common wrong answer:** "Every re-render touches the DOM, so re-renders are always expensive." Most cost is in running components, not DOM writes.
 
 ??? question "Q3. What does memo do?"
     **Answer:** Skips re-rendering a component when its props are shallowly equal to the previous render's props.
 
+    **Interviewer listens for:** shallow prop comparison, skip render, custom comparator option.
+
+    **Common wrong answer:** "memo prevents all re-renders." State and context changes inside the component still render it.
+
+??? question "Q4. Why does my component render (and my effect run) twice in development?"
+    **Answer:** `<StrictMode>` deliberately **double-invokes** component bodies, `useState`/`useMemo` initialisers and reducers, and runs **mount → unmount → mount** for effects, in development only. The goal is to expose impure rendering and missing effect cleanup early. Production builds render once. If the double effect causes a visible bug (two subscriptions, two analytics events), the fix is a proper cleanup function or moving the side effect to an event handler, not removing StrictMode.
+
+    **Interviewer listens for:** dev-only, what is double-invoked, purpose (purity and cleanup), fix with cleanup.
+
+    **Common wrong answer:** "It is a bug in React 18" or "remove StrictMode to fix it".
+
 ### Intermediate
 
-??? question "Q4. Why might memo not help?"
+??? question "Q5. Why might memo not help?"
     **Answer:** New object/array/function props each render, children passed as JSX created fresh, or the component reads a context that changes.
 
-??? question "Q5. What is automatic batching?"
+    **Interviewer listens for:** new references each render, JSX children, context reads.
+
+    **Common wrong answer:** "Wrap it in memo and it is fixed." Without stable props memo only adds a comparison cost.
+
+??? question "Q6. What is automatic batching?"
     **Answer:** React 18 groups multiple state updates in the same tick into one render everywhere (promises, timeouts, native events), not only in React event handlers.
 
-??? question "Q6. When would you use flushSync?"
+    **Interviewer listens for:** React 18 batches everywhere (timeouts, promises, native events), one render per tick.
+
+    **Common wrong answer:** "Batching only happens in React event handlers." That was React 17 behaviour.
+
+??? question "Q7. When would you use flushSync?"
     **Answer:** When you must read or act on the updated DOM immediately after a state change, e.g. scrolling to a newly added item. It's a performance escape hatch.
 
-??? question "Q7. How does React decide whether to keep a component's state?"
+    **Interviewer listens for:** synchronous DOM read after update, scroll or focus use cases, escape hatch.
+
+    **Common wrong answer:** Using flushSync to "make setState synchronous" everywhere, which kills batching.
+
+??? question "Q8. How does React decide whether to keep a component's state?"
     **Answer:** By identity: same type at the same position (and same key) keeps state; otherwise it remounts.
+
+    **Interviewer listens for:** type + position + key decides identity.
+
+    **Common wrong answer:** "State belongs to the component function." It belongs to the position in the tree.
 
 ### Senior
 
-??? question "Q8. How do you prevent re-renders without memo?"
+??? question "Q9. How do you prevent re-renders without memo?"
     **Answer:** Move state down to where it's used, lift expensive content up and pass it as children/props, split components, and use selector-based store subscriptions.
 
-??? question "Q9. Why does setting the same state value sometimes still call the component?"
+    **Interviewer listens for:** move state down, lift content up as children, split components, selectors.
+
+    **Common wrong answer:** "Use memo everywhere." Structure fixes are cheaper and clearer.
+
+??? question "Q10. Why does setting the same state value sometimes still call the component?"
     **Answer:** React may render the component once to confirm before bailing out of its children; the result is discarded if nothing changed.
 
-??? question "Q10. How do you find unnecessary renders?"
+    **Interviewer listens for:** bail-out render for confirmation, discarded result.
+
+    **Common wrong answer:** "Setting the same value always causes a full re-render." React bails out of children after that check.
+
+??? question "Q11. How do you find unnecessary renders?"
     **Answer:** React DevTools Profiler (flame graph, why it rendered, highlight updates), Chrome Performance Tracks, and measuring interaction latency (INP) before and after.
+
+    **Interviewer listens for:** Profiler, why-did-it-render info, performance tracks, INP measurement.
+
+    **Common wrong answer:** Counting `console.log` lines in render, which double in Strict Mode and say nothing about cost.
 
 ### Scenario-based
 
-??? question "Q11. Typing in a search box makes the whole page lag."
+??? question "Q12. Typing in a search box makes the whole page lag."
     **Answer:** Search state is too high, re-rendering heavy siblings. Move state into the search component, defer the expensive part with `useDeferredValue`, and virtualise long lists.
 
-??? question "Q12. After toggling between two forms, the second shows the first's values."
+    **Interviewer listens for:** state colocation, useDeferredValue, virtualisation.
+
+    **Common wrong answer:** "Debounce the input." Debouncing hides the lag but delays the user's own typing feedback if done on the input value.
+
+??? question "Q13. After toggling between two forms, the second shows the first's values."
     **Answer:** Same component type at the same position keeps state. Give each a different key (or render at different positions).
+
+    **Interviewer listens for:** same type at same position keeps state, key fixes it.
+
+    **Common wrong answer:** "Clear the fields in a useEffect when the form switches."
 
 ## Cheat sheet
 

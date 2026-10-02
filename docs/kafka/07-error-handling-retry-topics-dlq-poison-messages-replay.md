@@ -369,6 +369,8 @@ public void process(OrderEvent e) {
 
     **Interviewer listens for:** Understanding of the partition-mapping default.
 
+    **Common wrong answer:** "DLT partitions do not matter." The default resolver uses the same partition number.
+
 ### Intermediate
 
 ??? question "Q5. Blocking vs non-blocking retries: trade-offs?"
@@ -376,20 +378,28 @@ public void process(OrderEvent e) {
 
     **Interviewer listens for:** Ordering vs throughput framed as the core trade-off.
 
+    **Common wrong answer:** "Non-blocking retries are always better." They break per-key ordering.
+
 ??? question "Q6. How do you avoid a rebalance when retry delays are long?"
     **Answer:** Don't sleep in the poll thread. Use pausing back-off (Spring's `ContainerPausingBackOffHandler`), which pauses the listener container but keeps calling `poll()`, so the consumer stays in the group. Or move long waits to non-blocking retry topics. Tuning `max.poll.interval.ms` and `max.poll.records` helps but doesn't fix the root problem.
 
     **Interviewer listens for:** Knowing that liveness is tied to `poll()` (`max.poll.interval.ms`), separately from heartbeats (`session.timeout.ms`), and that a paused consumer still polls.
+
+    **Common wrong answer:** "Increase max.poll.interval.ms to an hour." That delays detection of dead consumers.
 
 ??? question "Q7. Which errors should not be retried?"
     **Answer:** Errors that will fail identically every time: deserialization and conversion failures, validation errors, business-rule violations, missing mandatory references (unless it's an eventual-consistency race). Map them to non-retryable exceptions so they go straight to the DLT.
 
     **Common wrong answer:** "Retry everything 3 times to be safe."
 
+    **Interviewer listens for:** permanent vs transient failures, classify and send permanent ones to DLT.
+
 ??? question "Q8. What metadata do you keep with a dead-lettered record?"
     **Answer:** The original topic, partition, offset, timestamp and key; the exception class, message and stack trace; the retry count; the consumer group; and a correlation/event ID. Spring's `DeadLetterPublishingRecoverer` adds most of these as `kafka_dlt-*` headers automatically (retry topics use `kafka_original-*` / `kafka_exception-*` names and add an attempts header). Header values are raw bytes, so the offset and timestamp need decoding. Persisting them enables triage, auditing and targeted replay.
 
     **Interviewer listens for:** Enough metadata to find the original record and to replay selectively, without relying on logs.
+
+    **Common wrong answer:** Storing only the payload, which makes the DLQ impossible to diagnose or replay safely.
 
 ??? question "Q9. Why is idempotency mandatory once you add retries?"
     **Answer:** Retries, rebalances (before an offset commit) and replays all redeliver records, so at-least-once delivery means duplicates. Without idempotency, you double-charge, double-ship or double-notify. Use natural idempotency (upserts), a dedupe table keyed by eventId in the same transaction, or Kafka transactions for Kafka-to-Kafka pipelines.
@@ -419,6 +429,8 @@ public void process(OrderEvent e) {
 
     **Interviewer listens for:** Not pretending retry topics preserve order; per-key thinking.
 
+    **Common wrong answer:** "Use retry topics and accept reordering." For patient events that can be dangerous.
+
 ??? question "Q12. A downstream service is down for an hour. What happens to your DLQ?"
     **Answer:** With naive retries, every record exhausts its retries and floods the DLQ: thousands of records, and an expensive bulk replay. Better: detect systemic failure (circuit breaker open, error-rate threshold) and **pause the consumer** (`KafkaListenerEndpointRegistry` → `pause()`), then resume when healthy. Lag grows, but nothing is lost and order is preserved. Alert on lag instead. Check that topic retention comfortably exceeds the longest outage you plan to ride out, otherwise unread records can age out. Resume gradually (or rate-limit) so the backlog doesn't knock the recovering service over again.
 
@@ -431,10 +443,14 @@ public void process(OrderEvent e) {
 
     **Interviewer listens for:** Root cause first, key preservation, idempotency, rate limiting, auditability, and awareness of other consumer groups.
 
+    **Common wrong answer:** "Replay the whole DLT to the main topic." Without a fix and filtering, it fails again or duplicates.
+
 ??? question "Q14. How do retries interact with exactly-once semantics?"
     **Answer:** Kafka EOS (transactions + `read_committed`) covers *consume-transform-produce within Kafka*. A failed transaction aborts and the input is re-consumed, so retries are safe inside that boundary. Side effects outside Kafka (DB writes, HTTP calls) aren't covered, so you still need idempotency or the outbox pattern there. Publishing to a DLT can be part of the transaction so the "move to DLT + commit offset" step is atomic. In Spring Kafka, a transactional container doesn't use the `DefaultErrorHandler` by default. The exception rolls back the transaction and the `DefaultAfterRollbackProcessor` re-seeks, applies the back-off and calls the recoverer.
 
     **Interviewer listens for:** The boundary of EOS (Kafka-only), and that external side effects still need idempotency or an outbox.
+
+    **Common wrong answer:** "EOS makes retries exactly-once for database writes too."
 
 ### Scenario-based
 
@@ -442,6 +458,8 @@ public void process(OrderEvent e) {
     **Answer:** Suspect a stuck record. Check the logs for repeated failures at the same offset (blocking retries or a poison pill). Check the consumer is alive (no rebalance loop). Check for a hot key (skew) versus a failure. Fixes: route permanent errors to the DLT, add `ErrorHandlingDeserializer`, add a retry cap, and split hot keys if it's skew. Add alerting on per-partition lag and on the DLT rate. Useful tools: `kafka-consumer-groups.sh --describe --group <group>` shows the committed offset, log-end offset and lag per partition. If the committed offset isn't moving, it's a stuck record. If it's moving but slower than the others, it's skew or a slow path.
 
     **Interviewer listens for:** A structured approach: stuck offset vs slow progress, then failure vs skew.
+
+    **Common wrong answer:** "Add more consumers." One stuck partition is processed by one consumer only.
 
 ??? question "Q16. Your listener consumes in batches of 500 and record 137 fails. What happens, and how should it be handled?"
     **Answer:** With a batch listener the framework doesn't know which record failed. If you throw a plain exception, the `DefaultErrorHandler` falls back to retrying the **whole batch**, so records 0–136 are processed again (duplicates) and one bad record can block the batch indefinitely. Throw `BatchListenerFailedException` with the failed record or its index instead. The handler then commits the offsets of the records before it, retries from the failed record with the back-off, and after retries are exhausted sends just that record to the recoverer/DLT and carries on with the rest. Non-blocking retry topics aren't available for batch listeners, and the batch's DB work must be idempotent because partial reprocessing is normal.
@@ -452,6 +470,10 @@ public void process(OrderEvent e) {
 
 ??? question "Q17. Walk me through the retry and DLQ design you built."
     **Answer structure (use STAR):** context (flow, volume, ordering needs) → failure classification → retry strategy and why → DLQ handling, alerting and replay → idempotency → an outcome or metric (e.g. no lost events, triage time). Be ready for Q11–Q13 as follow-ups. *[Fill in from your OptumRx implementation.]*
+
+    **Interviewer listens for:** clear STAR structure, classification, ordering trade-off, idempotency, measured outcome.
+
+    **Common wrong answer:** Describing configuration flags with no reasoning or results.
 
 ## Cheat sheet
 

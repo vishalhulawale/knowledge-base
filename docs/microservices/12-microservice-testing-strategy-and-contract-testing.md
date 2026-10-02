@@ -237,44 +237,92 @@ Contract.make {
 ??? question "Q1. What does the test pyramid look like for microservices?"
     **Answer:** Many unit tests; integration tests for adapters; component tests per service with real infrastructure and stubbed collaborators; contract tests between services; very few end-to-end tests.
 
+    **Interviewer listens for:** layer by layer, component and contract tests carry most of the confidence, few E2E.
+
+    **Common wrong answer:** "Lots of E2E tests in a shared environment give the most confidence." They are slow, flaky and couple releases.
+
 ??? question "Q2. What is a component test?"
     **Answer:** A test of one service through its public interface, with real infrastructure (DB, broker in containers) and external services stubbed, so it's realistic but isolated and deterministic.
 
+    **Interviewer listens for:** one service via its public API, real infrastructure, stubbed collaborators, deterministic.
+
+    **Common wrong answer:** Calling it a unit test with mocks, or an E2E test with real neighbour services.
+
 ??? question "Q3. What is contract testing?"
     **Answer:** Verifying that a consumer and provider agree on their interaction (requests, responses, messages), each side tested independently against a shared contract, instead of deploying both together.
+
+    **Interviewer listens for:** agreement on the interaction, each side tested independently, no joint deployment.
+
+    **Common wrong answer:** "Contract testing is validating against an OpenAPI schema." Schemas say what is allowed, not what consumers actually use.
 
 ### Intermediate
 
 ??? question "Q4. What does 'consumer-driven' mean?"
     **Answer:** Consumers define the contracts based on what they actually use; providers must satisfy all their consumers' contracts. Providers can change anything no consumer depends on.
 
+    **Interviewer listens for:** consumers specify actual usage, provider verifies all consumers, free to change unused parts.
+
+    **Common wrong answer:** "The provider publishes the contract and consumers follow it." That is provider-driven.
+
 ??? question "Q5. Pact vs Spring Cloud Contract?"
     **Answer:** Pact: consumer-first, polyglot, Pact Broker with versioning and `can-i-deploy`. Spring Cloud Contract: contracts usually authored with the provider, generates provider tests and consumer stub jars, JVM/Spring oriented. Both support HTTP and messaging.
+
+    **Interviewer listens for:** consumer-first and polyglot with Broker vs provider-authored JVM-oriented with stubs, both support messaging.
+
+    **Common wrong answer:** "Pact only does HTTP." It supports message contracts as well.
 
 ??? question "Q6. Why use Testcontainers instead of H2 or embedded Kafka?"
     **Answer:** Same engine and version as production: SQL dialect, JSON types, indexes, migrations, broker behaviour. In-memory substitutes hide real bugs.
 
+    **Interviewer listens for:** same engine and version, dialect, migrations, broker behaviour.
+
+    **Common wrong answer:** "H2 in PostgreSQL mode is close enough." JSONB, locking, indexes and many functions differ.
+
 ??? question "Q7. How do you test a Kafka consumer?"
     **Answer:** Component test with Testcontainers Kafka: produce a message, assert the side effect (DB row, outgoing event); test duplicates (idempotency), poison messages (DLQ path) and retries. Contract-test the message schema with the producer.
+
+    **Interviewer listens for:** real broker, assert side effects, duplicates, poison messages, retries, schema contract.
+
+    **Common wrong answer:** Mocking `KafkaTemplate` and the listener, which tests none of the serialisation, retry or DLQ behaviour.
 
 ### Senior
 
 ??? question "Q8. Why are large E2E suites a problem in microservices?"
     **Answer:** They require all services deployed together (coupling releases), are slow and flaky, are hard to debug, and block teams. Most of their value is gained more cheaply with component and contract tests.
 
+    **Interviewer listens for:** release coupling, slowness, flakiness, debugging cost, cheaper alternatives.
+
+    **Common wrong answer:** "We need E2E because unit tests miss integration bugs." Component and contract tests catch those faster.
+
 ??? question "Q9. What does `can-i-deploy` do?"
     **Answer:** Queries the Pact Broker to check whether a given version of a service has successful contract verifications against the versions of its consumers/providers deployed in the target environment, gating the deployment.
 
+    **Interviewer listens for:** verification matrix, deployed versions per environment, deployment gate.
+
+    **Common wrong answer:** "It runs the contract tests." It only checks recorded verification results in the Broker.
+
 ??? question "Q10. What can contract tests not catch?"
     **Answer:** Business logic errors, performance, cross-service workflows, environment/config issues, and changes in semantics with the same shape. Those need provider behaviour tests, component tests, journey tests and production monitoring.
+
+    **Interviewer listens for:** business logic, performance, workflows, config, semantic changes with the same shape.
+
+    **Common wrong answer:** "Contracts guarantee the integration works." They guarantee shape agreement, not correct behaviour.
 
 ### Scenario-based
 
 ??? question "Q11. An upstream team renamed a field and your service broke in production. How do you prevent a repeat?"
     **Answer:** Add consumer-driven contracts for the fields we use, verified in the upstream's pipeline with `can-i-deploy` gating, plus tolerant reading on our side and alerts on deserialization errors. Agree on a versioning/deprecation policy.
 
+    **Interviewer listens for:** consumer-driven contracts in the provider pipeline, can-i-deploy, tolerant reader, deserialisation alerts, deprecation policy.
+
+    **Common wrong answer:** "Ask the upstream team to be more careful." Process without an automated gate repeats the incident.
+
 ??? question "Q12. Your staging E2E suite takes 2 hours and fails 30% of the time. What do you do?"
     **Answer:** Quarantine flaky tests, map each E2E test to the risk it covers, move coverage down to component and contract tests, keep a few journey tests (maybe as production synthetic monitors), and fix test data isolation. Measure suite time and flakiness.
+
+    **Interviewer listens for:** quarantine, risk mapping, push coverage down, few journeys as synthetics, data isolation, measure.
+
+    **Common wrong answer:** Adding automatic retries to flaky tests until the suite goes green.
 
 ## Cheat sheet
 

@@ -195,9 +195,16 @@ Level signal: Senior (not yet Lead: no cross-team considerations raised).
 
     **Common wrong answer:** "Good guy, smart, hire".
 
+??? question "Q7. How do you interview a lead or architect candidate differently from a senior engineer?"
+    **Answer:** Add signals for **scope and influence**: system design with trade-offs across teams, how they made and documented decisions, how they grew people, how they handled conflict and stakeholders, and how they balanced delivery with quality. Probe for their own actions with follow-up questions ("what did you do?"). Keep a hands-on part too, such as a code or design review, because leads must still judge technical quality. *[confirm]*
+
+    **Interviewer listens for:** broader scope signals, decision-making and people growth, the "what did you do" probe, a hands-on part kept.
+
+    **Common wrong answer:** Running the same coding round and judging only speed.
+
 ### Senior
 
-??? question "Q7. How would you improve a team's hiring process?"
+??? question "Q8. How would you improve a team's hiring process?"
     **Answer:**
     - Define competencies and levels.
     - Build a question bank with rubrics, calibrated internally.
@@ -211,23 +218,30 @@ Level signal: Senior (not yet Lead: no cross-team considerations raised).
 
     **Common wrong answer:** "ask harder questions".
 
-??? question "Q8. Tell me about a hire you regretted, or one you're proud of."
+??? question "Q9. Tell me about a hire you regretted, or one you're proud of."
     **Answer structure:** An honest example *[confirm]*: what the interview showed, what you missed or saw correctly, the outcome, and how you changed your interviewing (a new question, a rubric anchor, a reference-check focus).
 
     **Interviewer listens for:** learning applied to the process.
 
     **Common wrong answer:** "all my hires were great".
 
+??? question "Q10. How do you help a strong candidate choose your team?"
+    **Answer:** The interview is also their evaluation of you. Be on time, prepared and respectful; explain the problem space honestly, including the hard parts; leave real time for their questions; and connect them with the people they would work with. Move quickly after the final round. A good candidate experience also helps the people you reject, who talk to others. *[confirm]*
+
+    **Interviewer listens for:** candidate experience, honesty about the role, time for their questions, speed of decision.
+
+    **Common wrong answer:** Selling only the positives, which leads to early attrition when reality shows up.
+
 ### Scenario-based
 
-??? question "Q9. The team urgently needs people, and a borderline candidate is available now. Hire?"
+??? question "Q11. The team urgently needs people, and a borderline candidate is available now. Hire?"
     **Answer:** Don't lower the bar under pressure. A mis-hire costs more than the gap. Check whether more evidence is possible (a focused follow-up interview). Consider alternatives (contractors, rescoping, internal moves). Escalate the pipeline problem. If they don't meet the bar, no hire, and document why.
 
     **Interviewer listens for:** bar discipline.
 
     **Common wrong answer:** "hire and train them".
 
-??? question "Q10. A candidate is nervous and freezes on a coding question. What do you do?"
+??? question "Q12. A candidate is nervous and freezes on a coding question. What do you do?"
     **Answer:** Reassure them, restate the problem, suggest starting with a simple brute-force approach or an example, and give the standard hints (the same ones every candidate gets). Note the recovery. Assess problem solving fairly and don't penalise nerves alone. Leave time for their questions so they leave with a good impression.
 
     **Interviewer listens for:** humane and consistent behaviour.

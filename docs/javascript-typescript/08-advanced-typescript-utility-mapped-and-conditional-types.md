@@ -230,44 +230,92 @@ Not ★. Applies to shared libraries in the OptumRx React app and micro-frontend
 ??? question "Q1. What do keyof and typeof do in types?"
     **Answer:** `keyof T` gives the union of T's keys; `typeof x` (in a type position) gives the type of value x.
 
+    **Interviewer listens for:** keyof gives key union, typeof lifts a value into a type.
+
+    **Common wrong answer:** Confusing the type-level `typeof` with the runtime `typeof` operator that returns a string.
+
 ??? question "Q2. Partial vs Required vs Readonly?"
     **Answer:** Make all properties optional / required / readonly, implemented as mapped types with `?`, `-?`, `readonly` modifiers.
 
+    **Interviewer listens for:** mapped types with ?, -?, readonly modifiers, shallow only.
+
+    **Common wrong answer:** "Readonly makes nested objects readonly too." It is shallow.
+
 ??? question "Q3. Pick vs Omit?"
     **Answer:** Keep the listed keys vs remove them (`Omit = Pick<T, Exclude<keyof T, K>>`).
+
+    **Interviewer listens for:** keep vs remove keys, Omit built on Pick + Exclude.
+
+    **Common wrong answer:** "Omit errors if the key does not exist." Omit's key parameter is not constrained to keyof T.
 
 ### Intermediate
 
 ??? question "Q4. What is a mapped type?"
     **Answer:** A type that iterates over keys (`[K in keyof T]`) to produce a new property per key, optionally changing modifiers and remapping keys with `as`.
 
+    **Interviewer listens for:** [K in keyof T], modifiers, key remapping with as.
+
+    **Common wrong answer:** Describing it as a runtime loop.
+
 ??? question "Q5. What does infer do?"
     **Answer:** Declares a type variable inside a conditional type's extends clause that TypeScript infers from the matched type, e.g. the return type of a function.
+
+    **Interviewer listens for:** type variable inside a conditional type's extends clause.
+
+    **Common wrong answer:** "infer works anywhere in a type." Only in the extends clause of a conditional type.
 
 ??? question "Q6. Implement ReturnType."
     **Answer:** `type RT<F> = F extends (...a: any[]) => infer R ? R : never`.
 
+    **Interviewer listens for:** conditional type + infer R, never fallback.
+
+    **Common wrong answer:** Writing `F extends Function` without `infer`.
+
 ??? question "Q7. What are template literal types?"
     **Answer:** String literal types built from other types with template syntax, combinable with unions and Capitalize etc., for typed event names, routes, CSS units.
+
+    **Interviewer listens for:** string literal composition, unions expand, intrinsic string helpers.
+
+    **Common wrong answer:** "They are runtime template strings."
 
 ### Senior
 
 ??? question "Q8. What are distributive conditional types?"
     **Answer:** Conditional types over a naked type parameter are applied to each union member separately and the results unioned; wrapping in `[T]` prevents it.
 
+    **Interviewer listens for:** naked type parameter distributes over union, [T] wrapper prevents it.
+
+    **Common wrong answer:** Not knowing why `Exclude` works on unions.
+
 ??? question "Q9. Why does Omit behave oddly on unions?"
     **Answer:** keyof a union is only the common keys, so Omit flattens the union. Use a distributive version.
 
+    **Interviewer listens for:** keyof union = common keys only, distributive Omit.
+
+    **Common wrong answer:** "Omit is buggy." It behaves as specified; it is just not distributive.
+
 ??? question "Q10. When are advanced types counterproductive?"
     **Answer:** When they make code and errors unreadable, slow the checker, or encode logic better handled by a runtime check or simpler explicit types.
+
+    **Interviewer listens for:** readability, compiler performance, simpler alternatives.
+
+    **Common wrong answer:** "More advanced types are always safer." Unreadable types slow teams and the compiler.
 
 ### Scenario-based
 
 ??? question "Q11. Type a function `setField(obj, key, value)` so value matches the key."
     **Answer:** `function setField<T, K extends keyof T>(o: T, k: K, v: T[K]): T`.
 
+    **Interviewer listens for:** K extends keyof T, indexed access T[K].
+
+    **Common wrong answer:** Typing value as `any` or `T[keyof T]`, which allows the wrong value type for the key.
+
 ??? question "Q12. Derive a type of all dotted paths of a nested config object."
     **Answer:** A recursive mapped type producing ``K | `${K}.${Paths<T[K]>}` `` over string keys, with depth limits in mind.
+
+    **Interviewer listens for:** recursive template literal type, depth limits.
+
+    **Common wrong answer:** Building the path list at runtime only and losing type safety.
 
 ## Cheat sheet
 

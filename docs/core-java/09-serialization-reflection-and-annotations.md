@@ -402,20 +402,28 @@ spring:
 
     **Interviewer listens for:** default is computed and fragile; with a fixed UID, added fields get default values and removed fields are ignored.
 
+    **Common wrong answer:** "It is optional and only a warning." Without it, harmless changes can break deserialisation of stored data.
+
 ??? question "Q3. What do `transient` and `static` mean for serialization?"
     **Answer:** Neither is written. `transient` marks instance state that should be skipped (secrets, caches, derived values, non-serializable resources). `static` fields belong to the class. After deserialization a transient field holds its type's default (`null`, `0`, `false`), **not** its initialiser value, because initialisers do not run.
 
     **Common wrong answer:** "A `transient int count = 5` comes back as 5."
+
+    **Interviewer listens for:** neither written, defaults after read, static belongs to the class.
 
 ??? question "Q4. What is reflection? Name three places you rely on it every day."
     **Answer:** The ability to inspect classes, fields, methods and annotations at runtime and to create objects or invoke members by name, through `java.lang.Class` and `java.lang.reflect`. Daily examples: Spring dependency injection and component scanning, Jackson mapping JSON to objects, Hibernate instantiating entities, JUnit finding `@Test` methods.
 
     **Interviewer listens for:** that you also know the costs (no compile-time safety, performance, encapsulation).
 
+    **Common wrong answer:** "Reflection is rarely used in modern Java." Spring, Jackson, Hibernate and JUnit all depend on it.
+
 ??? question "Q5. What are the three retention policies, and which is the default?"
     **Answer:** `SOURCE` (discarded by the compiler, e.g. `@Override`), `CLASS` (stored in the class file but not available to reflection; **this is the default**), and `RUNTIME` (available to reflection, e.g. `@Autowired`). A custom annotation read by a framework at runtime must be declared `@Retention(RetentionPolicy.RUNTIME)`.
 
     **Common wrong answer:** "The default is `RUNTIME`."
+
+    **Interviewer listens for:** SOURCE/CLASS/RUNTIME, CLASS is the default, RUNTIME needed for frameworks.
 
 ### Intermediate
 
@@ -454,23 +462,35 @@ spring:
 
     **Interviewer listens for:** the constructor rule and the reason for each of the four values.
 
+    **Common wrong answer:** Expecting a = 10 to be restored from the stream. The non-serialisable parent's constructor runs and re-initialises it.
+
 ??? question "Q7. How can serialization break a singleton, and how do you fix it?"
     **Answer:** Deserialization creates a new object without using the private constructor, so you end up with two instances. Fix it with `readResolve()` returning the existing instance, or better, use a single-element enum: enums are serialized by name and resolved with `valueOf`, and they cannot be instantiated reflectively either.
 
     **Interviewer listens for:** reflection (`setAccessible` on the private constructor) as the second way to break a singleton, and enum handling both.
 
+    **Common wrong answer:** "Make the constructor private." Deserialisation does not call the constructor.
+
 ??? question "Q8. `getMethods()` vs `getDeclaredMethods()`, and `Class.forName()` vs `.class`?"
     **Answer:** `getMethods()` returns public methods including inherited ones. `getDeclaredMethods()` returns methods of every access level but only those declared in that class. To find a private method in a superclass you walk up with `getSuperclass()`. `Class.forName(name)` loads and initialises the class, so static initialisers run (this is how old JDBC drivers registered themselves). `Foo.class` gives the `Class` object without triggering initialisation.
+
+    **Interviewer listens for:** public + inherited vs all-access declared-only, initialisation behaviour of forName vs .class.
+
+    **Common wrong answer:** "getDeclaredMethods includes inherited methods."
 
 ??? question "Q9. Annotations have no behaviour. So how does `@Autowired` or `@Transactional` do anything?"
     **Answer:** Something reads them. At startup, Spring's bean post-processors inspect each bean class reflectively. `AutowiredAnnotationBeanPostProcessor` finds `@Autowired` members and injects dependencies. For `@Transactional`, an auto-proxy creator wraps the bean in a proxy (JDK dynamic proxy for interfaces, CGLIB subclass otherwise) whose interceptor starts and commits or rolls back the transaction around the call. Compile-time annotations such as Lombok's are read by an annotation processor inside `javac` instead.
 
     **Interviewer listens for:** the distinction between runtime reflection and compile-time processing, and the word "proxy".
 
+    **Common wrong answer:** "The compiler generates the transaction code." Runtime proxies and post-processors do the work.
+
 ??? question "Q10. Does a subclass inherit its parent's annotations? Does an overriding method?"
     **Answer:** Only class-level annotations that are themselves marked `@Inherited` are visible on subclasses through `getAnnotation`. It does not apply to annotations on interfaces, methods, fields or constructors. An overriding method does not inherit the overridden method's annotations in plain Java. Frameworks often add their own lookup: Spring's `AnnotatedElementUtils.findMergedAnnotation` searches superclasses, interfaces and meta-annotations.
 
     **Common wrong answer:** "Yes, annotations are inherited like methods."
+
+    **Interviewer listens for:** @Inherited only for class annotations, Spring's merged-annotation lookup.
 
 ### Senior
 
@@ -486,6 +506,10 @@ spring:
 ??? question "Q12. How do records change the serialization story?"
     **Answer:** A record's serialized form is exactly its components. On deserialization the JVM reads the component values and calls the **canonical constructor**, so compact-constructor validation and defensive copies always run. Records cannot customise the process with `writeObject`, `readObject` or `Externalizable` methods (they are ignored), though `writeReplace` and `readResolve` are still supported. That removes the "hidden constructor" problem for the record itself. It does not make untrusted streams safe: the stream can still name other, non-record classes, so filters are still needed.
 
+    **Interviewer listens for:** components only, canonical constructor on read, invariants always checked.
+
+    **Common wrong answer:** "Records use the same serialisation as normal classes."
+
 ??? question "Q13. What does reflection cost, and how do you reduce that cost?"
     **Answer:** Costs: member lookup is slow; `invoke` boxes arguments into an `Object[]`, checks access and is hard to inline; errors move from compile time to runtime; it breaks encapsulation; it needs `opens` under the module system; and it needs build-time metadata for native images.
 
@@ -493,13 +517,21 @@ spring:
 
     **Interviewer listens for:** "lookup once, invoke many", and awareness of startup time as well as per-call time.
 
+    **Common wrong answer:** "Reflection is always too slow to use." Cached MethodHandles and framework metadata make it cheap enough.
+
 ??? question "Q14. What changed for reflection with the module system and Java 17?"
     **Answer:** Java 9 introduced modules: `exports` makes a package's public types accessible at compile time and runtime; `opens` gives runtime-only access that also permits deep reflection (`setAccessible` on non-public members). Java 9 to 15 only warned about illegal reflective access to JDK internals. Java 16 denied it by default (JEP 396), and Java 17 (JEP 403) removed the `--illegal-access` escape hatch, so the result is `InaccessibleObjectException`. The remaining workaround is an explicit `--add-opens module/package=ALL-UNNAMED`. Code on the classpath (the unnamed module) can still reflect freely on other classpath code, which is why most Spring applications are unaffected for their own classes. The direction continues: JDK 26 starts warning when `final` fields are mutated through deep reflection (JEP 500).
+
+    **Interviewer listens for:** exports vs opens, strong encapsulation since Java 16/17, --add-opens as a temporary fix.
+
+    **Common wrong answer:** "setAccessible(true) still works on JDK internals." Since Java 17 it is blocked without --add-opens.
 
 ??? question "Q15. JDK dynamic proxy vs CGLIB proxy: what are the differences and the limits?"
     **Answer:** A JDK proxy is a runtime-generated class implementing given interfaces; calls go to an `InvocationHandler`. It can only be injected by interface type. CGLIB generates a subclass of the concrete class and overrides its methods, so it cannot proxy `final` classes or intercept `final`, `static` or `private` methods. Spring Boot defaults to class-based proxies (`proxyTargetClass=true`). Both share the self-invocation limit: a call through `this` does not pass the proxy. Options are to move the method to another bean, inject the bean's own proxy, or use AspectJ weaving, which changes the bytecode itself.
 
     **Interviewer listens for:** a real consequence, for example "Kotlin classes are final by default" or "`@Transactional` on a private method is silently ignored".
+
+    **Common wrong answer:** "CGLIB can proxy final methods." It cannot, which silently skips @Transactional on them.
 
 ### Scenario-based
 
@@ -512,6 +544,8 @@ spring:
 
     **Interviewer listens for:** rolling deployment means two versions run together; cache must fail soft; versioned keys.
 
+    **Common wrong answer:** "Flush the cache and move on." Without a stable format it will happen again on the next class change.
+
 ??? question "Q17. A security scan flags an internal endpoint that accepts `application/x-java-serialized-object`. As tech lead, what is your plan?"
     **Answer:** Treat it as a likely remote-code-execution risk, not a low-priority finding; "internal" is not a trust boundary.
 
@@ -521,12 +555,16 @@ spring:
 
     **Interviewer listens for:** containment before redesign, allow-list thinking, and turning one incident into a team standard.
 
+    **Common wrong answer:** "It is internal, so it is low priority." Internal endpoints are reachable after any foothold.
+
 ??? question "Q18. A Kafka consumer is stuck: the same offset fails again and again with a deserialization error. Why, and what do you do?"
     **Answer:** Deserialization happens inside `poll()`, before the listener and its error handler run. A record that cannot be deserialized (a "poison pill") throws on every poll, so the consumer never moves past it and lag grows on that partition.
 
     Fix: wrap the real deserializer in Spring Kafka's `ErrorHandlingDeserializer`. It catches the failure and passes the error to the container's error handler, which can publish the raw bytes to a dead-letter topic with `DeadLetterPublishingRecoverer` and commit the offset. Deserialization errors are not retryable, so do not send them through the retry topics. Longer term, enforce schema compatibility at the producer (schema registry) so bad payloads are rejected at write time.
 
     **Interviewer listens for:** why the normal error handler never sees it, non-retryable classification, keeping the original bytes for diagnosis.
+
+    **Common wrong answer:** "Catch the exception in the listener." The listener never sees it because poll throws first.
 
 ## Cheat sheet
 

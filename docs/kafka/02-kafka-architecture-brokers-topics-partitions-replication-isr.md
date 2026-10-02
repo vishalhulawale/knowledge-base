@@ -283,21 +283,21 @@ Rough method: `partitions ≥ max(target throughput / per-partition producer thr
 
 ### Senior
 
-??? question "Q9. A broker holding a partition leader crashes. Walk through what happens."
+??? question "Q10. A broker holding a partition leader crashes. Walk through what happens."
     **Answer:** The active controller detects the failure (in KRaft, missed broker heartbeats beyond `broker.session.timeout.ms`, default 9s; a clean shutdown is faster because the broker asks for controlled shutdown). It fences the broker, picks a new leader from the ISR for each affected partition, bumps the **leader epoch**, and writes the change to the metadata log, which brokers replicate. Clients get `NOT_LEADER_OR_FOLLOWER` errors, refresh metadata and retry against the new leader. With `acks=all` and `min.insync.replicas` satisfied, no committed data is lost; records the old leader had appended but not yet replicated were never acknowledged, so the producer retries them (idempotence prevents duplicates). When the old broker returns, it uses the leader epoch to truncate any divergent tail (KIP-101, not a blind truncate-to-HW), catches up as a follower, rejoins the ISR, and preferred-leader election (`auto.leader.rebalance.enable=true` by default) moves leadership back.
 
     **Interviewer listens for:** detection → election from ISR → metadata propagation → client retry → rejoin with epoch-based truncation, plus what happens to unacknowledged writes.
 
     **Common wrong answer:** "Consumers rebalance." A broker failure changes partition leadership, not group membership (unless the failed broker was the group coordinator, in which case clients just find the new coordinator).
 
-??? question "Q10. How would you size a cluster and partitions for 50K msgs/s of 2KB?"
+??? question "Q11. How would you size a cluster and partitions for 50K msgs/s of 2KB?"
     **Answer:** That's ~100 MB/s ingress, and RF=3 means ~300 MB/s written across the cluster, plus consumer egress × number of groups. Measure per-partition throughput (often ~10 MB/s producer-side, consumer-dependent) to get ~12–24 partitions with headroom. Size brokers by disk throughput, network and retention (100 MB/s × 7 days × 3 ≈ 180 TB). Spread across 3 AZs. Validate with load tests (`kafka-producer-perf-test.sh`). Compression typically cuts the disk and network numbers substantially, and tiered storage (KIP-405) can move older segments to object storage. Keep disk and network utilisation low enough that the cluster still copes with one broker (or one AZ) down.
 
     **Interviewer listens for:** a method (throughput → bytes → replication → retention → headroom), not a magic number; N+1 capacity planning.
 
     **Common wrong answer:** quoting a partition count without stating assumptions about message size, retention or consumer speed.
 
-??? question "Q11. When would you consider follower fetching?"
+??? question "Q12. When would you consider follower fetching?"
     **Answer:** Multi-AZ clusters where consumers in each AZ read from a local replica (set `client.rack` and a rack-aware replica selector on brokers). It cuts cross-AZ cost and latency. The broker setting is `replica.selector.class=org.apache.kafka.common.replica.RackAwareReplicaSelector`, with `broker.rack` set on every broker. The trade-off is slightly higher end-to-end latency: a follower only serves up to its own high watermark, which trails the leader's. Producers still always write to the leader.
 
     **Interviewer listens for:** both the client and the broker side of the configuration, and that consistency is preserved because followers serve only committed data.
@@ -311,16 +311,30 @@ Rough method: `partitions ≥ max(target throughput / per-partition producer thr
 
     **Common wrong answer:** "A returning replica truncates to its high watermark" (pre-0.11 behaviour).
 
+??? question "Q14. How do you secure a Kafka cluster that carries PHI?"
+    **Answer:** In layers:
+
+    1. **Encryption in transit:** TLS on every listener (client-broker and broker-broker); no `PLAINTEXT` listeners.
+    2. **Authentication:** mTLS client certificates, `SASL/SCRAM`, or `SASL/OAUTHBEARER` with your IdP. On AWS MSK, IAM authentication.
+    3. **Authorisation:** ACLs (or Confluent RBAC) per service principal, least privilege: a producer gets `WRITE` on its own topics, a consumer gets `READ` on its topics and its consumer group. Deny by default (`allow.everyone.if.no.acl.found=false`).
+    4. **Encryption at rest:** encrypted broker volumes (KMS on MSK or EBS). For the most sensitive fields, **field-level encryption** in the producer, so PHI stays encrypted in the log, in DLQs and in replays, and only authorised consumers hold the key.
+    5. **Data minimisation:** put ids and references in events, not full clinical records. Remember that retention and compaction decide how long PHI lives in the log.
+    6. **Audit and operations:** broker audit logs, Schema Registry and Connect secured too, secrets in a manager, and no payload logging in consumers or DLQ tooling.
+
+    **Interviewer listens for:** TLS everywhere, an authentication mechanism, per-principal ACLs with deny-by-default, at-rest and field-level encryption, minimisation and retention, the surrounding components.
+
+    **Common wrong answer:** "The cluster is in a private VPC, so it is secure." Network isolation does not stop a compromised service from reading every topic.
+
 ### Scenario-based
 
-??? question "Q12. Producers see NotEnoughReplicasException. What's going on and what do you do?"
+??? question "Q15. Producers see NotEnoughReplicasException. What's going on and what do you do?"
     **Answer:** The ISR for a partition is below `min.insync.replicas`, because brokers are down or followers are lagging (disk, network, GC). Check under-replicated partitions, broker health and replica fetcher lag. Restore brokers or capacity. Don't lower `min.insync.replicas` as a quick fix on critical data. That trades away the durability guarantee. Producers should retry with backoff (the error is retriable, bounded by `delivery.timeout.ms`, default 2 minutes), and idempotence avoids duplicates. Note that consumers are unaffected: already-committed data stays readable while writes are rejected.
 
     **Interviewer listens for:** correct diagnosis (ISR < min ISR with `acks=all`), the metrics to check (`UnderMinIsrPartitionCount`, ISR shrink rate), and refusing the "lower min ISR" shortcut.
 
     **Common wrong answer:** "Increase producer retries" or "set `acks=1`" as the fix.
 
-??? question "Q13. The KRaft controller quorum loses its majority (2 of 3 controllers down). What still works?"
+??? question "Q16. The KRaft controller quorum loses its majority (2 of 3 controllers down). What still works?"
     **Answer:** The data plane mostly keeps running: existing partition leaders keep serving produce and fetch requests, because brokers work from their cached metadata. The control plane stops: no metadata changes can be committed, so no leader elections, no ISR changes, no topic or partition creation, no config or ACL changes, and no new broker registrations. That means a broker failure during this window leaves its partitions leaderless until the quorum is back, and ISR shrinks cannot be recorded, which can stall `acks=all` writes waiting on a dead follower. Fix by restoring controllers to regain a majority. Prevention: 3 or 5 dedicated controllers spread across AZs, never an even number, and monitor `ActiveControllerCount`.
 
     **Interviewer listens for:** control plane vs data plane separation, Raft majority maths, and the knock-on effect on ISR changes.

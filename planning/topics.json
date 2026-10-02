@@ -962,7 +962,7 @@
       "num": 10,
       "title": "Frontend Architecture",
       "slug": "frontend-architecture",
-      "priority": "P1",
+      "priority": "P0",
       "subtopics": [
         {
           "title": "Micro-frontends: approaches (Module Federation, single-spa, iframes) & trade-offs",
@@ -1006,7 +1006,7 @@
       "num": 11,
       "title": "Redis & Caching",
       "slug": "redis-caching",
-      "priority": "P1",
+      "priority": "P0",
       "subtopics": [
         {
           "title": "Redis data structures & use cases",
@@ -1056,7 +1056,7 @@
       "num": 12,
       "title": "MongoDB",
       "slug": "mongodb",
-      "priority": "P1",
+      "priority": "P0",
       "subtopics": [
         {
           "title": "Document model & schema design (embed vs reference)",
@@ -1106,7 +1106,7 @@
       "num": 13,
       "title": "PostgreSQL / SQL",
       "slug": "postgresql-sql",
-      "priority": "P1",
+      "priority": "P0",
       "subtopics": [
         {
           "title": "SQL essentials: joins, group by, window functions, CTEs",
@@ -1162,7 +1162,7 @@
       "num": 14,
       "title": "JPA / Hibernate",
       "slug": "jpa-hibernate",
-      "priority": "P1",
+      "priority": "P0",
       "subtopics": [
         {
           "title": "Entity lifecycle & persistence context",
@@ -1206,7 +1206,7 @@
       "num": 16,
       "title": "Docker & Kubernetes",
       "slug": "docker-kubernetes",
-      "priority": "P1",
+      "priority": "P0",
       "subtopics": [
         {
           "title": "Containers vs VMs; Docker images, layers, multi-stage builds",
@@ -1312,7 +1312,7 @@
       "num": 19,
       "title": "Cryptography & Key Management",
       "slug": "cryptography-key-management",
-      "priority": "P1",
+      "priority": "P0",
       "subtopics": [
         {
           "title": "Symmetric vs asymmetric encryption, hashing, MAC, digital signatures",
@@ -1362,7 +1362,7 @@
       "num": 27,
       "title": "Data Structures & Algorithms",
       "slug": "dsa",
-      "priority": "P1",
+      "priority": "P0",
       "subtopics": [
         {
           "title": "Complexity analysis (Big-O)",
@@ -1436,7 +1436,7 @@
       "num": 28,
       "title": "API Design",
       "slug": "api-design",
-      "priority": "P1",
+      "priority": "P0",
       "subtopics": [
         {
           "title": "REST principles, resource modelling & HTTP semantics",

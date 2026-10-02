@@ -243,44 +243,92 @@ databaseChangeLog:
 ??? question "Q1. Blue-green vs canary?"
     **Answer:** Blue-green: full parallel environment, switch all traffic at once, instant rollback by switching back; needs 2× capacity. Canary: shift a small percentage to the new version, analyse metrics, increase gradually; smaller blast radius, needs traffic splitting and good metrics.
 
+    **Interviewer listens for:** capacity cost, switch granularity, rollback speed, need for traffic splitting and metrics.
+
+    **Common wrong answer:** "Canary means testing on a few internal users." It means a small share of real production traffic.
+
 ??? question "Q2. How does a rolling update work in Kubernetes?"
     **Answer:** The Deployment creates new ReplicaSet pods and scales down old ones within `maxSurge`/`maxUnavailable` (25% each by default), gated by readiness probes; `kubectl rollout undo` reverts.
 
+    **Interviewer listens for:** new ReplicaSet, maxSurge/maxUnavailable, readiness gating, rollout undo.
+
+    **Common wrong answer:** "Kubernetes stops all old pods, then starts new ones." That is the `Recreate` strategy, not rolling.
+
 ??? question "Q3. What is a feature flag?"
     **Answer:** A runtime switch that enables code paths for some or all users without redeploying. Separates deploy from release; supports gradual rollout, experiments and kill switches.
+
+    **Interviewer listens for:** deploy vs release, gradual rollout, kill switch, experiments.
+
+    **Common wrong answer:** "A flag is a config property read at startup." Flags are evaluated at runtime, per user or request.
 
 ### Intermediate
 
 ??? question "Q4. What is expand/contract?"
     **Answer:** A sequence for backward-compatible schema changes: add the new structure, write to both and backfill, switch reads, then remove the old structure in a later release. Lets old and new code run together.
 
+    **Interviewer listens for:** expand, dual write + backfill, switch reads, contract later; old and new code coexist.
+
+    **Common wrong answer:** "Rename the column in one migration and deploy the app at the same time." Old pods still running will fail.
+
 ??? question "Q5. Why can't you just roll back after a database migration?"
     **Answer:** The old code may not understand the new schema or data written in the new shape. Unless the migration was backward compatible, rollback breaks; you roll forward instead.
+
+    **Interviewer listens for:** old code vs new schema, data written in the new shape, roll forward.
+
+    **Common wrong answer:** "Flyway can undo it." An undo script cannot bring back data or fix rows written in the new shape.
 
 ??? question "Q6. What is a dark launch / shadow traffic?"
     **Answer:** Mirroring real requests to a new version whose responses are discarded, to test behaviour and performance under real load without user impact. Side effects must be disabled.
 
+    **Interviewer listens for:** mirrored traffic, discarded responses, disabled side effects.
+
+    **Common wrong answer:** Shadowing a payment or email service without stubbing side effects.
+
 ??? question "Q7. What metrics drive canary analysis?"
     **Answer:** Error rate, latency percentiles, saturation and key business metrics, compared to the stable baseline over the same window, with thresholds and minimum sample sizes.
+
+    **Interviewer listens for:** RED + saturation + business metrics, baseline comparison, thresholds, minimum sample size.
+
+    **Common wrong answer:** "If there are no 500 errors, the canary is good." Latency and business metrics catch most bad releases.
 
 ### Senior
 
 ??? question "Q8. How do you manage feature flag debt?"
     **Answer:** Classify flags (release, ops, experiment, permission), assign owners and expiry dates, remove release flags soon after full rollout, test both paths while they exist, and monitor flag counts and age.
 
+    **Interviewer listens for:** flag types, owner and expiry, removal after rollout, test both paths, monitor age.
+
+    **Common wrong answer:** "Flags are free; leave them in." Old flags create untested code paths and dangerous combinations.
+
 ??? question "Q9. How do blue-green and Kafka consumers interact?"
     **Answer:** Both colours may consume the same topics. With the same group id, partitions split across versions; with different group ids, messages are processed twice. Run consumers only in the live colour or pause the idle one.
 
+    **Interviewer listens for:** same group id splits partitions, different ids double-process, consume only in live colour.
+
+    **Common wrong answer:** Assuming blue-green only affects HTTP traffic and forgetting the idle colour is still consuming messages.
+
 ??? question "Q10. When would you choose blue-green over canary?"
     **Answer:** When you need an all-at-once switch with instant rollback (e.g. coordinated client and server changes, low traffic where canary stats are weak) and can afford double capacity; canary when traffic is high enough to judge and you want minimal blast radius.
+
+    **Interviewer listens for:** instant all-or-nothing switch, coordinated changes, low-traffic stats, capacity budget.
+
+    **Common wrong answer:** "Blue-green is always safer." It exposes 100% of users at once.
 
 ### Scenario-based
 
 ??? question "Q11. A release increased error rates 10 minutes after full rollout. What should have caught it, and what do you do now?"
     **Answer:** Now: roll back (or kill-switch the feature) and verify recovery. Prevention: canary with automated analysis and longer bake time, flags for risky changes, and better pre-production tests. Post-incident: blameless review and add the missing signal.
 
+    **Interviewer listens for:** roll back first, then prevention: canary analysis, bake time, flags, blameless review.
+
+    **Common wrong answer:** Debugging the root cause in production while the error rate is still elevated.
+
 ??? question "Q12. You need to rename a column used by three services. Plan it."
     **Answer:** Expand: add the new column, update writers to write both, backfill. Update readers to use the new column (each service on its own schedule). Contract: stop writing the old, then drop it in a later release once no reader uses it. Coordinate via contract tests.
+
+    **Interviewer listens for:** expand/contract steps, per-service schedule, later drop, contract tests.
+
+    **Common wrong answer:** One migration that renames the column, coordinated with a release of all three services at the same minute.
 
 ## Cheat sheet
 

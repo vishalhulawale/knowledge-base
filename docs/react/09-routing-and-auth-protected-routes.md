@@ -259,44 +259,92 @@ function safeReturnTo(raw: string | null): string {
 ??? question "Q1. How does client-side routing work?"
     **Answer:** The router listens to the History API, matches the URL to a route config and renders the matching components without reloading; links push new history entries. The server must return the app for deep links.
 
+    **Interviewer listens for:** History API, route matching, no reload, server fallback for deep links.
+
+    **Common wrong answer:** Forgetting the server rewrite, so refreshing `/claims/42` returns a 404.
+
 ??? question "Q2. What are nested routes and Outlet?"
     **Answer:** Child routes render inside a parent layout at the `<Outlet/>` position, so layouts (nav, tabs) are shared and only the inner part changes.
 
+    **Interviewer listens for:** layout reuse, Outlet placement, only inner part changes.
+
+    **Common wrong answer:** Repeating the nav and layout inside every page component.
+
 ??? question "Q3. How do you protect a route?"
     **Answer:** Check authentication before rendering (middleware or loader with redirect in data mode, a guard component in declarative mode), redirect to login with a return URL, and rely on the API for real authorisation.
+
+    **Interviewer listens for:** check before render, redirect with return URL, API is the real authority.
+
+    **Common wrong answer:** "Hiding the route is enough security." The API must enforce authorisation.
 
 ### Intermediate
 
 ??? question "Q4. What are loaders and actions?"
     **Answer:** Route-level functions: loaders fetch data before render (in parallel across matched routes); actions handle form submissions and trigger loader revalidation.
 
+    **Interviewer listens for:** route-level data before render, parallel loading, actions with revalidation.
+
+    **Common wrong answer:** Fetching in useEffect inside each nested route, which creates waterfalls.
+
 ??? question "Q5. What is React Router middleware?"
     **Answer:** Functions on routes that run parent-to-child before loaders/actions (and after for responses), can redirect, and pass typed values via context. Stable in v8; client and server variants.
+
+    **Interviewer listens for:** parent-to-child order, runs before loaders/actions, redirect, typed context, v8 stable.
+
+    **Common wrong answer:** Thinking middleware runs on the API server only. Client middleware runs in the browser.
 
 ??? question "Q6. Why put state in search params?"
     **Answer:** Filters, sorting and pagination become shareable, bookmarkable, survive refresh and back/forward navigation.
 
+    **Interviewer listens for:** shareable, bookmarkable, survives refresh, back/forward.
+
+    **Common wrong answer:** Keeping filters only in component state, so refresh or a shared link loses them.
+
 ??? question "Q7. How do you avoid flashing protected content?"
     **Answer:** Decide auth before rendering (middleware/loader), or show a loading state until session status is known in a guard component.
+
+    **Interviewer listens for:** decide before render, loading state until session known.
+
+    **Common wrong answer:** Rendering the page and redirecting in useEffect, which flashes protected content.
 
 ### Senior
 
 ??? question "Q8. What changed in React Router v7 and v8?"
     **Answer:** v7 merged Remix (framework mode, type-safe route modules) and offered future flags; v8 removed `react-router-dom`, made middleware and split route modules default, requires React 19.2+, Node 22+, Vite 7+ for framework mode, and renamed `data` to `loaderData` in meta/matches.
 
+    **Interviewer listens for:** Remix merge, framework mode, type-safe modules, v8 requirements and removals.
+
+    **Common wrong answer:** "React Router 7 is a rewrite with a new API." Library (declarative) mode is still largely compatible with v6.
+
 ??? question "Q9. Where should tokens live in an SPA?"
     **Answer:** Preferably not in the browser (BFF with HttpOnly cookie). Otherwise in memory with short lifetimes and refresh via the IdP library; never localStorage.
 
+    **Interviewer listens for:** BFF + HttpOnly cookie, in-memory fallback, short lifetimes, XSS exposure of localStorage.
+
+    **Common wrong answer:** "localStorage is fine with HTTPS." HTTPS does not stop XSS from reading it.
+
 ??? question "Q10. How do you route across micro-frontends?"
     **Answer:** Shell owns top-level routes and history; each micro-frontend lazy-loads under a prefix with relative routes; one history owner; shared auth via the shell.
+
+    **Interviewer listens for:** shell owns history, prefix per micro-frontend, relative routes, shared auth.
+
+    **Common wrong answer:** Each micro-frontend creating its own BrowserRouter, which fights over history.
 
 ### Scenario-based
 
 ??? question "Q11. A member's session expires while filling a form."
     **Answer:** Warn before idle timeout; on 401 save the draft locally (no PHI in persistent storage if policy forbids), re-authenticate silently if possible, otherwise redirect to login with returnTo and restore.
 
+    **Interviewer listens for:** idle warning, draft preservation within PHI policy, silent re-auth, returnTo.
+
+    **Common wrong answer:** Redirecting to login on 401 and losing everything the member typed.
+
 ??? question "Q12. A pharmacist-only page is reachable by members typing the URL."
     **Answer:** Add a role check in the route middleware/loader (403 page), hide the link, and, most importantly, ensure the API rejects member tokens for pharmacist operations.
+
+    **Interviewer listens for:** route-level role check, hidden link, API rejects the token.
+
+    **Common wrong answer:** "Hide the menu item." Typing the URL or calling the API still works.
 
 ## Cheat sheet
 

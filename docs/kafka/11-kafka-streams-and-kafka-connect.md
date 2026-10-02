@@ -299,11 +299,29 @@ Also trimmed: the S3 sink additionally requires `s3.region`, `storage.class` (`i
 ### Scenario-based
 
 ??? question "Q11. A windowed aggregation is missing some events. Why?"
-    **Answer:** I'd check in this order. (1) Late records: anything arriving after window end + grace is dropped. Confirm with the task-level `dropped-records-total` metric and the WARN log line. (2) Wrong timestamps: windows use the record timestamp from the `TimestampExtractor`, so if producers set it wrongly or the topic uses `LogAppendTime`, events land in the wrong window. Extract event time from the payload. (3) Stream time only advances with new records, so one partition replaying old data after another has moved ahead makes its records look late. With `suppress` or `onWindowClose`, a quiet topic never closes the last window, so the result appears "missing". (4) Upstream of the window: the `filter`, a deserialization handler set to log-and-continue, or a re-key that sends records to a different key than expected. Fixes: size the grace period from the observed lateness, fix the extractor, and reprocess with the application reset tool if the history must be corrected.
+    **Answer:** I'd check in this order:
+
+    1. Late records: anything arriving after window end + grace is dropped. Confirm with the task-level `dropped-records-total` metric and the WARN log line.
+    2. Wrong timestamps: windows use the record timestamp from the `TimestampExtractor`, so if producers set it wrongly or the topic uses `LogAppendTime`, events land in the wrong window. Extract event time from the payload.
+    3. Stream time only advances with new records, so one partition replaying old data after another has moved ahead makes its records look late. With `suppress` or `onWindowClose`, a quiet topic never closes the last window, so the result appears "missing".
+    4. Upstream of the window: the `filter`, a deserialization handler set to log-and-continue, or a re-key that sends records to a different key than expected. Fixes: size the grace period from the observed lateness, fix the extractor, and reprocess with the application reset tool if the history must be corrected.
 
     **Interviewer listens for:** grace period, event time vs processing time, the stream-time concept, a metric to confirm instead of guessing.
 
     **Common wrong answer:** "Kafka lost the messages" or "increase the window size".
+
+??? question "Q12. A Kafka Streams app takes 40 minutes to become ready after every deploy. Why, and how do you fix it?"
+    **Answer:** It is **restoring local state** (RocksDB) from the changelog topics because the new pods start with empty disks. Fixes:
+
+    - Keep state on **persistent volumes** (StatefulSet) so restarts reuse local RocksDB and only replay the tail.
+    - Set `num.standby.replicas=1` so a warm copy exists on another instance and failover is quick.
+    - Use **static membership** (`group.instance.id`) so a quick restart does not trigger a full rebalance and task movement.
+    - Keep changelogs compacted and avoid huge unbounded stores (windowed stores with retention).
+    - Watch restore progress with the `StateRestoreListener` and lag metrics.
+
+    **Interviewer listens for:** local RocksDB vs changelog, persistent volumes, standby replicas, static membership, store retention.
+
+    **Common wrong answer:** "Add more partitions or more pods." More instances do not make a cold restore faster; they still read the changelogs from the start.
 
 ## Cheat sheet
 

@@ -413,10 +413,14 @@ class ClaimsUpstreamPropertiesTest {
 
     **Interviewer listens for:** validation at startup, immutability with records, a single place for each key.
 
+    **Common wrong answer:** "@Value is deprecated." It is fine for single values; typed properties are better for groups.
+
 ??? question "Q4. What is a profile and how do you activate one?"
     **Answer:** A named logical group that activates extra config (`application-{profile}.yml` or documents with `spring.config.activate.on-profile`) and beans marked `@Profile`. Activate with `spring.profiles.active` as a property, `--spring.profiles.active=prod`, or the `SPRING_PROFILES_ACTIVE` env var. If none is active, `default` is used.
 
     **Common wrong answer:** "Profiles are a Maven feature" (Maven profiles are a separate build-time concept).
+
+    **Interviewer listens for:** named config groups, profile files and on-profile documents, activation methods.
 
 ??? question "Q5. What is relaxed binding? Which env var sets `claims.upstream.api-key`?"
     **Answer:** Boot matches different naming styles to the same property: kebab-case, camelCase, underscore and upper-case env var form. For env vars the documented rule is: replace dots with underscores, remove dashes, upper-case. So the canonical answer is `CLAIMS_UPSTREAM_APIKEY`. In practice `CLAIMS_UPSTREAM_API_KEY` also binds, because the binder tries a legacy form in which dashes become underscores (the same reason `SPRING_DATASOURCE_DRIVER_CLASS_NAME` works).
@@ -434,26 +438,42 @@ class ClaimsUpstreamPropertiesTest {
 
     **Interviewer listens for:** walking the order calmly rather than guessing.
 
+    **Common wrong answer:** "9090, because the prod profile file wins." Environment variables beat packaged files.
+
 ??? question "Q7. `spring.profiles.active=dev,local`. Both `application-dev.yml` and `application-local.yml` define `app.url`. Which wins?"
     **Answer:** `local`. Profile-specific files follow a last-wins rule in the order the profiles are listed. Both still beat plain `application.yml`.
+
+    **Interviewer listens for:** last listed profile wins, both beat the base file.
+
+    **Common wrong answer:** "dev, because it is listed first."
 
 ??? question "Q8. How does constructor binding work in Boot 3, and why prefer it?"
     **Answer:** If a `@ConfigurationProperties` class or record has exactly one parameterised constructor, Boot binds through it. `@ConstructorBinding` is needed only to pick between several constructors. Defaults come from `@DefaultValue`. The result is immutable, so nobody can change configuration at runtime, and the object is always fully initialised. Such a class must be registered with `@EnableConfigurationProperties` or `@ConfigurationPropertiesScan`, not `@Component`.
 
     **Interviewer listens for:** records, immutability, the Boot 2.x versus 3.x difference (in 2.x the annotation was required at type or constructor level).
 
+    **Common wrong answer:** "You always need @ConstructorBinding in Boot 3." Only with several constructors.
+
 ??? question "Q9. How do you make the application fail at startup when configuration is wrong?"
     **Answer:** Put `@Validated` on the properties class with constraints such as `@NotBlank`, `@Min`, `@Positive`, and `@Valid` on nested objects. Add `spring-boot-starter-validation`. Binding then throws `BindValidationException` and the context does not start. Also avoid defaults for mandatory production values, and do not mark critical imports as `optional:`.
 
     **Common wrong answer:** "I null-check the value in the service method." That fails at the first request, possibly hours after deployment.
+
+    **Interviewer listens for:** @Validated + constraints, fail at startup, validation starter.
 
 ??? question "Q10. What changed in config file processing in Spring Boot 2.4?"
     **Answer:** The `ConfigData` API replaced the old `ConfigFileApplicationListener`. It introduced `spring.config.import`, `spring.config.activate.on-profile` (replacing `spring.profiles`), `spring.profiles.group`, `configtree:` and the `optional:` prefix. Documents are processed in a simple order, and profile-specific documents may no longer set `spring.profiles.active` or `include`.
 
     **Interviewer listens for:** awareness that old blog posts using `spring.profiles` or `bootstrap.yml` describe the legacy model.
 
+    **Common wrong answer:** "Nothing important changed." spring.profiles inside files stopped working the old way.
+
 ??? question "Q11. Gotcha: base `application.yml` has `app.hosts: [a, b, c]`. `application-prod.yml` has `app.hosts: [x]`. What is the list in prod? What if these were maps?"
     **Answer:** The list is `[x]`. A list from a higher-priority source replaces the lower one completely. Maps are different: entries are merged key by key, with the higher-priority source winning on conflicts.
+
+    **Interviewer listens for:** lists are replaced, maps are merged.
+
+    **Common wrong answer:** "[a, b, c, x]."
 
 ### Senior
 
@@ -461,6 +481,8 @@ class ClaimsUpstreamPropertiesTest {
     **Answer:** `SpringApplication.run` creates the `Environment` and adds system properties, env vars and command-line args. `EnvironmentPostProcessor`s run. `ConfigDataEnvironmentPostProcessor` loads `application.*`, resolves imports, works out active profiles, then loads profile-specific documents. The context is created. `@EnableConfigurationProperties` or the scan registers bean definitions. When each bean is created, the `Binder` reads `ConfigurationPropertySource`s, applies relaxed name matching, converts types through the `ConversionService`, then runs validation. Constructor-bound types are instantiated by the binder itself. JavaBean types are bound by `ConfigurationPropertiesBindingPostProcessor` after instantiation.
 
     **Interviewer listens for:** environment before context, post-processors, the `Binder`, and that conditions in [auto-configuration](02-auto-configuration-and-starters.md) rely on this order.
+
+    **Common wrong answer:** "Properties are read when the bean is created from application.yml directly."
 
 ??? question "Q13. How do you manage secrets for Spring Boot services in a regulated environment?"
     **Answer:** Secrets never go into git, the jar or the image. Store them in a managed secret store (Vault, AWS Secrets Manager, Azure Key Vault) with encryption, access control per workload identity, rotation and audit logs. Deliver them through `spring.config.import`, mounted files read by `configtree:`, or the platform's CSI driver. Keep Actuator values masked, restrict `/env` and `/heapdump`, and never log properties objects that contain secrets. Plan rotation: either short-lived credentials or a rolling restart on change.
@@ -474,10 +496,14 @@ class ClaimsUpstreamPropertiesTest {
 
     **Interviewer listens for:** knowing that refresh does not rebuild everything, and a preference for gradual, reversible rollout.
 
+    **Common wrong answer:** "Refresh is safe for any bean." Rebuilding stateful beans mid-traffic can drop work.
+
 ??? question "Q15. A team has 9 profiles and code full of `@Profile(\"prod\")`. What is wrong and how do you fix it?"
     **Answer:** Profile sprawl hides combinations nobody tests, and `@Profile("prod")` beans mean production runs code that no lower environment ever ran. Fix: keep one small profile per environment purely for values, move behaviour switches to explicit properties with `@ConditionalOnProperty`, externalise per-environment values to the platform, use profile groups for convenience, and make lower environments as production-like as possible.
 
     **Interviewer listens for:** dev/prod parity, testability, feature toggles as properties.
+
+    **Common wrong answer:** "Add a tenth profile for the new case."
 
 ### Scenario-based
 
@@ -492,15 +518,21 @@ class ClaimsUpstreamPropertiesTest {
 
     **Interviewer listens for:** a method based on precedence, and use of Actuator origin tracking instead of trial and error.
 
+    **Common wrong answer:** "The YAML is wrong." A higher-priority source (env var, config server, secret) is overriding it.
+
 ??? question "Q17. After a deployment, a timeout you set to 800ms is not applied. The key in the ConfigMap is `CLAIMS_UPSTREAM_TIME_OUT`. Why?"
     **Answer:** The field is `timeout`, so the env var must be `CLAIMS_UPSTREAM_TIMEOUT`. `TIME_OUT` maps to `claims.upstream.time.out`, which matches nothing, and unknown properties are ignored by default, so the default of 2s is used without any error. Fix the name. To prevent a repeat, log effective non-secret config at startup, add a test with `ApplicationContextRunner`, and consider `ignoreUnknownFields = false` for properties that come only from files.
 
     **Interviewer listens for:** silent-ignore behaviour and a prevention step, not only the fix.
 
+    **Common wrong answer:** "Spring does not read environment variables in Kubernetes."
+
 ??? question "Q18. You must ship one Docker image to dev, QA and prod, in two regions, with different Kafka brokers and credentials. Design the configuration."
     **Answer:** Package only safe defaults and structure in `application.yml`. Define typed, validated `@ConfigurationProperties` per integration. Activate a profile per environment with `SPRING_PROFILES_ACTIVE` for non-secret values that are stable, or supply everything through ConfigMaps. Region-specific values come from env vars set by the deployment tooling (Helm or Terraform). Secrets come from a secret store, mounted and read with `configtree:` or imported. No `optional:` on mandatory production imports, so a missing secret fails the rollout, and readiness probes stop traffic reaching a broken pod. Config changes go through pull requests and are rolled out gradually.
 
     **Interviewer listens for:** build once, fail fast, secrets separated from config, auditability.
+
+    **Common wrong answer:** Building one image per environment with the config baked in.
 
 ## Cheat sheet
 

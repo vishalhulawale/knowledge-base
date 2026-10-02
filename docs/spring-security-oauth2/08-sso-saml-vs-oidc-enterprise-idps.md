@@ -443,20 +443,36 @@ Known incidents worth being able to describe:
 
     **Interviewer listens for:** format (XML vs JWT), channel (front vs back), use cases (browser only vs APIs too), and a balanced view rather than "SAML is bad".
 
+    **Common wrong answer:** "SAML is obsolete and never used." It is still common in enterprises and vendor tools.
+
 ??? question "Q3. What is the difference between Active Directory, AD FS and Entra ID?"
     **Answer:** Active Directory Domain Services is an on-premises directory that stores users and groups and authenticates with Kerberos, NTLM and LDAP inside the network. AD FS is an on-premises federation server that sits in front of AD and issues SAML, WS-Federation or OIDC tokens to web applications. Entra ID is Microsoft's cloud identity service that natively speaks OIDC, OAuth2 and SAML. It is a different product from AD, commonly synchronised with it through Entra Connect.
 
     **Common wrong answer:** "Entra ID is Active Directory hosted in Azure." It has no domain controllers, Kerberos or group policy in the classic sense.
+
+    **Interviewer listens for:** on-prem directory vs on-prem federation vs cloud identity platform.
 
 ??? question "Q4. What does a federation server such as PingFederate do, and why not let the application talk to AD directly over LDAP?"
     **Answer:** It authenticates the user against the directory and then issues standard web tokens (SAML assertions, OIDC ID tokens, OAuth2 access tokens) to applications. Talking to LDAP directly means the application collects the password, every application needs network access and a service account in the directory, there is no SSO, and MFA or conditional access has to be rebuilt in every application. Federation keeps credentials in one place and gives each application only a signed, audience-restricted statement.
 
     **Interviewer listens for:** the application never sees the password, central MFA and policy, reduced blast radius.
 
+    **Common wrong answer:** "Apps should query LDAP directly for login." That spreads passwords and directory access everywhere.
+
 ### Intermediate
 
 ??? question "Q5. What must a service provider validate in a SAML response?"
-    **Answer:** (1) The XML signature, using a certificate from trusted IdP metadata, and that the signature covers the assertion actually being read. (2) Issuer equals the expected IdP entity ID. (3) Audience restriction contains the SP's entity ID. (4) `Destination` and `Recipient` equal the SP's ACS URL. (5) `NotBefore` and `NotOnOrAfter` with small clock skew. (6) `InResponseTo` matches a request this session actually sent. (7) The assertion ID has not been seen before, to stop replay. Use a maintained library (OpenSAML through Spring Security) and do not parse XML by hand.
+    **Answer:**
+
+    1. The XML signature, using a certificate from trusted IdP metadata, and that the signature covers the assertion actually being read.
+    2. Issuer equals the expected IdP entity ID.
+    3. Audience restriction contains the SP's entity ID.
+    4. `Destination` and `Recipient` equal the SP's ACS URL.
+    5. `NotBefore` and `NotOnOrAfter` with small clock skew.
+    6. `InResponseTo` matches a request this session actually sent.
+    7. The assertion ID has not been seen before, to stop replay.
+
+    Use a maintained library (OpenSAML through Spring Security) and do not parse XML by hand.
 
     **Interviewer listens for:** audience and recipient, replay protection, "signature covers what you read".
 
@@ -465,18 +481,30 @@ Known incidents worth being able to describe:
 ??? question "Q6. SP-initiated vs IdP-initiated SSO. Which is safer and why?"
     **Answer:** SP-initiated: the application sends an `AuthnRequest` and later checks that the response's `InResponseTo` matches it, so unsolicited or stolen responses are rejected. IdP-initiated: the IdP sends a response with no prior request, so there is nothing to correlate. A stolen assertion can be injected into a victim's or attacker's browser, similar to login CSRF. SP-initiated is safer. If the business wants a portal tile, point the tile at the application's own login URL so it starts an SP-initiated flow.
 
+    **Interviewer listens for:** InResponseTo binding, unsolicited responses, replay risk.
+
+    **Common wrong answer:** "IdP-initiated is safer because the IdP starts it."
+
 ??? question "Q7. A user logs out of your application, clicks Login and is signed in again without a prompt. Why, and is it a bug?"
     **Answer:** Logout ended only the application session. The IdP session cookie is still valid, so the next redirect returns a new code or assertion silently. Whether it is a bug depends on requirements. To really sign out, use RP-initiated logout in OIDC (redirect to the IdP's `end_session_endpoint` with an `id_token_hint`, which Spring does with `OidcClientInitiatedLogoutSuccessHandler`) or SAML Single Logout. To also end sessions in other applications, the IdP needs back-channel or front-channel logout to each of them. To force a prompt for one sensitive action without logging out, request `prompt=login` or use `max_age` and verify the `auth_time` claim.
 
     **Interviewer listens for:** two session layers, named logout mechanisms, and awareness that single logout is best effort.
+
+    **Common wrong answer:** "The logout is broken." The IdP session is still valid; that is single sign-on working.
 
 ??? question "Q8. Your Spring resource server validates JWTs from PingFederate. PingFederate rotates its signing key at 2 a.m. What happens?"
     **Answer:** Nothing visible, if configured from the issuer or JWKS URI. Each JWT header carries a `kid`. The Nimbus decoder caches the JWK set, and when it sees a `kid` that is not in the cache it refetches the JWKS and finds the new key. Good IdPs also publish the new key before they start signing with it and keep the old one until old tokens expire. It breaks only if someone pinned a single public key in configuration, or if the services cannot reach the JWKS endpoint.
 
     **Common wrong answer:** "We redeploy with the new certificate." That is the SAML-with-static-certificate habit carried over.
 
+    **Interviewer listens for:** kid-based key selection, JWKS refetch on unknown kid, overlap window.
+
 ??? question "Q9. Gotcha: the access token from Entra ID has no `groups` claim for one senior user, but it does for everyone else. What is going on?"
     **Answer:** Group overage. When the user belongs to more groups than fit in the token (over 200 for JWTs, 150 for SAML tokens), Entra ID leaves out `groups` and includes a pointer telling the application to query Microsoft Graph. The application must handle it: call Graph for membership, or avoid the problem by using app roles, or by configuring the token to include only groups assigned to the application. The code must fail closed: missing claim means no roles, not all roles.
+
+    **Interviewer listens for:** group overage, _claim_names/hasgroups, Graph lookup or app roles.
+
+    **Common wrong answer:** "The user is not in the groups." They are in too many to fit.
 
 ### Senior
 
@@ -485,39 +513,71 @@ Known incidents worth being able to describe:
 
     **Interviewer listens for:** not forcing one protocol everywhere, audience separation, where tokens live in the browser, deprovisioning.
 
+    **Common wrong answer:** "Use SAML for everything for consistency." SPAs and APIs fit OIDC/OAuth2 better.
+
 ??? question "Q11. JWT access tokens or reference tokens with introspection? PingFederate supports both."
     **Answer:** JWTs are validated locally with a cached public key, so they add no latency and no runtime dependency on the IdP, but they cannot be revoked before expiry without extra machinery, and they expose claims to anyone who holds them. Reference tokens are random strings. The resource server calls the introspection endpoint, so revocation is immediate and nothing leaks, at the cost of a network call (cache results for a short time) and a hard dependency on IdP availability. A common split: reference tokens for external or third-party clients, exchanged at the gateway for short-lived internal JWTs, and JWTs between internal services. Details are in [JWT](04-jwt-structure-signing-validation-revocation.md).
+
+    **Interviewer listens for:** local validation vs immediate revocation, latency and IdP dependency trade-off.
+
+    **Common wrong answer:** "Reference tokens are always more secure."
 
 ??? question "Q12. What is XML signature wrapping and how do you defend against it?"
     **Answer:** XML-DSig signs a referenced element, not the whole document. In a wrapping attack the attacker keeps the original signed assertion somewhere in the document so the signature still verifies, and adds a second, forged assertion in the place where the application logic reads the user identity. The verifier and the consumer look at different elements. Defences: use a hardened, current library that reads identity only from the element whose signature it verified, validate against the SAML schema, reject documents with more than one assertion or with duplicate IDs, require signed assertions, and patch quickly (this bug class reappeared in ruby-saml in 2024). JWT avoids it structurally because the signature covers the exact bytes of header and payload.
 
     **Interviewer listens for:** "signed element is not the element that was read", and reliance on libraries rather than custom parsing.
 
+    **Common wrong answer:** "Validate the signature and you are safe." You must also check that the signed element is the one you use.
+
 ??? question "Q13. Why should you not use `email` as the user key, and what do you use instead?"
     **Answer:** Email is mutable (marriage, rebranding, domain migration), can be reassigned to a new employee, and in some IdPs it is user-editable or unverified. In multi-tenant setups an attacker can set the email attribute in their own tenant to the victim's address (the nOAuth issue). Key on the pair **issuer + `sub`**, which OIDC guarantees to be stable and unique within the issuer. With Entra ID, use `tid` + `oid`. In SAML ask the IdP for a persistent NameID or an immutable attribute such as an employee ID or object GUID. Store email only as a display attribute.
+
+    **Interviewer listens for:** stable immutable identifier, issuer-scoped, mutable and reassigned emails.
+
+    **Common wrong answer:** "Email is unique, so it is a good key."
 
 ??? question "Q14. A partner company wants their employees to log in to your application with their own IdP. How do you design it?"
     **Answer:** Do not integrate each partner into the application. Make your IdP (PingFederate or similar) a **broker**: it has one inbound trust per partner (SAML or OIDC, whatever they offer) and one outbound OIDC contract to your application. Add home-realm discovery (pick the partner by email domain or a tenant-specific URL). Normalise claims in the broker so the application always sees the same shape. Namespace identities by issuer so `sub=123` from partner A never collides with partner B. Never trust partner-asserted roles blindly: map them to your roles and cap what any partner can grant. Add just-in-time provisioning plus a deprovisioning story, and a certificate rotation process per partner.
 
+    **Interviewer listens for:** IdP as broker, per-partner trust, claim mapping, the app sees one IdP.
+
+    **Common wrong answer:** "Add each partner IdP to the application's configuration."
+
 ### Scenario-based
 
 ??? question "Q15. After a release, SAML login works locally but in Kubernetes users loop between the application and the IdP. How do you debug it?"
-    **Answer:** A loop means the application received the response but did not end up with an authenticated session. Check in this order. (1) **Session affinity or shared sessions:** the `AuthnRequest` was saved in the session on pod A and the response landed on pod B. Use Spring Session with Redis or store the request outside the pod-local session. (2) **`SameSite`:** the cross-site POST to the ACS did not carry the session cookie. (3) **URL mismatch behind the ingress:** `Destination`/`Recipient` is `https://...` but the application thinks it is `http://...`, so configure forwarded headers. (4) **Clock skew** on some nodes. (5) **Certificate changed** on the IdP. Turn on `org.springframework.security.saml2` debug logging: Spring reports the exact validation error, such as an invalid `InResponseTo` or an invalid destination. A SAML tracer browser extension shows the decoded request and response.
+    **Answer:** A loop means the application received the response but did not end up with an authenticated session. Check in this order:
+
+    1. **Session affinity or shared sessions:** the `AuthnRequest` was saved in the session on pod A and the response landed on pod B. Use Spring Session with Redis or store the request outside the pod-local session.
+    2. **`SameSite`:** the cross-site POST to the ACS did not carry the session cookie.
+    3. **URL mismatch behind the ingress:** `Destination`/`Recipient` is `https://...` but the application thinks it is `http://...`, so configure forwarded headers.
+    4. **Clock skew** on some nodes.
+    5. **Certificate changed** on the IdP. Turn on `org.springframework.security.saml2` debug logging: Spring reports the exact validation error, such as an invalid `InResponseTo` or an invalid destination. A SAML tracer browser extension shows the decoded request and response.
 
     **Interviewer listens for:** a systematic list, knowledge of where the request state is stored, reading the actual validation error.
 
+    **Common wrong answer:** "The IdP is misconfigured." Session affinity, cookie or proxy headers are usually wrong.
+
 ??? question "Q16. An employee is terminated at 10:00 and disabled in AD. At 10:20 they can still call your API. Explain, and reduce the window."
     **Answer:** Disabling the account stops new logins and, if the IdP checks the directory on refresh, new access tokens. But a JWT access token issued at 09:50 with a one-hour lifetime is self-contained and stays valid until 10:50 because resource servers validate it locally. Options: shorten the access token lifetime (5 to 15 minutes) and make sure refresh re-checks account status. Use reference tokens with introspection for sensitive APIs. Have the IdP send back-channel logout or a revocation event, and keep a small deny list of `sub` or `jti` values in Redis, with a TTL equal to the token lifetime, checked by the gateway. Kill the application session too, since a server-side session can outlive the tokens. The trade-off is latency and IdP dependency versus revocation speed.
+
+    **Interviewer listens for:** token lifetime, revocation at the IdP, short TTLs, events-based revocation.
+
+    **Common wrong answer:** "AD should block the token instantly." Issued JWTs are self-contained.
 
 ??? question "Q17. Your API suddenly accepts tokens that were issued for a different application in the same company. What went wrong?"
     **Answer:** The API validates signature and issuer but not **audience**. Every application at the company gets tokens signed by the same IdP key, so signature and issuer alone only prove "issued by our IdP", not "issued for me". A token for a low-privilege application can then be replayed against a high-privilege API (the confused deputy problem). Fix: configure the expected audience (`spring.security.oauth2.resourceserver.jwt.audiences` or a `JwtClaimValidator` on `aud`), have the IdP issue distinct audiences per API, and check scopes as well. Note that Spring's default validator built from the issuer checks timestamps and issuer only. Audience has to be configured explicitly.
 
     **Common wrong answer:** "The signing key was leaked." Nothing was leaked. The validation was incomplete.
 
+    **Interviewer listens for:** audience validation missing, same issuer and key for all apps.
+
 ??? question "Q18. The identity team announces a migration from PingFederate to Entra ID. What changes in your Spring services and what would you check first?"
     **Answer:** If the services are standards based, mostly configuration: new issuer URI, new JWKS, new client IDs and secrets, new redirect URIs registered. The risky part is **claims**. `sub` values will be different (in Entra ID `sub` is pairwise per application), so any data keyed by the old subject needs a mapping through a stable attribute such as employee ID. Group claims change format (object IDs instead of DNs or names) and may hit overage, so the group-to-role map must be rebuilt. Scope and audience formats differ (`api://...`). The token version (v1 vs v2) changes the issuer string. Plan: put claim mapping behind one converter class, run both issuers in parallel with `JwtIssuerAuthenticationManagerResolver` during the cut-over, test with real users who are in many groups, and migrate client by client.
 
     **Interviewer listens for:** identity key continuity, dual-issuer transition, claim differences rather than "just change the URL".
+
+    **Common wrong answer:** "Rewrite the security code for Entra ID." Standards-based services mostly need config changes.
 
 ## Cheat sheet
 

@@ -319,9 +319,16 @@ classDiagram
 
     **Common wrong answer:** "`synchronized` on the whole service" (correct, but kills concurrency, so mention the trade-off).
 
+??? question "Q7. How do you design the public API (method signatures) of your classes in an LLD round?"
+    **Answer:** Start from the **use cases**, not the fields. Write the calls the client makes: `ParkingLot.park(Vehicle): Ticket`, `ParkingLot.unpark(TicketId): Receipt`. Use domain types instead of primitives (`TicketId`, `Money`). Return results or throw **specific** exceptions (`NoSpotAvailableException`). Keep methods small and intention-revealing, and make mutation explicit. Hide internals: callers should not reach `lot.getFloors().get(2).getSpots()`.
+
+    **Interviewer listens for:** use-case first, domain types, explicit failures, encapsulation (Law of Demeter).
+
+    **Common wrong answer:** Generating getters and setters for every field and calling that the API.
+
 ### Senior
 
-??? question "Q7. And across multiple instances?"
+??? question "Q8. And across multiple instances?"
     **Answer:**
     - Move the invariant to shared storage: a unique constraint on `(show_id, seat_id)` in a holds or bookings table, inserted for all seats in one transaction.
     - Or a conditional `UPDATE seat SET status='HELD' WHERE status='AVAILABLE'` checking the affected row count.
@@ -334,7 +341,7 @@ classDiagram
 
     **Common wrong answer:** "`synchronized` works across servers".
 
-??? question "Q8. How do you structure a machine-coding solution?"
+??? question "Q9. How do you structure a machine-coding solution?"
     **Answer:**
     - Packages: `model` (entities, value objects, enums), `service` (orchestration), `repository` (interfaces + in-memory implementations), `strategy` (pricing etc.), `exception`.
     - A driver or JUnit tests.
@@ -347,16 +354,23 @@ classDiagram
 
     **Common wrong answer:** one file with static methods.
 
+??? question "Q10. How do you make a design extensible without over-engineering it?"
+    **Answer:** Ask which **variation points** are likely (pricing rules, vehicle types, notification channels). Put an interface only at those points (Strategy, Factory) and keep everything else concrete. Say the trade-off aloud: "I am making pricing pluggable because you mentioned weekend rates; I am not abstracting storage because we only have in-memory." YAGNI applies to guessed requirements, not to requirements the interviewer already hinted at.
+
+    **Interviewer listens for:** identifies likely variation points, targeted abstraction, explains what is deliberately left concrete.
+
+    **Common wrong answer:** Interfaces and factories for every class "in case it changes", which makes the code hard to follow in 45 minutes.
+
 ### Scenario-based
 
-??? question "Q9. Twist: 'Now add dynamic pricing: weekends +20%, premium seats ×1.5, coupons.' How do you change the design?"
+??? question "Q11. Twist: 'Now add dynamic pricing: weekends +20%, premium seats ×1.5, coupons.' How do you change the design?"
     **Answer:** A `PricingStrategy` interface already exists. Add composable rules: a base price per seat type plus a chain of `PriceModifier`s (weekend, coupon) applied in order (Decorator or Chain). Each rule is a class, configured per show. Tests per rule. No changes to `Show` or the booking flow.
 
     **Interviewer listens for:** an extension with minimal change.
 
     **Common wrong answer:** "add `if` statements to `BookingService`".
 
-??? question "Q10. Your design is half done and the interviewer says it's too complex. What do you do?"
+??? question "Q12. Your design is half done and the interviewer says it's too complex. What do you do?"
     **Answer:** Ask which part feels complex, then simplify: collapse unnecessary interfaces, merge tiny classes with no variation, keep patterns only where variation is real. Explain the trade-off you'd revisit if requirements grow. Showing you can simplify is a strong senior signal.
 
     **Interviewer listens for:** responsiveness and judgement.

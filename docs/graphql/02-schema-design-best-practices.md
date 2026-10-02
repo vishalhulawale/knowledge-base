@@ -246,7 +246,15 @@ Window<Prescription> prescriptions(Member member, ScrollSubrange subrange) {
 ### Senior
 
 ??? question "Q8. GraphQL has no `/v2`. How do you ship a breaking change?"
-    **Answer:** By continuous evolution on a single endpoint. Because clients select fields explicitly, I can add the replacement alongside the old field without affecting anyone: (1) add the new field or type, (2) mark the old one `@deprecated` with a reason and a removal date, (3) measure usage per field and per client, which requires clients to identify themselves (client name/version headers) and field-level metrics or operation logs, (4) notify the owning teams and help them migrate, (5) remove only when usage is zero, or after an agreed window for clients I can't force to upgrade, such as old mobile app versions. CI schema checks compare the proposed schema against the current one, and ideally against real or registered operations, so a breaking change fails the build unless it is explicitly approved. If a field's semantics must change, I add a new field with a new name and don't change the meaning in place.
+    **Answer:** By continuous evolution on a single endpoint. Because clients select fields explicitly, I can add the replacement alongside the old field without affecting anyone:
+
+    1. Add the new field or type.
+    2. Mark the old one `@deprecated` with a reason and a removal date.
+    3. Measure usage per field and per client, which requires clients to identify themselves (client name/version headers) and field-level metrics or operation logs.
+    4. Notify the owning teams and help them migrate.
+    5. Remove only when usage is zero, or after an agreed window for clients I can't force to upgrade, such as old mobile app versions.
+
+    CI schema checks compare the proposed schema against the current one, and ideally against real or registered operations, so a breaking change fails the build unless it is explicitly approved. If a field's semantics must change, I add a new field with a new name and don't change the meaning in place.
 
     **Interviewer listens for:** add → deprecate → measure → remove; usage data as the gate; client identification; long-lived mobile clients; CI enforcement.
 
@@ -266,9 +274,16 @@ Window<Prescription> prescriptions(Member member, ScrollSubrange subrange) {
 
     **Common wrong answer:** "Yes, one root field per service keeps ownership clear", or generating the schema directly from JPA entities or upstream DTOs.
 
+??? question "Q11. How do you deprecate a field and know when it is safe to remove?"
+    **Answer:** Mark it `@deprecated(reason: "Use dispensedAt. Removal after 2026-12-31")` and add the replacement in the same release. Then **measure usage**: require named operations and a client name/version header, and record field usage per client (Apollo GraphOS, Hive, or your own instrumentation that walks the selection set). Contact the remaining clients, and only remove the field when usage is zero for an agreed window, including mobile app versions still in the wild. Schema checks in CI should block removal while operations still use it.
+
+    **Interviewer listens for:** @deprecated with a reason and date, field-level usage per client, mobile long tail, CI schema checks.
+
+    **Common wrong answer:** "Deprecate it and delete it next sprint." Old mobile versions keep sending the field for months.
+
 ### Scenario-based
 
-??? question "Q11. Mobile needs `prescriptions` sorted differently from web. How do you design it?"
+??? question "Q12. Mobile needs `prescriptions` sorted differently from web. How do you design it?"
     **Answer:** Add an `orderBy: PrescriptionOrder` argument on the same connection field: an input with a `field` enum and a `direction` enum, with a default that preserves current behaviour (so the change is additive). I expose only sorts that have a supporting index, and always append a unique tie-breaker so pagination is deterministic. Cursors must encode the sort key they were created with, and the server should reject a cursor used with a different `orderBy`. I don't create separate fields per client (`mobilePrescriptions`) and don't accept a free-form sort string.
 
     **Interviewer listens for:** one field with arguments instead of per-client fields; an enum of supported sorts; index backing; cursor validity tied to sort order; a backward-compatible default.

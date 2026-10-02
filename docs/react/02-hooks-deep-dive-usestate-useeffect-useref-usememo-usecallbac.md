@@ -242,50 +242,106 @@ export default [reactHooks.configs.flat.recommended];   // rules-of-hooks, exhau
 ??? question "Q1. What are the Rules of Hooks and why do they exist?"
     **Answer:** Call hooks only at the top level of function components or custom hooks, never conditionally or in loops. React identifies hook state by call order; changing the order mismatches state between renders.
 
+    **Interviewer listens for:** call order identifies hook state, top level only, no conditions or loops.
+
+    **Common wrong answer:** "Hooks can be called conditionally if you are careful." The order must be identical on every render.
+
 ??? question "Q2. What does the dependency array do?"
     **Answer:** Tells React when to re-run the effect: when any listed value changes (`Object.is`). Omit → every render; `[]` → mount/unmount only. List every reactive value the effect reads.
+
+    **Interviewer listens for:** Object.is comparison, every reactive value listed, omit vs empty array.
+
+    **Common wrong answer:** "An empty array means the effect runs once in all cases." In Strict Mode development it runs twice by design.
 
 ??? question "Q3. useMemo vs useCallback?"
     **Answer:** `useMemo` caches a computed value; `useCallback` caches a function. `useCallback(fn, d)` equals `useMemo(() => fn, d)`.
 
+    **Interviewer listens for:** value vs function, useCallback is useMemo returning a function.
+
+    **Common wrong answer:** "useCallback makes the function run faster." It only keeps the same reference between renders.
+
 ??? question "Q4. useRef vs useState?"
     **Answer:** Both persist across renders; changing a ref doesn't re-render and is mutable; state changes schedule a render. Use refs for values not shown in UI (DOM nodes, timer ids).
+
+    **Interviewer listens for:** mutable, no re-render, persistence, DOM and timer ids.
+
+    **Common wrong answer:** Reading `ref.current` during render to show UI. The UI will not update when it changes.
 
 ### Intermediate
 
 ??? question "Q5. useEffect vs useLayoutEffect?"
     **Answer:** useEffect runs after paint (non-blocking); useLayoutEffect runs after DOM mutations but before paint (blocking), for measuring layout or preventing flicker.
 
+    **Interviewer listens for:** timing relative to paint, blocking vs non-blocking, measurement and flicker.
+
+    **Common wrong answer:** "Use useLayoutEffect by default to be safe." It blocks painting and hurts responsiveness.
+
 ??? question "Q6. What is a stale closure? Give an example."
     **Answer:** A function captured an old render's values, e.g. an interval created with `[]` deps reading `count` sees the initial value forever. Fix with updater functions, correct deps, refs, or `useEffectEvent`.
+
+    **Interviewer listens for:** captured render values, interval example, updater/deps/refs/useEffectEvent fixes.
+
+    **Common wrong answer:** "Disable the exhaustive-deps lint rule." That hides the bug.
 
 ??? question "Q7. How do you avoid race conditions when fetching in an effect?"
     **Answer:** AbortController or an "ignore" flag in cleanup so stale responses don't set state; better, use a data library or framework loader.
 
+    **Interviewer listens for:** cleanup ignores stale responses, AbortController, data libraries.
+
+    **Common wrong answer:** "Use async directly in useEffect: `useEffect(async () => ...)`." An effect must return a cleanup function, not a promise.
+
 ??? question "Q8. When don't you need an effect?"
     **Answer:** Derived data (compute in render), resetting state on prop change (key), handling user events (event handler), sharing data between components (lift state), data fetching handled by a library.
+
+    **Interviewer listens for:** derived data, keys for reset, event handlers, lifted state, libraries for fetching.
+
+    **Common wrong answer:** Using an effect to update one state from another state.
 
 ### Senior
 
 ??? question "Q9. Why does Strict Mode run effects twice?"
     **Answer:** In development React mounts, unmounts and remounts once to verify effects clean up properly and are resilient, preparing for features that preserve state while unmounting (Activity).
 
+    **Interviewer listens for:** dev-only remount, verifies cleanup, prepares for state-preserving unmount.
+
+    **Common wrong answer:** "It is a React bug; remove StrictMode." It exposes missing cleanup that would break later.
+
 ??? question "Q10. What is useEffectEvent?"
     **Answer:** A hook (stable in 19.2) creating a non-reactive function that reads the latest props/state, called from effects. It removes values from dependency arrays that shouldn't re-trigger the effect.
+
+    **Interviewer listens for:** non-reactive, latest values, used inside effects, removes false dependencies.
+
+    **Common wrong answer:** "It is the same as useCallback." useCallback is reactive and changes when deps change.
 
 ??? question "Q11. Do you still need useMemo/useCallback with React Compiler?"
     **Answer:** Mostly not: the compiler memoises automatically and more precisely. Keep manual memoisation for escape hatches (effect dependencies with specific semantics) or code not compiled.
 
+    **Interviewer listens for:** compiler memoises automatically, manual memo only as escape hatch.
+
+    **Common wrong answer:** "The compiler makes every component fast." It removes needless re-renders, not slow logic or large lists.
+
 ??? question "Q12. What makes a good custom hook?"
     **Answer:** One clear purpose, a `use` name, explicit inputs and outputs, shares logic not state, no hidden lifecycle semantics, testable with `renderHook`.
+
+    **Interviewer listens for:** single purpose, use prefix, shares logic not state, testable.
+
+    **Common wrong answer:** "Two components using the same custom hook share its state." Each call gets its own state.
 
 ### Scenario-based
 
 ??? question "Q13. A component re-fetches in an infinite loop. Why?"
     **Answer:** The effect sets state and depends on an object/function recreated each render (or has no deps). Fix dependencies (primitives, memoised values, create inside effect) or move fetching to a data library.
 
+    **Interviewer listens for:** effect sets state and depends on a new object/function each render.
+
+    **Common wrong answer:** "Add a counter to stop it after N fetches." Fix the dependency instead.
+
 ??? question "Q14. A chat reconnects every time the theme changes. Fix it."
     **Answer:** The effect depends on theme only to show a notification. Move that into `useEffectEvent` so the effect depends only on roomId.
+
+    **Interviewer listens for:** useEffectEvent for non-reactive read of theme, effect depends only on roomId.
+
+    **Common wrong answer:** Removing theme from deps and suppressing the lint warning, which leaves a stale theme.
 
 ## Cheat sheet
 

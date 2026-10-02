@@ -230,32 +230,46 @@ offer:
 
     **Common wrong answer:** promising immediate joining without checking.
 
+??? question "Q7. Where do you see yourself in five years?"
+    **Answer:** Give a direction that fits the role you are interviewing for: growing from leading one team to shaping architecture across several, or deeper technical leadership in a domain like healthcare platforms or cloud security. Link it to what this company offers. Keep it honest and specific, and show you plan to stay long enough to deliver. *[confirm]*
+
+    **Interviewer listens for:** ambition that fits the role, specificity, link to this company, commitment.
+
+    **Common wrong answer:** "In your job" or a plan that clearly points away from the role ("starting my own company next year").
+
 ### Senior
 
-??? question "Q7. How do you evaluate whether a lead role is real or just a title?"
+??? question "Q8. How do you evaluate whether a lead role is real or just a title?"
     **Answer:** Ask about decision rights (architecture, hiring), team size and composition, who the role reports to, the success metrics, on-call and production ownership, hands-on expectations, and how leads are assessed. Check consistency across interviewers.
 
     **Interviewer listens for:** due diligence.
 
     **Common wrong answer:** "the title says lead, so it's fine".
 
-??? question "Q8. How do you negotiate when the base salary band is fixed?"
+??? question "Q9. How do you negotiate when the base salary band is fixed?"
     **Answer:** Negotiate other components: the level, joining bonus, equity grant or refreshers, variable target, review timing, a notice buyout, relocation, learning budget, remote flexibility. Present your case with scope and market data, and be clear about what matters most to you.
 
     **Interviewer listens for:** multi-dimensional thinking.
 
     **Common wrong answer:** "then nothing can be done".
 
+??? question "Q10. Your current employer makes a counter-offer. How do you handle it?"
+    **Answer:** Decide your position **before** you resign: list why you are leaving, and check whether money fixes those reasons. Usually it doesn't (scope, growth, technology, team). Thank them, be professional, and be consistent with what you told the new employer. If you do accept a counter-offer, tell the new company quickly and honestly. Do not use one offer to bargain for the other in bad faith. *[confirm]*
+
+    **Interviewer listens for:** clarity about reasons for leaving, professionalism, consistency, honesty with both companies.
+
+    **Common wrong answer:** Accepting the new offer and then using it only to get a raise, which damages trust on both sides.
+
 ### Scenario-based
 
-??? question "Q9. The recruiter asks for your current salary and you'd rather not share it. What do you say?"
+??? question "Q11. The recruiter asks for your current salary and you'd rather not share it. What do you say?"
     **Answer:** Where it's legal and appropriate, politely redirect: "I'd prefer to focus on the value of this role. Based on research for this level, my expectation is [range]." If company policy requires it, be truthful. Never inflate it.
 
     **Interviewer listens for:** a polite boundary plus honesty.
 
     **Common wrong answer:** inventing a number.
 
-??? question "Q10. You get an exploding offer: accept within 24 hours. What do you do?"
+??? question "Q12. You get an exploding offer: accept within 24 hours. What do you do?"
     **Answer:** Thank them, express interest, and ask for a reasonable extension (2–3 business days) to review the written details and discuss with family. Explain that you want to make a committed decision. If they refuse, weigh it against your criteria. Pressure is often a red flag.
 
     **Interviewer listens for:** a calm, principled response.

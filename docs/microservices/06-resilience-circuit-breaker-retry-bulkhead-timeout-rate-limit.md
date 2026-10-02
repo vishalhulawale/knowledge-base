@@ -248,53 +248,113 @@ Not ★, but directly relevant to "Owned the GraphQL Consumer Service end-to-end
 ??? question "Q1. What is a circuit breaker and what are its states?"
     **Answer:** A wrapper that tracks failures/slow calls to a dependency. CLOSED: calls pass and are measured. OPEN: calls fail fast for a wait period. HALF_OPEN: a few trial calls decide whether to close or reopen. It prevents wasting resources on a failing dependency and gives it time to recover.
 
+    **Interviewer listens for:** three states, failure and slow-call rates, fail fast, half-open trial calls, recovery time for the dependency.
+
+    **Common wrong answer:** "A circuit breaker retries failed calls." It does the opposite: it stops calling for a while.
+
 ??? question "Q2. Why are timeouts the first resilience pattern?"
     **Answer:** Without them, a slow dependency holds threads and connections indefinitely, exhausting the caller. Every other pattern relies on bounded waiting.
 
+    **Interviewer listens for:** unbounded waits exhaust threads/connections, every other pattern depends on bounded waits.
+
+    **Common wrong answer:** "Defaults are fine." Many HTTP clients default to infinite or very long read timeouts.
+
 ??? question "Q3. When is it safe to retry?"
     **Answer:** For transient failures on idempotent operations (or with idempotency keys), with exponential backoff and jitter, a small attempt limit, at one layer only.
+
+    **Interviewer listens for:** transient failures, idempotency (or keys), backoff + jitter, small limit, one layer.
+
+    **Common wrong answer:** "Retry any 5xx three times." Non-idempotent POSTs can then create duplicate payments or orders.
 
 ### Intermediate
 
 ??? question "Q4. What is a bulkhead?"
     **Answer:** Isolation of resources per dependency (concurrent-call limit or dedicated pool), so one failing dependency can't consume all threads/connections and starve others.
 
+    **Interviewer listens for:** per-dependency isolation, concurrency limit or own pool, ship analogy.
+
+    **Common wrong answer:** Confusing it with a rate limiter. A bulkhead caps concurrent calls, not calls per second.
+
 ??? question "Q5. How do retry and circuit breaker interact?"
     **Answer:** Retry wraps the breaker (Resilience4j default order): each attempt is recorded by the breaker; once it opens, attempts fail fast with `CallNotPermittedException`, which shouldn't be retried. Without that, retries keep hammering a broken dependency.
+
+    **Interviewer listens for:** aspect order (Retry outside CircuitBreaker), CallNotPermittedException not retried.
+
+    **Common wrong answer:** "The breaker sits outside the retry." Then a whole retry sequence counts as one call and the breaker reacts late.
 
 ??? question "Q6. What is jitter and why add it?"
     **Answer:** Randomising backoff delays so clients don't retry in synchronised waves that hit the recovering dependency at the same moment (thundering herd).
 
+    **Interviewer listens for:** synchronised retry waves, thundering herd, full jitter spreads load.
+
+    **Common wrong answer:** "Exponential backoff alone is enough." Clients that fail together still retry together without jitter.
+
 ??? question "Q7. Count-based vs time-based sliding windows?"
     **Answer:** Count-based judges the last N calls; time-based judges calls in the last N seconds. Time-based behaves more predictably with variable or low traffic.
 
+    **Interviewer listens for:** last N calls vs last N seconds, low-traffic behaviour, minimum number of calls.
+
+    **Common wrong answer:** Not knowing about `minimumNumberOfCalls`, so one failure out of one call opens the breaker.
+
 ??? question "Q8. Why should a circuit breaker trip on slow calls?"
     **Answer:** Slowness exhausts resources just like errors, often earlier and more dangerously. Configure slow-call duration near the acceptable latency and a slow-call rate threshold.
+
+    **Interviewer listens for:** slowness exhausts resources, slow-call duration and rate thresholds.
+
+    **Common wrong answer:** "Only exceptions should count." A dependency at 10 s latency can take you down without a single error.
 
 ### Senior
 
 ??? question "Q9. How do you choose timeout values?"
     **Answer:** From measured latency (e.g. a bit above the dependency's p99), the caller's own deadline budget (sum of serial calls must fit the SLA), and the cost of a false timeout. Propagate remaining budget downstream; review with real metrics.
 
+    **Interviewer listens for:** p99-based, deadline budget across serial calls, propagate remaining budget, revisit with metrics.
+
+    **Common wrong answer:** Picking round numbers like 30 s everywhere, longer than the caller's own SLA.
+
 ??? question "Q10. What is a retry storm and how do you prevent it?"
     **Answer:** Multiplicative retries across layers during an outage that overload the struggling dependency. Prevent with retries at a single layer, budgets, backoff with jitter, circuit breakers, and server-side load shedding.
+
+    **Interviewer listens for:** multiplicative retries, single retry layer, budgets, jitter, breakers, server-side shedding.
+
+    **Common wrong answer:** "Make the dependency autoscale." Autoscaling is too slow to absorb a retry storm.
 
 ??? question "Q11. Semaphore vs thread-pool bulkhead?"
     **Answer:** Semaphore limits concurrency on the caller's thread (cheap, works with virtual threads and reactive code). Thread-pool runs calls on a dedicated pool with a queue (isolation of threads, adds hand-off cost). Prefer semaphore with proper client timeouts in most modern setups.
 
+    **Interviewer listens for:** caller thread vs dedicated pool, virtual threads/reactive fit, hand-off cost.
+
+    **Common wrong answer:** "Thread-pool is always safer." With virtual threads it adds cost and little extra isolation.
+
 ??? question "Q12. What makes a good fallback?"
     **Answer:** Correct for the use case: cached/stale reference data, defaults, partial responses with explicit error signals, or deferred processing. Bad fallbacks hide failures in critical paths (payments, clinical data). Make degraded state visible to users and metrics.
+
+    **Interviewer listens for:** use-case correct fallback, stale data vs defaults vs deferral, never silently wrong for critical data, visible degradation.
+
+    **Common wrong answer:** Returning an empty list or a default value for clinical or payment data, which hides the failure and misleads users.
 
 ### Scenario-based
 
 ??? question "Q13. One of five upstreams becomes slow and your whole GraphQL service times out. Walk through the fix."
     **Answer:** Immediate: lower that upstream's timeout, enable/tune its circuit breaker with slow-call detection, add a semaphore bulkhead so it can only use N concurrent calls, and return partial results for its fields. Then alert on breaker state and per-upstream latency, and agree on SLOs with the upstream team.
 
+    **Interviewer listens for:** timeout, slow-call breaker, semaphore bulkhead, partial results for that field, alerting, SLO with the owning team.
+
+    **Common wrong answer:** "Raise the GraphQL service's overall timeout." That makes every request slower and still fails.
+
 ??? question "Q14. A circuit breaker opens and closes repeatedly (flapping). What do you change?"
     **Answer:** Increase the window/minimum calls to reduce noise, lengthen wait in open state, require more successful half-open calls, and check whether the breaker records business errors (404s) it should ignore.
 
+    **Interviewer listens for:** larger window/min calls, longer open wait, more half-open calls, ignore business exceptions.
+
+    **Common wrong answer:** Disabling the breaker because it is "too sensitive".
+
 ??? question "Q15. A partner API allows 100 requests per second across all your pods. How do you enforce it?"
     **Answer:** A local rate limiter per pod only works if you divide the quota by pod count (fragile with autoscaling). Better: a distributed limiter (Redis token bucket) or route partner calls through one gateway component enforcing the quota, with queuing and backoff on 429.
+
+    **Interviewer listens for:** global quota needs shared state or one choke point, per-pod division is fragile, 429 handling.
+
+    **Common wrong answer:** Configuring a local 100 rps limiter in each pod, which allows 100 × pod count.
 
 ## Cheat sheet
 

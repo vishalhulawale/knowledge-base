@@ -398,10 +398,14 @@ Also remember: catching the exception **inside** the `@Transactional` method mea
 
     **Interviewer listens for:** "fail fast and let the orchestrator restart the pod"; awareness that `catch (Throwable)` includes `Error`.
 
+    **Common wrong answer:** "Catch Throwable everywhere so the app never crashes." The JVM may be in a broken state after an Error.
+
 ??? question "Q3. Does `finally` always run?"
     **Answer:** It runs whenever control leaves the `try` block: normal completion, `return`, `break`, `continue` or an exception. It does not run if the JVM stops first (`System.exit`, `Runtime.halt`, a crash, the process being killed) or if the `try` block never completes (infinite loop, deadlock). A daemon thread killed at JVM shutdown also won't run it.
 
     **Common wrong answer:** "Always, no exceptions."
+
+    **Interviewer listens for:** every exit path, JVM halt cases, infinite loops or blocked threads.
 
 ??? question "Q4. Output prediction: what does `test()` return?"
     ```java
@@ -418,12 +422,16 @@ Also remember: catching the exception **inside** the `@Transactional` method mea
 
     **Interviewer listens for:** "value saved before finally", and the reference vs primitive difference.
 
+    **Common wrong answer:** "2, because finally runs last." The return value was already evaluated and saved.
+
 ### Intermediate
 
 ??? question "Q5. How does try-with-resources work and what are suppressed exceptions?"
     **Answer:** Resources declared in the `try (...)` header must implement `AutoCloseable`. They are closed automatically in reverse order of declaration, whether the body succeeds or throws. If the body throws X and a `close()` throws Y, X is propagated and Y is added with `X.addSuppressed(Y)`, readable via `getSuppressed()`. If only `close()` throws, that exception propagates. Null resources are skipped. Any `catch`/`finally` attached to the TWR runs after the resources are closed. Java 9 allows an effectively final variable declared earlier as the resource.
 
     **Interviewer listens for:** reverse order, suppressed exceptions, why this beats `finally { close(); }` (which could mask the original exception).
+
+    **Common wrong answer:** "The exception from close replaces the original." The original is propagated and close's is added as suppressed.
 
 ??? question "Q6. Output prediction: what is printed?"
     ```java
@@ -444,16 +452,28 @@ Also remember: catching the exception **inside** the `@Transactional` method mea
 
     **Common wrong answer:** printing `catch boom` before the close lines.
 
+    **Interviewer listens for:** opening in declaration order, closing in reverse, body exception primary.
+
 ??? question "Q7. What happens if you put `catch (Exception e)` before `catch (IOException e)`?"
     **Answer:** Compile error: the second catch is unreachable because `IOException` is already handled by the broader `Exception`. Catch blocks are tested top to bottom, so order from most specific to most general. In a multi-catch, the alternatives may not be in a subclass relationship either (`catch (IOException | Exception e)` does not compile).
 
+    **Interviewer listens for:** compile-time unreachable catch, specific before general.
+
+    **Common wrong answer:** "The second catch is just never reached at runtime." It does not compile.
+
 ??? question "Q8. Can an overriding method throw a broader checked exception?"
     **Answer:** No. It can throw the same checked exceptions, narrower ones, or none at all, plus any unchecked exceptions. Otherwise code written against the parent type (`catch (IOException e)`) could receive a checked exception it never planned for, breaking substitutability.
+
+    **Interviewer listens for:** Liskov substitution, narrower or none, unchecked allowed.
+
+    **Common wrong answer:** "Yes, as long as it is a subclass of Exception."
 
 ??? question "Q9. Why is creating exceptions expensive and what can you do about it?"
     **Answer:** The `Throwable` constructor calls `fillInStackTrace()`, which walks the current thread's stack and records frames. Deep framework stacks make it costlier. The throw/unwind itself is cheaper, especially when the JIT can optimise it. Mitigations: don't use exceptions for expected control flow (return `Optional` or a result type), and for very frequent expected failures use the constructor with `writableStackTrace = false` or override `fillInStackTrace()`. Also know that HotSpot's `OmitStackTraceInFastThrow` can drop traces for hot implicit exceptions.
 
     **Interviewer listens for:** stack trace capture as the main cost, and no premature optimisation: normal error paths should keep full traces.
+
+    **Common wrong answer:** "try/catch blocks are slow." Entering a try costs almost nothing; creating the exception (stack trace) is the cost.
 
 ### Senior
 
@@ -469,35 +489,65 @@ Also remember: catching the exception **inside** the `@Transactional` method mea
 
     **Interviewer listens for:** "restore the flag", link to `ExecutorService.shutdownNow()` and Kubernetes graceful shutdown.
 
+    **Common wrong answer:** Catching InterruptedException and doing nothing, which loses the cancellation request.
+
 ??? question "Q12. Design error handling for a Spring Boot REST + GraphQL service."
-    **Answer:** (1) A small sealed unchecked hierarchy (`NotFound`, `BusinessRule`, `UpstreamUnavailable`, `Conflict`) with stable codes. (2) Translate third-party exceptions at the edge adapters (HTTP clients, repositories, Kafka) and keep the cause. (3) One `@RestControllerAdvice` producing RFC 9457 `ProblemDetail`, plus a GraphQL `DataFetcherExceptionResolverAdapter` mapping the same exceptions to GraphQL `ErrorType`s. (4) Log once, at the edge: 4xx at INFO/WARN without traces, 5xx at ERROR with traces and a correlation/trace ID. (5) Never return stack traces or internal messages to clients; no PII/PHI in messages. (6) `rollbackFor` on any `@Transactional` method that throws checked exceptions. (7) Test each mapping.
+    **Answer:**
+
+    1. A small sealed unchecked hierarchy (`NotFound`, `BusinessRule`, `UpstreamUnavailable`, `Conflict`) with stable codes.
+    2. Translate third-party exceptions at the edge adapters (HTTP clients, repositories, Kafka) and keep the cause.
+    3. One `@RestControllerAdvice` producing RFC 9457 `ProblemDetail`, plus a GraphQL `DataFetcherExceptionResolverAdapter` mapping the same exceptions to GraphQL `ErrorType`s.
+    4. Log once, at the edge: 4xx at INFO/WARN without traces, 5xx at ERROR with traces and a correlation/trace ID.
+    5. Never return stack traces or internal messages to clients; no PII/PHI in messages.
+    6. `rollbackFor` on any `@Transactional` method that throws checked exceptions.
+    7. Test each mapping.
 
     **Interviewer listens for:** consistent contracts, log once, security (no information disclosure), observability (trace IDs).
+
+    **Common wrong answer:** Returning stack traces or internal messages to clients, or one generic 500 for every failure.
 
 ??? question "Q13. Exceptions in `CompletableFuture` and executors: what goes wrong?"
     **Answer:** `submit()` captures the exception inside the `Future`; if no one calls `get()`, it is lost. `get()` wraps it in `ExecutionException`; `join()` wraps it in `CompletionException`, so handlers must unwrap `getCause()`. In a `CompletableFuture` chain, `exceptionally`/`handle` must be added where recovery is wanted, otherwise the failure only surfaces at `join()`. Also, thread-local context (MDC, security context) isn't automatically present in pool threads, so logged errors may lack correlation IDs unless you propagate context.
 
     **Interviewer listens for:** unwrapping, `submit` vs `execute`, context propagation.
 
+    **Common wrong answer:** "The exception will appear in the logs." Exceptions inside a Future are invisible until someone calls get or join.
+
 ### Scenario-based
 
 ??? question "Q14. A transfer debited one account but didn't credit the other. The method is `@Transactional`. Why?"
-    **Answer:** Likely causes: (1) a **checked** exception was thrown between the two writes, and Spring by default only rolls back for `RuntimeException`/`Error`, so the debit was committed; (2) the exception was **caught inside** the method, so the proxy saw a normal return; (3) the method was called via `this.transfer()` from the same class, so the proxy and transaction were bypassed. Fixes: `@Transactional(rollbackFor = ...)` or switch to an unchecked exception, don't swallow inside the method (or call `setRollbackOnly()`), and call through the proxy.
+    **Answer:** Likely causes:
+
+    1. A **checked** exception was thrown between the two writes, and Spring by default only rolls back for `RuntimeException`/`Error`, so the debit was committed.
+    2. The exception was **caught inside** the method, so the proxy saw a normal return.
+    3. The method was called via `this.transfer()` from the same class, so the proxy and transaction were bypassed.
+
+    Fixes: `@Transactional(rollbackFor = ...)` or switch to an unchecked exception, don't swallow inside the method (or call `setRollbackOnly()`), and call through the proxy.
 
     **Interviewer listens for:** all three causes, especially the checked-exception rule.
 
+    **Common wrong answer:** "@Transactional rolls back on any exception." By default only on unchecked exceptions and errors.
+
 ??? question "Q15. Production logs show `java.lang.NullPointerException` with no stack trace at all. What's happening?"
     **Answer:** HotSpot's fast-throw optimisation: after a hot compiled method throws the same implicit exception many times, the JIT replaces it with a preallocated, stackless exception. Find the first occurrences in older logs (they have full traces) or restart with `-XX:-OmitStackTraceInFastThrow`. Another cause: code logging only `e.toString()` or `e.getMessage()` instead of passing the exception to the logger.
+
+    **Interviewer listens for:** JIT fast-throw, stackless preallocated exceptions, find early occurrences or -XX:-OmitStackTraceInFastThrow.
+
+    **Common wrong answer:** "Logback is truncating the stack trace."
 
 ??? question "Q16. A Kafka consumer is stuck: the same offset fails forever and lag keeps growing. How do you handle it?"
     **Answer:** It's a poison pill: a record that can never be processed (bad schema, invalid data). Configure `DefaultErrorHandler` with a bounded back-off and a `DeadLetterPublishingRecoverer`, and classify permanent failures (validation, deserialization via `ErrorHandlingDeserializer`, business rule violations) as not retryable so they go to the DLQ immediately. Transient failures (timeouts, 503s) get retries with exponential back-off. Monitor DLQ volume and build a replay path once the bug or data is fixed.
 
     **Interviewer listens for:** transient vs permanent classification, `ErrorHandlingDeserializer`, DLQ monitoring and replay.
 
+    **Common wrong answer:** "Increase retries until it succeeds." A poison record never succeeds; it needs a DLQ.
+
 ??? question "Q17. During a code review you find `catch (Exception e) { log.error(msg); }` in a payment service. What do you say?"
     **Answer:** Three problems: it's too broad (catches bugs like NPE), it swallows the failure (the caller thinks the payment succeeded, a correctness and possibly financial issue), and it loses the stack trace and cause. Ask: what is the expected failure here, and what should the caller do? Catch only that type, translate it into a domain exception with the cause, and let the rest propagate to the global handler that logs once with a trace ID. Also check the message carries no card data.
 
     **Interviewer listens for:** mentoring tone, business impact, concrete fix.
+
+    **Common wrong answer:** Only asking for a stack trace in the log while keeping the swallowed failure.
 
 ## Cheat sheet
 

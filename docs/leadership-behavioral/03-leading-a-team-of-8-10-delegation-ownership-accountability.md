@@ -250,16 +250,23 @@ metrics: [sprint predictability, escaped defects, lead time, change failure rate
 
     **Common wrong answer:** "I'm the lead, so my decision stands".
 
+??? question "Q8. How do you set priorities and goals for your team?"
+    **Answer:** Start from the product and platform goals for the quarter, then agree a short list of team outcomes (two or three), not a long task list. Make trade-offs explicit: what we will **not** do this quarter. Break the outcomes into milestones with owners, review progress weekly, and re-plan when something important changes. Keep a fixed share of capacity for support and tech debt so it doesn't silently eat the plan. *[confirm]*
+
+    **Interviewer listens for:** outcomes over tasks, explicit trade-offs, owners, a review rhythm, protected capacity for support and debt.
+
+    **Common wrong answer:** "My manager gives me the priorities and I assign tickets." That describes dispatching work, not leading.
+
 ### Senior
 
-??? question "Q8. How do you onboard a new engineer so they're productive quickly?"
+??? question "Q9. How do you onboard a new engineer so they're productive quickly?"
     **Answer:** A buddy, an onboarding doc and environment setup automation, a first good-first-issue within days, architecture walkthroughs, pairing on real work, gradually growing ownership with a 30/60/90-day plan, and feedback at each milestone.
 
     **Interviewer listens for:** structured onboarding.
 
     **Common wrong answer:** "they read the wiki".
 
-??? question "Q9. How do you avoid becoming the single point of failure for your own service?"
+??? question "Q10. How do you avoid becoming the single point of failure for your own service?"
     **Answer:** Name a deputy owner, write runbooks and ADRs, rotate on-call and reviews, pair on complex changes, and ask others to lead some incidents and releases with you as backup. Measure the bus factor.
 
     **Interviewer listens for:** a deliberate knowledge spread.
@@ -268,7 +275,7 @@ metrics: [sprint predictability, escaped defects, lead time, change failure rate
 
 ### Scenario-based
 
-??? question "Q10. Two seniors on your team both want to own the same high-visibility feature. What do you do?"
+??? question "Q11. Two seniors on your team both want to own the same high-visibility feature. What do you do?"
     **Answer:**
     1. Understand each person's motivation (growth area, visibility).
     2. Look for a split with clear ownership boundaries (for example the API vs the frontend experience), or a rotation (one leads this release, the other the next).
@@ -280,7 +287,7 @@ metrics: [sprint predictability, escaped defects, lead time, change failure rate
 
     **Common wrong answer:** "first come, first served".
 
-??? question "Q11. Velocity dropped 30% over three sprints. How do you respond?"
+??? question "Q12. Velocity dropped 30% over three sprints. How do you respond?"
     **Answer:** Investigate before reacting:
     - scope churn
     - unplanned work (production support, incidents)

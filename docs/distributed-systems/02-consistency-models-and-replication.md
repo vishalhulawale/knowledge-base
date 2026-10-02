@@ -252,9 +252,22 @@ CONSISTENCY LOCAL_QUORUM;
 
     **Common wrong answer:** "compare timestamps".
 
+??? question "Q8. What are session guarantees, and how do you provide read-your-writes and monotonic reads with replicas?"
+    **Answer:** Session guarantees make eventual consistency usable for one user:
+
+    - **Read-your-writes:** after I write, my reads see that write.
+    - **Monotonic reads:** I never see older data after seeing newer data (no going back in time).
+    - **Monotonic writes** and **writes-follow-reads** keep one session's operations in order.
+
+    With async replicas: route a user's reads to the **leader for a short window after they write**, or track the **log position / version** of their last write and only read from a replica that has caught up to it (MongoDB causal consistency sessions do this with `afterClusterTime`). For monotonic reads, **pin a user to one replica** (hash by user id) so a lagging replica cannot show them older data after a fresher one did.
+
+    **Interviewer listens for:** definitions of each guarantee, leader-after-write routing, version/LSN tracking, replica pinning, MongoDB causal sessions.
+
+    **Common wrong answer:** "Read from the leader always." It works, but removes the read scaling that replicas were added for.
+
 ### Senior
 
-??? question "Q8. Walk through a safe leader failover."
+??? question "Q9. Walk through a safe leader failover."
     **Answer:**
     1. Detect failure with a confirmed timeout.
     2. Elect or choose the most up-to-date follower (or let consensus elect one with all committed entries).
@@ -270,7 +283,7 @@ CONSISTENCY LOCAL_QUORUM;
 
     **Common wrong answer:** "promote any replica".
 
-??? question "Q9. Kafka's replication: how do acks, ISR and unclean election interact?"
+??? question "Q10. Kafka's replication: how do acks, ISR and unclean election interact?"
     **Answer:**
     - Each partition has a leader and followers. The **ISR** is the set of followers caught up within `replica.lag.time.max.ms`.
     - `acks=all` waits for all ISR members. With `min.insync.replicas=2`, writes fail if the ISR shrinks below 2 (durability over availability).
@@ -282,7 +295,7 @@ CONSISTENCY LOCAL_QUORUM;
 
 ### Scenario-based
 
-??? question "Q10. After a DB failover, users report that their last few minutes of changes vanished. Explain and prevent it."
+??? question "Q11. After a DB failover, users report that their last few minutes of changes vanished. Explain and prevent it."
     **Answer:** Async replication: the promoted replica lacked the recent writes, and the old leader's extra writes were discarded. Prevent with:
     - semi-sync/quorum commit for critical tables
     - lag-aware failover (refuse to promote a replica that's too far behind, or wait for catch-up)
@@ -294,7 +307,7 @@ CONSISTENCY LOCAL_QUORUM;
 
     **Common wrong answer:** "users didn't save properly".
 
-??? question "Q11. Analytics queries on the primary slow down OLTP. Can you move them to replicas safely?"
+??? question "Q12. Analytics queries on the primary slow down OLTP. Can you move them to replicas safely?"
     **Answer:** Yes, for reads that tolerate lag:
     - Route reporting to async replicas, with **bounded staleness** (MongoDB `maxStalenessSeconds`, or lag-aware routing in Postgres).
     - Show "data as of" times.

@@ -228,16 +228,23 @@ deploy_staging:
 
     **Common wrong answer:** "100% of PRs follow the checklist".
 
+??? question "Q7. How do you make a build-vs-buy decision?"
+    **Answer:** Compare against the **real need**: is this capability a differentiator for us or a commodity? Look at total cost over a few years (licences vs engineering, hosting, on-call, upgrades), time to value, compliance needs (HIPAA, BAA, data residency), lock-in and exit cost, and the team's ability to run it. Do a time-boxed spike or proof of concept, and record the decision and its review date in an ADR. *[confirm]*
+
+    **Interviewer listens for:** differentiator vs commodity, total cost of ownership, compliance, lock-in, a time-boxed proof, an ADR.
+
+    **Common wrong answer:** "We build because we can do it better." Engineers underestimate ongoing maintenance cost.
+
 ### Senior
 
-??? question "Q7. A senior engineer refuses to follow the new testing standard. What do you do?"
+??? question "Q8. A senior engineer refuses to follow the new testing standard. What do you do?"
     **Answer:** Have a private conversation to understand the objection (maybe valid: slow tests, low-value rules). Show the data and purpose. Invite them to improve the standard (give them ownership of the test strategy). Agree on expectations. If they still refuse after a fair process, it's a performance and behaviour issue: involve their manager.
 
     **Interviewer listens for:** openness, then firmness.
 
     **Common wrong answer:** "block all their PRs".
 
-??? question "Q8. How do you drive a standard across multiple teams you don't lead?"
+??? question "Q9. How do you drive a standard across multiple teams you don't lead?"
     **Answer:**
     - Build a coalition (other leads, architects).
     - Start with one team's success story and data.
@@ -250,9 +257,16 @@ deploy_staging:
 
     **Common wrong answer:** "escalate to management to mandate it".
 
+??? question "Q10. How do you stop standards turning into bureaucracy?"
+    **Answer:** Keep each standard tied to a **problem it solves**, written down in one place, and **automated** where possible (lint rules, templates, CI checks) instead of enforced by reviewers. Make exceptions possible with a short documented reason. Review standards every year or two and remove ones that no longer pay off. Measure friction: lead time and how often teams ask for exceptions. *[confirm]*
+
+    **Interviewer listens for:** each rule linked to a problem, automation over policing, an exception path, regular pruning, friction measured.
+
+    **Common wrong answer:** "More process makes quality higher." Past a point it only slows delivery and pushes people to work around it.
+
 ### Scenario-based
 
-??? question "Q9. Production defects are rising and releases are manual and risky. You have one quarter. What's your plan?"
+??? question "Q11. Production defects are rising and releases are manual and risky. You have one quarter. What's your plan?"
     **Answer:**
     1. **Weeks 1–2:** measure (defect sources, deploy steps, incident causes).
     2. **Quick wins:** a DoD, CI quality gates (tests, static analysis), and a release checklist automated into the pipeline.
@@ -264,7 +278,7 @@ deploy_staging:
 
     **Common wrong answer:** "rewrite the system".
 
-??? question "Q10. Product wants to skip the contract-testing work you planned to stabilise upstream integrations. How do you argue for it?"
+??? question "Q12. Product wants to skip the contract-testing work you planned to stabilise upstream integrations. How do you argue for it?"
     **Answer:** Quantify the cost of the status quo (integration incidents, hours spent debugging upstream changes, delayed releases). Show what contract tests prevent, and the effort involved. Propose a minimal version for the riskiest upstreams first. Connect it to upcoming features that depend on those integrations. Agree a decision, and document any risk acceptance.
 
     **Interviewer listens for:** business framing plus a pragmatic scope.

@@ -192,44 +192,111 @@ Not ★. Everyday in the OptumRx React/TypeScript codebase and micro-frontends.
 ??? question "Q1. ?? vs ||?"
     **Answer:** `??` returns the right side only for null/undefined; `||` for any falsy value (0, "", false, NaN, null, undefined).
 
+    **Interviewer listens for:** nullish vs falsy, 0 and "" as valid values.
+
+    **Common wrong answer:** "They are the same, ?? is just newer." `0 || 10` is 10; `0 ?? 10` is 0.
+
 ??? question "Q2. Is spread a deep copy?"
     **Answer:** No, one level only; nested objects/arrays are shared references.
 
+    **Interviewer listens for:** one level only, shared nested references.
+
+    **Common wrong answer:** "Spread clones the whole object."
+
 ??? question "Q3. Rest vs spread?"
     **Answer:** Same `...` syntax: rest collects remaining items into an array/object (parameters, destructuring); spread expands an iterable/object into elements/properties.
+
+    **Interviewer listens for:** same syntax, collect vs expand, position decides.
+
+    **Common wrong answer:** Mixing them up in function signatures vs calls.
 
 ### Intermediate
 
 ??? question "Q4. ESM vs CommonJS?"
     **Answer:** ESM: static, async-capable, live bindings, strict, tree-shakable, top-level await. CJS: dynamic synchronous require, copied exports, Node legacy default.
 
+    **Interviewer listens for:** static vs dynamic, live bindings vs copies, tree shaking, top-level await, interop.
+
+    **Common wrong answer:** "The only difference is import vs require syntax."
+
 ??? question "Q5. Why does tree shaking need ESM?"
     **Answer:** Static import/export lets bundlers know at build time which exports are used; dynamic require can't be analysed reliably.
+
+    **Interviewer listens for:** static analysis of imports and exports at build time.
+
+    **Common wrong answer:** "Tree shaking works with any module format." CommonJS exports can be built dynamically, so bundlers cannot be sure.
 
 ??? question "Q6. What is an iterator/iterable?"
     **Answer:** An iterable has `[Symbol.iterator]()` returning an iterator whose `next()` yields `{value, done}`; used by for...of, spread and destructuring.
 
+    **Interviewer listens for:** Symbol.iterator protocol, next() returning {value, done}, consumers.
+
+    **Common wrong answer:** "Any object with a length is iterable." Plain objects are not iterable.
+
 ??? question "Q7. What are generators for?"
     **Answer:** Lazy sequences, infinite streams, custom iteration, pausing computation, and (async generators) paginated or streaming data with for await...of.
 
+    **Interviewer listens for:** laziness, infinite sequences, async generators with for await.
+
+    **Common wrong answer:** "Generators are just old async/await." They are a general pausable-function feature.
+
+??? question "Q8. Predict the output of this destructuring and Map code."
+    **Answer:** ```js
+    const user = { name: 'Asha', address: { city: 'Pune' } };
+    const { address: { city }, role = 'member', ...rest } = user;
+    console.log(city, role, JSON.stringify(rest)); // Pune member {"name":"Asha"}
+
+    const m = new Map([[{ id: 1 }, 'a']]);
+    console.log(m.get({ id: 1 }));                  // undefined
+
+    console.log(Object.groupBy([1, 2, 3, 4], n => n % 2 ? 'odd' : 'even'));
+    // { odd: [1, 3], even: [2, 4] }
+    ```
+
+    Nested destructuring pulls `city` out; `address` itself is **not** bound as a variable. `role` gets its default because it is `undefined`. The rest object holds only the keys not already taken (`name`). `Map` compares object keys by **reference**, so a new `{id: 1}` is a different key. Use a primitive key such as the id. `Object.groupBy` (ES2024) groups into a null-prototype object.
+
+    **Interviewer listens for:** nested patterns don't bind the parent, defaults on undefined, rest excludes taken keys, Map key identity.
+
+    **Common wrong answer:** Expecting `address` to be defined, or expecting `m.get({id:1})` to return `'a'`.
+
 ### Senior
 
-??? question "Q8. What are live bindings?"
+??? question "Q9. What are live bindings?"
     **Answer:** ESM imports are references to the exporter's binding; if the exporting module reassigns the variable, importers see the new value. CJS gives a snapshot of `module.exports`.
 
-??? question "Q9. Name recent ECMAScript additions you'd use."
+    **Interviewer listens for:** reference to the exporter's binding, CJS snapshot.
+
+    **Common wrong answer:** "Imports are copies of the exported values."
+
+??? question "Q10. Name recent ECMAScript additions you'd use."
     **Answer:** `toSorted`/`with` (ES2023), `Object.groupBy`, `Promise.withResolvers` (ES2024), iterator helpers, Set methods, `Promise.try`, `RegExp.escape` (ES2025), Temporal for dates.
 
-??? question "Q10. How do dynamic import and code splitting relate?"
+    **Interviewer listens for:** a few concrete, dated features and why you would use them.
+
+    **Common wrong answer:** Listing only ES2015 features like arrow functions and classes.
+
+??? question "Q11. How do dynamic import and code splitting relate?"
     **Answer:** `import()` loads a module on demand returning a promise; bundlers create a separate chunk for it, used by React.lazy and router lazy routes.
+
+    **Interviewer listens for:** import() returns a promise, separate chunk, React.lazy.
+
+    **Common wrong answer:** "Dynamic import loads the module synchronously."
 
 ### Scenario-based
 
-??? question "Q11. Predict: `const {a = 1} = {a: null}`"
+??? question "Q12. Predict: `const {a = 1} = {a: null}`"
     **Answer:** `a` is null: defaults apply only for undefined.
 
-??? question "Q12. Predict: `[10, 9, 1].sort()`"
+    **Interviewer listens for:** defaults apply only for undefined, not null.
+
+    **Common wrong answer:** "a is 1."
+
+??? question "Q13. Predict: `[10, 9, 1].sort()`"
     **Answer:** `[1, 10, 9]`: default sort compares strings. Use a comparator `(a, b) => a - b` (and `toSorted` to avoid mutation).
+
+    **Interviewer listens for:** string comparison by default, numeric comparator, toSorted avoids mutation.
+
+    **Common wrong answer:** "[1, 9, 10]." The default sort compares strings.
 
 ## Cheat sheet
 

@@ -186,44 +186,105 @@ Not ★. Applies to React state management (Redux, immutable updates) in the Opt
 ??? question "Q1. == vs ===?"
     **Answer:** `===` compares type and value without coercion; `==` converts operands to a common type first. Prefer `===`.
 
+    **Interviewer listens for:** coercion rules of ==, prefer ===, `x == null` idiom.
+
+    **Common wrong answer:** "== compares values and === compares references." Both compare object references; == also coerces primitives.
+
 ??? question "Q2. What are the falsy values?"
     **Answer:** false, 0, -0, 0n, "", null, undefined, NaN. Everything else is truthy, including "0", [] and {}.
 
+    **Interviewer listens for:** the eight falsy values, "0", [] and {} are truthy.
+
+    **Common wrong answer:** "Empty arrays are falsy."
+
 ??? question "Q3. Shallow vs deep copy?"
     **Answer:** Shallow copies the top level only, sharing nested references; deep copies recursively so nothing is shared.
+
+    **Interviewer listens for:** top level vs recursive, shared nested references.
+
+    **Common wrong answer:** "Object.assign makes a deep copy."
 
 ### Intermediate
 
 ??? question "Q4. Predict: `[] + []`, `[] + {}`, `"5" - 2`, `"5" + 2`."
     **Answer:** `""`, `"[object Object]"`, `3`, `"52"`.
 
+    **Interviewer listens for:** ToPrimitive on objects, + prefers string concatenation, - forces numbers.
+
+    **Common wrong answer:** Guessing `[] + {}` is `0` or an error.
+
 ??? question "Q5. Why is `NaN === NaN` false and how do you test for NaN?"
     **Answer:** IEEE 754 defines NaN as unequal to everything, itself included. Use `Number.isNaN(x)` or `Object.is(x, NaN)`.
+
+    **Interviewer listens for:** IEEE 754, Number.isNaN vs global isNaN.
+
+    **Common wrong answer:** Using global `isNaN("abc")`, which coerces and returns true for strings.
 
 ??? question "Q6. Object.is vs ===?"
     **Answer:** Same except `Object.is(NaN, NaN)` is true and `Object.is(+0, -0)` is false. React uses Object.is for state comparisons.
 
+    **Interviewer listens for:** NaN and ±0 differences, React uses Object.is.
+
+    **Common wrong answer:** "Object.is is a deep equality check."
+
 ??? question "Q7. structuredClone vs JSON round-trip?"
     **Answer:** structuredClone preserves Dates, Maps, Sets, typed arrays, cycles; JSON loses types and fails on cycles/BigInt. Neither clones functions or class behaviour.
 
+    **Interviewer listens for:** types preserved, cycles, no functions or prototypes; JSON loses types.
+
+    **Common wrong answer:** "JSON.parse(JSON.stringify(x)) is a safe deep clone." It drops undefined, turns Dates into strings and fails on cycles.
+
+??? question "Q8. How do you compare two objects for equality in JavaScript?"
+    **Answer:** `===` and `Object.is` compare **references** for objects, so two objects with the same content are not equal. Options for value equality:
+
+    - Compare the fields that define identity (`a.id === b.id`), which is usually what the domain needs.
+    - A **deep-equal** utility (`node:util.isDeepStrictEqual`, Lodash `isEqual`, Vitest/Jest `toEqual`) for tests and change detection.
+    - `JSON.stringify(a) === JSON.stringify(b)` only for simple data with the same key order. It breaks with different key order, `undefined`, Dates and Maps.
+
+    In React, prefer **immutable updates** so a reference check is enough to detect change.
+
+    **Interviewer listens for:** reference vs value equality, domain identity, deep-equal tools, JSON.stringify pitfalls, immutability in React.
+
+    **Common wrong answer:** "Use == instead of ===." Loose equality still compares object references.
+
 ### Senior
 
-??? question "Q8. How does an object convert to a primitive?"
+??? question "Q9. How does an object convert to a primitive?"
     **Answer:** `Symbol.toPrimitive(hint)` if present; else `valueOf` then `toString` for number/default hints (reverse for string hint).
 
-??? question "Q9. Is Object.freeze enough for immutability?"
+    **Interviewer listens for:** Symbol.toPrimitive, hint order of valueOf and toString.
+
+    **Common wrong answer:** "Objects always convert with toString."
+
+??? question "Q10. Is Object.freeze enough for immutability?"
     **Answer:** No, it's shallow and runtime-only. Deep freeze recursively, or use immutable update patterns/Immer plus TypeScript readonly types.
 
-??? question "Q10. Why do React and Redux require immutable updates?"
+    **Interviewer listens for:** shallow and runtime-only, deep freeze, readonly types, immutable updates.
+
+    **Common wrong answer:** "Object.freeze makes nested objects immutable too."
+
+??? question "Q11. Why do React and Redux require immutable updates?"
     **Answer:** They detect changes by reference (Object.is / shallow equality); mutating in place keeps the same reference, so updates and memoisation miss changes.
+
+    **Interviewer listens for:** reference comparison for change detection, mutation keeps the same reference.
+
+    **Common wrong answer:** "Immutability is just a style preference in React." Mutating state means React may not re-render.
 
 ### Scenario-based
 
-??? question "Q11. A copay field of 0 is treated as 'not provided'. Why?"
+??? question "Q12. A copay field of 0 is treated as 'not provided'. Why?"
     **Answer:** A truthiness check (`if (copay)`) or `||` default treats 0 as falsy. Check `copay == null` / use `??`.
 
-??? question "Q12. Editing a draft member also changes the original in the list."
+    **Interviewer listens for:** truthiness treats 0 as missing, == null or ??.
+
+    **Common wrong answer:** "Convert it to a string first."
+
+??? question "Q13. Editing a draft member also changes the original in the list."
     **Answer:** The draft is a shallow copy; nested address is shared. Copy nested levels (spread per level, Immer, or structuredClone).
+
+    **Interviewer listens for:** shallow copy shares nested objects, per-level spread, Immer, structuredClone.
+
+    **Common wrong answer:** "Spread the member object" again at the top level only.
 
 ## Cheat sheet
 

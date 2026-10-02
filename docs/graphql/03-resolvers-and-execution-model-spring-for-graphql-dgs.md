@@ -301,16 +301,25 @@ class MemberDataFetcher {
 
     **Common wrong answer:** "`@BatchMapping` caches results across requests." DataLoaders are per request.
 
+??? question "Q8. How do subscriptions work in Spring for GraphQL, and what makes them hard to scale?"
+    **Answer:** A `@SubscriptionMapping` method returns a `Flux<T>`. Each item becomes a message to the client over **WebSocket** (`graphql-transport-ws` protocol) or, from Spring for GraphQL 1.3, **Server-Sent Events**. Authentication happens on the HTTP upgrade or in the `connection_init` payload.
+
+    Scaling is hard because connections are **long-lived and stateful**. An event produced on instance A must reach a subscriber connected to instance B, so you need a fan-out backplane (Redis pub/sub, Kafka, or a broker) feeding each instance's `Flux`. You also need connection limits, heartbeats, token expiry handling on open connections, and load balancers that support WebSockets with long idle timeouts.
+
+    **Interviewer listens for:** Flux return type, transport protocols, auth at connection time, cross-instance fan-out backplane, connection lifecycle.
+
+    **Common wrong answer:** "Subscriptions are just polling queries." They are server-pushed streams over a persistent connection.
+
 ### Senior
 
-??? question "Q8. How do you avoid fetching unrequested data from upstreams?"
+??? question "Q9. How do you avoid fetching unrequested data from upstreams?"
     **Answer:** Split expensive data into separate fields with their own resolvers (they only run if selected), inspect `DataFetchingEnvironment.getSelectionSet()` to choose a lighter upstream call, and use projections. Combined with DataLoader, this minimises calls.
 
     **Interviewer listens for:** resolver granularity as the main tool, and `DataFetchingFieldSelectionSet` (`contains("prescriptions/pharmacy")`) as the look-ahead tool.
 
     **Common wrong answer:** "GraphQL only fetches what the client asks for automatically." It only *returns* what was asked for. What you fetch upstream is your code's decision.
 
-??? question "Q9. Virtual threads vs reactive for a GraphQL aggregation service?"
+??? question "Q10. Virtual threads vs reactive for a GraphQL aggregation service?"
     **Answer:** Both avoid thread starvation on I/O. Reactive (WebFlux, `Mono`) is mature but complex. Virtual threads (Java 21+, `spring.threads.virtual.enabled`) let you write blocking-style resolvers that scale. With that property set, Spring for GraphQL runs blocking controller methods asynchronously on virtual threads, so siblings overlap without `CompletableFuture` code. Watch pinning (`synchronized` blocks pin the carrier thread on JDK 21–23, fixed in JDK 24 by JEP 491) and connection-pool limits, since the bottleneck moves to upstream pools. Reactive still wins when you need backpressure or heavy streaming subscriptions.
 
     **Interviewer listens for:** a reasoned trade-off, pinning, and that virtual threads remove the thread limit but not the downstream capacity limit.
@@ -319,14 +328,14 @@ class MemberDataFetcher {
 
 ### Scenario-based
 
-??? question "Q10. Under load, GraphQL latency spikes and CPU is low. What's happening?"
+??? question "Q11. Under load, GraphQL latency spikes and CPU is low. What's happening?"
     **Answer:** Likely thread pool or connection pool starvation: blocking resolvers waiting on upstreams, or HTTP client pools exhausted. Check thread dumps, pool metrics and upstream latency. Fix with async clients or virtual threads, right-sized pools, DataLoader batching, timeouts and bulkheads per upstream.
 
     **Interviewer listens for:** a diagnosis method (thread dump, pool and per-upstream metrics, tracing per field) before the fix, and "low CPU + high latency = waiting, not working".
 
     **Common wrong answer:** "Add more pods" or "increase the heap" without finding what the threads are waiting on.
 
-??? question "Q11. One of five upstreams is down. What does the client get, and how do you design for it?"
+??? question "Q12. One of five upstreams is down. What does the client get, and how do you design for it?"
     **Answer:** GraphQL returns partial results. The failing field becomes `null` with an entry in `errors[]` (`message`, `path`, `locations`, `extensions`), and the other fields still resolve, normally with HTTP 200. If the failing field is non-null (`!`), the `null` propagates to the nearest nullable ancestor, so schema nullability decides the blast radius. Design: keep fields backed by remote calls nullable, set per-upstream timeouts and circuit breakers, map exceptions centrally (`@GraphQlExceptionHandler` / `DataFetcherExceptionResolver`) to a stable `extensions` error code with no internal details, and have the UI render degraded sections.
 
     **Interviewer listens for:** partial response, null bubbling, nullability as a resilience decision, and sanitised errors.

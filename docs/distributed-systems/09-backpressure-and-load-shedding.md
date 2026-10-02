@@ -262,16 +262,23 @@ Flux.fromIterable(prescriptionIds)
 
     **Common wrong answer:** "random".
 
+??? question "Q8. Rate limiting vs backpressure vs load shedding: how are they different?"
+    **Answer:** **Rate limiting** enforces a fixed policy per client (100 req/s per API key) regardless of current health. It is about fairness and contracts. **Backpressure** is a signal from a busy consumer to slow the producer down (bounded queues, Reactive Streams `request(n)`, Kafka consumers pulling at their own pace). It works when the producer can wait. **Load shedding** is the server rejecting work it cannot finish in time (fast 503 or 429) based on current capacity, to protect itself when the caller cannot or will not slow down. Production systems usually use all three.
+
+    **Interviewer listens for:** policy vs signal vs self-protection, when each applies, combined use.
+
+    **Common wrong answer:** "They are the same thing: returning 429." Backpressure often never returns an error; it just stops pulling.
+
 ### Senior
 
-??? question "Q8. Explain adaptive concurrency limits."
+??? question "Q9. Explain adaptive concurrency limits."
     **Answer:** Instead of a fixed limit, the server (or client) continuously estimates the right concurrency from latency: when latency rises above the no-load baseline, reduce the limit, and when it's healthy, increase it (gradient or Vegas-like algorithms, AIMD). It tracks capacity changes (deploys, noisy neighbours) automatically. Examples: Netflix concurrency-limits, Envoy adaptive concurrency.
 
     **Interviewer listens for:** a latency-driven feedback loop.
 
     **Common wrong answer:** "autoscaling".
 
-??? question "Q9. What is client-side adaptive throttling?"
+??? question "Q10. What is client-side adaptive throttling?"
     **Answer:** Each client tracks requests sent vs requests accepted by the backend over a window. When the backend rejects a lot, the client probabilistically rejects locally: `p = max(0, (requests − K·accepts)/(requests+1))` with K ≈ 2. That stops overloaded backends from spending resources even on rejecting requests. It's from Google SRE.
 
     **Interviewer listens for:** local rejection, and K.
@@ -280,7 +287,7 @@ Flux.fromIterable(prescriptionIds)
 
 ### Scenario-based
 
-??? question "Q10. A downstream DB slows down 5×. Your service's threads are exhausted and it times out on everything, including health checks. Redesign."
+??? question "Q11. A downstream DB slows down 5×. Your service's threads are exhausted and it times out on everything, including health checks. Redesign."
     **Answer:**
     - Bulkhead the DB calls (a separate bounded pool or semaphore).
     - DB statement and pool-acquire timeouts.
@@ -296,7 +303,7 @@ Flux.fromIterable(prescriptionIds)
 
     **Common wrong answer:** "increase the thread pool to 2,000".
 
-??? question "Q11. During open enrolment, traffic is 8× normal for 2 hours. Plan for it."
+??? question "Q12. During open enrolment, traffic is 8× normal for 2 hours. Plan for it."
     **Answer:**
     - **Before:** pre-scale (scheduled) and load-test at 10×, warm caches, defer batch jobs, set rate limits per partner, enable shedding policies, feature-flag non-essential features off.
     - **During:** prioritise enrolment and critical flows, shed analytics and prefetch, queue async work, and watch SLOs, saturation and lag.

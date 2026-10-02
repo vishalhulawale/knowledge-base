@@ -396,11 +396,21 @@ public record MemberSummary(String memberId, List<String> planCodes) {
 
     **Interviewer listens for:** backing structure, order guarantees, complexity, which method defines "duplicate".
 
+    **Common wrong answer:** "TreeSet uses hashCode." It uses compareTo or a Comparator and ignores equals and hashCode.
+
 ??? question "Q3. Why does Map not extend Collection?"
     **Answer:** A `Map`'s unit is a key-value mapping, not a single element. Methods like `add(E)` make no sense for it. Instead, `Map` offers three collection views: `keySet()`, `values()` and `entrySet()`.
 
+    **Interviewer listens for:** unit is a key-value pair, add(E) does not fit, the three collection views.
+
+    **Common wrong answer:** "It is a historical accident."
+
 ??? question "Q4. What is the difference between `poll()` and `remove()`, and `offer()` and `add()`, on a Queue?"
     **Answer:** They do the same thing but fail differently. `add`/`remove`/`element` throw (`IllegalStateException` for a full bounded queue, `NoSuchElementException` when empty). `offer`/`poll`/`peek` return `false` or `null`. That is also why `ArrayDeque` and most queues forbid `null` elements: `null` from `poll()` must mean "empty".
+
+    **Interviewer listens for:** throwing vs special-value methods, bounded queues, why nulls are banned in most queues.
+
+    **Common wrong answer:** "They are aliases with no difference."
 
 ??? question "Q5. Predict the output."
     ```java
@@ -423,41 +433,65 @@ public record MemberSummary(String memberId, List<String> planCodes) {
 
     **Interviewer listens for:** geometric growth, the 1.5× factor, why fixed increments would be quadratic, pre-sizing with `new ArrayList<>(n)` or `ensureCapacity`.
 
+    **Common wrong answer:** "Every add is O(1)." Resizes are O(n); only the average is constant.
+
 ??? question "Q7. What is a fail-fast iterator, and does ConcurrentModificationException mean you have a threading problem?"
     **Answer:** Fail-fast iterators compare the collection's `modCount` with the value captured at creation and throw CME if a structural change happened outside the iterator. It is best-effort and not guaranteed. CME does not mean multithreading: the most common cause is removing from a list inside its own for-each loop on a single thread. Fix with `removeIf`, `Iterator.remove`, or a new list. Concurrent collections use weakly consistent iterators that never throw CME.
 
     **Common wrong answer:** "Use `Collections.synchronizedList` to fix CME." Synchronization does not stop a single thread from modifying during iteration.
+
+    **Interviewer listens for:** modCount check, best-effort, single-threaded removal during for-each, iterator.remove or removeIf.
 
 ??? question "Q8. List.of vs Collections.unmodifiableList vs Arrays.asList vs Stream.toList?"
     **Answer:** `List.of` creates a truly immutable list that rejects nulls (even `contains(null)` throws NPE). `Collections.unmodifiableList` is a read-only **view**, so changes to the underlying list are visible through it. `Arrays.asList` is a fixed-size view over an array: `set` works and writes through, `add`/`remove` throw. `Stream.toList()` (Java 16) returns an unmodifiable list that does allow nulls, unlike `Collectors.toUnmodifiableList()`. `Collectors.toList()` makes no guarantees about mutability, though today it returns an `ArrayList`.
 
     **Interviewer listens for:** view vs copy, null handling, which ones throw UOE.
 
+    **Common wrong answer:** "unmodifiableList makes a copy." It is a view; changes to the source show through.
+
 ??? question "Q9. How would you implement an LRU cache in Java?"
     **Answer:** For a simple single-threaded case, extend `LinkedHashMap` with `accessOrder = true` and override `removeEldestEntry` to return `size() > max`. `get` moves an entry to the tail, and eviction removes the head. All operations are O(1). For concurrent production use, choose Caffeine (`maximumSize`, `expireAfterWrite`) instead of wrapping the `LinkedHashMap` in a global lock, because with access order every `get` is a structural modification.
 
     **Interviewer listens for:** access order, `removeEldestEntry`, why `get` mutates, the concurrency caveat.
 
+    **Common wrong answer:** Using LinkedHashMap with the default insertion order, which gives FIFO eviction, not LRU.
+
 ??? question "Q10. When would you pick TreeMap over HashMap?"
     **Answer:** When you need sorted iteration or navigation: range queries (`subMap`), nearest-key lookups (`floorKey`, `ceilingEntry`), first/last. Example: finding the price or eligibility rule effective on a given date with `floorEntry(date)`. Otherwise `HashMap` is faster (O(1) vs O(log n)). Remember that `TreeMap` uses the comparator for equality and rejects null keys under natural ordering.
+
+    **Interviewer listens for:** sorted iteration, range and nearest-key navigation, O(log n) cost.
+
+    **Common wrong answer:** "TreeMap is faster for lookups." It is O(log n) versus O(1) average.
 
 ### Senior
 
 ??? question "Q11. Why is ArrayDeque recommended over Stack and LinkedList?"
     **Answer:** `Stack` extends `Vector`: every call is synchronized (wasted cost when unshared), and it leaks list operations like `add(index, e)` that break stack semantics. `LinkedList` allocates a node per element and has poor locality. `ArrayDeque` is a circular array with O(1) amortised operations at both ends, no per-element allocation and contiguous memory. Its only restrictions are no nulls and no index access.
 
+    **Interviewer listens for:** synchronised Vector legacy, broken stack semantics, node allocation, circular array.
+
+    **Common wrong answer:** "LinkedList is best for queues because insertion is O(1)." ArrayDeque is also O(1) with far better locality.
+
 ??? question "Q12. HashMap lookup is described as O(1). When is it not?"
     **Answer:** It is O(1) on average with a good hash spread. With many collisions a bucket's list grows; since Java 8 a bucket whose chain grows past `TREEIFY_THRESHOLD` (8) nodes is converted to a red-black tree (if the table has at least 64 buckets, otherwise the table resizes instead), giving O(log n) for that bucket when keys are `Comparable`. A resize is O(n) but amortised. Bad `hashCode()` implementations, mutable keys, and hash-flooding attacks are the real-world causes. Details on the [HashMap internals page](04-hashmap-and-concurrenthashmap-internals.md).
 
     **Interviewer listens for:** average vs worst case, treeification thresholds, amortised resizing, the role of `hashCode` quality.
 
+    **Common wrong answer:** "HashMap is always O(1)." Bad hashes, resizes and treeified bins change that.
+
 ??? question "Q13. What did Java 21 sequenced collections change, and why did it need a new interface?"
     **Answer:** JEP 431 added `SequencedCollection`, `SequencedSet` and `SequencedMap` to describe collections with a defined encounter order. They give uniform `getFirst/getLast/addFirst/addLast/removeFirst/removeLast` and a `reversed()` view (plus `firstEntry`, `pollFirstEntry`, `putFirst` and so on for maps). Before that, each type had its own API, and `LinkedHashSet` had no way to get its last element without iterating. They were retrofitted into the hierarchy (`List`, `Deque`, `LinkedHashSet`, `SortedSet`, `LinkedHashMap`, `SortedMap`). A compatibility note: a class implementing both `List` and `Deque` may now hit conflicting `reversed()` return types, and custom collections with methods like `getFirst()` with a different return type could stop compiling.
+
+    **Interviewer listens for:** uniform first/last/reversed API, why List and Deque needed a common supertype.
+
+    **Common wrong answer:** "It added new collection classes." It added interfaces retrofitted onto existing ones.
 
 ??? question "Q14. How do you safely share a lookup map that is refreshed every few minutes and read by many threads?"
     **Answer:** Build a new map off to the side, wrap it as immutable (`Map.copyOf`), and publish it with a single write to a `volatile` field or `AtomicReference`. Readers do one volatile read and then use a fully built, immutable map with no locking. This beats `ConcurrentHashMap` with in-place updates because readers never see a half-refreshed state. Use `ConcurrentHashMap` when updates are incremental and per-key (`compute`, `merge`).
 
     **Interviewer listens for:** safe publication, immutability, avoiding partial-update visibility, knowing when CHM is the better tool.
+
+    **Common wrong answer:** Wrapping a HashMap with synchronizedMap and refreshing it in place, which blocks readers and exposes half-built state.
 
 ### Scenario-based
 
@@ -466,11 +500,21 @@ public record MemberSummary(String memberId, List<String> planCodes) {
 
     **Interviewer listens for:** spotting the hidden O(n) inside the loop, pre-sizing, and choosing Set vs Map based on what is needed.
 
+    **Common wrong answer:** "Parallelise the loop." The algorithm is O(n²); fix the data structure first.
+
 ??? question "Q16. A service OOMs under load. The heap dump shows millions of Runnable objects held by a LinkedBlockingQueue. What happened?"
     **Answer:** The executor was created with `Executors.newFixedThreadPool`, which uses an unbounded `LinkedBlockingQueue`. When the downstream slowed, submissions outpaced processing and the queue grew without limit. Fix: create the `ThreadPoolExecutor` directly with a bounded `ArrayBlockingQueue`, a rejection policy (`CallerRunsPolicy` for back-pressure, or reject and return 503), and metrics on queue depth. Also add timeouts on the downstream call.
 
+    **Interviewer listens for:** unbounded queue in fixed pools, bounded ThreadPoolExecutor with rejection policy, backpressure.
+
+    **Common wrong answer:** "Increase heap." The queue will grow until it fills any heap.
+
 ??? question "Q17. Users report that some entries in a `Set<Member>` cannot be removed, and the set keeps growing. Member is a mutable class with equals/hashCode based on email. What is going on?"
     **Answer:** Somewhere a member's email is updated after it was added. The entry still sits in the bucket computed from the old hash, so `contains`/`remove` with the updated object look in the new bucket and fail, and adding it again creates a duplicate. Fix: base equality on an immutable identifier (member ID), or make the key a record, and never mutate fields used in `hashCode` while the object is in a hash collection.
+
+    **Interviewer listens for:** mutated field used in hashCode, entry stranded in the old bucket, immutable keys.
+
+    **Common wrong answer:** "HashSet has a bug with large sizes."
 
 ??? question "Q18. Predict the behaviour."
     ```java
@@ -481,6 +525,8 @@ public record MemberSummary(String memberId, List<String> planCodes) {
     **Answer:** `null` is printed for `get("c")`, then `containsKey(null)` throws `NullPointerException`. Immutable factory collections reject null both as content and as a query argument. A `HashMap` would have printed `false`.
 
     **Common wrong answer:** "prints null and false".
+
+    **Interviewer listens for:** immutable factories reject null queries, NPE from containsKey(null).
 
 ## Cheat sheet
 

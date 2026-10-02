@@ -116,6 +116,38 @@ stateDiagram-v2
 
 **Persistence:** make the transition atomic with the state check (`UPDATE … SET state='FILLED', version=version+1 WHERE id=? AND state='VERIFIED' AND version=?`), and emit an event per transition (audit + outbox).
 
+### The rest of the catalogue: Iterator, Visitor, Mediator, Memento
+
+These four come up less often, but interviewers expect you to recognise them and know the modern Java equivalent.
+
+| Pattern | Problem it solves | Where you already use it |
+|---|---|---|
+| **Iterator** | Walk a collection without exposing its internal structure | `Iterator`/`Iterable`, enhanced `for`, `Stream`, Spring Data `Slice`/`Page` for paging through results |
+| **Visitor** | Add new operations over a *fixed* set of types without editing those types (double dispatch) | Java compiler trees, ASM bytecode visitors, `FileVisitor`. In Java 21 a **sealed interface + exhaustive `switch`** usually replaces it |
+| **Mediator** | Many objects talk through one coordinator instead of to each other (N×N links become N) | A saga orchestrator, Spring Integration channels, a UI form controller coordinating fields |
+| **Memento** | Capture and restore an object's state without breaking encapsulation | Undo snapshots, `Serializable` checkpoints, event-sourcing snapshots |
+
+**Visitor in modern Java.** The classic version needs an `accept(Visitor v)` method on every type and a `visitX` method per type. With sealed types and pattern matching the compiler checks exhaustiveness for you:
+
+```java
+sealed interface Claim permits Pharmacy, Medical, Dental {}
+record Pharmacy(BigDecimal amount, int daysSupply) implements Claim {}
+record Medical(BigDecimal amount, String cptCode) implements Claim {}
+record Dental(BigDecimal amount) implements Claim {}
+
+// One "visitor" = one method. A new Claim type breaks compilation here, which is what you want.
+static BigDecimal memberShare(Claim c) {
+    return switch (c) {
+        case Pharmacy p when p.daysSupply() > 30 -> new BigDecimal("15");
+        case Pharmacy p -> new BigDecimal("10");
+        case Medical m  -> m.amount().multiply(new BigDecimal("0.20"));
+        case Dental d   -> d.amount().multiply(new BigDecimal("0.50"));
+    };
+}
+```
+
+Use this when the **set of types is stable and the operations grow** (pricing, validation, export). If new *types* arrive often and operations are stable, plain polymorphism (a method on each type) is the better fit.
+
 ## In practice: code & configuration
 
 === "❌ Common mistake"
@@ -274,32 +306,46 @@ SecurityFilterChain api(HttpSecurity http) throws Exception {
 
     **Common wrong answer:** "synonyms".
 
+??? question "Q5. What problem does Visitor solve, and how does Java 21 change it?"
+    **Answer:** Visitor adds new **operations** over a fixed set of **types** without editing those types, using double dispatch (`accept(visitor)` calls `visitor.visit(this)`). It suits stable type hierarchies with growing operations (compilers, AST tools). In Java 21, a **sealed interface plus an exhaustive pattern `switch`** does the same job with less boilerplate. The compiler reports every switch that misses a new subtype.
+
+    **Interviewer listens for:** operations vs types axis, double dispatch, sealed + exhaustive switch as the modern form.
+
+    **Common wrong answer:** Using Visitor where new types arrive every sprint. Each new type forces changes to every visitor.
+
 ### Intermediate
 
-??? question "Q5. `@EventListener` vs `@TransactionalEventListener`?"
+??? question "Q6. `@EventListener` vs `@TransactionalEventListener`?"
     **Answer:** `@EventListener` runs synchronously when published, inside the publisher's transaction, and its exceptions affect the publisher. `@TransactionalEventListener` runs at a transaction phase (default AFTER_COMMIT), so side effects happen only if the data committed. It's still not durable: use an outbox for guaranteed delivery.
 
     **Interviewer listens for:** timing plus durability.
 
     **Common wrong answer:** "the second one is async".
 
-??? question "Q6. Template Method vs callbacks?"
+??? question "Q7. Template Method vs callbacks?"
     **Answer:** Template Method uses inheritance: the base class defines the skeleton and subclasses override steps. Callbacks pass the varying steps as functions or objects to a template object (`JdbcTemplate.query(sql, rowMapper)`). Callbacks avoid inheritance coupling and compose better. Modern Spring prefers them.
 
     **Interviewer listens for:** composition preference.
 
     **Common wrong answer:** "`JdbcTemplate` uses Template Method by subclassing".
 
-??? question "Q7. How would you implement undo/redo?"
+??? question "Q8. How would you implement undo/redo?"
     **Answer:** The Command pattern, with `execute()` and `undo()` (or storing the previous state as a memento). Keep two stacks: executing pushes onto undo and clears redo, undo pops into redo. For distributed systems, "undo" becomes a **compensating command** (sagas).
 
     **Interviewer listens for:** commands + stacks, and compensation in distributed systems.
 
     **Common wrong answer:** "save the whole database".
 
+??? question "Q9. Mediator vs Observer?"
+    **Answer:** Both reduce direct links between objects. **Observer** is one-to-many broadcast: the subject does not know what listeners do. **Mediator** is a hub that **knows the participants and coordinates them**, deciding who does what next. A saga orchestrator is a mediator. Choreography with events is observer-style. Choose a mediator when the interaction logic is complex and must be visible in one place. Choose observer when listeners are independent and the publisher should not care.
+
+    **Interviewer listens for:** broadcast vs coordination, knowledge of participants, orchestrator vs choreography mapping.
+
+    **Common wrong answer:** "They are the same because both use events." A mediator owns the flow; an observer subject does not.
+
 ### Senior
 
-??? question "Q8. Model an order lifecycle so invalid transitions are impossible, even under concurrency."
+??? question "Q10. Model an order lifecycle so invalid transitions are impossible, even under concurrency."
     **Answer:**
     - An explicit state machine: an enum + transition table (or State classes / Spring Statemachine).
     - A domain method `transitionTo(next)` validates against the table.
@@ -312,7 +358,7 @@ SecurityFilterChain api(HttpSecurity http) throws Exception {
 
     **Common wrong answer:** "check the status in the controller".
 
-??? question "Q9. When is Observer the wrong choice?"
+??? question "Q11. When is Observer the wrong choice?"
     **Answer:**
     - When the reaction is part of the **same business transaction** and must succeed or fail together: call it directly, and make the dependency explicit.
     - When ordering and error handling are critical.
@@ -325,14 +371,14 @@ SecurityFilterChain api(HttpSecurity http) throws Exception {
 
 ### Scenario-based
 
-??? question "Q10. Add a new insurance plan type every quarter without touching existing code."
+??? question "Q12. Add a new insurance plan type every quarter without touching existing code."
     **Answer:** A `CopayStrategy` interface with an implementation per plan type, discovered by Spring into a `Map<PlanType, CopayStrategy>`. Add a class and a configuration/feature flag. Contract tests per strategy, plus a fallback for unknown types. If rules change often or are data-driven, consider a rules engine or table-driven strategy instead of code.
 
     **Interviewer listens for:** OCP through Strategy, plus a data-driven alternative.
 
     **Common wrong answer:** "add another case to the switch".
 
-??? question "Q11. Patients got "ready for pickup" SMS for fills that later failed. Why, and what's the fix?"
+??? question "Q13. Patients got "ready for pickup" SMS for fills that later failed. Why, and what's the fix?"
     **Answer:** The SMS was sent inside the transaction (or by a synchronous `@EventListener`) before the commit, and the transaction then rolled back. Fix: publish events and handle them `AFTER_COMMIT`. Better, write an outbox row in the transaction and have a relay publish it to the notification service, with idempotent sends keyed by `(rxId, state)`.
 
     **Interviewer listens for:** commit timing, outbox and idempotency.
@@ -350,6 +396,10 @@ SecurityFilterChain api(HttpSecurity http) throws Exception {
 | Command | Request as an object: queue, retry, audit, undo | `Runnable`, job messages, CQRS commands |
 | State | Behaviour by state, explicit transitions | enum + transition table, conditional update, Spring Statemachine |
 | Command vs event | Intent (one handler) vs fact (many listeners) | Imperative vs past-tense naming |
+| Iterator | Traverse without exposing internals | `Iterable`, `Stream`, Spring Data `Slice` |
+| Visitor | New operations over fixed types | Sealed interface + exhaustive `switch` (Java 21) |
+| Mediator | Hub coordinates many participants | Saga orchestrator, Spring Integration |
+| Memento | Snapshot and restore state | Undo stacks, event-sourcing snapshots |
 
 ## Sources
 1. Gamma et al., *Design Patterns* (GoF): behavioural patterns.

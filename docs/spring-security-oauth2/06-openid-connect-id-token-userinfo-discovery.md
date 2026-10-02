@@ -412,15 +412,21 @@ For a browser app, the common production pattern is a backend-for-frontend: the 
 
     **Interviewer listens for:** knowing `sub` is the identifier and that `email` and `name` are not guaranteed.
 
+    **Common wrong answer:** "email and name are mandatory." Only identity and timing claims are required.
+
 ??? question "Q4. What is the UserInfo endpoint and how do you call it?"
     **Answer:** A protected resource on the provider that returns claims about the authenticated user. The client sends `GET` (or `POST`) with `Authorization: Bearer <access_token>`. Which claims come back depends on the granted scopes (`profile`, `email`, ...). The response always includes `sub`, and the client must check it matches the ID token's `sub`.
 
     **Common wrong answer:** "You call it with the ID token."
 
+    **Interviewer listens for:** access token as bearer, profile claims, consistency of sub with the ID token.
+
 ??? question "Q5. What is OIDC discovery?"
     **Answer:** A JSON metadata document at `{issuer}/.well-known/openid-configuration` listing the provider's endpoints, `jwks_uri`, supported scopes, response types and signing algorithms. Clients use it to configure themselves from a single issuer URL. The `issuer` value inside must exactly equal the issuer URL the client started from (the prefix before `/.well-known/openid-configuration`) and the `iss` claim in tokens.
 
     **Interviewer listens for:** `jwks_uri` for keys, the exact-match rule, Spring's `issuer-uri`.
+
+    **Common wrong answer:** "Discovery is optional decoration." Spring uses it to configure endpoints and keys.
 
 ### Intermediate
 
@@ -436,10 +442,14 @@ For a browser app, the common production pattern is a backend-for-frontend: the 
 
     **Interviewer listens for:** nonce lives inside the token and is verified by the client. PKCE is verified by the provider.
 
+    **Common wrong answer:** "nonce and state are the same thing." They protect different steps.
+
 ??? question "Q8. Why should you key users on iss + sub and not on email?"
     **Answer:** `sub` is defined as a stable, never-reassigned identifier, but only unique within one issuer, so the pair is the globally unique key. Email is mutable, may be unverified (`email_verified: false`), may be recycled to a different person, and in multi-tenant providers can be set by a tenant admin. The nOAuth issue with Entra ID was account takeover caused by matching on email.
 
     **Common wrong answer:** "Email is unique so it is fine as a primary key."
+
+    **Interviewer listens for:** sub is stable per issuer, email is mutable and can be reassigned or unverified.
 
 ??? question "Q9. (Gotcha) A resource server is configured with the same issuer-uri as the client. A developer sends the ID token as the Bearer token. What happens?"
     **Answer:** With only default validation, it may well be **accepted**. Spring's resource server by default checks signature, expiry and issuer. The ID token is signed by the same provider with the same keys, so those all pass. Audience is not validated unless you configure it. That is why you must add an audience validator (or the `audiences` property) on the resource server, so that only tokens minted for this API are accepted. Details in [Resource server & client configuration in Spring](07-resource-server-and-client-configuration-in-spring.md).
@@ -451,6 +461,10 @@ For a browser app, the common production pattern is a backend-for-frontend: the 
 ??? question "Q10. What does Spring Security do when you set only issuer-uri for a client registration?"
     **Answer:** At startup it fetches the discovery document (trying the OIDC well-known path, then the RFC 8414 forms), checks the `issuer` matches, and builds the `ClientRegistration` with authorization, token, UserInfo and JWKS URIs plus the user-name attribute `sub`. At login, `oauth2Login()` uses those to run the code flow, validate the ID token and load the `OidcUser`. If the provider is down at startup, the context fails to start.
 
+    **Interviewer listens for:** discovery fetch at startup, issuer check, endpoints and JWKS filled in, startup dependency.
+
+    **Common wrong answer:** "Nothing happens until the first login."
+
 ### Senior
 
 ??? question "Q11. When should claims go in the ID token versus be fetched from UserInfo?"
@@ -458,20 +472,28 @@ For a browser app, the common production pattern is a backend-for-frontend: the 
 
     **Interviewer listens for:** privacy, size and freshness as the three axes, not just "performance".
 
+    **Common wrong answer:** "Put everything in the ID token to save a call." Large tokens leak data and break header limits.
+
 ??? question "Q12. How do you handle signing key rotation at the provider without redeploying clients?"
     **Answer:** Clients never hard-code keys. They read `jwks_uri` from discovery, cache the key set, and select the key by the `kid` header. The provider publishes the new key in the JWKS ahead of time, starts signing with it, and removes the old key after the longest token lifetime has passed. On an unknown `kid` the client refetches the JWKS once (rate-limited, to avoid a denial of service by tokens with random `kid` values). Spring's Nimbus-based decoders do this caching and refetch.
 
     **Interviewer listens for:** overlap window, `kid`, refetch on miss, rate-limiting the refetch.
+
+    **Common wrong answer:** "Redeploy all clients with the new public key."
 
 ??? question "Q13. Your app supports customers from many Entra ID tenants. What changes in ID token validation?"
     **Answer:** The shared endpoint's discovery document has an issuer with a tenant placeholder, so the fixed issuer-equality check cannot be used as is. I would validate that `iss` matches the expected pattern for the token's `tid`, and that `tid` is in an allow-list of onboarded tenants, while still verifying signature, audience, expiry and nonce. The user key becomes tenant plus the stable object identifier, never email. In Spring this means a custom issuer validator or a per-tenant registration resolved dynamically.
 
     **Interviewer listens for:** awareness that "accept any issuer from this provider" equals "accept any tenant in the world", and a tenant allow-list.
 
+    **Common wrong answer:** "Disable issuer validation for multi-tenant apps." Validate the tenant-specific issuer instead.
+
 ??? question "Q14. How does OIDC support step-up authentication for a sensitive action?"
     **Answer:** The client inspects `acr`, `amr` and `auth_time` in the ID token. If the assurance is too low or the login is too old, it sends the user back to the authorization endpoint with `acr_values` (requesting a stronger method), `max_age` (forcing a recent login) or `prompt=login`. The new ID token must then be validated for exactly those values, because the request parameters are only requests. The client must check the result and not assume the provider complied.
 
     **Common wrong answer:** "Send `prompt=login` and assume MFA happened."
+
+    **Interviewer listens for:** acr/amr/auth_time inspection, re-authentication with max_age or acr_values.
 
 ### Scenario-based
 
@@ -480,20 +502,28 @@ For a browser app, the common production pattern is a backend-for-frontend: the 
 
     **Interviewer listens for:** a concrete comparison method and refusing to turn the check off.
 
+    **Common wrong answer:** "Turn off issuer validation." The mismatch is a configuration or proxy issue to fix.
+
 ??? question "Q16. A user's access was revoked in Active Directory, but they can still use the application for hours. Why, and how do you fix it?"
     **Answer:** The application validated the ID token once and created its own session, which lives independently of the provider. The fixes, in order of strength: shorten the local session and access-token lifetime so refresh fails at the provider. Implement OIDC back-channel logout so the provider can end the session actively (Spring Security supports this through `oidcLogout().backChannel()` since 6.2). For the highest-risk operations, re-check with the provider at the time of the action. State the trade-off: tighter revocation costs more round trips.
 
     **Interviewer listens for:** understanding that the ID token is a point-in-time proof and that the session is the thing to control.
+
+    **Common wrong answer:** "The ID token is still valid, so nothing can be done." Session lifetime and back-channel logout fix it.
 
 ??? question "Q17. The team wants the React SPA to read roles from the token to show or hide menus. Which token, and what are the risks?"
     **Answer:** Use the ID token or UserInfo claims, because those are meant for the client. Do not parse the access token in the client, since its format belongs to the API and the provider and may change or be opaque. Make clear this is user-experience only: every API must enforce authorization from the access token it validates. With a backend-for-frontend, the cleaner option is a `/me` endpoint that returns the roles from the server-side `OidcUser`, so no token reaches the browser.
 
     **Common wrong answer:** "Decode the access token in the browser and trust the roles for security."
 
+    **Interviewer listens for:** ID token or UserInfo for UI decisions, server still enforces, access token is opaque to the client.
+
 ??? question "Q18. Your service starts failing to boot in one region during a provider outage, while already-running pods are fine. Explain and propose a fix."
     **Answer:** Running pods already have the client registration and cached JWKS, so they keep working for existing sessions and can validate tokens. New pods call the discovery endpoint during bean creation and fail. Options: configure endpoints explicitly so startup has no network dependency. Resource servers behave differently: Spring Boot's auto-configured decoder for `issuer-uri` is lazy (a `SupplierJwtDecoder` that runs discovery on the first request), so they boot but fail requests until the provider is back. Setting `jwk-set-uri` (with `issuer-uri` kept for `iss` validation) removes the discovery call entirely, so only the JWKS fetch remains. Keep enough capacity and avoid restarts during the incident. Longer term, ensure the provider is multi-region and included in dependency health planning.
 
     **Interviewer listens for:** distinguishing startup-time discovery from request-time validation.
+
+    **Common wrong answer:** "The provider outage is not our problem." Startup dependence on discovery needs a fallback.
 
 ## Cheat sheet
 

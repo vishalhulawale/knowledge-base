@@ -444,6 +444,8 @@ Use `@PostConstruct` for cheap validation and in-memory setup. Do not start thre
 
     **Interviewer listens for:** `ApplicationContext` is a superset, and it instantiates singletons eagerly.
 
+    **Common wrong answer:** "ApplicationContext is a different container that replaced BeanFactory." It extends BeanFactory and adds features.
+
 ??? question "Q4. What bean scopes does Spring provide, and what is the default?"
     **Answer:** Singleton is the default: one instance per container per bean name. Prototype creates a new instance for every lookup or injection point. Web-aware scopes are request, session, application and websocket. You can register custom scopes, and Spring Cloud's refresh scope is a well-known example. A Spring singleton is not a JVM-wide singleton, and it is shared by all request threads, so it must be stateless or thread-safe.
 
@@ -476,6 +478,8 @@ Use `@PostConstruct` for cheap validation and in-memory setup. Do not start thre
 
     **Interviewer listens for:** The exact order, and the reason: annotation callbacks are post-processor driven.
 
+    **Common wrong answer:** "ctor env=set." Field injection happens after the constructor runs.
+
 ### Intermediate
 
 ??? question "Q6. Walk me through the lifecycle of a singleton bean."
@@ -483,10 +487,14 @@ Use `@PostConstruct` for cheap validation and in-memory setup. Do not start thre
 
     **Interviewer listens for:** Proxy creation is after initialisation, and the three init mechanisms have a fixed order.
 
+    **Common wrong answer:** Putting @PostConstruct before dependency injection, or forgetting that proxies are created after init callbacks.
+
 ??? question "Q7. `BeanPostProcessor` vs `BeanFactoryPostProcessor`?"
     **Answer:** A `BeanFactoryPostProcessor` runs once, after definitions are loaded and before any normal bean is created. It changes metadata: add definitions, change scope, resolve placeholders. `ConfigurationClassPostProcessor` is the main one. A `BeanPostProcessor` runs for each bean instance, before and after its init callbacks, and may return a different object such as a proxy. `@Autowired`, `@PostConstruct` and AOP are implemented this way. Declare a `BeanFactoryPostProcessor` in a `static @Bean` method so its configuration class is not instantiated too early.
 
     **Interviewer listens for:** Definitions versus instances, a real example of each, and the `static` detail.
+
+    **Common wrong answer:** "They are the same with different names." One changes definitions before creation; the other wraps or changes instances.
 
 ??? question "Q8. There are three beans of type `PaymentGateway`. How does Spring decide which to inject?"
     **Answer:** It finds candidates by type. A `@Qualifier` at the injection point selects the matching bean. Without one, a single `@Primary` bean wins. After that come two late tie-breakers: the highest `@Priority`, and a bean whose name equals the field or parameter name (up to Spring 6.1 priority is checked first, from 6.2 the name match is checked first). If nothing decides it, startup fails with `NoUniqueBeanDefinitionException`. Alternatives: inject `List<PaymentGateway>` or `Map<String, PaymentGateway>` and choose at runtime, or use `ObjectProvider`. Spring 6.2 also has `@Fallback` to mark a bean as the last resort.
@@ -500,6 +508,8 @@ Use `@PostConstruct` for cheap validation and in-memory setup. Do not start thre
 
     **Interviewer listens for:** Injection happens once, `ObjectProvider` or `@Lookup`, and awareness of the proxy-per-call behaviour.
 
+    **Common wrong answer:** "Spring creates a new prototype each time the singleton uses it."
+
 ??? question "Q10. Gotcha: how many `HttpClient` instances exist, and what changes with `proxyBeanMethods = false`?"
     ```java
     @Configuration
@@ -512,6 +522,8 @@ Use `@PostConstruct` for cheap validation and in-memory setup. Do not start thre
     **Answer:** One. A full `@Configuration` class is subclassed with CGLIB, and the calls to `httpClient()` are intercepted and return the singleton from the container. With `@Configuration(proxyBeanMethods = false)`, or if the class were a `@Component`, those are plain Java calls: three instances are created, and two of them are unmanaged (no lifecycle callbacks, no post-processing). The safe style in both modes is to take the dependency as a method parameter: `PharmacyClient pharmacy(HttpClient httpClient)`.
 
     **Interviewer listens for:** CGLIB interception of `@Bean` methods, lite mode, and parameter injection as the fix.
+
+    **Common wrong answer:** "Three HttpClients, because httpClient() is called three times." In a full @Configuration the calls go through the proxy and return the singleton.
 
 ### Senior
 
@@ -527,15 +539,21 @@ Use `@PostConstruct` for cheap validation and in-memory setup. Do not start thre
 
     **Interviewer listens for:** The lifecycle position of proxy creation, and a working alternative.
 
+    **Common wrong answer:** "Mark the method @Transactional and it works." The init callback runs on the raw bean, before the proxy exists.
+
 ??? question "Q13. How do request-scoped beans work when injected into a singleton, and where does this break?"
     **Answer:** Spring injects a scoped proxy (CGLIB by default with `@RequestScope`). On each method call the proxy asks the request scope for the target. The scope reads `RequestContextHolder`, which stores the current request attributes in a `ThreadLocal`, and creates the bean on first use within that request. At the end of the request the bean's destroy callbacks run. It breaks on any thread that is not the request thread: `@Async` executors, `CompletableFuture` pools, scheduled jobs, Kafka listeners and reactive pipelines. There you get "No thread-bound request found". The robust approach is to read the values on the request thread and pass an immutable context object explicitly, or to propagate context deliberately (task decorators, Micrometer context propagation).
 
     **Interviewer listens for:** Proxy plus thread-bound lookup, the async limitation, explicit passing as the preferred design.
 
+    **Common wrong answer:** "Request scope works in @Async methods." The request context is thread-bound and missing on other threads.
+
 ??? question "Q14. What happens inside the container when a pod receives `SIGTERM`?"
     **Answer:** Boot registers a JVM shutdown hook that closes the context. A `ContextClosedEvent` is published. `SmartLifecycle` beans are stopped in descending phase order: with graceful shutdown the web server stops accepting new requests and waits for active ones, and Kafka listener containers stop polling and finish the current records. Each phase has a timeout (`spring.lifecycle.timeout-per-shutdown-phase`, 30 seconds by default). Then singletons are destroyed in reverse dependency order: `@PreDestroy`, `DisposableBean`, inferred `close()` or `shutdown()`. Graceful shutdown is the default from Boot 3.4. Before that you set `server.shutdown=graceful`. The pod's `terminationGracePeriodSeconds` must be longer than the Spring timeouts, and a readiness probe or pre-stop delay is needed so the load balancer stops sending traffic first.
 
     **Interviewer listens for:** Lifecycle phases before destruction, reverse dependency order, and alignment with Kubernetes settings.
+
+    **Common wrong answer:** "The JVM is killed immediately." Spring stops lifecycle beans and drains requests within the grace period.
 
 ### Scenario-based
 
@@ -544,20 +562,28 @@ Use `@PostConstruct` for cheap validation and in-memory setup. Do not start thre
 
     **Interviewer listens for:** Singleton thread-safety as the first hypothesis, a way to reproduce, a preventive control.
 
+    **Common wrong answer:** "It is a caching bug in the CDN." Shared mutable state in singletons is the usual cause.
+
 ??? question "Q16. After upgrading Spring Boot, the app fails at startup: 'The dependencies of some of the beans in the application context form a cycle'. What do you do?"
     **Answer:** This is the Boot 2.6+ default that prohibits circular references. Short term, to unblock the upgrade, set `spring.main.allow-circular-references=true` and record it as technical debt. Then fix each cycle. Read the cycle printed in the failure analysis. Typical fixes: extract the logic both beans need into a third bean, invert one direction with an application event or an interface owned by the lower layer, or merge the two classes if they are really one responsibility. `@Lazy` on one injection point works but only hides the coupling. Moving to constructor injection across the codebase prevents new cycles, because they then fail immediately.
 
     **Interviewer listens for:** Knows the cause, separates the temporary flag from the real fix, and treats a cycle as a design smell.
+
+    **Common wrong answer:** Setting allow-circular-references=true permanently and moving on.
 
 ??? question "Q17. A service takes 90 seconds to start, so rolling deployments and autoscaling are slow. How do you investigate and improve it?"
     **Answer:** Measure first. Enable `BufferingApplicationStartup` and read the Actuator `startup` endpoint, or use a profiler, to see which beans and phases cost time. Usual causes: remote calls or cache warm-up in constructors and `@PostConstruct`, component scanning over a huge package tree, heavy JPA or Hibernate metamodel building, and unused auto-configurations. Improvements: move warm-up to an `ApplicationReadyEvent` listener or do it asynchronously, mark rarely used heavy beans `@Lazy`, narrow scanning, exclude unneeded auto-configuration, consider background bootstrap for independent heavy beans (Spring 6.2+). Global lazy initialisation is a trade: faster start, but failures and latency move to the first request, so pair it with readiness checks. For a larger step, AOT processing, CDS or a native image. Also check that startup and readiness probes reflect real readiness.
 
     **Interviewer listens for:** Measurement before tuning, knowing the trade-off of lazy init, lifecycle-aware placement of warm-up.
 
+    **Common wrong answer:** "Turn on lazy initialisation everywhere." It hides the slow beans and moves the cost to the first request.
+
 ??? question "Q18. You need to add a fourth cloud provider to a key-management service without touching existing provider code. How do you design it with Spring?"
     **Answer:** Define one interface, for example `KeyProvider`, with a method that says which cloud it supports. Each provider is a `@Component`. The orchestrating service injects `List<KeyProvider>` (or `Map<String, KeyProvider>`) and builds a lookup map in its constructor, failing fast if two providers claim the same cloud. Adding a provider is then one new class and its configuration: open for extension, closed for modification. Provider-specific settings bind through `@ConfigurationProperties`. Providers that are not licensed or configured can be switched off with `@ConditionalOnProperty`. Tests instantiate the service with fake providers through its constructor.
 
     **Interviewer listens for:** Collection injection as a strategy registry, fail-fast validation, conditional beans, testability.
+
+    **Common wrong answer:** Adding another if/else branch for the new provider in the orchestrating service.
 
 ## Cheat sheet
 

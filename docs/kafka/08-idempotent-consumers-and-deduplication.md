@@ -172,37 +172,44 @@ var result = mongoTemplate.updateFirst(query, update, Prescription.class);
 
     **Common wrong answer:** Naming only "check Redis for the event ID" with no mention of atomicity or of what happens when processing fails after the check.
 
+??? question "Q3. Why does a normal Kafka consumer need to be idempotent at all?"
+    **Answer:** Kafka consumers are **at-least-once** by default. You process a record, then commit its offset. If the consumer crashes, times out (`max.poll.interval.ms`) or loses its partitions in a rebalance *after* processing but *before* the commit, the next owner of the partition reads the same records again. Producer retries without idempotence, DLQ replays and manual offset resets also redeliver. So duplicates are normal operation, not a rare bug.
+
+    **Interviewer listens for:** commit-after-process ordering, rebalance and crash windows, replays and offset resets as other sources.
+
+    **Common wrong answer:** "Kafka guarantees exactly-once, so duplicates cannot happen." EOS covers Kafka-to-Kafka writes inside a transaction, not your database or an SMS call.
+
 ### Intermediate
 
-??? question "Q3. Why is a Redis 'seen' check not enough?"
+??? question "Q4. Why is a Redis 'seen' check not enough?"
     **Answer:** Check-then-act across Redis and the DB isn't atomic. Concurrent or retried processing can both pass the check, and a crash between the side effect and the `SET` reprocesses. Use a DB unique constraint in the same transaction, or `SET NX` to claim before acting with a status and recovery. Redis also adds its own gaps: the TTL bounds how long you're protected, and a claim can be lost on eviction or on failover with asynchronous replication. Redis is fine as a cheap first filter or where an occasional duplicate is acceptable; it shouldn't be the only guard on money or clinical data.
 
     **Interviewer listens for:** both failure orders (mark-after-work → duplicate, mark-before-work → lost event), atomicity with the business write, and the TTL / durability limits.
 
     **Common wrong answer:** "Redis is single-threaded, so it's atomic." A single Redis command is atomic; the check, the database write and the mark together are not.
 
-??? question "Q4. How long should dedupe records live?"
+??? question "Q5. How long should dedupe records live?"
     **Answer:** Longer than the maximum window in which a duplicate could arrive: topic retention, the replay policy and retry topic delays (e.g. 7–30 days). Purge with a TTL (a MongoDB TTL index, Redis `EX`) or a batch delete. Partition the table by date for cheap purging. Remember the downstream side too: an external provider's idempotency keys expire on their schedule, not yours.
 
     **Interviewer listens for:** retention derived from the replay window rather than a guessed number, a purge mechanism, and awareness of table growth.
 
     **Common wrong answer:** "Keep them forever" (unbounded growth) or "a few minutes is enough" (a DLQ replay days later slips straight through).
 
-??? question "Q5. Delta events vs state events for idempotency?"
+??? question "Q6. Delta events vs state events for idempotency?"
     **Answer:** State events (`status=SHIPPED`, `balance=120`) are naturally idempotent and tolerate duplicates. Delta events (`+20`) aren't and need dedupe. Delta events carry intent and are needed for audit or event sourcing, so they often need the dedupe store. State events have their own trap: a late, older state can overwrite a newer one, so pair them with a version check and rely on per-key ordering within a partition.
 
     **Interviewer listens for:** the trade-off in both directions, and that state events still need a version guard against stale overwrites.
 
     **Common wrong answer:** "Always use state events." That drops intent and history, and without a version an out-of-order event silently regresses the data.
 
-??? question "Q6. What's the difference between Kafka's idempotent producer and an idempotent consumer?"
+??? question "Q7. What's the difference between Kafka's idempotent producer and an idempotent consumer?"
     **Answer:** They solve different duplicates. The idempotent producer (`enable.idempotence=true`, default since Kafka 3.0, requires `acks=all`) gives each producer a producer ID and a sequence number per partition, so the broker discards a batch that the client resends after a lost acknowledgement. It only covers the client's internal retries within one producer session; it doesn't cover the application calling `send()` twice, or a restart (unless a `transactional.id` is used). An idempotent consumer is application logic that makes *processing* safe to repeat, which is what handles redelivery after a crash, rebalance, retry topic or DLQ replay. You need both: one keeps duplicates out of the log, the other makes the ones that still arrive harmless.
 
     **Interviewer listens for:** PID + sequence number, "broker-side dedupe of producer retries", the session scope, and that consumer redelivery is a separate problem.
 
     **Common wrong answer:** "`enable.idempotence=true` gives exactly-once end to end."
 
-??? question "Q7. Why not use topic-partition-offset as the dedupe key instead of an eventId?"
+??? question "Q8. Why not use topic-partition-offset as the dedupe key instead of an eventId?"
     **Answer:** It works for one class of duplicate: the same record redelivered to the same consumer group. It's unique and free. It fails when the *business event* is duplicated: an app-level producer retry or an upstream system sending twice creates two records with different offsets, and a replay through a retry topic, DLQ or mirrored cluster gives the event a new coordinate. A producer-generated eventId (payload field or header, created once, e.g. in the outbox row) survives all of those. Offsets are still useful a different way: storing the last processed offset per partition in the same database transaction as the data, and seeking to it on assignment, gives exactly-once processing for that sink without a per-event table.
 
     **Interviewer listens for:** distinguishing record identity from event identity, and the "store offsets with the data" alternative.
@@ -211,21 +218,21 @@ var result = mongoTemplate.updateFirst(query, update, Prescription.class);
 
 ### Senior
 
-??? question "Q8. The consumer updates MongoDB and calls an SMS provider. Make it idempotent."
+??? question "Q9. The consumer updates MongoDB and calls an SMS provider. Make it idempotent."
     **Answer:** In MongoDB, store a notification document keyed by `eventId+channel` with status `PENDING` (unique index → duplicate inserts fail). Call the provider with an idempotency key if supported. Update to `SENT` with the provider message ID. On retry, read the status: `SENT` → skip; `PENDING` → query the provider or resend with the same key. The MongoDB business update itself should be an upsert or version-guarded update so it's safe to repeat. If the provider has no idempotency key and no lookup API, exactly-once is impossible: a crash after the provider accepted the SMS but before `SENT` is recorded leaves you choosing between resending (possible duplicate) and not resending (possible loss). State that choice explicitly; for a reminder I'd usually accept a rare duplicate, for an OTP or payment I'd insist on a provider with idempotency support. Accept and document the residual tiny window.
 
     **Interviewer listens for:** a per-side-effect state record with a unique key, the provider idempotency key, and honesty that the dual write can't be made atomic.
 
     **Common wrong answer:** "Wrap the MongoDB write and the SMS call in a transaction." An HTTP call can't join a database transaction, and it can't be rolled back.
 
-??? question "Q9. How do idempotency and exactly-once semantics relate?"
+??? question "Q10. How do idempotency and exactly-once semantics relate?"
     **Answer:** Kafka EOS gives atomic Kafka-to-Kafka processing. End-to-end exactly-once *effects* with external systems are achieved by at-least-once delivery plus idempotent processing. Concretely, EOS (`processing.guarantee=exactly_once_v2` in Kafka Streams, or a transactional producer with `sendOffsetsToTransaction` plus `isolation.level=read_committed` downstream) commits the output records and the consumed offsets in one Kafka transaction, so it covers consume-transform-produce only. The moment the handler writes to a database or calls an API, that write is outside the transaction. In practice, idempotency is the more general and robust tool, and the two combine well: EOS inside Kafka, idempotent sinks at the edges.
 
     **Interviewer listens for:** the Kafka-only scope of EOS, offsets committed inside the transaction, `read_committed`, and "exactly-once effects = at-least-once + idempotency".
 
     **Common wrong answer:** "We enabled exactly-once, so we don't need idempotent consumers." EOS doesn't cover the database or any external call.
 
-??? question "Q10. Two instances process the same event at the same moment. What does your dedupe table do, and what breaks if you get the transaction boundary wrong?"
+??? question "Q11. Two instances process the same event at the same moment. What does your dedupe table do, and what breaks if you get the transaction boundary wrong?"
     **Answer:** With the insert and the business change in one transaction, the database arbitrates. The second insert of the same `(consumer_group, event_id)` blocks on the unique index until the first transaction finishes: if it commits, the second sees a conflict and skips; if it rolls back, the second proceeds and does the work. Either way the effect is applied once. Get the boundary wrong and you pick a failure mode. Committing the dedupe row *before* the work means a crash in between marks the event as done when it wasn't (lost update). Writing it *after* the work in a separate transaction means a crash in between repeats the work (duplicate). The same applies if the dedupe row and the data live in different databases: there's no shared transaction, so you need a status column and a recovery job, or an outbox. In MongoDB the equivalent is a multi-document transaction on a replica set, or folding the processed event ID or version into the business document itself so a single atomic update covers both.
 
     **Interviewer listens for:** unique-constraint blocking semantics, both failure orders, and what to do when a shared transaction isn't available.
@@ -234,7 +241,7 @@ var result = mongoTemplate.updateFirst(query, update, Prescription.class);
 
 ### Scenario-based
 
-??? question "Q11. After a DLQ replay, members got duplicate refill reminders. What went wrong and how do you fix it?"
+??? question "Q12. After a DLQ replay, members got duplicate refill reminders. What went wrong and how do you fix it?"
     **Answer:** The notification consumer wasn't idempotent, or the replay assigned new event IDs. Fix it by keeping the original eventId on replay, adding a dedupe store per (eventId, channel), and making the replay tool preserve keys and headers. Add a pre-replay checklist. I'd also check why the record was in the DLQ: if the handler sends the notification and *then* fails on a later step, every retry and replay resends it, so the send needs its own recorded state (`PENDING → SENT`) rather than relying on the handler succeeding as a whole. Finally, check the dedupe retention: if the replay happened after the records were purged, the guard had already expired.
 
     **Interviewer listens for:** root cause before fix, stable event IDs across replay, per-side-effect idempotency for partial failures, and a process change (replay runbook, dry run).

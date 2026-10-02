@@ -445,15 +445,21 @@ The same rules apply: `skip()` on a large collection walks the skipped documents
 
     **Interviewer listens for:** the 3.0 hierarchy change, and the design point that you can extend plain `Repository` to expose less.
 
+    **Common wrong answer:** "JpaRepository is required for paging." PagingAndSortingRepository already provides it.
+
 ??? question "Q3. `Page` vs `Slice` vs `List` as a return type?"
     **Answer:** `Page` runs the data query plus a count query and knows total elements and total pages. `Slice` fetches one extra row to know whether a next slice exists and never counts. `List` with a `Pageable` just applies limit and offset. Choose `Slice` when the UI does not show totals, because the count is often the expensive part.
 
     **Common wrong answer:** "`Slice` is faster because it uses keyset pagination." It still uses offset. It only saves the count.
 
+    **Interviewer listens for:** count query cost, Slice for infinite scroll, List for bounded results.
+
 ??? question "Q4. What are projections, and which kinds exist?"
     **Answer:** A projection returns a subset of an entity's attributes. Closed interface projections (getters matching property names) and class or record DTOs let Spring Data select only those columns. Open projections use `@Value` with SpEL and need the whole entity, so nothing is saved. Dynamic projections take a `Class<T>` parameter so one method can return different shapes.
 
     **Interviewer listens for:** closed vs open and the performance difference, read-only nature.
+
+    **Common wrong answer:** "Projections still load the full entity." Closed and DTO projections select only the needed columns.
 
 ### Intermediate
 
@@ -480,10 +486,14 @@ The same rules apply: `skip()` on a large collection walks the skipped documents
 
     **Interviewer listens for:** `merge` returns a different object, managed vs detached, dirty checking.
 
+    **Common wrong answer:** "save() on a detached entity updates the same instance." merge returns a different managed instance.
+
 ??? question "Q7. Why do you get `HHH000104: firstResult/maxResults specified with collection fetch; applying in memory`?"
     **Answer:** The query fetch-joins a to-many collection and is also paged. A join multiplies parent rows, so a SQL `LIMIT 20` would cut off children and return fewer than 20 parents. Hibernate therefore runs the query **without** a limit, loads the full result and pages in memory. On a large table that is an out-of-memory risk. Fixes: page IDs first and then fetch the graph with `IN`, use `default_batch_fetch_size` with lazy collections, or use a DTO projection. Turn on `hibernate.query.fail_on_pagination_over_collection_fetch` to make it an error.
 
     **Common wrong answer:** "Add `DISTINCT`." That removes duplicate parents in the result but does not make the limit work in SQL.
+
+    **Interviewer listens for:** fetch join + paging multiplies rows, in-memory paging, two-step id query or batch fetching.
 
 ??? question "Q8. How do transactions work on repository methods if I never write `@Transactional`?"
     **Answer:** `SimpleJpaRepository` is `@Transactional(readOnly = true)` at class level and its write methods are `@Transactional`. So each inherited CRUD call runs in its own transaction if none exists, or joins the caller's. That means two repository calls from a non-transactional service are two separate transactions and are not atomic. Declare the boundary on the service method. Query methods you declare yourself (derived or `@Query`) get **no** transaction configuration by default. A read still works, but a `@Modifying` query with no active transaction throws `TransactionRequiredException`, so it needs its own `@Transactional` or a transactional caller.
@@ -495,8 +505,16 @@ The same rules apply: `skip()` on a large collection walks the skipped documents
 ??? question "Q9. What does `@Modifying(clearAutomatically = true)` solve?"
     **Answer:** A JPQL `update` or `delete` goes straight to the database and does not touch entities already loaded in the persistence context. Those entities are now stale, and a later `findById` in the same transaction returns the cached, old state. `clearAutomatically` clears the persistence context after the query. `flushAutomatically` flushes pending changes first so they are not lost by the clear.
 
+    **Interviewer listens for:** bulk JPQL bypasses the persistence context, stale entities, clear and flush options.
+
+    **Common wrong answer:** "@Modifying is only needed for the query to compile."
+
 ??? question "Q10. `findById` vs `getReferenceById`?"
     **Answer:** `findById` runs a `SELECT` (or returns from the first-level cache) and gives an `Optional`. `getReferenceById` returns an uninitialised proxy without any query. Use it to set an association (`order.setCustomer(customerRepo.getReferenceById(id))`) when you only need the foreign key. If the row does not exist, the error appears later, on access or at flush as a constraint violation.
+
+    **Interviewer listens for:** SELECT + Optional vs lazy proxy without a query, use for setting associations.
+
+    **Common wrong answer:** "getReferenceById returns null if the row is missing." It throws on first access.
 
 ### Senior
 
@@ -512,15 +530,21 @@ The same rules apply: `skip()` on a large collection walks the skipped documents
 
     **Interviewer listens for:** entities for writes, projections for reads, optimistic locking, `open-in-view` off, room to scale reads separately.
 
+    **Common wrong answer:** Using the same entity graph for list screens and commands, loading full aggregates just to display a table.
+
 ??? question "Q13. What are the limits of the repository abstraction? When do you bypass it?"
     **Answer:** It is strong for aggregate CRUD and simple queries. It is weak for reporting queries, window functions, bulk operations, store-specific features and anything where you need exact control of the SQL or the pipeline. In those cases use a custom fragment with `EntityManager`, `JdbcClient`/`JdbcTemplate`, jOOQ or `MongoTemplate`. Also, the "same API across stores" promise is only at the interface level: transaction semantics, consistency and paging cost differ between a relational database, MongoDB and Elasticsearch, so you cannot swap stores without redesign.
 
     **Interviewer listens for:** pragmatic mix, awareness that the abstraction leaks, no dogma.
 
+    **Common wrong answer:** "Everything must go through repositories." Reporting and bulk work are better with JdbcClient or native queries.
+
 ??? question "Q14. Why is `spring.jpa.open-in-view` considered an anti-pattern, and what breaks when you turn it off?"
     **Answer:** With it on, the persistence context stays open until the view is rendered, so lazy associations load during JSON serialisation. That hides N+1 queries, runs them outside any service transaction, and can keep a database connection tied up for the whole request, including slow downstream calls. Turning it off makes those lazy accesses throw `LazyInitializationException`. The fix is to fetch what the response needs inside the service (entity graph, fetch join, or better, a projection) and return DTOs.
 
     **Interviewer listens for:** connection-pool impact, explicit fetch plans, DTO boundary.
+
+    **Common wrong answer:** "Turn it off and add EAGER fetching everywhere." That causes over-fetching on every query.
 
 ### Scenario-based
 
@@ -529,18 +553,28 @@ The same rules apply: `skip()` on a large collection walks the skipped documents
 
     **Interviewer listens for:** recognising the moving-window bug quickly, keyset as the robust fix, concurrency follow-through.
 
+    **Common wrong answer:** "The database lost rows." Paging over a filter the job itself changes skips rows.
+
 ??? question "Q16. Users report seeing the same order on page 2 and page 3 of a list sorted by `createdAt`. No data changed. What is wrong?"
     **Answer:** The sort is not deterministic. Many rows share the same `createdAt`, and the database is free to return ties in any order, which can differ between two queries. Add a unique tie-breaker: `Sort.by("createdAt").descending().and(Sort.by("id").descending())`, with a matching composite index. If data does change between requests, offset paging can still duplicate or skip rows, and keyset paging is the complete fix.
+
+    **Interviewer listens for:** ties in the sort key, deterministic tiebreaker such as id, keyset paging.
+
+    **Common wrong answer:** "The cache is stale."
 
 ??? question "Q17. A list API returns `Page<Customer>` entities directly. Review it."
     **Answer:** Several problems. The API contract is now the JPA model, so a column rename breaks clients. Serialisation walks lazy associations, which causes N+1 or `LazyInitializationException`, and bidirectional links can recurse. Sensitive fields can leak (PHI, account numbers). The JSON shape of `PageImpl` is not a stable contract, and Spring Data 3.3+ logs a warning about it. And the client controls `size` and `sort` with no limits. Fix: return a DTO or projection inside `PagedModel`, cap `max-page-size`, whitelist sort fields, and set `open-in-view=false`.
 
     **Interviewer listens for:** security and contract thinking, not just performance.
 
+    **Common wrong answer:** "It is fine because Jackson can serialise entities." The API becomes the database schema.
+
 ??? question "Q18. Your service uses MongoDB. The team wants `Page` with totals on a collection of 200 million documents. What do you advise?"
     **Answer:** Explain the two costs: `skip` walks skipped documents, and the `count` for a filtered query must scan the matching index range or documents. Propose range-based paging on an indexed field (`_id` or `(submittedAt, _id)`), returning a cursor and `hasNext`. For totals, offer an estimated count for unfiltered views, a capped count, or a pre-aggregated counter maintained on write. Add field projections so list views do not pull full documents, and make sure the filter plus sort is covered by a compound index (equality fields first, then sort, then range).
 
     **Interviewer listens for:** same pagination principles applied to a document store, index design, negotiating the requirement instead of just implementing it.
+
+    **Common wrong answer:** "Add an index and keep skip/count." Skip still walks documents and count still scans.
 
 ## Cheat sheet
 

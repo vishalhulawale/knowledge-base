@@ -356,13 +356,21 @@ The resume doesn't name specific Java versions, so position this as "how I'd wri
 
     **Common wrong answer:** Writing `this.amount = amount` inside it. That is a compile error, because field assignment happens implicitly.
 
+    **Interviewer listens for:** implicit parameters, validation and normalisation, fields assigned automatically.
+
 ??? question "Q3. Switch statement vs switch expression?"
     **Answer:** A switch expression produces a value, uses `->` arms with no fall-through, allows multiple labels per arm (`case A, B ->`), uses `yield` to return a value from a block, and must be exhaustive. The old statement form falls through without `break` and needs no exhaustiveness (except for pattern switches).
 
     **Interviewer listens for:** exhaustiveness, `yield` vs `return`, no fall-through.
 
+    **Common wrong answer:** "Switch expressions still fall through without break."
+
 ??? question "Q4. What does a sealed class give you that `final` doesn't?"
     **Answer:** `final` allows no subclasses. `sealed ... permits A, B` allows exactly the listed subclasses, each of which must be `final`, `sealed` or `non-sealed`. The type stays public and extensible in a controlled way, and the compiler knows the full set of subtypes, which enables exhaustive pattern matching.
+
+    **Interviewer listens for:** exact permitted subclasses, final/sealed/non-sealed, exhaustive switches.
+
+    **Common wrong answer:** "sealed is just final with exceptions." The point is that the compiler knows the full set of subtypes.
 
 ??? question "Q5. Output prediction: what does this print?"
     ```java
@@ -375,6 +383,8 @@ The resume doesn't name specific Java versions, so position this as "how I'd wri
 
     **Interviewer listens for:** knowing equality is per-component and arrays don't override `equals`; suggesting `List<Integer>` or a custom `equals` using `Arrays.equals`.
 
+    **Common wrong answer:** "true true, because records compare all fields." They compare arrays by reference.
+
 ### Intermediate
 
 ??? question "Q6. Can a JPA entity be a record? Where do records fit with JPA?"
@@ -382,11 +392,21 @@ The resume doesn't name specific Java versions, so position this as "how I'd wri
 
     **Common wrong answer:** "Yes, just add `@Entity`."
 
+    **Interviewer listens for:** no-arg constructor, mutability and proxies needed; records as projections and embeddables.
+
 ??? question "Q7. Explain flow scoping of pattern variables."
     **Answer:** A binding variable from `instanceof` is in scope only where the match is definitely true. `if (o instanceof String s && s.length() > 3)` works. `if (o instanceof String s || s.isEmpty())` does not compile. `if (!(o instanceof String s)) return;` puts `s` in scope after the `if`.
 
+    **Interviewer listens for:** in scope only where the match is definitely true, negated-if pattern.
+
+    **Common wrong answer:** "The variable is in scope for the whole method."
+
 ??? question "Q8. What is dominance in a pattern switch? Give an example of a compile error."
     **Answer:** A case is dominated if an earlier case matches everything it matches. `case CharSequence cs -> ...; case String s -> ...` fails because `String` is a `CharSequence`. An unguarded `case Declined d` before `case Declined d when ...` also fails. Order: constants, then guarded patterns, then unguarded patterns.
+
+    **Interviewer listens for:** earlier case matching everything a later case matches, order specific first.
+
+    **Common wrong answer:** "The compiler picks the most specific case automatically."
 
 ??? question "Q9. Gotcha: what happens here when `status` is null?"
     ```java
@@ -399,8 +419,14 @@ The resume doesn't name specific Java versions, so position this as "how I'd wri
 
     **Common wrong answer:** "It returns `other`."
 
+    **Interviewer listens for:** default does not match null, case null or case null, default.
+
 ??? question "Q10. How do text blocks handle indentation?"
     **Answer:** The compiler normalises line endings to `\n`, then strips incidental whitespace: the minimum indentation across non-blank lines and the closing delimiter line. Trailing spaces are removed. Escapes are processed last. `\` at line end joins lines and `\s` keeps a space. The result is an ordinary interned `String`. There is no interpolation, so use `.formatted()`.
+
+    **Interviewer listens for:** incidental whitespace stripped by the minimum indent and closing delimiter position.
+
+    **Common wrong answer:** "The text keeps exactly the indentation you see in the source."
 
 ### Senior
 
@@ -409,14 +435,28 @@ The resume doesn't name specific Java versions, so position this as "how I'd wri
 
     **Interviewer listens for:** sum vs product types, exhaustiveness, knowing when polymorphism is still the right call.
 
+    **Common wrong answer:** "It is just shorter syntax." The gain is compile-time exhaustiveness when types are added.
+
 ??? question "Q12. A switch over a sealed interface has no default. A new permitted subclass is added and shipped in a library, but your service isn't recompiled. What happens?"
     **Answer:** The compiler inserted a synthetic default in your switch. At runtime, the new subtype matches no case, so it throws `MatchException`. (Exhaustive enum switch expressions also throw `MatchException` from Java 21, instead of the older `IncompatibleClassChangeError`.) Recompiling then shows a compile error pointing to the missing case. Lesson: sealed hierarchies shared across deployable units are a contract, so version them carefully.
+
+    **Interviewer listens for:** synthetic default, MatchException at runtime, separate compilation.
+
+    **Common wrong answer:** "It fails to compile." Only code compiled against the new library version fails to compile.
 
 ??? question "Q13. How do records behave with Java serialization and why is that safer?"
     **Answer:** Record serialization writes only the component values, and deserialization always calls the canonical constructor. So invariants in the compact constructor are enforced, unlike normal classes where deserialization creates objects without running constructors (a known source of gadget attacks and broken invariants). You can't customise it with `writeObject`/`readObject`. Jackson (2.12+) also binds records through the canonical constructor.
 
+    **Interviewer listens for:** only components written, canonical constructor on read, invariants enforced.
+
+    **Common wrong answer:** "Records cannot be serialised."
+
 ??? question "Q14. Records vs Lombok: what would you standardise on for a team, and why?"
     **Answer:** Records for immutable DTOs, events, config properties and value objects: they're language-level, need no annotation processor, and have safe deserialization. Keep Lombok (or hand-written classes) where you need builders for many optional fields, JavaBean getters for older frameworks, or mutable JPA entities. Many teams use records plus a static factory or small builder for complex cases. The decision is about consistency and tool risk, not taste.
+
+    **Interviewer listens for:** records for immutable data, Lombok only where builders or JPA need it, consistency.
+
+    **Common wrong answer:** "Remove Lombok everywhere at once." Entities and builder-heavy types still need it or hand-written code.
 
 ### Scenario-based
 
@@ -425,11 +465,26 @@ The resume doesn't name specific Java versions, so position this as "how I'd wri
 
     **Interviewer listens for:** compile-time safety inside the service plus defensive handling at the network boundary.
 
+    **Common wrong answer:** Adding a default branch that logs and skips unknown events, which hides the gap.
+
 ??? question "Q16. A teammate's record DTO is used as a Redis cache value and a HashMap key, and cache results are occasionally wrong. What would you check?"
-    **Answer:** (1) Mutable components: a `List` or array inside the record mutated after it was used as a key changes its `hashCode`, so it is lost in the map. Fix with `List.copyOf`. (2) Array components: equality by reference, so lookups miss. (3) Custom `equals` overridden without `hashCode`. (4) Serialization format changes: renaming or reordering record components changes the JSON/serialized shape, so old cached entries fail to deserialize. Version keys or flush the cache on deploy.
+    **Answer:**
+
+    1. Mutable components: a `List` or array inside the record mutated after it was used as a key changes its `hashCode`, so it is lost in the map. Fix with `List.copyOf`.
+    2. Array components: equality by reference, so lookups miss.
+    3. Custom `equals` overridden without `hashCode`.
+    4. Serialization format changes: renaming or reordering record components changes the JSON/serialized shape, so old cached entries fail to deserialize. Version keys or flush the cache on deploy.
+
+    **Interviewer listens for:** mutable components, arrays, custom equals, serialisation shape.
+
+    **Common wrong answer:** "Records are immutable, so they cannot cause this."
 
 ??? question "Q17. You're upgrading a Spring Boot 2 / Java 11 service to Spring Boot 3 / Java 21. Which modern-Java features would you adopt first, and what would you avoid?"
     **Answer:** Adopt incrementally: records for new DTOs and `@ConfigurationProperties`, switch expressions and `instanceof` patterns in touched code, text blocks for SQL/GraphQL/JSON in tests, sealed hierarchies for result and event types. Avoid preview features in production (they need `--enable-preview` and can change, as String Templates showed). Don't mass-rewrite stable code just for style. Watch for `javax` → `jakarta` package changes, which are the real migration effort in Boot 3, and check that mappers (MapStruct, Jackson) support records.
+
+    **Interviewer listens for:** incremental adoption, records/patterns/text blocks, no preview features, tests first.
+
+    **Common wrong answer:** "Rewrite every class to use records in the upgrade PR." Large unrelated changes make the upgrade risky to review.
 
 ## Cheat sheet
 

@@ -225,7 +225,7 @@ public void on(PaymentFailed e) {
 
 - **Where I used it:**
     - **OptumRx Meteor:** "Designed Kafka-based event-driven workflows with retry and DLQ handling" with MongoDB. Multi-step workflows over Kafka are choreographed sagas; retries and DLQs handle transient and permanent failures. *[confirm: whether any workflow needed compensating actions, and how events were published reliably after MongoDB writes (outbox, change streams, or publish-after-save with retry)]*
-    - **Coriolis CCKM:** "Implemented automated key rotation workflows and HSM integrations." Rotation across a local store, a cloud KMS and an HSM is a saga: create new key version, distribute, switch, retire old, with compensation if a step fails mid-way. *[confirm how partial failures were handled]*
+    - **Coriolis CCKM:** "Implemented automated key rotation workflows and HSM integrations." Rotation across a local store, a cloud KMS and an HSM is a saga. The steps are: create a new key version, distribute it, switch to it, retire the old one. If a step fails mid-way, compensate. *[confirm how partial failures were handled]*
     - **Deloitte ConvergeHealth:** event-driven workflows on AWS (SQS/SNS, Lambda); Step Functions is AWS's orchestrator. *[confirm whether Step Functions was used]*
 - **Talking points:**
     - "In MongoDB we kept a business change inside one document where possible, so the local step is atomic, then published an event for the next step." *[confirm]*
@@ -240,50 +240,106 @@ public void on(PaymentFailed e) {
 ??? question "Q1. Why can't you use a normal transaction across microservices?"
     **Answer:** Each service owns its database; there's no shared transaction manager. Distributed 2PC is possible in theory but blocks on failures, couples availability and isn't supported by most brokers and NoSQL stores.
 
+    **Interviewer listens for:** database per service, no shared transaction manager, 2PC blocking and limited support.
+
+    **Common wrong answer:** "Use @Transactional across the REST calls." It only covers the local database; the remote call cannot be rolled back.
+
 ??? question "Q2. What is a saga?"
     **Answer:** A sequence of local transactions across services, where each step triggers the next; if one fails, previously completed steps are undone with compensating transactions.
 
+    **Interviewer listens for:** local transactions, next step triggered by event or command, compensations on failure.
+
+    **Common wrong answer:** "A saga is a distributed transaction with rollback." There is no rollback; there are new compensating actions.
+
 ??? question "Q3. Choreography vs orchestration?"
     **Answer:** Choreography: services react to events, no coordinator; loosely coupled but the flow is implicit. Orchestration: a coordinator sends commands and tracks state; explicit and testable but adds a component and risks centralising logic.
+
+    **Interviewer listens for:** implicit vs explicit flow, coupling, testability, visibility, when each fits.
+
+    **Common wrong answer:** "Choreography is always better because it is more decoupled." With many steps nobody can see the whole flow.
 
 ### Intermediate
 
 ??? question "Q4. What is a compensating transaction?"
     **Answer:** A business action that semantically undoes a completed step (refund, release reservation, cancel), recorded as a new action, not a database rollback. It must be idempotent and retriable.
 
+    **Interviewer listens for:** semantic undo, new forward action, idempotent and retriable, some actions cannot be undone (emails).
+
+    **Common wrong answer:** "It restores the database row to its old value." Other transactions may already have used that value.
+
 ??? question "Q5. What is the dual-write problem?"
     **Answer:** Writing to two systems (DB and broker) without a shared transaction: a failure between them loses the event or publishes one for a rolled-back change.
+
+    **Interviewer listens for:** two systems without a shared transaction, lost event or phantom event, crash window.
+
+    **Common wrong answer:** "Publish after commit, so it is safe." A crash between commit and publish still loses the event.
 
 ??? question "Q6. How does the transactional outbox work?"
     **Answer:** Write the event to an outbox table in the same local transaction as the business change; a relay (poller or CDC) publishes outbox rows to the broker and marks or deletes them. Delivery is at-least-once, so consumers are idempotent.
 
+    **Interviewer listens for:** same local transaction, relay via poller or CDC, at-least-once, idempotent consumers.
+
+    **Common wrong answer:** "The outbox gives exactly-once delivery." The relay can publish twice, so consumers must dedupe.
+
 ??? question "Q7. Polling publisher vs CDC for the outbox?"
     **Answer:** Polling is simple but adds DB load and latency and can reorder if parallel. CDC (Debezium) reads the transaction log: low latency, ordered per table, no polling, but needs Kafka Connect/Debezium infrastructure.
+
+    **Interviewer listens for:** DB load and latency vs infrastructure cost, ordering, Debezium reads the WAL/binlog.
+
+    **Common wrong answer:** "CDC has no operational cost." Connectors, offsets and schema changes all need running and monitoring.
 
 ### Senior
 
 ??? question "Q8. What isolation problems do sagas have and how do you mitigate them?"
     **Answer:** Other transactions can see intermediate states (dirty reads, lost updates). Mitigate with semantic locks (PENDING status), commutative updates, rereading values, versioning, and ordering steps so failure-prone steps run before the pivot.
 
+    **Interviewer listens for:** no isolation between steps, semantic locks, commutative updates, versioning, step ordering.
+
+    **Common wrong answer:** "Sagas are ACID across services." They give ACD at best; isolation is lost.
+
 ??? question "Q9. What is the pivot transaction?"
     **Answer:** The step after which the saga is committed to completing; steps after it must be retriable until they succeed. Steps before it are compensatable. Put risky steps before and irreversible ones after.
+
+    **Interviewer listens for:** point of no return, compensatable before, retriable after, risky steps first.
+
+    **Common wrong answer:** Placing an irreversible step (sending to the pharmacy) before steps that often fail.
 
 ??? question "Q10. How do you make saga participants idempotent?"
     **Answer:** Use a message/saga-step id stored in a processed-messages table with a unique constraint, checked in the same local transaction as the change; or natural idempotency (upsert by key, state machine transitions that ignore repeats).
 
+    **Interviewer listens for:** dedupe table with unique key in the same transaction, natural idempotency, state-machine guards.
+
+    **Common wrong answer:** "Check if the message was processed, then process it" in two separate transactions, which races under redelivery.
+
 ??? question "Q11. When would you choose Temporal or Step Functions over hand-written choreography?"
     **Answer:** Long-running flows with many steps, timeouts, human tasks or retries that need durable state and visibility; when "what state is this order in?" must be answerable and the flow changes often.
+
+    **Interviewer listens for:** durable state, timers, retries, visibility of each instance, frequent flow changes.
+
+    **Common wrong answer:** "Always use a workflow engine." For two or three steps it is more infrastructure than the problem needs.
 
 ### Scenario-based
 
 ??? question "Q12. Design the refill flow across Order, Benefits, Payment and Pharmacy."
     **Answer:** Orchestrated saga: create order PENDING (semantic lock), reserve benefit (compensatable), authorise payment (pivot), send to pharmacy (retriable). On payment failure release the benefit and reject the order. Outbox for all events/commands, idempotent participants, per-step timeouts, saga state visible in a dashboard.
 
+    **Interviewer listens for:** semantic lock, step order around the pivot, compensations, outbox, idempotency, timeouts, visible saga state.
+
+    **Common wrong answer:** Calling the four services in one synchronous request and trying to undo with try/catch.
+
 ??? question "Q13. Customers occasionally have an order but no notification. What's likely wrong?"
     **Answer:** A dual write: order committed, event publish failed or happened before a rollback. Fix with outbox/CDC; add reconciliation (find orders without events) for existing data.
 
+    **Interviewer listens for:** dual write diagnosis, outbox/CDC fix, reconciliation for past data.
+
+    **Common wrong answer:** "Kafka lost the message." The event was most likely never published.
+
 ??? question "Q14. A compensation keeps failing (refund API down). What do you do?"
     **Answer:** Retry with backoff (compensations are retriable), keep the saga in COMPENSATING with alerts, park to a DLQ after limits for manual handling, and make the user-facing state honest ("refund pending").
+
+    **Interviewer listens for:** retry with backoff, COMPENSATING state, alerting, DLQ + manual runbook, honest user state.
+
+    **Common wrong answer:** Giving up after three tries and marking the order cancelled while the money is still taken.
 
 ## Cheat sheet
 

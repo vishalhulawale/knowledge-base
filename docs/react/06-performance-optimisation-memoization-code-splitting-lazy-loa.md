@@ -207,44 +207,92 @@ onCLS(m => analytics.track("web_vital", { name: m.name, value: m.value }));
 ??? question "Q1. How do you approach a slow React app?"
     **Answer:** Measure (Profiler, Performance panel, Web Vitals), classify (load, interaction, lists, layout), fix the bottleneck with the matching technique, re-measure in production.
 
+    **Interviewer listens for:** measure first, classify the problem, targeted fix, re-measure with real-user data.
+
+    **Common wrong answer:** "Add useMemo and React.memo everywhere." That guesses before measuring.
+
 ??? question "Q2. What is code splitting and how do you do it in React?"
     **Answer:** Splitting the bundle into chunks loaded on demand: `lazy(() => import(...))` with `Suspense`, or router lazy routes; start at route level.
 
+    **Interviewer listens for:** lazy + Suspense, route-level first, on-demand chunks.
+
+    **Common wrong answer:** Splitting every small component, which creates many tiny requests and loading flashes.
+
 ??? question "Q3. What is virtualization?"
     **Answer:** Rendering only the visible part of a long list (plus overscan), keeping DOM size constant.
+
+    **Interviewer listens for:** visible window + overscan, constant DOM size, libraries (TanStack Virtual, react-window).
+
+    **Common wrong answer:** "Use memo on rows instead." 5,000 memoised rows still means 5,000 DOM nodes.
 
 ### Intermediate
 
 ??? question "Q4. What are Core Web Vitals?"
     **Answer:** LCP (≤ 2.5 s), INP (≤ 200 ms; replaced FID in March 2024), CLS (≤ 0.1), measured at the 75th percentile of real users.
 
+    **Interviewer listens for:** LCP, INP, CLS thresholds, p75 of real users, INP replaced FID in 2024.
+
+    **Common wrong answer:** Still quoting FID as a Core Web Vital.
+
 ??? question "Q5. useTransition vs useDeferredValue?"
     **Answer:** useTransition wraps the state update you control as non-urgent and gives isPending; useDeferredValue defers a value you receive (e.g. a prop or input) so dependent rendering lags behind urgent updates.
+
+    **Interviewer listens for:** you own the setter vs you receive the value, isPending, both mark work non-urgent.
+
+    **Common wrong answer:** "They make code run in a background thread." Rendering still happens on the main thread; it is just interruptible.
 
 ??? question "Q6. Why might memo not improve performance?"
     **Answer:** Unstable props (new objects/functions), context changes, cheap components where comparison costs more than rendering, or the real bottleneck is elsewhere.
 
+    **Interviewer listens for:** unstable props, context, cheap components, bottleneck elsewhere.
+
+    **Common wrong answer:** "memo always helps a little." The comparison has a cost and can make things slower.
+
 ??? question "Q7. How do you reduce bundle size?"
     **Answer:** Route/component splitting, tree shaking with ES modules, replace heavy libraries, analyse bundles, share dependencies across micro-frontends, compress and cache.
+
+    **Interviewer listens for:** splitting, tree shaking, replacing heavy libraries, bundle analysis, shared deps, compression and caching.
+
+    **Common wrong answer:** "Minify the code." Minification is already on by default and is not where large wins come from.
 
 ### Senior
 
 ??? question "Q8. What does React Compiler change for performance work?"
     **Answer:** It memoises components and values automatically at build time, so most manual memo/useMemo/useCallback becomes unnecessary; focus shifts to architecture, data fetching and bundle size.
 
+    **Interviewer listens for:** build-time automatic memoisation, less manual memo, focus moves to architecture and data.
+
+    **Common wrong answer:** "The compiler makes React apps fast automatically." It fixes re-render waste only.
+
 ??? question "Q9. What is a request waterfall and how do you avoid it?"
     **Answer:** Sequential fetches where each depends on rendering the previous level. Fetch in parallel at the route level (loaders), prefetch, or aggregate with GraphQL/BFF.
 
+    **Interviewer listens for:** sequential render-then-fetch chains, route loaders, prefetch, aggregation.
+
+    **Common wrong answer:** Fixing waterfalls by adding loading spinners at each level.
+
 ??? question "Q10. SSR vs CSR for performance?"
     **Answer:** SSR/streaming improves LCP and SEO by sending HTML first; hydration can hurt INP. CSR is simpler but slower to first content. Choose per page type.
+
+    **Interviewer listens for:** first content and SEO vs hydration cost, per-page choice.
+
+    **Common wrong answer:** "SSR is always faster." It improves first paint but can delay interactivity.
 
 ### Scenario-based
 
 ??? question "Q11. A claims table with 5,000 rows freezes the browser."
     **Answer:** Virtualize rows (or paginate server-side), memoise row components, avoid heavy cell renderers, and filter/sort on the server or in a worker.
 
+    **Interviewer listens for:** virtualise or paginate, cheap rows, server-side filter/sort, workers.
+
+    **Common wrong answer:** "Use pagination on the client after loading all 5,000 rows." The network and parsing cost remain.
+
 ??? question "Q12. LCP is 5 s on mobile. What do you look at?"
     **Answer:** JS bundle size and splitting, render-blocking resources, server/API latency (TTFB), image sizes and priorities, whether SSR or prerendering would help.
+
+    **Interviewer listens for:** bundle, render-blocking resources, TTFB, image priority, SSR/prerender.
+
+    **Common wrong answer:** Only looking at React render times. LCP is often dominated by network and images.
 
 ## Cheat sheet
 

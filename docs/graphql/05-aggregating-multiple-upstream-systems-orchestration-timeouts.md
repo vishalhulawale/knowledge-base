@@ -377,7 +377,13 @@ Always inject the auto-configured `RestClient.Builder` (as above) instead of cal
     **Common wrong answer:** exposing upstream DTOs directly in the schema (often by generating the schema from them), which couples every client to every upstream.
 
 ??? question "Q11. A mutation has to write to two upstream systems. How do you keep them consistent?"
-    **Answer:** There is no distributed transaction across independent HTTP services, so I don't pretend there is. Options: (1) prefer a design where the mutation writes to **one** system of record and the second is updated asynchronously from an event (outbox + Kafka, with retry and a DLQ). (2) If both must be called, order them so the reversible or idempotent one goes first, send an **idempotency key** to both so the client can safely retry the whole mutation, and run a compensating action if the second fails (a saga). (3) Return a payload type that reports the outcome honestly, e.g. a `PENDING` status, instead of claiming success. Mutations are not retried automatically unless the upstream supports idempotency keys.
+    **Answer:** There is no distributed transaction across independent HTTP services, so I don't pretend there is. Options:
+
+    1. Prefer a design where the mutation writes to **one** system of record and the second is updated asynchronously from an event (outbox + Kafka, with retry and a DLQ).
+    2. If both must be called, order them so the reversible or idempotent one goes first, send an **idempotency key** to both so the client can safely retry the whole mutation, and run a compensating action if the second fails (a saga).
+    3. Return a payload type that reports the outcome honestly, e.g. a `PENDING` status, instead of claiming success.
+
+    Mutations are not retried automatically unless the upstream supports idempotency keys.
 
     **Interviewer listens for:** no 2PC, idempotency keys, saga/compensation, outbox, honest status to the client, serial execution of top-level mutation fields.
 

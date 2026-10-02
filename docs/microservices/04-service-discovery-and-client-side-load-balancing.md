@@ -221,46 +221,92 @@ Not ★. Position it through the platforms on the resume.
 ??? question "Q1. What is service discovery and why is it needed?"
     **Answer:** A mechanism mapping a logical service name to its current healthy instances. Needed because instances are dynamic (autoscaling, deploys, failures), so fixed addresses don't work.
 
+    **Interviewer listens for:** logical name to healthy instances, dynamic addresses (autoscaling, deploys, failures).
+
+    **Common wrong answer:** "It is just DNS." Plain DNS with long TTLs does not track health or fast changes.
+
 ??? question "Q2. Client-side vs server-side discovery?"
     **Answer:** Client-side: the caller queries a registry and picks an instance itself (Eureka + Spring Cloud LoadBalancer). Server-side: the caller uses a stable address and a load balancer/proxy picks the instance (Kubernetes Service, ALB, mesh).
 
     **Interviewer listens for:** where the decision is made and the trade-offs.
 
+    **Common wrong answer:** "Client-side discovery is always better because there is no extra hop." It couples every client to a registry library and language.
+
 ??? question "Q3. How does service discovery work in Kubernetes?"
     **Answer:** A Service selects pods by labels, gets a ClusterIP and DNS name. EndpointSlices list ready pod IPs; kube-proxy (or eBPF/mesh) routes ClusterIP traffic to them. Readiness probes control membership.
+
+    **Interviewer listens for:** Service selector, ClusterIP + DNS, EndpointSlices, kube-proxy/eBPF, readiness gates membership.
+
+    **Common wrong answer:** "Kubernetes DNS returns pod IPs and the client picks one." For a normal ClusterIP Service DNS returns one virtual IP.
 
 ### Intermediate
 
 ??? question "Q4. Self-registration vs third-party registration?"
     **Answer:** Self-registration: the service registers and heartbeats itself (Eureka client), coupling it to the registry. Third-party: the platform registers instances based on what it runs and their health (Kubernetes, ECS Cloud Map, Consul agents).
 
+    **Interviewer listens for:** who registers the instance, coupling of the service to the registry, platform-driven health.
+
+    **Common wrong answer:** Thinking self-registration is required for health checks. The platform can check health itself.
+
 ??? question "Q5. Do you need Eureka on Kubernetes?"
     **Answer:** Usually not. Kubernetes already provides registration, health-based endpoints and DNS. Eureka makes sense for VMs, hybrid estates, or if you need client-side policies not available otherwise.
+
+    **Interviewer listens for:** Kubernetes already provides registry, health and DNS; Eureka only for VMs, hybrid or special client policies.
+
+    **Common wrong answer:** "Yes, Spring Cloud apps always need Eureka." It duplicates what the platform already does.
 
 ??? question "Q6. What replaced Netflix Ribbon in Spring Cloud?"
     **Answer:** Spring Cloud LoadBalancer: pluggable client-side balancer, round-robin by default, with random, weighted, zone-preference, health-check and hint-based suppliers and an instance cache.
 
+    **Interviewer listens for:** Ribbon is in maintenance; Spring Cloud LoadBalancer is the replacement with pluggable suppliers.
+
+    **Common wrong answer:** "Ribbon is still the default." It was removed from Spring Cloud in 2020.
+
 ??? question "Q7. What load-balancing algorithms do you know and when do they matter?"
     **Answer:** Round robin, random, least connections/requests, weighted, zone-aware, consistent hashing, power of two choices. Least-request helps with uneven request costs; weighted for canaries; zone-aware to cut latency and cross-AZ cost; hashing for cache affinity.
+
+    **Interviewer listens for:** several algorithms, and when each matters (uneven costs, canaries, zone cost, cache affinity).
+
+    **Common wrong answer:** Naming only round robin and not knowing when it performs badly (uneven request costs).
 
 ### Senior
 
 ??? question "Q8. Eureka is AP. What does that mean in practice?"
     **Answer:** During partitions it keeps serving the last known registry (possibly stale) rather than refusing, and self-preservation stops evicting instances when many heartbeats fail at once. Clients must tolerate dead instances with timeouts, retries on another instance and circuit breakers.
 
+    **Interviewer listens for:** stale registry during partitions, self-preservation, so clients must tolerate dead instances.
+
+    **Common wrong answer:** "AP means the registry is always correct." AP means it stays available and may be wrong.
+
 ??? question "Q9. Why can gRPC load balancing be uneven on Kubernetes?"
     **Answer:** kube-proxy balances connections. gRPC multiplexes all requests over one long-lived HTTP/2 connection, so a client sticks to one pod. Use client-side balancing with a headless Service (DNS returns all pod IPs) or a mesh doing per-request L7 balancing.
 
+    **Interviewer listens for:** connection-level vs request-level balancing, HTTP/2 multiplexing, headless Service or mesh.
+
+    **Common wrong answer:** "Increase the replica count." More pods do not help if every client stays pinned to one connection.
+
 ??? question "Q10. How do you avoid errors during rolling deployments?"
     **Answer:** New pods only receive traffic when ready; terminating pods first fail readiness and get a preStop sleep so endpoints and caches update, then graceful shutdown finishes in-flight requests. Callers retry idempotent requests on another instance.
+
+    **Interviewer listens for:** readiness before traffic, preStop delay, graceful shutdown, retries on another instance.
+
+    **Common wrong answer:** "Kubernetes rolling updates are zero-downtime by default." Without preStop and graceful shutdown some requests fail.
 
 ### Scenario-based
 
 ??? question "Q11. After a deploy, 1–2% of calls fail with connection refused for a minute. Why?"
     **Answer:** Callers still route to terminated pods: endpoint propagation lag, client-side caches or DNS caching, and pods exiting before draining. Add a preStop delay, graceful shutdown, readiness off on SIGTERM, shorter client caches, and retries on another instance.
 
+    **Interviewer listens for:** endpoint propagation lag, client and DNS caching, missing drain; preStop + graceful shutdown fix.
+
+    **Common wrong answer:** "It is a network blip." It is reproducible on every deploy, so it is a shutdown-ordering bug.
+
 ??? question "Q12. One pod gets most of the traffic. What do you check?"
     **Answer:** Long-lived connections (HTTP/2, gRPC, keep-alive) pinning to one pod, sticky sessions, consistent hashing on a hot key, or a client that cached a single instance. Fix with per-request balancing (mesh or client-side), connection max-age, or better keys.
+
+    **Interviewer listens for:** long-lived connection pinning, stickiness, hot hash keys, cached single instance; per-request balancing.
+
+    **Common wrong answer:** "The load balancer is broken." Usually the client or the protocol is pinning connections.
 
 ## Cheat sheet
 

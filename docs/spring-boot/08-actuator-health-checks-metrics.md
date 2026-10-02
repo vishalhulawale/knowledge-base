@@ -491,6 +491,8 @@ The resume does not name Actuator or Micrometer, so the honest position is: "sta
 
     **Interviewer listens for:** Worst status wins, 503 for down, and that details are hidden by default (`show-details: never`).
 
+    **Common wrong answer:** "The endpoint is UP if any indicator is UP." The most severe status wins.
+
 ??? question "Q3. What is the difference between liveness and readiness?"
     **Answer:** Liveness says the application's internal state is broken and only a restart can fix it. Kubernetes restarts the container when it fails. Readiness says the instance cannot serve traffic right now. Kubernetes removes it from the Service endpoints but does not restart it. Spring Boot models them as `LivenessState` and `ReadinessState` and exposes them at `/actuator/health/liveness` and `/actuator/health/readiness`.
 
@@ -503,10 +505,14 @@ The resume does not name Actuator or Micrometer, so the honest position is: "sta
 
     **Interviewer listens for:** The "SLF4J for metrics" analogy and the dimensional (tags) model.
 
+    **Common wrong answer:** "Micrometer is a monitoring system." It is a facade; Prometheus or another backend stores the data.
+
 ??? question "Q5. Name the main meter types and when to use each."
     **Answer:** `Counter` for things that only increase (events, errors). `Gauge` for a current value that can go down (queue depth, pool size). `Timer` for short durations, giving count, total time, max and optional histogram. `DistributionSummary` for non-time distributions such as payload size. `LongTaskTimer` for tasks still in progress.
 
     **Common wrong answer:** Using a gauge for request count, or a counter for something that can decrease. A rule of thumb: if you would compute a rate from it, it is a counter. If you would look at its current value, it is a gauge.
+
+    **Interviewer listens for:** counter, gauge, timer, distribution summary, long task timer and when to use each.
 
 ### Intermediate
 
@@ -515,15 +521,21 @@ The resume does not name Actuator or Micrometer, so the honest position is: "sta
 
     **Interviewer listens for:** "Cascading restarts" or "restart storm", and the idea that a probe should only trigger an action that can actually help.
 
+    **Common wrong answer:** "Liveness should check everything the app needs." Restarting pods cannot fix the database.
+
 ??? question "Q7. Should readiness include downstream dependencies?"
     **Answer:** It depends, and the reasoning matters. Include it when the instance is useless without it and the problem can be specific to that instance (its own connection pool, a local cache that must be warm). Be careful with shared dependencies: when they fail, all instances go unready and the Service has no endpoints, so callers get ingress-level errors and you lose the chance to return a controlled 503 or a fallback. For shared dependencies, prefer timeouts, circuit breakers and degraded responses.
 
     **Interviewer listens for:** A trade-off, not a rule. A mention of partial functionality: a service with 5 upstreams should not go unready because one is down.
 
+    **Common wrong answer:** "Always include every dependency in readiness." One shared outage then removes all pods from service.
+
 ??? question "Q8. Client-side percentiles vs percentile histograms. Which do you use for a service with 20 pods?"
     **Answer:** Histograms. Client-side percentiles are computed per instance and published as gauges. Percentiles cannot be averaged, so there is no correct way to get a fleet-wide p99 from them. With `percentiles-histogram`, each pod publishes bucket counters, the backend sums buckets across pods and computes the quantile. The cost is more series, so I turn it on only for timers tied to SLOs, or use `slo` boundaries.
 
     **Interviewer listens for:** "You cannot average percentiles."
+
+    **Common wrong answer:** "Average the p99 of each pod." Percentiles cannot be averaged.
 
 ??? question "Q9. Gotcha: what is wrong with this code?"
     ```java
@@ -532,6 +544,8 @@ The resume does not name Actuator or Micrometer, so the honest position is: "sta
     **Answer:** Both tags are unbounded. The raw URI contains IDs (`/orders/123`, `/orders/124`) and `userId` has one value per user. Each unique combination is a new `Counter` object held in the registry forever and a new time series in the backend. The app's heap grows, the scrape response grows, and Prometheus memory grows until something falls over. Use the route template (`/orders/{id}`) and drop the user tag. Put user IDs in logs or trace attributes.
 
     **Interviewer listens for:** The word *cardinality* and the fact that the damage is in both the app and the backend.
+
+    **Common wrong answer:** "The tag values are fine because Prometheus is fast." Unbounded tags create millions of series.
 
 ??? question "Q10. Gotcha: a gauge always shows NaN in Grafana. Why?"
     ```java
@@ -542,10 +556,16 @@ The resume does not name Actuator or Micrometer, so the honest position is: "sta
     ```
     **Answer:** Micrometer holds the gauge's state object through a **weak reference** so that a gauge never causes a memory leak. Here `jobs` is a local variable. After `init` returns, nothing holds it strongly, it is garbage collected, and the gauge reports `NaN`. Keep the object in a field of a long-lived bean, or use `strongReference(true)` on the builder if that is really the intent.
 
+    **Interviewer listens for:** gauge holds a weak reference, local list collected, keep a strong reference.
+
+    **Common wrong answer:** "Grafana cannot display list sizes."
+
 ??? question "Q11. How do `@Timed` and `@Observed` work, and when do they silently not work?"
     **Answer:** They are handled by AOP aspects (`TimedAspect`, `ObservedAspect`), which wrap the bean in a proxy. They do not work when the aspect is not registered (needs the AOP starter and, in Boot 3.2+, `management.observations.annotations.enabled=true`), on self-invocation within the same class, on private methods, or on objects that are not Spring beans. On Spring MVC controllers, requests are already timed by `http.server.requests` without any annotation.
 
     **Interviewer listens for:** The link to proxies and self-invocation.
+
+    **Common wrong answer:** "Annotations work on any method." They need the aspect bean and a proxied, public, externally called method.
 
 ### Senior
 
@@ -561,10 +581,14 @@ The resume does not name Actuator or Micrometer, so the honest position is: "sta
 
     **Interviewer listens for:** Defence in depth, and awareness that a heap dump is a data breach.
 
+    **Common wrong answer:** "Put Actuator behind basic auth and expose everything."
+
 ??? question "Q13. What does the Observation API add over plain timers?"
     **Answer:** One instrumentation point with several outputs. An `Observation` has a start, stop, error and context. Handlers turn it into a timer, a long task timer and a trace span, and can add logging correlation. It separates low-cardinality key values (metric tags) from high-cardinality ones (span attributes only). Spring Framework 6 and Boot 3 instrument HTTP server, HTTP clients, messaging and data access with it, so metric tags and span names are consistent. With exemplars, a latency bucket in a dashboard can link to a trace ID that landed in that bucket.
 
     **Interviewer listens for:** Metrics and traces from one API, and the low vs high cardinality split.
+
+    **Common wrong answer:** "It is just a renamed Timer." One observation feeds metrics, traces and logs.
 
 ??? question "Q14. How do you design alerts from these metrics for an API service?"
     **Answer:** Start from symptoms the user feels, then causes.
@@ -578,10 +602,14 @@ The resume does not name Actuator or Micrometer, so the honest position is: "sta
 
     **Interviewer listens for:** RED/USE, SLO thinking, symptom vs cause, and avoiding noisy alerts.
 
+    **Common wrong answer:** Alerting on CPU or heap alone, which pages for causes users never feel.
+
 ??? question "Q15. How does graceful shutdown interact with readiness?"
     **Answer:** On `SIGTERM`, Boot publishes `ReadinessState.REFUSING_TRAFFIC`, the web server stops accepting new requests, and `SmartLifecycle` beans stop in phases while in-flight requests finish, up to `spring.lifecycle.timeout-per-shutdown-phase`. In Kubernetes the endpoint removal and the `SIGTERM` happen in parallel, so some proxies still send requests for a short time. A small `preStop` sleep gives the network time to converge. `terminationGracePeriodSeconds` must be longer than the preStop sleep plus the shutdown timeout, or the kubelet sends `SIGKILL` mid-request.
 
     **Interviewer listens for:** The race between endpoint removal and SIGTERM, and the three timeouts that must line up.
+
+    **Common wrong answer:** "Readiness goes DOWN after the app has stopped." It changes first so traffic drains before shutdown.
 
 ### Scenario-based
 
@@ -591,6 +619,8 @@ The resume does not name Actuator or Micrometer, so the honest position is: "sta
     Fix: point liveness at `/livez` with only `livenessState`. Decide deliberately about readiness. Add a `startupProbe`. Make the application tolerate Mongo being unavailable at startup and at runtime with driver timeouts and retries. Add a dashboard panel for container restarts so this is visible.
 
     **Interviewer listens for:** Diagnosis from the symptom "all pods at once", and a fix that changes the probe design, not just the thresholds.
+
+    **Common wrong answer:** "MongoDB failover is too slow." The probes turned a dependency outage into restarts.
 
 ??? question "Q17. After a release, Prometheus memory doubled and the service's `/actuator/prometheus` response went from 200 KB to 40 MB. How do you investigate?"
     **Answer:** This is a cardinality explosion. Steps:
@@ -603,10 +633,14 @@ The resume does not name Actuator or Micrometer, so the honest position is: "sta
 
     **Interviewer listens for:** A method, the `http.client.requests` URI template cause, and a preventive guard.
 
+    **Common wrong answer:** "Prometheus needs more memory." Fix the tag that exploded.
+
 ??? question "Q18. Your service aggregates 5 upstream systems. One upstream is down. What should `/readyz`, `/livez` and `/actuator/health` return?"
     **Answer:** `/livez` returns 200: the process is fine. `/readyz` returns 200: the instance can still serve the parts of the API that do not need that upstream, and taking every pod out of rotation would turn a partial outage into a total one. `/actuator/health` can show the upstream indicator as `DOWN` for humans and dashboards, with an alert on it. I would consider a custom status such as `DEGRADED` mapped to 200 so the overall status is honest without failing anything. The request path handles the failed upstream with a timeout, a circuit breaker, and a partial response (GraphQL can return data plus errors).
 
     **Interviewer listens for:** Three endpoints with three audiences, and partial availability as a design goal.
+
+    **Common wrong answer:** "Mark readiness DOWN so traffic stops." That turns a partial outage into a full one.
 
 ??? question "Q19. A security scan reports that `/actuator/heapdump` and `/actuator/env` are reachable from the internet. What do you do, in order?"
     **Answer:**
@@ -618,10 +652,14 @@ The resume does not name Actuator or Micrometer, so the honest position is: "sta
 
     **Interviewer listens for:** Containment before root cause, secret rotation, and a systemic fix across services.
 
+    **Common wrong answer:** "Disable the endpoints and close the ticket." Leaked secrets must be rotated.
+
 ??? question "Q20. Health checks time out now and then and pods flap between ready and unready, but the application seems fine. What do you look at?"
     **Answer:** Probe timeouts are about the *latency* of the health call. Candidates: a slow indicator in the readiness group (a remote call without a timeout, a DB validation query waiting for a pool connection), request thread pool exhaustion so the probe queues behind real traffic, long GC pauses, or CPU throttling from a low CPU limit. I check which component is slow using the health details, pool and thread metrics, GC pause metrics and container throttling metrics. Fixes: remove or cache slow indicators, set tight timeouts in them, raise `timeoutSeconds` or `failureThreshold` modestly, and fix the actual saturation. A flapping readiness probe under load makes things worse, because the remaining pods take more traffic and then fail too.
 
     **Interviewer listens for:** That probes share resources with real traffic, and the feedback loop of readiness failures under load.
+
+    **Common wrong answer:** "Increase the probe timeout to 30 seconds." That hides a slow indicator.
 
 ## Cheat sheet
 

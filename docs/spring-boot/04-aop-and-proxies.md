@@ -406,6 +406,8 @@ A stack trace tells you a lot. Frames such as `CglibAopProxy$DynamicAdvisedInter
 
     **Interviewer listens for:** That Spring AOP supports only method-execution join points on Spring beans.
 
+    **Common wrong answer:** "Spring AOP weaves bytecode at compile time." Spring AOP uses runtime proxies; only AspectJ weaves bytecode.
+
 ??? question "Q3. What is the difference between a JDK dynamic proxy and a CGLIB proxy?"
     **Answer:** A JDK dynamic proxy is a runtime class that implements the bean's interfaces and forwards calls to an `InvocationHandler`. It needs at least one interface and can only advise interface methods. A CGLIB proxy is a runtime-generated subclass of the bean's class. It needs no interface, but it cannot proxy `final` classes and cannot advise `final` or `private` methods. With JDK proxies the proxy is not an instance of the implementation class; with CGLIB it is.
 
@@ -424,6 +426,8 @@ A stack trace tells you a lot. Frames such as `CglibAopProxy$DynamicAdvisedInter
     **Answer:** `@Before` runs before the method. `@AfterReturning` runs on normal return and can read the result. `@AfterThrowing` runs on an exception. `@After` runs in both cases, like `finally`. `@Around` wraps the whole call and controls whether `proceed()` is called, with which arguments, and what is returned. Use `@Around` when you need state shared before and after (timing), or need to change the flow (caching, retry, transactions). Otherwise use the least powerful advice, because it is harder to get wrong.
 
     **Interviewer listens for:** `proceed()`, and the "least powerful advice" principle.
+
+    **Common wrong answer:** Using @Around for everything, or forgetting to call proceed(), which silently skips the method.
 
 ### Intermediate
 
@@ -453,15 +457,21 @@ A stack trace tells you a lot. Frames such as `CglibAopProxy$DynamicAdvisedInter
 
     **Interviewer listens for:** The override mechanics, the 6.0 change, and the link to self-invocation.
 
+    **Common wrong answer:** "Spring logs an error when @Transactional is on a private method." It silently does nothing.
+
 ??? question "Q10. How is the order of multiple aspects decided? Why does it matter?"
     **Answer:** Across aspects, by `@Order` or the `Ordered` interface. A lower value means higher precedence: that aspect is outermost, so it runs first on the way in and last on the way out. Without explicit order the result is undefined. Inside one aspect class, advice on the same join point follows a fixed precedence: `@Around`, `@Before`, `@After`, `@AfterReturning`, `@AfterThrowing`. It matters for correctness. Retry must wrap the transaction so each attempt gets a new transaction. Security must wrap caching so a cached result is not returned to an unauthorised caller.
 
     **Interviewer listens for:** "lower value = outermost" and a concrete example where wrong order causes a bug.
 
+    **Common wrong answer:** "Aspects run in the order their classes are declared." Without @Order the order is undefined.
+
 ??? question "Q11. When exactly is the proxy created? Why does a `@Transactional` method called from `@PostConstruct` not run in a transaction?"
     **Answer:** A `BeanPostProcessor` (`AnnotationAwareAspectJAutoProxyCreator`) creates the proxy in `postProcessAfterInitialization`, after dependency injection and after init callbacks such as `@PostConstruct`. During `@PostConstruct` only the raw bean exists, and the call is a self-invocation anyway. The Spring docs say explicitly not to rely on transactional behaviour in initialisation code. Run start-up work from an `ApplicationRunner` or an `ApplicationReadyEvent` listener that calls another bean.
 
     **Interviewer listens for:** The bean lifecycle order and a correct alternative.
+
+    **Common wrong answer:** "The proxy exists from the moment the bean is constructed."
 
 ### Senior
 
@@ -469,6 +479,8 @@ A stack trace tells you a lot. Frames such as `CglibAopProxy$DynamicAdvisedInter
     **Answer:** When proxies cannot reach the join point: advice on self-invoked or private methods, on objects not managed by Spring (for example domain objects created with `new`, using `@Configurable`), on constructors or field access. AspectJ modifies the class bytecode at compile time (`ajc`) or load time (Java agent), so there is no proxy and no self-invocation issue. The costs are a more complex build or JVM setup, harder debugging, and less obvious behaviour for the team. I would first try restructuring beans or a programmatic API, and use AspectJ only for a clear need.
 
     **Interviewer listens for:** Concrete capabilities, the operational cost, and a pragmatic default.
+
+    **Common wrong answer:** "Always use AspectJ because it is more powerful." It adds build complexity most services do not need.
 
 ??? question "Q13. A bean has a `final` method and is CGLIB-proxied. What happens when the method is called through the proxy?"
     **Answer:** The proxy subclass cannot override a `final` method, so the call is not intercepted and is not delegated to the target. It executes on the proxy object itself. That object was instantiated with Objenesis without calling the constructor, so its fields, including injected dependencies, are `null`. The result is usually a `NullPointerException` on a dependency that is clearly set in the constructor. The fix is to remove `final`, or use an interface with a JDK proxy. A `final` class fails earlier, at startup, because it cannot be subclassed at all.
@@ -482,22 +494,44 @@ A stack trace tells you a lot. Frames such as `CglibAopProxy$DynamicAdvisedInter
 
     **Interviewer listens for:** Build-time generation, closed-world assumption, runtime hints.
 
+    **Common wrong answer:** "Native images do not support Spring AOP." AOT generates the proxy classes at build time.
+
 ??? question "Q15. How would you design method-level audit logging for a regulated healthcare service?"
-    **Answer:** A custom `@Audited(action = ...)` annotation and an `@Around` aspect that records who (from the security context), what action, which resource identifier, the outcome and the duration. Design decisions: (1) never log arguments wholesale, extract only approved identifiers, because they may be PHI; (2) give the aspect a high precedence so denied and failed attempts are audited too; (3) decide whether the audit must survive a business rollback, and if so write it in a separate transaction or publish it as an event after the outcome is known; (4) rethrow exceptions unchanged; (5) add an architecture test (for example ArchUnit) that fails the build when an annotated method is private, final or called from inside its own class; (6) cover it with an integration test, since a unit test has no proxy.
+    **Answer:** A custom `@Audited(action = ...)` annotation and an `@Around` aspect that records who (from the security context), what action, which resource identifier, the outcome and the duration. Design decisions:
+
+    1. Never log arguments wholesale, extract only approved identifiers, because they may be PHI.
+    2. Give the aspect a high precedence so denied and failed attempts are audited too.
+    3. Decide whether the audit must survive a business rollback, and if so write it in a separate transaction or publish it as an event after the outcome is known.
+    4. Rethrow exceptions unchanged.
+    5. Add an architecture test (for example ArchUnit) that fails the build when an annotated method is private, final or called from inside its own class.
+    6. Cover it with an integration test, since a unit test has no proxy.
 
     **Interviewer listens for:** Data protection, aspect ordering, failure paths, and guarding against the silent-bypass cases.
+
+    **Common wrong answer:** Logging full request parameters, which writes PHI into logs.
 
 ### Scenario-based
 
 ??? question "Q16. After a release, a method marked `@Async` blocks the HTTP request thread. How do you investigate?"
-    **Answer:** `@Async` is proxy-based, so I check the usual bypasses. (1) Is it called from the same class? Then it is a self-invocation and runs on the caller's thread. (2) Is the method private or final, or is the object created with `new` and not a Spring bean? (3) Is `@EnableAsync` present? (4) I log the thread name inside the method and look at the stack trace: if `AsyncExecutionInterceptor` is missing, the proxy was not used. The fix is normally to move the async method to its own bean. I would add an integration test asserting that the method runs on an executor thread.
+    **Answer:** `@Async` is proxy-based, so I check the usual bypasses:
+
+    1. Is it called from the same class? Then it is a self-invocation and runs on the caller's thread.
+    2. Is the method private or final, or is the object created with `new` and not a Spring bean?
+    3. Is `@EnableAsync` present?
+    4. I log the thread name inside the method and look at the stack trace: if `AsyncExecutionInterceptor` is missing, the proxy was not used.
+
+    The fix is normally to move the async method to its own bean. I would add an integration test asserting that the method runs on an executor thread.
 
     **Interviewer listens for:** A systematic list of proxy-bypass causes and a way to prove the diagnosis from evidence.
+
+    **Common wrong answer:** "The executor is too small." First check for self-invocation and missing @EnableAsync.
 
 ??? question "Q17. A team turns on `spring.aop.proxy-target-class=false` and the app fails to start with `BeanNotOfRequiredTypeException`. Why?"
     **Answer:** With JDK proxies the proxy implements the bean's interfaces but is not an instance of the implementation class. Somewhere a bean is injected by its concrete type, for example `@Autowired PaymentServiceImpl`, and the container holds a `com.sun.proxy`/`jdk.proxy` object that is only a `PaymentService`. Fix it by injecting the interface, or keep class-based proxies for that bean (globally, or with `@Proxyable(TARGET_CLASS)` in Spring Framework 7). This exact confusion is why Spring Boot defaults to CGLIB.
 
     **Interviewer listens for:** "proxy is a sibling, not a subclass" and the history behind the Boot default.
+
+    **Common wrong answer:** "JDK proxies are broken in Spring Boot 3." Injection by concrete class needs CGLIB proxies.
 
 ??? question "Q18. In production, an order row is committed even though the method threw an exception. The method has `@Transactional`. What do you check?"
     **Answer:** First, whether a transaction existed at all. Proxy bypass causes: the method is called from another method in the same class that is not transactional, it is private or final, or the object is not a Spring bean. In those cases each repository call runs in its own auto-committed transaction. Second, if the proxy is in play, rollback rules: by default only unchecked exceptions and `Error` trigger rollback, so a checked exception commits unless `rollbackFor` is set. Third, an inner aspect or a `try/catch` that swallows the exception, so the transaction interceptor never sees it. I would confirm with transaction debug logging (`org.springframework.transaction.interceptor=TRACE`) and by checking the stack trace for `TransactionInterceptor`. Details of rollback rules are on the [Transactions](06-transactions-transactional-propagation-isolation-rollback-ru.md) page.

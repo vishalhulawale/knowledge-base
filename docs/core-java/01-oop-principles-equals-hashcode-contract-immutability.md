@@ -403,20 +403,28 @@ The hash is constant because the id changes from `null` to a value when the enti
 
     **Interviewer listens for:** the bucket-then-equals lookup order; "silent failure".
 
+    **Common wrong answer:** "It still works, just slower." Lookups fail outright because they search the wrong bucket.
+
 ??? question "Q3. Explain the four OOP pillars with a Java example of each."
     **Answer:** Encapsulation: `private` fields with methods that enforce invariants (an `Account` that rejects negative withdrawals). Abstraction: code depends on `PaymentGateway`, not a concrete provider. Inheritance: `SavingsAccount extends Account`. Polymorphism: `gateway.charge()` dispatches at runtime to the actual implementation. Add that composition is usually preferred over inheritance.
 
     **Interviewer listens for:** runtime vs compile-time polymorphism, composition over inheritance, LSP.
+
+    **Common wrong answer:** Defining the pillars as textbook words with no example of the invariant or the polymorphic call.
 
 ??? question "Q4. Overloading vs overriding. Which one is resolved at runtime?"
     **Answer:** Overriding (same signature in a subclass) is resolved at **runtime** by the object's actual class. Overloading (same name, different parameters) is resolved at **compile time** from the declared argument types. Static methods are hidden, not overridden.
 
     **Interviewer listens for:** link to the `equals(MyType)` overload bug and the value of `@Override`.
 
+    **Common wrong answer:** "Overloading is runtime polymorphism." Overloads are chosen by the compiler from declared types.
+
 ??? question "Q5. What makes a class immutable? Is `final` on fields enough?"
     **Answer:** No mutators, class can't be subclassed (`final`/record/private constructor), all fields `private final`, defensive copies of mutable inputs and outputs, and no `this` escape during construction. `final` on a field only freezes the reference; a `final List` can still be modified.
 
     **Interviewer listens for:** defensive copying, subclassing risk, deep vs shallow.
+
+    **Common wrong answer:** "Make all fields final and you are done." A final List can still be modified through its reference.
 
 ### Intermediate
 
@@ -440,25 +448,35 @@ The hash is constant because the id changes from `null` to a value when the enti
 
     **Interviewer listens for:** correct reasoning about both lookups, not just the answers.
 
+    **Common wrong answer:** Guessing from intuition without walking through which class overrides equals and hashCode.
+
 ??? question "Q7. Predict: `new BigDecimal(\"2.0\")` and `new BigDecimal(\"2.00\")` added to a HashSet and a TreeSet. Sizes?"
     **Answer:** `HashSet` size **2**, `TreeSet` size **1**. `BigDecimal.equals` compares value and scale; `compareTo` compares only numeric value, and `TreeSet` uses `compareTo`. Fix: normalise scale (`setScale` or `stripTrailingZeros`) before using as a key, or compare amounts with `compareTo`.
 
     **Common wrong answer:** "Both are 1, they are the same number."
+
+    **Interviewer listens for:** equals vs compareTo, scale, which collection uses which method, normalising the key.
 
 ??? question "Q8. getClass() or instanceof in equals? Why?"
     **Answer:** `instanceof` allows subclass instances to be equal to parent instances, which breaks symmetry or transitivity if a subclass adds state. `getClass()` keeps the contract but breaks substitutability and fails with framework proxies (Hibernate, Spring CGLIB). Best: make value classes `final` or records and use `instanceof`; use composition rather than extending value classes. For JPA entities use `instanceof` because proxies are subclasses.
 
     **Interviewer listens for:** the "no way to extend and add a value component" insight from *Effective Java*, and the proxy issue.
 
+    **Common wrong answer:** "Always use instanceof, it is the IDE default." It silently breaks symmetry once a subclass adds fields.
+
 ??? question "Q9. Are Java records immutable?"
     **Answer:** Shallowly. Fields are `private final`, the class is `final`, and there are no setters. But a component that is a mutable object (`List`, array, `Date`) can still change through the original or returned reference. Make them deeply immutable by copying in the compact constructor (`List.copyOf`, `clone()`) and, for arrays, copying in the accessor and overriding `equals`/`hashCode` with `Arrays.equals`/`Arrays.hashCode`.
 
     **Common wrong answer:** "Yes, records are fully immutable."
 
+    **Interviewer listens for:** shallow vs deep immutability, defensive copies in the compact constructor, List.copyOf.
+
 ??? question "Q10. Why are immutable objects thread-safe? What does `final` give you in the memory model?"
     **Answer:** No state changes after construction, so there is nothing to race on. Additionally, JLS §17.5 guarantees that any thread that obtains a reference to a properly constructed object (no `this` escape) sees the correct values of its `final` fields without synchronization. Non-final fields could be seen as default values under a data race.
 
     **Interviewer listens for:** "safe publication", "this escape".
+
+    **Common wrong answer:** "Immutable objects are thread-safe because they are final." Safety comes from no state change plus the final-field publication guarantee.
 
 ### Senior
 
@@ -472,26 +490,52 @@ The hash is constant because the id changes from `null` to a value when the enti
 ??? question "Q12. Your hashCode returns a constant 42. Is that legal? What's the impact?"
     **Answer:** Legal: it satisfies the contract (equal objects have equal hashes). But every entry collides into one bucket, so `HashMap` degrades. Since Java 8, a bucket with 8 or more entries (once the table has at least 64 buckets) is converted to a red-black tree (if keys are `Comparable`, lookups become O(log n)); otherwise it is effectively a linear scan, O(n). Good for correctness tests, bad for performance. A constant hash is acceptable only for small collections (the JPA entity case).
 
+    **Interviewer listens for:** legal but degraded, treeification threshold, Comparable keys help, real cost in production.
+
+    **Common wrong answer:** "It is illegal and throws an exception." The contract is met; only performance suffers.
+
 ??? question "Q13. Why can mutable keys cause a memory leak, and how would you detect it?"
     **Answer:** The mutated entry stays referenced by the map's table but can no longer be found or removed by key (only iteration or `clear()` still reaches it), so it is never collected, and callers re-insert "missing" entries. Detection: heap dump analysis (a map whose size keeps growing, many entries with equal-looking keys), metrics on cache size vs hit rate, and code review for setters on key classes. Prevention: immutable keys (records), or extract an immutable key from the mutable object.
+
+    **Interviewer listens for:** unreachable but referenced entries, re-insertion growth, heap dump analysis, immutable keys.
+
+    **Common wrong answer:** "The garbage collector will clean them up." The map still holds a strong reference.
 
 ??? question "Q14. Composition vs inheritance: give a concrete example where inheritance broke an invariant."
     **Answer:** The *Effective Java* `InstrumentedHashSet` example: a subclass of `HashSet` overrides `add` and `addAll` to count insertions, but `HashSet.addAll` internally calls `add`, so elements are counted twice. The subclass depended on a superclass implementation detail. A wrapper (composition plus forwarding) that holds a `Set` and delegates avoids it. Another example is `java.sql.Timestamp extends java.util.Date`, which breaks equals symmetry.
 
     **Interviewer listens for:** "fragile base class", forwarding/decorator.
 
+    **Common wrong answer:** Choosing an example that does not show a broken invariant, such as "Square extends Rectangle" without explaining what breaks.
+
 ### Scenario-based
 
 ??? question "Q15. A Redis-backed cache has a low hit rate even though the same requests repeat. The local (in-process) layer uses a request DTO as the key. What do you check?"
-    **Answer:** (1) Does the DTO override `equals`/`hashCode`, and with the same fields? (2) Does it include volatile fields (timestamp, correlation id, trace id) that differ on every request? (3) Are there collections in different orders (`List` vs `Set` semantics) or `BigDecimal` scale differences? (4) Is the object mutated after being used as a key? (5) For the Redis key string, is serialisation deterministic (field order, map ordering)? Fix by building an explicit, immutable cache-key record with only the fields that define the result.
+    **Answer:**
+
+    1. Does the DTO override `equals`/`hashCode`, and with the same fields?
+    2. Does it include volatile fields (timestamp, correlation id, trace id) that differ on every request?
+    3. Are there collections in different orders (`List` vs `Set` semantics) or `BigDecimal` scale differences?
+    4. Is the object mutated after being used as a key?
+    5. For the Redis key string, is serialisation deterministic (field order, map ordering)? Fix by building an explicit, immutable cache-key record with only the fields that define the result.
 
     **Interviewer listens for:** systematic debugging, a dedicated key type, awareness that Redis keys are strings.
+
+    **Common wrong answer:** "Redis is slow, increase memory." The keys never match, so more memory will not raise the hit rate.
 
 ??? question "Q16. Two services deduplicate Kafka events by putting them in a `Set`. Duplicates still get processed. Possible causes?"
     **Answer:** The event class lacks a value-based `equals`/`hashCode` (identity equality, so every deserialised instance is "new"); equality includes fields that differ between redeliveries (consumer timestamp, offset, headers); or equality uses arrays by reference. Also, an in-memory `Set` doesn't survive restarts or span instances. Correct approach: dedup on a stable business idempotency key (event id) stored in a durable store (Redis `SET NX` with TTL, or a unique DB constraint), with the event modelled as an immutable record.
 
+    **Interviewer listens for:** identity equality, unstable fields in equals, arrays by reference, dedupe by business event id.
+
+    **Common wrong answer:** "Kafka delivered the message twice, so it is Kafka's fault." Redelivery is expected; the dedupe key is wrong.
+
 ??? question "Q17. A colleague adds a `ColorPoint extends Point` and now some `Set<Point>` operations behave strangely. Explain and fix."
     **Answer:** If `Point.equals` uses `instanceof` and `ColorPoint.equals` also compares colour, then `point.equals(colorPoint)` is true but `colorPoint.equals(point)` is false: symmetry is broken, so set behaviour depends on which object is the argument. "Fixing" it by ignoring colour for plain points breaks transitivity. Fix: make `Point` final (or a record) and model `ColorPoint` with composition (`record ColorPoint(Point point, Color color)`).
+
+    **Interviewer listens for:** symmetry violation, Liskov, composition over inheritance or getClass-based equals.
+
+    **Common wrong answer:** "Override equals in ColorPoint to also compare colour." That is exactly what breaks symmetry.
 
 ## Cheat sheet
 

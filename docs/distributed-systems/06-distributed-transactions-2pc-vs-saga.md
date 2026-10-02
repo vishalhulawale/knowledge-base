@@ -300,9 +300,16 @@ It's common in payments (authorise/capture/void) and booking (hold/confirm/relea
 
     **Common wrong answer:** "the same thing".
 
+??? question "Q10. How do you observe and support sagas in production?"
+    **Answer:** Give every saga a **saga id** carried in every command, event and log line, and propagate trace context across messages. Persist saga state (`STARTED`, `PAYMENT_AUTHORISED`, `COMPENSATING`, `FAILED`) in the orchestrator's table, or rely on Temporal/Step Functions history. Alert on **stuck sagas** (no progress for longer than the step timeout), on compensation failures and on DLQ growth. Give support staff a screen or runbook to see where an order is and to retry or complete a step manually. Track business metrics too: completion rate and time to complete.
+
+    **Interviewer listens for:** saga id + trace propagation, persisted state, stuck-saga alerts, manual retry tooling, business metrics.
+
+    **Common wrong answer:** "Read the logs of each service when someone complains." Without a saga id and state you cannot answer "where is this order?" quickly.
+
 ### Scenario-based
 
-??? question "Q10. Design checkout across inventory, payment and shipping."
+??? question "Q11. Design checkout across inventory, payment and shipping."
     **Answer:**
     - An orchestrated saga: create the order PENDING (semantic lock) → reserve stock (compensatable, hold with TTL) → authorise payment (compensatable: void) → capture payment (pivot) → create shipment and send confirmation (retriable).
     - Each step via outbox + idempotent participants.
@@ -313,7 +320,7 @@ It's common in payments (authorise/capture/void) and booking (hold/confirm/relea
 
     **Common wrong answer:** "one `@Transactional` method calling all services".
 
-??? question "Q11. A refund compensation keeps failing because the payment provider is down. What happens?"
+??? question "Q12. A refund compensation keeps failing because the payment provider is down. What happens?"
     **Answer:** Compensations must be retriable with backoff and idempotency keys (refund key = order ID). The saga stays in COMPENSATING with alerts. After N attempts or a deadline, escalate to a manual queue with full context. Notify the customer appropriately. Reconciliation catches anything missed. Never silently drop it.
 
     **Interviewer listens for:** retriable compensations plus escalation.

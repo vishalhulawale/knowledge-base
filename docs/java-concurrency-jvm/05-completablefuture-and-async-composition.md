@@ -391,7 +391,12 @@ A failure pattern that shows up repeatedly in production reviews: all blocking c
 ### Fundamentals
 
 ??? question "Q1. What is the difference between `Future` and `CompletableFuture`?"
-    **Answer:** `Future` is a read-only handle: you can only block with `get()`, poll `isDone()`, or cancel. `CompletableFuture` implements `Future` and `CompletionStage`, so you can (1) attach callbacks that run when the result arrives, (2) chain and combine futures (`thenCompose`, `thenCombine`, `allOf`), (3) handle errors inside the pipeline, and (4) complete it manually with `complete` / `completeExceptionally`, which lets you wrap callback APIs.
+    **Answer:** `Future` is a read-only handle: you can only block with `get()`, poll `isDone()`, or cancel. `CompletableFuture` implements `Future` and `CompletionStage`, so you can:
+
+    1. Attach callbacks that run when the result arrives.
+    2. Chain and combine futures (`thenCompose`, `thenCombine`, `allOf`).
+    3. Handle errors inside the pipeline.
+    4. Complete it manually with `complete` / `completeExceptionally`, which lets you wrap callback APIs.
 
     **Interviewer listens for:** "non-blocking composition" and "manually completable", not just "it's async".
 
@@ -409,13 +414,21 @@ A failure pattern that shows up repeatedly in production reviews: all blocking c
 
     **Interviewer listens for:** knowing the default and immediately saying it is wrong for blocking I/O.
 
+    **Common wrong answer:** "They create a new thread per call." Without an executor they use the common pool.
+
 ??? question "Q4. `get()` vs `join()`?"
     **Answer:** Both block until completion. `get()` throws checked exceptions: `ExecutionException` (wrapping the cause) and `InterruptedException`, and has a timed overload. `join()` throws the unchecked `CompletionException`, which makes it usable inside lambdas and streams. Neither should be called on a request path without a bound on the wait.
+
+    **Interviewer listens for:** checked vs unchecked exceptions, timed get, join in pipelines.
+
+    **Common wrong answer:** "join is faster than get."
 
 ??? question "Q5. What do `exceptionally`, `handle` and `whenComplete` do?"
     **Answer:** `exceptionally` runs only on failure and replaces it with a fallback value (`catch`). `handle` runs on both outcomes with `(value, ex)` and returns a new value. `whenComplete` also sees both but cannot change the outcome, it is for side effects such as logging and metrics (`finally`). If the `whenComplete` action itself throws while the stage had succeeded, the returned future fails with that exception.
 
     **Common wrong answer:** "`whenComplete` handles the exception." It observes it. The failure still propagates.
+
+    **Interviewer listens for:** fallback only on failure vs both outcomes with a new value vs side effect without changing the result.
 
 ### Intermediate
 
@@ -451,10 +464,14 @@ A failure pattern that shows up repeatedly in production reviews: all blocking c
 
     **Common wrong answer:** `futures.stream().map(CompletableFuture::join)` directly inside the same stream that creates the futures. Streams are lazy, so each future is created and joined one at a time, which makes it sequential.
 
+    **Interviewer listens for:** allOf returns Void, join after allOf does not block, failure handling.
+
 ??? question "Q9. Does `cancel(true)` stop the running task?"
     **Answer:** No. For `CompletableFuture` the `mayInterruptIfRunning` argument has no effect. `cancel` only completes the future with a `CancellationException`. The task keeps running on its thread until it finishes. Dependents see a `CompletionException` caused by the `CancellationException`. The same applies to `orTimeout`. To really stop work you need a timeout at the I/O layer, a cooperative flag, or structured concurrency with virtual threads, where cancelling a scope interrupts its subtasks.
 
     **Interviewer listens for:** the contrast with `FutureTask.cancel(true)`, which does interrupt.
+
+    **Common wrong answer:** "cancel(true) interrupts the thread like FutureTask." For CompletableFuture it does not.
 
 ### Senior
 
@@ -463,45 +480,85 @@ A failure pattern that shows up repeatedly in production reviews: all blocking c
 
     **Interviewer listens for:** shared pool, bulkhead, bounded queue, and the container point: with 1-2 CPUs the common pool is even smaller.
 
+    **Common wrong answer:** "The common pool grows when threads block." It does not grow for blocking calls (except ManagedBlocker).
+
 ??? question "Q11. How do you propagate MDC, the security context and trace ids across async stages?"
-    **Answer:** They are stored in `ThreadLocal`s, which do not follow a task to another thread. Options: (1) a `TaskDecorator` on `ThreadPoolTaskExecutor` that captures context at submit time, restores it on the worker and clears it in `finally`; (2) Spring Security's `DelegatingSecurityContextExecutor` / `DelegatingSecurityContextAsyncTaskExecutor`; (3) Micrometer's context-propagation library, which Spring Boot 3 uses to carry observation and trace context. Always clear the context afterwards, because pool threads are reused and a leftover context is a data leak. Decoration only works on executors you control, which is another reason not to use the common pool. The long-term answer is scoped values with structured concurrency.
+    **Answer:** They are stored in `ThreadLocal`s, which do not follow a task to another thread. Options:
+
+    1. A `TaskDecorator` on `ThreadPoolTaskExecutor` that captures context at submit time, restores it on the worker and clears it in `finally`.
+    2. Spring Security's `DelegatingSecurityContextExecutor` / `DelegatingSecurityContextAsyncTaskExecutor`.
+    3. Micrometer's context-propagation library, which Spring Boot 3 uses to carry observation and trace context.
+
+    Always clear the context afterwards, because pool threads are reused and a leftover context is a data leak. Decoration only works on executors you control, which is another reason not to use the common pool. The long-term answer is scoped values with structured concurrency.
 
     **Interviewer listens for:** capture at submit, restore on run, **clear after**.
+
+    **Common wrong answer:** "InheritableThreadLocal solves it." Pool threads are reused, so values leak or go stale.
 
 ??? question "Q12. CompletableFuture vs virtual threads: which would you choose on Java 21+?"
     **Answer:** CF was partly a way to avoid blocking scarce platform threads. Virtual threads (JEP 444, final in Java 21) make blocking cheap, so for request-style I/O code I would write plain sequential blocking code on virtual threads: it is easier to read, debug and profile, and exceptions and stack traces are normal. I would still use CF when a library already returns it (AWS SDK async, `HttpClient.sendAsync`, GraphQL Java, Spring Kafka), for simple fan-out, and for bridging callbacks. The two combine well: `supplyAsync(task, virtualThreadExecutor)`. Structured concurrency gives the cancel-siblings behaviour CF lacks, but it is still a preview API in Java 25, so I would not base production code on it yet.
 
     **Interviewer listens for:** a balanced answer, not "CF is dead". Knowing structured concurrency's preview status is a plus.
 
+    **Common wrong answer:** "Virtual threads make CompletableFuture obsolete everywhere." CF is still useful for composing and combining results.
+
 ??? question "Q13. Explain internally what happens when a stage completes."
     **Answer:** A CF holds a `result` field and a lock-free stack of dependent completions. Completing sets `result` with a CAS, so only the first of several competing completions wins and the others return `false`. The completing thread then pops each dependent and runs it, or submits it to an executor for async variants. Each dependent completes its own CF, which triggers its dependents in turn. If a stage is added after completion, it runs immediately on the adding thread. There are no locks, which is why CF scales well, and why the executing thread is decided by timing.
 
     **Interviewer listens for:** CAS, a stack of dependents, "the completing thread runs the callbacks".
+
+    **Common wrong answer:** "Each stage runs on a new thread." Non-async stages often run on the completing thread.
 
 ??? question "Q14. A CF pipeline deadlocks under load but works in tests. What is a likely cause?"
     **Answer:** Thread-pool starvation. A task running on a bounded pool submits child tasks to the **same** pool and then blocks on them with `join()`. Under load every worker is a parent waiting for a child that is stuck in the queue. Nothing can make progress. Fixes: do not block inside a stage, compose with `thenCompose` / `thenCombine` instead; or run child tasks on a different pool; or use virtual threads. A thread dump shows all pool threads `WAITING` in `CompletableFuture.join` with a non-empty queue.
 
     **Common wrong answer:** "Increase the pool size." That only moves the load level at which it fails.
 
+    **Interviewer listens for:** pool starvation from join inside the same pool, separate pools or non-blocking composition.
+
 ### Scenario-based
 
 ??? question "Q15. An endpoint calls 5 upstream services. p99 latency is too high. Design the fix."
-    **Answer:** (1) Find which calls are independent and start them all before composing, with a dedicated executor. Dependent calls chain with `thenCompose`. (2) Give each call a timeout from the latency budget, both `orTimeout` and client-level timeouts. (3) Classify each upstream as required or optional: optional ones get `exceptionally` / `completeOnTimeout` fallbacks, required ones fail the request quickly. (4) Add a circuit breaker and bulkhead per upstream (Resilience4j) so a sick dependency cannot use every thread. (5) Cache reference data in Redis. (6) Propagate trace context and record per-upstream latency so you can prove the improvement. (7) Return the `CompletableFuture` to Spring MVC or GraphQL instead of blocking.
+    **Answer:**
+
+    1. Find which calls are independent and start them all before composing, with a dedicated executor. Dependent calls chain with `thenCompose`.
+    2. Give each call a timeout from the latency budget, both `orTimeout` and client-level timeouts.
+    3. Classify each upstream as required or optional: optional ones get `exceptionally` / `completeOnTimeout` fallbacks, required ones fail the request quickly.
+    4. Add a circuit breaker and bulkhead per upstream (Resilience4j) so a sick dependency cannot use every thread.
+    5. Cache reference data in Redis.
+    6. Propagate trace context and record per-upstream latency so you can prove the improvement.
+    7. Return the `CompletableFuture` to Spring MVC or GraphQL instead of blocking.
 
     **Interviewer listens for:** latency = slowest call not the sum, partial failure policy, isolation, and measurement.
+
+    **Common wrong answer:** "Call the five services sequentially but faster." Independent calls should run in parallel with a deadline.
 
 ??? question "Q16. After a release, the whole service slows down whenever one upstream is slow, even endpoints that do not call it. Diagnose."
     **Answer:** Take thread dumps. If `ForkJoinPool.commonPool-worker-*` threads are all in socket reads, someone used `supplyAsync` without an executor (or a parallel stream) for blocking calls, and the common pool is exhausted. Unrelated endpoints that rely on the common pool now queue behind it. Fix: move blocking work to a dedicated bounded executor per upstream, add timeouts, and add a circuit breaker. Add a pool-saturation metric (active threads, queue depth) and an alert.
 
     **Interviewer listens for:** a diagnostic method (thread dump, pool metrics) before a fix.
 
+    **Common wrong answer:** "The slow upstream also slows other endpoints' upstreams." The shared common pool is blocked.
+
 ??? question "Q17. Audit logs sometimes show the wrong user id for async operations. What is going on?"
     **Answer:** A `ThreadLocal` context leak. Either the context was set on a pooled worker thread and never cleared, so the next task on that thread inherits the previous user, or the context was not propagated and the code fell back to a stale value. Fix with a decorator that sets the captured context before the task and **clears it in `finally`**, use `DelegatingSecurityContextExecutor`, and prefer passing the user id explicitly as a parameter for anything audit-critical. In healthcare and banking this is a reportable security defect, so add a test that runs two users through the same single-thread pool.
 
     **Interviewer listens for:** recognising it as a security issue, and "clear in finally".
 
+    **Common wrong answer:** "The JWT was decoded wrongly." Thread-local context leaked across pooled threads.
+
 ??? question "Q18. You fire `runAsync(() -> publishEvent())` and events are occasionally missing with nothing in the logs. Why?"
-    **Answer:** Three likely reasons. (1) The task threw, and since nobody joins the future or attaches `exceptionally` / `whenComplete`, the exception was stored in the future and discarded. (2) Common-pool threads are daemon threads, so on shutdown the JVM does not wait for them. (3) The bounded executor rejected the task. Fix: always end fire-and-forget chains with a `whenComplete` that logs and counts failures, use a managed executor that Spring drains on shutdown, and for events that must not be lost use a durable mechanism (transactional outbox to Kafka) instead of an in-memory future.
+    **Answer:** Three likely reasons:
+
+    1. The task threw, and since nobody joins the future or attaches `exceptionally` / `whenComplete`, the exception was stored in the future and discarded.
+    2. Common-pool threads are daemon threads, so on shutdown the JVM does not wait for them.
+    3. The bounded executor rejected the task.
+
+    Fix: always end fire-and-forget chains with a `whenComplete` that logs and counts failures, use a managed executor that Spring drains on shutdown, and for events that must not be lost use a durable mechanism (transactional outbox to Kafka) instead of an in-memory future.
+
+    **Interviewer listens for:** fire-and-forget loses exceptions, common pool saturation, shutdown before completion.
+
+    **Common wrong answer:** "Async tasks never fail silently."
 
 ## Cheat sheet
 

@@ -316,15 +316,21 @@ CompletableFuture<Formulary> formulary(String planId) {
 
     **Interviewer listens for:** lazy init, threshold maths, doubling.
 
+    **Common wrong answer:** "The map resizes when it is full." It resizes when size exceeds capacity × load factor.
+
 ??? question "Q3. Why must you override both `equals` and `hashCode` for keys?"
     **Answer:** HashMap uses `hashCode` to find the bin and `equals` to find the key in it. If two equal objects have different hash codes they land in different bins, so `get` with an equal key returns null and duplicates appear. Overriding `hashCode` but not `equals` means identity comparison, so a new but equal key is never found.
 
     **Interviewer listens for:** the contract (equal objects must have equal hash codes), and the effect on both lookup and duplicates.
 
+    **Common wrong answer:** "equals alone is enough because HashMap compares keys with equals." It only calls equals inside the bin chosen by hashCode.
+
 ??? question "Q4. Can HashMap and ConcurrentHashMap hold null keys or values?"
     **Answer:** HashMap allows one null key (stored in bin 0) and any number of null values. ConcurrentHashMap allows neither and throws `NullPointerException`. In a concurrent map, null from `get` must unambiguously mean "absent", because you can't safely follow up with `containsKey` while other threads change the map.
 
     **Common wrong answer:** "CHM forbids null because of hashing" (the reason is ambiguity under concurrency).
+
+    **Interviewer listens for:** one null key in HashMap, none in CHM, ambiguity of null under concurrency.
 
 ### Intermediate
 
@@ -332,6 +338,8 @@ CompletableFuture<Formulary> formulary(String planId) {
     **Answer:** Power of two lets the index be `hash & (n - 1)`, a cheap AND instead of `%`, and makes resize splitting a one-bit decision. Because only the low bits are used for small tables, XOR-ing the upper 16 bits into the lower 16 makes keys that differ only in high bits spread across bins.
 
     **Interviewer listens for:** bit masking, high-bit spreading, link to resize.
+
+    **Common wrong answer:** "Powers of two use less memory."
 
 ??? question "Q6. What is treeification and when does it happen?"
     **Answer:** Since Java 8 (JEP 180), when a single bin grows past 8 nodes (an insert into a bin already holding `TREEIFY_THRESHOLD` = 8) and the table has at least 64 slots, the list becomes a red-black tree, making lookups in that bin `O(log n)`. If the table is smaller than 64, HashMap resizes instead. Trees convert back to lists at 6 nodes or fewer (during resize). Ordering uses hash, then `compareTo` for `Comparable` keys of the same class, then a tie-break.
@@ -358,13 +366,21 @@ CompletableFuture<Formulary> formulary(String planId) {
 
     **Interviewer listens for:** cached hash in the node, mutable key danger, records as safe keys.
 
+    **Common wrong answer:** Assuming a mutated key can still be found by its new value.
+
 ??? question "Q8. What does fail-fast mean? Is it a thread-safety mechanism?"
     **Answer:** HashMap iterators check `modCount` and throw `ConcurrentModificationException` if the map was structurally modified other than through the iterator. It's best-effort bug detection and is not guaranteed under concurrency. It also fires in single-threaded code (removing inside a for-each). Use `iterator.remove()` or `removeIf`. CHM iterators are weakly consistent and never throw CME.
 
     **Common wrong answer:** "CME means another thread modified the map."
 
+    **Interviewer listens for:** modCount, best-effort detection, single-threaded cases.
+
 ??? question "Q9. HashMap vs Hashtable vs synchronizedMap vs ConcurrentHashMap?"
     **Answer:** HashMap: unsynchronised, nulls allowed. Hashtable: legacy, every method `synchronized`, no nulls. `synchronizedMap`: wrapper with one mutex, and you must lock it yourself while iterating. ConcurrentHashMap: lock-free reads, per-bin locking for writes, cooperative resize, atomic compound methods, weakly consistent iteration, no nulls. For shared mutable maps use CHM.
+
+    **Interviewer listens for:** locking granularity, null rules, compound actions, CHM as the default.
+
+    **Common wrong answer:** "Hashtable and synchronizedMap are as good as CHM." One global lock serialises every access.
 
 ### Senior
 
@@ -380,15 +396,21 @@ CompletableFuture<Formulary> formulary(String planId) {
 
     **Interviewer listens for:** ForwardingNode, helpTransfer, strides, sizeCtl, readers unaffected.
 
+    **Common wrong answer:** "CHM locks the whole table to resize." Transfer is cooperative and bin by bin.
+
 ??? question "Q12. Why was concurrent use of HashMap in Java 7 able to cause an infinite loop, and is Java 8 HashMap safe now?"
     **Answer:** Java 7's `transfer` re-inserted nodes at the head of the new bin, reversing list order. Two threads resizing at once could each reverse part of a chain and leave `a.next = b` and `b.next = a`. A later `get` then looped forever. Java 8 preserves order with lo/hi splitting, so that specific cycle is gone, but HashMap is still not thread-safe: you can lose entries, get wrong sizes, or corrupt tree bins (other hang reports exist). The answer is CHM or confinement, not "upgrade to Java 8".
 
     **Common wrong answer:** "Java 8 fixed it, so HashMap is OK for concurrent use."
 
+    **Interviewer listens for:** head insertion caused cycles in Java 7, Java 8 still unsafe (lost updates, corrupted trees).
+
 ??? question "Q13. What are the rules and pitfalls of `computeIfAbsent` on ConcurrentHashMap?"
     **Answer:** The mapping function runs atomically at most once per absent key, while the bin is locked. So it must be short, must not block on I/O, and must not modify other mappings in the same map. A recursive call on the same map throws `IllegalStateException("Recursive update")` on Java 9+ (Java 8 could hang). For expensive loads, store a `CompletableFuture` so the work runs outside the lock, or use Caffeine's `LoadingCache`/`AsyncLoadingCache`. Note that `computeIfAbsent` still takes the lock path on a hit in some cases, so for very hot read paths try `get` first and fall back to `computeIfAbsent`.
 
     **Interviewer listens for:** atomicity scope, lock held during function, no recursion, future-based memoisation.
+
+    **Common wrong answer:** Calling a remote service or another computeIfAbsent on the same map inside the mapping function.
 
 ### Scenario-based
 
@@ -397,20 +419,28 @@ CompletableFuture<Formulary> formulary(String planId) {
 
     **Interviewer listens for:** thread dump evidence, root cause (shared singleton), right replacement, bounded caching.
 
+    **Common wrong answer:** "Make the map volatile." That only publishes the reference, not safe concurrent updates.
+
 ??? question "Q15. You need a per-member rate counter for an API handling thousands of requests per second. Which structure and why?"
     **Answer:** `ConcurrentHashMap<String, LongAdder>` with `computeIfAbsent(id, k -> new LongAdder()).increment()`. CHM gives atomic create-once per key and per-bin locking only on first insert; after that increments touch only the `LongAdder`, which stripes contention across cells. `merge(k, 1L, Long::sum)` also works but locks the bin on every increment. Add eviction (scheduled cleanup or Caffeine with expiry) so the map doesn't grow without bound. For limits across pods, the counter must live in Redis instead.
 
     **Interviewer listens for:** LongAdder, unbounded growth concern, local vs distributed.
+
+    **Common wrong answer:** "Use AtomicLong in a synchronizedMap." It works but serialises every request on one lock.
 
 ??? question "Q16. Two concurrent GraphQL requests miss the cache for the same upstream key and both call the slow upstream. How do you stop the duplicate call?"
     **Answer:** This is a cache stampede. Locally: `cache.computeIfAbsent(key, k -> client.fetchAsync(k))` storing a `CompletableFuture`, so the first caller creates the future and others share it, and the remote call doesn't run while holding the bin lock. Remove failed futures so errors aren't cached. Caffeine's `AsyncLoadingCache` does this for you with expiry. Across pods, use a short Redis lock or accept one call per pod.
 
     **Interviewer listens for:** single-flight via futures, error eviction, local vs distributed.
 
+    **Common wrong answer:** "Put a synchronized block around the upstream call." That serialises all keys, not just the hot one.
+
 ??? question "Q17. Gotcha: a teammate writes `if (!chm.containsKey(k)) chm.put(k, create());`. The map is a ConcurrentHashMap, so it's safe, right?"
     **Answer:** No. Each call is thread-safe, but the pair is check-then-act. Two threads can both see the key missing, both call `create()`, and the second `put` overwrites the first. Use `putIfAbsent` (if creating is cheap) or `computeIfAbsent` (creates once).
 
     **Common wrong answer:** "Yes, CHM is thread-safe."
+
+    **Interviewer listens for:** check-then-act race, putIfAbsent or computeIfAbsent.
 
 ## Cheat sheet
 

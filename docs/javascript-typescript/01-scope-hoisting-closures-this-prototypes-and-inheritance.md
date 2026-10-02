@@ -208,47 +208,99 @@ Not ★; JavaScript and TypeScript are listed as core languages, and the React a
 ??? question "Q1. var vs let vs const?"
     **Answer:** `var` is function-scoped, hoisted and initialised to undefined, redeclarable. `let`/`const` are block-scoped, hoisted into the TDZ, not redeclarable; `const` can't be reassigned (but its object can be mutated).
 
+    **Interviewer listens for:** function vs block scope, TDZ, redeclaration, const binding vs mutable object.
+
+    **Common wrong answer:** "const makes the object immutable." It only stops reassigning the variable.
+
 ??? question "Q2. What is hoisting?"
     **Answer:** Declarations are registered at the start of their scope before execution: `var` as undefined, function declarations fully, `let`/`const`/`class` uninitialised (TDZ).
+
+    **Interviewer listens for:** different hoisting for var, function declarations and let/const/class.
+
+    **Common wrong answer:** "let and const are not hoisted." They are hoisted but uninitialised (TDZ).
 
 ??? question "Q3. What is a closure?"
     **Answer:** A function together with references to the variables of the scope where it was defined, kept alive after that scope finishes.
 
+    **Interviewer listens for:** function + captured scope, survives after outer function returns, practical uses (privacy, factories).
+
+    **Common wrong answer:** "A closure is a function inside a function." Nesting alone is not the point; keeping the scope alive is.
+
 ??? question "Q4. How is `this` determined?"
     **Answer:** By the call site: `new` > explicit (call/apply/bind) > implicit (`obj.fn()`) > default (undefined in strict mode). Arrow functions use the enclosing `this`.
+
+    **Interviewer listens for:** call-site rules in priority order, arrows inherit lexical this.
+
+    **Common wrong answer:** "this is the object where the function was defined." For normal functions it depends on how it is called.
 
 ### Intermediate
 
 ??? question "Q5. What's the TDZ?"
     **Answer:** The period from entering a scope until a `let`/`const`/`class` declaration runs; accessing the binding then throws ReferenceError.
 
+    **Interviewer listens for:** scope entry until declaration, ReferenceError, applies to let/const/class.
+
+    **Common wrong answer:** "Accessing let before declaration returns undefined." That is var behaviour.
+
 ??? question "Q6. Predict: `for (var i=0;i<3;i++) setTimeout(()=>console.log(i))`"
     **Answer:** `3 3 3`: one function-scoped `i` shared by all callbacks, which run after the loop. With `let`: `0 1 2`.
+
+    **Interviewer listens for:** one shared var binding vs per-iteration let binding, callbacks run after the loop.
+
+    **Common wrong answer:** "0 1 2 because setTimeout has 0 delay." Callbacks run after the loop finishes.
 
 ??? question "Q7. call vs apply vs bind?"
     **Answer:** call invokes with `this` and listed args; apply with an args array; bind returns a new function with fixed `this` (and partial args).
 
+    **Interviewer listens for:** invoke vs return new function, args list vs array, partial application.
+
+    **Common wrong answer:** "bind calls the function immediately."
+
 ??? question "Q8. What is the prototype chain?"
     **Answer:** The linked list of `[[Prototype]]` objects used to look up properties not found on an object, ending at `Object.prototype` then null.
+
+    **Interviewer listens for:** [[Prototype]] lookup, ends at Object.prototype then null, shared methods.
+
+    **Common wrong answer:** Confusing `__proto__` (instance link) with `prototype` (property on constructor functions).
 
 ### Senior
 
 ??? question "Q9. How do ES classes map to prototypes?"
     **Answer:** A class creates a constructor function; methods go on `C.prototype`; `extends` links `Child.prototype` to `Parent.prototype` and `Child` to `Parent` for statics; `super` calls parent constructor/methods. Private `#fields` are per-instance and language-enforced.
 
+    **Interviewer listens for:** constructor function, methods on prototype, extends links both chains, #private.
+
+    **Common wrong answer:** "JS classes work like Java classes." They are syntax over prototypes.
+
 ??? question "Q10. Can closures cause memory leaks?"
     **Answer:** Yes, when long-lived references (listeners, timers, caches, globals) hold closures that capture large or sensitive data. Remove listeners, clear timers, avoid capturing more than needed.
 
+    **Interviewer listens for:** long-lived holders keep closures alive, listeners/timers/caches, cleanup.
+
+    **Common wrong answer:** "Closures always leak memory." They only leak when something long-lived keeps them reachable.
+
 ??? question "Q11. TypeScript `private` vs JavaScript `#private`?"
     **Answer:** TS `private` is erased at compile time (accessible at runtime); `#private` is enforced by the JS engine.
+
+    **Interviewer listens for:** compile-time only vs runtime-enforced.
+
+    **Common wrong answer:** "TypeScript private is enforced at runtime."
 
 ### Scenario-based
 
 ??? question "Q12. A method passed to setInterval throws 'Cannot read properties of undefined'. Why?"
     **Answer:** It's called as a plain function, so `this` is undefined. Use an arrow function, bind it, or wrap the call.
 
+    **Interviewer listens for:** detached method loses this, arrow/bind/wrapper fixes.
+
+    **Common wrong answer:** "setInterval runs in another thread, so this is lost." It is about how the function is called.
+
 ??? question "Q13. Predict: `const o = { n: 1, f() { return () => this.n } }; o.f()()`"
     **Answer:** `1`. The arrow inherits `this` from `f`, which was called as `o.f()`.
+
+    **Interviewer listens for:** arrow takes this from f's call, which was o.f().
+
+    **Common wrong answer:** "undefined, because arrow functions have no this." They have no own this; they inherit it.
 
 ## Cheat sheet
 

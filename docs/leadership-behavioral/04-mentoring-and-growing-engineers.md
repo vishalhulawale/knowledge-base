@@ -206,16 +206,23 @@ flowchart LR
 
     **Common wrong answer:** "I only mentor backend".
 
+??? question "Q8. How do you know your mentoring is working?"
+    **Answer:** Look for changes in **behaviour and scope**, not hours spent: the person makes decisions you used to make, their designs need fewer review rounds, they own an area end to end, others start asking them for help, they mentor someone in turn. Agree the goal and a few signals at the start, check them in 1:1s every month or two, and ask the mentee directly what is and isn't helping. *[confirm]*
+
+    **Interviewer listens for:** agreed goals, observable signals, regular check-ins, mentee feedback, the mentee eventually mentoring others.
+
+    **Common wrong answer:** "They said the sessions were useful." Satisfaction is not growth.
+
 ### Senior
 
-??? question "Q8. How do you scale mentoring when you lead 8–10 people?"
+??? question "Q9. How do you scale mentoring when you lead 8–10 people?"
     **Answer:** Standards and checklists (repeated advice becomes documentation), guild sessions and brown-bags, pairing rotations, senior engineers mentoring juniors (mentoring the mentors), growth plans in 1:1s, and stretch assignments planned into sprints.
 
     **Interviewer listens for:** leverage.
 
     **Common wrong answer:** "more 1:1 time".
 
-??? question "Q9. Describe a mentoring relationship that didn't work."
+??? question "Q10. Describe a mentoring relationship that didn't work."
     **Answer structure:** An honest example *[confirm]*: a mismatch of goals, too much advice and too little autonomy, or the wrong timing. What you noticed, what you changed (a different mentor, an adjusted approach, a conversation with their manager), and the outcome and lesson.
 
     **Interviewer listens for:** self-awareness.
@@ -224,7 +231,7 @@ flowchart LR
 
 ### Scenario-based
 
-??? question "Q10. A talented engineer is overlooked for promotion because nobody outside the team knows their work. What do you do?"
+??? question "Q11. A talented engineer is overlooked for promotion because nobody outside the team knows their work. What do you do?"
     **Answer:** Sponsor them:
     - Give them visible ownership (lead a design review or demo, write the ADR).
     - Credit them in stakeholder updates.
@@ -236,7 +243,7 @@ flowchart LR
 
     **Common wrong answer:** "Good work speaks for itself".
 
-??? question "Q11. A senior engineer gives harsh code review comments that discourage juniors. How do you handle it?"
+??? question "Q12. A senior engineer gives harsh code review comments that discourage juniors. How do you handle it?"
     **Answer:**
     1. Give private SBI feedback with examples of the impact (juniors avoiding PRs).
     2. Acknowledge their high standards.

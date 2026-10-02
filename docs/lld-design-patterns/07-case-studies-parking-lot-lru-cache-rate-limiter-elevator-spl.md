@@ -405,9 +405,16 @@ public static List<Transfer> simplify(Map<String, Long> netBalances) {   // + = 
 
     **Common wrong answer:** a global `synchronized` method.
 
+??? question "Q7. Splitwise: how do you split 100.00 among 3 people without losing a cent?"
+    **Answer:** Never use `double`. Work in **minor units** (`long` cents) or `BigDecimal` with an explicit scale and rounding mode. 10000 cents ÷ 3 = 3333 remainder 1. Give 3333 to everyone and add the 1-cent remainder to the first payee (or rotate it fairly). Then the shares always sum exactly to the total. The same rule applies to percentage splits: compute, round down, then distribute the remainder cents.
+
+    **Interviewer listens for:** minor units or BigDecimal, explicit rounding, remainder distribution, shares sum to the total.
+
+    **Common wrong answer:** Using `100.0 / 3` as a double, which gives 33.333… and balances that never settle to zero.
+
 ### Senior
 
-??? question "Q7. Add TTL to your LRU cache."
+??? question "Q8. Add TTL to your LRU cache."
     **Answer:**
     - Store `expiresAt` per node.
     - On `get`, if it's expired, remove it and return empty (lazy expiry).
@@ -419,16 +426,23 @@ public static List<Transfer> simplify(Map<String, Long> netBalances) {   // + = 
 
     **Common wrong answer:** a thread per entry.
 
-??? question "Q8. Library: two members try to borrow the last copy at once. What happens?"
+??? question "Q9. Library: two members try to borrow the last copy at once. What happens?"
     **Answer:** The status transition must be atomic: `UPDATE copy SET status='ON_LOAN' WHERE id=? AND status='AVAILABLE'` (rows affected = 1 wins), or a per-copy lock in memory. The loser gets "unavailable" and can be offered a reservation. Reservations are a FIFO queue, and the next member is notified on return (Observer) with a hold expiry.
 
     **Interviewer listens for:** atomic transition, plus the reservation flow.
 
     **Common wrong answer:** "check availability first, then create the loan".
 
+??? question "Q10. Elevator: how do you extend the single-elevator design to a bank of elevators?"
+    **Answer:** Add a **dispatcher** (Mediator) that receives hall calls and assigns each to one elevator. Each elevator keeps its own LOOK/SCAN queue for cabin calls. A simple dispatch strategy is **nearest suitable car**: prefer an elevator already moving towards the floor in the requested direction, then an idle one, then the one with the fewest stops. Make the strategy pluggable (peak-time zoning, energy-saving). Update elevator state from one thread (event loop or actor per elevator) to avoid races between assignment and movement.
+
+    **Interviewer listens for:** dispatcher/mediator, per-car scheduling, pluggable assignment strategy, concurrency model.
+
+    **Common wrong answer:** Sharing one global request queue that every elevator polls, which causes several cars to answer the same call.
+
 ### Scenario-based
 
-??? question "Q9. Parking twist: add EV charging spots with per-kWh billing."
+??? question "Q11. Parking twist: add EV charging spots with per-kWh billing."
     **Answer:**
     - A new spot type `EV` (or a capability flag) and an allocation rule (EVs prefer EV spots, others avoid them unless the lot is full).
     - Pricing becomes a composite: parking fee strategy + a charging session (start/stop kWh from the charger adapter) priced per kWh.
@@ -439,7 +453,7 @@ public static List<Transfer> simplify(Map<String, Long> netBalances) {   // + = 
 
     **Common wrong answer:** "add an `if (ev)` everywhere".
 
-??? question "Q10. Splitwise twist: multiple currencies."
+??? question "Q12. Splitwise twist: multiple currencies."
     **Answer:**
     - Keep balances **per currency** (don't silently convert).
     - Simplify within each currency.

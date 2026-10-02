@@ -377,15 +377,21 @@ jcmd <pid> Thread.print                 # thread dump: stacks of all threads
 
     **Interviewer listens for:** an explanation in terms of frames and copied references, not "because `Integer` is immutable" (immutability is irrelevant here; the same happens with any class).
 
+    **Common wrong answer:** "2 1, because Integer is an object passed by reference." Java passes references by value.
+
 ??? question "Q4. Where are instance variables, static variables and local variables stored?"
     **Answer:** Local variables and parameters: in the stack frame of the method. Instance variables: inside the object on the heap. Static variables: with the `Class` object of the declaring class, which is on the heap (since Java 7); the class metadata itself is in Metaspace (native memory). In all cases, if the variable is of object type, only the reference is stored there and the object is on the heap.
 
     **Common wrong answer:** "Static variables are in PermGen/Metaspace." That was roughly true before Java 7.
 
+    **Interviewer listens for:** locals in frames, instance fields in heap objects, statics with the Class object on the heap, metadata in Metaspace.
+
 ??? question "Q5. When does an object become eligible for garbage collection?"
     **Answer:** When it is no longer reachable through any chain of strong references from a GC root. Roots are local variables of live threads, static fields of loaded classes, JNI references and similar. Typical ways to become unreachable: the method returns and its locals vanish, a reference is reassigned or set to `null`, or the containing object itself becomes unreachable. Cycles are collected because the JVM traces from roots and does not count references.
 
     **Interviewer listens for:** "reachability from GC roots"; islands of isolation; eligibility does not mean immediate collection.
+
+    **Common wrong answer:** "When you set it to null." Only when no strong path from a GC root remains.
 
 ### Intermediate
 
@@ -407,28 +413,44 @@ jcmd <pid> Thread.print                 # thread dump: stacks of all threads
 
     **Follow-up:** if `names` were `List.of("a")` the first `add` would throw `UnsupportedOperationException`, which is a good argument for passing unmodifiable collections.
 
+    **Interviewer listens for:** mutation through the copied reference is visible, reassignment is not.
+
+    **Common wrong answer:** "[a, b, c]" or "[c]".
+
 ??? question "Q7. StackOverflowError vs OutOfMemoryError: causes and fixes?"
     **Answer:** `StackOverflowError` means one thread's stack is full, almost always from unbounded or very deep recursion (also recursive `toString`/`equals` on cyclic object graphs, or bidirectional JPA entities serialised to JSON). Fix the recursion or convert to iteration; raising `-Xss` is a last resort. `OutOfMemoryError` means a memory area cannot satisfy an allocation: `Java heap space` (leak or undersized heap), `Metaspace` (too many classes, classloader leak), `Direct buffer memory` (NIO buffers), `unable to create native thread` (OS thread or memory limit). Read the message first, then take a heap dump or use NMT.
 
     **Interviewer listens for:** that both are `Error`s, not exceptions; that the OOM message identifies the area; not reaching for "increase memory" first.
+
+    **Common wrong answer:** "Increase -Xss for StackOverflowError." That hides runaway recursion instead of fixing it.
 
 ??? question "Q8. How can Java have a memory leak if it has a garbage collector?"
     **Answer:** The GC only frees *unreachable* objects. A leak in Java is an object that is still reachable but no longer needed. Common causes: static collections that only grow, caches with no size or TTL bound, `ThreadLocal` values left on pooled threads, listeners or callbacks never deregistered, inner classes or lambdas pinning an outer object, unclosed resources, and classloader leaks on redeploy. The symptom is old-generation usage after each full GC trending upwards (a sawtooth with a rising floor).
 
     **Interviewer listens for:** "reachable but unused"; at least three concrete causes; how to recognise it on a GC graph.
 
+    **Common wrong answer:** "Java cannot leak memory because of GC."
+
 ??? question "Q9. What is escape analysis? Are objects ever allocated on the stack?"
     **Answer:** Escape analysis is a C2 JIT optimisation that checks whether an object can be reached outside the method (or thread) that created it. If it does not escape, HotSpot can do **scalar replacement** (remove the allocation and keep the fields as locals) and **lock elision** (remove synchronisation on it). HotSpot does not literally put whole objects on the stack, but the effect is similar: no heap allocation. It is an optimisation, not a language guarantee, and it applies only after the code is hot and inlined.
 
     **Interviewer listens for:** awareness that "all objects are on the heap" is the model, not the machine reality; not claiming you can force it.
+
+    **Common wrong answer:** "Java never allocates objects on the stack, so escape analysis does nothing." Scalar replacement removes allocations entirely.
 
 ??? question "Q10. Explain strong, soft, weak and phantom references."
     **Answer:** Strong: normal references, never cleared while reachable. Soft: cleared only when the JVM is short of memory, guaranteed before an `OutOfMemoryError`. Weak: cleared at the next GC once no strong reference remains; used by `WeakHashMap` and for metadata attached to objects you do not own. Phantom: `get()` always returns `null`; the reference is enqueued after the object is dead so you can release native resources, which is what `Cleaner` is built on.
 
     **Common wrong answer:** recommending `SoftReference` as a cache. It makes GC behaviour unpredictable and keeps the heap full; a bounded cache with explicit eviction is better.
 
+    **Interviewer listens for:** clear conditions for each, WeakHashMap, Cleaner for phantom.
+
 ??? question "Q11. Why should you not use `finalize()`? What replaces it?"
     **Answer:** It runs at an unpredictable time or never, on a finalizer thread, delays reclamation by at least one extra GC cycle, can resurrect the object and swallows exceptions. It has been deprecated since Java 9 and deprecated for removal since Java 18 (JEP 421). Use `AutoCloseable` with try-with-resources for deterministic cleanup, and `java.lang.ref.Cleaner` only as a backstop for native resources.
+
+    **Interviewer listens for:** unpredictable timing, resurrection, deprecated for removal, Cleaner and try-with-resources.
+
+    **Common wrong answer:** "finalize is like a C++ destructor."
 
 ### Senior
 
@@ -437,10 +459,14 @@ jcmd <pid> Thread.print                 # thread dump: stacks of all threads
 
     **Interviewer listens for:** linking "stack is per thread, heap is shared" to thread safety; stack confinement as a thread-safety technique.
 
+    **Common wrong answer:** "Each request gets its own copy of the bean." Singleton means one shared instance.
+
 ??? question "Q13. How do virtual threads change the stack-vs-heap picture?"
     **Answer:** A platform thread reserves a fixed stack in native memory (about 1 MB by default on Linux x64), which caps how many you can have. A virtual thread's frames are stored in heap objects (stack chunks) while it is parked and are mounted onto a carrier thread's stack when it runs. Stacks grow and shrink as needed and are garbage collected, so millions of threads become feasible. Consequences: thread stacks now count toward heap usage and GC work; deep `ThreadLocal` usage multiplied by many threads becomes a heap cost (hence `ScopedValue`); and thread dumps need `jcmd Thread.dump_to_file` to show virtual threads.
 
     **Interviewer listens for:** JEP 444; "stack on the heap"; the `ThreadLocal` implication.
+
+    **Common wrong answer:** "Virtual threads have no stack." Their frames live on the heap and are copied on mount and unmount.
 
 ??? question "Q14. Your service has `-Xmx2g` and the pod limit is 2Gi. It keeps getting OOMKilled with no `OutOfMemoryError` in the logs. Explain."
     **Answer:** The kernel's OOM killer acts on the process's total resident memory, not the Java heap. Heap is only one part: Metaspace, code cache, thread stacks (threads × `-Xss`), direct `ByteBuffer`s used by Netty/Kafka/gRPC, GC bookkeeping and native libraries all sit outside `-Xmx`. With heap equal to the limit, any non-heap usage pushes RSS over and the container is killed with exit code 137, with no chance to write a heap dump. Fix: size the heap to roughly 65 to 75% of the limit via `MaxRAMPercentage`, cap or monitor direct memory and Metaspace, and use Native Memory Tracking (`jcmd VM.native_memory`) to see the breakdown.
@@ -453,6 +479,8 @@ jcmd <pid> Thread.print                 # thread dump: stacks of all threads
     **Answer:** A `String` is immutable, so you cannot overwrite it; it stays on the heap until it is unreachable *and* collected, and it may be interned or logged accidentally. A `char[]` or `byte[]` can be zeroed straight after use, shrinking the window in which a heap dump or memory scrape reveals it. It is not a complete defence: a moving GC may already have copied the array, leaving stale copies in freed memory, and frameworks often convert to `String` anyway. The real controls are restricting who can take heap dumps, encrypting and expiring dumps, keeping keys in an HSM/KMS, and short-lived tokens.
 
     **Interviewer listens for:** honest limits of the technique; treating heap dumps as sensitive data.
+
+    **Common wrong answer:** "char[] makes secrets fully safe." Copies may exist elsewhere; zeroing only narrows the window.
 
 ### Scenario-based
 
@@ -468,15 +496,21 @@ jcmd <pid> Thread.print                 # thread dump: stacks of all threads
 
     **Interviewer listens for:** a method, not a guess; "path to GC roots"; distinguishing a leak from an undersized heap.
 
+    **Common wrong answer:** "Increase the heap and restart weekly." That schedules the outage instead of finding the leak.
+
 ??? question "Q17. A teammate's method takes a `List<Order>` and calls `sort()` on it. A different part of the app starts failing intermittently. What happened and how do you prevent it?"
     **Answer:** The method received a copy of the reference to the caller's list and mutated the shared object. If that list is also held by a cache, a singleton or another thread, they now see a reordered list, or get `ConcurrentModificationException` when iterating during the sort, or `UnsupportedOperationException` if the list is unmodifiable in some code paths. Prevention: do not mutate arguments; sort a copy (`list.stream().sorted(...).toList()`); expose unmodifiable views or `List.copyOf` from caches and records; document ownership; add a review rule for it.
 
     **Interviewer listens for:** recognising aliasing as the cause; defensive copies; immutability as the default.
 
+    **Common wrong answer:** "Java passes objects by reference, so this is expected and fine." Mutating a caller's collection is a contract violation.
+
 ??? question "Q18. In a load test with 2,000 concurrent requests the service fails with `OutOfMemoryError: unable to create native thread`, yet heap usage is 40%. Why?"
     **Answer:** Thread stacks are native memory, not heap. Each platform thread reserves its stack (about 1 MB by default), and the OS or container also limits thread/process counts (`ulimit -u`, cgroup `pids.max`). Something is creating a thread per request or per task, for example an unbounded `newCachedThreadPool`, or a blocking call inside each request with its own executor. Fixes: bounded thread pools with back-pressure, non-blocking I/O, or virtual threads on Java 21+ for blocking I/O workloads. Raising the heap makes it worse because it leaves less native memory for stacks.
 
     **Interviewer listens for:** heap vs native memory; bounded pools; virtual threads as the modern answer.
+
+    **Common wrong answer:** "Increase -Xmx." Thread stacks are native memory; more heap leaves less room for them.
 
 ## Cheat sheet
 

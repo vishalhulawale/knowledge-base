@@ -226,44 +226,92 @@ spec:
 ??? question "Q1. Why externalise configuration?"
     **Answer:** So one immutable artifact runs in every environment, config changes don't need rebuilds, and environment differences are explicit and reviewable (12-factor).
 
+    **Interviewer listens for:** one artifact across environments, no rebuild for config, explicit and reviewable differences.
+
+    **Common wrong answer:** "So we can change anything in production without a deploy." Unreviewed runtime changes are a common cause of incidents.
+
 ??? question "Q2. Config vs secrets: why treat them differently?"
     **Answer:** Secrets grant access; they need encryption, least-privilege access, audit and rotation. Config can live in git and be reviewed openly.
 
+    **Interviewer listens for:** access-granting nature, encryption, least privilege, audit, rotation.
+
+    **Common wrong answer:** Storing secrets in the same git-backed config repo as ordinary properties.
+
 ??? question "Q3. Are Kubernetes Secrets encrypted?"
     **Answer:** Not by default: values are base64-encoded in etcd. Enable encryption at rest with a KMS provider, restrict RBAC, and preferably sync from an external secret manager.
+
+    **Interviewer listens for:** base64 is encoding not encryption, etcd encryption with KMS, RBAC, external manager sync.
+
+    **Common wrong answer:** "Yes, Kubernetes Secrets are encrypted." By default they are only base64-encoded.
 
 ### Intermediate
 
 ??? question "Q4. How does Spring Cloud Config work?"
     **Answer:** A config server serves properties from a backend (usually git) per application/profile/label; clients import it at startup (`configserver:`); `@RefreshScope` and Spring Cloud Bus allow runtime refresh; `{cipher}` values can be encrypted.
 
+    **Interviewer listens for:** git backend, app/profile/label, configserver import, refresh scope and Bus, cipher values.
+
+    **Common wrong answer:** Still using `bootstrap.yml` in Boot 3. Boot 2.4+ uses `spring.config.import`.
+
 ??? question "Q5. What are Vault dynamic secrets?"
     **Answer:** Credentials Vault generates on demand (e.g. a new DB user) with a lease and TTL, unique per client, revoked automatically at expiry. Limits blast radius and gives per-instance audit.
+
+    **Interviewer listens for:** generated on demand, lease + TTL, per-client uniqueness, auto revoke, smaller blast radius.
+
+    **Common wrong answer:** "Vault just stores passwords encrypted." Static storage is only part of it; dynamic secrets are the main value.
 
 ??? question "Q6. Env vars or mounted files for secrets?"
     **Answer:** Mounted files are generally safer (not inherited by child processes or dumped with the environment, can update without restart). Env vars are simpler but leak more easily and need a restart to change.
 
+    **Interviewer listens for:** leakage paths for env vars, file updates without restart, trade-off with simplicity.
+
+    **Common wrong answer:** "Environment variables are secure because they are not on disk." They leak via child processes, crash dumps and `/proc`.
+
 ??? question "Q7. What is workload identity?"
     **Answer:** Pods authenticate to the cloud with short-lived credentials tied to their service account (IRSA on EKS, Azure workload identity, GKE workload identity), so no static access keys exist.
+
+    **Interviewer listens for:** short-lived federated credentials tied to a service account, no static keys.
+
+    **Common wrong answer:** Putting AWS access keys in a Kubernetes Secret and calling it workload identity.
 
 ### Senior
 
 ??? question "Q8. How do you rotate a database password without downtime?"
     **Answer:** Create the new credential while the old remains valid (dual-version window), switch the secret's current version, let apps pick it up (refresh or rolling restart, pool recycles connections), verify, then revoke the old. Managed rotation (AWS) follows create/set/test/finish steps. Better: dynamic credentials with leases.
 
+    **Interviewer listens for:** dual-valid window, switch current version, apps pick up, verify, revoke old, dynamic credentials.
+
+    **Common wrong answer:** "Change the password in the database, then update the secret." Every running pod fails between the two steps.
+
 ??? question "Q9. When is runtime refresh a bad idea?"
     **Answer:** For values baked into objects at startup (connection pools, HTTP clients, thread pools) and for changes that must be consistent across pods. Rolling restarts are safer and easier to audit; refresh suits flags and simple values.
 
+    **Interviewer listens for:** objects built at startup, cross-pod consistency, rolling restarts are auditable.
+
+    **Common wrong answer:** "`@RefreshScope` everything." Refreshing a connection pool bean mid-traffic can drop in-flight work.
+
 ??? question "Q10. How do you prevent secrets from reaching git or logs?"
     **Answer:** Pre-commit and CI secret scanning, repository push protection, no secrets in config files, masking in logs and Actuator, code review checklist, and rotate immediately on any leak (assume compromised).
+
+    **Interviewer listens for:** scanning in pre-commit and CI, push protection, masking, rotate on leak.
+
+    **Common wrong answer:** "Delete the file and force-push." The secret is already in clones, forks and scraper caches.
 
 ### Scenario-based
 
 ??? question "Q11. A developer accidentally committed an API key to a public repo. What do you do?"
     **Answer:** Revoke/rotate the key immediately (removing the commit isn't enough; it's already scraped), check access logs for misuse, purge history if needed, add scanning/push protection, and move the secret to a manager.
 
+    **Interviewer listens for:** rotate first, check misuse, purge history second, add prevention.
+
+    **Common wrong answer:** Rewriting git history first and rotating later, which leaves a live key exposed.
+
 ??? question "Q12. Design secret management for 40 Spring Boot services on EKS in a HIPAA environment."
     **Answer:** AWS Secrets Manager (or Vault) as source of truth with KMS encryption; IRSA per service with least-privilege policies; External Secrets Operator or Spring Cloud AWS for delivery; automated rotation with tested pickup; CloudTrail audit; etcd encryption; secret scanning in CI; config in git via GitOps.
+
+    **Interviewer listens for:** central manager + KMS, per-service IRSA, delivery mechanism, rotation, audit, etcd encryption, CI scanning, GitOps config.
+
+    **Common wrong answer:** One shared IAM role or one shared secret for all 40 services, which breaks least privilege and audit.
 
 ## Cheat sheet
 

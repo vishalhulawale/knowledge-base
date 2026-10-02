@@ -239,44 +239,92 @@ Not ★; TypeScript is a listed language, used in the OptumRx React app and micr
 ??? question "Q1. interface vs type alias?"
     **Answer:** Both define object shapes; interfaces support declaration merging and `extends`; type aliases also express unions, tuples, primitives, mapped and conditional types.
 
+    **Interviewer listens for:** declaration merging and extends vs unions/tuples/mapped/conditional; a team convention.
+
+    **Common wrong answer:** "Interfaces are for classes and types are for everything else." Both describe any object shape.
+
 ??? question "Q2. What is structural typing?"
     **Answer:** Type compatibility is based on structure (members), not on declared names or inheritance.
 
+    **Interviewer listens for:** compatibility by shape, not by name; extra-property checks only on fresh literals.
+
+    **Common wrong answer:** "Two types with different names are never assignable." TypeScript is not nominal like Java.
+
 ??? question "Q3. any vs unknown?"
     **Answer:** `any` disables checking; `unknown` accepts anything but requires narrowing before use. Use unknown for untrusted data.
+
+    **Interviewer listens for:** any switches off checking; unknown forces narrowing first.
+
+    **Common wrong answer:** "unknown is just a stricter any you can still call methods on." You cannot use it until you narrow it.
 
 ### Intermediate
 
 ??? question "Q4. What is narrowing?"
     **Answer:** Refining a union to a more specific type using control flow: typeof, instanceof, in, equality, truthiness, discriminants, type guards and assertion functions.
 
+    **Interviewer listens for:** control-flow analysis and the main narrowing tools, including custom guards.
+
+    **Common wrong answer:** Using `as` casts and calling it narrowing. A cast tells the compiler to trust you; narrowing proves it.
+
 ??? question "Q5. What is a discriminated union?"
     **Answer:** A union of object types sharing a literal property (e.g. `kind`); checking it narrows to the matching member, enabling exhaustive switches with `never`.
+
+    **Interviewer listens for:** shared literal discriminant, narrowing per case, exhaustive `never` check.
+
+    **Common wrong answer:** "It is a union of strings." The point is objects tagged by a literal field.
 
 ??? question "Q6. What do generic constraints do?"
     **Answer:** `T extends X` limits type arguments to those assignable to X, letting the function use X's members safely.
 
+    **Interviewer listens for:** extends limits type arguments and enables safe member access.
+
+    **Common wrong answer:** "extends in generics means class inheritance."
+
 ??? question "Q7. What does `satisfies` do?"
     **Answer:** Checks an expression against a type without changing the expression's inferred (narrower) type.
+
+    **Interviewer listens for:** checks against a type while keeping the narrower inferred type.
+
+    **Common wrong answer:** "satisfies is the same as `as`." `as` can hide errors; satisfies reports them.
 
 ### Senior
 
 ??? question "Q8. Why validate at runtime if you have TypeScript?"
     **Answer:** Types are erased; external data (APIs, storage, URLs) can be anything. Runtime schemas (Zod) or guards turn unknown into trusted types.
 
+    **Interviewer listens for:** types are erased, external data is untrusted, schemas at the boundary.
+
+    **Common wrong answer:** "TypeScript validates API responses."
+
 ??? question "Q9. How do you make impossible states unrepresentable?"
     **Answer:** Model states as discriminated unions where each variant has only its valid fields, instead of one object with many optional fields and booleans.
 
+    **Interviewer listens for:** discriminated unions with only valid fields per state.
+
+    **Common wrong answer:** One object with `isLoading`, `error?` and `data?` that allows invalid combinations.
+
 ??? question "Q10. What changed in TypeScript 6 and 7?"
     **Answer:** 6.0: strict on by default, ESM module default, modern target, `types: []`, deprecations (es5 target, node10 resolution, baseUrl, outFile). 7.0: native Go compiler, ~10× faster, same tsc semantics, API in 7.1.
+
+    **Interviewer listens for:** 6.0 defaults and deprecations, 7.0 native Go compiler speed, same semantics.
+
+    **Common wrong answer:** "TypeScript 7 changes the type system." It is a compiler port aiming for the same checking behaviour.
 
 ### Scenario-based
 
 ??? question "Q11. An API sometimes omits a nested field and the app crashes despite types."
     **Answer:** The type was asserted, not validated. Model the field as optional/nullable, validate responses at the boundary, and handle the missing case in UI.
 
+    **Interviewer listens for:** assertion vs validation, optional modelling, boundary validation, UI handling.
+
+    **Common wrong answer:** "Add `!` to the access." The non-null assertion hides the bug.
+
 ??? question "Q12. Adding a new claim status breaks nothing at compile time but shows a blank UI."
     **Answer:** Switches lack exhaustiveness checks. Use a union type for status and a `never` default so new members cause compile errors.
+
+    **Interviewer listens for:** union status, `never` default for exhaustiveness.
+
+    **Common wrong answer:** Adding a `default: return null` case, which silently hides new statuses.
 
 ## Cheat sheet
 

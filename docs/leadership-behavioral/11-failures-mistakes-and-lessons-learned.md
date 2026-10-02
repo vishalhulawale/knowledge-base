@@ -203,32 +203,46 @@ weakness:
 
     **Common wrong answer:** "fix it quietly so nobody notices".
 
+??? question "Q7. Tell me about a time you received critical feedback."
+    **Answer:** Structure: the feedback and who gave it → your first reaction (be honest) → what you did to understand it (asked for examples) → the concrete change you made → evidence the change worked → how you seek feedback now. Pick feedback that was genuinely uncomfortable and relevant to a lead role, such as delegation, communication or review style. *[confirm]*
+
+    **Interviewer listens for:** openness, asking for specifics, a concrete behaviour change, evidence it stuck.
+
+    **Common wrong answer:** "I got feedback that I work too hard." A disguised strength reads as evasive.
+
 ### Senior
 
-??? question "Q7. Tell me about a time you failed as a leader."
+??? question "Q8. Tell me about a time you failed as a leader."
     **Answer:** A leadership-specific failure *[confirm]*: delayed feedback, poor delegation, burning out the team before a deadline, missing a conflict. What happened to the team, how you repaired it (apology, changes), and how your leadership changed.
 
     **Interviewer listens for:** a leadership mindset and humility.
 
     **Common wrong answer:** a purely technical failure.
 
-??? question "Q8. What have you learned from your failures about how you lead?"
+??? question "Q9. What have you learned from your failures about how you lead?"
     **Answer:** Two or three specific principles drawn from real failures *[confirm]*: for example "spike before committing", "delegate shaped problems early", "bad news early with options", "timeouts and alerts are release blockers". Each tied to a story.
 
     **Interviewer listens for:** synthesis across experiences.
 
     **Common wrong answer:** generic platitudes.
 
+??? question "Q10. Tell me about something you missed in a review or design that reached production."
+    **Answer:** Own it without self-punishment: what you approved, what the defect did, how it was found and fixed, and the **systemic fix**, such as a test, a contract check, a review checklist item or an alert. Explain what you changed in how you review, for example focusing on failure paths and data boundaries rather than style. Keep the focus on the system, not on the engineer who wrote the code. *[confirm]*
+
+    **Interviewer listens for:** personal ownership, user impact stated, systemic prevention, a change in review practice, no blame.
+
+    **Common wrong answer:** Blaming the author of the code ("they should have tested it") while presenting yourself as only the reviewer.
+
 ### Scenario-based
 
-??? question "Q9. The interviewer pushes: 'What was YOUR part in that failure?'"
+??? question "Q11. The interviewer pushes: 'What was YOUR part in that failure?'"
     **Answer:** Name your specific contribution clearly ("I committed the date without a spike", "I didn't escalate early enough"), without minimising it or over-dramatising it, then return to what you changed.
 
     **Interviewer listens for:** owning it without defensiveness.
 
     **Common wrong answer:** shifting to others' roles again.
 
-??? question "Q10. 'Tell me about another failure, a different kind.'"
+??? question "Q12. 'Tell me about another failure, a different kind.'"
     **Answer:** Have a second story ready from a different category (people vs technical vs communication), using the same structure. *[confirm]*
 
     **Interviewer listens for:** depth of self-reflection.

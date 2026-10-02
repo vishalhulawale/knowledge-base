@@ -223,44 +223,107 @@ Not ★. Daily in the OptumRx React app (data fetching, token refresh) and conce
 ??? question "Q1. What are the states of a promise?"
     **Answer:** Pending, then settled as fulfilled (value) or rejected (reason), permanently.
 
+    **Interviewer listens for:** pending, fulfilled, rejected; settled once and permanently.
+
+    **Common wrong answer:** "A promise can be resolved again with a new value."
+
 ??? question "Q2. Promise.all vs allSettled?"
     **Answer:** all resolves with all values or rejects on the first failure; allSettled waits for every promise and reports each outcome, never rejecting.
 
+    **Interviewer listens for:** fail-fast vs every outcome, when to use each.
+
+    **Common wrong answer:** "Promise.all runs requests in parallel." The requests were already running; all only waits for them.
+
 ??? question "Q3. What does async/await compile down to conceptually?"
     **Answer:** A function returning a promise, with each await splitting the function into continuations scheduled as microtasks when awaited promises settle.
+
+    **Interviewer listens for:** promise-returning function, continuations as microtasks, state machine.
+
+    **Common wrong answer:** "await makes the code synchronous."
 
 ### Intermediate
 
 ??? question "Q4. race vs any?"
     **Answer:** race settles with the first settled (fulfil or reject); any fulfils with the first fulfilment and rejects only if all reject (AggregateError).
 
+    **Interviewer listens for:** first settled vs first fulfilled, AggregateError.
+
+    **Common wrong answer:** "race and any are the same."
+
 ??? question "Q5. Why doesn't forEach work with async callbacks?"
     **Answer:** forEach ignores returned promises, so it doesn't wait and rejections become unhandled. Use for...of with await or Promise.all(map).
+
+    **Interviewer listens for:** ignored returned promises, no waiting, unhandled rejections, for...of or Promise.all(map).
+
+    **Common wrong answer:** "forEach is just slow with async." It does not wait at all.
 
 ??? question "Q6. How do you run three independent requests efficiently?"
     **Answer:** Start all, then `await Promise.all([...])` (or allSettled for partial results).
 
+    **Interviewer listens for:** start all before awaiting, all vs allSettled.
+
+    **Common wrong answer:** Awaiting each call in sequence, tripling the latency.
+
 ??? question "Q7. How do you cancel a fetch?"
     **Answer:** Pass an AbortSignal from an AbortController (or AbortSignal.timeout) and call abort(); fetch rejects with AbortError.
 
+    **Interviewer listens for:** AbortController/AbortSignal, AbortSignal.timeout, AbortError handling.
+
+    **Common wrong answer:** "Ignore the result when it arrives." The request still uses the network and server.
+
+??? question "Q8. What do `Promise.allSettled` and `Promise.any` return when some promises reject?"
+    **Answer:** ```js
+    const r = await Promise.allSettled([Promise.resolve(1), Promise.reject(new Error('x')), slow3()]);
+    // [{status:'fulfilled',value:1}, {status:'rejected',reason:Error('x')}, {status:'fulfilled',value:3}]
+
+    try { await Promise.any([Promise.reject(new Error('a')), Promise.reject(new Error('b'))]); }
+    catch (e) { console.log(e.constructor.name, e.errors.map(x => x.message)); } // AggregateError ['a','b']
+    ```
+
+    `allSettled` never rejects. It waits for every input and returns an array of `{status, value}` or `{status, reason}` objects in **input order**, so you can show partial results (for example, four of five dashboard widgets). `any` fulfils with the **first success**. Only if every input rejects does it reject, with an `AggregateError` whose `errors` array holds every reason. Use it for "first healthy mirror wins" patterns.
+
+    **Interviewer listens for:** result shapes, input order preserved, AggregateError.errors, real use cases (partial dashboards, fastest mirror).
+
+    **Common wrong answer:** "allSettled throws if any promise fails" or "any returns the first promise to settle" (that is race).
+
 ### Senior
 
-??? question "Q8. Does a rejected Promise.all cancel the other promises?"
+??? question "Q9. Does a rejected Promise.all cancel the other promises?"
     **Answer:** No. Promises aren't cancellable; others continue. Share an AbortSignal and abort on first failure if needed.
 
-??? question "Q9. What happens to unhandled rejections?"
+    **Interviewer listens for:** promises are not cancellable, shared AbortSignal.
+
+    **Common wrong answer:** "Yes, Promise.all stops the other requests."
+
+??? question "Q10. What happens to unhandled rejections?"
     **Answer:** Browser fires unhandledrejection and logs; Node (v15+) crashes the process by default. Handle at boundaries and add global logging.
 
-??? question "Q10. return vs return await inside try?"
+    **Interviewer listens for:** browser event vs Node crash (v15+), boundary handling, global logging.
+
+    **Common wrong answer:** "Unhandled rejections are just warnings." In Node they terminate the process by default.
+
+??? question "Q11. return vs return await inside try?"
     **Answer:** return await lets the local catch/finally handle the rejection; plain return passes the promise out, bypassing the catch.
+
+    **Interviewer listens for:** local catch/finally only sees the rejection with return await.
+
+    **Common wrong answer:** "return await is always redundant." Inside try/catch it changes behaviour.
 
 ### Scenario-based
 
-??? question "Q11. Upload 500 files without overwhelming the server."
+??? question "Q12. Upload 500 files without overwhelming the server."
     **Answer:** Concurrency pool (e.g. 4–6 at a time), retries with backoff for transient failures, progress tracking, allSettled to report failures, abort on cancel.
 
-??? question "Q12. Implement a timeout for any promise-returning call."
+    **Interviewer listens for:** bounded concurrency, retries with backoff, progress, allSettled, abort.
+
+    **Common wrong answer:** `Promise.all(files.map(upload))`, which starts 500 uploads at once.
+
+??? question "Q13. Implement a timeout for any promise-returning call."
     **Answer:** Prefer passing `AbortSignal.timeout(ms)` to APIs that accept signals; otherwise race with a timer that rejects, and clear the timer when done.
+
+    **Interviewer listens for:** AbortSignal.timeout first, race with a timer, clear the timer.
+
+    **Common wrong answer:** Using Promise.race without clearing the timer, which leaks timers and keeps Node processes alive.
 
 ## Cheat sheet
 

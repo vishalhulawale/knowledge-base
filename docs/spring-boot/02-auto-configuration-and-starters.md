@@ -387,6 +387,8 @@ The report has four parts: **Positive matches**, **Negative matches** (with the 
 
     **Interviewer listens for:** that this explains why the main class sits in the root package: classes outside it are not scanned.
 
+    **Common wrong answer:** "It is just @Configuration." It combines configuration, component scanning and auto-configuration.
+
 ??? question "Q3. How does Spring Boot find the auto-configuration classes?"
     **Answer:** `AutoConfigurationImportSelector` reads every `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports` file on the classpath. Each lists fully qualified class names. Before Boot 2.7 the list lived in `META-INF/spring.factories` under the `EnableAutoConfiguration` key. Boot 2.7 supported both, and Boot 3.0 removed the `spring.factories` route for auto-configurations.
 
@@ -397,8 +399,16 @@ The report has four parts: **Positive matches**, **Negative matches** (with the 
 ??? question "Q4. How do you see which auto-configurations were applied and why?"
     **Answer:** Start with `--debug` or `debug=true` to print the condition evaluation report: positive matches, negative matches with the failing condition, exclusions and unconditional classes. In a running service, the `/actuator/conditions` endpoint returns the same data. IDE Spring tooling also shows it.
 
+    **Interviewer listens for:** condition evaluation report via --debug, Actuator conditions endpoint.
+
+    **Common wrong answer:** "Read the source of every auto-configuration class."
+
 ??? question "Q5. How do you disable a specific auto-configuration?"
     **Answer:** `@SpringBootApplication(exclude = X.class)` (or `excludeName` when the class is not on the compile classpath), or the property `spring.autoconfigure.exclude`, which can differ per profile. Many features also have their own toggle property. Removing the dependency is the cleanest fix if the library is not needed at all.
+
+    **Interviewer listens for:** exclude/excludeName, spring.autoconfigure.exclude per profile.
+
+    **Common wrong answer:** "Remove the dependency from the classpath." Often you cannot, because other starters need it.
 
 ### Intermediate
 
@@ -412,18 +422,30 @@ The report has four parts: **Positive matches**, **Negative matches** (with the 
 ??? question "Q7. Why should `@ConditionalOnMissingBean` be used only in auto-configuration classes?"
     **Answer:** The condition looks at bean definitions registered *so far*. For auto-configuration that means "all user beans", because of deferred processing and explicit `before`/`after` ordering. In a normal `@Configuration` class the processing order relative to other user configuration is not something you control, so the result can change with a package rename or a new import.
 
+    **Interviewer listens for:** registration order, user beans not guaranteed to be registered yet in normal config.
+
+    **Common wrong answer:** "It works anywhere because Spring checks at runtime."
+
 ??? question "Q8. `@ConditionalOnClass` refers to a class that might not exist. Why does this not throw `NoClassDefFoundError`?"
     **Answer:** Spring reads the annotation from bytecode with ASM instead of loading the class, so the referenced type is never resolved if it is absent. In addition, Boot's annotation processor writes the class conditions into `spring-autoconfigure-metadata.properties`, so many candidates are rejected without even opening the class file. On `@Bean` methods whose signature uses the optional type, the condition comes too late, because the JVM loads the outer class and its method signatures first. The documented fix is to put the method in a nested static configuration class that carries the `@ConditionalOnClass`. The `name` attribute is mandatory only inside composed meta-annotations.
 
     **Interviewer listens for:** ASM metadata reading, nested configuration classes.
+
+    **Common wrong answer:** "Spring catches the NoClassDefFoundError." It never loads the class.
 
 ??? question "Q9. What will happen? The application has `spring-boot-starter-data-jpa` on the classpath and no `spring.datasource.*` properties and no embedded database."
     **Answer:** Startup fails with `Failed to configure a DataSource: 'url' attribute is not specified and no embedded datasource could be configured`. `DataSourceAutoConfiguration` matched because the JDBC classes are present, but it found no URL and no H2/HSQL/Derby driver to fall back to. Fixes: supply the properties, exclude `DataSourceAutoConfiguration` (and JPA with it), or remove the dependency. The message comes from a `FailureAnalyzer`, which is why it is readable.
 
     **Common wrong answer:** "It starts without a database."
 
+    **Interviewer listens for:** JPA starter pulls in JDBC, DataSourceAutoConfiguration matches, no URL and no embedded DB.
+
 ??? question "Q10. What is the difference between `@AutoConfiguration` and `@Configuration`?"
     **Answer:** `@AutoConfiguration` (Boot 2.7+) is meta-annotated with `@Configuration(proxyBeanMethods = false)` and adds `before`, `after`, `beforeName`, `afterName` for ordering. It signals that the class is meant to be registered through the imports file and not scanned. With `proxyBeanMethods = false` there is no CGLIB proxy of the class, so inter-bean method calls are not intercepted and dependencies should be method parameters.
+
+    **Interviewer listens for:** proxyBeanMethods=false, ordering attributes, registration via AutoConfiguration.imports.
+
+    **Common wrong answer:** "They are identical."
 
 ### Senior
 
@@ -441,16 +463,28 @@ The report has four parts: **Positive matches**, **Negative matches** (with the 
 
     **Interviewer listens for:** overridability, kill switch, tests, and awareness that a shared starter is a coupling point that needs release discipline.
 
+    **Common wrong answer:** Putting the auto-configuration in a package that consuming apps component-scan.
+
 ??? question "Q12. How does Boot keep startup fast with well over a hundred candidate auto-configurations?"
     **Answer:** Most candidates are removed cheaply. The `AutoConfigurationImportFilter` step uses pre-computed metadata (`spring-autoconfigure-metadata.properties`) to reject classes whose `@ConditionalOnClass` fails, without loading or parsing them. Survivors are read with ASM, not reflection. `proxyBeanMethods = false` avoids CGLIB subclass generation. Beyond that, Boot offers lazy initialisation, AOT processing (conditions evaluated at build time and bean definitions generated as code), CDS/AppCDS archives and native images.
+
+    **Interviewer listens for:** pre-computed metadata filtering, conditions on class presence first, lazy evaluation.
+
+    **Common wrong answer:** "Boot loads every candidate class and checks it."
 
 ??? question "Q13. What changes about auto-configuration in a GraalVM native image?"
     **Answer:** AOT processing runs the bean-definition phase at build time. Conditions are evaluated then, and the result is generated source code that registers a fixed set of bean definitions. So the classpath is closed, and conditions based on properties or profiles are frozen at build time: setting `acme.audit.enabled=false` at runtime will not remove the bean. Property *values* bound through `@ConfigurationProperties` still work at runtime. Custom starters also need to contribute runtime hints (`RuntimeHintsRegistrar`) for reflection, resources and proxies.
 
     **Common wrong answer:** "Native images work the same, just faster."
 
+    **Interviewer listens for:** build-time condition evaluation, fixed bean set, no runtime classpath changes.
+
 ??? question "Q14. What does `before`/`after` ordering actually control? Can it fix a bean initialisation order problem?"
     **Answer:** It controls the order in which auto-configuration classes are *processed*, which means the order in which bean definitions are registered and conditions evaluated. It matters for `@ConditionalOnBean` / `@ConditionalOnMissingBean` between auto-configurations. It does not control instantiation order. That is decided by injection dependencies, `@DependsOn` and `SmartLifecycle` phases. Using `@AutoConfigureOrder` to fix a runtime ordering bug is a sign of a missing dependency declaration.
+
+    **Interviewer listens for:** processing order of auto-configurations, not runtime bean init order; use dependencies for that.
+
+    **Common wrong answer:** "before/after decides which bean is initialised first."
 
 ### Scenario-based
 
@@ -459,11 +493,21 @@ The report has four parts: **Positive matches**, **Negative matches** (with the 
 
     **Interviewer listens for:** distinguishing "never considered" from "condition failed", and fixing the library and not each consumer.
 
+    **Common wrong answer:** "Boot 3 dropped support for libraries." It reads AutoConfiguration.imports instead of spring.factories.
+
 ??? question "Q16. You added a custom `ObjectMapper` bean and now dates in API responses changed format and `spring.jackson.*` properties are ignored. Why?"
     **Answer:** Defining an `ObjectMapper` makes `JacksonAutoConfiguration`'s mapper back off. The bean built with `new ObjectMapper()` has none of Boot's setup: no JavaTime module, no property binding, no customizers. Fix: remove the bean and use a `Jackson2ObjectMapperBuilderCustomizer`, or if a second mapper is truly needed, build it from the injected `Jackson2ObjectMapperBuilder` and do not make it the primary one.
 
+    **Interviewer listens for:** user bean makes the auto-configured mapper back off, customise with Jackson2ObjectMapperBuilderCustomizer.
+
+    **Common wrong answer:** "Set spring.jackson properties again." They only apply to the auto-configured mapper.
+
 ??? question "Q17. A service needs two databases. After adding the second `DataSource` bean, JPA repositories and `@Transactional` stopped working. Explain."
     **Answer:** Once you define a `DataSource`, Boot's own backs off. And several auto-configurations (JPA, `DataSourceTransactionManager`, `JdbcTemplate`) are guarded by `@ConditionalOnSingleCandidate(DataSource.class)`. Two candidates with no `@Primary` means no single candidate, so they back off too. Options: mark one `@Primary` so the auto-configuration applies to it and wire the second explicitly, or configure both stacks by hand (data source, entity manager factory, transaction manager, `@EnableJpaRepositories` with separate base packages). Use `@ConfigurationProperties` on each `DataSource` bean method to keep property binding. Details in [Spring Data](07-spring-data.md) and [Transactions](06-transactions-transactional-propagation-isolation-rollback-ru.md).
+
+    **Interviewer listens for:** ConditionalOnSingleCandidate backing off, @Primary or explicit configuration per database.
+
+    **Common wrong answer:** "Spring Boot does not support two databases."
 
 ??? question "Q18. Your team's starter works in the sample app but in one service its `@ConditionalOnMissingBean` bean is created in addition to the service's own bean, causing `NoUniqueBeanDefinitionException`. What do you check?"
     **Answer:** Three likely causes.
@@ -475,6 +519,8 @@ The report has four parts: **Positive matches**, **Negative matches** (with the 
     The condition report tells which one: it shows the condition matched and where the class came from. Fix the package or ordering, and add a context-runner test for the case.
 
     **Interviewer listens for:** a structured diagnosis using the report, not trial and error.
+
+    **Common wrong answer:** "The starter has a bug in its condition." The scan order makes it look like one.
 
 ## Cheat sheet
 

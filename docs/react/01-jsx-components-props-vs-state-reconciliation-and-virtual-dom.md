@@ -214,50 +214,104 @@ Not ★ on its own, but the foundation for "Built the ReactJS application from t
 
     **Interviewer listens for:** elements are descriptions, not DOM nodes.
 
+    **Common wrong answer:** "JSX compiles to HTML" or "JSX creates DOM nodes." It creates plain JavaScript objects.
+
 ??? question "Q2. Props vs state?"
     **Answer:** Props are read-only inputs from the parent; state is the component's own memory, changed via its setter, which schedules a re-render.
+
+    **Interviewer listens for:** ownership (parent vs component), read-only props, setter schedules a render.
+
+    **Common wrong answer:** "Props can be changed by the child if needed." Mutating props breaks one-way data flow.
 
 ??? question "Q3. Why must components be pure?"
     **Answer:** React may call them multiple times, discard renders, or render out of order (Strict Mode, concurrent rendering). Same inputs must give the same output with no side effects, or the UI becomes unpredictable.
 
+    **Interviewer listens for:** React can call render many times or throw renders away; Strict Mode and concurrent rendering depend on purity.
+
+    **Common wrong answer:** "Purity is a style preference." Side effects in render cause double requests and inconsistent UI.
+
 ??? question "Q4. Why is `count` unchanged right after `setCount(count + 1)`?"
     **Answer:** State is a snapshot per render; the setter schedules a new render with the new value. Read it in the next render or use the updater form.
+
+    **Interviewer listens for:** state snapshot per render, setter schedules a new render, updater form.
+
+    **Common wrong answer:** "setState is asynchronous, so wait for it with await." It is not a promise; the value changes in the next render.
 
 ### Intermediate
 
 ??? question "Q5. What happens when state changes?"
     **Answer:** React schedules a render of that component (and its children by default), builds a new element tree, reconciles it against the previous one, commits minimal DOM changes, then runs layout effects and effects.
 
+    **Interviewer listens for:** render phase, reconciliation, commit phase, then layout effects and effects.
+
+    **Common wrong answer:** "React re-renders the whole page and replaces the DOM." It re-runs components but commits only the differences.
+
 ??? question "Q6. Why do lists need keys?"
     **Answer:** Keys give children stable identity across renders so React can match, move, insert and remove correctly and keep each item's state. Index keys break when items are inserted, removed or reordered.
+
+    **Interviewer listens for:** stable identity, matching moves and deletions, state attached to the right item, index pitfalls.
+
+    **Common wrong answer:** "Keys are for performance only." Wrong keys cause wrong state, not just slower renders.
 
 ??? question "Q7. What are the reconciliation heuristics?"
     **Answer:** Different type at the same position → replace subtree (state lost). Same type → keep instance, update props, recurse. Children matched by key.
 
+    **Interviewer listens for:** type comparison at the same position, recursion, keyed children, O(n) heuristics.
+
+    **Common wrong answer:** "React does a full tree diff." A general tree diff is O(n³); React uses heuristics to stay O(n).
+
 ??? question "Q8. Why does `setCount(count + 1)` three times only add 1?"
     **Answer:** All three use the same snapshot value. Use `setCount(c => c + 1)` to queue updates based on the latest value.
+
+    **Interviewer listens for:** same snapshot used three times, updater form queues on latest value.
+
+    **Common wrong answer:** "React only runs the last setState." All three run; they just set the same value.
 
 ### Senior
 
 ??? question "Q9. What is Fiber?"
     **Answer:** React's reconciler data structure (since 16): a linked tree of units of work with priorities, allowing rendering to be split, paused, resumed or abandoned. It enables concurrent features like transitions.
 
+    **Interviewer listens for:** units of work, priorities, interruptible rendering, basis for concurrent features.
+
+    **Common wrong answer:** "Fiber is the virtual DOM." It is the reconciler's work structure.
+
 ??? question "Q10. Is the virtual DOM faster than the real DOM?"
     **Answer:** Not inherently. It adds work (diffing). It makes declarative UI practical by batching and minimising DOM writes. Fine-grained reactive frameworks avoid it entirely.
 
+    **Interviewer listens for:** diffing cost vs batched minimal writes, declarative model, fine-grained alternatives.
+
+    **Common wrong answer:** "Yes, the virtual DOM is always faster." Hand-written DOM updates are faster; React trades speed for a simpler model.
+
 ??? question "Q11. How can you reset a component's state?"
     **Answer:** Change its `key` (forces remount), or render it at a different position/type. Avoid syncing props into state with effects.
+
+    **Interviewer listens for:** key change forces remount, position/type change, avoid prop-to-state syncing effects.
+
+    **Common wrong answer:** Copying props into state with a `useEffect` and resetting manually.
 
 ### Scenario-based
 
 ??? question "Q12. An input loses focus on every keystroke. Why?"
     **Answer:** Its component type is recreated each render (defined inside another component) or its key changes each render, so React remounts it. Move the component out and keep keys stable.
 
+    **Interviewer listens for:** component defined inside another component, unstable key, remount on every render.
+
+    **Common wrong answer:** "It is a CSS or browser focus bug." It is a remount caused by a new component type.
+
 ??? question "Q13. A list shows wrong checkbox states after deleting a row. Why?"
     **Answer:** Index keys: after deletion, remaining items shift indices and inherit the deleted row's state. Use stable ids as keys.
 
+    **Interviewer listens for:** index keys shift after deletion, state moves to the wrong row, stable ids.
+
+    **Common wrong answer:** "Use `Math.random()` as the key." That remounts every row on every render.
+
 ??? question "Q14. A component shows a stale total after items change. What do you fix?"
     **Answer:** It stores derived data in state synced by an effect. Compute the total during render (memoise only if expensive).
+
+    **Interviewer listens for:** derived data computed in render, not stored in state; memoise only if expensive.
+
+    **Common wrong answer:** Adding more effects to keep the stored total in sync.
 
 ## Cheat sheet
 

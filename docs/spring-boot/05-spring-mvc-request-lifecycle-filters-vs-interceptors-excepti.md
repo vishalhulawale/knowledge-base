@@ -402,13 +402,23 @@ server:
 ??? question "Q3. What are the three HandlerInterceptor methods and when is each called?"
     **Answer:** `preHandle` before the handler runs, returning `false` stops processing. `postHandle` after the handler returned normally and before view rendering, not called on exception. `afterCompletion` after the request is complete, always, with the exception if any, but only for interceptors whose `preHandle` returned `true`. `preHandle` runs in registration order, the other two in reverse.
 
+    **Interviewer listens for:** preHandle can stop, postHandle skipped on exceptions, afterCompletion always runs for passed preHandles.
+
+    **Common wrong answer:** "postHandle always runs."
+
 ??? question "Q4. What is the difference between @ControllerAdvice and @RestControllerAdvice?"
     **Answer:** `@RestControllerAdvice` is `@ControllerAdvice` plus `@ResponseBody`, so return values of its `@ExceptionHandler` methods are serialised by message converters instead of being treated as view names. Both can be narrowed with `basePackages`, `assignableTypes` or `annotations`, and can also hold `@InitBinder` and `@ModelAttribute` methods.
+
+    **Interviewer listens for:** @ResponseBody semantics, JSON vs view resolution.
+
+    **Common wrong answer:** "RestControllerAdvice only works with RestControllers."
 
 ??? question "Q5. What does DispatcherServlet do when a controller throws an exception?"
     **Answer:** It catches it and runs the `HandlerExceptionResolver` chain: `ExceptionHandlerExceptionResolver` (`@ExceptionHandler` in the controller, then in advices), `ResponseStatusExceptionResolver` (`@ResponseStatus`, `ResponseStatusException`), then `DefaultHandlerExceptionResolver` (standard MVC exceptions to status codes). If none resolves it, the exception propagates to the container, which dispatches to `/error`, served by Boot's `BasicErrorController`.
 
     **Interviewer listens for:** the order, and the `/error` fallback.
+
+    **Common wrong answer:** "The exception goes straight to Tomcat." Resolvers handle it first.
 
 ### Intermediate
 
@@ -419,24 +429,42 @@ server:
 
     **Common wrong answer:** expecting `postHandle` to run, or expecting `afterCompletion` to receive the handled exception.
 
+    **Interviewer listens for:** no postHandle on exception, afterCompletion in reverse order.
+
 ??? question "Q7. I throw a custom exception in a filter and my @RestControllerAdvice does not handle it. Why, and how do you fix it?"
     **Answer:** Controller advice is applied by `DispatcherServlet`'s exception resolvers, and the filter runs before the request enters `DispatcherServlet`, so the exception is outside its try/catch. It goes to the container error handling and `/error`. Fixes: write the error response directly in the filter, inject the `handlerExceptionResolver` bean and call `resolveException` so the same advice formats it, move the logic to an interceptor if it does not need to be a filter, or (for Spring Security) configure `AuthenticationEntryPoint` and `AccessDeniedHandler`.
 
     **Interviewer listens for:** the boundary of `DispatcherServlet`, and at least two fixes.
 
+    **Common wrong answer:** "The advice handles all exceptions in the application." Only those raised inside DispatcherServlet.
+
 ??? question "Q8. Why can't I add a response header in postHandle for a @RestController?"
     **Answer:** For `@ResponseBody` and `ResponseEntity`, the return value handler writes the body through the message converter inside `HandlerAdapter.handle()`, which is before `postHandle`. The response may already be committed, and headers of a committed response cannot change. Use `ResponseBodyAdvice.beforeBodyWrite`, set the header in `preHandle`, or use a filter.
+
+    **Interviewer listens for:** body already committed by the converter before postHandle; use ResponseBodyAdvice or a filter.
+
+    **Common wrong answer:** "postHandle runs before the response is written."
 
 ??? question "Q9. How does Spring pick an @ExceptionHandler when several could match?"
     **Answer:** First by location: methods in the controller that threw win over `@ControllerAdvice` methods. Advices are checked in `@Order` order, and the first advice with a matching method wins, even if a later advice has a more specific one. Within a class, the handler whose declared type is closest to the thrown type in the hierarchy wins. Spring also checks the cause chain, preferring a match on the top-level exception over a match on a cause.
 
     **Common wrong answer:** "The most specific handler across all advices is chosen." Specificity is evaluated per class, so a catch-all in a high-priority advice can shadow specific handlers in a lower-priority one.
 
+    **Interviewer listens for:** controller-local first, then advices by order, closest exception type within one advice.
+
 ??? question "Q10. What is OncePerRequestFilter and why does it exist?"
     **Answer:** A single HTTP request can be dispatched through the filter chain several times: the initial `REQUEST`, a `FORWARD`, an `ERROR` dispatch to `/error`, or an `ASYNC` dispatch when a `DeferredResult` completes. A plain filter mapped to those dispatcher types would run again. `OncePerRequestFilter` marks the request with an attribute and skips repeat executions. By default it also skips ASYNC and ERROR dispatches (`shouldNotFilterAsyncDispatch` and `shouldNotFilterErrorDispatch` return `true`), which you override when the filter must also apply there.
 
+    **Interviewer listens for:** multiple dispatch types per request, run once guarantee.
+
+    **Common wrong answer:** "It prevents the same client from calling twice."
+
 ??? question "Q11. What is ProblemDetail and how do you enable it?"
     **Answer:** `ProblemDetail` is Spring Framework 6's representation of the RFC 9457 (formerly RFC 7807) error body, media type `application/problem+json`, with `type`, `title`, `status`, `detail`, `instance` and extension properties. Return it from `@ExceptionHandler` methods, extend `ResponseEntityExceptionHandler` to get it for built-in MVC exceptions, or set `spring.mvc.problemdetails.enabled=true`. Custom exceptions can extend `ErrorResponseException` to carry their own status and body.
+
+    **Interviewer listens for:** RFC 9457 body, problem+json, spring.mvc.problemdetails.enabled, ErrorResponse exceptions.
+
+    **Common wrong answer:** "It is a Spring-specific error format." It follows an IETF standard.
 
 ### Senior
 
@@ -445,18 +473,28 @@ server:
 
     **Interviewer listens for:** defence in depth: URL-level rules in filters, method-level rules with AOP.
 
+    **Common wrong answer:** "An interceptor is enough because all our endpoints are controllers." Actuator, static resources and errors bypass it.
+
 ??? question "Q13. How does async request processing change the lifecycle?"
     **Answer:** When a controller returns `Callable`, `DeferredResult` or `CompletableFuture`, the request thread calls `startAsync`, the filters and `DispatcherServlet` exit, and the thread is released while the response stays open. `postHandle` and `afterCompletion` are not called at that point. `AsyncHandlerInterceptor.afterConcurrentHandlingStarted` is called instead. When the result is ready, the container performs an `ASYNC` dispatch on another thread: the filter chain runs again (filters extending `OncePerRequestFilter` skip it by default), `DispatcherServlet` resumes with the result, and then `postHandle` and `afterCompletion` run. Consequence: thread-bound state such as MDC must be cleaned on the first thread and restored on the second.
 
     **Interviewer listens for:** the second dispatch, and the ThreadLocal consequence.
 
+    **Common wrong answer:** "Async requests run all interceptors twice in the same way." AsyncHandlerInterceptor has its own callback.
+
 ??? question "Q14. What changes on this path with virtual threads in Spring Boot 3.2+?"
     **Answer:** With `spring.threads.virtual.enabled=true` Tomcat handles each request on a new virtual thread instead of a pooled platform thread. The lifecycle is identical, and the blocking style stays, but the 200-thread limit is no longer the concurrency limit. That moves the bottleneck to downstream resources, so you need explicit limits (connection pools, bulkheads, rate limiters). ThreadLocals still work per virtual thread but should stay small, since there can be very many of them. Before Java 24, `synchronized` blocks around blocking I/O pinned the carrier thread. JEP 491 removed that limitation. Details in [10-spring-boot-3-x-jakarta-ee-graalvm-native-image-virtual-thre.md](10-spring-boot-3-x-jakarta-ee-graalvm-native-image-virtual-thre.md).
+
+    **Interviewer listens for:** one virtual thread per request, same lifecycle, pinning and ThreadLocal cautions.
+
+    **Common wrong answer:** "You must rewrite controllers to be reactive."
 
 ??? question "Q15. How do you design a consistent error contract for a platform of many microservices?"
     **Answer:** Define one shape (RFC 9457 `ProblemDetail`) with a stable machine-readable `code`, a correlation or trace ID, and no internal details. Ship it as a shared starter that auto-configures the advice (see [02-auto-configuration-and-starters.md](02-auto-configuration-and-starters.md)), the Security entry point and access-denied handler, and the `/error` fallback, so all three producers match. Classify exceptions: client errors (4xx, logged at warn, no stack trace), dependency failures (502/503/504, with `Retry-After` where sensible), bugs (500, logged at error). Translate upstream errors at the client boundary into domain exceptions rather than passing them through. Test the contract with `MockMvc` or contract tests.
 
     **Interviewer listens for:** security and `/error` covered, not just `@ControllerAdvice`. Log level discipline. No leakage.
+
+    **Common wrong answer:** Each team inventing its own error JSON with stack traces.
 
 ### Scenario-based
 
@@ -465,13 +503,21 @@ server:
 
     **Common wrong answer:** reading `request.getInputStream()` in the filter or an interceptor, which consumes the body and breaks `@RequestBody`.
 
+    **Interviewer listens for:** filter with content-caching wrappers, redaction, size limits, sampling, no PHI.
+
 ??? question "Q17. After a release, clients report that some 401 responses are HTML or have a different JSON shape from other errors. What is going on?"
     **Answer:** The 401 is produced by Spring Security's `ExceptionTranslationFilter` calling the `AuthenticationEntryPoint`, or by the `/error` dispatch, not by the controller advice. A likely cause: a new filter or security configuration changed the entry point, or `/error` is now itself secured, so the error dispatch is rejected and the container default page is returned. Fix by configuring a custom `AuthenticationEntryPoint` and `AccessDeniedHandler` that write the standard `ProblemDetail`, permitting the error dispatch (`dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()`), and adding a test that asserts the 401 and 403 bodies.
+
+    **Interviewer listens for:** Security entry point and /error path, a consistent AuthenticationEntryPoint.
+
+    **Common wrong answer:** "The controller advice is broken." The 401 never reached it.
 
 ??? question "Q18. Users occasionally see another user's ID in log lines. Where do you look?"
     **Answer:** A ThreadLocal (MDC or a custom context holder) is set and not cleared on some path, and the pooled Tomcat thread carries it into the next request. Check for cleanup in `postHandle` (skipped on exceptions) instead of `afterCompletion` or a `finally` block in a filter. Check `preHandle` paths that return `false`, async endpoints where cleanup happens on a different thread, and `@Async` or executor tasks that copy the context and never clear it. The robust pattern is set and clear in the same filter with `try/finally`, plus a task decorator for executors.
 
     **Interviewer listens for:** thread reuse as the root cause, and `finally`.
+
+    **Common wrong answer:** "Logback mixes up threads." The MDC was never cleared on a pooled thread.
 
 ## Cheat sheet
 

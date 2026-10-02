@@ -286,9 +286,16 @@ static BigDecimal apply(Discount d, Cart cart) {
 
     **Common wrong answer:** "one interface per method".
 
+??? question "Q8. What are cohesion and coupling, and how do the principles relate to them?"
+    **Answer:** **Cohesion** is how closely the parts of one module belong together. **Coupling** is how much one module depends on the details of another. The goal is **high cohesion, low coupling**. SRP and ISP raise cohesion (one reason to change, small focused interfaces). DIP and OCP lower coupling (depend on abstractions, extend without editing). Composition lowers coupling compared with inheritance, which exposes the parent's internals to the child. When an interviewer asks "why is this design better?", answer in these two words first, then name the principle.
+
+    **Interviewer listens for:** definitions, the high-cohesion/low-coupling goal, which principle affects which property.
+
+    **Common wrong answer:** "Low coupling means no dependencies." Modules must depend on each other; the aim is to depend on stable abstractions, not details.
+
 ### Senior
 
-??? question "Q8. When would you deliberately NOT apply SOLID?"
+??? question "Q9. When would you deliberately NOT apply SOLID?"
     **Answer:**
     - Simple, stable code (scripts, glue).
     - Prototypes.
@@ -301,7 +308,7 @@ static BigDecimal apply(Discount d, Cart cart) {
 
     **Common wrong answer:** "always apply all principles".
 
-??? question "Q9. How does DIP shape a service's architecture?"
+??? question "Q10. How does DIP shape a service's architecture?"
     **Answer:** In hexagonal/clean architecture, the domain defines **ports** (interfaces: `PrescriptionRepository`, `PaymentGateway`), and **adapters** implement them (JPA, REST client, Kafka). Dependencies point inward, so the domain has no framework imports and is testable with fakes, and adapters are replaceable (swap PSP, DB, broker).
 
     **Interviewer listens for:** dependency direction at the architecture level.
@@ -310,7 +317,7 @@ static BigDecimal apply(Discount d, Cart cart) {
 
 ### Scenario-based
 
-??? question "Q10. A `PaymentService` has a 400-line switch over 9 payment methods, edited every sprint. Refactor it."
+??? question "Q11. A `PaymentService` has a 400-line switch over 9 payment methods, edited every sprint. Refactor it."
     **Answer:**
     1. Characterisation tests first.
     2. Extract a `PaymentMethodHandler` interface (`supports`, `authorise`, `refund`).
@@ -324,7 +331,7 @@ static BigDecimal apply(Discount d, Cart cart) {
 
     **Common wrong answer:** "rewrite it all".
 
-??? question "Q11. A junior created interfaces for every class 'for SOLID'. How do you give feedback?"
+??? question "Q12. A junior created interfaces for every class 'for SOLID'. How do you give feedback?"
     **Answer:** Acknowledge the intent, then explain that the value of abstractions is at **boundaries and points of variation**. Single-implementation internal interfaces add indirection without benefit. Agree on a team guideline: interfaces for I/O ports and real variants, concrete classes otherwise, and mock only at boundaries. Pair on a refactor. Give the feedback in the review, privately and kindly.
 
     **Interviewer listens for:** mentoring plus a standards mindset.

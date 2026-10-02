@@ -1,6 +1,6 @@
 # Data Structures & Algorithms
 
-**Priority:** P1 — strong working knowledge
+**Priority:** P0 — must master
 
 | # | Subtopic | Resume link | Status |
 |---|---|---|---|

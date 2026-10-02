@@ -459,10 +459,14 @@ For Reactor pipelines set `spring.reactor.context-propagation=auto` so the trace
 
     **Interviewer listens for:** build-time analysis, and why Spring needs an AOT step and hints.
 
+    **Common wrong answer:** "Native images run a JIT like the JVM." They are compiled ahead of time with reachability analysis.
+
 ??? question "Q5. What is an `Observation` in Micrometer?"
     **Answer:** A single instrumentation of an operation with a name, lifecycle (start, stop, error) and key-values. Handlers on the `ObservationRegistry` convert it into a timer metric, a trace span, and log correlation. You instrument once instead of separately for metrics and tracing.
 
     **Common wrong answer:** Treating it as only tracing, or as a replacement for `MeterRegistry`. Counters and gauges still use the meter API directly.
+
+    **Interviewer listens for:** one instrumentation point, handlers produce metrics, spans and logs.
 
 ### Intermediate
 
@@ -470,6 +474,8 @@ For Reactor pipelines set `spring.reactor.context-propagation=auto` so the trace
     **Answer:** Tomcat or Jetty handle each request on a new virtual thread. The auto-configured `applicationTaskExecutor` becomes a `SimpleAsyncTaskExecutor` creating virtual threads, so `@Async` uses them. `@Scheduled` uses a `SimpleAsyncTaskScheduler`. Messaging listener containers (Kafka, RabbitMQ and others) use virtual threads. Because virtual threads are daemon threads, non-web apps may need `spring.main.keep-alive=true`. Properties like `server.tomcat.threads.max` and the task executor pool sizes stop having an effect.
 
     **Interviewer listens for:** more than "Tomcat uses virtual threads", and the lost implicit limit.
+
+    **Common wrong answer:** "It makes CPU-bound code faster." It only helps blocking I/O concurrency.
 
 ??? question "Q7. What is pinning? How do you detect and fix it?"
     **Answer:** Pinning is when a blocked virtual thread cannot unmount, so it holds its carrier. On JDK 21 to 23 this happens when blocking inside a `synchronized` block or method, and inside native frames. If all carriers are pinned, the application stalls. Detect it with `-Djdk.tracePinnedThreads` or the JFR `jdk.VirtualThreadPinned` event. Fix by replacing `synchronized` around I/O with `ReentrantLock`, upgrading libraries, or moving to JDK 24+ where JEP 491 lets virtual threads unmount inside `synchronized`.
@@ -490,8 +496,14 @@ For Reactor pipelines set `spring.reactor.context-propagation=auto` so the trace
 
     **Common wrong answer:** "Native image just compiles the JAR to machine code." It skips the whole AOT and hints story.
 
+    **Interviewer listens for:** build-time bean definitions, fixed conditions, generated proxies and hints.
+
 ??? question "Q10. What is the difference between low- and high-cardinality key-values?"
     **Answer:** Low-cardinality values have a small bounded set (HTTP method, status, outcome, exception class). They become metric tags and span tags. High-cardinality values are unbounded (user ID, order ID, raw URL). They go only to spans. A metric time series exists for each unique tag combination, so an unbounded tag multiplies series without limit, which raises cost and can crash the backend. This is also why HTTP server metrics tag the URI **template** (`/members/{id}`), not the raw path.
+
+    **Interviewer listens for:** bounded tag values for metrics vs unbounded values only on spans.
+
+    **Common wrong answer:** "All key-values become metric tags."
 
 ### Senior
 
@@ -507,15 +519,29 @@ For Reactor pipelines set `spring.reactor.context-propagation=auto` so the trace
 
     **Interviewer listens for:** cost-benefit thinking, alternatives, operational cost (build time, debugging, profiling).
 
+    **Common wrong answer:** "Always use native for faster startup." Long-running services lose JIT peak performance.
+
 ??? question "Q13. How does trace context cross thread and process boundaries in Boot 3?"
     **Answer:** Across processes, instrumented clients inject the W3C `traceparent` header (HTTP) or record headers (Kafka), and instrumented servers and listeners extract it and continue the trace. Inside a process the current span lives in a thread local. For `@Async` and executors you need a `ContextPropagatingTaskDecorator` or a context-propagating executor wrapper. For Reactor, automatic context propagation copies between the Reactor `Context` and thread locals. Virtual threads created by Spring's instrumented executors follow the same rules, but a raw `Thread.startVirtualThread` does not carry context.
 
     **Interviewer listens for:** the two separate problems (wire propagation vs in-process propagation) and the builder requirement for clients.
 
+    **Common wrong answer:** "Trace context follows the request automatically everywhere." Thread hops and raw clients drop it.
+
 ??? question "Q14. How would you plan a Boot 2.7 to 3.x migration for 30 services?"
-    **Answer:** (1) Inventory: Java version, `javax` dependencies, Sleuth, `WebSecurityConfigurerAdapter`, custom starters using `spring.factories`. (2) Preparation on 2.7: Java 17, latest 2.7 patch, remove deprecations, move to `SecurityFilterChain` beans. This is shippable and low risk. (3) Shared libraries and internal starters first, published in a Jakarta version. (4) Automate the mechanical part with OpenRewrite, use the properties migrator. (5) Pilot on a low-risk service, write a playbook, then move in waves. (6) Test focus: JPA queries and ID generation (Hibernate 6), security rules, trailing-slash URLs, serialization, trace propagation between migrated and non-migrated services (keep B3 and W3C compatible). (7) Canary deployments and a rollback path.
+    **Answer:**
+
+    1. Inventory: Java version, `javax` dependencies, Sleuth, `WebSecurityConfigurerAdapter`, custom starters using `spring.factories`.
+    2. Preparation on 2.7: Java 17, latest 2.7 patch, remove deprecations, move to `SecurityFilterChain` beans. This is shippable and low risk.
+    3. Shared libraries and internal starters first, published in a Jakarta version.
+    4. Automate the mechanical part with OpenRewrite, use the properties migrator.
+    5. Pilot on a low-risk service, write a playbook, then move in waves.
+    6. Test focus: JPA queries and ID generation (Hibernate 6), security rules, trailing-slash URLs, serialization, trace propagation between migrated and non-migrated services (keep B3 and W3C compatible).
+    7. Canary deployments and a rollback path.
 
     **Interviewer listens for:** sequencing, shared-library ordering, mixed-fleet compatibility, not just "change the version".
+
+    **Common wrong answer:** "Upgrade all 30 services at once in a single release."
 
 ### Scenario-based
 
@@ -524,18 +550,28 @@ For Reactor pipelines set `spring.reactor.context-propagation=auto` so the trace
 
     **Interviewer listens for:** knowing that normal thread dumps hide virtual threads, and a mitigation plus a root fix.
 
+    **Common wrong answer:** "Virtual threads are unstable." Pinned carriers explain the symptoms.
+
 ??? question "Q16. The service works on the JVM, but the native image returns `{}` for one REST response and throws `ClassNotFoundException` in another path. Why, and how do you fix and prevent it?"
     **Answer:** Both are missing reachability metadata. Jackson serialises by reflection, and with no reflection hint for that DTO it sees no properties, so it writes an empty object (or fails with a "no properties discovered" error, depending on configuration). The `ClassNotFoundException` comes from `Class.forName` on a class the static analysis never saw. Fix with `@RegisterReflectionForBinding` for DTOs that Spring cannot infer (for example types used only through `Object` or generics), and a `RuntimeHintsRegistrar` for the dynamic class. Prevent it by running the suite with `nativeTest` in CI, testing hints with `RuntimeHintsPredicates`, and running the GraalVM tracing agent against integration tests to discover third-party needs.
+
+    **Interviewer listens for:** missing reflection hints, RuntimeHints or @RegisterReflectionForBinding.
+
+    **Common wrong answer:** "Native image breaks Jackson." It needs hints for reflected DTOs.
 
 ??? question "Q17. Traces break between two services: service A shows a trace, service B starts a new one. Logs in B's `@Async` method have no traceId. What are the likely causes?"
     **Answer:** For the broken hop: A's client was created with `new RestTemplate()` or `RestClient.create()` instead of the auto-configured builder, so no header is injected. Or the two services use different propagation formats (B3 on a Sleuth-era service, W3C on the Boot 3 one). Or a gateway strips `traceparent`. For the missing log IDs: the context is a thread local and `@Async` runs on another thread, so add a `ContextPropagatingTaskDecorator`. I would also verify sampling: an unsampled trace is not exported, but IDs should still appear in logs.
 
     **Interviewer listens for:** a structured list of causes, not a single guess.
 
+    **Common wrong answer:** "The tracing backend dropped spans."
+
 ??? question "Q18. Your team wants to put member ID in baggage so every service can log it. This is a healthcare system. What do you say?"
     **Answer:** Baggage is propagated as plain HTTP and message headers to every downstream, including third parties, and often ends up in logs and the telemetry backend. A member ID is PHI when linked to health data. I would push back: propagate an opaque correlation ID or a tokenised reference, keep the member ID inside services that are authorised to hold it, restrict baggage fields with an allow-list, and make sure the telemetry pipeline is in scope for the same access controls and retention rules as application data.
 
     **Interviewer listens for:** security and compliance judgment, not only knowledge of the API.
+
+    **Common wrong answer:** "Baggage is internal so PHI is fine." It travels to every downstream service and vendor.
 
 ## Cheat sheet
 

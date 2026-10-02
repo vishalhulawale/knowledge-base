@@ -382,13 +382,21 @@ The resume does not list low-level concurrency work directly, so the honest posi
 
     **Interviewer listens for:** that thread-safe building blocks do not make a compound action safe.
 
+    **Common wrong answer:** "They are the same thing." A program can be free of data races and still have race conditions (check-then-act on a ConcurrentHashMap).
+
 ??? question "Q4. What does it mean that `synchronized` is reentrant, and why does it matter?"
     **Answer:** A thread that already owns a monitor can lock it again without blocking. The JVM tracks the owner and a hold count, and releases the monitor when the count returns to zero. Without it, a synchronized method calling another synchronized method on the same object (or a subclass calling `super.method()`) would deadlock on itself.
+
+    **Interviewer listens for:** owner + hold count, nested calls and overriding methods would self-deadlock otherwise.
+
+    **Common wrong answer:** "Reentrant means another thread can enter." It means the same thread can re-enter.
 
 ??? question "Q5. What is the difference between a `synchronized` instance method and a `static synchronized` method?"
     **Answer:** The instance method locks `this`. The static method locks the `Class` object. They are different monitors, so one thread can be in each at the same time. If both touch the same static state, that state is not protected.
 
     **Common wrong answer:** "`synchronized` locks the method." Locks are always on an object, never on code.
+
+    **Interviewer listens for:** this vs Class monitor, both can run at once, protecting static state.
 
 ### Intermediate
 
@@ -404,6 +412,8 @@ The resume does not list low-level concurrency work directly, so the honest posi
 
     **Interviewer listens for:** the JIT hoisting explanation, and that the result is "allowed to hang", not "will hang".
 
+    **Common wrong answer:** "It stops after a short delay because the CPU cache flushes eventually." The JIT can hoist the read so it never stops.
+
 ??? question "Q8. Why is double-checked locking broken without `volatile`?"
     **Answer:** `instance = new Foo()` is roughly: allocate memory, run the constructor, assign the reference. Without a happens-before edge, the assignment can become visible before the constructor's writes. A second thread does the first unsynchronized null check, sees non-null, and uses a partially constructed object. Marking the field `volatile` makes the write a safe publication: everything the constructor did happens-before the volatile write, which happens-before the other thread's read. The static holder idiom or an enum singleton avoids the problem entirely.
 
@@ -416,8 +426,14 @@ The resume does not list low-level concurrency work directly, so the honest posi
 
     **Interviewer listens for:** the `this`-escape condition, and that immutability is a concurrency tool.
 
+    **Common wrong answer:** "final only means the reference cannot change." It also gives safe publication of initialised state.
+
 ??? question "Q10. Is a read or write of a `long` atomic?"
     **Answer:** Not guaranteed. The JLS allows a non-volatile `long` or `double` write to be split into two 32-bit writes, so a reader could see half of one value and half of another. Declaring it `volatile` (or guarding it with a lock, or using `AtomicLong`) guarantees atomic reads and writes. On 64-bit HotSpot it is atomic in practice, but you should code to the spec. Reference reads and writes are always atomic.
+
+    **Interviewer listens for:** non-volatile long/double may tear, volatile makes single reads and writes atomic, not compound ops.
+
+    **Common wrong answer:** "Yes, all primitive writes are atomic."
 
 ### Senior
 
@@ -433,15 +449,21 @@ The resume does not list low-level concurrency work directly, so the honest posi
 
     **Interviewer listens for:** version awareness (21 vs 24/25) and choosing by feature need, not folklore.
 
+    **Common wrong answer:** "ReentrantLock is always faster than synchronized." Modern JVMs optimise synchronized well; choose by features.
+
 ??? question "Q13. What is false sharing and how does it relate to `volatile`?"
     **Answer:** CPUs cache memory in lines (typically 64 bytes). If two threads write to different variables that sit on the same line, each write invalidates the other core's copy, so the line bounces between cores even though there is no logical sharing. Hot `volatile` or atomic fields written by different threads are the usual victims. The fix is to separate them with padding. The JDK does this with `@jdk.internal.vm.annotation.Contended` in `LongAdder` cells and `ForkJoinPool` queues. Application code needs `-XX:-RestrictContended` (and, since JDK 9, `--add-exports java.base/jdk.internal.vm.annotation=ALL-UNNAMED` to compile against the internal annotation) to use it, so in practice prefer `LongAdder` or restructure the data. Measure with JMH before optimising.
 
     **Interviewer listens for:** that this is a performance problem, not a correctness problem, and that you would measure first.
 
+    **Common wrong answer:** "volatile fixes false sharing." volatile writes make it worse; padding or @Contended separates the fields.
+
 ??? question "Q14. Why does racy code often work on x86 and fail on ARM (for example after moving to AWS Graviton)?"
     **Answer:** x86 has a strong memory model (total store order): the only reordering is that a store can be delayed in the store buffer past a later load of a different address. ARM and other weakly ordered architectures can reorder stores with stores and loads with loads. Code with a data race, such as unsafe publication through a plain field, can accidentally work on x86 because the hardware never produces the bad order, and then break on ARM. The JMM is the contract, not the hardware. Code that is correct under the JMM is correct on both. Note that JIT-level reordering and hoisting can break racy code on x86 too.
 
     **Interviewer listens for:** "program to the JMM, not to the CPU".
+
+    **Common wrong answer:** "Graviton has a JVM bug." The code relied on undefined behaviour that x86 happened to hide.
 
 ### Scenario-based
 
@@ -457,15 +479,21 @@ The resume does not list low-level concurrency work directly, so the honest posi
 
     **Interviewer listens for:** immutable snapshot + atomic swap, and noticing readers would see an empty map between `clear()` and `putAll()`.
 
+    **Common wrong answer:** "volatile makes the map thread-safe."
+
 ??? question "Q17. You guard 'check balance, then debit' with `synchronized` and it passes all tests. In production with 4 pods, accounts still go negative. Why, and what is the fix?"
     **Answer:** A JVM monitor provides mutual exclusion **inside one process**. Two pods each take their own lock and both pass the check. The invariant must be enforced where the shared state lives: a conditional atomic update in the database (`UPDATE ... SET balance = balance - :amt WHERE id = :id AND balance >= :amt`), optimistic locking with a version column and retry, a database constraint, or `SELECT ... FOR UPDATE` inside a transaction. A distributed lock (Redis, ZooKeeper) is a last resort and needs fencing tokens to be safe. Add an idempotency key so retries do not debit twice.
 
     **Interviewer listens for:** recognising the limit of in-process locking, and preferring data-store guarantees over a distributed lock.
 
+    **Common wrong answer:** "Use a static lock so all pods share it." Static fields are still per JVM.
+
 ??? question "Q18. A thread dump shows 180 threads `BLOCKED (on object monitor)` waiting for the same lock, and one thread `RUNNABLE` holding it inside a socket read. What happened and how do you fix it?"
     **Answer:** A critical section contains blocking I/O. One thread holds the monitor while waiting on a slow upstream, and every other request queues behind it, so throughput collapses to one request at a time and the pool fills. Immediate mitigation: a timeout on the upstream call. Real fix: move the I/O out of the lock (compute outside, lock only to update in-memory state), or replace the lock with a per-key mechanism such as `ConcurrentHashMap.computeIfAbsent` with a memoised `CompletableFuture`, so only callers for the same key wait. Reading thread dumps is covered on the [diagnosing production issues](10-diagnosing-production-issues-thread-dumps-heap-dumps-memory.md) page.
 
     **Interviewer listens for:** reading the dump correctly (BLOCKED = waiting for a monitor, owner shown by "locked <address>"), and "never hold a lock across I/O".
+
+    **Common wrong answer:** "Increase the thread pool size." More threads just queue behind the same lock.
 
 ## Cheat sheet
 

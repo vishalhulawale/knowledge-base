@@ -302,7 +302,14 @@ String internals are not a resume line, so position this as a deep fundamental y
 ### Fundamentals
 
 ??? question "Q1. Why is String immutable in Java?"
-    **Answer:** Four linked reasons: (1) the string pool can safely share instances; (2) the `hashCode` can be cached, which makes Strings fast and safe `HashMap` keys; (3) immutable objects are thread-safe without locks; (4) security, because values like class names, paths and URLs cannot change after validation. It is enforced by a `final` class with a `private final` array that is never exposed.
+    **Answer:** Four linked reasons:
+
+    1. The string pool can safely share instances.
+    2. The `hashCode` can be cached, which makes Strings fast and safe `HashMap` keys.
+    3. Immutable objects are thread-safe without locks.
+    4. Security, because values like class names, paths and URLs cannot change after validation.
+
+    It is enforced by a `final` class with a `private final` array that is never exposed.
 
     **Interviewer listens for:** Pool + hash caching + thread safety + security, and how immutability is enforced.
 
@@ -332,15 +339,21 @@ String internals are not a resume line, so position this as a deep fundamental y
 
     **Interviewer listens for:** Knowing the JLS "constant expression" rule, not just memorised outputs.
 
+    **Common wrong answer:** "Still false, because concatenation always creates a new String."
+
 ??? question "Q4. How many objects does `String s = new String(\"hello\");` create?"
     **Answer:** Up to two. The literal `"hello"` is placed in the pool when the constant is resolved (if not already there), and `new` creates one more `String` object on the heap. If `"hello"` is already pooled, only one new object is created by this line. (Its internal byte array may be shared with the literal.)
 
     **Common wrong answer:** "Always exactly two" or "one", without explaining the pool lookup.
 
+    **Interviewer listens for:** the literal in the pool plus one heap object, already-pooled case.
+
 ??? question "Q5. StringBuilder vs StringBuffer vs String?"
     **Answer:** `String` is immutable. `StringBuilder` is mutable and not synchronized (default choice for building text). `StringBuffer` is mutable with synchronized methods (legacy, Java 1.0). Because builders are almost always local variables, synchronization adds cost without benefit.
 
     **Interviewer listens for:** Thread-safety reasoning, and that `StringBuffer` is rarely the right answer.
+
+    **Common wrong answer:** "StringBuffer is faster because it is thread-safe." Synchronisation only adds cost.
 
 ### Intermediate
 
@@ -349,39 +362,71 @@ String internals are not a resume line, so position this as a deep fundamental y
 
     **Common wrong answer:** "In Metaspace" or "in PermGen" for modern Java.
 
+    **Interviewer listens for:** heap since Java 7, collectable, PermGen gone in 8.
+
 ??? question "Q7. Is `s += x` in a loop still bad in Java 9+, given invokedynamic concatenation?"
     **Answer:** Yes. JEP 280 optimises *each concatenation expression* (better strategies, exact pre-sizing), but each loop iteration is still a separate expression that creates a new `String` and copies everything built so far. That is O(n²). Use one `StringBuilder` across the loop, or `Collectors.joining`.
 
     **Interviewer listens for:** Distinguishing per-expression optimisation from algorithmic complexity.
 
+    **Common wrong answer:** "Java 9+ optimises it away, so it is fine now."
+
 ??? question "Q8. What are Compact Strings?"
     **Answer:** JEP 254 (Java 9) changed `String`'s storage from `char[]` to `byte[]` plus a `coder` byte. Latin-1-only strings use 1 byte per char, others use UTF-16 (2 bytes per char). This roughly halves memory for ASCII-heavy strings with no API change. `-XX:-CompactStrings` disables it.
+
+    **Interviewer listens for:** byte[] + coder, Latin-1 vs UTF-16, memory saving with no API change.
+
+    **Common wrong answer:** "Strings now use UTF-8 internally." They use Latin-1 or UTF-16.
 
 ??? question "Q9. Why is `char[]` preferred over `String` for passwords?"
     **Answer:** A `String` is immutable and may stay in memory until GC, possibly copied around, and can appear in heap dumps or logs. A `char[]` can be overwritten with `Arrays.fill` right after use. That is why `Console.readPassword()` and `JPasswordField.getPassword()` return `char[]`.
 
     **Common wrong answer:** "Strings are stored in the pool forever." Only literals and interned strings are pooled; the real point is that you cannot wipe a `String`.
 
+    **Interviewer listens for:** overwriting a char[] after use, Strings linger and leak in dumps.
+
 ??? question "Q10. Predict the output: `\"a.b.c\".split(\".\").length` and `\"a,b,,\".split(\",\").length`."
     **Answer:** `0` and `2`. `split` takes a regex; `.` matches every char, so all tokens are empty and trailing empties are removed. In the second case the two trailing empty strings are removed too. Use `split("\\.")` and `split(",", -1)` (negative limit keeps trailing empties, giving 4).
+
+    **Interviewer listens for:** split takes a regex, trailing empties removed, limit -1.
+
+    **Common wrong answer:** "3 and 4."
 
 ### Senior
 
 ??? question "Q11. Would you use `String.intern()` in production? What are the alternatives?"
-    **Answer:** Rarely. It helps only when you keep many long-lived duplicates of a small set of values. Costs: a global native hash table shared by the whole JVM, lookup cost on every call, and unbounded growth if fed user input. Alternatives: (1) parse to enums or small value types at the boundary; (2) a bounded `ConcurrentHashMap` canonicaliser you control; (3) G1/GC String Deduplication (`-XX:+UseStringDeduplication`), which shares backing arrays with no code changes. Measure with a heap dump first.
+    **Answer:** Rarely. It helps only when you keep many long-lived duplicates of a small set of values. Costs: a global native hash table shared by the whole JVM, lookup cost on every call, and unbounded growth if fed user input. Alternatives:
+
+    1. Parse to enums or small value types at the boundary.
+    2. A bounded `ConcurrentHashMap` canonicaliser you control.
+    3. G1/GC String Deduplication (`-XX:+UseStringDeduplication`), which shares backing arrays with no code changes.
+
+    Measure with a heap dump first.
 
     **Interviewer listens for:** Measure-first mindset and knowing GC dedup vs interning (dedup does not make `==` true).
+
+    **Common wrong answer:** "Intern every repeated String to save memory." Unbounded input fills a JVM-wide table.
 
 ??? question "Q12. How does String.hashCode() work, and why is it cached?"
     **Answer:** `s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1]`, computed lazily and stored in the `hash` field. Since Java 13 a `hashIsZero` flag avoids recomputing when the real hash is 0. Caching is only safe because the string is immutable. The algorithm is specified in the Javadoc, so it is deterministic and predictable, which enabled hash-flooding attacks before Java 8's tree bins in `HashMap`.
 
     **Interviewer listens for:** Linking immutability to hash caching, and awareness of collision attacks.
 
+    **Common wrong answer:** "hashCode is random or based on memory address." For String it is a fixed, specified formula.
+
 ??? question "Q13. How does `switch` on a String work under the hood?"
     **Answer:** `javac` compiles it to a `switch` on `hashCode()` and then `equals()` checks inside each hash case (to handle collisions), mapping to an index, followed by a second `switch` on that index. A null selector throws `NullPointerException` unless you use a Java 21 pattern switch with `case null`.
 
+    **Interviewer listens for:** hashCode switch then equals, NPE on null without case null.
+
+    **Common wrong answer:** "It compares with equals against every case in order."
+
 ??? question "Q14. What did Java 9's indy string concatenation (JEP 280) change, and why?"
     **Answer:** Before, `javac` hard-coded a `StringBuilder` chain into bytecode, so improvements needed recompilation and the builder was often under-sized. Now `javac` emits an `invokedynamic` call bootstrapped by `StringConcatFactory`, and the JVM chooses the strategy at link time (for example, computing the exact length and filling one array). Libraries can improve concatenation without changing your bytecode.
+
+    **Interviewer listens for:** invokedynamic + StringConcatFactory, JVM-chosen strategy without recompiling.
+
+    **Common wrong answer:** "It made concatenation in loops efficient."
 
 ### Scenario-based
 
@@ -390,16 +435,28 @@ String internals are not a resume line, so position this as a deep fundamental y
 
     **Interviewer listens for:** Diagnose before tuning; MAT dominator tree; cache sizing; dedup as a cheap win.
 
+    **Common wrong answer:** "Increase -Xmx." That delays the problem without finding who holds the data.
+
 ??? question "Q16. An auth check `if (role == \"ADMIN\")` passed all tests but fails in production. Why?"
     **Answer:** In tests the role came from a literal, so both sides were the same pooled instance. In production it comes from a JWT claim or DB, which is a runtime-created `String`, so `==` compares different references. Fix with `"ADMIN".equals(role)` or, better, map the role to an enum once at the boundary. Add a static-analysis rule (SpotBugs `ES_COMPARING_STRINGS_WITH_EQ`, Sonar) to catch it in review.
 
+    **Interviewer listens for:** literal pooling hides the bug in tests, runtime Strings differ, equals or enums.
+
+    **Common wrong answer:** "Production has a different JVM bug."
+
 ??? question "Q17. A service generating large CSV reports gets slow and GC-heavy as row counts grow. What do you suspect?"
     **Answer:** `+=` concatenation in a loop (quadratic copying and garbage), or building the whole report in memory. Fix: a pre-sized `StringBuilder`, or better, stream rows directly to the output (`Writer`/`OutputStream` or a streaming response) so memory stays flat regardless of size. Confirm with a profiler (allocation flame graph via JFR or async-profiler).
+
+    **Interviewer listens for:** quadratic concatenation, whole report in memory, streaming output.
+
+    **Common wrong answer:** "Increase heap and give the GC more threads."
 
 ??? question "Q18. In one environment, enum lookups like `Status.valueOf(code.toUpperCase())` fail for codes containing 'i'. Why?"
     **Answer:** `toUpperCase()` with no argument uses the default locale. Under a Turkish locale, `i` becomes dotted `İ`, so `"active".toUpperCase()` is not `"ACTIVE"`. Use `toUpperCase(Locale.ROOT)` for protocol and identifier values.
 
     **Interviewer listens for:** Locale sensitivity of case conversion; using `Locale.ROOT` for machine values.
+
+    **Common wrong answer:** "The codes in that environment are corrupt." The cause is the default locale.
 
 ## Cheat sheet
 

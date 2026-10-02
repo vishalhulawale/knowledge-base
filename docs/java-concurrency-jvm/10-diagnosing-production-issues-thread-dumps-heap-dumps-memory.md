@@ -394,6 +394,8 @@ Micrometer already exports the numbers you should alert on: `jvm.memory.used`, `
 
     **Interviewer listens for:** Symptom-to-tool mapping and awareness of the cost of a heap dump.
 
+    **Common wrong answer:** "They are the same thing in different formats."
+
 ??? question "Q3. How can Java have a memory leak when it has garbage collection?"
     **Answer:** The GC frees objects that are unreachable from GC roots. A leak in Java is an object that is still reachable but will never be used again, so the GC must keep it. Typical causes: an unbounded static map or cache, `ThreadLocal` values on pooled threads that are never removed, listeners that are never unregistered, keys with broken `equals`/`hashCode`, and class loader leaks.
 
@@ -436,10 +438,14 @@ Micrometer already exports the numbers you should alert on: `jvm.memory.used`, `
 
     **Interviewer listens for:** Pooled threads, strong value reference, `finally { remove() }`, and the data-bleed risk.
 
+    **Common wrong answer:** "ThreadLocals are cleared when the request ends." Only if your code calls remove().
+
 ??? question "Q8. A dump shows 180 threads `BLOCKED` with `waiting to lock <0x000000071a2b3c40>`. What do you do next?"
     **Answer:** Search the dump for `- locked <0x000000071a2b3c40>`. At most one thread owns that monitor (occasionally a dump shows no owner, because the lock was being handed over at that instant; the next dump will show one). Read its stack: what is it doing while holding the lock? Usually it is doing something slow inside a `synchronized` block, such as a remote call, a database query, or logging to a slow appender. Check the next dump: if the owner changes each time, it is contention on a hot lock; if it is the same thread in the same place, that thread is stuck. Fixes: shrink the critical section, move I/O outside the lock, or replace the lock with a concurrent data structure (pages 3 and 6).
 
     **Interviewer listens for:** Finding the owner by address and examining what it does under the lock.
+
+    **Common wrong answer:** "Restart the service." Find the owning thread and what it is waiting on first.
 
 ### Senior
 
@@ -463,6 +469,8 @@ Micrometer already exports the numbers you should alert on: `jvm.memory.used`, `
 
     **Interviewer listens for:** Pause awareness, probes, disk space, data sensitivity, cheaper alternatives.
 
+    **Common wrong answer:** "Take it on a live instance serving traffic." The pause can last tens of seconds and trigger restarts.
+
 ??? question "Q11. The dominator tree shows one object retaining 70% of the heap. What are your next steps, and what if nothing dominates?"
     **Answer:** With a clear dominator: open its **path to GC roots, excluding weak and soft references**, to see who holds it (a static field, a thread, a class loader). Then look inside it: what are the entries, how many, what keys? That tells you which code path adds entries and why they are never removed. Confirm with the code, fix, and verify in a soak test that the after-GC baseline is now flat.
 
@@ -470,10 +478,14 @@ Micrometer already exports the numbers you should alert on: `jvm.memory.used`, `
 
     **Interviewer listens for:** Path to roots excluding weak references; comparing two dumps; verifying the fix.
 
+    **Common wrong answer:** "Look at the class with the most instances." Count alone ignores retained size.
+
 ??? question "Q12. How does diagnosing change with virtual threads?"
     **Answer:** Three things. First, traditional thread dumps do not list virtual threads; use `jcmd Thread.dump_to_file -format=json`, which also shows the structure when structured concurrency is used. Second, there may be hundreds of thousands of threads, so you group by stack instead of reading one by one. Third, a new failure mode: **pinning**. On Java 21 to 23 a virtual thread that blocks while inside a `synchronized` block holds its carrier thread. If all carriers are pinned, the application stops making progress although CPU is idle and classic dumps look quiet. JFR's `jdk.VirtualThreadPinned` event exposes it. Java 24 (JEP 491) removed pinning for `synchronized`; native frames still pin. Also, virtual thread stacks live on the heap, so a huge number of blocked virtual threads appears as heap usage.
 
     **Interviewer listens for:** `Thread.dump_to_file`, pinning and its version history, stacks on the heap.
+
+    **Common wrong answer:** "jstack shows virtual threads like platform threads." Use the JSON thread dump.
 
 ### Scenario-based
 
@@ -498,6 +510,8 @@ Micrometer already exports the numbers you should alert on: `jvm.memory.used`, `
 
     **Interviewer listens for:** Reasoning from "low CPU" to "waiting"; shared dependency; bulkheads and timeouts.
 
+    **Common wrong answer:** "It is a GC problem." CPU is idle; threads are waiting on a shared dependency.
+
 ??? question "Q15. Gotcha: your team added `-XX:+HeapDumpOnOutOfMemoryError`, the service crashed overnight, and there is no dump file. Give four possible reasons."
     **Answer:**
 
@@ -509,6 +523,8 @@ Micrometer already exports the numbers you should alert on: `jvm.memory.used`, `
     Other possibilities: the error type does not trigger the dump (for example `unable to create native thread`), or a file with that name already existed and the JVM will not overwrite it.
 
     **Interviewer listens for:** The kernel-kill distinction first, then the operational reasons.
+
+    **Common wrong answer:** "The flag is broken." It only fires on a Java OutOfMemoryError, not on a container OOM kill.
 
 ## Cheat sheet
 

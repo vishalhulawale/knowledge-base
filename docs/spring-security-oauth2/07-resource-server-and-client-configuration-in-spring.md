@@ -428,15 +428,21 @@ void adminEndpointNeedsRole() throws Exception {
 
     **Interviewer listens for:** the `SCOPE_` prefix and the `ROLE_` prefix that `hasRole` adds.
 
+    **Common wrong answer:** "hasRole('read') works because read is in the token."
+
 ??? question "Q4. What is the difference between `oauth2Login()` and `oauth2Client()`?"
     **Answer:** `oauth2Login` authenticates the user with the authorization code flow, validates the ID token, creates an `OidcUser` and establishes a session. `oauth2Client` only provides the machinery to obtain and store access tokens for outgoing API calls and does not authenticate anyone. `oauth2Login` is built on the same client infrastructure, so the user's tokens are also available as an authorized client.
 
     **Interviewer listens for:** login = authentication + session, client = authorization for outbound calls.
 
+    **Common wrong answer:** "They are the same configuration." One logs users in; the other only obtains tokens to call APIs.
+
 ??? question "Q5. What does a resource server return for a missing token, an expired token and a token without the required scope?"
     **Answer:** Missing: 401 with `WWW-Authenticate: Bearer`. Expired or otherwise invalid: 401 with `error="invalid_token"` and a description. Valid but insufficient authority: 403 with `error="insufficient_scope"`. These come from `BearerTokenAuthenticationEntryPoint` and `BearerTokenAccessDeniedHandler` and follow RFC 6750.
 
     **Common wrong answer:** "It redirects to the login page." That only happens if `oauth2Login` or form login shares the same chain.
+
+    **Interviewer listens for:** 401 for missing or invalid tokens with WWW-Authenticate, 403 insufficient_scope for valid tokens.
 
 ### Intermediate
 
@@ -444,6 +450,8 @@ void adminEndpointNeedsRole() throws Exception {
     **Answer:** Provide a `JwtAuthenticationConverter` and set its granted-authorities converter. For a flat claim, configure `JwtGrantedAuthoritiesConverter` with `setAuthoritiesClaimName("groups")` and `setAuthorityPrefix("ROLE_")`. For nested claims or to combine scopes and roles, write a lambda that reads the claim and returns a collection of `GrantedAuthority`. Register it with `.jwt(j -> j.jwtAuthenticationConverter(...))` or expose it as a bean.
 
     **Interviewer listens for:** keeping both scopes (what the client may do) and roles (what the user may do), and normalising names in one place.
+
+    **Common wrong answer:** "Spring reads the roles claim automatically."
 
 ??? question "Q7. How do you add audience validation, and why does it matter?"
     **Answer:** Simplest: `spring.security.oauth2.resourceserver.jwt.audiences`. Programmatically: a `JwtClaimValidator` on `aud` combined with `JwtValidators.createDefaultWithIssuer(issuer)` in a `DelegatingOAuth2TokenValidator`, set on the `NimbusJwtDecoder`. Without it, any token from the same issuer is accepted, so a token obtained for a low-value API can be replayed against a high-value one.
@@ -457,6 +465,8 @@ void adminEndpointNeedsRole() throws Exception {
 
     **Interviewer listens for:** understanding that auto-configuration is conditional on a missing bean.
 
+    **Common wrong answer:** "issuer-uri still applies to my custom decoder." Custom beans make Boot's settings back off.
+
 ??? question "Q9. How does a Spring service get and reuse a client-credentials token?"
     **Answer:** A `ClientRegistration` with `authorization-grant-type: client_credentials` describes the client. An `OAuth2AuthorizedClientManager` with a client-credentials provider is asked to authorize for that registration id. It looks up the stored `OAuth2AuthorizedClient`, and if there is none or the token is about to expire, it calls the token endpoint and saves the result. An interceptor (`OAuth2ClientHttpRequestInterceptor` for `RestClient`, `ServletOAuth2AuthorizedClientExchangeFilterFunction` for `WebClient`) does this on each outgoing call and sets the header. There is no refresh token in this grant, the client simply asks again.
 
@@ -469,6 +479,8 @@ void adminEndpointNeedsRole() throws Exception {
 
     **Interviewer listens for:** connecting the resource server output (authorities) to method security.
 
+    **Common wrong answer:** "Use requestMatchers with the operation name." All operations share one URL.
+
 ### Senior
 
 ??? question "Q11. Your service consumes Kafka messages and must call a protected API. Calls fail with `servletRequest cannot be null`. Why, and what is the fix?"
@@ -476,25 +488,35 @@ void adminEndpointNeedsRole() throws Exception {
 
     **Interviewer listens for:** knowing both managers and which contexts each fits.
 
+    **Common wrong answer:** "Kafka cannot call OAuth-protected APIs." Use the service-based authorized client manager.
+
 ??? question "Q12. How do you support tokens from more than one issuer, for example during an IdP migration?"
     **Answer:** Use `oauth2ResourceServer(o -> o.authenticationManagerResolver(JwtIssuerAuthenticationManagerResolver.fromTrustedIssuers(a, b)))`. It reads the unverified `iss` claim, checks it against the allow-list, then validates the token with that issuer's decoder (created lazily and cached). The allow-list is the security boundary: never build a decoder from an arbitrary `iss` value, or an attacker hosts their own issuer and JWKS. Authority mapping may differ per issuer, so configure a converter per issuer if claims differ.
 
     **Interviewer listens for:** allow-list of issuers, per-issuer key sets, the attack if you trust `iss` blindly.
+
+    **Common wrong answer:** "Disable issuer validation during the migration."
 
 ??? question "Q13. What happens when the IdP rotates signing keys, and how can it go wrong?"
     **Answer:** Tokens carry a `kid`. The decoder caches the JWK set and, on an unknown `kid`, refetches it, so rotation is transparent if the IdP publishes the new key and keeps the old one until old tokens expire. It goes wrong when the IdP reuses a `kid`, removes the old key too early, the JWKS endpoint is unreachable from the cluster, or a static public key was configured. Attackers can also send random `kid` values to try to force refetches. Whether refetches are rate-limited depends on the Nimbus JWK source in your Spring Security version, so verify it for your version rather than assume, and rate-limit unauthenticated traffic at the gateway. Mitigations: `issuer-uri`/`jwk-set-uri` instead of static keys, alerts on 401 rate, and a tested rotation runbook.
 
     **Interviewer listens for:** `kid`-driven refetch, overlap period, operational monitoring.
 
+    **Common wrong answer:** "Keys are fetched once at startup." Unknown kid triggers a refetch; misconfigured caching breaks it.
+
 ??? question "Q14. JWT or opaque tokens for a healthcare API? How would you configure Spring for each?"
     **Answer:** JWT: local validation, no IdP dependency per request, but a stolen token works until expiry, so keep lifetimes short (minutes) and consider a deny-list for logout. Opaque: `opaqueToken(...)` with `introspection-uri` and client credentials, giving immediate revocation and no PHI-adjacent claims leaking in the token, at the cost of a network call per request (cache introspection results for a few seconds). A common compromise is JWT inside the trusted network and opaque or reference tokens at the edge, with the gateway exchanging them. Whichever is chosen, validate audience and log `sub` and client id for audit.
 
     **Interviewer listens for:** a reasoned trade-off, not a slogan, plus revocation and audit needs.
 
+    **Common wrong answer:** "Opaque tokens are always safer." They add an introspection dependency on every request unless cached.
+
 ??? question "Q15. In a chain of services A → B → C, should B relay the user's token, use client credentials, or do a token exchange?"
     **Answer:** Relay is simple and keeps user identity, but the token must list C as an audience, which widens its blast radius, and it may expire mid-flow. Client credentials gives B its own least-privilege token, but C no longer knows the user unless identity is passed separately, and C must trust B's claim about it. Token exchange (RFC 8693) lets B swap the user token for a new one scoped to C that still carries the user and records B as the actor. Spring Security has a token-exchange authorized client provider since 6.3. Choose by what C needs for authorization and audit. Details in [service-to-service auth](09-service-to-service-auth.md).
 
     **Interviewer listens for:** audience scoping, confused-deputy awareness, user identity for audit.
+
+    **Common wrong answer:** "Always relay the token, it is simplest." It widens audience and blast radius.
 
 ### Scenario-based
 
@@ -510,15 +532,21 @@ void adminEndpointNeedsRole() throws Exception {
 
     **Interviewer listens for:** `securityMatcher` vs `requestMatchers`, ordering, different session and CSRF policy per chain.
 
+    **Common wrong answer:** "Disable form login for the API with a flag." Use separate chains with their own entry points.
+
 ??? question "Q18. The IdP team reports your service requests a new token thousands of times per minute. What do you check?"
     **Answer:** Whether tokens are being cached at all: a hand-rolled token call per request, a new `OAuth2AuthorizedClientManager` or in-memory service created per call, or a different principal name on every call (the authorized client is keyed by registration id and principal, so a random principal never hits the cache). Then check token lifetime versus the clock-skew window: a 60-second token with a 60-second skew is always "expired". Finally consider scale: with in-memory storage each pod has its own token, so 200 pods restarting together cause a burst. Fixes: one shared manager bean, a stable principal, sensible token lifetime, and jittered startup or a shared store if the IdP rate-limits.
 
     **Interviewer listens for:** knowledge of the cache key and the expiry-skew interaction.
 
+    **Common wrong answer:** "The IdP is too slow." The client is not caching tokens.
+
 ??? question "Q19. Your `@WebMvcTest` passes with `jwt().authorities(...)`, but in production users with the right AD group get 403. Why did the test not catch it?"
     **Answer:** The `jwt()` post-processor creates a `JwtAuthenticationToken` directly with the authorities you gave it. It never runs the real `JwtDecoder` or your `JwtAuthenticationConverter`, so a bug in claim mapping (wrong claim name, case mismatch, missing `ROLE_` prefix) is invisible. Add a unit test for the converter with a realistic claim set, and at least one integration test that sends a really signed token through the full chain.
 
     **Interviewer listens for:** knowing what the test helper skips, and testing the converter separately.
+
+    **Common wrong answer:** "The test proves the mapping works." The test bypasses the real converter.
 
 ## Cheat sheet
 

@@ -21,20 +21,27 @@ All 44 topics by priority. ★ counts show how many subtopics tie to resume clai
 | [Distributed Systems Concepts](distributed-systems/index.md) | 9 | 3 |
 | [Leadership & Behavioral](leadership-behavioral/index.md) | 12 | 9 |
 
+### Promoted to P0 after the October 2026 audit
+
+Ranked by expected interview payoff. Each is either asked in almost every Senior/Lead Java loop or is a ★ resume claim interviewers will probe.
+
+| Topic | Subtopics | ★ |
+|---|---|---|
+| [API Design](api-design/index.md) | 8 | 3 |
+| [JPA / Hibernate](jpa-hibernate/index.md) | 6 | 1 |
+| [PostgreSQL / SQL](postgresql-sql/index.md) | 8 | 0 |
+| [Redis & Caching](redis-caching/index.md) | 7 | 4 |
+| [MongoDB](mongodb/index.md) | 7 | 3 |
+| [Docker & Kubernetes](docker-kubernetes/index.md) | 8 | 1 |
+| [Cryptography & Key Management](cryptography-key-management/index.md) | 7 | 5 |
+| [Frontend Architecture](frontend-architecture/index.md) | 6 | 5 |
+| [Data Structures & Algorithms](dsa/index.md) | 11 | 0 |
+
 ## P1 — strong working knowledge
 
 | Topic | Subtopics | ★ |
 |---|---|---|
-| [Frontend Architecture](frontend-architecture/index.md) | 6 | 5 |
-| [Redis & Caching](redis-caching/index.md) | 7 | 4 |
-| [MongoDB](mongodb/index.md) | 7 | 3 |
-| [PostgreSQL / SQL](postgresql-sql/index.md) | 8 | 0 |
-| [JPA / Hibernate](jpa-hibernate/index.md) | 6 | 1 |
-| [Docker & Kubernetes](docker-kubernetes/index.md) | 8 | 1 |
 | [Testing Strategy](testing/index.md) | 7 | 3 |
-| [Cryptography & Key Management](cryptography-key-management/index.md) | 7 | 5 |
-| [Data Structures & Algorithms](dsa/index.md) | 11 | 0 |
-| [API Design](api-design/index.md) | 8 | 3 |
 | [Observability & Production Support](observability/index.md) | 7 | 1 |
 | [Application Security](application-security/index.md) | 7 | 1 |
 | [Domain-Driven Design & Clean Architecture](ddd-clean-architecture/index.md) | 4 | 1 |

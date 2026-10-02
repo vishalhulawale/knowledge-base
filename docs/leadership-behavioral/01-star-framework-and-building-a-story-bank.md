@@ -256,16 +256,23 @@ follow_ups:
 
     **Common wrong answer:** "I rewrote it from scratch".
 
+??? question "Q8. Tell me about a time you had to deliver bad news to a stakeholder."
+    **Answer:** Structure: what the news was (a slip, a defect, a risk) → **when you found out and how fast you told them** → the facts and impact in one sentence → the options you brought (cut scope, move date, add a workaround) with a recommendation → what you did to stop it happening again → how the relationship looked afterwards. Pick a real example from the Meteor or CCKM work where you surfaced a delay or risk early. *[confirm]*
+
+    **Interviewer listens for:** telling early, options rather than only problems, ownership without blame, a follow-up that rebuilt trust.
+
+    **Common wrong answer:** A story where the stakeholder found out from someone else first, or where the bad news was blamed on another team.
+
 ### Senior
 
-??? question "Q8. Tell me about the biggest technical risk you managed."
+??? question "Q9. Tell me about the biggest technical risk you managed."
     **Answer structure:** A risk at Lead scope (an upstream dependency, a migration, security). How you identified it, quantified it, mitigated it (fallbacks, phased rollout, monitoring), and communicated it to stakeholders. The result.
 
     **Interviewer listens for:** risk management, not heroics.
 
     **Common wrong answer:** a last-minute firefight with no prevention.
 
-??? question "Q9. How do you show impact when you lead rather than write most of the code?"
+??? question "Q10. How do you show impact when you lead rather than write most of the code?"
     **Answer:** Through team outcomes I enabled:
     - delivery predictability
     - quality (escaped defects, incident rate)
@@ -281,14 +288,14 @@ follow_ups:
 
 ### Scenario-based
 
-??? question "Q10. The interviewer keeps asking 'and what did YOU do?' What does that mean, and how do you respond?"
+??? question "Q11. The interviewer keeps asking 'and what did YOU do?' What does that mean, and how do you respond?"
     **Answer:** They aren't hearing your personal contribution. Switch to first person and specifics: "I made the call to…", "I wrote the proposal…", "I paired with…". Name decisions and alternatives. Acknowledge the team's work separately.
 
     **Interviewer listens for:** adapting quickly.
 
     **Common wrong answer:** repeating "we".
 
-??? question "Q11. You're asked about a competency you have no story for (e.g. firing someone). What do you do?"
+??? question "Q12. You're asked about a competency you have no story for (e.g. firing someone). What do you do?"
     **Answer:** Be honest: "I haven't had to do that directly. The closest is…" Then give a related story (for example a difficult performance conversation handled with your manager) and explain how you'd approach the situation, step by step. Never fabricate.
 
     **Interviewer listens for:** honesty plus transferable judgement.

@@ -269,50 +269,104 @@ The new service consumes `legacy.public.member` events to build its own copy whi
 
     **Interviewer listens for:** routing layer, incremental, reversible, retire old code.
 
+    **Common wrong answer:** "Rewrite the system in the background and switch over on a launch date." That is a big-bang rewrite with a new name.
+
 ??? question "Q3. Why avoid a big-bang rewrite?"
     **Answer:** Long feature freeze, a moving target, undocumented behaviour lost, one high-risk cut-over, and no value until the end. Incremental migration delivers value early and limits the blast radius of mistakes.
 
+    **Interviewer listens for:** moving target, lost implicit behaviour, single risky cut-over, no value until the end, incremental alternative.
+
+    **Common wrong answer:** "Rewrites fail because the new team is weaker." The failure is structural (freeze, moving target, one cut-over), not about people.
+
 ??? question "Q4. What is a bounded context?"
     **Answer:** A boundary within which a domain model and its terms have one consistent meaning. "Order" in sales and in fulfilment may be different models; each context owns its own. Bounded contexts are natural service candidates.
+
+    **Interviewer listens for:** one model per context, same word with different meanings, context owns its data, maps to team and service boundaries.
+
+    **Common wrong answer:** "A bounded context is a microservice" or "one per database table." It is a language and model boundary; one context can hold several services.
 
 ### Intermediate
 
 ??? question "Q5. Explain branch by abstraction."
     **Answer:** Introduce an abstraction (interface) around the component to replace, make all callers use it, add a new implementation (e.g. calling the new service), switch between implementations with a toggle, then delete the old implementation. It allows migration from deep inside the code without long-lived branches.
 
+    **Interviewer listens for:** abstraction first, toggle between implementations, trunk-based (no long-lived branch), delete old path at the end.
+
+    **Common wrong answer:** Confusing it with a feature branch in Git. The "branch" is in the code, behind an interface.
+
 ??? question "Q6. What is a parallel run and when do you use it?"
     **Answer:** Execute both old and new implementations for the same input, return the old result, and record mismatches. Use it for high-risk logic (pricing, eligibility, claims) to prove the new implementation with real traffic before switching. Avoid side effects in the shadow path.
+
+    **Interviewer listens for:** old result is served, new result only compared, mismatch metrics, no side effects in the shadow path.
+
+    **Common wrong answer:** Running both paths and letting both write to the database or send emails, which doubles side effects.
 
 ??? question "Q7. How do you migrate data out of a shared monolith database?"
     **Answer:** Stop cross-boundary joins and FKs first, split into a separate schema, then a separate database. Choose one writer at a time. Keep copies in sync with CDC or events, not dual writes. Replace joins with API calls or replicated read models; move reporting to an event-fed store.
 
+    **Interviewer listens for:** remove cross-boundary joins/FKs first, schema split before database split, single writer, CDC instead of dual writes, reporting moved out.
+
+    **Common wrong answer:** "Copy the tables and write to both databases from the app." Dual writes drift on partial failure.
+
 ??? question "Q8. How do you choose the first service to extract?"
     **Answer:** Balance value and risk: a capability that changes often or hurts, with few inbound dependencies and little shared data, that can be done in weeks. Use it to build the platform (pipeline, observability, service auth).
+
+    **Interviewer listens for:** value vs risk, few inbound dependencies, low data coupling, short delivery, builds the platform for later services.
+
+    **Common wrong answer:** "Start with the core domain (billing, orders) because it matters most." The most coupled core is the riskiest first extraction.
 
 ### Senior
 
 ??? question "Q9. What is transitional architecture and why accept it?"
     **Answer:** Temporary components that let old and new coexist (proxies, CDC pipelines, anti-corruption layers, toggles). It costs effort and is thrown away, but it makes each step reversible and delivers value earlier. Plan its removal.
 
+    **Interviewer listens for:** temporary scaffolding is deliberate, it buys reversibility and early value, and its removal is planned.
+
+    **Common wrong answer:** "Any code we will throw away is waste." Without it every step becomes a big-bang cut-over.
+
 ??? question "Q10. What is an anti-corruption layer?"
     **Answer:** A translation layer between the new service's model and the legacy model, so legacy concepts and quirks don't leak into the new design. Often a small adapter service or module that maps between the two.
+
+    **Interviewer listens for:** translation at the boundary, legacy model kept out of the new domain, small adapter, can be removed once legacy is gone.
+
+    **Common wrong answer:** Treating it as an API gateway. An ACL translates models; a gateway routes and secures traffic.
 
 ??? question "Q11. How do you know the migration is going well?"
     **Answer:** Traffic share on new services, legacy code paths deleted, deployment frequency and lead time for the extracted areas, incident rate, and parallel-run mismatch rates. Not "number of services created".
 
+    **Interviewer listens for:** outcome metrics (legacy traffic share, deleted code, lead time, incidents), not output metrics.
+
+    **Common wrong answer:** "We have extracted 15 services." Service count says nothing about risk or value delivered.
+
 ??? question "Q12. How do you handle authentication during a migration?"
     **Answer:** Both monolith and new services must trust the same identity. Usually a central IdP issuing tokens both validate, or the gateway validating and forwarding identity. Session-based monoliths often need a bridge (gateway exchanges session for token) during transition.
+
+    **Interviewer listens for:** one shared IdP, tokens validated by both sides, gateway session-to-token bridge during the transition.
+
+    **Common wrong answer:** Giving each new service its own login or user store, which splits identity and breaks single sign-on.
 
 ### Scenario-based
 
 ??? question "Q13. You must migrate prescription eligibility rules out of a monolith used by 750K members. Plan it."
     **Answer:** Wrap the rules behind an interface (branch by abstraction). Build the new service reading replicated data via CDC. Parallel run against production traffic and track mismatches by rule. Fix differences, then switch a small percentage, monitor, ramp up, keep a fast toggle back. Delete the legacy rules after a stable period.
 
+    **Interviewer listens for:** branch by abstraction, CDC-fed data, parallel run with per-rule mismatch tracking, percentage ramp, instant toggle back, legacy deletion.
+
+    **Common wrong answer:** Switching all 750K members on a date after functional testing alone. Eligibility rules hide edge cases that only real traffic exposes.
+
 ??? question "Q14. Two services you extracted keep needing to change together and call each other synchronously. What now?"
     **Answer:** The boundary is wrong. Merge them, or re-cut the boundary along the capability that changes together. Splitting further rarely helps; services that always change together belong together.
 
+    **Interviewer listens for:** recognises a wrong boundary (distributed monolith), willing to merge, re-cut along change patterns.
+
+    **Common wrong answer:** Adding a shared library or more sync calls between them. That cements the coupling.
+
 ??? question "Q15. The new service needs data that only the monolith writes. How do you get it?"
     **Answer:** Short term: call the monolith's API (accept the coupling) or consume CDC events from its tables into a local read model. Long term: move ownership of that data into the service that writes it most, and make the monolith read through the service.
+
+    **Interviewer listens for:** short-term API or CDC read model, long-term move data ownership, avoid shared-database reads.
+
+    **Common wrong answer:** "Just read the monolith's tables directly." That couples the new service to the old schema and blocks both from changing.
 
 ## Cheat sheet
 

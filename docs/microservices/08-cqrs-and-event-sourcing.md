@@ -227,49 +227,99 @@ Not ★. Position it through the read-model and audit needs in the projects.
 ??? question "Q1. What is CQRS?"
     **Answer:** Separating the model that handles commands (writes, enforcing rules) from the models that serve queries (reads, shaped for consumers), often with separate stores synchronised via events.
 
+    **Interviewer listens for:** separate write and read models, read models shaped for queries, often synced by events.
+
+    **Common wrong answer:** "CQRS means two databases." It means two models; they can share a database.
+
 ??? question "Q2. What is event sourcing?"
     **Answer:** Persisting state as an append-only sequence of domain events; current state is derived by replaying them. Provides full history and audit.
+
+    **Interviewer listens for:** append-only events as the source of truth, state by replay, history and audit.
+
+    **Common wrong answer:** "Event sourcing is publishing events to Kafka." Publishing events is event-driven architecture; event sourcing is about how you store state.
 
 ??? question "Q3. Are CQRS and event sourcing the same thing?"
     **Answer:** No. CQRS can use a normal database on the write side. Event sourcing usually needs CQRS because querying event streams directly is impractical.
 
     **Common wrong answer:** treating them as one pattern.
 
+    **Interviewer listens for:** independent patterns, ES usually needs CQRS, CQRS without ES is common.
+
 ### Intermediate
 
 ??? question "Q4. What is a projection?"
     **Answer:** A component that consumes events and builds a read model (table, document, index). It should be idempotent and rebuildable by replaying events.
 
+    **Interviewer listens for:** event consumer building a read model, idempotent, rebuildable by replay.
+
+    **Common wrong answer:** "A projection is a database view." It is code that consumes events and keeps its own store.
+
 ??? question "Q5. Why do you need snapshots?"
     **Answer:** Aggregates with long histories become slow to rehydrate. A snapshot stores state at a version; loading = snapshot + events after it. Snapshots are an optimisation, not the source of truth.
+
+    **Interviewer listens for:** rehydration cost, snapshot + later events, optimisation not truth.
+
+    **Common wrong answer:** "Snapshots replace old events, so we can delete them." Then you lose history and the ability to rebuild.
 
 ??? question "Q6. How do you handle concurrency in an event store?"
     **Answer:** Optimistic concurrency: append with an expected stream version; if another writer appended first, the append fails and the command is retried or rejected.
 
+    **Interviewer listens for:** expected-version append, optimistic concurrency, retry or reject.
+
+    **Common wrong answer:** "Use a database lock on the aggregate." Event stores are designed for optimistic version checks.
+
 ??? question "Q7. How do you deal with eventual consistency in the UI?"
     **Answer:** Return the result/new version from the command, read-your-own-writes from the write side for the acting user, show pending states, or poll/push until the read model catches up.
+
+    **Interviewer listens for:** return version, read-your-writes, pending state, poll/push until read model catches up.
+
+    **Common wrong answer:** "Make the projection synchronous." That removes the main benefit and couples write latency to every read model.
 
 ### Senior
 
 ??? question "Q8. How do you version events?"
     **Answer:** Prefer additive, backward-compatible changes with tolerant readers; upcast old versions when reading; introduce new event types for changed meaning; never change the meaning of stored events; validate with schemas.
 
+    **Interviewer listens for:** additive changes, tolerant reader, upcasting, new types for new meaning, never rewrite history.
+
+    **Common wrong answer:** "Migrate the old events in place." Stored events are immutable facts.
+
 ??? question "Q9. How do you handle GDPR/HIPAA deletion with immutable events?"
     **Answer:** Keep personal data out of events (store references), or encrypt per-subject data with a key you delete on request (crypto-shredding). Projections can be rebuilt without the data.
+
+    **Interviewer listens for:** no PII in events, crypto-shredding, rebuilt projections.
+
+    **Common wrong answer:** "Events are immutable, so we cannot delete." The law still applies; design for it up front.
 
 ??? question "Q10. When should you not use event sourcing?"
     **Answer:** Simple CRUD domains, teams without experience and no strong need for history, requirements for immediate consistency on all reads, or as a system-wide default.
 
+    **Interviewer listens for:** CRUD domains, team inexperience, strong-read needs, not a system-wide default.
+
+    **Common wrong answer:** "Use it everywhere for the audit log." A simple audit table gives history without the complexity.
+
 ??? question "Q11. Why is Kafka a poor primary event store?"
     **Answer:** No per-aggregate streams with expected-version append, partitioning is not per aggregate, and retention/compaction can drop history. It's excellent for distributing events from a proper store.
+
+    **Interviewer listens for:** no per-aggregate stream or expected-version append, retention/compaction, good for distribution.
+
+    **Common wrong answer:** "Kafka keeps data forever, so it is a database." Retention settings and topic design make it a poor aggregate store.
 
 ### Scenario-based
 
 ??? question "Q12. A member dashboard calls 4 services and is slow. How would CQRS help?"
     **Answer:** Build a dashboard read model per member, updated by consuming events from the four services (or CDC), stored as one document. The query becomes one key lookup; staleness is seconds; rebuild from events when the model changes.
 
+    **Interviewer listens for:** pre-joined per-member read model, events or CDC from four sources, single lookup, accepted staleness.
+
+    **Common wrong answer:** "Call the four services in parallel." That helps latency but keeps four runtime dependencies on every page load.
+
 ??? question "Q13. Auditors want to know the state of each claim on any date and who changed it. Design?"
     **Answer:** Event-source the claim aggregate: each change is an event with actor, timestamp and reason; state on a date = replay up to that date; projections for current status and reports; immutable storage with retention policy.
+
+    **Interviewer listens for:** events with actor/time/reason, temporal replay, projections, immutable retention.
+
+    **Common wrong answer:** Adding `updated_by` and `updated_at` columns, which only keep the latest change.
 
 ## Cheat sheet
 

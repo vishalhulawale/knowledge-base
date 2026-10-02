@@ -182,10 +182,14 @@ Event envelope worth standardising across services:
 
     **Interviewer listens for:** Naming in past tense, ownership (the event belongs to the producer, the command to the receiver).
 
+    **Common wrong answer:** "Events and commands are the same thing." Commands are requests that can be rejected; events are facts.
+
 ??? question "Q2. What are the benefits and costs of event-driven architecture?"
     **Answer:** Benefits: temporal decoupling, independent scaling, easy fan-out, resilience to downstream outages, replay and audit. Costs: eventual consistency, duplicates and ordering, harder debugging, schema governance, operational overhead of a broker.
 
     **Interviewer listens for:** That you name the costs unprompted and tie each one to its mitigation (idempotency, partition keys, outbox, tracing, schema registry). A Lead who lists only benefits sounds like they haven't run it in production.
+
+    **Common wrong answer:** "Event-driven is always more scalable and has no downside."
 
 ??? question "Q3. How is Kafka different from a traditional message queue?"
     **Answer:** Kafka is a partitioned, replicated, append-only **log**. Messages aren't deleted on consume. They're retained by time or size, and consumers track their own offsets, so many groups can read independently and rewind. Ordering is per partition. Traditional queues (RabbitMQ classic/quorum queues, SQS) delete on acknowledge, do per-message acks and redelivery (and, in RabbitMQ, broker-side routing via exchanges), and can't replay what was already acked. Consequences worth saying out loud: Kafka's parallelism within a group is bounded by partitions, the broker is "dumb" and the consumer is "smart" (it owns its position), and a slow record blocks its partition. The line is blurring from both sides: RabbitMQ Streams are a replayable log, and Kafka share groups (KIP-932, production-ready in Kafka 4.2) give per-record acks and competing consumers on one partition.
@@ -199,6 +203,10 @@ Event envelope worth standardising across services:
 ??? question "Q4. Choreography vs orchestration: when would you pick each?"
     **Answer:** Choreography for simple flows with few steps and independent reactors, because it keeps coupling minimal. Orchestration for long-running, multi-step processes needing compensation, timeouts and visibility (a payment saga, onboarding). Many systems mix them: orchestrate within a domain, choreograph between domains.
 
+    **Interviewer listens for:** flow complexity, visibility, coupling, failure handling.
+
+    **Common wrong answer:** "Choreography is always better because there is no central point."
+
 ??? question "Q5. What is the dual-write problem and how do you solve it?"
     **Answer:** Writing to a DB and publishing to a broker are two separate systems with no shared transaction, so one can succeed while the other fails, and you get lost or phantom events. Solutions: the **transactional outbox** (write the event to an outbox table in the same DB transaction, then relay via a poller or CDC like Debezium), or **listen-to-yourself** (publish first, update the DB from your own consumer). Kafka transactions don't span your DB, and XA/2PC across a DB and Kafka isn't a real option (Kafka doesn't offer an XA resource, and 2PC hurts availability anyway).
 
@@ -210,6 +218,10 @@ Event envelope worth standardising across services:
 
 ??? question "Q6. Thin events vs fat events?"
     **Answer:** Thin (notification) events are small and avoid stale data, but consumers call back, which adds coupling and load. Fat (event-carried state transfer) events let consumers be autonomous, but the schema is bigger, may carry sensitive data (PHI!) and needs versioning. Choose per use case. In healthcare, minimise PHI in events and use references plus authorised lookups.
+
+    **Interviewer listens for:** callback coupling vs data duplication and schema size.
+
+    **Common wrong answer:** "Always send the full entity."
 
 ??? question "Q6a. Is event-driven architecture the same as event sourcing? Where does CQRS fit?"
     **Answer:** No. **EDA** is about how services *communicate*: they publish facts and others react. **Event sourcing** is about how one service *stores* its state: the append-only event stream is the source of truth and current state is derived by replaying it (plus snapshots). **CQRS** splits the write model from one or more read models, which are often built by consuming events. They combine well but are independent: most event-driven systems store current state in a normal database and publish events via an outbox, with no event sourcing at all. Fowler lists four distinct patterns that all get called "event-driven": event notification, event-carried state transfer, event sourcing and CQRS.
@@ -223,16 +235,30 @@ Event envelope worth standardising across services:
 ??? question "Q7. How do you handle eventual consistency in the user experience?"
     **Answer:** Model explicit intermediate states (`PENDING`), return `202 Accepted` with a status resource, push updates (WebSocket/SSE) or poll, read-your-own-writes from the write model, and use compensating actions for failures. Set SLAs for convergence and monitor lag.
 
+    **Interviewer listens for:** explicit pending states, 202 + status, push or poll, read-your-own-writes.
+
+    **Common wrong answer:** "Make everything synchronous to avoid it."
+
 ??? question "Q8. How do you debug a business flow that spans 6 services via events?"
     **Answer:** A correlation ID in every event header, propagated by OpenTelemetry (trace context in Kafka headers). Centralised logging keyed by correlationId and aggregateId. Consumer lag dashboards. An event catalogue with owners. Optionally a "process view" service that builds a timeline per business entity from the events.
+
+    **Interviewer listens for:** correlation/trace id in headers, centralised logs, tracing across Kafka.
+
+    **Common wrong answer:** "Grep each service's logs by timestamp."
 
 ??? question "Q9. How would you version events without breaking consumers?"
     **Answer:** Schema registry with a compatibility mode enforced at registration time. Confluent's default is `BACKWARD`: the new schema can read data written with the previous one, which allows adding optional fields (with defaults) and removing fields, and means you **upgrade consumers first**. `FORWARD` is the mirror image (add fields, remove optional fields, upgrade producers first). `FULL` allows only adding/removing optional fields and lets either side deploy first. The `_TRANSITIVE` variants check against all earlier versions, not just the latest, which matters when you replay old data from the log. In practice: only add optional fields with defaults, never rename a field or change its type, and never reuse a Protobuf field number. A breaking change goes to a new event type or topic (`orders.v2`), with dual-publishing during migration. Include `eventVersion` in the envelope.
 
     **Interviewer listens for:** Which side deploys first under each mode, and that Kafka's replayability means old events live on, so new consumers must still read old schemas.
 
+    **Common wrong answer:** "Add a version number to the topic name for every change."
+
 ??? question "Q10. When is event-driven architecture the wrong choice?"
     **Answer:** When you need synchronous answers, strict cross-service consistency, very simple CRUD, or the team lacks the operational maturity for brokers, tracing and schema governance. Also when ordering and exactly-once requirements are so strict that a single database transaction is simpler.
+
+    **Interviewer listens for:** sync needs, strict consistency, simple CRUD, operational maturity.
+
+    **Common wrong answer:** "Never; events are always better."
 
 ??? question "Q10a. Events arrive duplicated or out of order. How do you make consumers correct anyway?"
     **Answer:** Assume **at-least-once**: duplicates come from producer retries, outbox relay retries, and consumer rebalances or crashes between processing and offset commit. Make the handler **idempotent**: either naturally (upsert, "set status to X") or with a dedupe table keyed by `eventId`, written in the same DB transaction as the business change. For **ordering**, Kafka only orders within a partition, so key by the aggregate ID so all events for one entity land on one partition. That still isn't enough across topics, after a repartition, or with retry topics, so carry a per-aggregate **version/sequence number** and have the consumer ignore anything older than what it has already applied (or park events that arrive ahead of a gap). On the producer keep `enable.idempotence=true` (the default since Kafka 3.0), which prevents duplicates and reordering caused by producer retries within a partition.
@@ -248,8 +274,16 @@ Event envelope worth standardising across services:
 
     Points a Lead should raise: **PHI minimisation** (the event carries IDs and a status code, not drug names; the notification text is generic or built after an authorised lookup). **Ordering** per prescription via the key, plus a version check so a late "Processing" never overwrites "Shipped". **Idempotency** at the send step, because a duplicate SMS is user-visible (dedupe on `eventId` + channel before calling the provider). **Backpressure**: when the SMS provider throttles, pause the consumer or move the record to a delayed retry topic instead of blocking the partition, and don't let one channel's outage hold up the others (a topic or consumer group per channel). **Staleness**: drop or collapse notifications that are obsolete by the time they're retried. **Capacity**: 750K users is a modest event rate, so size partitions for consumer parallelism and future growth rather than raw throughput. **Observability**: consumer lag, DLQ depth and end-to-end delivery latency with alerts.
 
+    **Interviewer listens for:** outbox, dedupe by eventId, preferences, rate limits, retries and DLQ, PHI-free payloads.
+
+    **Common wrong answer:** "Send an SMS directly from the Rx service after each update."
+
 ??? question "Q12. A consumer team asks you to add a field. Another team is still on the old schema. How do you proceed?"
     **Answer:** Add an **optional field with a default**. That change is both backward and forward compatible (`FULL`), so deployment order doesn't matter: old consumers ignore the new field, and new consumers reading old events get the default. Register the schema (CI should run the registry compatibility check before merge), deploy the producer, and let consumers adopt at their own pace. Be precise if pushed: under plain `BACKWARD` the formal rule is consumers first, and it is the optional-with-default shape that makes producer-first safe here. Communicate via the event catalogue. If the change is breaking, create a new version and topic, publish to both for a migration window (ideally both from the same outbox row, so it isn't a dual write), and retire the old topic once consumer-group lag on it shows nobody is reading.
+
+    **Interviewer listens for:** optional field with default, compatibility modes, independent deployment order.
+
+    **Common wrong answer:** "Create a new topic for the new schema."
 
 ## Cheat sheet
 

@@ -267,7 +267,7 @@ Plus: its own database and migrations, its own pipeline, dashboards, alerts and 
 - **Segment (2018):** started with one service per integration destination. With ~140 nearly identical services, shared-library upgrades meant touching every service, queues per destination behaved badly under one destination's outage, and the small team drowned in operations. They merged destinations into one service (and built Centrifuge for delivery), cutting test time and operational load dramatically.
 - **Prime Video (2023):** a monitoring tool built as distributed serverless components hit cost and scale limits from orchestration transitions and passing video frames through S3. Running the components in one process (scaled by cloning the service with different detector subsets) cut infrastructure cost by over 90%. Note this was one tool, not Prime Video as a whole.
 - **Shopify:** kept one Rails codebase and invested in componentization with enforced boundaries (Packwerk), getting modularity without distributed-systems cost.
-- **Healthcare and banking:** compliance boundaries (PHI under HIPAA, card data under PCI DSS) are a legitimate reason to isolate a capability into its own service with its own data store, access controls and audit, which shrinks the scope auditors must examine. Strong consistency needs (ledgers, payments) push towards keeping the core transactional model together and integrating via events at the edges.
+- **Healthcare and banking:** compliance boundaries (PHI under HIPAA, card data under PCI DSS) are a legitimate reason to isolate a capability. Give it its own service, data store, access controls and audit trail. That also shrinks the scope auditors must examine. Strong consistency needs (ledgers, payments) push towards keeping the core transactional model together and integrating via events at the edges.
 
 ## Trade-offs & production gotchas
 
@@ -313,7 +313,7 @@ Not a ★ subtopic, but the resume touches it directly in two places. Position i
 ### Fundamentals
 
 ??? question "Q1. What is a microservice architecture?"
-    **Answer:** An approach where an application is built as a suite of small services, each running in its own process, owning its data, organised around a business capability, communicating over lightweight mechanisms (HTTP, messaging) and independently deployable by the team that owns it.
+    **Answer:** An application built as a set of small services. Each one runs in its own process, owns its data and is organised around one business capability. Services talk over lightweight mechanisms (HTTP, messaging), and the owning team can deploy each one independently.
 
     **Interviewer listens for:** independent deployability, business capability, data ownership.
 
@@ -361,10 +361,14 @@ Not a ★ subtopic, but the resume touches it directly in two places. Position i
 
     **Interviewer listens for:** team ownership per service.
 
+    **Common wrong answer:** "Conway's law is about code style." It links system structure to how teams communicate.
+
 ??? question "Q8. What prerequisites should be in place before adopting microservices?"
     **Answer:** Fowler's list: rapid provisioning, basic monitoring, rapid automated deployment, and a DevOps culture. In practice also: centralised logging, distributed tracing, service-to-service auth, a contract-testing approach, and on-call ownership per team.
 
     **Interviewer listens for:** platform and operational maturity before the split.
+
+    **Common wrong answer:** "Kubernetes is the only prerequisite." Without CI/CD, observability and team ownership it fails.
 
 ??? question "Q9. How should services be sized?"
     **Answer:** By business capability or bounded context, owned by one team, changeable and deployable independently, with high cohesion inside and low coupling outside. Things that always change together belong together.
@@ -380,6 +384,8 @@ Not a ★ subtopic, but the resume touches it directly in two places. Position i
 
     **Interviewer listens for:** concrete forces and the modular-monolith default.
 
+    **Common wrong answer:** "Microservices are always the modern choice."
+
 ??? question "Q11. Segment and Prime Video moved back towards monoliths. What's the lesson?"
     **Answer:** Architecture must fit the forces. Segment had many near-identical services and a small team, so the operational cost outweighed the isolation benefit. Prime Video's tool moved large data (video frames) between distributed components through S3 and an orchestrator, so network and orchestration cost dominated; one process removed it. Neither is "microservices failed"; they're "wrong granularity for this workload".
 
@@ -392,15 +398,21 @@ Not a ★ subtopic, but the resume touches it directly in two places. Position i
 
     **Interviewer listens for:** evidence-based extraction and a migration path.
 
+    **Common wrong answer:** "Extract services by layer (UI, business, data)." That creates chatty, coupled services.
+
 ??? question "Q13. How does data consistency change when you split a monolith?"
     **Answer:** You lose ACID across the split. Cross-service workflows become sagas with compensating actions; reliable event publishing needs an outbox; consumers must be idempotent; reads across services need API composition or replicated read models (CQRS). Business stakeholders must accept eventual consistency where it applies.
 
     **Interviewer listens for:** saga, outbox, idempotency, and talking to the business about consistency.
 
+    **Common wrong answer:** "Use distributed transactions (2PC) across services."
+
 ??? question "Q14. What are micro-frontends and when are they worth it?"
     **Answer:** The same idea on the frontend: independently built and deployed UI parts owned by different teams, composed in a shell (module federation, iframes, web components, server composition). Worth it with several teams working on one large UI needing independent releases; costs include duplicated dependencies, consistent UX and shared state across parts.
 
     **Interviewer listens for:** team-driven justification and the costs.
+
+    **Common wrong answer:** "Use micro-frontends for any app with several pages."
 
 ### Scenario-based
 
@@ -409,20 +421,28 @@ Not a ★ subtopic, but the resume touches it directly in two places. Position i
 
     **Interviewer listens for:** a pragmatic recommendation plus a path to change.
 
+    **Common wrong answer:** "Start with microservices so you do not have to migrate later."
+
 ??? question "Q16. Your 12 services must always be deployed together in a specific order. What's wrong and how do you fix it?"
     **Answer:** It's a distributed monolith. Find the coupling: shared DB, shared domain library, breaking API changes without versioning, synchronous chains. Fix by backward-compatible API changes (expand/contract), consumer-driven contract tests, owning data per service, replacing sync chains with events, and merging services that always change together.
 
     **Interviewer listens for:** diagnosis before remedy, and willingness to merge services.
 
+    **Common wrong answer:** "Write a deployment script that enforces the order." That automates the coupling instead of removing it.
+
 ??? question "Q17. In a healthcare platform, which part would you split out first and why?"
-    **Answer:** A capability with a real force: e.g. the component handling PHI-heavy records needing strict access control and audit (compliance boundary), or an integration layer whose upstreams change on their own schedules, or a high-traffic read path with a different scaling profile. Justify with the force, and keep strongly consistent workflows together.
+    **Answer:** A capability with a real force behind it. Examples: the component handling PHI-heavy records, which needs strict access control and audit (a compliance boundary); an integration layer whose upstreams change on their own schedules; or a high-traffic read path with a different scaling profile. Justify with the force, and keep strongly consistent workflows together.
 
     **Interviewer listens for:** force-based reasoning tied to the domain.
+
+    **Common wrong answer:** "Split the biggest module first." Size alone is not a reason.
 
 ??? question "Q18. The team says the monolith is slow and wants microservices. How do you respond?"
     **Answer:** Measure first. Most slowness is a database query, missing index, N+1, or a hot lock, which a split doesn't fix and can worsen with network hops. If it's a release-speed problem, improve modularity, tests and pipeline. Only if a specific component's scaling or team independence is the issue, extract that one.
 
     **Interviewer listens for:** data before decisions.
+
+    **Common wrong answer:** "Yes, microservices will make it faster." Network hops usually make latency worse.
 
 ## Cheat sheet
 

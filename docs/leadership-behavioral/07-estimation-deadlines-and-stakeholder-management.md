@@ -219,25 +219,39 @@ Total ≈ 19.5 days effort (σ ≈ sqrt(Σσᵢ²) ≈ 1.8 days) + review/integr
 
     **Common wrong answer:** "wait for them".
 
+??? question "Q7. How do you handle scope creep in the middle of a sprint or release?"
+    **Answer:** Make the trade-off visible instead of absorbing it quietly. Size the new request, show what it would push out, and let the product owner choose: swap something out, move the date, or schedule it next. Keep an agreed buffer for genuinely urgent items, and log changes so retrospectives show the real cost of churn. *[confirm]*
+
+    **Interviewer listens for:** visible trade-offs, product owner decides, a buffer for urgent items, tracking churn.
+
+    **Common wrong answer:** "We just work harder to fit it in." Silent overtime hides the problem and makes estimates look wrong.
+
 ### Senior
 
-??? question "Q7. Why not just add more engineers to catch up?"
+??? question "Q8. Why not just add more engineers to catch up?"
     **Answer:** Brooks's law: adding people late slows things down at first (onboarding, communication paths grow as n(n−1)/2). It helps only if it's early and the work splits into independent streams with good onboarding. Prefer scope adjustment first.
 
     **Interviewer listens for:** Brooks's law and its nuance.
 
     **Common wrong answer:** "more people = faster".
 
-??? question "Q8. How do you build stakeholders' trust in your estimates over time?"
+??? question "Q9. How do you build stakeholders' trust in your estimates over time?"
     **Answer:** Consistent ranges with stated confidence, tracking forecast vs actual and sharing it, raising risks early, delivering in small increments with demos, and being honest about misses and what changed. Trust comes from transparency, not from always being right.
 
     **Interviewer listens for:** a calibration habit.
 
     **Common wrong answer:** "padding so we're never late".
 
+??? question "Q10. How do you say no to a senior stakeholder?"
+    **Answer:** Say "not this way" or "not now" rather than a flat no. Start from their goal, explain the constraint or risk in their terms (date, cost, compliance, reliability), and offer options: a smaller version, a later date, or a different approach. Put the decision and its trade-offs in writing. If it is still contested, escalate together with both options laid out, not around them. *[confirm]*
+
+    **Interviewer listens for:** anchoring on their goal, risk in business terms, alternatives, written trade-offs, joint escalation.
+
+    **Common wrong answer:** "I just do what senior people ask." Or the opposite: refusing without alternatives.
+
 ### Scenario-based
 
-??? question "Q9. Two weeks before a release, a critical upstream API changes its contract. What do you do?"
+??? question "Q11. Two weeks before a release, a critical upstream API changes its contract. What do you do?"
     **Answer:**
     1. Assess the impact quickly (contract tests should catch it).
     2. Talk to the upstream team: can they version or keep backward compatibility, and what's the timeline?
@@ -249,7 +263,7 @@ Total ≈ 19.5 days effort (σ ≈ sqrt(Σσᵢ²) ≈ 1.8 days) + review/integr
 
     **Common wrong answer:** "work overtime to adapt everything silently".
 
-??? question "Q10. Your sprint is constantly disrupted by production support. How do you plan?"
+??? question "Q12. Your sprint is constantly disrupted by production support. How do you plan?"
     **Answer:** Measure unplanned work over several sprints and reserve capacity for it (e.g. 20%). Run a rotating support duty so the rest stay focused. Fix root causes of repeat incidents (bugs, alert noise) as planned work. Make it visible to stakeholders when support load affects roadmap dates.
 
     **Interviewer listens for:** data-driven capacity and root-cause fixes.

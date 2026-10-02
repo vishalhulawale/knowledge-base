@@ -408,15 +408,29 @@ In a new system, prefer a real authorization server (Spring Authorization Server
 
     **Interviewer listens for:** `aud` as protection against replay to another service. `jti` used for revocation and replay detection. Seconds, not milliseconds.
 
+    **Common wrong answer:** "aud is the user's audience group." It names the service the token is meant for.
+
 ??? question "Q5. Output prediction: an attacker decodes the payload, changes `\"role\":\"user\"` to `\"role\":\"admin\"`, re-encodes it and keeps the old signature. What happens?"
     **Answer:** Verification fails and the resource server returns 401 with `WWW-Authenticate: Bearer error="invalid_token"`. The signature was computed over the original payload bytes, and the attacker cannot produce a new valid signature without the key. This holds only if the server really verifies. A service that merely decodes the payload would accept the change.
 
     **Interviewer listens for:** 401, not 403. The distinction between decoding and verifying.
 
+    **Common wrong answer:** "The JWT is encrypted, so the attacker cannot change it." It is signed, not encrypted; anyone can read it.
+
 ### Intermediate
 
 ??? question "Q6. Walk me through everything a resource server must validate."
-    **Answer:** In order: (1) the token parses as a JWS. (2) The algorithm is one the server has configured, never `none` and never chosen by the token. (3) The key is picked by `kid` from a trusted key set and the signature verifies. (4) `iss` equals the expected issuer exactly. (5) `aud` contains this API. (6) The current time is before `exp` and not before `nbf`, with a small skew. (7) Optionally the token type and a revocation check. Only then are claims mapped to authorities, and authorization rules decide between 200 and 403.
+    **Answer:** In order:
+
+    1. The token parses as a JWS.
+    2. The algorithm is one the server has configured, never `none` and never chosen by the token.
+    3. The key is picked by `kid` from a trusted key set and the signature verifies.
+    4. `iss` equals the expected issuer exactly.
+    5. `aud` contains this API.
+    6. The current time is before `exp` and not before `nbf`, with a small skew.
+    7. Optionally the token type and a revocation check.
+
+    Only then are claims mapped to authorities, and authorization rules decide between 200 and 403.
 
     **Interviewer listens for:** Algorithm pinning and audience. Order: nothing trusted before the signature check. 401 for invalid token versus 403 for insufficient scope.
 
@@ -427,10 +441,14 @@ In a new system, prefer a real authorization server (Spring Authorization Server
 
     **Interviewer listens for:** Knowing the defaults instead of assuming. `issuer-uri` versus `jwk-set-uri`. `JwtAuthenticationConverter` for custom role claims.
 
+    **Common wrong answer:** "Spring validates audience automatically." You must add an audience validator.
+
 ??? question "Q8. Explain the `alg: none` and the RS256-to-HS256 confusion attacks."
     **Answer:** In `alg: none`, the attacker sets the header to say the token is unsigned and removes the signature. A library that honours the header accepts it. In algorithm confusion, the server expects RS256 and holds an RSA public key. The attacker changes the header to HS256 and signs the token with HMAC, using the **public key bytes as the secret**. A library with a generic `verify(token, key)` call reads HS256 from the header, uses the public key as an HMAC secret, and the check passes. The public key is public, so anyone can do this. The fix is the same for both: the verifier fixes the accepted algorithms and the key type in its own configuration and ignores what the token asks for.
 
     **Interviewer listens for:** The root cause, which is trusting an attacker-controlled header. RFC 8725. That Spring's decoder is built for a specific algorithm set.
+
+    **Common wrong answer:** "Modern libraries are immune, so it does not matter." Pinning the algorithm is still required.
 
 ??? question "Q9. What is a JWKS endpoint and how does `kid` enable key rotation?"
     **Answer:** JWKS is a JSON document listing the issuer's current public keys, each with a `kid`. The token header carries the `kid` of the signing key. The verifier caches the set and selects the key by `kid`. To rotate, the issuer adds the new key to the set, later starts signing with it, and removes the old key once all tokens signed with it have expired. A verifier that sees an unknown `kid` refetches the set, so no deployment is needed.
@@ -444,10 +462,14 @@ In a new system, prefer a real authorization server (Spring Authorization Server
 
     **Interviewer listens for:** Refresh is the revocation checkpoint. Refresh tokens are usually opaque. Reuse detection. Grant details are in [OAuth2 roles & grant types](05-oauth2-roles-and-grant-types.md).
 
+    **Common wrong answer:** "The refresh token is just a longer-lived access token sent to APIs." It goes only to the authorization server.
+
 ??? question "Q11. Gotcha: a service returns 401 with \"Jwt used before\" or \"Jwt expired\" for tokens that were issued one second ago. What is wrong?"
     **Answer:** Clock drift between the issuer and the verifier. If the verifier's clock is behind, `nbf` appears to be in the future (Spring's `JwtTimestampValidator` checks `exp` and `nbf`, not `iat`, though other libraries also reject a future `iat`). If it is ahead, `exp` appears to have passed, which hurts most with very short TTLs. Spring allows 60 seconds of skew by default, so the drift is larger than that or the skew was set to zero. Fix time synchronisation on the hosts. Also check that the issuer writes seconds, not milliseconds, into the time claims.
 
     **Interviewer listens for:** Clock skew as a concept, the default tolerance, and fixing the cause instead of widening the tolerance to minutes.
+
+    **Common wrong answer:** "The IdP issued bad tokens." Clock skew between machines is the usual cause.
 
 ### Senior
 
@@ -463,20 +485,28 @@ In a new system, prefer a real authorization server (Spring Authorization Server
 
     **Interviewer listens for:** A decision based on revocation needs, trust boundary and throughput. The hybrid pattern. Caching introspection results trades back some revocation delay.
 
+    **Common wrong answer:** "JWTs are always better because they are stateless." Revocation and data exposure are the trade-offs.
+
 ??? question "Q14. How do you store and rotate the signing key in production?"
     **Answer:** The private key lives in a KMS or HSM, not in a config file or a container image. Ideally the application calls a sign operation and never sees the key material. Each key has a `kid`. Rotation is scheduled and automated: generate the new key, publish its public half in JWKS, wait for verifier caches to refresh, switch signing, keep the old public key until the longest-lived token has expired, then remove it. There is also a tested emergency path that removes a key immediately. Verifiers must cache JWKS, refetch on unknown `kid`, and keep working from the cache if the IdP is briefly unreachable.
 
     **Interviewer listens for:** Separation of signing from application code. Overlap window. Emergency rotation as a global logout. Verifier-side caching and resilience.
+
+    **Common wrong answer:** Keeping the private key in application.yml or a Kubernetes Secret in plain form.
 
 ??? question "Q15. A bearer JWT is stolen. What limits the damage, and what would you add for a high-value API?"
     **Answer:** A bearer token works for whoever holds it, so the levers are: short lifetime, narrow audience and scopes so the token is useful in few places, refresh-token rotation with reuse detection to notice theft, and a denylist to cut it off. To make a stolen token useless, **sender-constrain** it: bind it to a client key with mTLS (RFC 8705) or DPoP (RFC 9449). The token then carries a `cnf` claim with a key thumbprint, and the resource server requires proof of possession of that key on each request. Prevention matters too: no tokens in URLs or logs, and careful browser storage.
 
     **Interviewer listens for:** Bearer versus proof-of-possession. `aud` and scope minimisation as containment. Detection as well as prevention.
 
+    **Common wrong answer:** "Use HTTPS and the token cannot be stolen." Tokens leak from logs, browsers and compromised hosts.
+
 ??? question "Q16. Roles are embedded in the JWT. An admin removes a user's role. When does it take effect, and how do you design for it?"
     **Answer:** With plain JWTs, when the current access token expires and the next one is issued, so up to one TTL. Options: keep the TTL short and accept that delay. Put only coarse scopes in the token and check fine-grained permissions against a permission service or cache at request time. Bump the user's token version on role change so existing tokens fail and the client refreshes. Or push a revocation event to services. Choose per operation: a stale read permission for five minutes is usually fine, a stale "approve payment" permission is not.
 
     **Interviewer listens for:** Token claims are a snapshot. Separating identity (in the token) from fast-changing authorization (looked up). Risk-based choice. See [Authentication vs authorization](02-authentication-vs-authorization-method-security.md).
+
+    **Common wrong answer:** "Immediately, because the token is checked on every request." The JWT still carries the old roles.
 
 ### Scenario-based
 
@@ -485,20 +515,28 @@ In a new system, prefer a real authorization server (Spring Authorization Server
 
     **Interviewer listens for:** Verifiers first, issuer second. A dual-acceptance window with metrics. Avoiding algorithm confusion during the overlap by keeping key types separate. Cleaning up the old secret, including git history.
 
+    **Common wrong answer:** Switching all services to RS256 in one release, which breaks callers holding HS256 tokens.
+
 ??? question "Q18. After the IdP rotated its signing key, about half of your pods return 401 for valid tokens. How do you diagnose and prevent it?"
     **Answer:** Half the pods points to per-pod state: some hold a stale JWKS cache. Check the `kid` in a failing token against the keys each pod has, and check whether pods can reach the JWKS URL (egress, proxy, DNS, TLS trust). Likely causes: a hardcoded public key or a custom cache that never refetches on unknown `kid`, the IdP signing with the new key before verifiers' caches could pick it up, or a network policy that blocked the refetch. Short-term fix: restart or refresh the affected pods. Prevention: use the library's JWKS source with refetch on unknown `kid`, ask the IdP team to publish keys ahead of use, alert on JWKS fetch failures, and test rotation in a lower environment.
 
     **Interviewer listens for:** Reasoning from the "half the pods" symptom. Knowledge of `kid` and cache behaviour. Process fix with the IdP team, not only a restart.
+
+    **Common wrong answer:** "The IdP is broken." Per-pod JWKS caches are stale.
 
 ??? question "Q19. A penetration test reports that a token issued for the `reports` service is accepted by the `payments` service. What is the bug and the fix?"
     **Answer:** `payments` does not validate the audience. Both services trust the same issuer, so signature, issuer and expiry all pass. This lets any service that receives a user's token, or any low-privilege client, replay it against a more sensitive API. Fix: the authorization server issues tokens with a specific `aud` per API (or per resource indicator), each resource server requires its own identifier in `aud`, and scopes are specific to the API. In Spring, set `spring.security.oauth2.resourceserver.jwt.audiences` or add a `JwtClaimValidator`. For calls between services, use token exchange to get a new token with the right audience rather than forwarding the original one. See [Service-to-service auth](09-service-to-service-auth.md).
 
     **Interviewer listens for:** Naming `aud` immediately. Knowing Spring does not enforce it by default. The confused-deputy risk of forwarding tokens.
 
+    **Common wrong answer:** "The tokens are signed, so this is fine." Signature does not say who the token was meant for.
+
 ??? question "Q20. Product asks for \"log out from all devices\" that takes effect at once, across 20 services, with JWT access tokens. Design it."
     **Answer:** On the authorization server, revoke all of the user's refresh tokens so no new access tokens can be issued. For the access tokens already out there, keep a per-user `revokedBefore` timestamp (or token version) in Redis. Each service's JWT validator compares the token's `iat` with that value and rejects older tokens. The entry needs to live only as long as the maximum access-token TTL. To avoid 20 services each calling Redis on every request, enforce the check at the gateway, or cache the value locally for a few seconds and push invalidations through a pub/sub or Kafka topic. State the trade-off: this is one small lookup per request and a short propagation delay if a local cache is used. If Redis is unavailable, fail closed for sensitive operations.
 
     **Interviewer listens for:** Refresh tokens and access tokens handled separately. Per-user marker instead of listing every `jti`. Bounded state through TTL. Where the check runs and what happens on store failure.
+
+    **Common wrong answer:** "Make access tokens valid for 1 minute." It helps, but you still need refresh revocation and a deny list.
 
 ## Cheat sheet
 

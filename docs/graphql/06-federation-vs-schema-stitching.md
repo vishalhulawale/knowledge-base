@@ -264,37 +264,44 @@ rover subgraph publish my-graph@prod --name prescriptions --schema ./schema.grap
 
     **Common wrong answer:** Mixing the two up, or saying the subgraph calls the other subgraph to get the required field.
 
+??? question "Q6. What are `@shareable` and `@override` in Federation 2, and when do you use them?"
+    **Answer:** `@shareable` lets more than one subgraph resolve the same field, for example a value type both teams can serve. The router may pick either, so the values must be identical. `@override(from: "members")` moves ownership of a field from one subgraph to another. With **progressive override** (`@override(from: "members", label: "percent(10)")`) the router sends a percentage of traffic to the new owner, which makes migrations gradual and reversible.
+
+    **Interviewer listens for:** shareable needs consistent values, override for ownership migration, progressive percentage rollout.
+
+    **Common wrong answer:** "Mark everything @shareable to avoid composition errors." That hides ownership problems and allows inconsistent data.
+
 ### Senior
 
-??? question "Q6. When would you choose a monolithic GraphQL aggregator over federation?"
+??? question "Q7. When would you choose a monolithic GraphQL aggregator over federation?"
     **Answer:** A single integration team, non-GraphQL upstreams owned by other organisations or legacy systems, a modest schema size, and a need for consistent cross-cutting logic (auth, caching, error mapping) in one place. In that situation federation adds a router, a registry and composition checks in CI, but there are no independent teams to benefit from them. Federation solves an organisational scaling problem more than a technical one. It pays off with many domain teams, a large graph and independent deploy cadence. The signals that tell me to revisit the decision: the aggregator team is a bottleneck for other teams' changes, releases are being coordinated across domains, or the schema is too large for one team to review.
 
     **Interviewer listens for:** team topology as the main driver, an honest account of federation's operating cost, and concrete triggers for changing the decision.
 
     **Common wrong answer:** "Federation is the best practice for microservices, so always federation", or "the aggregator performs better" without mentioning ownership.
 
-??? question "Q7. How would you migrate a monolithic GraphQL service to federation?"
+??? question "Q8. How would you migrate a monolithic GraphQL service to federation?"
     **Answer:** Use a strangler approach. First make the existing service federation-compatible and put it behind a router as the only subgraph. Clients keep the same schema and only the endpoint changes. Then extract one domain at a time into a new subgraph. Mark the shared types as entities with `@key`, and use `@override(from: "monolith")` to move field ownership without a coordinated release. Newer Federation versions support progressive `@override` with a percentage label, so traffic can be shifted gradually (an Apollo Router feature that needs the matching Federation version and plan). Set up a schema registry and CI checks (composition plus checks against recorded client operations) before the second subgraph exists. Compare latency and error rates per operation before and after each extraction. Decide early where auth lives: the router authenticates and forwards identity, and each subgraph still authorises.
 
     **Interviewer listens for:** incremental and reversible steps, no client-visible break, `@override`, schema checks in CI, and measurement.
 
     **Common wrong answer:** A "big bang" rewrite into subgraphs, or splitting by technical layer and not by domain.
 
-??? question "Q8. Federation performance concerns?"
+??? question "Q9. Federation performance concerns?"
     **Answer:** Four main ones. First, query-plan depth: each dependent step is a sequential network hop, so a query that goes Members → Prescriptions → Pharmacy pays three round trips. Second, N+1 inside subgraphs when `_entities` is resolved one representation at a time. Third, router overhead: query planning (cached per operation shape) and JSON serialisation of representations and results. Fourth, tail latency: the response is as slow as the slowest subgraph on the critical path. Mitigations: batch entity resolution (`List`-based `@EntityMapping`, DataLoader), `@provides` or `@shareable` on hot fields to remove hops, keep tightly coupled data in the same subgraph, per-subgraph timeouts, persisted queries, caching in the subgraphs, and tracing per fetch node so you can see the query plan's cost.
 
     **Interviewer listens for:** sequential hops, `_entities` N+1, where to batch, subgraph boundaries as a performance decision, and observability of query plans.
 
     **Common wrong answer:** "The router adds latency so federation is slow." Planning is cheap and cached. The dominant cost is the number of sequential subgraph hops and unbatched entity resolvers.
 
-??? question "Q9. How do you handle authentication, authorisation and failures in a federated graph?"
+??? question "Q10. How do you handle authentication, authorisation and failures in a federated graph?"
     **Answer:** Authentication happens once at the edge: the router (or a gateway in front of it) validates the JWT and forwards the token or verified claims to subgraphs as headers. Authorisation stays in the subgraphs, because they own the data and the rules. A subgraph must not trust requests that did not come through the router, so restrict it with network policy or mTLS. Otherwise anyone who can reach it can call `_entities` directly and bypass the query the router would have planned. For failures: set timeouts per subgraph at the router, and design nullability on purpose. If the Prescriptions subgraph is down, `member.prescriptions` should come back as `null` with an entry in `errors`, and the rest of the response should still be useful. If that field were non-null, the whole `member` would be nulled. Clients must be written to handle partial data.
 
     **Interviewer listens for:** authenticate at the router, authorise in subgraphs, protecting `_entities`, partial responses, and nullability as a resilience tool.
 
     **Common wrong answer:** "The router handles security, so the subgraphs can trust everything they receive."
 
-??? question "Q10. How does a schema change reach production safely in federation?"
+??? question "Q11. How does a schema change reach production safely in federation?"
     **Answer:** Each subgraph team changes only its own schema. In CI, the proposed subgraph schema is checked against the registry: composition (does it still compose with all other subgraphs?) and operation checks (does it break queries that real clients have sent recently?). With Apollo that is `rover subgraph check`. On deploy, the subgraph publishes its schema (`rover subgraph publish`), the registry composes a new supergraph, and routers pick it up without a redeploy (managed federation). The alternative is composing a supergraph file in the pipeline (`rover supergraph compose`) and shipping it with the router. Order matters: deploy the subgraph that can serve a new field before the supergraph that exposes it, and remove a field from the supergraph before removing it from the subgraph. Breaking changes go through `@deprecated`, usage tracking, then removal.
 
     **Interviewer listens for:** composition check versus operation check, registry, deployment ordering between subgraph and supergraph, and deprecation discipline.
@@ -303,7 +310,7 @@ rover subgraph publish my-graph@prod --name prescriptions --schema ./schema.grap
 
 ### Scenario-based
 
-??? question "Q11. Two teams both want to define `Member.address`. How does federation handle it and what do you decide?"
+??? question "Q12. Two teams both want to define `Member.address`. How does federation handle it and what do you decide?"
     **Answer:** In Federation 2, if two subgraphs define the same non-key field and it is not marked `@shareable` in both, composition fails (an invalid field sharing error). So the conflict is caught in CI and not in production. Then it is a design decision. Decide on ownership: the member domain owns the address. Use `@shareable` only if both subgraphs truly return identical data from the same source of truth, because the router is free to pick either one. If the second team only needs the address as input for its own field, it should use `@external` + `@requires`. Use `@override` to migrate ownership if needed. Governance (schema review, naming conventions) settles such conflicts before they reach composition.
 
     **Interviewer listens for:** composition error by default, `@shareable` semantics and its consistency requirement, a clear ownership decision, `@requires` as the alternative.

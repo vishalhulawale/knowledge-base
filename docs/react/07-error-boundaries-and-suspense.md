@@ -202,44 +202,99 @@ function RxList() {
 ??? question "Q1. What is an error boundary?"
     **Answer:** A component that catches errors thrown while rendering its subtree (render, lifecycle, constructors), logs them and renders a fallback instead of unmounting the app.
 
+    **Interviewer listens for:** catches render-time errors in subtree, logs, fallback UI.
+
+    **Common wrong answer:** "It works like try/catch for all errors in the component." It catches only rendering-phase errors.
+
 ??? question "Q2. What don't error boundaries catch?"
     **Answer:** Errors in event handlers, async callbacks outside render, SSR, and in the boundary itself.
 
+    **Interviewer listens for:** event handlers, async code, SSR, the boundary itself.
+
+    **Common wrong answer:** "It catches API errors." A rejected fetch in a handler is never seen by a boundary.
+
 ??? question "Q3. What is Suspense?"
     **Answer:** A component that shows a fallback while its children are waiting for something (code via lazy, Suspense-enabled data), then reveals them when ready.
+
+    **Interviewer listens for:** declarative loading state, lazy code, Suspense-enabled data, reveal when ready.
+
+    **Common wrong answer:** "Suspense is a data fetching library." It only coordinates waiting; something must actually suspend.
 
 ### Intermediate
 
 ??? question "Q4. Why are error boundaries class components?"
     **Answer:** They rely on `getDerivedStateFromError` and `componentDidCatch`, which have no hook equivalents yet; libraries wrap them for function-component use.
 
+    **Interviewer listens for:** getDerivedStateFromError and componentDidCatch have no hook equivalent; libraries wrap them.
+
+    **Common wrong answer:** "Function components can be error boundaries with useErrorBoundary." That is a library hook built on a class.
+
 ??? question "Q5. getDerivedStateFromError vs componentDidCatch?"
     **Answer:** The first runs in the render phase to update state and show the fallback; the second runs in the commit phase for side effects like logging.
+
+    **Interviewer listens for:** render phase state update vs commit phase side effects.
+
+    **Common wrong answer:** Logging inside getDerivedStateFromError, which runs during render and must stay pure.
 
 ??? question "Q6. Does fetching in useEffect trigger Suspense?"
     **Answer:** No. Only Suspense-enabled sources (lazy, `use` with cached promises, libraries like React Query's suspense hooks, framework loaders) suspend.
 
+    **Interviewer listens for:** only Suspense-enabled sources suspend.
+
+    **Common wrong answer:** "Any fetch inside a Suspense boundary shows the fallback."
+
 ??? question "Q7. How do you recover from an error boundary?"
     **Answer:** Reset it (button calling reset, or resetKeys tied to route/params) and clear or refetch the failing data.
 
+    **Interviewer listens for:** reset function or resetKeys, clear or refetch the failing data.
+
+    **Common wrong answer:** "Reload the page." That throws away all user state.
+
+??? question "Q8. How do you handle errors from data fetching in a React app?"
+    **Answer:** Separate **expected** errors from **unexpected** ones. Expected (404, validation, permission) are part of the UI: render an inline message or empty state from the query's `error` state. Unexpected errors (bugs, 500s you can't recover from) can be thrown to the nearest **error boundary** (React Query's `throwOnError`, or `useErrorBoundary().showBoundary`). Add retries for transient errors only, a retry button, and report to monitoring with the request id or trace id so backend logs can be found.
+
+    **Interviewer listens for:** expected vs unexpected, inline UI vs boundary, throwOnError/showBoundary, retries for transient only, correlation id.
+
+    **Common wrong answer:** Sending every error to one global boundary, which replaces the whole screen for a simple 404.
+
 ### Senior
 
-??? question "Q8. Where do you place boundaries in a large app?"
+??? question "Q9. Where do you place boundaries in a large app?"
     **Answer:** Root as last resort, per route so navigation survives, per independent widget or micro-frontend for isolation; Suspense boundaries matching meaningful loading regions.
 
-??? question "Q9. How do transitions interact with Suspense?"
+    **Interviewer listens for:** root, route and widget layers; loading regions that match the UI.
+
+    **Common wrong answer:** One boundary at the root only, so any widget error blanks the whole app.
+
+??? question "Q10. How do transitions interact with Suspense?"
     **Answer:** Updates inside startTransition keep already visible content instead of falling back to a spinner while the new content suspends, giving stable navigation.
 
-??? question "Q10. What do onCaughtError and onUncaughtError do?"
+    **Interviewer listens for:** transitions keep visible content, no fallback flash on navigation.
+
+    **Common wrong answer:** "Transitions disable Suspense." The new content still suspends; old content just stays on screen.
+
+??? question "Q11. What do onCaughtError and onUncaughtError do?"
     **Answer:** React 19 root options to centrally report errors caught by a boundary vs errors that reached the root, with component stacks.
+
+    **Interviewer listens for:** central reporting hooks on the root, caught vs uncaught, component stacks.
+
+    **Common wrong answer:** Thinking they replace error boundaries. They report; boundaries render the fallback.
 
 ### Scenario-based
 
-??? question "Q11. A broken pharmacy map widget blanks the whole page."
+??? question "Q12. A broken pharmacy map widget blanks the whole page."
     **Answer:** Wrap the widget in its own error boundary (and Suspense) with a small fallback, report the error, and keep critical content outside it.
 
-??? question "Q12. Clicking refill fails silently."
+    **Interviewer listens for:** widget-level boundary + Suspense, small fallback, reporting, critical content outside.
+
+    **Common wrong answer:** "Add try/catch in the map component's render."
+
+??? question "Q13. Clicking refill fails silently."
     **Answer:** The async error in the handler isn't caught by boundaries. Handle mutation errors (toast/inline message, retry), and use showBoundary only for unexpected failures.
+
+    **Interviewer listens for:** handler errors bypass boundaries, explicit mutation error UI and retry, showBoundary for unexpected cases.
+
+    **Common wrong answer:** "Wrap the button in an error boundary." The boundary never sees the async error.
 
 ## Cheat sheet
 

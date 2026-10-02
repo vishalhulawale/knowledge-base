@@ -185,32 +185,46 @@ Subject: Follow-up from our conversation on <date>
 
     **Common wrong answer:** "I keep private notes they don't see".
 
+??? question "Q7. Have you ever had to recommend letting someone go? How would you handle it?"
+    **Answer:** If you have a real case, tell it with care and without naming anyone. *[confirm]* If not, say so plainly and describe how you would handle it: performance documented over time, clear expectations and support already given, the manager and HR leading the formal process, your role being honest input about impact and evidence. Respect the person's dignity throughout, keep it confidential, and plan the knowledge transfer and team communication.
+
+    **Interviewer listens for:** honesty about experience, a fair process before the decision, manager/HR role, dignity, team impact.
+
+    **Common wrong answer:** Inventing a story, or describing the person with contempt.
+
 ### Senior
 
-??? question "Q7. The improvement plan isn't working after the agreed period. What next?"
+??? question "Q8. The improvement plan isn't working after the agreed period. What next?"
     **Answer:** Review the facts with the manager. Check that the support was really provided and the expectations were fair. If they were and there's no improvement, the manager leads next steps per process (a formal PIP, a role change, or exit) with HR. I keep supporting the person respectfully and handle the team's workload fairly.
 
     **Interviewer listens for:** fairness and process.
 
     **Common wrong answer:** "I asked the client to remove them".
 
-??? question "Q8. How do you protect team morale while handling an underperformer?"
+??? question "Q9. How do you protect team morale while handling an underperformer?"
     **Answer:** Keep it confidential (no gossip or public comments), redistribute work fairly and transparently in planning, acknowledge the team's extra effort, and address it promptly, because the team notices when problems are ignored and that hurts morale more.
 
     **Interviewer listens for:** confidentiality + fairness.
 
     **Common wrong answer:** "I tell the team what's happening".
 
+??? question "Q10. A team member is technically strong but repeatedly misses commitments. How do you handle it?"
+    **Answer:** Treat it as a pattern, not single misses. Bring two or three concrete examples using SBI and ask what is happening: over-committing, unclear scope, hidden blockers, too much context switching, or something personal. Agree changes together: smaller commitments, earlier check-ins, raising blockers by a set point, and visible progress. Follow up on the agreement, recognise improvement, and involve the manager if the pattern continues. *[confirm]*
+
+    **Interviewer listens for:** pattern with examples, diagnosis before judgement, agreed mechanisms, follow-up, escalation path.
+
+    **Common wrong answer:** "They are our best engineer, so I let it go." The team notices, and standards drop for everyone.
+
 ### Scenario-based
 
-??? question "Q9. During your feedback conversation, the engineer becomes upset and says they've been dealing with a family illness. What do you do?"
+??? question "Q11. During your feedback conversation, the engineer becomes upset and says they've been dealing with a family illness. What do you do?"
     **Answer:** Pause the performance focus. Show empathy and thank them for telling you. Ask what support would help (temporary workload changes, leave options through the manager and HR, flexibility). Keep it confidential. Agree to revisit expectations later. Inform the manager appropriately so formal support can be arranged.
 
     **Interviewer listens for:** humanity + process.
 
     **Common wrong answer:** "continue the feedback as planned".
 
-??? question "Q10. A senior engineer consistently dismisses QA feedback and causes friction. How do you handle it?"
+??? question "Q12. A senior engineer consistently dismisses QA feedback and causes friction. How do you handle it?"
     **Answer:**
     1. Private SBI conversation with examples and the impact (escaped defects, QA morale).
     2. Understand their view (maybe QA processes have real issues).

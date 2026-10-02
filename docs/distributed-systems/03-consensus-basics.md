@@ -281,16 +281,23 @@ final class RaftNode {
 
     **Common wrong answer:** "Raft is faster".
 
+??? question "Q8. Why use etcd or ZooKeeper instead of implementing consensus yourself, and what primitives do they give you?"
+    **Answer:** Consensus is easy to get subtly wrong (membership changes, log compaction, read safety), so you reuse a proven implementation. They provide: a **linearisable key-value store**; **compare-and-set / transactions** (etcd `Txn` on revision, ZooKeeper versioned `setData`); **leases / ephemeral nodes** that disappear when a client's session dies; **watches** to react to changes; and monotonically increasing **revisions / zxids** you can use as fencing tokens. Leader election, service locks and configuration distribution are built from these primitives (Curator recipes, etcd `concurrency` package).
+
+    **Interviewer listens for:** not rolling your own Raft, CAS, leases/ephemerals, watches, revisions as fencing tokens.
+
+    **Common wrong answer:** "Use etcd as a general database." It is designed for small, critical coordination data, not high-volume application data.
+
 ### Senior
 
-??? question "Q8. Why isn't leader election enough to protect a shared resource?"
+??? question "Q9. Why isn't leader election enough to protect a shared resource?"
     **Answer:** A leader can be paused (GC, VM stall) past its lease. Meanwhile a new leader is elected, then the old one resumes and acts. The resource must verify **fencing tokens** (a monotonic term, lease revision or zxid) and reject stale ones. Or the operations must be idempotent or conditional on state.
 
     **Interviewer listens for:** fencing tokens.
 
     **Common wrong answer:** "use a shorter lease".
 
-??? question "Q9. How are Raft membership changes made safely?"
+??? question "Q10. How are Raft membership changes made safely?"
     **Answer:** Change one server at a time (any two majorities of consecutive configurations overlap), or use **joint consensus**: a transitional configuration requiring majorities of both old and new sets, so two disjoint majorities can't exist. New servers catch up as non-voting learners first.
 
     **Interviewer listens for:** avoiding disjoint majorities.
@@ -299,7 +306,7 @@ final class RaftNode {
 
 ### Scenario-based
 
-??? question "Q10. A nightly reconciliation job ran twice and double-posted adjustments. You use a Redis lock. What's wrong and how do you fix it?"
+??? question "Q11. A nightly reconciliation job ran twice and double-posted adjustments. You use a Redis lock. What's wrong and how do you fix it?"
     **Answer:**
     - **What's wrong:** the lease expired during a long pause or a slow run, a second instance acquired it, and the first continued. There was no fencing, and the job steps weren't idempotent.
     - **Fix:**
@@ -313,7 +320,7 @@ final class RaftNode {
 
     **Common wrong answer:** "increase the TTL".
 
-??? question "Q11. Where should you place 3 etcd nodes for a production Kubernetes cluster?"
+??? question "Q12. Where should you place 3 etcd nodes for a production Kubernetes cluster?"
     **Answer:** One per AZ across 3 AZs (losing any one AZ keeps the quorum), on low-latency fast disks (fsync latency matters), not co-located with noisy workloads. Back them up regularly. Managed control planes (EKS) do this for you.
 
     **Interviewer listens for:** AZ spread and disk performance.

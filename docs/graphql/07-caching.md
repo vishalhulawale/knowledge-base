@@ -267,30 +267,37 @@ const link = createPersistedQueryLink({ sha256, useGETForHashedQueries: true }).
 
     **Common wrong answer:** keying only by the resource ID (e.g. `memberId`) and assuming the caller is entitled to it.
 
+??? question "Q8. How do per-field cache hints become a single response cache policy?"
+    **Answer:** Each field can carry a hint, for example `@cacheControl(maxAge: 3600)` on plan reference data and `maxAge: 0, scope: PRIVATE` on member data (Apollo's convention; in Spring you implement the equivalent with an instrumentation). The response policy is the **most restrictive** of all fields in the selection: the **minimum** `maxAge`, and `PRIVATE` if any field is private. One member-specific field therefore makes the whole response uncacheable at a shared CDN. That is why reference data is often split into separate operations.
+
+    **Interviewer listens for:** minimum maxAge rule, PRIVATE taints the response, split reference data into separate operations.
+
+    **Common wrong answer:** "Use the longest maxAge so the response is cached more." That caches private or fast-changing fields too long.
+
 ### Scenario-based
 
-??? question "Q8. After a deploy, users see outdated plan details for hours. What happened and how do you fix it?"
+??? question "Q9. After a deploy, users see outdated plan details for hours. What happened and how do you fix it?"
     **Answer:** A long TTL with no invalidation on plan updates, or changed serialization causing stale reads, or keys not versioned with schema changes. Fix: event-driven eviction or versioned keys, shorter TTLs for that data, a cache-flush step in the deploy runbook for schema changes, and staleness monitoring. I'd diagnose before fixing: check the key's remaining TTL (`TTL key`. `-1` means it never expires, which is Spring's default if no `entryTtl` was set), check whether the eviction listener is consuming (consumer lag, DLQ), and check whether the staleness is actually in the browser (Apollo `cache-first`) or at a CDN rather than in Redis.
 
     **Interviewer listens for:** a structured hunt across layers (browser, CDN, Redis, upstream), and a fix that addresses the cause instead of "flush Redis".
 
     **Common wrong answer:** "Flush the cache" as the whole answer. It fixes today and guarantees a repeat (and a stampede).
 
-??? question "Q9. Your team wants CDN caching for the GraphQL API, which runs on Spring for GraphQL. Is it feasible, and what would you propose?"
+??? question "Q10. Your team wants CDN caching for the GraphQL API, which runs on Spring for GraphQL. Is it feasible, and what would you propose?"
     **Answer:** Only for a narrow slice. First I'd split the operations: anything user-specific (most of a member portal) is out, and public reference queries (drug catalogue, pharmacy directory, labels) are candidates. Then the mechanics: a CDN needs a stable GET URL, so the client uses persisted queries with GET for hashed queries. Spring for GraphQL's HTTP transport only accepts POST with a JSON body and has no cache-hint feature, so I'd either put a router/gateway in front that understands persisted queries and emits `Cache-Control`, or expose those few reference datasets through a small GET endpoint that sets `Cache-Control: public, max-age=...` itself. The cache key must include the variables and anything the response varies on (locale, tenant), and the response must not depend on the `Authorization` header. Often the honest conclusion is that Redis plus the Apollo client cache already gives most of the win, and the CDN isn't worth the added surface.
 
     **Interviewer listens for:** public vs private split first, GET + persisted queries, knowing the framework limit, `Vary`/cache-key design, and willingness to say "not worth it".
 
     **Common wrong answer:** "Put CloudFront in front of `/graphql`." POST isn't cached, and if it were forced, users would get each other's responses.
 
-??? question "Q10. A mutation succeeds but the list on screen doesn't show the new item. Why, and how do you fix it?"
+??? question "Q11. A mutation succeeds but the list on screen doesn't show the new item. Why, and how do you fix it?"
     **Answer:** The normalized cache wrote the new entity (`Prescription:rx-9`), but the cached `prescriptions` list field still holds its old array of references, because Apollo can't know which lists a new object belongs to. Options: an `update` function on the mutation that appends the reference with `cache.modify` or `cache.writeQuery`. `refetchQueries` for that list (simpler, one extra round-trip). Or `cache.evict` on the field plus `cache.gc()`. For paginated or filtered lists, where the right position is ambiguous, refetching is usually the correct choice. If instead an **update** to an existing item isn't showing, the cause is normally a missing `id`/`__typename` in the mutation's selection set or a wrong `keyFields`.
 
     **Interviewer listens for:** entity update vs list membership, the three fixes and their trade-offs, checking the selection set for `id`.
 
     **Common wrong answer:** switching everything to `network-only`, which throws away the cache instead of fixing the update.
 
-??? question "Q11. Redis becomes slow or unavailable. What happens to your GraphQL service, and what should happen?"
+??? question "Q12. Redis becomes slow or unavailable. What happens to your GraphQL service, and what should happen?"
     **Answer:** By default it gets worse than having no cache: every `@Cacheable` call waits for the Redis timeout and then throws, so requests fail or pile up. What should happen is degradation to the upstream. I'd set short Lettuce command and connect timeouts, register a `CacheErrorHandler` that logs and treats get/put errors as a miss, and wrap the cache in a circuit breaker so a dead Redis is skipped rather than waited on. The second-order risk is that all traffic now lands on the upstreams at once, so they need their own protection: bulkheads, rate limits, and for reference data a small in-process Caffeine tier (L1) that keeps serving. When Redis comes back cold, warm it gradually or rely on single-flight and jittered TTLs to avoid a stampede.
 
     **Interviewer listens for:** cache as an optimisation not a dependency, timeouts, error handler/circuit breaker, upstream protection, cold-start stampede.

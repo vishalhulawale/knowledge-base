@@ -262,16 +262,23 @@ public void on(RxEvent e) {
 
     **Common wrong answer:** "end-to-end exactly-once".
 
+??? question "Q8. A client reuses an idempotency key with a different request body. What should the server do?"
+    **Answer:** Reject it. Store a **hash of the request** (method, path, canonical body) with the key. On a repeat with the same key, compare hashes: same hash → replay the stored response; different hash → return an error instead of processing. Stripe returns an error for this case, and the IETF Idempotency-Key draft suggests **422** for key reuse with a different payload and **409** while the original request is still in progress. Silently returning the first response would tell the client its second, different request succeeded.
+
+    **Interviewer listens for:** request fingerprint stored with the key, replay vs reject, 409 for in-flight, 422 for mismatch.
+
+    **Common wrong answer:** "Just return the stored response." The client thinks a different payment or order went through.
+
 ### Senior
 
-??? question "Q8. Two identical requests with the same key arrive at the same time on different instances. What happens?"
+??? question "Q9. Two identical requests with the same key arrive at the same time on different instances. What happens?"
     **Answer:** Both try to insert the key. The unique constraint lets exactly one win (IN_PROGRESS). The other gets a conflict, reads IN_PROGRESS, and returns 409 with Retry-After (or polls until COMPLETED, then replays). Without the constraint (check-then-insert), both would execute.
 
     **Interviewer listens for:** DB-enforced uniqueness.
 
     **Common wrong answer:** "use a `synchronized` block".
 
-??? question "Q9. The request crashed after charging the provider but before storing COMPLETED. The client retries. What now?"
+??? question "Q10. The request crashed after charging the provider but before storing COMPLETED. The client retries. What now?"
     **Answer:** The key exists as IN_PROGRESS (stale). On retry after a timeout, **resume**: call the provider with the **same idempotency key**. It returns the original charge instead of creating a new one. Then record COMPLETED. That's why provider keys matter. Without provider support, query the provider's status or reconcile before re-executing.
 
     **Interviewer listens for:** recovery through the propagated key.
@@ -280,7 +287,7 @@ public void on(RxEvent e) {
 
 ### Scenario-based
 
-??? question "Q10. Patients receive duplicate refill-ready SMS after consumer rebalances. Fix it."
+??? question "Q11. Patients receive duplicate refill-ready SMS after consumer rebalances. Fix it."
     **Answer:**
     - Dedup by a deterministic key `(rxId, fillNumber, channel)` stored before sending with a unique constraint (or Redis SETNX with a TTL longer than the redelivery window).
     - Make the send step idempotent with the provider's dedup if available.
@@ -291,7 +298,7 @@ public void on(RxEvent e) {
 
     **Common wrong answer:** "disable retries".
 
-??? question "Q11. Design idempotency for a mobile app that queues actions offline for days."
+??? question "Q12. Design idempotency for a mobile app that queues actions offline for days."
     **Answer:**
     - The client creates a UUID per action when the user acts, persists it with the queued action, and sends it on every retry.
     - The server keeps keys for longer than the max offline window (or uses business constraints, e.g. one refill per rx per fill cycle).

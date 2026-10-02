@@ -255,44 +255,116 @@ Not ★. Practical in the OptumRx React app (search, scroll, caching) and mirror
 ??? question "Q1. Debounce vs throttle?"
     **Answer:** Debounce runs once after events stop for a period; throttle runs at most once per period while events continue.
 
+    **Interviewer listens for:** after quiet period vs at most once per period.
+
+    **Common wrong answer:** Using them interchangeably, or describing debounce as "runs every N ms".
+
 ??? question "Q2. Use cases?"
     **Answer:** Debounce: search-as-you-type, autosave, resize end, validation. Throttle: scroll, mousemove, drag, rate-limited analytics.
 
+    **Interviewer listens for:** match the event pattern: "after they stop" vs "steady rate while active".
+
+    **Common wrong answer:** Throttling a search box, which still sends requests mid-word.
+
 ??? question "Q3. What is memoisation?"
     **Answer:** Caching a pure function's results by its arguments to avoid recomputation.
+
+    **Interviewer listens for:** pure functions, argument-keyed cache, memory trade-off.
+
+    **Common wrong answer:** Memoising impure functions whose results depend on time or external state.
 
 ### Intermediate
 
 ??? question "Q4. Implement debounce. What edge cases matter?"
     **Answer:** Closure over a timer; clear and reset on each call; preserve `this` and latest arguments; leading/trailing options; cancel/flush; cleanup on unmount.
 
+    **Interviewer listens for:** timer closure, reset, this and latest args, leading/trailing, cancel/flush, cleanup.
+
+    **Common wrong answer:** Losing `this` by using an arrow inside a non-method context, or forgetting cancel on unmount.
+
 ??? question "Q5. Why does creating a debounced function inside a React component break it?"
     **Answer:** A new debounced function (with its own timer) is created each render, so calls never share a timer. Memoise it (useMemo/useRef) or debounce the value.
+
+    **Interviewer listens for:** new function and timer per render, stable reference via useMemo/useRef.
+
+    **Common wrong answer:** "Debounce does not work in React."
 
 ??? question "Q6. How do you key a memoised function with object arguments?"
     **Answer:** By identity using a WeakMap (no leaks, but equal-content objects miss), or by a stable serialisation (costly, key-order sensitive). Choose based on how inputs are created.
 
+    **Interviewer listens for:** identity with WeakMap vs serialisation; leak and cost trade-offs.
+
+    **Common wrong answer:** Using `JSON.stringify(args)` as a key without thinking about key order, cost or unbounded growth.
+
 ??? question "Q7. Implement an LRU cache."
     **Answer:** Map (insertion order) with delete-and-reinsert on access, evict the first key when over capacity; or hash map + doubly linked list; O(1) get/put.
+
+    **Interviewer listens for:** Map insertion order or hash map + doubly linked list, O(1) get/put.
+
+    **Common wrong answer:** Using an array and `indexOf`, which makes get/put O(n).
 
 ### Senior
 
 ??? question "Q8. How do you memoise async functions safely?"
     **Answer:** Cache the in-flight promise (dedupes concurrent calls), evict on rejection, set TTL/size bounds, and consider abort signals.
 
+    **Interviewer listens for:** cache the promise, evict on rejection, TTL/size bounds.
+
+    **Common wrong answer:** Caching the resolved value only, so concurrent callers all fire requests.
+
 ??? question "Q9. Implement a concurrency limiter."
     **Answer:** Queue of tasks, active counter; run while active < limit; on each settle decrement and start next; return promises resolving to each task's result.
+
+    **Interviewer listens for:** queue + active counter, start next on settle, per-task results.
+
+    **Common wrong answer:** Splitting tasks into fixed batches of N, which waits for the slowest in each batch.
 
 ??? question "Q10. How do you test debounce/throttle?"
     **Answer:** Fake timers; advance time precisely; assert call counts and arguments at boundaries; test cancel.
 
+    **Interviewer listens for:** fake timers, precise time advance, boundary assertions, cancel.
+
+    **Common wrong answer:** Using real timers with sleeps, which makes tests slow and flaky.
+
+??? question "Q11. Implement `retry(fn, { retries, baseMs })` with exponential backoff and jitter."
+    **Answer:** ```ts
+    async function retry<T>(fn: (signal: AbortSignal) => Promise<T>,
+                            { retries = 3, baseMs = 200, signal }: { retries?: number; baseMs?: number; signal?: AbortSignal } = {}): Promise<T> {
+      for (let attempt = 0; ; attempt++) {
+        try {
+          return await fn(signal ?? new AbortController().signal);
+        } catch (err) {
+          if (attempt >= retries || signal?.aborted || !isRetryable(err)) throw err;
+          const cap = baseMs * 2 ** attempt;                 // 200, 400, 800 ...
+          const delay = Math.random() * cap;                 // full jitter
+          await new Promise(r => setTimeout(r, delay));
+        }
+      }
+    }
+    const isRetryable = (e: any) => e?.name === 'TypeError' || [429, 502, 503, 504].includes(e?.status);
+    ```
+
+    Key points: `return await` inside `try` so failures reach the `catch`; retry only **transient** errors (network failures, 429, 503), never 400 or 401; **full jitter** spreads clients out; respect an `AbortSignal`; and only retry operations that are idempotent (or carry an idempotency key).
+
+    **Interviewer listens for:** return await in try, retryable error filter, exponential cap + jitter, abort support, idempotency caveat.
+
+    **Common wrong answer:** Retrying every error immediately in a loop, including validation errors and non-idempotent POSTs.
+
 ### Scenario-based
 
-??? question "Q11. A search box sends a request on every keystroke and results flicker."
+??? question "Q12. A search box sends a request on every keystroke and results flicker."
     **Answer:** Debounce input (or the value), cancel stale requests with AbortController, and key the query by the debounced term (React Query).
 
-??? question "Q12. A memoised selector grows memory over a long session."
+    **Interviewer listens for:** debounce, abort stale requests, query keyed by debounced term.
+
+    **Common wrong answer:** Debouncing only, which still lets an older slow response overwrite newer results.
+
+??? question "Q13. A memoised selector grows memory over a long session."
     **Answer:** Unbounded cache keyed by changing inputs. Bound with LRU/TTL, key by stable ids, clear on logout.
+
+    **Interviewer listens for:** unbounded cache, LRU/TTL bounds, stable keys, clear on logout.
+
+    **Common wrong answer:** "Memoisation never leaks memory."
 
 ## Cheat sheet
 

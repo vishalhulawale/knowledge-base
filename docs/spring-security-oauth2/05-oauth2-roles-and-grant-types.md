@@ -405,6 +405,8 @@ Resource-server validation of the tokens these flows produce is covered in [07-r
 
     **Interviewer listens for:** "A secret in a JavaScript bundle or APK is not a secret."
 
+    **Common wrong answer:** "A SPA can keep a client secret in its environment variables." Anything shipped to the browser is public.
+
 ??? question "Q4. Walk me through the authorization code flow."
     **Answer:** The client redirects the browser to the authorization endpoint with `response_type=code`, `client_id`, `redirect_uri`, `scope`, `state` and a PKCE `code_challenge`. The user authenticates and consents at the authorization server. The server redirects back to the registered `redirect_uri` with a short-lived, single-use `code` and the `state`. The client checks `state`, then makes a back-channel `POST` to the token endpoint with the code, the `redirect_uri`, the `code_verifier` and (if confidential) its client authentication. The server verifies everything and returns an access token, usually a refresh token, and an ID token if OIDC was requested.
 
@@ -414,6 +416,10 @@ Resource-server validation of the tokens these flows produce is covered in [07-r
 
 ??? question "Q5. Why does the client credentials grant not return a refresh token?"
     **Answer:** A refresh token exists so the client can get new access tokens without bothering the **user** again. In client credentials there is no user, and the client already holds a long-lived credential (secret, key or certificate). It can simply repeat the request. A refresh token would be a second long-lived secret with no benefit.
+
+    **Interviewer listens for:** no user to re-involve, client can just request a new token with its own credentials.
+
+    **Common wrong answer:** "Because client tokens never expire."
 
 ### Intermediate
 
@@ -429,18 +435,28 @@ Resource-server validation of the tokens these flows produce is covered in [07-r
 
     **Interviewer listens for:** The login-CSRF attack, not just "it prevents CSRF".
 
+    **Common wrong answer:** "PKCE replaces state completely." Many deployments still use state for CSRF and app state.
+
 ??? question "Q8. A token comes from client credentials. What does `sub` contain, and why does it matter?"
     **Answer:** There is no end user, so `sub` typically identifies the client itself (often equal to `client_id`, depending on the IdP). User claims such as `email` or groups are absent. It matters because resource servers that assume every token has a user will break or make wrong decisions. The API should authorize such calls by scope or client identity, and distinguish user tokens from service tokens explicitly.
 
     **Common wrong answer:** "It is the user who triggered the job."
 
+    **Interviewer listens for:** sub identifies the client, no user claims, audit and authorisation implications.
+
 ??? question "Q9. Why were the implicit and password grants removed?"
     **Answer:** Implicit returned the access token in the URL fragment through the front channel, where it leaks through history, referrers and scripts, with no client authentication and no way to bind the token to the requester. It only existed because browsers once could not call the token endpoint cross-origin. CORS removed that reason. The password grant hands the user's credentials to the client, which is exactly what OAuth was created to avoid, and it cannot support MFA, passkeys or federation. OAuth 2.1 omits both. RFC 9700 says the password grant MUST NOT be used and the implicit grant SHOULD NOT be used.
+
+    **Interviewer listens for:** front-channel token leakage, password exposure to clients, PKCE + code flow replace them.
+
+    **Common wrong answer:** "They still work fine for internal apps."
 
 ??? question "Q10. What is refresh token rotation and reuse detection?"
     **Answer:** With rotation every refresh request returns a new refresh token and invalidates the previous one. If a previously used token is presented again, the server knows two parties hold tokens from the same family and cannot tell which one is legitimate, so it revokes the entire family and forces a new login. It turns silent theft into a detectable event. RFC 9700 requires rotation or sender-constraining (DPoP, mTLS) for refresh tokens issued to public clients.
 
     **Interviewer listens for:** Family revocation, and awareness of the concurrent-refresh race.
+
+    **Common wrong answer:** "Rotation means the refresh token expires sooner."
 
 ### Senior
 
@@ -454,15 +470,23 @@ Resource-server validation of the tokens these flows produce is covered in [07-r
 ??? question "Q12. How do you design service-to-service authorization when the downstream service needs to know the end user?"
     **Answer:** Three options. (1) **Forward the user's access token**: simple, but the token's audience must include the downstream service and a wide-audience token is a bigger prize if leaked. (2) **Client credentials plus a user ID in a header or body**: the downstream must fully trust the caller, so the user context is unauthenticated. Acceptable only inside a tight trust boundary. (3) **Token exchange (RFC 8693)**: the caller swaps the user's token for a new one with the downstream as audience, narrower scope and an `act` claim identifying the calling service. This keeps least privilege and an audit trail at the cost of an extra IdP call, which you cache. I pick (3) for crossing trust boundaries and (1) for a small set of services owned by one team. Details are in [09-service-to-service-auth.md](09-service-to-service-auth.md).
 
+    **Interviewer listens for:** token forwarding vs token exchange vs signed internal assertion, audience and blast radius.
+
+    **Common wrong answer:** "Pass the user id in a header." Anyone on the network can forge it.
+
 ??? question "Q13. How would you make client credentials stronger than a shared secret?"
     **Answer:** Use asymmetric client authentication. With `private_key_jwt` the client signs a short-lived JWT assertion (`iss` and `sub` = client ID, `aud` = the authorization server, historically its token endpoint URL and in newer guidance its issuer identifier, plus `jti` and `exp`) with a private key, and the IdP verifies with the registered public key or JWKS URL. Nothing secret is shared or sent over the wire. With mTLS (RFC 8705) the client proves possession of a certificate key at the TLS layer, and the access token can be **bound** to that certificate so a stolen token is useless without the key. DPoP (RFC 9449) gives the same binding at the application layer. Add key rotation, per-environment clients and narrow scopes.
 
     **Interviewer listens for:** Sender-constrained vs bearer tokens, and that FAPI mandates this for banking.
 
+    **Common wrong answer:** "Rotate the shared secret more often." Asymmetric client authentication removes shared secrets.
+
 ??? question "Q14. What changes in OAuth 2.1 compared to OAuth 2.0?"
     **Answer:** OAuth 2.1 is a consolidation draft, not a new protocol. It folds in the security best practice: PKCE required for the authorization code grant, implicit and password grants removed, redirect URIs compared by exact string match, bearer tokens not allowed in query strings, and refresh tokens for public clients either sender-constrained or one-time use. If you already follow RFC 9700, you are effectively doing OAuth 2.1.
 
     **Common wrong answer:** Treating 2.1 as a published RFC with new grant types. At the time of writing it is still an IETF draft.
+
+    **Interviewer listens for:** consolidation of best practice, PKCE required, implicit and password removed, exact redirect matching.
 
 ### Scenario-based
 
@@ -471,10 +495,14 @@ Resource-server validation of the tokens these flows produce is covered in [07-r
 
     **Interviewer listens for:** Diagnosing the race rather than blaming the IdP.
 
+    **Common wrong answer:** "The IdP is randomly logging users out." Concurrent refresh with rotation triggers reuse detection.
+
 ??? question "Q16. A Kafka consumer in your service must call a protected REST API. There is no HTTP request and no user. How do you get a token in Spring?"
     **Answer:** Use the client credentials grant with a client registration, and an `AuthorizedClientServiceOAuth2AuthorizedClientManager`, which works outside a servlet request. The default `DefaultOAuth2AuthorizedClientManager` needs an `HttpServletRequest` and fails in a listener or scheduled thread. Attach the manager to the `RestClient` (interceptor) or `WebClient` (filter function) so the token is fetched, cached and renewed shortly before expiry. Handle a 401 by evicting the cached client and retrying once.
 
     **Common wrong answer:** Storing the user's token in the Kafka message and replaying it later. It will be expired, and it puts credentials in a topic.
+
+    **Interviewer listens for:** client credentials, AuthorizedClientServiceOAuth2AuthorizedClientManager outside request scope.
 
 ??? question "Q17. Output prediction: the client sends the token request below. The original authorization request used `code_challenge_method=S256`. What does the server return?"
     ```http
@@ -487,10 +515,14 @@ Resource-server validation of the tokens these flows produce is covered in [07-r
 
     **Interviewer listens for:** Knowing the error codes: `invalid_client` (client authentication failed, 401), `invalid_grant` (bad code, verifier or refresh token), `invalid_scope`, `unauthorized_client` (grant not allowed for this client).
 
+    **Common wrong answer:** "200, because the client secret is correct." The PKCE code_verifier is missing.
+
 ??? question "Q18. Security asks you to cut off a compromised user immediately. Access tokens are 30-minute JWTs. What do you do?"
     **Answer:** Revoke the user's refresh tokens and sessions at the authorization server so no new access tokens are issued. That alone leaves up to 30 minutes of exposure because resource servers validate JWTs locally. For an immediate cut-off add one of: a short-lived deny list of `jti` or user IDs checked by the gateway or resource servers (for example in Redis with TTL equal to the remaining token life), token introspection (RFC 7662) on sensitive operations, or a shorter access token lifetime. Then state the trade-off: every one of these puts back some of the central lookup that JWTs were meant to remove.
 
     **Interviewer listens for:** Refresh revocation is necessary but not sufficient.
+
+    **Common wrong answer:** "Delete the user's session cookie." Existing access tokens stay valid until they expire.
 
 ## Cheat sheet
 

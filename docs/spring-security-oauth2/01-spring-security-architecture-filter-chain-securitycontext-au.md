@@ -447,6 +447,8 @@ class AsyncConfig {
 
     **Interviewer listens for:** bridging two lifecycles, lazy lookup of `springSecurityFilterChain`.
 
+    **Common wrong answer:** "It is how Spring adds security to the DispatcherServlet." It bridges the servlet container to Spring beans, before any servlet runs.
+
 ??? question "Q3. What is the difference between AuthenticationManager, ProviderManager and AuthenticationProvider?"
     **Answer:** `AuthenticationManager` is the API: `authenticate(Authentication)`. `ProviderManager` is the standard implementation, and it delegates to a list of `AuthenticationProvider`s. Each provider verifies one credential type and declares it through `supports()`. `ProviderManager` tries providers in order until one returns an authenticated token, falls back to a parent manager if none can, then erases credentials and publishes an event.
 
@@ -458,6 +460,8 @@ class AsyncConfig {
     **Answer:** The `SecurityContext` holds one `Authentication` (principal, credentials, authorities, authenticated flag). During a request it is held by `SecurityContextHolder`, by default in a `ThreadLocal`. Between requests it is stored by a `SecurityContextRepository`: the HTTP session for stateful apps, or nowhere for stateless APIs, where it is rebuilt from the token on every request.
 
     **Interviewer listens for:** the difference between holder (per thread, per request) and repository (across requests).
+
+    **Common wrong answer:** "It is stored in the HTTP session for every request." For stateless APIs it lives only in a ThreadLocal for the request.
 
 ??? question "Q5. An unauthenticated user calls a protected endpoint. Do they get 401 or 403, and which component decides?"
     **Answer:** 401 (or a redirect to login). `AnonymousAuthenticationFilter` puts an anonymous token in the context. `AuthorizationFilter` denies and throws `AccessDeniedException`. `ExceptionTranslationFilter` sees that the user is anonymous, so it calls the `AuthenticationEntryPoint` instead of the `AccessDeniedHandler`. A fully authenticated user without the right authority gets 403 from the `AccessDeniedHandler`.
@@ -495,15 +499,21 @@ class AsyncConfig {
 
     **Interviewer listens for:** "explicit save" and "deferred load", plus the practical migration symptom (user logged out on the next request).
 
+    **Common wrong answer:** "Nothing changed; the context is still saved automatically." In 6.x you must save it explicitly in custom login flows.
+
 ??? question "Q9. Why did my custom filter execute twice per request?"
     **Answer:** It is a Spring bean (`@Component`), so Spring Boot auto-registered it with the servlet container, and it was also added to the security chain with `addFilterBefore`. Fix: do not declare it as a bean, or register a `FilterRegistrationBean` for it with `setEnabled(false)`. `OncePerRequestFilter` skips the second invocation within one dispatch, but that only hides the problem: if the container copy is ordered ahead of the security chain (order `-100`), it is the one that actually does the work, outside the security chain, which is the wrong place.
 
     **Interviewer listens for:** knowledge of Boot's automatic filter registration.
 
+    **Common wrong answer:** "The filter chain runs twice per request by design."
+
 ??? question "Q10. `permitAll()` versus `web.ignoring()`?"
     **Answer:** `permitAll()` keeps the request inside the filter chain. It still gets security headers, CSRF protection and a security context, and the authorization decision is simply "allow". `web.ignoring()` gives the path an empty filter chain: `FilterChainProxy` still applies the `HttpFirewall`, but no security filters run, so there are no headers, no CSRF protection and no context. The official guidance is to prefer `permitAll()`. Since deferred context loading, its cost for static resources is small.
 
     **Common wrong answer:** "They are the same, ignoring is just faster."
+
+    **Interviewer listens for:** permitAll keeps headers, CSRF and context; ignoring skips the whole chain.
 
 ### Senior
 
@@ -519,20 +529,28 @@ class AsyncConfig {
 
     **Interviewer listens for:** extraction versus verification, creating an empty context instead of mutating the current one, using the entry point.
 
+    **Common wrong answer:** Validating the API key inside a controller or an interceptor.
+
 ??? question "Q13. Why is the SecurityContext a ThreadLocal, and what breaks with reactive code or virtual threads?"
     **Answer:** With one thread per request, a `ThreadLocal` gives any code access to the current user without passing parameters. In WebFlux a request hops between event-loop threads, so a `ThreadLocal` would leak one user's identity into another request. Reactive Spring Security therefore stores the context in the Reactor `Context` and exposes it through `ReactiveSecurityContextHolder`. Virtual threads keep the one-thread-per-request model, so the servlet approach still works, but every new virtual thread you start has an empty context and needs explicit propagation, the same as platform threads.
 
     **Interviewer listens for:** the leak risk on shared threads, and that virtual threads do not change the propagation rule.
+
+    **Common wrong answer:** "ThreadLocal works the same in WebFlux." Reactive code uses ReactiveSecurityContextHolder in the Reactor context.
 
 ??? question "Q14. Why did Spring Security 6 start applying authorization to all dispatcher types, and what does that break on migration?"
     **Answer:** Previously authorization ran once per request, on the `REQUEST` dispatch. A `FORWARD`, `INCLUDE` or `ERROR` dispatch to another path was not re-checked, which opened bypasses (for example CVE-2022-31692). `AuthorizationFilter` now checks every dispatch. On migration, forwards to views and the `/error` page start being denied, so error responses become empty 401/403s and server-side rendered pages fail. The fix is explicit rules: `dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()` where that is safe.
 
     **Interviewer listens for:** the security reason, not only the symptom.
 
+    **Common wrong answer:** "Spring Security 6 has a bug with error pages." It closed a bypass through forward and error dispatches.
+
 ??? question "Q15. How would you prove to an auditor that every endpoint is protected?"
     **Answer:** Deny by default: every chain ends with `anyRequest().authenticated()` or `denyAll()`, and there is a catch-all chain. Add method security as a second layer on sensitive operations. Add tests that enumerate all handler mappings and assert that an unauthenticated call returns 401, plus `@WithMockUser`/JWT tests per role. In production, publish authorization-denied and authentication events to the audit log. Review `permitAll` entries as an explicit allow-list in code review.
 
     **Interviewer listens for:** defence in depth, automated verification, auditability.
+
+    **Common wrong answer:** "We test the main endpoints manually." Auditors need deny-by-default plus automated proof.
 
 ### Scenario-based
 
@@ -541,15 +559,21 @@ class AsyncConfig {
 
     **Interviewer listens for:** naming the explicit-save change, and choosing the real fix over the compatibility flag.
 
+    **Common wrong answer:** "The JSESSIONID cookie is broken." The context is never saved to the session.
+
 ??? question "Q17. A new `/internal/**` chain was added, but requests to it are still handled by the old rules. What do you check?"
     **Answer:** Chain ordering and matchers. Likely causes: the existing chain has no `securityMatcher`, so it matches everything and has a lower `@Order`, or neither chain has `@Order` and bean ordering is undefined. Another cause is using `requestMatchers` inside `authorizeHttpRequests` when `securityMatcher` was intended. Confirm with TRACE logging, which prints the chain that matched. Fix by giving the specific chain a lower order value and a `securityMatcher`, with the catch-all chain last.
 
     **Interviewer listens for:** first-match semantics, and `securityMatcher` versus `requestMatchers`.
 
+    **Common wrong answer:** "Spring merges chains." Only the first matching chain handles the request.
+
 ??? question "Q18. In production, a few requests occasionally run with another user's identity. Where do you look?"
     **Answer:** This is context leakage across threads. Check for: `MODE_INHERITABLETHREADLOCAL` with a thread pool, code that sets `SecurityContextHolder` on a pooled thread (Kafka listener, scheduler, custom executor) without clearing it in `finally`, an `Authentication` or user object cached in a singleton field, and code that mutates a shared context with `getContext().setAuthentication()` instead of creating a new context. Also check anything outside Spring Security that caches per user, such as a response cache whose key lacks the user. Fix by using delegating executors, which clear the context after each task, and by always creating a fresh context. Treat it as a security incident: identify affected requests from logs and report as required.
 
     **Interviewer listens for:** a systematic list of causes, cleanup in `finally`, and treating it as an incident, not only a bug.
+
+    **Common wrong answer:** "It is a JWT validation bug." A context leaked across pooled threads.
 
 ## Cheat sheet
 

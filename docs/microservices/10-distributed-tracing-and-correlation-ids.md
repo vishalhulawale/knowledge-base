@@ -239,44 +239,92 @@ processors:
 ??? question "Q1. What is distributed tracing?"
     **Answer:** Recording the path and timing of a request across services as a trace made of spans, linked by a shared trace id and parent span ids, to see where time is spent and where errors occur.
 
+    **Interviewer listens for:** trace and spans, trace id + parent ids, where time and errors are.
+
+    **Common wrong answer:** "It is centralised logging." Logs do not show causality and timing across hops by themselves.
+
 ??? question "Q2. Trace vs span?"
     **Answer:** A trace is the whole request journey; a span is one operation within it with its own id, parent id, timing, attributes and status.
 
+    **Interviewer listens for:** whole journey vs one operation, span ids, parent, timing, attributes, status.
+
+    **Common wrong answer:** "A span is one service." One service usually creates several spans (server, DB, client calls).
+
 ??? question "Q3. How is context passed between services?"
     **Answer:** In headers: W3C `traceparent` (version, trace id, parent span id, flags) and optional `tracestate`, injected by the client and extracted by the server; in message headers for Kafka.
+
+    **Interviewer listens for:** W3C traceparent fields, inject/extract, message headers for async.
+
+    **Common wrong answer:** "The trace id is passed in the request body." It belongs in headers so any protocol and proxy can carry it.
 
 ### Intermediate
 
 ??? question "Q4. What is OpenTelemetry?"
     **Answer:** A CNCF standard and toolkit (API, SDKs, auto-instrumentation, OTLP protocol, Collector) for traces, metrics and logs, vendor-neutral, replacing OpenTracing and OpenCensus.
 
+    **Interviewer listens for:** vendor neutral API/SDK/OTLP/Collector, three signals, replaced OpenTracing and OpenCensus.
+
+    **Common wrong answer:** "OpenTelemetry is a tracing backend like Jaeger." It produces and ships telemetry; it does not store or show it.
+
 ??? question "Q5. How does tracing work in Spring Boot 3?"
     **Answer:** Micrometer Tracing with an OTel or Brave bridge plus an exporter; Observation API instruments HTTP server/client, Kafka, etc.; W3C propagation; sampling property; trace ids in MDC. Sleuth is not used with Boot 3.
+
+    **Interviewer listens for:** Micrometer Tracing + bridge, Observation API, exporter, sampling property, MDC, no Sleuth.
+
+    **Common wrong answer:** "Add Spring Cloud Sleuth." Sleuth does not support Boot 3.
 
 ??? question "Q6. Why do traces break, and where?"
     **Answer:** At uninstrumented clients, thread hops (executors, `@Async`, reactive), message brokers without header propagation, and proxies that drop headers.
 
+    **Interviewer listens for:** uninstrumented clients, thread hops, broker headers, header-dropping proxies.
+
+    **Common wrong answer:** "The tracing backend is losing spans." Usually context was never propagated across that hop.
+
 ??? question "Q7. What is baggage and what's the risk?"
     **Answer:** Key-values propagated with the context to all downstream services. Useful for tenant/region; risky because it travels everywhere (size, privacy). Never PHI or secrets.
+
+    **Interviewer listens for:** propagated everywhere, size and privacy cost, never PHI or secrets.
+
+    **Common wrong answer:** Treating baggage as span attributes. Baggage travels to every downstream service and third party.
 
 ### Senior
 
 ??? question "Q8. Head-based vs tail-based sampling?"
     **Answer:** Head decides at the start (cheap, consistent, but misses rare errors). Tail decides after the trace completes in the Collector (keeps errors and slow traces) at the cost of buffering and infrastructure.
 
+    **Interviewer listens for:** decision time, cost, missed rare errors vs buffering in the Collector.
+
+    **Common wrong answer:** "Sample 1% and you will still see errors." At 1% head sampling you keep only 1% of the rare failures too.
+
 ??? question "Q9. How do you trace through Kafka with batches?"
     **Answer:** Producer injects context into record headers; consumer extracts it. For batch or fan-in processing, a single parent doesn't fit, so use span links to each message's context.
 
+    **Interviewer listens for:** header injection/extraction, span links for batches and fan-in.
+
+    **Common wrong answer:** Making the first message of a batch the parent of everything, which hides the other traces.
+
 ??? question "Q10. How do traces, metrics and logs work together?"
     **Answer:** Metrics alert (RED, saturation), traces locate (which service/hop), logs explain (details). Linked by trace id in logs and exemplars on metrics.
+
+    **Interviewer listens for:** metrics alert, traces locate, logs explain, linked by trace id and exemplars.
+
+    **Common wrong answer:** "With good tracing we do not need metrics." Sampled traces are bad at counting and alerting.
 
 ### Scenario-based
 
 ??? question "Q11. p99 latency of the GraphQL endpoint doubled. How do you find the cause?"
     **Answer:** Check per-upstream latency metrics; open exemplar or slow traces for the endpoint; the waterfall shows which span grew (an upstream, Redis, a lock); drill into that service's logs via trace id; compare with deploys and traffic.
 
+    **Interviewer listens for:** per-upstream metrics, exemplars, waterfall, trace-id log drill-down, correlate with deploys.
+
+    **Common wrong answer:** Reading through logs of every service by timestamp without using the trace waterfall.
+
 ??? question "Q12. Your tracing backend is a SaaS vendor and you handle PHI. What rules do you set?"
     **Answer:** No PHI in span names, attributes, baggage, logs sent to the vendor; route templates not raw URLs; attribute allow-lists in the Collector (redaction processors); BAA with the vendor if needed; retention limits and access control.
+
+    **Interviewer listens for:** no PHI in names, attributes, baggage; route templates; Collector redaction; BAA; retention and access.
+
+    **Common wrong answer:** "The vendor is SOC 2 compliant, so PHI is fine." HIPAA needs a BAA and data minimisation.
 
 ## Cheat sheet
 

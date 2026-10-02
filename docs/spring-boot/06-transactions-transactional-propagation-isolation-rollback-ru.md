@@ -392,20 +392,28 @@ Repository transaction defaults (`SimpleJpaRepository` is read-only at class lev
 
     **Interviewer listens for:** that isolation is the database's default, not a fixed Spring value, and that checked exceptions do not roll back.
 
+    **Common wrong answer:** "The default isolation is SERIALIZABLE." DEFAULT means the database's own default (usually READ COMMITTED).
+
 ??? question "Q3. Which exceptions cause a rollback by default? How do you change it?"
     **Answer:** Unchecked exceptions (`RuntimeException` and subclasses) and `Error`. Checked exceptions commit. Change it per method with `rollbackFor` or `noRollbackFor`, or globally in Spring Framework 6.2+ with `@EnableTransactionManagement(rollbackOn = RollbackOn.ALL_EXCEPTIONS)`. To roll back without throwing, call `setRollbackOnly()` on the current `TransactionStatus`.
 
     **Common wrong answer:** "Any exception rolls back."
+
+    **Interviewer listens for:** unchecked and Error roll back, checked commit, rollbackFor.
 
 ??? question "Q4. Explain `REQUIRED` vs `REQUIRES_NEW`."
     **Answer:** `REQUIRED` joins the current transaction or creates one. All joined methods share one connection and one outcome. `REQUIRES_NEW` always starts an independent transaction. If one exists, it is suspended, a second connection is taken from the pool, and the inner transaction commits or rolls back on its own. The outer transaction resumes afterwards and can still roll back without affecting the inner result.
 
     **Interviewer listens for:** two physical connections, independent commit, pool impact.
 
+    **Common wrong answer:** "REQUIRES_NEW creates a nested transaction." It suspends the outer one and uses a new connection.
+
 ??? question "Q5. What are dirty reads, non-repeatable reads and phantom reads, and which isolation level stops each?"
     **Answer:** A dirty read sees uncommitted data, and READ COMMITTED prevents it. A non-repeatable read gets different values for the same row within one transaction, and REPEATABLE READ prevents it. A phantom read gets a different set of rows for the same range query, and SERIALIZABLE prevents it in the SQL standard. Real databases differ: PostgreSQL's REPEATABLE READ is snapshot isolation and already prevents phantoms.
 
     **Interviewer listens for:** knowing the default of the database you actually use.
+
+    **Common wrong answer:** "READ COMMITTED prevents all anomalies." It still allows non-repeatable and phantom reads.
 
 ### Intermediate
 
@@ -458,13 +466,23 @@ Repository transaction defaults (`SimpleJpaRepository` is read-only at class lev
 ??? question "Q8. `REQUIRES_NEW` vs `NESTED`?"
     **Answer:** `REQUIRES_NEW` is a separate physical transaction on a second connection. It commits independently and stays committed even if the outer transaction rolls back. `NESTED` is a savepoint inside the same physical transaction and connection. The nested part can roll back alone, but if the outer transaction rolls back, the nested work is lost too. `NESTED` needs savepoint support, which in practice means `DataSourceTransactionManager` with JDBC. It is not a good fit for JPA.
 
+    **Interviewer listens for:** separate connection vs savepoint, independent commit vs partial rollback, JPA limits.
+
+    **Common wrong answer:** "They are the same."
+
 ??? question "Q9. What does `readOnly = true` actually do?"
     **Answer:** It is a hint. With Hibernate, the flush mode becomes `MANUAL`, so dirty checking and the commit-time flush are skipped. The JDBC connection is flagged read-only, which some databases use to optimise and which a routing `DataSource` can use to pick a read replica. It does not guarantee that writes fail on every database.
 
     **Common wrong answer:** "It makes the method unable to write."
 
+    **Interviewer listens for:** Hibernate flush mode, read-only connection hint, routing to replicas.
+
 ??? question "Q10. On which methods does `@Transactional` not work?"
     **Answer:** Methods called from the same class (self-invocation), `private` methods, `final` methods or classes with CGLIB proxies, objects not managed by Spring, and methods called during bean construction (for example in `@PostConstruct`, where the proxy may not be in place yet). Non-public methods work only with class-based proxies on Spring 6.0+. It also has no effect when no matching transaction manager exists, such as MongoDB without a `MongoTransactionManager` bean.
+
+    **Interviewer listens for:** self-invocation, private/final, non-Spring objects, constructors and init callbacks.
+
+    **Common wrong answer:** "It works on every method of a @Service."
 
 ### Senior
 
@@ -472,6 +490,8 @@ Repository transaction defaults (`SimpleJpaRepository` is read-only at class lev
     **Answer:** The transaction holds a pooled connection, and often row locks, from begin to commit. A 2-second HTTP call turns a 5 ms transaction into a 2-second one. Under load the pool empties and unrelated requests fail waiting for a connection. The transaction timeout does not interrupt a blocked HTTP call. Restructure into: short transaction to record intent (status PENDING), remote call with no transaction, short transaction to record the outcome. Add an idempotency key so the remote call is safe to retry, and a reconciliation job for records stuck in PENDING.
 
     **Interviewer listens for:** connection pool reasoning, intermediate state, idempotency, recovery path.
+
+    **Common wrong answer:** "Make the HTTP call async inside the transaction." The transaction still waits or commits without the result.
 
 ??? question "Q12. How do you keep a database write and a Kafka publish consistent?"
     **Answer:** They are two resources, so one local transaction cannot cover both. Publishing inside the transaction risks sending an event for data that rolls back. Publishing after commit risks losing the event if the process dies in between. The reliable solution is the transactional outbox: write the business row and an outbox row in the same transaction, then a relay (a poller or CDC with Debezium) publishes outbox rows to Kafka and marks them sent. Delivery is at-least-once, so consumers must be idempotent. `@TransactionalEventListener(AFTER_COMMIT)` is a lighter option when losing an occasional event is acceptable or is repaired by reconciliation. XA is avoided because it couples availability and performs poorly.
@@ -485,8 +505,14 @@ Repository transaction defaults (`SimpleJpaRepository` is read-only at class lev
 
     **Interviewer listens for:** READ COMMITTED does not stop lost updates, retry must wrap the transaction, trade-off between optimistic and pessimistic.
 
+    **Common wrong answer:** "Use synchronized in the service." It does not work across pods.
+
 ??? question "Q14. How do transactions behave with `@Async`, virtual threads and WebFlux?"
     **Answer:** Imperative Spring transactions are bound to a thread through `ThreadLocal`. An `@Async` method or a task submitted to an executor runs on another thread with no transaction, and cannot see the caller's uncommitted changes. Virtual threads behave the same way: one request on one virtual thread works normally, but work forked to other threads is outside the transaction. Reactive code uses `ReactiveTransactionManager` and `TransactionalOperator`, with the transaction carried in the Reactor context, and it needs a reactive driver such as R2DBC or the reactive Mongo driver.
+
+    **Interviewer listens for:** ThreadLocal-bound transactions, @Async gets none, reactive needs a reactive TransactionManager.
+
+    **Common wrong answer:** "The transaction propagates to the @Async method."
 
 ### Scenario-based
 
@@ -495,15 +521,21 @@ Repository transaction defaults (`SimpleJpaRepository` is read-only at class lev
 
     **Interviewer listens for:** a method, not a guess. Metrics, thread dump, leak detection, root cause before tuning.
 
+    **Common wrong answer:** "Increase the pool size." Usually long transactions or leaked connections exhaust it.
+
 ??? question "Q16. A Kafka consumer saves to the database and the listener is retried after a failure. How do you avoid duplicate or partial data?"
     **Answer:** Make the handler idempotent: use a natural or event ID with a unique constraint or an upsert, or keep a processed-events table written in the same transaction as the business change. Keep one message (or one small batch) per transaction so a failure rolls back cleanly and the offset is not committed. Do not swallow exceptions in the handler, or the transaction commits and the retry logic never runs. After the configured retries, send the record to a DLQ with enough context to replay.
 
     **Interviewer listens for:** at-least-once delivery, idempotency in the same transaction as the write, interaction between rollback and offset commit.
 
+    **Common wrong answer:** "Kafka exactly-once makes the database write safe." It does not cover the DB.
+
 ??? question "Q17. A batch job processes 10,000 records in one `@Transactional` method and is slow and memory hungry. What do you change?"
     **Answer:** One huge transaction holds locks for a long time, grows the persistence context, and loses everything on one failure. Process in chunks (for example 500 to 1,000 records), one transaction per chunk, using `TransactionTemplate` or a separate bean. Enable JDBC batching, and flush and clear the `EntityManager` per chunk. Make the job restartable by recording progress. Decide per-item failure handling: skip and record the bad item rather than fail the chunk, where the business allows it.
 
     **Common wrong answer:** "Increase the transaction timeout."
+
+    **Interviewer listens for:** chunked transactions, flush/clear, batch inserts, restartable progress.
 
 ## Cheat sheet
 

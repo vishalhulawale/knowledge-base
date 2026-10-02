@@ -184,44 +184,113 @@ Not ★. Relevant to the OptumRx React application (responsiveness with large da
 ??? question "Q1. Is JavaScript single-threaded?"
     **Answer:** Each agent runs JS on one thread with one call stack; the host provides concurrency (timers, I/O, workers) and queues callbacks back.
 
+    **Interviewer listens for:** one call stack per agent, host provides concurrency, workers for parallel JS.
+
+    **Common wrong answer:** "JavaScript is multi-threaded because of async." Async waits are handled by the host, not by more JS threads.
+
 ??? question "Q2. What is the event loop?"
     **Answer:** The mechanism that repeatedly takes a task from a queue, runs it to completion, drains the microtask queue, optionally renders, and repeats.
 
+    **Interviewer listens for:** task → drain microtasks → render → repeat, run to completion.
+
+    **Common wrong answer:** "The event loop runs callbacks in parallel."
+
 ??? question "Q3. Microtask vs macrotask examples?"
     **Answer:** Microtasks: promise reactions, await continuations, queueMicrotask, MutationObserver (Node: process.nextTick first). Tasks: setTimeout/setInterval, events, I/O, MessageChannel, setImmediate.
+
+    **Interviewer listens for:** promise/await/queueMicrotask vs timers/events/I/O, nextTick in Node.
+
+    **Common wrong answer:** Classing setTimeout callbacks as microtasks.
 
 ### Intermediate
 
 ??? question "Q4. Why does a resolved promise's then run before setTimeout(0)?"
     **Answer:** After the current task, all microtasks drain before the next task; the timer callback is a task.
 
+    **Interviewer listens for:** microtask queue drains fully before the next task.
+
+    **Common wrong answer:** "Promises are faster than timers." It is about queue priority, not speed.
+
 ??? question "Q5. Predict: `setTimeout(()=>log(1)); Promise.resolve().then(()=>log(2)); log(3)`"
     **Answer:** 3, 2, 1.
+
+    **Interviewer listens for:** sync first, then microtasks, then tasks.
+
+    **Common wrong answer:** "1, 2, 3 because that is the order they were written."
 
 ??? question "Q6. What does await do to execution?"
     **Answer:** Runs the function synchronously until await, then returns a pending promise; the rest resumes as a microtask after the awaited value settles.
 
+    **Interviewer listens for:** sync until first await, returns a promise, continuation as microtask.
+
+    **Common wrong answer:** "await blocks the thread until the promise resolves." It suspends only the async function.
+
 ??? question "Q7. Why is setTimeout(fn, 0) not immediate?"
     **Answer:** It queues a task after the current task and all microtasks, possibly after rendering, with a minimum delay (≥ 4 ms when nested 5+ levels).
+
+    **Interviewer listens for:** task after microtasks and rendering, nested clamp to 4 ms.
+
+    **Common wrong answer:** "0 ms means immediate."
 
 ### Senior
 
 ??? question "Q8. How does Node's event loop differ from the browser's?"
     **Answer:** libuv phases (timers, pending, poll, check, close), process.nextTick before promise microtasks after each callback, setImmediate in check phase, thread pool for fs/crypto/dns; no rendering step.
 
+    **Interviewer listens for:** libuv phases, nextTick priority, setImmediate in check phase, thread pool, no rendering.
+
+    **Common wrong answer:** "Node and browsers have the same event loop."
+
 ??? question "Q9. What is microtask starvation?"
     **Answer:** Microtasks that keep queuing microtasks prevent tasks and rendering from running, freezing the page or server.
+
+    **Interviewer listens for:** recursive microtasks block tasks and rendering.
+
+    **Common wrong answer:** "Promises can never block the page." An endless chain of microtasks freezes it.
 
 ??? question "Q10. How do you keep the UI responsive with heavy computation?"
     **Answer:** Chunk work and yield (scheduler.yield/setTimeout), move CPU work to Web Workers, avoid long tasks over 50 ms, measure with INP and Performance panel.
 
+    **Interviewer listens for:** chunking and yielding, Web Workers, long-task budget, INP measurement.
+
+    **Common wrong answer:** "Make the function async." An async function still runs its CPU work on the main thread.
+
+??? question "Q11. Predict the output, then explain each step."
+    **Answer:** `A G C D F B E` (verified in Node 22).
+
+    ```js
+    console.log('A');
+    setTimeout(() => console.log('B'), 0);
+    queueMicrotask(() => console.log('C'));
+    Promise.resolve().then(() => { console.log('D'); setTimeout(() => console.log('E'), 0); })
+      .then(() => console.log('F'));
+    console.log('G');
+    ```
+
+    1. Synchronous code runs first: `A`, `G`. One timer task (B) and two microtasks (C, D) are queued.
+    2. Microtasks drain in FIFO order: `C`, then `D`. D queues a second timer (E) and resolves the promise, which queues `F` as a **new microtask**.
+    3. The queue is not empty yet, so `F` runs before any task.
+    4. Tasks run in order: `B` (queued first), then `E`.
+
+    **Interviewer listens for:** sync first, microtasks drain completely including ones added during draining, timers in queue order.
+
+    **Common wrong answer:** `A G B C D E F` (timers before promises) or `A G C D B F E` (forgetting that F joins the microtask queue before any task runs).
+
 ### Scenario-based
 
-??? question "Q11. A Node API's p99 spikes when one endpoint generates a PDF. Why?"
+??? question "Q12. A Node API's p99 spikes when one endpoint generates a PDF. Why?"
     **Answer:** CPU-bound work blocks the single event-loop thread, stalling all requests. Move it to worker_threads, a queue + worker service, or a separate process.
 
-??? question "Q12. Predict: `async function a(){ log(1); await b(); log(2) } async function b(){ log(3) } a(); log(4)`"
+    **Interviewer listens for:** CPU-bound work blocks all requests, worker_threads or a separate worker service.
+
+    **Common wrong answer:** "Add more async/await to the PDF code."
+
+??? question "Q13. Predict: `async function a(){ log(1); await b(); log(2) } async function b(){ log(3) } a(); log(4)`"
     **Answer:** 1, 3, 4, 2.
+
+    **Interviewer listens for:** b runs synchronously until its end, await defers the rest of a.
+
+    **Common wrong answer:** "1, 2, 3, 4" or "1, 3, 2, 4". `log(2)` waits for the microtask after `log(4)`.
 
 ## Cheat sheet
 

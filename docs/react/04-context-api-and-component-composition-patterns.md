@@ -205,44 +205,92 @@ Context does not cross separately mounted React roots or different React copies.
 ??? question "Q1. What problem does Context solve?"
     **Answer:** Passing values deep into the tree without threading them through intermediate components (prop drilling).
 
+    **Interviewer listens for:** prop drilling, deep tree access.
+
+    **Common wrong answer:** "Context is for global state management." It is for passing values down.
+
 ??? question "Q2. Who re-renders when a context value changes?"
     **Answer:** Every component that reads that context (useContext/use), even if memoised, plus the normal cascade from the provider's parent.
 
+    **Interviewer listens for:** every consumer re-renders, memo does not stop it, provider parent cascade.
+
+    **Common wrong answer:** "Only components that use the changed field re-render." Context has no field-level selectors.
+
 ??? question "Q3. Is Context a state management library?"
     **Answer:** No; it's dependency injection. State lives in a component or store; context only distributes it.
+
+    **Interviewer listens for:** dependency injection, state lives elsewhere.
+
+    **Common wrong answer:** "Context replaces Redux." It distributes state; it does not add selectors, middleware or devtools.
 
 ### Intermediate
 
 ??? question "Q4. How do you prevent unnecessary consumer re-renders?"
     **Answer:** Memoise the value, split contexts by concern and update frequency (state vs actions), keep fast-changing state local, or use a store with selectors.
 
+    **Interviewer listens for:** memoised value, split by concern and frequency, local state, store with selectors.
+
+    **Common wrong answer:** Putting everything in one big `AppContext` with a new object value every render.
+
 ??? question "Q5. Context vs Redux?"
     **Answer:** Context for low-frequency app-wide values; Redux (or Zustand) for frequently changing shared state needing selectors, middleware and devtools; neither for server data.
+
+    **Interviewer listens for:** update frequency, selectors, middleware/devtools, server data belongs in a query library.
+
+    **Common wrong answer:** "Redux is outdated, use Context for everything." Frequently changing shared state performs badly in context.
 
 ??? question "Q6. What changed for context in React 19?"
     **Answer:** Render `<Ctx value>` directly instead of `<Ctx.Provider>`, and read with `use(Ctx)`, which can be called conditionally.
 
+    **Interviewer listens for:** `<Ctx value>` as provider, `use(Ctx)` can be conditional.
+
+    **Common wrong answer:** "React 19 removed Context." It simplified the provider and added `use`.
+
 ??? question "Q7. What are compound components?"
     **Answer:** A family of components (Tabs, Tabs.List, Tabs.Panel) sharing implicit state through a context from the parent, giving flexible composition with a simple API.
+
+    **Interviewer listens for:** shared implicit state via context, flexible composition, simple API.
+
+    **Common wrong answer:** Confusing it with HOCs. Compound components share state through context, not wrappers.
 
 ### Senior
 
 ??? question "Q8. How can composition remove the need for context?"
     **Answer:** If intermediate components only pass a value down to render a child, let the owner create that child and pass it as children or a slot prop; the intermediates no longer need the value.
 
+    **Interviewer listens for:** owner creates the child, pass as children or slot props, intermediates stop forwarding.
+
+    **Common wrong answer:** "Composition and context are the same thing." Composition often removes the need for context entirely.
+
 ??? question "Q9. Render props vs hooks vs HOCs?"
     **Answer:** Hooks are the default for sharing logic; render props still useful for render customisation (headless UI, virtualised rows); HOCs are legacy, with wrapper hell and typing issues.
 
+    **Interviewer listens for:** hooks default, render props for render control, HOCs legacy.
+
+    **Common wrong answer:** "HOCs are the recommended way to share logic." Hooks replaced them for most cases.
+
 ??? question "Q10. Does context work across micro-frontends?"
     **Answer:** Only within one React root and one React instance. Separate roots or React copies need a shared singleton module, events, or host APIs.
+
+    **Interviewer listens for:** one root and one React instance, shared module or events across roots.
+
+    **Common wrong answer:** "Context is global, so every micro-frontend can read it."
 
 ### Scenario-based
 
 ??? question "Q11. The whole app re-renders on every keystroke in the header search. Cause?"
     **Answer:** Search text stored in an app-level context (or provider value recreated). Keep it local to the search component, or move it into the URL/store with selectors.
 
+    **Interviewer listens for:** fast-changing value in app-level context, local state or store selectors.
+
+    **Common wrong answer:** "Wrap all children in memo." Context consumers still re-render.
+
 ??? question "Q12. Design how the logged-in user, theme and feature flags reach components."
     **Answer:** Separate contexts (session, theme, flags) with stable values and custom hooks that throw without providers; member data via React Query keyed by member id.
+
+    **Interviewer listens for:** separate stable contexts, custom hooks guarding missing providers, server data in React Query.
+
+    **Common wrong answer:** One context holding user, theme, flags and member data together.
 
 ## Cheat sheet
 

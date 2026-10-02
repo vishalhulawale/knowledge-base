@@ -241,9 +241,16 @@ confirm_before_interview:
 
     **Common wrong answer:** "always the best architecture".
 
+??? question "Q8. What was the business impact of your current project?"
+    **Answer:** Translate technical work into outcomes the interviewer's business cares about: who uses it (members, pharmacists, call-centre agents), what got faster, cheaper or safer, and a number where you have one (latency, release frequency, incidents, members served). Then say your part in that outcome. If you don't have hard numbers, say what you would measure and give an honest estimate, clearly labelled as one. *[confirm]*
+
+    **Interviewer listens for:** user and business framing, numbers or honest estimates, a clear link between your work and the outcome.
+
+    **Common wrong answer:** Listing technologies ("we used GraphQL, Kafka and React") without saying what changed for anyone.
+
 ### Senior
 
-??? question "Q8. If you rebuilt Meteor's integration layer today, what would you change?"
+??? question "Q9. If you rebuilt Meteor's integration layer today, what would you change?"
     **Answer:** A thoughtful but honest list, for example:
     - contract tests with upstreams from day one
     - persisted queries and cost limits earlier
@@ -257,7 +264,7 @@ confirm_before_interview:
 
     **Common wrong answer:** "nothing, it was perfect".
 
-??? question "Q9. How did you lead 8–10 people while owning a critical service?"
+??? question "Q10. How did you lead 8–10 people while owning a critical service?"
     **Answer:** Delegated by ownership areas, kept the critical architecture decisions and reviews, paired on the hardest parts, used standards and automation to scale quality, and protected focus time. Give an example of a delegation that grew someone. *[confirm]*
 
     **Interviewer listens for:** a balance of IC and leadership work.
@@ -266,14 +273,14 @@ confirm_before_interview:
 
 ### Scenario-based
 
-??? question "Q10. The interviewer says 'skip the overview, tell me one decision you'd defend'."
+??? question "Q11. The interviewer says 'skip the overview, tell me one decision you'd defend'."
     **Answer:** Pick one decision (for example caching reference data in Redis with agreed TTLs and per-upstream timeouts) and explain the problem, options (no cache, client cache, Redis, upstream changes), the decision criteria (freshness, load, latency, ownership), the risks and mitigations, and the outcome *[confirm]*.
 
     **Interviewer listens for:** decision quality.
 
     **Common wrong answer:** returning to the overview.
 
-??? question "Q11. You can't share client details under NDA. How do you still give a strong deep dive?"
+??? question "Q12. You can't share client details under NDA. How do you still give a strong deep dive?"
     **Answer:** Describe the domain generically ("a pharmacy benefits platform"), the scale (users, number of upstreams), the patterns and decisions, and anonymised metrics. Say upfront that you're keeping client specifics confidential. Interviewers respect this.
 
     **Interviewer listens for:** professionalism.

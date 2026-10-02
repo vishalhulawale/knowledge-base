@@ -326,18 +326,28 @@ If asked "have you tuned GC in production?" and the true answer is no, say: "We 
 
     **Interviewer listens for:** weak generational hypothesis, copy cost proportional to live objects, remembered sets.
 
+    **Common wrong answer:** "To keep old objects from being collected." The split exists because most objects die young.
+
 ??? question "Q3. What is a stop-the-world pause, and what is a safepoint?"
     **Answer:** In an STW pause all application threads are suspended so GC can work on a stable heap. Threads can only stop at safepoints, which are places where the JVM knows exactly where all references are (method returns, loop back-edges, calls). The pause the user feels is time-to-safepoint plus the GC work. Concurrent collectors do most work outside pauses but still need short ones.
 
     **Common wrong answer:** "ZGC has no pauses." It has three very short pauses per cycle.
+
+    **Interviewer listens for:** all threads suspended, threads reach safepoints, time-to-safepoint matters.
 
 ??? question "Q4. Which collector is the default, and which others exist in Java 21/25?"
     **Answer:** G1 has been the default since Java 9 (on server-class machines). Others: Serial, Parallel, ZGC, Shenandoah, and Epsilon (a no-op collector for testing). CMS was removed in Java 14. ZGC became generational in 21, generational by default in 23 and generational-only in 24. Java 25 made generational Shenandoah a product feature.
 
     **Interviewer listens for:** current knowledge, not Java 8 answers (PermGen, CMS).
 
+    **Common wrong answer:** "CMS is the low-latency default." CMS was removed in Java 14; G1 is the default.
+
 ??? question "Q5. What is the difference between a minor/young GC, a mixed GC and a Full GC in G1?"
     **Answer:** A young GC evacuates Eden and Survivor regions. A mixed GC, which happens after a concurrent marking cycle, evacuates young regions plus a selected set of old regions with the most garbage. A Full GC is an STW compaction of the whole heap, used as a fallback when G1 cannot free memory fast enough. In a healthy G1 application Full GCs should not appear.
+
+    **Interviewer listens for:** young evacuates Eden/Survivor, mixed adds selected old regions, Full is a single-threaded-like whole-heap fallback.
+
+    **Common wrong answer:** "A mixed GC is the same as a Full GC."
 
 ### Intermediate
 
@@ -346,25 +356,35 @@ If asked "have you tuned GC in production?" and the true answer is no, say: "We 
 
     **Interviewer listens for:** soft goal, collection set, adaptive young sizing, the throughput trade.
 
+    **Common wrong answer:** "G1 guarantees the pause target." It is a goal, not a guarantee.
+
 ??? question "Q7. What is a humongous object in G1 and why does it matter?"
     **Answer:** An object whose size is at least half a region. It is allocated directly in contiguous old regions, wastes the unused tail of its last region, can start a concurrent cycle early, and under fragmentation can cause a Full GC because no contiguous run of free regions exists. Typical sources are large `byte[]` buffers, big JSON or GraphQL responses built in memory, and large arrays behind collections. Fixes: stream instead of buffering, chunk the data, or raise `-XX:G1HeapRegionSize` so the objects are no longer humongous.
 
     **Interviewer listens for:** the 50% rule, a code-level fix before a flag-level fix.
+
+    **Common wrong answer:** "Large objects go to Eden like any other object."
 
 ??? question "Q8. How does ZGC relocate objects while the application is running?"
     **Answer:** With coloured pointers and load barriers. Metadata bits in each reference tell whether it is valid for the current phase. The JIT inserts a check on every reference load from the heap. If the colour is bad, the slow path looks up the object's new location in a forwarding table (or relocates it itself), returns the new reference, and heals the field. So the application never sees a stale address, and relocation needs no long pause.
 
     **Common wrong answer:** "ZGC just uses more threads" or "ZGC does not compact". It compacts concurrently.
 
+    **Interviewer listens for:** coloured pointers, load barriers, self-healing references, concurrent relocation.
+
 ??? question "Q9. Read this line: `GC(97) Pause Full (G1 Compaction Pause) 2040M->1998M(2048M) 2710.332ms`. What does it tell you?"
     **Answer:** A Full GC stopped the application for 2.7 seconds. Heap went from 2040 MB to 1998 MB with a 2048 MB committed heap, so even a full compaction freed only about 2%. The live set is about as large as the heap. Either there is a memory leak or the heap is too small for the workload. More Full GCs will follow at once, and an `OutOfMemoryError` (possibly "GC overhead limit exceeded" on Parallel GC, "Java heap space" on G1) is near. Next step: take a heap dump and look at the dominators, and check whether heap-after-GC has been growing for hours.
 
     **Interviewer listens for:** reading before → after (committed), concluding "live set problem", not suggesting a pause-time flag.
 
+    **Common wrong answer:** "The GC is slow; switch to ZGC." The heap is full of live data; the problem is the live set or the heap size.
+
 ??? question "Q10. How should you size the heap for a JVM in a Kubernetes pod?"
     **Answer:** The JVM is container-aware and by default uses 25% of the container memory limit as max heap, which usually wastes memory. Set `-XX:MaxRAMPercentage` to around 60 to 75% so the rest covers Metaspace, thread stacks, code cache, direct buffers and GC structures. Set initial equal to max for stable behaviour. Set memory request equal to limit. Give at least 2 CPUs and set the collector explicitly, because under 2 CPUs the JVM picks Serial GC. With ZGC leave more headroom, since it has no compressed oops and needs free space to relocate into.
 
     **Common wrong answer:** "`-Xmx` equal to the pod limit."
+
+    **Interviewer listens for:** 25% default, MaxRAMPercentage around 60-75%, room for metaspace, threads, direct buffers.
 
 ### Senior
 
@@ -373,25 +393,43 @@ If asked "have you tuned GC in production?" and the true answer is no, say: "We 
 
     **Interviewer listens for:** throughput / latency / footprint triangle, decision by measurement, awareness of ZGC's costs.
 
+    **Common wrong answer:** "ZGC is always better because pauses are shorter." It costs throughput and memory.
+
 ??? question "Q12. What causes a G1 Full GC, and how do you remove it?"
-    **Answer:** Causes: (1) **concurrent marking finishes too late** so old fills up, fixed by more heap, a lower `InitiatingHeapOccupancyPercent`, or more `ConcGCThreads`; (2) **evacuation failure** ("to-space exhausted"), meaning no free regions to copy into, fixed by more heap or a higher `G1ReservePercent`; (3) **humongous allocation** with no contiguous space, fixed by removing or shrinking those objects or a bigger region size; (4) explicit `System.gc()`, or **Metaspace** exhaustion (crossing the Metaspace threshold normally only starts a concurrent cycle; a Full GC follows only if metadata allocation still fails); (5) a **leak**, where nothing helps except fixing the code. The log cause in brackets tells you which one it is.
+    **Answer:** Causes:
+
+    1. **Concurrent marking finishes too late** so old fills up, fixed by more heap, a lower `InitiatingHeapOccupancyPercent`, or more `ConcGCThreads`.
+    2. **Evacuation failure** ("to-space exhausted"), meaning no free regions to copy into, fixed by more heap or a higher `G1ReservePercent`.
+    3. **Humongous allocation** with no contiguous space, fixed by removing or shrinking those objects or a bigger region size.
+    4. Explicit `System.gc()`, or **Metaspace** exhaustion (crossing the Metaspace threshold normally only starts a concurrent cycle; a Full GC follows only if metadata allocation still fails).
+    5. A **leak**, where nothing helps except fixing the code.
+
+    The log cause in brackets tells you which one it is.
 
     **Interviewer listens for:** a list of distinct causes tied to log evidence, not "increase the heap".
+
+    **Common wrong answer:** "Add -XX:+UseParallelGC." That swaps the problem for longer pauses.
 
 ??? question "Q13. What are GC barriers and what do they cost?"
     **Answer:** Barriers are small code sequences the JIT emits around reference reads or writes. G1 uses **write barriers**: a pre-write SATB barrier to keep concurrent marking correct, and a post-write barrier to keep remembered sets current. ZGC uses **load barriers** on reference reads (and store barriers in generational mode to track old-to-young pointers). They cost a few percent of throughput and larger compiled code. This is the reason Parallel GC, with only a simple card-marking barrier, still has the best raw throughput.
 
     **Interviewer listens for:** barriers are how concurrent collectors stay correct; lower pauses are paid for with throughput.
 
+    **Common wrong answer:** "Barriers are free." They cost a few percent of throughput, more for load barriers.
+
 ??? question "Q14. Application p99 latency spikes but the GC log shows only 10 ms pauses. Could GC still be responsible?"
     **Answer:** Yes, in several ways. Time-to-safepoint may be long, which is visible with `-Xlog:safepoint` as a large "reaching safepoint" time. Concurrent GC threads may be taking CPU from request threads, more so under a CPU limit with throttling. With ZGC, threads may be in allocation stalls. The machine may be swapping, or a blocking GC log write may be slow. G1 pauses may also be frequent enough that many requests hit one. If none apply, look elsewhere: lock contention, a slow upstream, connection pool exhaustion (see pages 3, 4 and 10).
 
     **Interviewer listens for:** safepoint time vs GC time, CPU competition, allocation stalls, and the readiness to rule GC out.
 
+    **Common wrong answer:** "GC pauses are short, so GC is not involved."
+
 ??? question "Q15. How do you lower GC pressure from the application side?"
     **Answer:** Reduce the allocation rate and the live set. Stream large payloads instead of building them in memory. Avoid needless boxing and intermediate collections in hot paths. Size collections up front. Keep big caches off-heap or in Redis, or bound them (Caffeine with a maximum size). Avoid unbounded queues in executors. Remove `ThreadLocal` values on pooled threads. Do not pool cheap small objects, because long-lived pooled objects move work from the cheap young generation into the expensive old one. Verify with an allocation profile from Java Flight Recorder.
 
     **Common wrong answer:** "Pool every object to avoid allocation." With TLAB allocation and generational GC, short-lived objects are nearly free.
+
+    **Interviewer listens for:** reduce allocation rate and live set, streaming, avoid boxing, sizing, caches with bounds.
 
 ### Scenario-based
 
@@ -400,15 +438,21 @@ If asked "have you tuned GC in production?" and the true answer is no, say: "We 
 
     **Interviewer listens for:** kernel OOM vs Java OOM, non-heap memory, Native Memory Tracking.
 
+    **Common wrong answer:** "Increase -Xmx." That makes the OOM kill more likely; the problem is total RSS.
+
 ??? question "Q17. After a release, GC CPU doubled and young collections run every 200 ms, but heap after GC is flat. What changed and what do you do?"
     **Answer:** Flat heap after GC means no leak. Frequent young GCs mean the **allocation rate** went up. Something in the release allocates much more per request: a new mapping layer, logging that builds large strings, loading full lists instead of pages, or a serialisation change. Record a JFR allocation profile in production or a load test, find the top allocating stack traces, and fix the code. Giving G1 a bigger heap (so young can be larger) is a valid stop-gap, since it makes collections less frequent at about the same pause cost.
 
     **Interviewer listens for:** separating allocation rate from live-set growth, using a profiler, code fix first.
 
+    **Common wrong answer:** "Memory leak." A flat heap after GC rules out a leak.
+
 ??? question "Q18. A Kafka consumer group rebalances at random under load. How could GC be involved and how do you confirm it?"
     **Answer:** If a consumer JVM pauses longer than `session.timeout.ms`, heartbeats stop and the broker removes it from the group. If processing plus pauses exceeds `max.poll.interval.ms`, the consumer leaves the group. Both cause a rebalance, duplicate processing and lag. To confirm, match rebalance timestamps in consumer logs with pauses in the GC log (including safepoint time). If they match, fix the GC cause (heap size, humongous batches, a leak) and lower `max.poll.records` so each batch allocates less. If they do not match, the cause is slow processing or network, not GC.
 
     **Interviewer listens for:** linking JVM pauses to distributed-system timeouts, proof by correlation.
+
+    **Common wrong answer:** "Kafka is unstable." Long pauses miss heartbeats; GC logs will confirm it.
 
 ## Cheat sheet
 

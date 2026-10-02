@@ -391,7 +391,14 @@ Explicit `java.util.concurrent.locks` usage is not named on the resume, so posit
 ### Fundamentals
 
 ??? question "Q1. What does `ReentrantLock` give you that `synchronized` does not?"
-    **Answer:** Four things. (1) `tryLock()` and `tryLock(timeout)`: attempt without waiting forever. (2) `lockInterruptibly()`: a waiting thread can be cancelled. (3) Optional fairness (FIFO). (4) Several `Condition` objects per lock. It also has inspection methods such as `getQueueLength()`. The costs are manual `unlock()` in `finally` and more code. Mutual exclusion and memory-visibility guarantees are the same for both.
+    **Answer:** Four things:
+
+    1. `tryLock()` and `tryLock(timeout)`: attempt without waiting forever.
+    2. `lockInterruptibly()`: a waiting thread can be cancelled.
+    3. Optional fairness (FIFO).
+    4. Several `Condition` objects per lock.
+
+    It also has inspection methods such as `getQueueLength()`. The costs are manual `unlock()` in `finally` and more code. Mutual exclusion and memory-visibility guarantees are the same for both.
 
     **Interviewer listens for:** The features by name, the `finally` rule, and "I still default to `synchronized` unless I need one of these".
 
@@ -402,18 +409,28 @@ Explicit `java.util.concurrent.locks` usage is not named on the resume, so posit
 
     **Interviewer listens for:** Owner + hold count, the matching number of unlocks, the `StampedLock` exception.
 
+    **Common wrong answer:** "Reentrant means the lock can be acquired by any thread at any time."
+
 ??? question "Q3. What are the four conditions for deadlock, and which one do you usually break?"
     **Answer:** Mutual exclusion, hold-and-wait, no pre-emption, circular wait. All four must hold. In practice you break **circular wait** with a global lock order (for example by account id), or **no pre-emption / hold-and-wait** with `tryLock(timeout)`: if you cannot get the second lock, release the first, back off and retry.
 
     **Interviewer listens for:** Linking each fix to the condition it removes, rather than reciting the list.
+
+    **Common wrong answer:** "Use tryLock everywhere to avoid deadlock." It can turn a deadlock into a livelock.
 
 ??? question "Q4. Deadlock vs livelock vs starvation?"
     **Answer:** **Deadlock:** threads are blocked in a cycle, waiting for each other forever; CPU is idle. **Livelock:** threads are running and keep reacting to each other (retry, release, retry) without progress; CPU is busy. **Starvation:** the system as a whole makes progress but one thread never gets the lock or CPU. Fixes: lock ordering or timeouts; randomised back-off; fairness or shorter critical sections.
 
     **Common wrong answer:** "Livelock is a deadlock with high CPU." The key difference is that livelocked threads are not blocked, so deadlock detectors find nothing.
 
+    **Interviewer listens for:** blocked cycle vs busy but no progress vs never scheduled; CPU pattern of each.
+
 ??? question "Q5. Why must `unlock()` be in a `finally` block, and why is `lock()` placed before `try`?"
     **Answer:** If the critical section throws and `unlock()` is skipped, the lock stays held forever (the owning thread may even die) and every later caller blocks. `lock()` goes before `try` because if acquiring fails with an exception, `finally` would call `unlock()` on a lock the thread does not hold; that throws `IllegalMonitorStateException` and hides the original error.
+
+    **Interviewer listens for:** skipped unlock leaves the lock held forever; lock before try so a failed lock is never unlocked.
+
+    **Common wrong answer:** "Put lock() inside try for safety." If lock() fails, finally calls unlock() on a lock you do not hold.
 
 ### Intermediate
 
@@ -434,37 +451,59 @@ Explicit `java.util.concurrent.locks` usage is not named on the resume, so posit
 
     **Interviewer listens for:** Hold-count reasoning, and knowing that `tryLock()` does not block.
 
+    **Common wrong answer:** Forgetting that one unlock() leaves the hold count at 1, so the lock is still held.
+
 ??? question "Q7. Fair vs unfair lock: what is the real trade-off? Why is unfair the default?"
     **Answer:** A fair lock grants in arrival order, so no thread starves, and wait times have low variance. An unfair lock lets a thread that arrives just as the lock is released take it at once ("barging"). That is faster because the queued thread needs time to wake up (a context switch), and during that time the lock would sit idle. Throughput for unfair locks can be many times higher under contention. So the default optimises throughput and accepts a small starvation risk. Note that fairness is about lock grants, not thread scheduling, and `tryLock()` with no arguments barges even on a fair lock.
 
     **Interviewer listens for:** The *reason* barging is faster, and the `tryLock()` caveat.
+
+    **Common wrong answer:** "Fair locks are always better because they are fair." They cost a lot of throughput.
 
 ??? question "Q8. A thread holds the read lock of a `ReentrantReadWriteLock` and calls `writeLock().lock()`. What happens?"
     **Answer:** It blocks forever. The write lock needs zero readers, and this thread is one of the readers. `ReentrantReadWriteLock` does not support upgrading, partly because two readers both trying to upgrade would deadlock each other anyway. The correct pattern: release the read lock, take the write lock, **re-check the condition** (state may have changed in the gap), do the write, optionally downgrade by taking the read lock before releasing the write lock. With `StampedLock`, `tryConvertToWriteLock(stamp)` gives a non-blocking upgrade attempt.
 
     **Common wrong answer:** "It throws an exception" or "it upgrades automatically".
 
+    **Interviewer listens for:** no upgrade support, self-deadlock, release read then acquire write and re-check.
+
 ??? question "Q9. Why use `Condition` instead of `wait`/`notify`? Why is `await()` called in a loop?"
     **Answer:** One intrinsic monitor has one wait set, so producers and consumers wait together and you must `notifyAll()` to be safe, waking threads that cannot proceed. A `ReentrantLock` can have several `Condition`s (`notFull`, `notEmpty`), so `signal()` wakes exactly the right kind of waiter. `await()` also has timed, deadline and uninterruptible variants. The loop is needed because (1) spurious wakeups are permitted, and (2) between the signal and re-acquiring the lock another thread may have changed the state again.
+
+    **Interviewer listens for:** multiple wait sets, targeted signals, spurious wake-ups and re-checking the condition.
+
+    **Common wrong answer:** "await is called in a loop for performance."
 
 ??? question "Q10. When is a `ReadWriteLock` slower than a plain `ReentrantLock`?"
     **Answer:** When the critical section is short. Acquiring and releasing the read lock each CAS the same shared state word and update per-thread hold counts, so on many cores the readers contend on that cache line even though they do not exclude each other. If the protected work is a few nanoseconds (a `HashMap.get`), the bookkeeping costs more than it saves. It also loses when writes are frequent, because each writer must wait for all readers to drain. It wins only with long reads and rare writes. For read-mostly data a `ConcurrentHashMap` or an immutable snapshot behind a `volatile` reference is usually better than either lock.
 
     **Interviewer listens for:** Cache-line contention on the read path, and "measure before choosing".
 
+    **Common wrong answer:** "ReadWriteLock is always faster for read-heavy code."
+
 ### Senior
 
 ??? question "Q11. Explain how `StampedLock` optimistic reading works and what can go wrong."
     **Answer:** `tryOptimisticRead()` returns the lock's current version stamp without acquiring anything (0 if a writer holds it). The reader copies the needed fields into locals and calls `validate(stamp)`, which returns true only if no write lock was acquired since the stamp was issued. If false, fall back to `readLock()` and re-read. Benefits: the reader does no shared write, so it scales linearly and never delays a writer.
 
-    Risks: (1) Between read and validate the copied values may be mutually inconsistent, so do not use them (no array indexing, no loops driven by them, no dereferencing that could throw) before validating. (2) Read only into locals; reading fields again after validation is unprotected. (3) Not reentrant: nested acquisition self-deadlocks. (4) No `Condition` and no owner, so tools cannot report who holds it. (5) Only worth it for a few fields and short reads; keep it private to one class.
+    Risks:
+
+    1. Between read and validate the copied values may be mutually inconsistent, so do not use them (no array indexing, no loops driven by them, no dereferencing that could throw) before validating.
+    2. Read only into locals; reading fields again after validation is unprotected.
+    3. Not reentrant: nested acquisition self-deadlocks.
+    4. No `Condition` and no owner, so tools cannot report who holds it.
+    5. Only worth it for a few fields and short reads; keep it private to one class.
 
     **Interviewer listens for:** Copy → validate → fall back; the inconsistent-read danger; non-reentrancy.
+
+    **Common wrong answer:** "validate() makes the read atomic." You must re-read under a real lock if validation fails.
 
 ??? question "Q12. How is `ReentrantLock` implemented? Walk me through `lock()` and `unlock()`."
     **Answer:** It delegates to an inner `Sync` class extending `AbstractQueuedSynchronizer`. AQS holds a `volatile int state` (hold count), the exclusive owner thread and a FIFO queue of waiting nodes. `lock()` in unfair mode: try CAS `state` 0→1; on success set owner and return. If the caller is already the owner, increment `state`. Otherwise create a node, CAS it onto the queue tail, re-try once more when at the head, then `LockSupport.park()`. `unlock()`: decrement `state`; at zero clear the owner and `unpark()` the successor of the head. The woken thread retries the CAS and may lose to a barging thread, in which case it parks again. The fair version first checks `hasQueuedPredecessors()` and does not barge. `Semaphore`, `CountDownLatch` and `ReentrantReadWriteLock` reuse the same framework with different meanings for `state`.
 
     **Interviewer listens for:** state + owner + queue, CAS fast path, park/unpark, and where fairness differs.
+
+    **Common wrong answer:** "It uses synchronized internally." It is built on AQS with CAS and park/unpark.
 
 ??? question "Q13. Should you replace `synchronized` with `ReentrantLock` when adopting virtual threads?"
     **Answer:** It depends on the Java version. On **Java 21-23**, a virtual thread that blocks inside a `synchronized` block or method pins its carrier thread, so the carrier cannot run other virtual threads; with enough pinned threads the application stalls. On those versions, replace `synchronized` with `ReentrantLock` where the guarded section blocks (I/O, waiting for another lock); short in-memory sections are fine. Find them with `-Djdk.tracePinnedThreads=full` or the `jdk.VirtualThreadPinned` JFR event. **JEP 491 in Java 24** changed the JVM so that virtual threads unmount while blocked on or inside `synchronized`, so on **Java 25 LTS** this reason is gone and you choose by features again. Pinning still happens in native frames.
@@ -478,27 +517,51 @@ Explicit `java.util.concurrent.locks` usage is not named on the resume, so posit
 
     **Interviewer listens for:** The tool, what the output looks like, the blind spots, multiple dumps.
 
+    **Common wrong answer:** "Restart the pod and it is fixed." Without a thread dump first, you lose the evidence.
+
 ??? question "Q15. Your service runs on 8 pods. Does a `ReentrantLock` around 'check balance then debit' make it safe?"
-    **Answer:** No. The lock lives in one JVM's heap, so it serialises threads in that pod only; two pods can run the section at the same time. Options, from best to worst for most cases: (1) make the operation atomic in the data store (a conditional update such as `UPDATE ... WHERE balance >= :amt`, or MongoDB `findAndModify` with a filter); (2) optimistic concurrency with a version field and retry; (3) a unique constraint or idempotency key; (4) a distributed lock (Redis `SET NX PX`, ZooKeeper, a database advisory lock). A distributed lock needs a TTL, because the holder may crash, and then a fencing token or version check at the resource, because a holder paused by GC can continue after its lease expired.
+    **Answer:** No. The lock lives in one JVM's heap, so it serialises threads in that pod only; two pods can run the section at the same time. Options, from best to worst for most cases:
+
+    1. Make the operation atomic in the data store (a conditional update such as `UPDATE ... WHERE balance >= :amt`, or MongoDB `findAndModify` with a filter).
+    2. Optimistic concurrency with a version field and retry.
+    3. A unique constraint or idempotency key.
+    4. A distributed lock (Redis `SET NX PX`, ZooKeeper, a database advisory lock).
+
+    A distributed lock needs a TTL, because the holder may crash, and then a fencing token or version check at the resource, because a holder paused by GC can continue after its lease expired.
 
     **Interviewer listens for:** Immediate "no", preferring data-store atomicity over a distributed lock, and awareness of lease expiry.
+
+    **Common wrong answer:** "Yes, if the lock is static." Each pod has its own JVM.
 
 ### Scenario-based
 
 ??? question "Q16. A payments service freezes about once a week. CPU is near zero and health checks time out. How do you investigate?"
-    **Answer:** Low CPU with no progress suggests blocked threads: a deadlock or an exhausted pool waiting on something. (1) Capture 3 thread dumps about 10 seconds apart *before* restarting. (2) Check for "Found one Java-level deadlock". (3) If absent, group threads by stack: are all request threads waiting on the same lock, the same connection pool or the same `Future.get()`? Find the holder and see what *it* waits for. (4) Typical findings: two code paths taking two locks in opposite order; a lock held across a remote call that hung without a timeout; a task that submits to its own bounded pool and waits for the result. (5) Fix by ordering or removing the nested lock, moving I/O out of the critical section, adding `tryLock` and client timeouts. (6) Add an alert on `findDeadlockedThreads()` and pool-queue metrics so the next one is caught in minutes.
+    **Answer:** Low CPU with no progress suggests blocked threads: a deadlock or an exhausted pool waiting on something:
+
+    1. Capture 3 thread dumps about 10 seconds apart *before* restarting.
+    2. Check for "Found one Java-level deadlock".
+    3. If absent, group threads by stack: are all request threads waiting on the same lock, the same connection pool or the same `Future.get()`? Find the holder and see what *it* waits for.
+    4. Typical findings: two code paths taking two locks in opposite order; a lock held across a remote call that hung without a timeout; a task that submits to its own bounded pool and waits for the result.
+    5. Fix by ordering or removing the nested lock, moving I/O out of the critical section, adding `tryLock` and client timeouts.
+    6. Add an alert on `findDeadlockedThreads()` and pool-queue metrics so the next one is caught in minutes.
 
     **Interviewer listens for:** Evidence before restart, a structured read of the dump, and a prevention step.
+
+    **Common wrong answer:** "Add more CPU." CPU is idle; threads are blocked.
 
 ??? question "Q17. You added `tryLock` with retry to fix a deadlock. Now, under load, CPU hits 100% and throughput collapses. Why?"
     **Answer:** Livelock. Both threads take their first lock, fail on the second, release and retry at the same pace, so they collide again and again. Nothing is blocked, so no deadlock is reported, but the work never completes. Fixes: add **randomised back-off** (jitter) between attempts, ideally growing exponentially with a cap; bound the number of retries and fail the request; and better still remove the need for retry by imposing a lock order so only one thread can ever hold the first lock while wanting the second.
 
     **Interviewer listens for:** Naming it as livelock, jitter, and preferring ordering over retry.
 
+    **Common wrong answer:** "Remove the tryLock and go back to lock()." That restores the deadlock; fix the lock ordering instead.
+
 ??? question "Q18. A config cache is read on every request and refreshed every 5 minutes. A colleague proposes a `ReentrantReadWriteLock`. What do you recommend?"
     **Answer:** No lock at all on the read path. Build a new immutable map on refresh and publish it by assigning a `volatile` field (or `AtomicReference.set`). Readers do one volatile read and always see a complete, consistent snapshot; the writer never blocks them. A read-write lock would add a contended CAS to every request for a read that takes nanoseconds, and it risks writer delay under constant traffic. Use a read-write lock only if readers must see several separate mutable structures together and copying is too expensive. If the refresh itself is expensive, guard only the refresh with a `tryLock()` so one thread reloads and the others keep using the old snapshot.
 
     **Interviewer listens for:** Copy-on-write snapshot, reasoning about read cost, and not reaching for the fancier tool.
+
+    **Common wrong answer:** "A ReadWriteLock is ideal for read-mostly data." A volatile immutable snapshot is faster and simpler.
 
 ## Cheat sheet
 

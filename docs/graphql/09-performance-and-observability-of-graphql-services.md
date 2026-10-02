@@ -272,39 +272,53 @@ export default function () {
 
     **Common wrong answer:** Listing only JVM and HTTP status panels.
 
+??? question "Q6. How should you count errors when every GraphQL response is HTTP 200?"
+    **Answer:** Count from the response body, not the status. Record per operation: total requests, requests with any `errors`, and requests with `data: null` (total failure). Tag errors by classification (`NOT_FOUND`, `FORBIDDEN`, `INTERNAL_ERROR`, upstream timeout) and by the path or data fetcher that failed. Client errors (validation, auth) and server errors go into separate SLIs, so a client sending bad queries does not burn your availability budget.
+
+    **Interviewer listens for:** body-based error metrics, partial vs total failure, classification tags, separate client vs server SLIs.
+
+    **Common wrong answer:** "Our 5xx rate is zero, so the service is healthy." GraphQL failures arrive with status 200.
+
 ### Senior
 
-??? question "Q6. How do you set and enforce SLOs for a GraphQL aggregation service?"
+??? question "Q7. How do you set and enforce SLOs for a GraphQL aggregation service?"
     **Answer:** Define SLOs per critical operation (latency and error), with error budgets, and alert on burn rates (multi-window, e.g. a fast window that pages and a slow window that tickets). Decide what counts as a "bad" request: a 200 with `errors` on a required field is bad, a partial response where an optional widget degraded may be acceptable, so the SLI has to be computed from GraphQL outcomes, not HTTP status. Derive per-upstream timeout budgets from the operation target. An aggregation service cannot be more available than the upstreams on its critical path (five serial dependencies at 99.9% each give roughly 99.5%), so either agree upstream SLOs with the owning teams or design for degradation: nullable fields, caching, fallbacks. Enforce with performance tests on key operations in CI and by spending or freezing on the error budget.
 
     **Interviewer listens for:** per-operation SLI defined on GraphQL outcome, burn-rate alerting, dependency arithmetic, partial-response policy, timeout budgets.
 
     **Common wrong answer:** One global "p95 < X" for `/graphql`, which mixes cheap and expensive operations and hides the ones users care about.
 
-??? question "Q7. How do you load-test a GraphQL API realistically?"
+??? question "Q8. How do you load-test a GraphQL API realistically?"
     **Answer:** Use the production operation mix with realistic variables (list sizes), the auth tokens of different roles, and upstream mocks with realistic latency and faults. Assert on GraphQL errors. Ramp past expected peak (a multiple agreed from capacity targets, 2–3× is a common rule of thumb) and observe pools, upstream calls and p99. Vary the variables so you don't just measure a warm cache, and run both cache-warm and cache-cold. Prefer an open (arrival-rate) workload model over a fixed number of looping virtual users, otherwise a slow server reduces the offered load and hides the problem (coordinated omission). Include a soak run to catch leaks, and a run with one upstream degraded to prove timeouts, breakers and bulkheads protect the other operations.
 
     **Interviewer listens for:** real mix and data shapes, error assertions, cache effects, open vs closed model, degraded-dependency test, what was observed besides latency.
 
     **Common wrong answer:** Hammering one small query with constant variables and reporting the average.
 
+??? question "Q9. How do you know which clients use which operations and fields?"
+    **Answer:** Require each client to send a name and version (for example `apollographql-client-name` / `-version` headers) and named operations. Record them as low-cardinality tags on metrics and as attributes on traces. With persisted queries or an operation registry you know every operation in advance. This lets you contact the owners of a slow or failing operation, judge the impact of a deprecation, and rate-limit or block one misbehaving client.
+
+    **Interviewer listens for:** client identity headers, named operations, operation registry, use in deprecation and incident response.
+
+    **Common wrong answer:** Tagging metrics with the full query text or user id, which explodes cardinality.
+
 ### Scenario-based
 
-??? question "Q8. p99 latency for MemberDashboard doubled after a release, while p50 is unchanged. Investigate."
+??? question "Q10. p99 latency for MemberDashboard doubled after a release, while p50 is unchanged. Investigate."
     **Answer:** Unchanged p50 with doubled p99 means the typical request is fine and a minority is hit, so look for what distinguishes the slow ones. First confirm it's the release (deploy marker, compare by version or canary) and whether it's all clients or one client version. Then compare traces of slow requests with normal ones: is there a new resolver on the critical path, larger list sizes triggering more calls, a new upstream with tail latency, cache misses falling through to a slow path, or pool contention (thread or connection waits) under bursts? Check GC pauses and CPU throttling. Adding one more upstream call also raises tail latency by itself, because the request is now as slow as the slowest of more calls. Mitigate first (roll back or feature-flag the new field), then fix by batching, sizing pools within upstream capacity, tighter timeouts, hedging idempotent reads, or making the new field nullable and deferred.
 
     **Interviewer listens for:** reasoning from the p50/p99 shape, diffing slow vs fast traces, fan-out tail amplification, queueing, mitigate-then-fix, verifying with the same metric afterwards.
 
     **Common wrong answer:** "Scale out the pods." More replicas don't fix a slow upstream tail or a per-request N+1.
 
-??? question "Q9. Your Grafana panel for `graphql.request` can't be broken down by operation name. Why, and what do you do?"
+??? question "Q11. Your Grafana panel for `graphql.request` can't be broken down by operation name. Why, and what do you do?"
     **Answer:** In Spring for GraphQL the request observation has low-cardinality keys `graphql.operation.type` and `graphql.outcome`; `graphql.operation.name` is a high-cardinality key, so it appears on spans but not on the timer. That's deliberate: the name is client-controlled and unbounded. To get per-operation metrics, register a custom `ExecutionRequestObservationConvention` (extend `DefaultExecutionRequestObservationConvention`) that adds the name as a low-cardinality key, mapped to a bounded set (known or persisted operations, everything else `other`). Alternatives are span-derived metrics in the collector or a `MeterFilter` to cap tag values.
 
     **Interviewer listens for:** low vs high cardinality in Micrometer Observation, why the default is safe, bounding the tag.
 
     **Common wrong answer:** "Spring tags it automatically", or adding the raw name (or query text) as a tag with no bound.
 
-??? question "Q10. How does the trace context reach your data fetchers and upstream calls, and where does it get lost?"
+??? question "Q12. How does the trace context reach your data fetchers and upstream calls, and where does it get lost?"
     **Answer:** The incoming `traceparent` header is extracted by the HTTP server observation; the `graphql.request` observation becomes its child, each `graphql.datafetcher` observation is a child of that, and instrumented clients (`RestClient`/`WebClient` built from the auto-configured builder, Kafka templates with observation enabled) inject the header on outgoing calls. It breaks when work hops threads without context propagation: your own executors or `CompletableFuture.supplyAsync` without a context-propagating wrapper, DataLoader batch functions running later on another thread, clients created with `new` instead of the builder, and reactive chains without automatic context propagation. Symptoms are orphan upstream spans or logs without trace IDs. Fix with Micrometer context-propagation (`ContextSnapshot`, a `ContextPropagatingTaskDecorator` on executors) and by always using the instrumented builders.
 
     **Interviewer listens for:** parent/child span structure, W3C trace context, thread hops as the failure point, concrete fix.

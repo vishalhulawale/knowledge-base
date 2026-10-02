@@ -237,9 +237,16 @@ flowchart LR
 
     **Common wrong answer:** "use faster servers".
 
+??? question "Q8. How do you test that a system survives these failures before production does it for you?"
+    **Answer:** Inject the failures on purpose. In integration tests use **Toxiproxy** (or Testcontainers' network tools) to add latency, drop connections and cut bandwidth between your service and Postgres, Redis or Kafka, then assert timeouts, retries and fallbacks behave. In staging and carefully in production, run **chaos experiments** (AWS Fault Injection Service, Chaos Mesh, Litmus): kill pods, black-hole an AZ, throttle a dependency, with a hypothesis, a small blast radius and a stop condition. For databases and consensus systems, **Jepsen**-style tests check whether acknowledged writes survive partitions. Game days rehearse the human side: alerts, runbooks, failover.
+
+    **Interviewer listens for:** fault injection at test and environment level, hypothesis + blast radius + abort condition, data-safety checks, game days.
+
+    **Common wrong answer:** "We test with unit tests and mocks." Mocks never time out halfway or return after the caller gave up.
+
 ### Senior
 
-??? question "Q8. What is a metastable failure? Give an example and a mitigation."
+??? question "Q9. What is a metastable failure? Give an example and a mitigation."
     **Answer:** The system enters a bad state that persists after the trigger is gone, sustained by its own feedback. For example, a brief DB slowdown causes client timeouts, retries double the load, and the DB stays overloaded. Mitigate with:
     - retry budgets and jittered backoff
     - circuit breakers
@@ -253,7 +260,7 @@ flowchart LR
 
     **Common wrong answer:** "restart everything".
 
-??? question "Q9. Why does consensus need timeouts (FLP)?"
+??? question "Q10. Why does consensus need timeouts (FLP)?"
     **Answer:** FLP proves that in a fully asynchronous system with even one possible crash, no deterministic algorithm can guarantee consensus terminates, because you can't distinguish a slow node from a crashed one. Practical protocols (Raft, Paxos) assume partial synchrony and use timeouts for leader election. They stay **safe** always, and are **live** when the network behaves.
 
     **Interviewer listens for:** safety vs liveness.
@@ -262,7 +269,7 @@ flowchart LR
 
 ### Scenario-based
 
-??? question "Q10. Payments occasionally show 'charged twice' after network blips. Diagnose and fix."
+??? question "Q11. Payments occasionally show 'charged twice' after network blips. Diagnose and fix."
     **Answer:** Timeouts led to retries of a non-idempotent charge (the response was lost or the server was slow). Fix:
     - A stable idempotency key per logical charge (from the order), passed to the PSP and stored.
     - On timeout, query the status by key before retrying.
@@ -274,7 +281,7 @@ flowchart LR
 
     **Common wrong answer:** "increase the timeout".
 
-??? question "Q11. A 30-second network partition between two data centres happened during peak. What could go wrong, and what should your design guarantee?"
+??? question "Q12. A 30-second network partition between two data centres happened during peak. What could go wrong, and what should your design guarantee?"
     **Answer:**
     - **What could go wrong:** leader failover to the other DC (possible split brain if not quorum-based), async replication lag causing lost acknowledged writes on failover, clients retrying en masse, caches diverging, and duplicate message processing on rebalance.
     - **What the design should guarantee:** quorum-based leadership with fencing, writes acknowledged only after durable replication for critical data, idempotent consumers, retry budgets, clear RPO for async data, and post-incident reconciliation.

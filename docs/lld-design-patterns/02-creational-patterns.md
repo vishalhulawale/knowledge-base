@@ -321,16 +321,23 @@ public record RetryPolicy(int maxAttempts, Duration initialDelay, double multipl
 
     **Common wrong answer:** "they're faster".
 
+??? question "Q8. Why is Singleton often called an anti-pattern, and what do you use instead?"
+    **Answer:** A hand-written Singleton is **global mutable state with a hidden dependency**. Callers reach it through `getInstance()`, so the dependency does not appear in constructors. Tests cannot swap it and share state between runs. It also fixes the lifecycle (one per class loader), which breaks with multiple tenants or configurations. Instead, let the **DI container** manage one instance (Spring singleton scope) and inject it through the constructor. You keep the "one instance" benefit while the dependency stays explicit and replaceable in tests. Keep the pattern itself for true process-wide resources with no state, or use an `enum` when you really need it.
+
+    **Interviewer listens for:** hidden dependency, global state, testability, DI-managed scope as the replacement, enum when needed.
+
+    **Common wrong answer:** "Singletons are bad because they are slow." The problem is coupling and testability, not speed.
+
 ### Senior
 
-??? question "Q8. How do you inject a new prototype-scoped object into a singleton for each use?"
+??? question "Q9. How do you inject a new prototype-scoped object into a singleton for each use?"
     **Answer:** Injecting it directly happens only once at singleton creation, so you'd always get the same instance. Use `ObjectProvider<T>.getObject()`, a `@Lookup` method, a `Provider<T>` (JSR-330), or a factory bean. Or reconsider: often a stateless design or method parameters are better.
 
     **Interviewer listens for:** knowing this Spring trap.
 
     **Common wrong answer:** "`@Scope("prototype")` on the field".
 
-??? question "Q9. Design object creation for a multi-cloud key-management service."
+??? question "Q10. Design object creation for a multi-cloud key-management service."
     **Answer:**
     - A `KeyManager` port with operations (create, import, rotate, disable, audit).
     - Provider implementations (AWS KMS, Azure Key Vault, GCP KMS) built from per-provider configuration with SDK **builders**.
@@ -343,7 +350,7 @@ public record RetryPolicy(int maxAttempts, Duration initialDelay, double multipl
 
 ### Scenario-based
 
-??? question "Q10. Tests are flaky because they share state through a singleton cache. Fix it."
+??? question "Q11. Tests are flaky because they share state through a singleton cache. Fix it."
     **Answer:**
     - Make the cache a **Spring bean** injected where needed. Reset it or use fresh contexts per test (or `@DirtiesContext` sparingly).
     - Or inject a `Clock` and the cache interface, and use test doubles.
@@ -354,7 +361,7 @@ public record RetryPolicy(int maxAttempts, Duration initialDelay, double multipl
 
     **Common wrong answer:** "run tests sequentially".
 
-??? question "Q11. A domain object has 15 fields and is built in 20 places with different subsets. What would you do?"
+??? question "Q12. A domain object has 15 fields and is built in 20 places with different subsets. What would you do?"
     **Answer:**
     - Introduce a builder with sensible defaults and validation in `build()`.
     - Possibly split the object (15 fields suggests several concepts), so value objects group related fields.

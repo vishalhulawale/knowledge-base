@@ -16,16 +16,16 @@ Depth: **Expert** = can go deep on internals and design trade-offs · **Working*
 | 7 | GraphQL (schema design, resolvers, N+1/DataLoader, federation, security) | Owned the GraphQL Consumer Service over 5 upstream systems | P0 | Expert |
 | 8 | ReactJS (hooks, rendering, state, performance, React 19) | Built the React app from scratch (Optum) | P0 | Expert |
 | 9 | JavaScript & TypeScript fundamentals (closures, event loop, promises, `this`, types) | Required for every front-end round | P0 | Expert |
-| 10 | Frontend architecture (micro-frontends, Redux, React Query, Storybook, MUI, web performance) | Established micro-frontend architecture | P1 | Working → Expert |
-| 11 | Redis & caching strategies | Redis caching for queries and reference data | P1 | Working → Expert |
-| 12 | MongoDB (data modelling, indexing, aggregation, transactions) | Primary datastore at Optum | P1 | Working |
-| 13 | PostgreSQL / SQL (indexing, query plans, transactions, isolation levels) | Listed skill; SQL is asked in almost every backend loop | P1 | Working → Expert |
-| 14 | JPA / Hibernate (entity lifecycle, N+1, caching, locking) | Listed skill; common Spring follow-up | P1 | Working |
+| 10 | Frontend architecture (micro-frontends, Redux, React Query, Storybook, MUI, web performance) | Established micro-frontend architecture | P0 | Working → Expert |
+| 11 | Redis & caching strategies | Redis caching for queries and reference data | P0 | Working → Expert |
+| 12 | MongoDB (data modelling, indexing, aggregation, transactions) | Primary datastore at Optum | P0 | Working |
+| 13 | PostgreSQL / SQL (indexing, query plans, transactions, isolation levels) | Listed skill; SQL is asked in almost every backend loop | P0 | Working → Expert |
+| 14 | JPA / Hibernate (entity lifecycle, N+1, caching, locking) | Listed skill; common Spring follow-up | P0 | Working |
 | 15 | AWS (compute, Lambda, ECS/EKS, API Gateway, S3, SQS/SNS, DynamoDB, RDS, IAM, KMS) | AWS SA certification; Deloitte cloud-native platform | P0 | Expert |
-| 16 | Docker & Kubernetes (EKS/AKS) | Listed skill; deployments on EKS/AKS | P1 | Working |
+| 16 | Docker & Kubernetes (EKS/AKS) | Listed skill; deployments on EKS/AKS | P0 | Working |
 | 17 | CI/CD & DevOps (GitLab CI, Jenkins, Terraform, deployment strategies) | Set engineering and CI/CD standards; Terraform at Deloitte | P2 | Working |
 | 18 | Testing strategy (JUnit 5, Mockito, Testcontainers, Jest, React Testing Library, contract tests) | Set testing standards at Optum | P1 | Working |
-| 19 | Cryptography & key management (encryption, envelope encryption, KMS, HSM, key rotation) | CipherTrust CCKM — 3 years of key management work | P1 | Working → Expert |
+| 19 | Cryptography & key management (encryption, envelope encryption, KMS, HSM, key rotation) | CipherTrust CCKM — 3 years of key management work | P0 | Working → Expert |
 | 20 | Azure (core services, AKS) | Listed skill | P2 | Awareness |
 | 21 | Messaging alternatives: RabbitMQ, SQS/SNS | Listed; "Kafka vs RabbitMQ vs SQS" is a common question | P2 | Awareness |
 | 22 | Elasticsearch & DynamoDB | Search and NoSQL at Deloitte | P2 | Awareness |
@@ -38,8 +38,8 @@ Depth: **Expert** = can go deep on internals and design trade-offs · **Working*
 | 24 | System Design — HLD (scalability, CAP, sharding, caching, rate limiting, classic designs) | Dedicated round for every Senior/Lead role | P0 | Expert |
 | 25 | Low-Level Design & design patterns (SOLID, GoF, clean code) | Machine-coding / LLD round | P0 | Expert |
 | 26 | Distributed systems concepts (consistency, idempotency, exactly-once, retries, distributed transactions) | Underpins Kafka, microservices and system design answers | P0 | Expert |
-| 27 | Data Structures & Algorithms | Coding rounds at most product companies | P1 (P0 for product companies) | Working |
-| 28 | API design (REST best practices, versioning, pagination, error handling, idempotency keys) | Built secure enterprise APIs; integration layer | P1 | Expert |
+| 27 | Data Structures & Algorithms | Coding rounds at most product companies | P0 | Working |
+| 28 | API design (REST best practices, versioning, pagination, error handling, idempotency keys) | Built secure enterprise APIs; integration layer | P0 | Expert |
 | 29 | Observability & production support (logging, metrics, tracing, incident handling) | Owned production support and critical services | P1 | Working |
 | 30 | Application security (OWASP Top 10, CORS, CSRF, XSS, secrets management) | Healthcare/banking/security domains | P1 | Working |
 | 31 | Leadership & behavioral (STAR stories, mentoring, conflict, estimation, hiring, stakeholder management) | Led 8–10 engineers, mentored 5+, ran interviews | P0 | Expert |

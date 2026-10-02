@@ -220,52 +220,104 @@ KeyResolver userKeyResolver() {
 
     **Interviewer listens for:** decoupling from topology plus cross-cutting concerns.
 
+    **Common wrong answer:** "The gateway is where we put shared business logic." Business rules in the gateway turn it into a shared monolith.
+
 ??? question "Q2. API gateway vs load balancer?"
     **Answer:** A load balancer distributes connections across instances (L4/L7). A gateway understands APIs: routes by path, authenticates, applies quotas per client, transforms requests. Often both: ALB in front of the gateway instances.
+
+    **Interviewer listens for:** L4/L7 distribution vs API awareness (routes, auth, quotas, transformation), and that both often coexist.
+
+    **Common wrong answer:** "They are the same thing." A load balancer has no idea of API keys, quotas or tokens.
 
 ??? question "Q3. What is the BFF pattern?"
     **Answer:** A backend per frontend experience (web, mobile, partner), owned by the frontend team, that aggregates and shapes data for that UI. It avoids a one-size-fits-all API and gives UI teams autonomy.
 
     **Common wrong answer:** "A BFF is a gateway for each microservice."
 
+    **Interviewer listens for:** one backend per UI experience, owned by the frontend team, shapes and aggregates data for that screen.
+
 ### Intermediate
 
 ??? question "Q4. What should not go into the gateway?"
     **Answer:** Business logic and domain rules. They make the gateway a shared monolith needing coordinated releases. Keep it to routing and cross-cutting concerns; BFFs may hold presentation logic for their own UI.
 
+    **Interviewer listens for:** routing and cross-cutting concerns only, coordinated-release risk, presentation logic belongs in BFFs.
+
+    **Common wrong answer:** "Validation and orchestration are fine there because every request passes through it."
+
 ??? question "Q5. Gateway vs service mesh?"
     **Answer:** The gateway handles north-south traffic and API management for external clients. A mesh handles east-west traffic between services (mTLS, retries, traffic shifting, telemetry) via sidecars or ambient proxies. They complement each other.
+
+    **Interviewer listens for:** north-south vs east-west, mesh features (mTLS, retries, traffic shifting), complementary not competing.
+
+    **Common wrong answer:** "A mesh replaces the gateway." The mesh does not do API keys, quotas or developer onboarding for external clients.
 
 ??? question "Q6. How do you rate-limit at the gateway?"
     **Answer:** Token bucket (or sliding window) per key (user, API key, client id), with shared state in Redis so all gateway instances agree. Return 429 with `Retry-After`. Use per-user keys rather than IP when clients sit behind NAT.
 
+    **Interviewer listens for:** algorithm choice, per-client key, shared counter store, 429 with Retry-After, NAT problem with IP keys.
+
+    **Common wrong answer:** Keeping counters in each gateway instance's memory, so N instances allow N times the limit.
+
 ??? question "Q7. How does authentication work through a gateway?"
     **Answer:** The gateway validates the token (signature, issuer, audience, expiry) and rejects early. It strips client-supplied identity headers, then relays the token, exchanges it for a downstream-audience token, or forwards verified claims. Services validate again.
 
+    **Interviewer listens for:** validate signature/iss/aud/exp, strip spoofable headers, token relay or exchange, services still validate.
+
+    **Common wrong answer:** "The gateway validates the token, so services can trust any X-User-Id header." Anyone who reaches the service directly can forge it.
+
 ??? question "Q8. How does GraphQL act as a BFF?"
     **Answer:** One endpoint and schema designed around the UI; clients select fields; resolvers call services; DataLoader batches calls per request to avoid N+1; partial failures return `data` plus `errors`. Federation lets domain teams own subgraphs.
+
+    **Interviewer listens for:** UI-shaped schema, field selection, DataLoader batching, partial results with errors, federation for ownership.
+
+    **Common wrong answer:** "GraphQL removes the need for backend services." It is an aggregation layer over them.
 
 ### Senior
 
 ??? question "Q9. How do you prevent the gateway from becoming a single point of failure or bottleneck?"
     **Answer:** Multiple stateless instances across zones behind a load balancer, autoscaling, external state (Redis) for rate limits, per-route timeouts and circuit breakers, bulkheads so one backend can't consume all connections, and a fast config rollback path.
 
+    **Interviewer listens for:** stateless horizontal instances across AZs, external state, timeouts/breakers/bulkheads per route, config rollback.
+
+    **Common wrong answer:** "Run one big instance with lots of CPU." That is still a single point of failure.
+
 ??? question "Q10. One gateway or many?"
     **Answer:** Separate by audience and ownership: an edge layer for shared policies (WAF, TLS), a partner gateway with versioned contracts and quotas, and BFFs per first-party UI owned by those teams. Avoid one gateway team becoming everyone's bottleneck.
 
+    **Interviewer listens for:** split by audience and ownership, shared edge policies, partner gateway, team-owned BFFs.
+
+    **Common wrong answer:** "One gateway for everything, owned by the platform team." Every change then queues behind one team.
+
 ??? question "Q11. Where do you do retries: client, gateway or service?"
     **Answer:** At one layer, as close to the failing call as possible, only for idempotent operations, with exponential backoff, jitter and a retry budget. Retries at several layers multiply load during outages.
+
+    **Interviewer listens for:** a single retry layer, idempotent only, backoff + jitter, retry budget, retry amplification across layers.
+
+    **Common wrong answer:** "Retry at every layer to be safe." Three layers of 3 retries means up to 27 calls per request during an outage.
 
 ### Scenario-based
 
 ??? question "Q12. The mobile team complains the API returns too much data and takes 6 calls per screen. What do you propose?"
     **Answer:** A mobile BFF owned by the mobile team (or a GraphQL layer) that aggregates the six calls server-side and returns a screen-shaped payload, with caching for reference data. Core services stay unchanged.
 
+    **Interviewer listens for:** BFF or GraphQL aggregation, screen-shaped payload, team ownership, core services unchanged.
+
+    **Common wrong answer:** "Add more fields to the existing REST endpoints." That makes the payload worse for every other client.
+
 ??? question "Q13. A partner integration is overwhelming your services. What do you do at the gateway?"
     **Answer:** Per-partner API keys/clients with quotas and rate limits (429 + Retry-After), circuit breakers to protect backends, caching where possible, and usage dashboards. Agree on limits contractually.
 
+    **Interviewer listens for:** per-partner identity and quotas, 429 + Retry-After, breakers protecting backends, usage visibility, contract.
+
+    **Common wrong answer:** "Block the partner's IP." It is crude, breaks the business relationship and is easily bypassed.
+
 ??? question "Q14. Should the GraphQL service validate tokens if the gateway already does?"
     **Answer:** Yes. Defence in depth: the service must check the audience and claims it relies on, and the network path could be bypassed. The gateway's check is a fast early rejection, not the only one.
+
+    **Interviewer listens for:** defence in depth, service checks audience and claims it relies on, gateway bypass risk.
+
+    **Common wrong answer:** "No, double validation is wasted CPU." JWT validation with cached keys costs microseconds.
 
 ## Cheat sheet
 

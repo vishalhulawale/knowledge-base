@@ -224,44 +224,99 @@ function RefillForm() {
 ??? question "Q1. Controlled vs uncontrolled component?"
     **Answer:** Controlled: value comes from React state and changes through onChange. Uncontrolled: the DOM holds the value (defaultValue), read via ref or FormData.
 
+    **Interviewer listens for:** source of truth (React state vs DOM), value/onChange vs defaultValue/ref/FormData.
+
+    **Common wrong answer:** "Uncontrolled inputs are bad practice." They are often the better choice for large or simple forms.
+
 ??? question "Q2. Why is file input always uncontrolled?"
     **Answer:** Its value is read-only for security; you can't set it programmatically, only read the selected files.
 
+    **Interviewer listens for:** read-only value for security, files list only.
+
+    **Common wrong answer:** Trying to set `value` on a file input to reset or prefill it.
+
 ??? question "Q3. What causes 'changing an uncontrolled input to be controlled'?"
     **Answer:** The `value` prop starts as undefined/null and later becomes defined. Initialise with an empty string.
+
+    **Interviewer listens for:** undefined to defined value, initialise to empty string.
+
+    **Common wrong answer:** Fixing it by switching `value` to `defaultValue` in the middle of the component's life.
 
 ### Intermediate
 
 ??? question "Q4. When would you choose uncontrolled inputs?"
     **Answer:** Large forms where per-keystroke renders are costly, simple submit-only forms, file inputs, integration with non-React widgets, and progressive-enhancement forms.
 
+    **Interviewer listens for:** render cost, submit-only forms, file inputs, non-React widgets, progressive enhancement.
+
+    **Common wrong answer:** "Only when you do not need validation." Uncontrolled forms can still be validated on submit or blur.
+
 ??? question "Q5. What does useActionState do?"
     **Answer:** Wraps an action to return its latest result state, a form action to pass to `<form action>`, and an isPending flag; the action receives the previous state and FormData.
+
+    **Interviewer listens for:** result state, action for the form, isPending, previous state + FormData.
+
+    **Common wrong answer:** "It replaces useState for all form fields." It manages the action result, not every field value.
 
 ??? question "Q6. What is useFormStatus for?"
     **Answer:** Lets a component inside a form (like a submit button) read the form's pending status and submitted data without prop drilling.
 
+    **Interviewer listens for:** pending status from the parent form, no prop drilling, must be inside the form.
+
+    **Common wrong answer:** Calling useFormStatus in the component that renders the `<form>`. It only works in a child of the form.
+
 ??? question "Q7. How do you validate forms well?"
     **Answer:** HTML constraints, a shared schema (Zod) on client and server, show errors on blur/submit, focus the first invalid field, accessible messages, server as the authority.
 
+    **Interviewer listens for:** HTML constraints, shared schema client and server, timing of errors, focus, accessibility, server authority.
+
+    **Common wrong answer:** "Client-side validation is enough." Any client check can be bypassed.
+
+??? question "Q8. How do you make a form accessible?"
+    **Answer:** Every input needs a **visible `<label>`** linked with `htmlFor`/`id` (placeholders are not labels). Group related inputs with `<fieldset>` and `<legend>`. Show errors as text linked with `aria-describedby`, set `aria-invalid` on the invalid field, and **move focus** to the first invalid field (or an error summary) on submit. Don't rely on colour alone. Make the whole form usable with a keyboard, and announce async results ("Saved") with a polite live region.
+
+    **Interviewer listens for:** real labels, fieldset/legend, aria-describedby + aria-invalid, focus management, keyboard use, live regions.
+
+    **Common wrong answer:** "Add aria-label to everything." Native elements with visible labels are better than ARIA added on top.
+
 ### Senior
 
-??? question "Q8. How does React Hook Form avoid re-renders?"
+??? question "Q9. How does React Hook Form avoid re-renders?"
     **Answer:** Inputs are registered uncontrolled via refs; form state is held outside React state and components subscribe only to what they use (e.g. specific errors).
 
-??? question "Q9. What is useOptimistic?"
+    **Interviewer listens for:** uncontrolled registration via refs, state outside React, field-level subscriptions.
+
+    **Common wrong answer:** "It uses memo on each field." It avoids re-renders by not storing values in React state.
+
+??? question "Q10. What is useOptimistic?"
     **Answer:** Shows an optimistic version of state while an action is in progress, automatically reverting to the real state when it completes or fails.
 
-??? question "Q10. How do you prevent double submissions end to end?"
+    **Interviewer listens for:** temporary optimistic state, auto-revert, used with actions.
+
+    **Common wrong answer:** "useOptimistic updates the server faster." It only changes what the UI shows until the real result arrives.
+
+??? question "Q11. How do you prevent double submissions end to end?"
     **Answer:** Disable while pending (useFormStatus/isSubmitting), idempotency key per submission sent to the server, and server-side dedupe.
+
+    **Interviewer listens for:** disable while pending, idempotency key, server dedupe.
+
+    **Common wrong answer:** "Disable the button" alone. Double-clicks, retries and slow networks still create duplicates.
 
 ### Scenario-based
 
-??? question "Q11. A 60-field enrollment form lags when typing. Fix it."
+??? question "Q12. A 60-field enrollment form lags when typing. Fix it."
     **Answer:** Move to uncontrolled registration (React Hook Form), split into sections/steps, avoid lifting all values into one parent state, and validate on blur.
 
-??? question "Q12. How do you show server validation errors next to fields?"
+    **Interviewer listens for:** uncontrolled registration, sections/steps, no giant parent state, validate on blur.
+
+    **Common wrong answer:** "Add useMemo to every field."
+
+??? question "Q13. How do you show server validation errors next to fields?"
     **Answer:** Server returns field-level errors (e.g. GraphQL userErrors with field paths); map them into form state (`setError` or action state) and render with aria-describedby.
+
+    **Interviewer listens for:** field-level error contract, map to form errors, aria-describedby.
+
+    **Common wrong answer:** Showing one generic toast with "Validation failed".
 
 ## Cheat sheet
 

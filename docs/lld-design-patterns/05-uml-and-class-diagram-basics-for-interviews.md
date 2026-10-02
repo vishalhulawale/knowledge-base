@@ -263,9 +263,16 @@ classDiagram
 
     **Common wrong answer:** "they're interchangeable".
 
+??? question "Q8. How do you show abstract classes, static members, enums and generics in a class diagram?"
+    **Answer:** Abstract class or method: *italic* name or the `{abstract}` / `<<abstract>>` marker. Static member: **underlined**. Interface and enum: stereotypes `<<interface>>` and `<<enumeration>>`, with enum constants listed in the attribute box. Generics: a small dashed box with the type parameter on the class corner (`List<T>`), or simply write `Repository<T>` in an interview. Mermaid supports `<<interface>>`, `$` for static and `*` for abstract.
+
+    **Interviewer listens for:** the notation for each and a willingness to keep it simple on a whiteboard.
+
+    **Common wrong answer:** Spending interview minutes on perfect UML notation. Interviewers care that the relationships are right.
+
 ### Senior
 
-??? question "Q8. How do composition boundaries map to persistence?"
+??? question "Q9. How do composition boundaries map to persistence?"
     **Answer:**
     - **Composition ≈ aggregate boundary.**
     - In JPA: `cascade = ALL` + `orphanRemoval = true` on the owned collection, with no repository for the parts.
@@ -278,16 +285,23 @@ classDiagram
 
     **Common wrong answer:** "always cascade".
 
-??? question "Q9. Why avoid bidirectional associations by default?"
+??? question "Q10. Why avoid bidirectional associations by default?"
     **Answer:** Both sides must be kept consistent (helper methods), they risk infinite recursion in serialisation (`toString`/JSON), JPA has owner vs inverse-side subtleties, and they increase coupling. Make them unidirectional unless navigation in both directions is a real use case, and use queries for the reverse direction.
 
     **Interviewer listens for:** practical pain points.
 
     **Common wrong answer:** "bidirectional is more complete".
 
+??? question "Q11. What design decisions does a class diagram not capture, and how do you cover them?"
+    **Answer:** A class diagram shows structure. It does not show **mutability** (which fields are final), **nullability**, **ownership and lifecycle** (who creates and deletes), **thread safety**, **transaction boundaries**, **equality** (entity id vs value) or **error handling**. Cover them with short notes next to the diagram, a sequence diagram for the main flow, a state diagram for lifecycles, and by stating them aloud: "`Reservation` is immutable once confirmed; seat holds are guarded by a conditional update."
+
+    **Interviewer listens for:** lists the missing dimensions, uses other diagrams or notes, states concurrency and lifecycle explicitly.
+
+    **Common wrong answer:** "The class diagram is the full design." Most production bugs live in what it leaves out.
+
 ### Scenario-based
 
-??? question "Q10. Draw the class diagram for a library system in 5 minutes. What do you include?"
+??? question "Q12. Draw the class diagram for a library system in 5 minutes. What do you include?"
     **Answer:**
     - `Library *-- BookCopy` (copies are owned, physical items).
     - `Book` (title/ISBN) `1 -- * BookCopy`.

@@ -289,9 +289,16 @@ UPDATE prescription SET state = 'FILLED', version = version + 1
 
     **Common wrong answer:** "a password for the lock".
 
+??? question "Q8. What is a lease, and how is it different from a lock?"
+    **Answer:** A lease is a lock **with an expiry**. The holder must renew it before it runs out. If the holder crashes, the lease expires and someone else can take over, so there is no deadlock. The catch is **time**: a holder that pauses (GC, VM freeze) past the expiry still believes it holds the lease while another node has taken it. Leases therefore need a safety margin, holders that check remaining time before acting, and **fencing tokens** at the resource so a stale holder's writes are rejected.
+
+    **Interviewer listens for:** expiry and renewal, no deadlock on crash, clock and pause hazards, fencing tokens.
+
+    **Common wrong answer:** "A lease with a short TTL is safe." A stop-the-world pause longer than the TTL still produces two holders.
+
 ### Senior
 
-??? question "Q8. Summarise the Redlock debate."
+??? question "Q9. Summarise the Redlock debate."
     **Answer:**
     - **Redlock** acquires locks on a majority of N independent Redis nodes within a validity time.
     - **Kleppmann's critique:** it relies on bounded clock drift and process pauses, which real systems violate (GC, NTP jumps), and it doesn't provide fencing tokens, so it isn't safe for correctness.
@@ -302,7 +309,7 @@ UPDATE prescription SET state = 'FILLED', version = version + 1
 
     **Common wrong answer:** "Redlock is perfectly safe".
 
-??? question "Q9. HLC vs TrueTime?"
+??? question "Q10. HLC vs TrueTime?"
     **Answer:** **HLC** combines physical time and a logical counter. It preserves causality while staying close to wall time, but needs a bounded max clock offset (CockroachDB nodes exit if they exceed it). **TrueTime** provides explicit uncertainty bounds (GPS + atomic clocks). Spanner waits out the uncertainty at commit for external consistency. TrueTime gives stronger guarantees with special hardware. HLC runs on commodity clocks.
 
     **Interviewer listens for:** the uncertainty handling difference.
@@ -311,7 +318,7 @@ UPDATE prescription SET state = 'FILLED', version = version + 1
 
 ### Scenario-based
 
-??? question "Q10. A nightly payout job ran twice in parallel and paid some vendors twice. Design the fix."
+??? question "Q11. A nightly payout job ran twice in parallel and paid some vendors twice. Design the fix."
     **Answer:**
     - **Prevention:** a consensus- or DB-based lock (ShedLock on the payouts DB, or a Postgres advisory lock), plus idempotency: a unique `(payout_run_date, vendor_id)` constraint so double payment is impossible even if two runs overlap.
     - Fencing tokens on writes to external payout rails (or idempotency keys with the bank/provider).
@@ -322,7 +329,7 @@ UPDATE prescription SET state = 'FILLED', version = version + 1
 
     **Common wrong answer:** "use a longer Redis TTL".
 
-??? question "Q11. Two services sync profile updates using 'last updated timestamp wins'. Users lose edits. Why, and what's the fix?"
+??? question "Q12. Two services sync profile updates using 'last updated timestamp wins'. Users lose edits. Why, and what's the fix?"
     **Answer:** Clock skew between services or devices: an older edit with a later (skewed) timestamp overwrites a newer one. Concurrent edits also silently overwrite each other. Fixes:
     - server-assigned monotonic versions per profile (optimistic concurrency: reject or merge on version mismatch)
     - field-level merges or CRDTs for concurrent edits

@@ -353,6 +353,8 @@ server:
 
     **Common wrong answer:** "`worker` twice", or "the second `start()` runs it again because the thread has finished".
 
+    **Interviewer listens for:** run() executes on the caller's thread, a thread can be started only once.
+
 ??? question "Q3. Name the thread states. Which one covers a thread blocked reading from a socket?"
     **Answer:** `NEW`, `RUNNABLE`, `BLOCKED`, `WAITING`, `TIMED_WAITING`, `TERMINATED`. A thread in a blocking socket read is `RUNNABLE`, because the state reflects the JVM's view and the thread is inside a native call. `BLOCKED` means only "waiting for a `synchronized` monitor".
 
@@ -365,13 +367,21 @@ server:
 
     **Interviewer listens for:** `Future`, `ExecutionException`, and that both are tasks that are independent of the thread that runs them.
 
+    **Common wrong answer:** "Callable runs on a separate thread and Runnable does not." Both are just tasks; the executor decides the thread.
+
 ??? question "Q5. Why is implementing `Runnable` preferred over extending `Thread`?"
     **Answer:** It separates the task from the execution mechanism. The same `Runnable` can run on a new thread, a pool, a scheduler or a virtual thread. Extending `Thread` uses the only superclass slot, ties the work to one thread object, and cannot be submitted to an executor in a meaningful way. It also follows "composition over inheritance": you are not creating a special kind of thread, you are describing work.
+
+    **Interviewer listens for:** task vs execution mechanism, reuse with pools and virtual threads, single inheritance.
+
+    **Common wrong answer:** "Extending Thread is faster."
 
 ??? question "Q6. What is a daemon thread?"
     **Answer:** A thread that does not keep the JVM alive. The JVM exits when the last non-daemon thread ends, and remaining daemon threads are abandoned without running their `finally` blocks. Daemon status must be set before `start()` and is inherited from the creating thread. Virtual threads are always daemon.
 
     **Common wrong answer:** "Daemon threads have lower priority" or "daemon threads are killed gracefully".
+
+    **Interviewer listens for:** JVM does not wait for it, finally blocks may not run, unsuitable for work that must finish.
 
 ### Intermediate
 
@@ -385,10 +395,14 @@ server:
 
     **Interviewer listens for:** lock behaviour of `sleep` vs `wait`, and the `while` loop.
 
+    **Common wrong answer:** "sleep releases locks." Only wait releases the monitor it was called on.
+
 ??? question "Q8. How do you stop a thread?"
     **Answer:** You cannot force it. `Thread.stop()` was unsafe because it released monitors at an arbitrary point and left shared state inconsistent. It has been deprecated since Java 1.2 and throws `UnsupportedOperationException` since Java 20. The correct way is cooperative: call `interrupt()`, and write the task to check `isInterrupted()` in loops and to handle `InterruptedException` by cleaning up and exiting. With executors, use `future.cancel(true)` or `shutdownNow()`, which interrupt the workers.
 
     **Common wrong answer:** "Call `stop()`" or "set the thread to null".
+
+    **Interviewer listens for:** cooperative interruption, checking the flag, interruptible blocking calls, executor shutdown.
 
 ??? question "Q9. What does this print?"
     ```java
@@ -402,15 +416,21 @@ server:
 
     **Interviewer listens for:** the difference between the static clearing method and the instance read-only method.
 
+    **Common wrong answer:** "true true true." Thread.interrupted() clears the flag.
+
 ??? question "Q10. What should you do when you catch `InterruptedException`?"
     **Answer:** Either propagate it (declare `throws InterruptedException`) or, when the signature does not allow that, restore the flag with `Thread.currentThread().interrupt()` and stop the current work. The flag is cleared when the exception is thrown, so swallowing it erases the cancellation request, and code higher in the stack (the pool worker, the shutdown logic) never learns about it.
 
     **Common wrong answer:** "Log it and continue" or "wrap it in a `RuntimeException`" without restoring the flag.
 
+    **Interviewer listens for:** propagate or restore the flag, stop the work.
+
 ??? question "Q11. A task submitted with `executor.submit(runnable)` throws a `RuntimeException`. What happens? What if `execute()` was used?"
     **Answer:** With `submit`, the task is wrapped in a `FutureTask` that catches the exception and stores it. Nothing is logged. It surfaces only when someone calls `future.get()`, as an `ExecutionException` with the original as the cause. With `execute`, the exception escapes the worker's `run`, reaches the uncaught exception handler (stack trace on `System.err` by default), and the pool replaces the dead worker thread.
 
     **Interviewer listens for:** silent failure with `submit`, `ExecutionException.getCause()`.
+
+    **Common wrong answer:** "The exception is printed to the console." With submit it is stored in the Future and lost if no one calls get.
 
 ### Senior
 
@@ -419,20 +439,28 @@ server:
 
     **Interviewer listens for:** park vs monitor, practical thread-dump reading.
 
+    **Common wrong answer:** "BLOCKED." That state is only for synchronized monitors.
+
 ??? question "Q13. Why not create a new platform thread for every request?"
     **Answer:** Each platform thread reserves a stack (about 1 MB by default), takes a kernel thread, and costs time to create and destroy. Under a traffic spike, thread count is unbounded: memory runs out (`unable to create native thread`) and the CPU spends its time context switching. A pool bounds the resource and reuses threads, and a bounded queue plus a rejection policy gives back-pressure. Virtual threads change the calculation: they are cheap enough to create one per task and should not be pooled. Concurrency towards a dependency is then limited with a semaphore, not with pool size.
 
     **Interviewer listens for:** cost model, bounding and back-pressure, the virtual-thread update.
+
+    **Common wrong answer:** "Threads are cheap in Java." Platform threads are OS threads with large reserved stacks.
 
 ??? question "Q14. What visibility guarantees do `start()` and `join()` give?"
     **Answer:** The Java Memory Model defines happens-before edges for both. A call to `start()` happens-before every action in the started thread, so the new thread sees all writes the parent made before starting it. Every action in a thread happens-before another thread's successful return from `join()` on it, so the joiner sees all of its writes without `volatile` or locks. Submitting a task to an executor and reading its result through `Future.get()` give equivalent guarantees.
 
     **Interviewer listens for:** the phrase happens-before, and that without one of these edges visibility is not guaranteed.
 
+    **Common wrong answer:** "Threads always see each other's writes eventually." Without happens-before edges there is no guarantee.
+
 ??? question "Q15. `future.get(1, SECONDS)` throws `TimeoutException`. Is the task stopped?"
     **Answer:** No. The timeout only stops the caller from waiting. The task continues and still occupies a pool thread. You must call `future.cancel(true)`, which interrupts the worker, and even that works only if the task responds to interruption. A blocking `java.io` socket read on a platform thread does not, so the real protection is connect and read timeouts on the client itself. Without both, timed-out work piles up and exhausts the pool.
 
     **Common wrong answer:** "The timeout kills the task."
+
+    **Interviewer listens for:** the timeout only stops waiting, cancel(true) interrupts, the task must respond to interruption.
 
 ### Scenario-based
 
@@ -441,15 +469,21 @@ server:
 
     **Interviewer listens for:** non-daemon threads keep the JVM alive, interruption as the shutdown mechanism, taking evidence before guessing.
 
+    **Common wrong answer:** "Kubernetes is slow to kill pods." The app is not shutting down its non-daemon threads or executors.
+
 ??? question "Q17. The service stops responding but CPU is near zero. The thread dump shows 200 `http-nio` threads `RUNNABLE` in `SocketInputStream.socketRead0`. Diagnose."
     **Answer:** All Tomcat request threads are blocked on a read from a downstream dependency (database or HTTP). They show as `RUNNABLE` because they are in native I/O, which also explains the idle CPU. New requests queue and time out. The frames below `socketRead0` name the dependency. (That frame name is from Java 8 to 12. On Java 13+ the same situation shows `NioSocketImpl.implRead` and `SocketDispatcher.read0`, and the diagnosis is identical.) Immediate action: relieve the dependency or restart to recover. Permanent fix: read and connect timeouts on that client, a bulkhead or circuit breaker so one slow dependency cannot take every request thread, and possibly virtual threads so blocked calls do not hold OS threads (timeouts are still needed).
 
     **Common wrong answer:** "RUNNABLE means they are burning CPU, so add more CPU or more threads."
 
+    **Interviewer listens for:** RUNNABLE in native socket reads, missing read timeouts, pool exhaustion.
+
 ??? question "Q18. A nightly reconciliation job scheduled with `scheduleAtFixedRate` ran for weeks and then stopped. No errors in the logs. Why?"
     **Answer:** If a run of a periodic task throws, `ScheduledExecutorService` suppresses all later runs. The exception is stored in the `ScheduledFuture`, which nobody reads, so nothing is logged. Fix: wrap the task body in `try/catch (Throwable)` that logs and raises a metric, alert on "last successful run" age, and consider Spring's `@Scheduled`, whose default error handler logs the exception and keeps the schedule.
 
     **Interviewer listens for:** knows this specific behaviour, adds observability and not only a catch block.
+
+    **Common wrong answer:** "The scheduler thread died." The executor suppressed later runs after one exception.
 
 ## Cheat sheet
 

@@ -220,44 +220,99 @@ test("member requests a refill", async ({ page }) => {
 ??? question "Q1. What is React Testing Library's philosophy?"
     **Answer:** Test components the way users use them: query the DOM by accessible roles, labels and text, interact like a user, assert on visible results, not implementation details.
 
+    **Interviewer listens for:** user perspective, accessible queries, visible results, no implementation details.
+
+    **Common wrong answer:** "Test component state and props." Those tests break on refactors that do not change behaviour.
+
 ??? question "Q2. getBy vs queryBy vs findBy?"
     **Answer:** getBy throws if not found (use when it must exist), queryBy returns null (assert absence), findBy returns a promise and waits (async appearance).
 
+    **Interviewer listens for:** throws vs null vs promise; presence, absence, async.
+
+    **Common wrong answer:** Using getBy to assert absence, which throws before the assertion runs.
+
 ??? question "Q3. Why prefer getByRole?"
     **Answer:** It matches how assistive technologies see the page, so tests also verify accessibility (role and accessible name).
+
+    **Interviewer listens for:** accessible role and name, mirrors assistive technology, accessibility checked for free.
+
+    **Common wrong answer:** "getByTestId is the most reliable query." It is a last resort that skips accessibility.
 
 ### Intermediate
 
 ??? question "Q4. user-event vs fireEvent?"
     **Answer:** user-event simulates full interactions (focus, pointer, keyboard sequences, input events) and is async; fireEvent dispatches a single DOM event. Prefer user-event.
 
+    **Interviewer listens for:** full interaction sequences, async API, prefer user-event.
+
+    **Common wrong answer:** Calling user-event without `await` in v14, which causes act warnings and flaky tests.
+
 ??? question "Q5. How do you mock API calls?"
     **Answer:** MSW at the network layer with handlers per test (override with server.use), keeping real fetching code; module mocks only for non-network dependencies.
+
+    **Interviewer listens for:** network-level mocking with MSW, per-test overrides, real fetch code.
+
+    **Common wrong answer:** Mocking `fetch` or `axios` with jest.fn in every test, which skips request building and parsing.
 
 ??? question "Q6. How do you test async UI correctly?"
     **Answer:** findBy queries and waitFor with a single assertion, fake timers for debounce/timeouts, await all user-event calls; no fixed sleeps.
 
+    **Interviewer listens for:** findBy and waitFor, fake timers, await interactions, no sleeps.
+
+    **Common wrong answer:** Adding `setTimeout(…, 1000)` waits.
+
 ??? question "Q7. How do you test a custom hook?"
     **Answer:** Through a component that uses it, or renderHook for logic-heavy hooks, wrapping required providers.
 
+    **Interviewer listens for:** through a component, renderHook for logic-heavy hooks, providers wrapper.
+
+    **Common wrong answer:** Calling the hook directly as a function outside React.
+
+??? question "Q8. How do you test accessibility in a React app?"
+    **Answer:** Use layers. **Role-based RTL queries** already fail when elements lack roles or accessible names. Add **jest-axe / vitest-axe** (axe-core) in component tests to catch missing labels, bad ARIA and contrast issues detectable in the DOM. Run **Playwright with @axe-core/playwright** on key pages in CI. Add lint rules (`eslint-plugin-jsx-a11y`). Automated tools find only part of the problems, so keep periodic **manual keyboard and screen-reader checks** (NVDA, VoiceOver) on critical journeys.
+
+    **Interviewer listens for:** role queries, axe in unit and E2E tests, lint, the limits of automation, manual screen-reader passes.
+
+    **Common wrong answer:** "Lighthouse gives 100 so we are accessible." Automated checks miss focus order, meaning and many interaction issues.
+
 ### Senior
 
-??? question "Q8. What's your frontend testing strategy?"
+??? question "Q9. What's your frontend testing strategy?"
     **Answer:** Static checks (TypeScript, lint) → unit tests for pure logic → most coverage as RTL + MSW integration tests per screen → a few Playwright E2E journeys → a11y and visual tests where valuable; CI gates on all.
 
-??? question "Q9. Why avoid big snapshot tests?"
+    **Interviewer listens for:** static checks, unit, integration-heavy RTL + MSW, few E2E, a11y/visual, CI gates.
+
+    **Common wrong answer:** "100% unit test coverage." Coverage of implementation details does not prove the screens work.
+
+??? question "Q10. Why avoid big snapshot tests?"
     **Answer:** They fail on any markup change, get updated without review, and don't express intent. Use explicit assertions or visual regression tools.
 
-??? question "Q10. Jest vs Vitest?"
+    **Interviewer listens for:** brittle, rubber-stamped updates, no intent.
+
+    **Common wrong answer:** "Snapshots catch everything." They catch change, not correctness.
+
+??? question "Q11. Jest vs Vitest?"
     **Answer:** Same API style. Vitest is Vite-native (shares config/transforms), fast with ESM and watch mode; Jest is mature and common in non-Vite setups.
+
+    **Interviewer listens for:** same API, Vite-native, ESM speed, maturity.
+
+    **Common wrong answer:** "Vitest cannot run React Testing Library." It supports it with jsdom or happy-dom.
 
 ### Scenario-based
 
-??? question "Q11. Tests are flaky with act warnings."
+??? question "Q12. Tests are flaky with act warnings."
     **Answer:** Async updates not awaited (user-event, findBy), shared state between tests (query cache, MSW handlers not reset), or real timers in debounce logic. Fix awaits, reset per test, fake timers.
 
-??? question "Q12. How do you test that a pharmacist-only button is hidden for members?"
+    **Interviewer listens for:** unawaited updates, shared cache/handlers, real timers; awaits, per-test reset, fake timers.
+
+    **Common wrong answer:** Wrapping everything in `act()` manually to silence the warning.
+
+??? question "Q13. How do you test that a pharmacist-only button is hidden for members?"
     **Answer:** Render with a member session provider and assert `queryByRole("button", { name: /approve/i })` is null; render with a pharmacist session and assert it's present. The API authorisation is tested in the backend.
+
+    **Interviewer listens for:** render with each role, queryByRole null vs present, API tested separately.
+
+    **Common wrong answer:** Asserting a CSS class like `hidden` instead of checking the accessible element is absent.
 
 ## Cheat sheet
 

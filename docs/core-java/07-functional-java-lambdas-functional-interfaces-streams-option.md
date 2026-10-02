@@ -391,6 +391,8 @@ The resume doesn't call out "Java Streams" by name, but every Java/Spring Boot s
 
     **Interviewer listens for:** laziness, single use, the exception type.
 
+    **Common wrong answer:** "You can call collect twice on the same stream." The second terminal operation throws IllegalStateException.
+
 ??? question "Q4. `orElse` vs `orElseGet` vs `orElseThrow`?"
     **Answer:** `orElse(value)` takes an already-computed value, so its argument is **always evaluated**, even when the Optional is non-empty. `orElseGet(supplier)` runs the supplier only when empty. `orElseThrow()` (Java 10) throws `NoSuchElementException` when empty and is the preferred replacement for `get()`. `orElseThrow(supplier)` throws your own exception.
 
@@ -424,20 +426,28 @@ The resume doesn't call out "Java Streams" by name, but every Java/Spring Boot s
 
     **Interviewer listens for:** knowledge that the implementation may skip stages, and the rule "no logic in peek".
 
+    **Common wrong answer:** "It prints 1, 2, 3 then 3." Since Java 9 count may skip traversal entirely.
+
 ??? question "Q7. `Collectors.toMap` throws in production. What are the two common causes and fixes?"
     **Answer:** (1) **Duplicate keys** → `IllegalStateException: Duplicate key`. Fix: a merge function `(a, b) -> ...` with a deliberate policy, or `groupingBy` if duplicates are valid. (2) **Null values** → `NullPointerException`, because `toMap` rejects null values (the 2-arg form calls `Objects.requireNonNull` on the mapped value; the merge-function forms accumulate with `Map.merge`, which throws on a null value). Fix: filter nulls, map to a sentinel, or collect manually with `collect(HashMap::new, (m, e) -> m.put(...), Map::putAll)`. Also pass a map supplier (`LinkedHashMap::new`, `TreeMap::new`) if order matters.
 
     **Interviewer listens for:** both causes, the merge function, and treating duplicates as a business decision.
+
+    **Common wrong answer:** Fixing the duplicate key error with a merge function that keeps an arbitrary value without asking which one is correct.
 
 ??? question "Q8. `Stream.toList()` vs `Collectors.toList()` vs `Collectors.toUnmodifiableList()`?"
     **Answer:** `Stream.toList()` (Java 16) returns an unmodifiable list and **allows** null elements. `Collectors.toUnmodifiableList()` (Java 10) is also unmodifiable but **throws NPE on nulls**. `Collectors.toList()` gives no guarantee on type or mutability (an `ArrayList` in practice). Choose based on whether callers will mutate and whether nulls can appear.
 
     **Interviewer listens for:** mutability and null-handling differences, and the migration risk.
 
+    **Common wrong answer:** "They all return an ArrayList." Only Collectors.toList happens to, and that is not guaranteed.
+
 ??? question "Q9. `map` vs `flatMap`, for both Stream and Optional?"
     **Answer:** `map` applies `T → R` and wraps each result: a function returning a `List` gives `Stream<List<R>>`. `flatMap` applies `T → Stream<R>` and flattens, giving `Stream<R>`. For Optional, `map` with a function that returns an `Optional` gives `Optional<Optional<R>>`. `flatMap` avoids the nesting, which is how you chain finder calls: `findMember(id).flatMap(this::findPrimaryPlan)`. Java 16's `mapMulti` is an imperative alternative to `flatMap` that avoids creating small streams per element.
 
     **Interviewer listens for:** flattening, the Optional chaining use case.
+
+    **Common wrong answer:** Using map with a function that returns Optional, then calling get on the nested Optional.
 
 ### Senior
 
@@ -453,15 +463,21 @@ The resume doesn't call out "Java Streams" by name, but every Java/Spring Boot s
 
     **Interviewer listens for:** common pool, CPU vs I/O, splittability, measure-first, alternatives (executors, virtual threads, `mapConcurrent`).
 
+    **Common wrong answer:** "Parallel streams always make things faster." Blocking calls in the common pool hurt the whole JVM.
+
 ??? question "Q12. Why shouldn't `Optional` be used as a field or method parameter?"
     **Answer:** It was designed as a return-type mechanism. As a field: it's not `Serializable` (a problem for JPA entities, session state, caches), it adds an object per field, and frameworks like Jackson and JPA need extra support for it. As a parameter: callers can still pass `null` for the `Optional` itself, so you now have three states (null, empty, present), and overloading or a nullable parameter is clearer. For collections, return an empty collection. Keep the field nullable and expose an `Optional` getter instead.
 
     **Interviewer listens for:** design intent, serialization, the three-state problem, empty collections.
 
+    **Common wrong answer:** "Optional removes NullPointerExceptions." A null Optional reference still throws.
+
 ??? question "Q13. What are Stream Gatherers (Java 24) and what problem do they solve?"
     **Answer:** Before Java 24 you could write custom terminal operations (via `Collector`) but not custom **intermediate** operations. JEP 485 adds `Stream.gather(Gatherer)`, where a gatherer can keep state, transform one-to-many or many-to-one, and short-circuit. Built-ins in `java.util.stream.Gatherers` include `windowFixed`, `windowSliding`, `fold`, `scan` and `mapConcurrent` (which runs a function concurrently on virtual threads with a concurrency limit while preserving order). Example: batching IDs into groups of 100 for an upstream bulk API with `ids.stream().gather(Gatherers.windowFixed(100))`.
 
     **Interviewer listens for:** intermediate vs terminal extensibility, a concrete use case. Bonus for knowing it was preview in 22/23 and final in 24, so it's available on Java 25 LTS.
+
+    **Common wrong answer:** "Gatherers are new terminal collectors." They are custom intermediate operations.
 
 ### Scenario-based
 
@@ -470,15 +486,21 @@ The resume doesn't call out "Java Streams" by name, but every Java/Spring Boot s
 
     **Interviewer listens for:** reading the error precisely, refusing to silently pick a winner, contract clarification, tests and observability.
 
+    **Common wrong answer:** Wrapping the whole job in try/catch and skipping members with problems silently.
+
 ??? question "Q15. A teammate parallelised `ids.parallelStream().map(client::fetch).toList()` to speed up 200 HTTP calls. Latency of unrelated endpoints went up. Explain and fix."
     **Answer:** The HTTP calls block threads of `ForkJoinPool.commonPool()`, which has only `cores - 1` workers by default (the calling request thread helps too). The 200 calls barely run in parallel, and every other user of the common pool (other parallel streams, `CompletableFuture.supplyAsync` without an executor) queues behind them. Fix: use a dedicated bounded executor or virtual threads (`Executors.newVirtualThreadPerTaskExecutor()` on Java 21) with a concurrency limit (semaphore) to protect the upstream, plus per-call timeouts. Better still, ask for a bulk endpoint. On Java 24+, `Gatherers.mapConcurrent(20, client::fetch)` is a neat option. Use a reactive client if the service is already reactive.
 
     **Interviewer listens for:** common pool starvation, I/O vs CPU, bounded concurrency, timeouts, upstream protection.
 
+    **Common wrong answer:** "Make it parallelStream with a bigger common pool." Use bounded concurrency with virtual threads or an async client instead.
+
 ??? question "Q16. Code review: `List<Dto> out = new ArrayList<>(); orders.stream().filter(o -> o.total() > 100).forEach(o -> out.add(toDto(o)));` What would you say?"
     **Answer:** It works sequentially, but it uses a stream as a loop with a side effect. It becomes a data race if someone later adds `.parallel()`, and it hides the intent. Prefer `orders.stream().filter(o -> o.total() > 100).map(this::toDto).toList()` (or `collect(Collectors.toList())` if callers need to mutate). If the logic needs complex control flow, a plain `for` loop is fine too. Also check whether `total()` is a `double` comparison on money, which should be `BigDecimal.compareTo`.
 
     **Interviewer listens for:** side-effect-free pipelines, mutability of result, pragmatism (a loop is acceptable), spotting domain issues.
+
+    **Common wrong answer:** "It is fine because it works." Side effects in forEach become a data race the moment someone adds parallel.
 
 ??? question "Q17. Predict the outcome of this Optional chain when `getManager()` returns null."
     ```java

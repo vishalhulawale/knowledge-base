@@ -326,10 +326,14 @@ void audit() {
 
     **Interviewer listens for:** per-task executor, no pooling, the Spring property.
 
+    **Common wrong answer:** "new Thread() with a virtual flag in the constructor." There is no constructor; use the builders or the executor.
+
 ??? question "Q4. What is a carrier thread?"
     **Answer:** The platform thread on which a virtual thread is currently mounted. Carriers belong to the virtual thread scheduler, a dedicated `ForkJoinPool` in FIFO mode with parallelism equal to the number of available processors by default. A virtual thread can run on different carriers over its lifetime, and the carrier's identity is hidden: `Thread.currentThread()` returns the virtual thread.
 
     **Common wrong answer:** "It uses the common ForkJoinPool." It is a separate pool.
+
+    **Interviewer listens for:** platform thread from the scheduler's ForkJoinPool, mount/unmount, parallelism equals cores.
 
 ??? question "Q5. What does this program print?"
     ```java
@@ -344,12 +348,16 @@ void audit() {
 
     **Interviewer listens for:** daemon behaviour, and that executor `close()` waits.
 
+    **Common wrong answer:** "done, after 100 ms." Virtual threads are daemon threads, so main exits first.
+
 ### Intermediate
 
 ??? question "Q6. What exactly happens when a virtual thread calls a blocking socket read?"
     **Answer:** The JDK's socket code sees it is on a virtual thread. It registers the socket with a non-blocking poller (epoll/kqueue) and **parks** the virtual thread: the continuation yields, its stack frames are copied to the heap, and the carrier returns to the scheduler to run another virtual thread. When the socket is readable, the poller unparks the virtual thread, which is submitted to the scheduler and resumes on any free carrier with its frames restored. To the application code it looks like a normal blocking call.
 
     **Interviewer listens for:** continuation, yield, stack to heap, poller, may resume on another carrier.
+
+    **Common wrong answer:** "The carrier thread blocks in the read." The virtual thread parks and the carrier is freed.
 
 ??? question "Q7. What is pinning? Is it still a problem?"
     **Answer:** Pinning is when a virtual thread cannot unmount, so a blocking operation blocks the carrier too. In Java 21-23 the two causes were (1) being inside a `synchronized` block or method and (2) having a native frame on the stack. **JEP 491 in Java 24** changed monitors so that `synchronized` and `Object.wait()` no longer pin. Native/JNI frames, and some class-loading or class-initialisation cases, still pin. So on Java 21 you replace `synchronized` around I/O with `ReentrantLock` and check your libraries. On Java 24/25 that is mostly unnecessary.
@@ -363,15 +371,27 @@ void audit() {
 
     **Interviewer listens for:** the idea that the pool was a hidden limit, and that limits now have to be explicit.
 
+    **Common wrong answer:** "Use a fixed pool of virtual threads to limit concurrency." Use a Semaphore or a bounded resource pool.
+
 ??? question "Q9. Do ThreadLocals work with virtual threads? Any concerns?"
-    **Answer:** Yes, they work. Each virtual thread has its own values. The concerns are: (1) code that uses `ThreadLocal` as a **cache of expensive objects** assumes threads are reused, so with one thread per task the cache never hits; (2) with millions of threads, per-thread data adds up on the heap; (3) `InheritableThreadLocal` copies data to each child. For request context, prefer `ScopedValue` (final in Java 25), which is immutable, bounded to a call, and cheap to inherit.
+    **Answer:** Yes, they work. Each virtual thread has its own values. The concerns are:
+
+    1. Code that uses `ThreadLocal` as a **cache of expensive objects** assumes threads are reused, so with one thread per task the cache never hits.
+    2. With millions of threads, per-thread data adds up on the heap.
+    3. `InheritableThreadLocal` copies data to each child.
+
+    For request context, prefer `ScopedValue` (final in Java 25), which is immutable, bounded to a call, and cheap to inherit.
 
     **Common wrong answer:** "ThreadLocal is not supported on virtual threads."
+
+    **Interviewer listens for:** one value per virtual thread, ThreadLocal caches stop working, memory with millions of threads, ScopedValue.
 
 ??? question "Q10. What is structured concurrency and what problem does it solve?"
     **Answer:** It ties the lifetime of subtasks to a code block. With `StructuredTaskScope` you fork subtasks (each on a virtual thread), then `join()`. The scope guarantees that when the block exits, all subtasks are done. If one fails, the others are cancelled. If the parent is interrupted or times out, the children are cancelled. It fixes thread leaks, wasted work after a failure, and lost parent-child relationships in thread dumps. It is still a preview API in Java 25 (and in 26 and 27), and the API changed in 25 to `StructuredTaskScope.open()` with `Joiner` policies.
 
     **Interviewer listens for:** lifetime, error propagation, cancellation propagation, observability, preview status.
+
+    **Common wrong answer:** "It is just a nicer CompletableFuture API." Its guarantee is that no subtask outlives the scope.
 
 ### Senior
 
@@ -387,15 +407,27 @@ void audit() {
 
     **Interviewer listens for:** no time slicing, carriers = cores, mixed workloads need separation.
 
+    **Common wrong answer:** "The JVM time-slices virtual threads like OS threads."
+
 ??? question "Q13. What changes in capacity planning and monitoring when you enable virtual threads?"
-    **Answer:** The request thread pool stops being the limit, so load goes straight to whatever is next: the DB connection pool, HTTP client pools, upstream services, heap. I would (1) set explicit limits per dependency with semaphores or bulkheads, (2) keep timeouts on every call, (3) add load shedding or rate limiting at the edge, since there is no queue-full rejection any more, (4) replace "active threads / queue size" dashboards with connection-pool wait time, semaphore queue length, latency percentiles and the JFR `jdk.VirtualThreadPinned` event, and (5) watch heap and GC, because parked stacks are heap objects.
+    **Answer:** The request thread pool stops being the limit, so load goes straight to whatever is next: the DB connection pool, HTTP client pools, upstream services, heap. I would:
+
+    1. Set explicit limits per dependency with semaphores or bulkheads.
+    2. Keep timeouts on every call.
+    3. Add load shedding or rate limiting at the edge, since there is no queue-full rejection any more.
+    4. Replace "active threads / queue size" dashboards with connection-pool wait time, semaphore queue length, latency percentiles and the JFR `jdk.VirtualThreadPinned` event.
+    5. Watch heap and GC, because parked stacks are heap objects.
 
     **Interviewer listens for:** "the bottleneck moves", explicit backpressure, new metrics.
+
+    **Common wrong answer:** "Virtual threads remove all capacity limits." They move the limit to connection pools and downstream services.
 
 ??? question "Q14. How does cancellation work in a StructuredTaskScope, and what must your subtasks do?"
     **Answer:** When the joiner decides the scope is finished (a failure, a first success, or a timeout), the scope **interrupts** the threads of the unfinished subtasks. Cancellation in Java is cooperative, so a subtask must respond to interruption: blocking JDK calls throw `InterruptedException` or close the channel, and long loops should check `Thread.interrupted()`. `close()` still waits for subtasks to end, so a subtask that swallows the interrupt delays the owner. This is why swallowing `InterruptedException` is a real bug with structured concurrency.
 
     **Interviewer listens for:** interrupt-based, cooperative, `close()` waits.
+
+    **Common wrong answer:** "The scope kills the subtasks." It interrupts them; they must respond to interruption.
 
 ### Scenario-based
 
@@ -404,20 +436,28 @@ void audit() {
 
     **Interviewer listens for:** a method (dump, JFR), the carrier-exhaustion reasoning, version-aware fix.
 
+    **Common wrong answer:** "Virtual threads are broken; turn them off." Find the pinning source (synchronized + blocking on Java 21, native calls).
+
 ??? question "Q16. You enable virtual threads and the database starts throwing connection timeout errors. Why, and what do you do?"
     **Answer:** Before, 200 Tomcat threads capped the concurrent DB work at 200. Now every request gets a thread, so thousands of threads compete for, say, 20 Hikari connections and many wait longer than `connectionTimeout`. The DB capacity did not change. Do not simply raise the pool to thousands: the database has its own limits. Instead, put a limit in front (semaphore or bulkhead around DB-heavy paths, or a concurrency limit at the edge), shed or queue excess load deliberately, and reduce how long each request holds a connection (no remote calls inside a transaction).
 
     **Interviewer listens for:** the pool was implicit backpressure, the fix is explicit backpressure rather than a bigger pool.
+
+    **Common wrong answer:** "Increase the Hikari pool to 2,000." The database cannot handle that many connections; limit concurrency instead.
 
 ??? question "Q17. An endpoint calls three services and combines the results. Compare CompletableFuture with StructuredTaskScope for this."
     **Answer:** With `CompletableFuture.supplyAsync(...)` three times plus `allOf`, if one call fails the other two keep running, a cancelled request does not cancel them, and timeouts have to be attached to each future. The code is a chain of callbacks. With `StructuredTaskScope`, I fork three blocking calls, call `join()`, and read the results. A failure cancels the siblings, a scope timeout cancels all, and the scope guarantees nothing leaks. The thread dump shows the subtasks under their parent. The trade-off: it is a preview API, so for production today I might use the virtual-thread-per-task executor with `invokeAll` and timeouts, and adopt `StructuredTaskScope` once it is final.
 
     **Interviewer listens for:** failure and cancellation behaviour, honesty about preview status.
 
+    **Common wrong answer:** "They are equivalent." Only the scope cancels siblings and guarantees cleanup.
+
 ??? question "Q18. Would you run Kafka consumers or a CPU-heavy batch job on virtual threads?"
     **Answer:** CPU-heavy batch: no. Use a platform thread pool sized to the cores, because virtual threads add nothing and are not time-sliced. Kafka consumers: it depends. The poll loop itself is one thread per consumer and does not need to be virtual. If each record triggers blocking I/O, processing records on virtual threads can raise throughput, but then I must protect per-partition ordering, commit offsets only after the work is done, and limit concurrency so that downstream systems and the DLQ/retry path are not flooded.
 
     **Interviewer listens for:** workload-based decision, awareness of ordering and offset semantics.
+
+    **Common wrong answer:** "Use virtual threads for everything now." CPU-bound work gains nothing from them.
 
 ## Cheat sheet
 

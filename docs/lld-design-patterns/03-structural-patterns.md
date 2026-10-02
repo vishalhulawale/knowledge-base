@@ -294,16 +294,23 @@ class AuditService {
 
     **Common wrong answer:** "any list of objects".
 
+??? question "Q5. What is Flyweight, and where does Java already use it?"
+    **Answer:** Flyweight shares immutable **intrinsic** state between many objects to save memory. Per-use **extrinsic** state (position, context) is passed in from outside. Java examples: `Integer.valueOf` caches -128..127, the `String` pool, `Boolean.TRUE`/`FALSE`, and enum constants. In your own code it helps when you create millions of similar objects, such as glyphs in an editor or drug reference data shared by many claim lines. The shared object must be immutable, or one user's change leaks to everyone.
+
+    **Interviewer listens for:** intrinsic vs extrinsic state, immutability, JDK caches, a memory-driven use case.
+
+    **Common wrong answer:** "Flyweight is a cache." A cache saves recomputation; Flyweight saves memory by sharing immutable instances.
+
 ### Intermediate
 
-??? question "Q5. How does Spring implement `@Transactional`?"
+??? question "Q6. How does Spring implement `@Transactional`?"
     **Answer:** It creates a proxy (CGLIB subclass by default in Boot, or a JDK dynamic proxy for interfaces) around the bean. The proxy's interceptor starts or joins a transaction, calls the target, then commits or rolls back (on runtime exceptions by default). Only external calls through the proxy are intercepted.
 
     **Interviewer listens for:** the proxy mechanism.
 
     **Common wrong answer:** "the compiler adds transaction code".
 
-??? question "Q6. Why does `@Transactional` on a method called from the same class not work?"
+??? question "Q7. Why does `@Transactional` on a method called from the same class not work?"
     **Answer:** The self-invocation goes through `this`, not the proxy, so the advice is skipped. Fixes:
     - Move the method to another bean (cleanest).
     - Inject a self-reference (`ObjectProvider<Self>`).
@@ -316,7 +323,7 @@ class AuditService {
 
     **Common wrong answer:** "because the method is in the same package".
 
-??? question "Q7. Does decorator order matter?"
+??? question "Q8. Does decorator order matter?"
     **Answer:** Yes:
     - `Metrics(Cache(Http))` records the latency callers see, including cache hits.
     - `Cache(Metrics(Http))` only measures misses.
@@ -331,7 +338,7 @@ class AuditService {
 
 ### Senior
 
-??? question "Q8. How do you isolate a domain from a messy vendor API?"
+??? question "Q9. How do you isolate a domain from a messy vendor API?"
     **Answer:**
     - Define a port in your domain language.
     - Implement an **adapter** that maps request and response models, units, codes and errors (anti-corruption layer).
@@ -344,7 +351,7 @@ class AuditService {
 
     **Common wrong answer:** "use the vendor SDK directly everywhere".
 
-??? question "Q9. Bridge vs Strategy?"
+??? question "Q10. Bridge vs Strategy?"
     **Answer:** Both use composition. **Strategy** swaps an algorithm used by one context. **Bridge** structurally separates two **hierarchies** that vary independently (abstraction × implementation), avoiding a class explosion like `SmsAlert`, `EmailAlert`, `SmsReminder`... Bridge is a structural, long-lived design. Strategy is often per-call behaviour.
 
     **Interviewer listens for:** the two-hierarchies idea.
@@ -353,14 +360,14 @@ class AuditService {
 
 ### Scenario-based
 
-??? question "Q10. Add caching, retries and metrics to an upstream client without touching business code."
+??? question "Q11. Add caching, retries and metrics to an upstream client without touching business code."
     **Answer:** Put the client behind a port interface. Compose decorators (or Resilience4j and Micrometer annotations) in configuration: Timed → CircuitBreaker → Retry → Cache → Adapter, in a deliberate order. Don't cache errors. Test each decorator in isolation. Feature-flag the cache.
 
     **Interviewer listens for:** composition in configuration, and order awareness.
 
     **Common wrong answer:** "add code in every service method".
 
-??? question "Q11. A `LazyInitializationException` appears after a refactor. Explain it and fix it."
+??? question "Q12. A `LazyInitializationException` appears after a refactor. Explain it and fix it."
     **Answer:** A Hibernate lazy proxy (virtual proxy) was accessed after the persistence context closed, often in a controller or serialiser. Fixes:
     - Fetch what you need in the transactional service (`JOIN FETCH`, entity graphs).
     - Map to DTOs inside the transaction.
