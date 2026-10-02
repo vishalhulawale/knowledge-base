@@ -9,10 +9,10 @@
 | Java Concurrency & JVM | 10/10 |
 | Spring Boot & Spring Core | 10/10 |
 
-## Written, NOT yet fact-checked (pages carry a "Draft" banner)
+## In progress
 | Topic | Pages | Next step |
 |---|---|---|
-| Spring Security, OAuth2/OIDC & JWT | 8/9 | 07 and 08 are fact-checked. Write 09; review 01-06 and remove their banners |
+| Spring Security, OAuth2/OIDC & JWT | 8/9 (all fact-checked) | Write and check 09 (service-to-service auth) |
 
 ## Not started (P0)
 Microservices (12), ReactJS (10), JavaScript & TypeScript (9), AWS (12), System Design (10), LLD & Design Patterns (7), Distributed Systems (9), Leadership & Behavioral (12)

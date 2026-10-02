@@ -6,16 +6,12 @@ tags: [spring-security-oauth2, P0]
 
 # OAuth2 Roles & Grant Types (Auth Code + PKCE, Client Credentials, Refresh Token)
 
-!!! warning "Draft: not yet fact-checked"
-    This page was written but its independent review pass has not run yet. Verify version numbers and defaults against the linked sources.
-
-
 !!! abstract "TL;DR"
     - OAuth2 is a **delegated authorization** framework: a **client** gets a limited **access token** to call a **resource server** on behalf of a **resource owner**, issued by an **authorization server**. The client never sees the user's password.
     - **Authorization code + PKCE** is the grant for anything with a user (web apps, SPAs, mobile). The code travels through the browser (front channel), the tokens travel server to server (back channel), and PKCE binds the two together.
     - **Client credentials** is for machine-to-machine calls with **no user**. The token represents the application itself. There is no refresh token, the client simply asks again.
     - **Refresh tokens** let you keep access tokens short-lived (minutes) without sending the user back to log in. For public clients they must be **rotated** or **sender-constrained**.
-    - **Implicit** and **password (ROPC)** grants are removed in OAuth 2.1 and forbidden by the Security BCP (RFC 9700). Saying "we used implicit for the SPA" in 2026 is a red flag.
+    - **Implicit** and **password (ROPC)** grants are removed in OAuth 2.1. The Security BCP (RFC 9700) says the password grant MUST NOT be used and the implicit grant SHOULD NOT be used. Saying "we used implicit for the SPA" in 2026 is a red flag.
 
 ## Why it matters
 
@@ -74,8 +70,8 @@ A grant type is simply "the way the client proves it deserves a token".
 | **Refresh token** | Client only (user consented earlier) | Both | Recommended, with rotation for public clients |
 | **Device authorization** (RFC 8628) | User on a second device | TVs, CLIs, IoT | Valid for input-constrained devices |
 | **Token exchange** (RFC 8693) | Service swapping one token for another | Confidential | Used for delegation between services, see 09-service-to-service-auth.md |
-| **Implicit** | User + browser client | Public | Removed in OAuth 2.1, forbidden by RFC 9700 |
-| **Resource owner password (ROPC)** | User gives password to client | Any | Removed in OAuth 2.1, forbidden by RFC 9700 |
+| **Implicit** | User + browser client | Public | Removed in OAuth 2.1, RFC 9700 says SHOULD NOT be used |
+| **Resource owner password (ROPC)** | User gives password to client | Any | Removed in OAuth 2.1, RFC 9700 says MUST NOT be used |
 
 ```mermaid
 flowchart TD
@@ -142,9 +138,9 @@ Parameters worth knowing by heart:
 | `code_challenge`, `code_challenge_method=S256` | PKCE |
 | `code_verifier` | PKCE proof, sent only to the token endpoint |
 
-The code itself must be **single use** and **short-lived** (RFC 6749 recommends a maximum of 10 minutes, most servers use 30 to 60 seconds). If a code is presented twice, the AS should reject it and revoke tokens already issued from it.
+The code itself must be **single use** and **short-lived** (RFC 6749 recommends a maximum of 10 minutes, and IdPs typically default to somewhere between 1 and 5 minutes). If a code is presented twice, the AS must reject it and should revoke tokens already issued from it.
 
-**PKCE is not only for public clients.** RFC 9700 and OAuth 2.1 require it for public clients and recommend it for confidential clients too, because it also stops **authorization code injection**: an attacker pasting a stolen code into their *own* legitimate session with the confidential client. The client secret does not help there, because the honest client is the one redeeming the code.
+**PKCE is not only for public clients.** RFC 9700 requires it for public clients and recommends it for confidential clients, and the OAuth 2.1 draft goes further and requires it for every client using the authorization code grant (with one narrow exception for confidential OIDC clients that rely on `nonce`). The reason is that it also stops **authorization code injection**: an attacker pasting a stolen code into their *own* legitimate session with the confidential client. The client secret does not help there, because the honest client is the one redeeming the code.
 
 ### Client credentials grant
 
@@ -208,7 +204,7 @@ sequenceDiagram
 - **Implicit** (`response_type=token`) returned the access token in the URL fragment, straight through the front channel. It existed because in 2012 browsers could not make cross-origin `POST` calls to the token endpoint. CORS solved that, so SPAs now use authorization code + PKCE. Implicit leaks tokens via history and referrers, has no client authentication and cannot bind the token to the requester.
 - **Password / ROPC** makes the client collect the user's password. That defeats the purpose of OAuth, trains users to type credentials into apps, and cannot support MFA, passkeys or federated SSO.
 
-Both are omitted from the OAuth 2.1 draft, and RFC 9700 says they must not be used.
+Both are omitted from the OAuth 2.1 draft. RFC 9700 says the password grant MUST NOT be used, and that clients SHOULD NOT use the implicit grant (the softer wording leaves room for OIDC hybrid response types with extra mitigations, not for new `response_type=token` clients).
 
 ## In practice: code & configuration
 
@@ -232,7 +228,7 @@ spring:
 ```
 
 === "❌ Common mistake"
-    ```java
+    ```javascript
     // A React SPA holding a "secret" and using the implicit grant (or a hand-rolled code flow).
     // 1. The secret is in the JS bundle, so anyone can read it. It protects nothing.
     // 2. response_type=token puts the access token in the URL fragment and browser history.
@@ -273,7 +269,7 @@ spring:
     ```
 
 !!! tip "Version note"
-    Spring Security 7 changes the default so that PKCE is applied to the authorization code grant for confidential clients as well, and it drops support for the password grant. On 6.x you opt in with `withPkce()` as shown. Check the "What's New" page for the exact version you are on before quoting defaults in an interview.
+    Spring Security 7 changes the default so that PKCE is applied to the authorization code grant for confidential clients as well (controlled by `ClientRegistration.clientSettings.requireProofKey`, which you set to `false` only if the IdP cannot handle PKCE for confidential clients), and it drops support for the password grant. On 6.x you opt in with `withPkce()` as shown. Check the "What's New" page for the exact version you are on before quoting defaults in an interview.
 
 ### Service-to-service call (client credentials)
 
@@ -334,7 +330,7 @@ var provider = OAuth2AuthorizedClientProviderBuilder.builder()
 
 With `oauth2Client()` and a registration that includes the `offline_access` scope (or whatever the IdP requires to issue refresh tokens), the framework swaps an expired access token for a new one and stores the rotated refresh token. If the refresh fails with `invalid_grant`, the correct behaviour is to clear the authorized client and send the user through login again, not to retry.
 
-Resource-server validation of the tokens these flows produce is covered in 07-resource-server-and-client-configuration-in-spring.md.
+Resource-server validation of the tokens these flows produce is covered in [07-resource-server-and-client-configuration-in-spring.md](07-resource-server-and-client-configuration-in-spring.md).
 
 ## Real-world usage
 
@@ -344,7 +340,7 @@ Resource-server validation of the tokens these flows produce is covered in 07-re
 - **Healthcare:** SMART on FHIR, which US health APIs use under the ONC rules, is an OAuth2 profile. User-facing apps use authorization code (with PKCE in SMART App Launch 2.x) and backend systems use client credentials with a signed JWT assertion.
 - **Known failure pattern, redirect URI validation:** many published OAuth account-takeover bugs come from loose `redirect_uri` matching (wildcards, prefix matching, open redirects on the allowed domain) that let attackers receive the code. This is why RFC 9700 requires exact string matching.
 - **Known failure pattern, long-lived tokens in third-party integrations:** in the April 2022 incident disclosed by GitHub, OAuth user tokens issued to Heroku and Travis CI integrations were stolen and used to download private repositories. The lesson is that an OAuth token stored by a client is a credential: scope it narrowly, keep it short-lived and be able to revoke it in bulk.
-- **BFF pattern:** the IETF "OAuth 2.0 for Browser-Based Applications" draft describes the backend-for-frontend as the most secure architecture for SPAs, because tokens stay on the server and the browser holds only a cookie. See [03-sessions-vs-tokens-csrf-and-cors-in-spring.md](03-sessions-vs-tokens-csrf-and-cors-in-spring.md) for the CSRF side of that trade.
+- **BFF pattern:** the IETF "OAuth 2.0 for Browser-Based Applications" document (RFC 10017) describes the backend-for-frontend as the most secure architecture for SPAs, because tokens stay on the server and the browser holds only a cookie. See [03-sessions-vs-tokens-csrf-and-cors-in-spring.md](03-sessions-vs-tokens-csrf-and-cors-in-spring.md) for the CSRF side of that trade.
 
 ## Trade-offs & production gotchas
 
@@ -358,11 +354,11 @@ Resource-server validation of the tokens these flows produce is covered in 07-re
 | **Token exchange** (RFC 8693) | Downstream sees user identity with narrowed audience | More IdP round trips and configuration | User context must flow across services |
 
 !!! warning "Gotchas"
-    - **`redirect_uri` must match exactly.** A trailing slash, `http` vs `https` or a different port gives `redirect_uri_mismatch`. Behind a load balancer, Spring builds `{baseUrl}` from forwarded headers, so set `server.forward-headers-strategy` or you will send `http://internal-host/...`.
+    - **`redirect_uri` must match exactly.** A trailing slash, `http` vs `https` or a different port gives a redirect URI mismatch error at the IdP (the exact error name varies by vendor, Google calls it `redirect_uri_mismatch`). Behind a load balancer, Spring builds `{baseUrl}` from forwarded headers, so set `server.forward-headers-strategy` or you will send `http://internal-host/...`.
     - **Parallel refresh with rotation.** Two tabs or two threads refresh with the same token at once. The second call looks like reuse and the family is revoked. Serialise refresh per session (single-flight) or rely on the IdP's short grace window if it has one.
     - **Client credentials token per request.** Forgetting to cache means one token call per outbound call. Under load the IdP throttles you and your service fails. Reuse the token until near expiry.
     - **Treating a client credentials token as a user.** There is no user. Code that reads `sub` and looks up a member record will either fail or, worse, match something.
-    - **`state` is not optional and PKCE does not replace validation of it** in every client library. Spring handles both. Hand-rolled clients often skip one.
+    - **Do not drop `state` just because PKCE is on.** RFC 6749 only recommends `state`, and RFC 9700 lets PKCE (or the OIDC `nonce`) provide the CSRF protection instead, but that only holds if the client and the AS both really enforce PKCE. Spring handles both. Hand-rolled clients often skip one.
     - **`code_challenge_method=plain`** defeats the purpose if the authorization request is observed. Always use `S256`, and configure the AS to reject `plain`.
     - **Scopes are not roles.** `scope=claims.read` says the client may read claims on the user's behalf. Whether *this user* may read *this claim* is still your API's decision. See [02-authentication-vs-authorization-method-security.md](02-authentication-vs-authorization-method-security.md).
     - **Access tokens are for the resource server, ID tokens are for the client.** Sending an ID token to an API as a bearer token is a common and wrong shortcut.
@@ -371,15 +367,15 @@ Resource-server validation of the tokens these flows produce is covered in 07-re
 ## How this connects to my experience
 
 - **Where I used it:**
-    - **Publicis Sapient, OptumRx Meteor:** "Built secure enterprise APIs using OAuth2, PingFederate, and Active Directory integration." PingFederate was the authorization server, Active Directory the user store behind it, and the Spring Boot services (including the GraphQL Consumer Service) were resource servers. I also built the ReactJS application, which is the OAuth client side of the same flow.
-    - **Johnson Controls, Metasys:** "Owned JWT-based authentication and SSO implementation end-to-end." That is the pre-OAuth version of the same problem (issue a signed token after login, validate it on each service), which gives a good "what I would do differently today" story.
+    - **Publicis Sapient, OptumRx Meteor:** "Built secure enterprise APIs using OAuth2, PingFederate, and Active Directory integration." PingFederate was the authorization server, Active Directory the user store behind it, and the Spring Boot services (including the GraphQL Consumer Service) were resource servers. *[confirm this role split matches the real setup]* I also built the ReactJS application, which is the OAuth client side of the same flow. *[confirm the React app itself, and not a gateway or BFF in front of it, was the registered OAuth client]*
+    - **Johnson Controls, Metasys:** "Owned JWT-based authentication and SSO implementation end-to-end." That is the pre-OAuth version of the same problem (issue a signed token after login, validate it on each service) *[confirm it was custom JWT issuance and not an OAuth2/OIDC provider]*, which gives a good "what I would do differently today" story.
 - **Talking points:**
-    - The React app signed users in through PingFederate with **authorization code + PKCE**, and the APIs validated the resulting access token (signature via JWKS, issuer, audience, expiry). *[confirm: whether the code exchange happened in the SPA or in a backend/BFF, and where tokens were stored]*
+    - The React app signed users in through PingFederate with **authorization code + PKCE**, and the APIs validated the resulting access token (signature via JWKS, issuer, audience, expiry). *[confirm: the grant type actually used and whether PKCE was enabled, whether the code exchange happened in the SPA or in a backend/BFF, and where tokens were stored]*
     - The GraphQL Consumer Service called 5 upstream systems. Calls made on behalf of a user propagated the user's token, and system calls (for example Kafka-driven workflows with no user) used **client credentials** with a cached token. *[confirm which upstreams used which approach]*
     - Active Directory groups were mapped by PingFederate into token claims, and the services mapped those claims to authorities for method-level checks. *[confirm claim name and mapping]*
     - Access token and refresh token lifetimes, and whether refresh rotation was enabled in PingFederate. *[confirm actual values]*
 - **Likely follow-up chain:**
-    - "Which grant type did the UI use?" → Authorization code + PKCE, because a SPA cannot keep a secret and implicit is deprecated.
+    - "Which grant type did the UI use?" → Authorization code + PKCE *[confirm]*, because a SPA cannot keep a secret and implicit is deprecated.
     - "What does PKCE actually protect against?" → Code interception and code injection. Explain verifier, challenge and S256.
     - "Where did you keep the tokens?" → State the real answer *[confirm]*, then give the trade-off: memory or BFF session beats localStorage because of XSS.
     - "How did service A call service B?" → Client credentials for system calls, token propagation or token exchange when user identity is needed. Mention token caching.
@@ -439,7 +435,7 @@ Resource-server validation of the tokens these flows produce is covered in 07-re
     **Common wrong answer:** "It is the user who triggered the job."
 
 ??? question "Q9. Why were the implicit and password grants removed?"
-    **Answer:** Implicit returned the access token in the URL fragment through the front channel, where it leaks through history, referrers and scripts, with no client authentication and no way to bind the token to the requester. It only existed because browsers once could not call the token endpoint cross-origin. CORS removed that reason. The password grant hands the user's credentials to the client, which is exactly what OAuth was created to avoid, and it cannot support MFA, passkeys or federation. OAuth 2.1 omits both and RFC 9700 says they must not be used.
+    **Answer:** Implicit returned the access token in the URL fragment through the front channel, where it leaks through history, referrers and scripts, with no client authentication and no way to bind the token to the requester. It only existed because browsers once could not call the token endpoint cross-origin. CORS removed that reason. The password grant hands the user's credentials to the client, which is exactly what OAuth was created to avoid, and it cannot support MFA, passkeys or federation. OAuth 2.1 omits both. RFC 9700 says the password grant MUST NOT be used and the implicit grant SHOULD NOT be used.
 
 ??? question "Q10. What is refresh token rotation and reuse detection?"
     **Answer:** With rotation every refresh request returns a new refresh token and invalidates the previous one. If a previously used token is presented again, the server knows two parties hold tokens from the same family and cannot tell which one is legitimate, so it revokes the entire family and forces a new login. It turns silent theft into a detectable event. RFC 9700 requires rotation or sender-constraining (DPoP, mTLS) for refresh tokens issued to public clients.
@@ -459,7 +455,7 @@ Resource-server validation of the tokens these flows produce is covered in 07-re
     **Answer:** Three options. (1) **Forward the user's access token**: simple, but the token's audience must include the downstream service and a wide-audience token is a bigger prize if leaked. (2) **Client credentials plus a user ID in a header or body**: the downstream must fully trust the caller, so the user context is unauthenticated. Acceptable only inside a tight trust boundary. (3) **Token exchange (RFC 8693)**: the caller swaps the user's token for a new one with the downstream as audience, narrower scope and an `act` claim identifying the calling service. This keeps least privilege and an audit trail at the cost of an extra IdP call, which you cache. I pick (3) for crossing trust boundaries and (1) for a small set of services owned by one team. Details are in 09-service-to-service-auth.md.
 
 ??? question "Q13. How would you make client credentials stronger than a shared secret?"
-    **Answer:** Use asymmetric client authentication. With `private_key_jwt` the client signs a short-lived JWT assertion (`iss` and `sub` = client ID, `aud` = token endpoint, `jti`, `exp`) with a private key, and the IdP verifies with the registered public key or JWKS URL. Nothing secret is shared or sent over the wire. With mTLS (RFC 8705) the client proves possession of a certificate key at the TLS layer, and the access token can be **bound** to that certificate so a stolen token is useless without the key. DPoP (RFC 9449) gives the same binding at the application layer. Add key rotation, per-environment clients and narrow scopes.
+    **Answer:** Use asymmetric client authentication. With `private_key_jwt` the client signs a short-lived JWT assertion (`iss` and `sub` = client ID, `aud` = the authorization server, historically its token endpoint URL and in newer guidance its issuer identifier, plus `jti` and `exp`) with a private key, and the IdP verifies with the registered public key or JWKS URL. Nothing secret is shared or sent over the wire. With mTLS (RFC 8705) the client proves possession of a certificate key at the TLS layer, and the access token can be **bound** to that certificate so a stolen token is useless without the key. DPoP (RFC 9449) gives the same binding at the application layer. Add key rotation, per-environment clients and narrow scopes.
 
     **Interviewer listens for:** Sender-constrained vs bearer tokens, and that FAPI mandates this for banking.
 
@@ -487,7 +483,7 @@ Resource-server validation of the tokens these flows produce is covered in 07-re
     &client_id=web&client_secret=s3cret
     ```
 
-    **Answer:** `400 Bad Request` with `{"error":"invalid_grant"}`. The code was issued with a challenge, so the server requires a matching `code_verifier`. A valid client secret does not substitute for it. The same error comes back if the code was already used, has expired, or the `redirect_uri` differs from the one in the authorization request. Note it is `invalid_grant`, not `invalid_client`: the client authenticated fine, the grant is what failed.
+    **Answer:** `400 Bad Request`, on most servers with `{"error":"invalid_grant"}`. The code was issued with a challenge, so the server requires a matching `code_verifier`. A valid client secret does not substitute for it. RFC 7636 specifies `invalid_grant` for a verifier that does not match, and most IdPs (Spring Authorization Server, Keycloak, Okta) use the same code when the verifier is missing, though a few answer `invalid_request` for the missing parameter. The same error comes back if the code was already used, has expired, or the `redirect_uri` differs from the one in the authorization request. Note it is `invalid_grant`, not `invalid_client`: the client authenticated fine, the grant is what failed.
 
     **Interviewer listens for:** Knowing the error codes: `invalid_client` (client authentication failed, 401), `invalid_grant` (bad code, verifier or refresh token), `invalid_scope`, `unauthorized_client` (grant not allowed for this client).
 
@@ -504,14 +500,14 @@ Resource-server validation of the tokens these flows produce is covered in 07-re
 | Client types | Confidential (can keep a secret) vs public (SPA, mobile: cannot) |
 | Front vs back channel | Browser redirect is observable, direct TLS call is not. Tokens only on the back channel |
 | Auth code + PKCE | Every user flow. `code_challenge = BASE64URL(SHA256(code_verifier))`, method `S256` |
-| PKCE stops | Code interception and code injection. Recommended for confidential clients too |
+| PKCE stops | Code interception and code injection. RFC 9700: required for public, recommended for confidential. OAuth 2.1: required for all |
 | `state` | Random, session-bound. Stops login CSRF on the redirect endpoint |
 | `redirect_uri` | Pre-registered, exact string match |
 | Authorization code | Single use, very short-lived (10 minutes maximum per RFC 6749) |
 | Client credentials | No user, confidential only, no refresh token, cache the access token |
 | Refresh token | Sent only to the AS. Same or narrower scope. Rotate or sender-constrain for public clients |
 | Reuse detection | Old refresh token replayed means revoke the whole family |
-| Removed grants | Implicit and password (ROPC): gone in OAuth 2.1, forbidden by RFC 9700 |
+| Removed grants | Implicit and password (ROPC): gone in OAuth 2.1. RFC 9700: password MUST NOT, implicit SHOULD NOT |
 | Stronger client auth | `private_key_jwt`, mTLS (RFC 8705). Sender-constrained tokens via mTLS or DPoP (RFC 9449) |
 | Error codes | `invalid_client` = who you are, `invalid_grant` = what you presented |
 | Spring user login | `oauth2Login()` + `withPkce()` (default for confidential clients from Spring Security 7) |
@@ -522,9 +518,9 @@ Resource-server validation of the tokens these flows produce is covered in 07-re
 
 1. [RFC 6749: The OAuth 2.0 Authorization Framework](https://datatracker.ietf.org/doc/html/rfc6749): roles, client types, grant types, endpoints, error codes, code lifetime and refresh rules.
 2. [RFC 7636: Proof Key for Code Exchange (PKCE)](https://datatracker.ietf.org/doc/html/rfc7636): verifier and challenge definitions, `S256` vs `plain`, the interception attack.
-3. [RFC 9700: Best Current Practice for OAuth 2.0 Security](https://datatracker.ietf.org/doc/html/rfc9700): PKCE requirements, exact redirect URI matching, no implicit or password grant, refresh token rotation or sender-constraining.
+3. [RFC 9700: Best Current Practice for OAuth 2.0 Security](https://datatracker.ietf.org/doc/html/rfc9700): PKCE requirements, exact redirect URI matching, password grant MUST NOT and implicit grant SHOULD NOT be used, refresh token rotation or sender-constraining.
 4. [The OAuth 2.1 Authorization Framework (IETF draft)](https://datatracker.ietf.org/doc/draft-ietf-oauth-v2-1/): the consolidated changes relative to OAuth 2.0.
-5. [OAuth 2.0 for Browser-Based Applications (IETF draft)](https://datatracker.ietf.org/doc/draft-ietf-oauth-browser-based-apps/): BFF vs token-mediating backend vs in-browser tokens.
+5. [RFC 10017: OAuth 2.0 for Browser-Based Applications](https://datatracker.ietf.org/doc/rfc10017/): BFF vs token-mediating backend vs in-browser tokens.
 6. [Spring Security Reference: OAuth 2.0 Client, Authorization Grant Support](https://docs.spring.io/spring-security/reference/servlet/oauth2/client/authorization-grants.html): authorization code, PKCE, refresh token and client credentials support and customisation.
 7. [Spring Security Reference: Authorized Clients](https://docs.spring.io/spring-security/reference/servlet/oauth2/client/authorized-clients.html): `OAuth2AuthorizedClientManager` variants and `RestClient` / `WebClient` integration.
 8. [GitHub Blog: Security alert, stolen OAuth user tokens (April 2022)](https://github.blog/news-insights/company-news/security-alert-stolen-oauth-user-tokens/): the Heroku and Travis CI token theft incident.

@@ -6,10 +6,6 @@ tags: [spring-security-oauth2, P0]
 
 # Sessions vs Tokens; CSRF & CORS in Spring
 
-!!! warning "Draft: not yet fact-checked"
-    This page was written but its independent review pass has not run yet. Verify version numbers and defaults against the linked sources.
-
-
 !!! abstract "TL;DR"
     - **Session** = the server keeps the state and the browser holds an opaque ID in a cookie. **Token** = the client holds a self-contained (or opaque) credential and sends it explicitly in the `Authorization` header.
     - **CSRF exists because browsers attach cookies automatically.** If the credential is a cookie (session cookie *or* a JWT in a cookie), you need CSRF protection. If it is a header the JavaScript adds itself, you don't.
@@ -37,7 +33,7 @@ In Spring Security the pieces are:
 
 - `SecurityContextHolderFilter` loads the context at the start of each request through a `SecurityContextRepository`.
 - `HttpSessionSecurityContextRepository` reads and writes it under the session attribute `SPRING_SECURITY_CONTEXT`.
-- Since Spring Security 6 the context is **saved explicitly** by the authentication filter. The old `SecurityContextPersistenceFilter` that saved automatically at the end of every request is gone. If you write a custom login endpoint, you must call `securityContextRepository.saveContext(...)` yourself, or the user is "logged in" for one request only.
+- Since Spring Security 6 the context is **saved explicitly** by the authentication filter. The old `SecurityContextPersistenceFilter` that saved automatically at the end of every request is deprecated and no longer in the default chain (`SecurityContextHolderFilter` replaced it). If you write a custom login endpoint, you must call `securityContextRepository.saveContext(...)` yourself, or the user is "logged in" for one request only.
 - `SessionCreationPolicy` controls session use: `IF_REQUIRED` (default), `ALWAYS`, `NEVER` (don't create, but use one if it exists), `STATELESS` (never create and never read the context from it).
 - **Session fixation protection** is on by default: after login the session ID is changed (`changeSessionId`), so an ID planted by an attacker before login becomes useless.
 
@@ -142,7 +138,7 @@ Response headers you must know:
 | `Access-Control-Max-Age` | How long the browser may cache the preflight. Browsers cap it (Chromium at 2 hours, Firefox at 24 hours). |
 | `Vary: Origin` | Needed when the allowed origin is echoed dynamically, so caches don't serve one origin's answer to another. |
 
-In Spring, `http.cors(...)` adds a `CorsFilter` early in the chain, ahead of the authentication filters. It uses a `CorsConfigurationSource` bean. Spring refuses the combination `allowCredentials(true)` with `allowedOrigins("*")` and throws an `IllegalArgumentException`. Use explicit origins, or `allowedOriginPatterns` when you really need wildcards on subdomains.
+In Spring, `http.cors(...)` adds a `CorsFilter` early in the chain, ahead of the authentication filters. It uses a `CorsConfigurationSource` bean. Recent Spring Security versions also apply CORS automatically when a `UrlBasedCorsConfigurationSource` bean is present, but writing `http.cors(...)` explicitly is still the clear and portable choice. Spring refuses the combination `allowCredentials(true)` with `allowedOrigins("*")` and throws an `IllegalArgumentException`. Use explicit origins, or `allowedOriginPatterns` when you really need wildcards on subdomains.
 
 ## In practice: code & configuration
 
@@ -160,13 +156,13 @@ In Spring, `http.cors(...)` adds a `CorsFilter` early in the chain, ahead of the
                 .csrf(csrf -> csrf.disable())            // copied from a tutorial, nobody knows why
                 .authorizeHttpRequests(a -> a.anyRequest().authenticated())
                 .formLogin(Customizer.withDefaults());   // cookie session + CSRF off = exploitable
-            // no .cors(...) here: preflight OPTIONS hits authentication and returns 401
+            // no .cors(...) here: preflight OPTIONS hits authentication and is rejected (401, or a 302 to /login with form login)
             return http.build();
         }
     }
 
     @RestController
-    @CrossOrigin(origins = "*", allowCredentials = "true")   // fails at runtime: IllegalArgumentException
+    @CrossOrigin(origins = "*", allowCredentials = "true")   // rejected by Spring: IllegalArgumentException when the mapping is registered
     class OrderController { /* ... */ }
     ```
 
@@ -220,8 +216,8 @@ SecurityFilterChain web(HttpSecurity http) throws Exception {
         .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class) // forces the deferred token to load
         .sessionManagement(s -> s
             .sessionFixation(f -> f.changeSessionId())              // default, shown for clarity
-            .maximumSessions(1))                                    // optional concurrent-session control
-        .logout(l -> l.deleteCookies("JSESSIONID"));
+            .sessionConcurrency(c -> c.maximumSessions(1)))         // optional concurrent-session control
+        .logout(l -> l.deleteCookies("JSESSIONID"));                // use your cookie name if you rename it (see YAML below)
     return http.build();
 }
 
@@ -254,7 +250,7 @@ server:
         http-only: true            # JS cannot read it, limits XSS impact
         secure: true               # HTTPS only
         same-site: lax             # use strict if no cross-site entry links are needed
-        name: __Host-SESSION       # __Host- prefix: Secure, no Domain, Path=/
+        name: __Host-SESSION       # __Host- prefix: Secure, no Domain, Path=/ (then deleteCookies("__Host-SESSION") on logout)
 ```
 
 Client side, Axios reads `XSRF-TOKEN` and sends `X-XSRF-TOKEN` automatically for same-origin calls. With `fetch` you copy it yourself:
@@ -291,7 +287,7 @@ await fetch("/api/orders", {
 !!! warning "Gotchas"
     - **`csrf.disable()` plus any cookie-based login** (form login, `oauth2Login`, remember-me, HTTP Basic in a browser) is a real vulnerability, not a simplification.
     - **CORS errors that are really 401s.** If `CorsFilter` is not ahead of authentication, or `http.cors()` is missing while you only have `@CrossOrigin` on controllers, the preflight is rejected by security before MVC ever sees it.
-    - **`@CrossOrigin` or `WebMvcConfigurer.addCorsMappings` alone is not enough** once Spring Security is on the classpath. You still need `http.cors(...)` so the security chain lets preflights through.
+    - **`@CrossOrigin` or `WebMvcConfigurer.addCorsMappings` alone is not enough** once Spring Security is on the classpath. You still need `http.cors(...)` so the security chain lets preflights through. With no `CorsConfigurationSource` bean, `http.cors(withDefaults())` reuses the Spring MVC CORS configuration.
     - **Reflecting the `Origin` header back** with `Allow-Credentials: true` is the same as having no same-origin policy. Validate against an allow list. Do not allow the origin `null`.
     - **`allowedOrigins("*")` with `allowCredentials(true)`** throws `IllegalArgumentException` in Spring. `allowedOriginPatterns("*")` avoids the exception and is just as dangerous.
     - **`STATELESS` does not disable CSRF** and CSRF being off does not make you stateless. They are separate switches.
@@ -314,7 +310,7 @@ await fetch("/api/orders", {
     - GraphQL angle: every operation is a `POST /graphql` with `application/json`, so cross-origin calls are always preflighted. A GraphQL endpoint that also accepts `GET` or form content types for mutations reopens CSRF. *[confirm how the endpoint was restricted]*
     - At Johnson Controls, moving from a monolith with server sessions to microservices with JWT: why stateless tokens fit the migration, and how logout and token expiry were handled. *[confirm session-to-JWT was part of the migration and the token lifetime used]*
     - Healthcare context: 750K+ users and protected health information make short idle timeouts and reliable logout a requirement, which shapes the choice. *[confirm the actual timeout policy]*
-- **Likely follow-up chain:** "Did your SPA use sessions or tokens?" → "Where was the token stored, and why?" → "Did you disable CSRF? Why is that safe?" → "How was CORS configured across environments?" → "How did logout work across micro-frontends?" Answer each by naming where the credential lives and who attaches it, then the control that follows from that. For SSO logout details see 08-sso-saml-vs-oidc-enterprise-idps.md.
+- **Likely follow-up chain:** "Did your SPA use sessions or tokens?" → "Where was the token stored, and why?" → "Did you disable CSRF? Why is that safe?" → "How was CORS configured across environments?" → "How did logout work across micro-frontends?" Answer each by naming where the credential lives and who attaches it, then the control that follows from that. For SSO logout details see [08-sso-saml-vs-oidc-enterprise-idps.md](08-sso-saml-vs-oidc-enterprise-idps.md).
 
 ## Interview questions
 
@@ -373,7 +369,7 @@ await fetch("/api/orders", {
     cfg.setAllowCredentials(true);
     ```
 
-    **Answer:** Spring throws an `IllegalArgumentException` when the configuration is validated, saying that `allowedOrigins` cannot contain `*` when `allowCredentials` is true, and suggesting `allowedOriginPatterns`. The CORS spec forbids `Access-Control-Allow-Origin: *` on credentialed requests, so Spring refuses to produce it. The right fix is a list of exact origins.
+    **Answer:** Spring throws an `IllegalArgumentException` when the configuration is validated (`validateAllowCredentials()`: on the first cross-origin request for a `CorsConfigurationSource`, at startup for `@CrossOrigin` and `addCorsMappings`), saying that `allowedOrigins` cannot contain `*` when `allowCredentials` is true, and suggesting `allowedOriginPatterns`. The CORS spec forbids `Access-Control-Allow-Origin: *` on credentialed requests, so Spring refuses to produce it. The right fix is a list of exact origins.
 
     **Common wrong answer:** "It works and allows everything." Also wrong: switching to `allowedOriginPatterns("*")` and calling it fixed. That echoes any origin with credentials, which defeats the same-origin policy.
 
@@ -464,4 +460,4 @@ await fetch("/api/orders", {
 5. [MDN: Cross-Origin Resource Sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS): simple vs preflighted requests, credentialed requests, header reference, `Max-Age` caps.
 6. [MDN: Set-Cookie, SameSite attribute](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Set-Cookie#samesitesamesite-value): `Strict`, `Lax`, `None` semantics and cookie prefixes.
 7. [IETF draft: OAuth 2.0 for Browser-Based Applications](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps): BFF pattern and token storage guidance for SPAs.
-8. [Zeller and Felten, "Cross-Site Request Forgeries: Exploitation and Prevention" (Princeton, 2008)](https://www.cs.princeton.edu/~felten/csrf.pdf): the ING Direct, YouTube and New York Times CSRF cases.
+8. [Zeller and Felten, "Cross-Site Request Forgeries: Exploitation and Prevention" (Princeton, 2008), announcement with link to the paper](https://freedom-to-tinker.com/2008/09/29/popular-websites-vulnerable-cross-site-request-forgery-attacks/): the ING Direct, YouTube and New York Times CSRF cases.

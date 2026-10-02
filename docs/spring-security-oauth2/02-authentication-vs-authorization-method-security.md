@@ -6,10 +6,6 @@ tags: [spring-security-oauth2, P0]
 
 # Authentication vs Authorization; Method Security
 
-!!! warning "Draft: not yet fact-checked"
-    This page was written but its independent review pass has not run yet. Verify version numbers and defaults against the linked sources.
-
-
 !!! abstract "TL;DR"
     - **Authentication (authn)** proves identity and produces an `Authentication` object in the `SecurityContext`. **Authorization (authz)** takes that object and decides *allow or deny* for one request, one method or one object. Failures map to **401** (not authenticated) and **403** (authenticated, not allowed).
     - Spring Security authorizes at two layers: **request level** (`authorizeHttpRequests`, enforced by `AuthorizationFilter`) and **method level** (`@EnableMethodSecurity` + `@PreAuthorize` / `@PostAuthorize` / `@PreFilter` / `@PostFilter`, enforced by Spring AOP interceptors). Both delegate to the same abstraction: `AuthorizationManager`.
@@ -68,7 +64,7 @@ To Spring Security these are all `GrantedAuthority` strings. The difference is c
 - **Role:** a coarse group of rights. Stored with the prefix `ROLE_`. `hasRole('ADMIN')` adds the prefix for you and looks for `ROLE_ADMIN`.
 - **Scope:** an OAuth2 concept. It is what the *client application* was allowed to do on the user's behalf. A Spring resource server maps the JWT `scope` / `scp` claim to authorities with the prefix `SCOPE_` by default.
 
-A scope is a limit on the client, not a statement about the user. A token with scope `prescriptions.read` held by a call-centre agent and by a member means different things. Senior answers always say: *scopes are a ceiling, user permissions still have to be checked.* Token contents are covered in [JWT](04-jwt-structure-signing-validation-revocation.md) and the converter setup in Resource server configuration.
+A scope is a limit on the client, not a statement about the user. A token with scope `prescriptions.read` held by a call-centre agent and by a member means different things. Senior answers always say: *scopes are a ceiling, user permissions still have to be checked.* Token contents are covered in [JWT](04-jwt-structure-signing-validation-revocation.md) and the converter setup in [Resource server configuration](07-resource-server-and-client-configuration-in-spring.md).
 
 ### Request-level authorization
 
@@ -133,17 +129,17 @@ flowchart TD
     C --> D{"PreAuthorize expression true?"}
     D -- No --> E["AuthorizationDeniedException, 403"]
     D -- Yes --> F["Transaction interceptor, then target method"]
-    F --> G{"PostAuthorize on returnObject true?"}
+    F --> H["PostFilter: filter returned collection"]
+    H --> G{"PostAuthorize on returnObject true?"}
     G -- No --> E
-    G -- Yes --> H["PostFilter: filter returned collection"]
-    H --> I["Result returned to caller"]
+    G -- Yes --> I["Result returned to caller"]
 ```
-*Notice that the left exit is the dangerous one: when the call never reaches the proxy, nothing is checked and nothing is logged.*
+*Notice that the left exit is the dangerous one: when the call never reaches the proxy, nothing is checked and nothing is logged. Also notice the return path: interceptor orders are PreFilter 100, PreAuthorize 200, PostAuthorize 500, PostFilter 600, so PostFilter is the innermost advice and sees the result before PostAuthorize does.*
 
 Key internals:
 
-- **`@EnableMethodSecurity`** (5.6+, the default in 6 and 7) replaces `@EnableGlobalMethodSecurity`, which is deprecated in 6 and removed in 7. `prePostEnabled` is `true` by default. `securedEnabled` and `jsr250Enabled` are `false`.
-- The old model was `AccessDecisionManager` + voters + `ConfigAttribute`. The new model is a single functional interface, **`AuthorizationManager<T>`**, which returns an `AuthorizationDecision` / `AuthorizationResult`. The same interface is used for requests, methods and messages, and each annotation has its own interceptor bean you can replace.
+- **`@EnableMethodSecurity`** (5.6+, the recommended annotation in 6 and 7, but you still have to declare it) replaces `@EnableGlobalMethodSecurity`, which is deprecated. In 7 the voter-based API behind the old annotation (`AccessDecisionManager`, `AccessDecisionVoter`) survives only in the legacy `spring-security-access` module. `prePostEnabled` is `true` by default. `securedEnabled` and `jsr250Enabled` are `false`.
+- The old model was `AccessDecisionManager` + voters + `ConfigAttribute`. The new model is a single functional interface, **`AuthorizationManager<T>`**, whose `authorize(...)` method returns an `AuthorizationResult` (`AuthorizationDecision` is the standard implementation; the older `check(...)` method was deprecated in 6.4 and removed in 7). The same interface is used for requests, methods and messages, and each annotation has its own interceptor bean you can replace.
 - A denied check throws **`AuthorizationDeniedException`** (6.3+), a subclass of `AccessDeniedException` that also carries the `AuthorizationResult`.
 - Expressions are **SpEL**, evaluated against a `MethodSecurityExpressionRoot`. Available: `authentication`, `principal`, `hasRole`, `hasAnyRole`, `hasAuthority`, `hasAnyAuthority`, `isAuthenticated()`, `permitAll`, `denyAll`, `hasPermission(...)`, method arguments as `#name`, the result as `returnObject`, collection elements as `filterObject`, and any bean as `@beanName`.
 - A method **without** an annotation is not checked at all. Method security is "allow by default". Request security can be made "deny by default" with `anyRequest().denyAll()` or `.authenticated()`. This is why you keep both layers.
@@ -234,7 +230,7 @@ class PrescriptionService {
 }
 ```
 
-`#memberId` works only if parameter names are in the bytecode. Since Spring Framework 6.1, that means compiling with **`-parameters`** (the Spring Boot Maven and Gradle plugins do this). Otherwise use `@P("memberId")` on the parameter.
+`#memberId` works only if parameter names are in the bytecode. Since Spring Framework 6.1, that means compiling with **`-parameters`** (`spring-boot-starter-parent` for Maven and the Spring Boot Gradle plugin configure this for you). Otherwise use `@P("memberId")` on the parameter.
 
 ### The classic mistake: self-invocation
 
@@ -304,6 +300,7 @@ A named annotation is easier to review and to search for than twenty copies of a
 public List<Pharmacy> nearby(GeoPoint point) { /* ... */ }
 
 // 6.3+: return a masked value instead of failing the whole response.
+// The object must be proxied: a Spring bean, or a returned domain object wrapped via @AuthorizeReturnObject.
 @PreAuthorize("hasAuthority('pii:read')")
 @HandleAuthorizationDenied(handlerClass = MaskHandler.class)
 public String getSsn() { return ssn; }
@@ -329,10 +326,12 @@ class ExportJob {
 
     void run(ExportRequest request) {
         Supplier<Authentication> auth = () -> SecurityContextHolder.getContext().getAuthentication();
-        AuthorizationDecision decision = exportAuthz.check(auth, request);   // authorize(...) in 6.4+
-        if (decision != null && !decision.isGranted()) {
-            throw new AccessDeniedException("export not allowed");
+        // authorize(...) exists since 6.4. Before that it was check(...), which was removed in 7.
+        AuthorizationResult result = exportAuthz.authorize(auth, request);
+        if (result != null && !result.isGranted()) {
+            throw new AuthorizationDeniedException("export not allowed", result);
         }
+        // Shortcut: exportAuthz.verify(auth, request) throws AccessDeniedException for you.
         // ...
     }
 }
@@ -347,21 +346,46 @@ class PrescriptionServiceSecurityTest {
     @Autowired PrescriptionService service;
 
     @Test
-    @WithMockUser(username = "member-42", roles = "MEMBER")   // puts ROLE_MEMBER in the context
+    @WithJwtSubject("member-42")                  // custom @WithSecurityContext: puts a JwtAuthenticationToken in the context
     void memberCannotReadAnotherMembersData() {
         assertThatThrownBy(() -> service.forMember("member-99"))
             .isInstanceOf(AccessDeniedException.class);
     }
 
     @Test
+    @WithJwtSubject("member-42")
+    void memberCanReadOwnData() {                 // the positive twin proves the denial above is the ownership rule
+        assertThatCode(() -> service.forMember("member-42")).doesNotThrowAnyException();
+    }
+
+    @Test
+    @WithAnonymousUser                            // AnonymousAuthenticationToken, as in a real unauthenticated request
     void anonymousIsRejected() {
         assertThatThrownBy(() -> service.forMember("member-42"))
-            .isInstanceOf(AuthenticationCredentialsNotFoundException.class);
+            .isInstanceOf(AccessDeniedException.class);
+    }
+}
+
+// Test support: builds the same Authentication type the resource server builds in production.
+@Retention(RetentionPolicy.RUNTIME)
+@WithSecurityContext(factory = WithJwtSubjectFactory.class)
+@interface WithJwtSubject { String value(); }
+
+class WithJwtSubjectFactory implements WithSecurityContextFactory<WithJwtSubject> {
+    @Override
+    public SecurityContext createSecurityContext(WithJwtSubject annotation) {
+        Jwt jwt = Jwt.withTokenValue("test-token")
+            .header("alg", "none")
+            .subject(annotation.value())
+            .build();
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(new JwtAuthenticationToken(jwt, AuthorityUtils.createAuthorityList("ROLE_MEMBER")));
+        return context;
     }
 }
 ```
 
-`@WithMockUser` builds a `UsernamePasswordAuthenticationToken`. If your bean casts the principal to `Jwt`, use the `jwt()` request post-processor with MockMvc or a custom `@WithSecurityContext` annotation. Always write the **negative** test. A security test that only proves the happy path proves nothing.
+`@WithMockUser` builds a `UsernamePasswordAuthenticationToken` whose principal is a `User`, not a `Jwt`. With the `canView` bean above, a `@WithMockUser` test would be denied for *every* member ID because of the fail-closed `instanceof Jwt` branch, so the negative test would pass for the wrong reason. That is why the test uses a custom `@WithSecurityContext` annotation (with MockMvc, the `jwt()` request post-processor does the same job). If the `SecurityContext` is completely empty, which happens on a background thread or in a test with no annotation, method security does not see an anonymous user: role-based expressions fail with `AuthenticationCredentialsNotFoundException`. Always write the **negative** test. A security test that only proves the happy path proves nothing.
 
 ## Real-world usage
 
@@ -404,8 +428,8 @@ class PrescriptionServiceSecurityTest {
     - **Johnson Controls, Metasys:** "Implemented Spring Security authorization controls and API security mechanisms" and "owned JWT-based authentication and SSO implementation end-to-end" on the user management microservices. This is the direct claim: authentication (JWT, SSO) and authorization (role/permission checks) on the same service.
     - **Publicis Sapient, OptumRx Meteor:** "Built secure enterprise APIs using OAuth2, PingFederate, and Active Directory integration" and "Owned the GraphQL Consumer Service end-to-end". PingFederate authenticates and issues the token. The service is the place where authorization decisions on that token are made.
 - **Talking points:**
-    - On Metasys I separated the two concerns: a filter validated the JWT and built the `Authentication`, and authorization rules decided what each user-management operation required. *[confirm: whether rules were URL-based, `@PreAuthorize` / `@Secured`, or both, and the role model used, e.g. admin / operator / viewer]*
-    - That work was in 2017–18, so it was Spring Security 4/5 with `@EnableGlobalMethodSecurity` and `WebSecurityConfigurerAdapter`. I can explain what changed: `@EnableMethodSecurity`, `AuthorizationManager`, `SecurityFilterChain` beans, `authorizeHttpRequests`. Saying this unprompted shows the knowledge is current.
+    - On Metasys I separated the two concerns: a filter validated the JWT and built the `Authentication`, and authorization rules decided what each user-management operation required. *[confirm: whether JWT validation was a custom filter or a library, whether rules were URL-based, `@PreAuthorize` / `@Secured`, or both, and the role model used, e.g. admin / operator / viewer]*
+    - That work was in 2017–18, so it was the Spring Security 4/5 generation, where the standard setup was `@EnableGlobalMethodSecurity` and `WebSecurityConfigurerAdapter`. *[confirm: the actual Spring Security version and whether method security was enabled at all]* I can explain what changed: `@EnableMethodSecurity`, `AuthorizationManager`, `SecurityFilterChain` beans, `authorizeHttpRequests`. Saying this unprompted shows the knowledge is current.
     - On OptumRx the token came from PingFederate, with user and group information originating in Active Directory. Groups or roles in the token were mapped to Spring authorities for access decisions. *[confirm: which claim carried groups/roles, and whether mapping was done with a custom `JwtAuthenticationConverter`]*
     - A GraphQL service has one URL, so URL rules only establish "authenticated". Per-operation rules belong on the `@QueryMapping` methods or the service layer, and member-level data needs an ownership check because this is healthcare data for 750K+ users. *[confirm: how member-level access was actually enforced, in the Consumer Service or delegated to the 5 upstream systems]*
     - As a lead I treat authorization as a review checklist item: every new service method needs a rule and a negative test. *[confirm if this was part of the engineering standards you established]*
@@ -444,7 +468,7 @@ class PrescriptionServiceSecurityTest {
     **Interviewer listens for:** That `@PostAuthorize` does not prevent the method from running.
 
 ??? question "Q5. What does `@EnableMethodSecurity` do, and how is it different from `@EnableGlobalMethodSecurity`?"
-    **Answer:** It registers AOP advisors, one per annotation type, each backed by an `AuthorizationManager`. Differences from the old annotation: pre/post annotations are enabled by default, it uses the `AuthorizationManager` API instead of `AccessDecisionManager` and voters, it follows JSR-250 semantics properly, and each interceptor is a separate bean you can override or reorder. `@EnableGlobalMethodSecurity` is deprecated in 6.x and gone in 7.
+    **Answer:** It registers AOP advisors, one per annotation type, each backed by an `AuthorizationManager`. Differences from the old annotation: pre/post annotations are enabled by default, it uses the `AuthorizationManager` API instead of `AccessDecisionManager` and voters, it follows JSR-250 semantics properly, and each interceptor is a separate bean you can override or reorder. `@EnableGlobalMethodSecurity` is deprecated in 6.x, and in 7 the voter-based Access API it relies on has been moved out to the legacy `spring-security-access` module.
 
 ### Intermediate
 
@@ -489,7 +513,7 @@ class PrescriptionServiceSecurityTest {
 ### Senior
 
 ??? question "Q12. Explain the internals: what happens between the caller and the method when `@PreAuthorize` is present?"
-    **Answer:** At startup, `@EnableMethodSecurity` registers advisors with pointcuts that match the security annotations. The auto-proxy creator wraps matching beans in a JDK or CGLIB proxy. At call time the proxy builds a `MethodInvocation` and runs the interceptor chain in order: pre-filter, pre-authorize, then other advice such as transactions, then the target, then post-authorize and post-filter on the way back. `AuthorizationManagerBeforeMethodInterceptor` calls `PreAuthorizeAuthorizationManager`, which parses and caches the SpEL expression, creates an evaluation context with a `MethodSecurityExpressionRoot` (via `MethodSecurityExpressionHandler`), and evaluates it with a lazily supplied `Authentication` from the `SecurityContextHolderStrategy`. If the decision is not granted, it publishes an authorization event and throws `AuthorizationDeniedException`, which `ExceptionTranslationFilter` turns into 403.
+    **Answer:** At startup, `@EnableMethodSecurity` registers advisors with pointcuts that match the security annotations. The auto-proxy creator wraps matching beans in a JDK or CGLIB proxy. At call time the proxy builds a `MethodInvocation` and runs the interceptor chain in order: pre-filter, pre-authorize, then other advice such as transactions, then the target, and on the way back post-filter (order 600, innermost) followed by post-authorize (order 500). `AuthorizationManagerBeforeMethodInterceptor` calls `PreAuthorizeAuthorizationManager`, which parses and caches the SpEL expression, creates an evaluation context with a `MethodSecurityExpressionRoot` (via `MethodSecurityExpressionHandler`), and evaluates it with a lazily supplied `Authentication` from the `SecurityContextHolderStrategy`. If the decision is not granted, it publishes an authorization-denied event and throws `AuthorizationDeniedException`. If nothing in between handles it (for example a catch-all `@ExceptionHandler(Exception.class)` in a `@ControllerAdvice`, which would turn it into a 500), it propagates to `ExceptionTranslationFilter`, which returns 403, or 401 for an anonymous caller.
 
     **Interviewer listens for:** Advisor/pointcut, interceptor order, expression handler, where `Authentication` comes from, and how the exception becomes a status code.
 

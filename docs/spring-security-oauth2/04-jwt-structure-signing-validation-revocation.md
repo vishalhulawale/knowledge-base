@@ -6,10 +6,6 @@ tags: [spring-security-oauth2, P0]
 
 # JWT: Structure, Signing (HS256 vs RS256), Validation, Revocation
 
-!!! warning "Draft: not yet fact-checked"
-    This page was written but its independent review pass has not run yet. Verify version numbers and defaults against the linked sources.
-
-
 !!! abstract "TL;DR"
     - A JWT is `base64url(header).base64url(payload).base64url(signature)`. It is **signed, not encrypted**: anyone who holds it can read the claims, so never put secrets or sensitive personal data in it.
     - **HS256** is an HMAC with one **shared secret**: every service that can verify can also forge. **RS256/ES256** use a **private key to sign and a public key to verify**, so only the issuer can mint tokens. Use asymmetric signing as soon as more than one party verifies.
@@ -205,7 +201,7 @@ With only `issuer-uri`, Spring Security resolves the JWKS URL from the discovery
         Key key = switch (alg) {
             case "HS256" -> new SecretKeySpec(rsaPublicKeyBytes, "HmacSHA256"); // algorithm confusion:
             case "RS256" -> rsaPublicKey;                    // attacker signs with the PUBLIC key as HMAC secret
-            default -> null;                                 // "none" -> no verification at all
+            default -> null;                                 // "none" -> null key; vulnerable libraries then skip verification
         };
         return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
         // Also missing: issuer check, audience check, key rotation, revocation.
@@ -238,7 +234,7 @@ With only `issuer-uri`, Spring Security resolves the JWKS URL from the discovery
             String issuer = "https://idp.example.com";
 
             NimbusJwtDecoder decoder = NimbusJwtDecoder
-                .withIssuerLocation(issuer)                          // JWKS URL from discovery, cached, refetched on unknown kid
+                .withIssuerLocation(issuer)                          // Spring Security 6.1+. JWKS URL from discovery, cached, refetched on unknown kid
                 .jwsAlgorithm(SignatureAlgorithm.RS256)              // allow-list comes from config, never from the token
                 .build();
 
@@ -264,7 +260,7 @@ With only `issuer-uri`, Spring Security resolves the JWKS URL from the discovery
     }
     ```
 
-How the filter chain invokes this is covered in [Spring Security architecture](01-spring-security-architecture-filter-chain-securitycontext-au.md). More resource-server options are in Resource server & client configuration.
+How the filter chain invokes this is covered in [Spring Security architecture](01-spring-security-architecture-filter-chain-securitycontext-au.md). More resource-server options are in [Resource server & client configuration](07-resource-server-and-client-configuration-in-spring.md).
 
 ### Revocation with a Redis denylist
 
@@ -449,7 +445,7 @@ In a new system, prefer a real authorization server (Spring Authorization Server
     **Interviewer listens for:** Refresh is the revocation checkpoint. Refresh tokens are usually opaque. Reuse detection. Grant details are in [OAuth2 roles & grant types](05-oauth2-roles-and-grant-types.md).
 
 ??? question "Q11. Gotcha: a service returns 401 with \"Jwt used before\" or \"Jwt expired\" for tokens that were issued one second ago. What is wrong?"
-    **Answer:** Clock drift between the issuer and the verifier. If the verifier's clock is behind, `nbf` or `iat` appears to be in the future. If it is ahead, `exp` appears to have passed, which hurts most with very short TTLs. Spring allows 60 seconds of skew by default, so the drift is larger than that or the skew was set to zero. Fix time synchronisation on the hosts. Also check that the issuer writes seconds, not milliseconds, into the time claims.
+    **Answer:** Clock drift between the issuer and the verifier. If the verifier's clock is behind, `nbf` appears to be in the future (Spring's `JwtTimestampValidator` checks `exp` and `nbf`, not `iat`, though other libraries also reject a future `iat`). If it is ahead, `exp` appears to have passed, which hurts most with very short TTLs. Spring allows 60 seconds of skew by default, so the drift is larger than that or the skew was set to zero. Fix time synchronisation on the hosts. Also check that the issuer writes seconds, not milliseconds, into the time claims.
 
     **Interviewer listens for:** Clock skew as a concept, the default tolerance, and fixing the cause instead of widening the tolerance to minutes.
 

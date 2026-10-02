@@ -6,10 +6,6 @@ tags: [spring-security-oauth2, P0]
 
 # Spring Security Architecture: Filter Chain, SecurityContext, Authentication Providers
 
-!!! warning "Draft: not yet fact-checked"
-    This page was written but its independent review pass has not run yet. Verify version numbers and defaults against the linked sources.
-
-
 !!! abstract "TL;DR"
     - Spring Security for servlet apps is **a chain of servlet filters**. The container sees one filter (`DelegatingFilterProxy`), which hands over to the `FilterChainProxy` bean, which picks **the first matching `SecurityFilterChain`** and runs its filters in a fixed order.
     - **Authentication** is done by a filter that builds an unauthenticated `Authentication` token and passes it to the `AuthenticationManager` (`ProviderManager`), which loops over `AuthenticationProvider`s until one that `supports()` the token type succeeds or fails.
@@ -19,7 +15,7 @@ tags: [spring-security-oauth2, P0]
 
 ## Why it matters
 
-Every Spring Boot service you have secured, whether with JWT, OAuth2 or SAML, runs on this same machinery. The protocol pages in this section ([JWT](04-jwt-structure-signing-validation-revocation.md), [OAuth2 grants](05-oauth2-roles-and-grant-types.md), resource server config) are all plug-ins to the architecture described here.
+Every Spring Boot service you have secured, whether with JWT, OAuth2 or SAML, runs on this same machinery. The protocol pages in this section ([JWT](04-jwt-structure-signing-validation-revocation.md), [OAuth2 grants](05-oauth2-roles-and-grant-types.md), [resource server config](07-resource-server-and-client-configuration-in-spring.md)) are all plug-ins to the architecture described here.
 
 Interviewers use this topic to separate "I copied a security config" from "I can debug one". The typical senior questions are all architectural: why does a `permitAll` endpoint return 401, why is the user `null` inside an `@Async` method, why did my custom filter run twice, why 403 instead of 401. You can only answer those if you know the order of filters and where the context lives.
 
@@ -75,7 +71,7 @@ Two consequences follow directly from this order:
 - **Authentication happens before authorization.** A request with a bad token is rejected by the authentication filter even if the URL is `permitAll`, because `permitAll` is only evaluated at step 10.
 - **CORS comes before authentication**, because browser preflight (`OPTIONS`) requests carry no credentials. Details are in [Sessions vs tokens; CSRF & CORS](03-sessions-vs-tokens-csrf-and-cors-in-spring.md).
 
-To see the real list for your app, set `logging.level.org.springframework.security=DEBUG` (or `TRACE`). At startup Spring logs every chain and its filters.
+To see the real list for your app, set `logging.level.org.springframework.security=DEBUG` (or `TRACE`). At startup Spring logs every chain and its filters at DEBUG level.
 
 ### The authentication model
 
@@ -158,14 +154,14 @@ Where the context is stored **between** requests is a separate concern, owned by
 
 - `HttpSessionSecurityContextRepository`: in the HTTP session (stateful login).
 - `RequestAttributeSecurityContextRepository`: only for the current request, so it survives `FORWARD`/`ERROR` dispatches but nothing else.
-- `NullSecurityContextRepository`: stores nothing. Used when the session policy is `STATELESS`.
+- `NullSecurityContextRepository`: stores nothing. With `SessionCreationPolicy.STATELESS`, session management uses it, so nothing is ever written to an HTTP session. (Precisely: in 6.x a stateless chain's shared repository is a `RequestAttributeSecurityContextRepository`, which is also the default of `BearerTokenAuthenticationFilter`. The context lives for the current request only and is rebuilt from the token on the next one.)
 - The default in 6.x is a `DelegatingSecurityContextRepository` combining the first two.
 
 **What changed in Spring Security 6** (a favourite senior question):
 
 - `SecurityContextPersistenceFilter` was replaced by `SecurityContextHolderFilter`. The old filter saved the context automatically at the end of every request. The new one only **loads** it. Whoever authenticates must **save it explicitly** to the repository. Built-in filters do this. Hand-written login endpoints must do it themselves.
 - Loading is **deferred**: the holder gets a `Supplier`, so the session is only read if something actually asks for the context. Requests for public static resources no longer touch the session.
-- `AuthorizationFilter` replaced `FilterSecurityInterceptor`, and `AuthorizationManager` replaced the `AccessDecisionManager`/voter model. Authorization rules now apply to **all dispatcher types** (`REQUEST`, `FORWARD`, `ERROR`, `ASYNC`) by default.
+- `AuthorizationFilter` replaced `FilterSecurityInterceptor`, and `AuthorizationManager` replaced the `AccessDecisionManager`/voter model. Authorization rules now apply to **all dispatcher types** (`REQUEST`, `FORWARD`, `INCLUDE`, `ERROR`, `ASYNC`) by default.
 
 ### Propagating the context to other threads
 
@@ -173,7 +169,7 @@ Because of the `ThreadLocal`, the context is absent in `@Async` methods, `Comple
 
 - Wrap the executor: `DelegatingSecurityContextExecutor`, `DelegatingSecurityContextExecutorService`, or `DelegatingSecurityContextAsyncTaskExecutor` for `@Async`. They copy the context when the task is submitted and clear it when the task finishes.
 - For a single task: `DelegatingSecurityContextRunnable` / `Callable`.
-- Spring MVC `Callable` and `DeferredResult` returns are handled by `WebAsyncManagerIntegrationFilter`.
+- A `Callable` returned from a Spring MVC controller is handled automatically by `WebAsyncManagerIntegrationFilter`. A `DeferredResult` is **not**: your own code completes it on a thread Spring Security does not control, so propagate the context yourself with the delegating wrappers above.
 - Reactive (WebFlux) apps do not use `ThreadLocal` at all. The context travels in the Reactor `Context` and is read with `ReactiveSecurityContextHolder`.
 - Virtual threads (Java 21+) still have their own `ThreadLocal`s, so the rule is the same: a new virtual thread starts with an empty context unless you propagate it.
 
@@ -182,7 +178,7 @@ Because of the `ThreadLocal`, the context is absent in `@Async` methods, `Comple
 One app often needs different security for different paths: stateless bearer tokens for `/api/**`, basic auth for `/actuator/**`, sessions for a UI. Define several `SecurityFilterChain` beans, each with a `securityMatcher` and an `@Order`. Rules:
 
 - Lower `@Order` value is checked first. First match wins.
-- A chain **without** `securityMatcher` matches every request, so it must be last. Since 6.x Spring fails at startup if an "any request" chain is placed before another chain, because the later chain would be unreachable.
+- A chain **without** `securityMatcher` matches every request, so it must be last. Recent versions (late 6.x and 7) fail at startup if an "any request" chain is placed before another chain, because the later chain would be unreachable. On older versions the later chain is silently never used.
 - `securityMatcher` decides **which chain** runs. `authorizeHttpRequests(...requestMatchers...)` decides **what is allowed** inside that chain. Mixing these up is a common bug.
 
 ### Version timeline to know
@@ -190,7 +186,7 @@ One app often needs different security for different paths: stateless bearer tok
 | Version | Change |
 |---|---|
 | 5.7 | `WebSecurityConfigurerAdapter` deprecated in favour of `SecurityFilterChain` beans |
-| 6.0 (Boot 3.0) | Adapter removed, Jakarta namespace, Java 17 baseline, explicit context save, deferred loading, `AuthorizationFilter` on all dispatcher types, `antMatchers`/`mvcMatchers` replaced by `requestMatchers`, `@EnableMethodSecurity` |
+| 6.0 (Boot 3.0) | Adapter removed, Jakarta namespace, Java 17 baseline, explicit context save, deferred loading, `AuthorizationFilter` on all dispatcher types, `antMatchers`/`mvcMatchers` replaced by `requestMatchers`, `@EnableGlobalMethodSecurity` deprecated in favour of `@EnableMethodSecurity` (which itself arrived in 5.6) |
 | 6.1 | Lambda DSL becomes the recommended style, chained `and()` deprecated |
 | 7.0 (Boot 4.0) | `and()` and non-lambda DSL removed, `authorizeRequests()` removed, `AntPathRequestMatcher`/`MvcRequestMatcher` removed in favour of `PathPatternRequestMatcher` |
 
@@ -201,7 +197,8 @@ A very common mistake is a hand-written JWT filter. It usually has four bugs at 
 === "❌ Common mistake"
     ```java
     @Component // (1) Boot ALSO registers every Filter bean with the servlet container,
-               //     so this runs twice: once outside security, once inside the chain
+               //     so it is registered twice: once outside security, once inside the chain.
+               //     A plain Filter would run twice; OncePerRequestFilter skips the second run
     public class JwtFilter extends OncePerRequestFilter {
 
         @Autowired JwtUtil jwtUtil;
@@ -253,9 +250,9 @@ A very common mistake is a hand-written JWT filter. It usually has four bugs at 
                     .requestMatchers("/api/admin/**").hasRole("ADMIN")
                     .anyRequest().authenticated())               // deny-by-default for the rest
                 // Built-in BearerTokenAuthenticationFilter + JwtAuthenticationProvider:
-                // signature, exp, nbf, issuer validated, correct 401 + WWW-Authenticate
+                // signature, exp, nbf (and issuer when issuer-uri is set) validated, correct 401 + WWW-Authenticate
                 .oauth2ResourceServer(o -> o.jwt(Customizer.withDefaults()))
-                // No session, so NullSecurityContextRepository is used
+                // No session: the context is kept only as a request attribute, never in HttpSession
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // Safe only because no browser cookie carries the credential
                 .csrf(csrf -> csrf.disable())
@@ -317,7 +314,7 @@ public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) {
         String key = (String) authentication.getCredentials();
-        ApiClient client = clients.findByKeyHash(Hashing.sha256(key))   // never store raw keys
+        ApiClient client = clients.findByKeyHash(sha256Hex(key))       // your own hashing helper: never store raw keys
             .orElseThrow(() -> new BadCredentialsException("Invalid API key"));
         return new ApiKeyAuthenticationToken(client.id(), client.authorities());
     }
@@ -403,12 +400,12 @@ class AsyncConfig {
 | One `SecurityFilterChain` | Simple to reason about | One auth style for all paths | Single-purpose service |
 | Multiple chains | Different auth per path group | Ordering bugs, unreachable chains | API + actuator + UI in one app |
 | `permitAll()` | Still gets headers, CSRF, context | Filters still run (small cost) | Public endpoints |
-| `web.ignoring()` | Zero filter cost | No headers, no context, no firewall-level protections | Almost never. Docs recommend `permitAll` |
+| `web.ignoring()` | Zero security-filter cost | No security headers, no CSRF, no context (only the `HttpFirewall` in `FilterChainProxy` still applies) | Almost never. Docs recommend `permitAll` |
 | `MODE_THREADLOCAL` + delegating executors | Explicit and safe | Must remember to wrap each executor | Default choice |
 | `MODE_INHERITABLETHREADLOCAL` | No wiring | Wrong user on pooled threads | Only with threads created per task |
 
 !!! warning "Gotcha: a Filter bean is registered twice"
-    Spring Boot registers every `Filter` bean with the servlet container automatically. If you also add it with `addFilterBefore`, it runs in both places. `OncePerRequestFilter` hides the double execution, but the first run happens **outside** the security chain, before the context is loaded. Either do not make it a bean, or add a `FilterRegistrationBean` with `setEnabled(false)`.
+    Spring Boot registers every `Filter` bean with the servlet container automatically. If you also add it with `addFilterBefore`, it is in both places: once inside the security chain and once as a container filter, in a different position. A plain `Filter` runs twice. `OncePerRequestFilter` only hides this by skipping the second invocation, and which one is "second" depends on ordering: an unordered filter bean gets lowest precedence and sits after the security chain (order `-100`), but with an `@Order` below `-100` the container copy runs first, **outside** the security chain, before the context is loaded and with no `ExceptionTranslationFilter` around it. Either do not make it a bean, or add a `FilterRegistrationBean` with `setEnabled(false)`.
 
 !!! warning "Gotcha: `permitAll` does not skip authentication"
     A request to a `permitAll` URL that carries an expired or malformed bearer token gets **401**. The authentication filter runs first and rejects the bad credential. Clients must not send stale tokens to public endpoints, or the public endpoint needs its own chain without the bearer filter.
@@ -428,7 +425,7 @@ class AsyncConfig {
     - **Publicis Sapient, OptumRx Meteor:** "Built secure enterprise APIs using OAuth2, PingFederate, and Active Directory integration." The Spring Boot services and the GraphQL Consumer Service validate tokens issued by PingFederate. In architecture terms that is a `SecurityFilterChain` with a bearer-token authentication filter, a JWT or opaque-token `AuthenticationProvider`, and authorities mapped from token claims or AD groups. *[confirm: JWT validated locally via JWK Set, or opaque tokens introspected against PingFederate; and whether validation happened in the service or at a gateway]*
     - **Johnson Controls, Metasys:** "Owned JWT-based authentication and SSO implementation end-to-end" and "Implemented Spring Security authorization controls and API security mechanisms" for user-management microservices. That was 2017–2018, so Spring Security 4/5 with `WebSecurityConfigurerAdapter` and most likely a custom `OncePerRequestFilter` for JWT. *[confirm the exact approach]*
 - **Talking points:**
-    - Contrast then and now: a hand-written JWT filter at Johnson Controls versus the built-in resource server support in current projects, and why the built-in path is safer (standard validation, proper 401/403 handling, key rotation).
+    - Contrast then and now: a hand-written JWT filter at Johnson Controls versus the built-in resource server support in current projects, and why the built-in path is safer (standard validation, proper 401/403 handling, key rotation). *[confirm: that Metasys used a hand-written filter and that OptumRx Meteor uses `oauth2ResourceServer`]*
     - GraphQL has a single endpoint, so the filter chain only establishes identity. Authorization for individual queries and fields is done at method level in the Consumer Service. *[confirm how field-level access was enforced]*
     - Mapping AD groups to `GrantedAuthority` with a custom `JwtAuthenticationConverter`, so business roles are not hard-coded to token claim names. *[confirm claim name and mapping]*
     - Context propagation when the Consumer Service calls 5 upstream systems in parallel or publishes to Kafka: the `ThreadLocal` context does not follow the work, so the token or user id must be passed explicitly or the executor wrapped. *[confirm which approach was used]*
@@ -491,7 +488,7 @@ class AsyncConfig {
 
     **Interviewer listens for:** `ThreadLocal`, and that `getContext()` never returns null but an empty context.
 
-    **Common wrong answer:** "Set `MODE_INHERITABLETHREADLOCAL`." It does not help here (the pool threads were not created by the request thread) and is dangerous with pools.
+    **Common wrong answer:** "Set `MODE_INHERITABLETHREADLOCAL`." It does not reliably help here (a pool thread inherits from whichever thread happened to create it, usually not this request's thread, and is then reused) and is dangerous with pools.
 
 ??? question "Q8. What changed about SecurityContext persistence in Spring Security 6?"
     **Answer:** `SecurityContextPersistenceFilter` was replaced by `SecurityContextHolderFilter`. The old filter loaded the context eagerly and saved it automatically at the end of each request. The new one loads it lazily through a `Supplier` and never saves. Saving is explicit: the code that authenticates calls `SecurityContextRepository.saveContext`. Benefits: no session read for requests that never need the user, no surprise session writes, and no lost updates when concurrent requests overwrite each other's context. The cost is that custom login code must save the context itself.
@@ -499,12 +496,12 @@ class AsyncConfig {
     **Interviewer listens for:** "explicit save" and "deferred load", plus the practical migration symptom (user logged out on the next request).
 
 ??? question "Q9. Why did my custom filter execute twice per request?"
-    **Answer:** It is a Spring bean (`@Component`), so Spring Boot auto-registered it with the servlet container, and it was also added to the security chain with `addFilterBefore`. Fix: do not declare it as a bean, or register a `FilterRegistrationBean` for it with `setEnabled(false)`. `OncePerRequestFilter` prevents the second execution within one dispatch, but then the filter runs at the container position, outside the security chain, which is usually the wrong place.
+    **Answer:** It is a Spring bean (`@Component`), so Spring Boot auto-registered it with the servlet container, and it was also added to the security chain with `addFilterBefore`. Fix: do not declare it as a bean, or register a `FilterRegistrationBean` for it with `setEnabled(false)`. `OncePerRequestFilter` skips the second invocation within one dispatch, but that only hides the problem: if the container copy is ordered ahead of the security chain (order `-100`), it is the one that actually does the work, outside the security chain, which is the wrong place.
 
     **Interviewer listens for:** knowledge of Boot's automatic filter registration.
 
 ??? question "Q10. `permitAll()` versus `web.ignoring()`?"
-    **Answer:** `permitAll()` keeps the request inside the filter chain. It still gets security headers, CSRF protection, a security context and firewall checks, and the authorization decision is simply "allow". `web.ignoring()` removes the path from Spring Security completely: no filters, no headers, no context. The official guidance is to prefer `permitAll()`. Since deferred context loading, its cost for static resources is small.
+    **Answer:** `permitAll()` keeps the request inside the filter chain. It still gets security headers, CSRF protection and a security context, and the authorization decision is simply "allow". `web.ignoring()` gives the path an empty filter chain: `FilterChainProxy` still applies the `HttpFirewall`, but no security filters run, so there are no headers, no CSRF protection and no context. The official guidance is to prefer `permitAll()`. Since deferred context loading, its cost for static resources is small.
 
     **Common wrong answer:** "They are the same, ignoring is just faster."
 

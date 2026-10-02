@@ -6,10 +6,6 @@ tags: [spring-security-oauth2, P0]
 
 # OpenID Connect: ID Token, UserInfo & Discovery
 
-!!! warning "Draft: not yet fact-checked"
-    This page was written but its independent review pass has not run yet. Verify version numbers and defaults against the linked sources.
-
-
 !!! abstract "TL;DR"
     - **OAuth2 answers "what may this app do?" OIDC answers "who just logged in?"** OIDC is a thin identity layer on top of OAuth2, switched on by the `openid` scope.
     - The **ID token** is a signed JWT *for the client*. Its audience is the `client_id`. It proves an authentication event (`iss`, `sub`, `aud`, `exp`, `iat`, plus `nonce`, `auth_time`, `acr`, `amr`). It is **not** an API credential.
@@ -109,7 +105,7 @@ Three ideas matter more than the claim list:
 
 ### ID token validation
 
-The spec lists the checks. Spring Security performs them in `OidcIdTokenValidator` plus the JWT decoder.
+The spec lists the checks. Spring Security performs them in the JWT decoder (signature, algorithm) and `OidcIdTokenValidator` (`iss`, `sub`, `aud`, `azp`, `exp`, `iat`). The nonce comparison is done separately by `OidcAuthorizationCodeAuthenticationProvider`. Spring does not check `auth_time` or `acr` for you.
 
 ```mermaid
 flowchart TD
@@ -185,7 +181,7 @@ Key fields:
 
 | Field | Purpose |
 |---|---|
-| `issuer` | Must be **identical** to the URL used to fetch the document, and to `iss` in tokens. |
+| `issuer` | Must be **identical** to the issuer URL the client used to build the discovery URL (the part before `/.well-known/...`), and to `iss` in tokens. |
 | `authorization_endpoint`, `token_endpoint` | The OAuth2 endpoints. |
 | `userinfo_endpoint` | UserInfo URL. |
 | `jwks_uri` | Public signing keys as a JWK Set. |
@@ -194,7 +190,7 @@ Key fields:
 | `id_token_signing_alg_values_supported` | Algorithms the provider may sign with. |
 | `code_challenge_methods_supported` | PKCE support (`S256`). |
 
-The issuer equality rule is a security control. If a client accepted metadata whose `issuer` differs from what it asked for, an attacker who can influence the URL could point it at endpoints they control (a "mix-up" attack).
+The issuer equality rule is a security control. If a client accepted metadata whose `issuer` differs from what it asked for, an attacker who can influence the URL could point it at endpoints they control and impersonate the real provider (the spec calls this out as an impersonation risk, and it is closely related to "mix-up" attacks).
 
 RFC 8414 defines the same idea for plain OAuth2 at `/.well-known/oauth-authorization-server`. Spring Security tries the OIDC path first and then the RFC 8414 forms when you give it an `issuer-uri`.
 
@@ -205,7 +201,7 @@ OIDC also standardises logout, which plain OAuth2 never did:
 - **RP-initiated logout:** the app redirects the browser to `end_session_endpoint` with `id_token_hint` and `post_logout_redirect_uri`. This is the one legitimate case of sending the ID token back to the provider.
 - **Back-channel logout:** the provider POSTs a signed `logout_token` to each app so they can end local sessions without a browser.
 
-Single sign-on across apps is covered in SSO, SAML vs OIDC, enterprise IdPs.
+Single sign-on across apps is covered in [SSO, SAML vs OIDC, enterprise IdPs](08-sso-saml-vs-oidc-enterprise-idps.md).
 
 ## In practice: code & configuration
 
@@ -340,7 +336,7 @@ JwtDecoderFactory<ClientRegistration> idTokenDecoderFactory() {
     }
     ```
 
-Downstream APIs are resource servers. They validate the **access token** (audience = the API) as described in Resource server & client configuration in Spring.
+Downstream APIs are resource servers. They validate the **access token** (audience = the API) as described in [Resource server & client configuration in Spring](07-resource-server-and-client-configuration-in-spring.md).
 
 ### React side
 
@@ -379,13 +375,13 @@ For a browser app, the common production pattern is a backend-for-frontend: the 
 
 - **Where I used it:**
     - **OptumRx Meteor (Publicis Sapient):** "Built secure enterprise APIs using OAuth2, PingFederate, and Active Directory integration." PingFederate is an OpenID Provider, with Active Directory as the user store behind it. The React application I built from the ground up is the natural Relying Party side of that login. *[confirm: whether login used OIDC with an ID token or OAuth2 access tokens only, and whether the React app or a backend held the tokens]*
-    - **Metasys (Johnson Controls):** "Owned JWT-based authentication and SSO implementation end-to-end." This is the same problem OIDC standardises: a signed token proving who logged in. *[confirm: whether SSO was a custom JWT scheme or a standard protocol]*
+    - **Metasys (Johnson Controls):** "Built user management microservices and owned JWT-based authentication and SSO implementation end-to-end." This is the same problem OIDC standardises: a signed token proving who logged in. *[confirm: whether SSO was a custom JWT scheme or a standard protocol]*
 - **Talking points:**
-    - Explain the split clearly: PingFederate authenticates against Active Directory, issues an ID token for the web application and an access token for the APIs, and the Spring services validate the access token as resource servers.
+    - Explain the split clearly: PingFederate authenticates against Active Directory, issues an ID token for the web application and an access token for the APIs, and the Spring services validate the access token as resource servers. *[confirm this matches the actual OptumRx setup before presenting it as what we built]*
     - How AD group membership became application roles (a `groups`-style claim mapped to authorities). *[confirm the actual claim name and mapping]*
     - How services found the signing keys (JWKS through the issuer's discovery document) and what happened during key rotation. *[confirm]*
     - Healthcare angle: keeping personal data out of tokens and logs, and using `iss` + `sub` rather than email as the member key.
-    - Honest contrast: at Johnson Controls I built token issuance and validation myself, so I understand what an identity provider does internally. At OptumRx we delegated that to an enterprise provider, which is the right choice at scale.
+    - Honest contrast: at Johnson Controls I built token issuance and validation myself, so I understand what an identity provider does internally. *[confirm: the resume says I owned JWT authentication and SSO, check that this included issuing tokens]* At OptumRx we delegated that to an enterprise provider, which is the right choice at scale.
 - **Likely follow-up chain:**
     - "You used OAuth2 with PingFederate. Was that OIDC?" → Say what the `openid` scope adds and which tokens came back.
     - "What is in the ID token and who consumes it?" → Claims, audience = client, validated once at login.
@@ -422,14 +418,14 @@ For a browser app, the common production pattern is a backend-for-frontend: the 
     **Common wrong answer:** "You call it with the ID token."
 
 ??? question "Q5. What is OIDC discovery?"
-    **Answer:** A JSON metadata document at `{issuer}/.well-known/openid-configuration` listing the provider's endpoints, `jwks_uri`, supported scopes, response types and signing algorithms. Clients use it to configure themselves from a single issuer URL. The `issuer` value inside must exactly equal the URL used to fetch it and the `iss` claim in tokens.
+    **Answer:** A JSON metadata document at `{issuer}/.well-known/openid-configuration` listing the provider's endpoints, `jwks_uri`, supported scopes, response types and signing algorithms. Clients use it to configure themselves from a single issuer URL. The `issuer` value inside must exactly equal the issuer URL the client started from (the prefix before `/.well-known/openid-configuration`) and the `iss` claim in tokens.
 
     **Interviewer listens for:** `jwks_uri` for keys, the exact-match rule, Spring's `issuer-uri`.
 
 ### Intermediate
 
 ??? question "Q6. Walk through how a client validates an ID token."
-    **Answer:** (1) Verify the signature using the key identified by `kid` from the provider's JWKS, with the algorithm the client expects. (2) `iss` equals the configured issuer. (3) `aud` contains my `client_id`, and if there are several audiences, `azp` is my `client_id`. (4) `exp` is in the future and `iat` is reasonable, with a small clock skew. (5) `nonce` matches the one bound to this browser session. (6) Optionally check `auth_time` against `max_age` and `acr` against policy. In Spring this is the JWT decoder plus `OidcIdTokenValidator`.
+    **Answer:** (1) Verify the signature using the key identified by `kid` from the provider's JWKS, with the algorithm the client expects. (2) `iss` equals the configured issuer. (3) `aud` contains my `client_id`, and if there are several audiences, `azp` is my `client_id`. (4) `exp` is in the future and `iat` is reasonable, with a small clock skew. (5) `nonce` matches the one bound to this browser session. (6) Optionally check `auth_time` against `max_age` and `acr` against policy. In Spring this is the JWT decoder plus `OidcIdTokenValidator`, with the nonce compared in `OidcAuthorizationCodeAuthenticationProvider`. Step (6) is application code.
 
     **Interviewer listens for:** audience and nonce, not just "check the signature and expiry".
 
@@ -446,7 +442,7 @@ For a browser app, the common production pattern is a backend-for-frontend: the 
     **Common wrong answer:** "Email is unique so it is fine as a primary key."
 
 ??? question "Q9. (Gotcha) A resource server is configured with the same issuer-uri as the client. A developer sends the ID token as the Bearer token. What happens?"
-    **Answer:** With only default validation, it may well be **accepted**. Spring's resource server by default checks signature, expiry and issuer. The ID token is signed by the same provider with the same keys, so those all pass. Audience is not validated unless you configure it. That is why you must add an audience validator (or the `audiences` property) on the resource server, so that only tokens minted for this API are accepted. Details in Resource server & client configuration in Spring.
+    **Answer:** With only default validation, it may well be **accepted**. Spring's resource server by default checks signature, expiry and issuer. The ID token is signed by the same provider with the same keys, so those all pass. Audience is not validated unless you configure it. That is why you must add an audience validator (or the `audiences` property) on the resource server, so that only tokens minted for this API are accepted. Details in [Resource server & client configuration in Spring](07-resource-server-and-client-configuration-in-spring.md).
 
     **Interviewer listens for:** knowing that audience validation is not on by default in the resource server, and that the fix is server-side, not "tell developers not to do it".
 
@@ -495,7 +491,7 @@ For a browser app, the common production pattern is a backend-for-frontend: the 
     **Common wrong answer:** "Decode the access token in the browser and trust the roles for security."
 
 ??? question "Q18. Your service starts failing to boot in one region during a provider outage, while already-running pods are fine. Explain and propose a fix."
-    **Answer:** Running pods already have the client registration and cached JWKS, so they keep working for existing sessions and can validate tokens. New pods call the discovery endpoint during bean creation and fail. Options: configure endpoints explicitly so startup has no network dependency. For resource servers, set `jwk-set-uri` so keys are fetched lazily on first request. Keep enough capacity and avoid restarts during the incident. Longer term, ensure the provider is multi-region and included in dependency health planning.
+    **Answer:** Running pods already have the client registration and cached JWKS, so they keep working for existing sessions and can validate tokens. New pods call the discovery endpoint during bean creation and fail. Options: configure endpoints explicitly so startup has no network dependency. Resource servers behave differently: Spring Boot's auto-configured decoder for `issuer-uri` is lazy (a `SupplierJwtDecoder` that runs discovery on the first request), so they boot but fail requests until the provider is back. Setting `jwk-set-uri` (with `issuer-uri` kept for `iss` validation) removes the discovery call entirely, so only the JWKS fetch remains. Keep enough capacity and avoid restarts during the incident. Longer term, ensure the provider is multi-region and included in dependency health planning.
 
     **Interviewer listens for:** distinguishing startup-time discovery from request-time validation.
 
