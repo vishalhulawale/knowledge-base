@@ -1,0 +1,303 @@
+/* Knowledge base docs theme (same as NeuroTrade docs): layered on Zensical's "modern" variant. */
+
+/* ---------- Palette ---------- */
+
+:root {
+  --kb-brand: #4f46e5;          /* indigo */
+  --kb-brand-2: #0ea5a4;        /* teal */
+  --kb-up: #16a34a;             /* market green */
+  --kb-down: #dc2626;           /* market red */
+  --kb-radius: 14px;
+  --kb-card-border: rgba(79, 70, 229, 0.14);
+  --kb-card-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: #4f46e5;
+  --md-primary-fg-color--light: #6366f1;
+  --md-primary-fg-color--dark: #4338ca;
+  --md-accent-fg-color: #0ea5a4;
+  --md-typeset-a-color: #4f46e5;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-hue: 230;
+  --md-default-bg-color: #0b1020;
+  --md-default-bg-color--light: #11172b;
+  --md-code-bg-color: #121a30;
+  --md-primary-fg-color: #818cf8;
+  --md-primary-fg-color--light: #a5b4fc;
+  --md-primary-fg-color--dark: #6366f1;
+  --md-accent-fg-color: #2dd4bf;
+  --md-typeset-a-color: #a5b4fc;
+  --kb-card-border: rgba(129, 140, 248, 0.18);
+  --kb-card-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+/* ---------- Typography ---------- */
+
+.md-typeset {
+  font-feature-settings: "cv11", "ss01", "ss03";
+  line-height: 1.7;
+}
+
+.md-typeset h1 {
+  font-weight: 750;
+  letter-spacing: -0.025em;
+}
+
+.md-typeset h2 {
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  margin-top: 2.2em;
+}
+
+.md-typeset h3 {
+  font-weight: 650;
+}
+
+/* ---------- Home hero ---------- */
+
+.kb-hero {
+  position: relative;
+  padding: 3.2rem 2rem 2.6rem;
+  margin: 0 0 2rem;
+  border-radius: calc(var(--kb-radius) + 6px);
+  overflow: hidden;
+  background:
+    radial-gradient(1200px 400px at 10% -20%, rgba(99, 102, 241, 0.22), transparent 60%),
+    radial-gradient(800px 360px at 110% 120%, rgba(20, 184, 166, 0.20), transparent 60%),
+    var(--md-default-bg-color--light, var(--md-default-bg-color));
+  border: 1px solid var(--kb-card-border);
+}
+
+.kb-hero h1 {
+  font-size: 2.6rem;
+  line-height: 1.1;
+  margin: 0 0 0.6rem;
+  background: linear-gradient(90deg, var(--md-primary-fg-color) 0%, var(--md-accent-fg-color) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.kb-hero .kb-tagline {
+  font-size: 1.05rem;
+  max-width: 44rem;
+  color: var(--md-default-fg-color--light);
+  margin: 0 0 1.6rem;
+}
+
+.kb-hero .md-button {
+  border-radius: 999px;
+  padding: 0.55em 1.4em;
+  margin: 0 0.5rem 0.5rem 0;
+  font-weight: 600;
+}
+
+.kb-hero .md-button--primary {
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.35);
+}
+
+@media screen and (max-width: 44.9375em) {
+  .kb-hero {
+    padding: 2rem 1.2rem 1.6rem;
+  }
+  .kb-hero h1 {
+    font-size: 1.9rem;
+  }
+}
+
+/* ---------- Cards ---------- */
+
+.md-typeset .grid.cards > ul > li,
+.md-typeset .grid > .card {
+  border-radius: var(--kb-radius);
+  border: 1px solid var(--kb-card-border);
+  box-shadow: var(--kb-card-shadow);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.md-typeset .grid.cards > ul > li:hover,
+.md-typeset .grid > .card:hover {
+  transform: translateY(-2px);
+  border-color: var(--md-primary-fg-color);
+  box-shadow: 0 12px 32px rgba(79, 70, 229, 0.16);
+}
+
+.md-typeset .grid.cards > ul > li > hr {
+  margin: 0.6rem 0;
+}
+
+/* ---------- Admonitions, code, tables ---------- */
+
+.md-typeset .admonition,
+.md-typeset details {
+  border-radius: var(--kb-radius);
+  border-width: 1px;
+  box-shadow: none;
+}
+
+.md-typeset pre > code {
+  border-radius: 10px;
+}
+
+.md-typeset table:not([class]) {
+  border-radius: var(--kb-radius);
+  overflow: hidden;
+  border: 1px solid var(--kb-card-border);
+  box-shadow: none;
+}
+
+.md-typeset table:not([class]) th {
+  background: rgba(99, 102, 241, 0.08);
+  font-weight: 650;
+}
+
+/* ---------- Priority badges (added by extra.js) ---------- */
+
+.md-typeset code.kb-badge {
+  font-family: var(--md-text-font-family);
+  font-size: 0.68em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.15em 0.6em;
+  border-radius: 999px;
+  vertical-align: 0.1em;
+  border: 1px solid transparent;
+}
+
+.md-typeset code.kb-p0 { color: #b91c1c; background: rgba(239, 68, 68, 0.12); border-color: rgba(239, 68, 68, 0.25); }
+.md-typeset code.kb-p1 { color: #b45309; background: rgba(245, 158, 11, 0.13); border-color: rgba(245, 158, 11, 0.28); }
+.md-typeset code.kb-p2 { color: #1d4ed8; background: rgba(59, 130, 246, 0.12); border-color: rgba(59, 130, 246, 0.25); }
+.md-typeset code.kb-p3 { color: #475569; background: rgba(100, 116, 139, 0.13); border-color: rgba(100, 116, 139, 0.25); }
+
+[data-md-color-scheme="slate"] .md-typeset code.kb-p0 { color: #fca5a5; }
+[data-md-color-scheme="slate"] .md-typeset code.kb-p1 { color: #fcd34d; }
+[data-md-color-scheme="slate"] .md-typeset code.kb-p2 { color: #93c5fd; }
+[data-md-color-scheme="slate"] .md-typeset code.kb-p3 { color: #cbd5e1; }
+
+/* ---------- Learning checklist ---------- */
+
+.md-typeset .task-list-item {
+  padding: 0.35rem 0.6rem 0.35rem 0;
+  border-radius: 8px;
+  transition: background-color 0.15s ease;
+}
+
+.md-typeset .task-list-item:hover {
+  background: rgba(99, 102, 241, 0.06);
+}
+
+.md-typeset .task-list-item.kb-done > strong a {
+  color: var(--kb-up);
+}
+
+.kb-progress {
+  margin: 1rem 0 1.6rem;
+  padding: 1rem 1.2rem;
+  border-radius: var(--kb-radius);
+  border: 1px solid var(--kb-card-border);
+  background: var(--md-default-bg-color--light, transparent);
+}
+
+.kb-progress p {
+  margin: 0 0 0.6rem;
+}
+
+.kb-progress-bar {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(100, 116, 139, 0.18);
+  overflow: hidden;
+}
+
+.kb-progress-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--md-primary-fg-color), var(--md-accent-fg-color));
+  transition: width 0.6s ease;
+}
+
+.kb-progress-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  margin-top: 0.6rem;
+  font-size: 0.72rem;
+  color: var(--md-default-fg-color--light);
+}
+
+/* Hide the heading permalink inside the hero, and underline card links only on hover */
+.kb-hero .headerlink {
+  display: none;
+}
+
+.md-typeset .grid.cards a {
+  text-decoration: none;
+}
+
+.md-typeset .grid.cards a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Reading mode (toggled by extra.js) ---------- */
+
+/* Header button: highlighted while reading mode is on. */
+.kb-reading-toggle[aria-pressed="true"] {
+  color: var(--md-accent-fg-color);
+}
+
+/* Remove navigation chrome. Below 76.25em the primary sidebar is the off-canvas drawer
+   behind the menu button, so it stays available there. */
+.kb-reading .md-tabs,
+.kb-reading .md-path,
+.kb-reading .md-content__button {
+  display: none;
+}
+
+@media screen and (min-width: 76.25em) {
+  .kb-reading .md-sidebar--primary {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 60em) {
+  .kb-reading .md-sidebar--secondary {
+    display: none;
+  }
+}
+
+/* One centred column at a comfortable line length, with larger text. */
+.kb-reading .md-content {
+  max-width: 40rem;
+  margin-inline: auto;
+}
+
+.kb-reading .md-typeset {
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+
+/* The theme sets admonitions, collapsible blocks and tables smaller than body text;
+   scale them up with it. */
+.kb-reading .md-typeset .admonition,
+.kb-reading .md-typeset details {
+  font-size: 0.8rem;
+}
+
+.kb-reading .md-typeset table:not([class]) {
+  font-size: 0.76rem;
+}
+
+.kb-reading .md-typeset p,
+.kb-reading .md-typeset li {
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+
+/* Wide tables and diagrams scroll sideways instead of squeezing the column. */
+.kb-reading .md-typeset .mermaid {
+  overflow-x: auto;
+}

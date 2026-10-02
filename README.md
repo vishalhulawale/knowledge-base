@@ -1,6 +1,6 @@
 # Interview Prep Knowledge Base
 
-Senior/Lead engineer interview preparation site built with [Zensical](https://zensical.org) (MkDocs-compatible `mkdocs.yml`) and hosted on Cloudflare Pages.
+Senior/Lead engineer interview preparation site built with [Zensical](https://zensical.org) (MkDocs-compatible `mkdocs.yml`) and hosted on Cloudflare Workers.
 
 ## Local preview
 ```bash
@@ -29,3 +29,11 @@ The site is protected by Cloudflare Access (Zero Trust), so only allowed identit
 - `docs/<topic>/<nn-subtopic>.md`: subtopic pages (written by the `research-subtopic` skill)
 - `planning/`: Phase 1 topics, Phase 2 subtopics, `topics.json` manifest
 - `.claude/skills/`: research and learning skills
+
+## Look and feel
+The site uses the same theme as the NeuroTrade docs: Zensical's `modern` variant with Inter / JetBrains Mono, Lucide icons and a light / dark / system switch (`mkdocs.yml`).
+- `docs/stylesheets/extra.css`: indigo/teal palette, home hero, cards, tables, admonitions, `P0`–`P3` badges and reading mode.
+- `docs/javascripts/extra.js`: the reading-mode button in the header (hides tabs, sidebars and breadcrumbs; remembered per device), priority badges for inline `` `P0` ``–`` `P3` `` and an optional `kb-progress` checklist bar.
+- `docs/assets/last-updated.js` + `build-info.js`: the "Last updated on" footer stamped by the deploy workflow.
+
+Zensical is pre-1.0 and pinned to a minor range in `requirements.txt`; after upgrading it, check the site in light and dark mode.

@@ -1,15 +1,48 @@
+---
+title: Home
+hide:
+  - navigation
+  - toc
+---
+
+<div class="kb-hero" markdown>
+
 # Interview Prep Knowledge Base
 
-My single source of truth for **Senior / Lead Software Engineer** interview preparation.
+<p class="kb-tagline">My single source of truth for <strong>Senior / Lead Software Engineer</strong> interview preparation. 9+ years · Java · Spring Boot · Kafka · GraphQL · MongoDB · Redis · ReactJS · AWS (Solutions Architect – Associate) · Kubernetes · OAuth2</p>
 
-**Background:** 9+ years · Java · Spring Boot · Kafka · GraphQL · MongoDB · Redis · ReactJS · AWS (Solutions Architect – Associate) · Kubernetes · OAuth2
+[Start with the study plan :lucide-arrow-right:](study-plan.md){ .md-button .md-button--primary }
+[Progress tracker](progress/tracker.md){ .md-button }
+
+</div>
+
+## Explore
 
 <div class="grid cards" markdown>
 
-- :material-map: **[Study Plan](study-plan.md)**: all 44 topics by priority
-- :material-language-java: **[Core Java](core-java/index.md)**: start here
-- :material-sitemap: **[System Design](system-design/index.md)**: HLD framework and case studies
-- :material-account-group: **[Leadership & Behavioral](leadership-behavioral/index.md)**: STAR story bank
+-   :lucide-map:{ .lg } **[Study Plan](study-plan.md)**
+
+    ---
+
+    All 44 topics by priority, with how many subtopics tie to resume claims.
+
+-   :lucide-coffee:{ .lg } **[Core Java](core-java/index.md)**
+
+    ---
+
+    Start here: OOP, collections, generics, exceptions and modern Java.
+
+-   :lucide-network:{ .lg } **[System Design](system-design/index.md)**
+
+    ---
+
+    The HLD framework and worked case studies.
+
+-   :lucide-users:{ .lg } **[Leadership & Behavioral](leadership-behavioral/index.md)**
+
+    ---
+
+    The STAR story bank for behavioural rounds.
 
 </div>
 
@@ -28,6 +61,6 @@ My single source of truth for **Senior / Lead Software Engineer** interview prep
 - **P0**: must master · **P1**: strong working knowledge · **P2**: light coverage
 - **★**: tied to a resume claim; expect deep follow-ups
 
-## Reader mode
+## Reading mode
 
-Tap the round book button at the bottom right of any page for a distraction-free view that suits a tablet. The toolbar lets you change text size, switch between light, sepia and dark, open or close all answers, and exit. Your settings are remembered on that device.
+Tap the book icon in the header, next to the light/dark switch, to hide the tabs, sidebars and breadcrumbs and read one larger, centred column, which suits a tablet. Tap it again to exit. The choice is remembered on that device.

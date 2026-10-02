@@ -1,47 +1,71 @@
 site_name: Interview Prep Knowledge Base
 site_description: Senior / Lead Engineer interview preparation — Java, Spring, Kafka, GraphQL, React, AWS, System Design
 site_author: Vishal Hulawale
+site_url: https://knowledge-base.hulawale-vishal.workers.dev/
 repo_url: https://github.com/vishalhulawale/knowledge-base
 repo_name: vishalhulawale/knowledge-base
 edit_uri: edit/main/docs/
 
 theme:
   name: material
-  features:
-    - navigation.tabs
-    - navigation.sections
-    - navigation.indexes
-    - navigation.top
-    - navigation.footer
-    - navigation.instant
-    - search.suggest
-    - search.highlight
-    - content.code.copy
-    - content.code.annotate
-    - content.tabs.link
-    - toc.follow
+  variant: modern
+  language: en
+  font:
+    text: Inter
+    code: JetBrains Mono
+  icon:
+    logo: lucide/graduation-cap
+    repo: fontawesome/brands/github
   palette:
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: lucide/sun-moon
+        name: Switch to light mode
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: indigo
-      accent: indigo
+      primary: custom
+      accent: custom
       toggle:
-        icon: material/brightness-7
+        icon: lucide/sun
         name: Switch to dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: indigo
-      accent: indigo
+      primary: custom
+      accent: custom
       toggle:
-        icon: material/brightness-4
-        name: Switch to light mode
+        icon: lucide/moon
+        name: Switch to system preference
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.indexes
+    - navigation.path
+    - navigation.top
+    - navigation.footer
+    - navigation.instant
+    - navigation.instant.progress
+    - search.suggest
+    - search.highlight
+    - search.share
+    - toc.follow
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - content.tooltips
+    - content.action.edit
+
+plugins:
+  - search
 
 extra_css:
-  - assets/reader.css
+  - stylesheets/extra.css
+
+# assets/build-info.js is overwritten by the deploy workflow with the deployment time.
 extra_javascript:
+  - javascripts/extra.js
   - assets/build-info.js
   - assets/last-updated.js
-  - assets/reader.js
 
 markdown_extensions:
   - abbr
@@ -67,8 +91,8 @@ markdown_extensions:
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.emoji:
-      emoji_index: !!python/name:material.extensions.emoji.twemoji
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      emoji_index: !!python/name:zensical.extensions.emoji.twemoji
+      emoji_generator: !!python/name:zensical.extensions.emoji.to_svg
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid

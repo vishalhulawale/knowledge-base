@@ -1,1 +1,3 @@
-zensical
+# Documentation site (Zensical, by the Material for MkDocs team; reads mkdocs.yml).
+# Pre-1.0, so pinned to a minor range; bump deliberately and re-check the site in light and dark mode.
+zensical>=0.0.64,<0.1
