@@ -146,61 +146,61 @@
           "title": "IoC & dependency injection, bean scopes & lifecycle",
           "slug": "01-ioc-and-dependency-injection-bean-scopes-and-lifecycle",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Auto-configuration & starters (how Boot works internally)",
           "slug": "02-auto-configuration-and-starters",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Configuration: properties, profiles, `@ConfigurationProperties`",
           "slug": "03-configuration-properties-profiles-configurationproperties",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "AOP & proxies (JDK vs CGLIB, self-invocation pitfall)",
           "slug": "04-aop-and-proxies",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Spring MVC request lifecycle, filters vs interceptors, exception handling",
           "slug": "05-spring-mvc-request-lifecycle-filters-vs-interceptors-excepti",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Transactions: `@Transactional`, propagation, isolation, rollback rules",
           "slug": "06-transactions-transactional-propagation-isolation-rollback-ru",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Spring Data (repositories, projections, pagination)",
           "slug": "07-spring-data",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Actuator, health checks, metrics (Micrometer)",
           "slug": "08-actuator-health-checks-metrics",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Validation, REST clients (RestClient, WebClient, Feign)",
           "slug": "09-validation-rest-clients",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Spring Boot 3.x: Jakarta EE, GraalVM native image, virtual threads, observability",
           "slug": "10-spring-boot-3-x-jakarta-ee-graalvm-native-image-virtual-thre",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
@@ -214,37 +214,37 @@
           "title": "Spring Security architecture: filter chain, SecurityContext, authentication providers",
           "slug": "01-spring-security-architecture-filter-chain-securitycontext-au",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Authentication vs authorization; method security",
           "slug": "02-authentication-vs-authorization-method-security",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Sessions vs tokens; CSRF & CORS in Spring",
           "slug": "03-sessions-vs-tokens-csrf-and-cors-in-spring",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "JWT: structure, signing (HS256 vs RS256), validation, revocation",
           "slug": "04-jwt-structure-signing-validation-revocation",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "OAuth2 roles & grant types (auth code + PKCE, client credentials, refresh token)",
           "slug": "05-oauth2-roles-and-grant-types",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "OpenID Connect: ID token, userinfo, discovery",
           "slug": "06-openid-connect-id-token-userinfo-discovery",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Resource server & client configuration in Spring",

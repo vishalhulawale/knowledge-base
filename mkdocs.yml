@@ -100,8 +100,24 @@ nav:
   - "Spring":
       - "Spring Boot & Spring Core":
           - Overview: spring-boot/index.md
+          - "IoC & Dependency Injection, Bean Scopes & Lifecycle": spring-boot/01-ioc-and-dependency-injection-bean-scopes-and-lifecycle.md
+          - "Auto-configuration & Starters (How Boot Works Internally)": spring-boot/02-auto-configuration-and-starters.md
+          - "Configuration: properties, profiles, @ConfigurationProperties": spring-boot/03-configuration-properties-profiles-configurationproperties.md
+          - "AOP & Proxies (JDK vs CGLIB, Self-Invocation Pitfall)": spring-boot/04-aop-and-proxies.md
+          - "Spring MVC Request Lifecycle, Filters vs Interceptors, Exception Handling": spring-boot/05-spring-mvc-request-lifecycle-filters-vs-interceptors-excepti.md
+          - "Transactions: @Transactional, propagation, isolation, rollback rules": spring-boot/06-transactions-transactional-propagation-isolation-rollback-ru.md
+          - "Spring Data (repositories, projections, pagination)": spring-boot/07-spring-data.md
+          - "Actuator, Health Checks & Metrics (Micrometer)": spring-boot/08-actuator-health-checks-metrics.md
+          - "Validation, REST clients (RestClient, WebClient, Feign)": spring-boot/09-validation-rest-clients.md
+          - "Spring Boot 3.x: Jakarta EE, GraalVM Native Image, Virtual Threads, Observability": spring-boot/10-spring-boot-3-x-jakarta-ee-graalvm-native-image-virtual-thre.md
       - "Spring Security, OAuth2/OIDC & JWT":
           - Overview: spring-security-oauth2/index.md
+          - "Spring Security Architecture: Filter Chain, SecurityContext, Authentication Providers": spring-security-oauth2/01-spring-security-architecture-filter-chain-securitycontext-au.md
+          - "Authentication vs Authorization; Method Security": spring-security-oauth2/02-authentication-vs-authorization-method-security.md
+          - "Sessions vs Tokens; CSRF & CORS in Spring": spring-security-oauth2/03-sessions-vs-tokens-csrf-and-cors-in-spring.md
+          - "JWT: Structure, Signing (HS256 vs RS256), Validation, Revocation": spring-security-oauth2/04-jwt-structure-signing-validation-revocation.md
+          - "OAuth2 Roles & Grant Types (Auth Code + PKCE, Client Credentials, Refresh Token)": spring-security-oauth2/05-oauth2-roles-and-grant-types.md
+          - "OpenID Connect: ID Token, UserInfo & Discovery": spring-security-oauth2/06-openid-connect-id-token-userinfo-discovery.md
       - "JPA / Hibernate":
           - Overview: jpa-hibernate/index.md
       - "Reactive Programming & Spring WebFlux":
