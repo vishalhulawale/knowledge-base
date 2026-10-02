@@ -10,8 +10,8 @@
 | 4 | [JWT: structure, signing (HS256 vs RS256), validation, revocation](04-jwt-structure-signing-validation-revocation.md) | ★ | :material-check-circle: Done |
 | 5 | [OAuth2 roles & grant types (auth code + PKCE, client credentials, refresh token)](05-oauth2-roles-and-grant-types.md) | ★ | :material-check-circle: Done |
 | 6 | [OpenID Connect: ID token, userinfo, discovery](06-openid-connect-id-token-userinfo-discovery.md) |  | :material-check-circle: Done |
-| 7 | Resource server & client configuration in Spring | ★ | :material-progress-clock: To do |
-| 8 | SSO, SAML vs OIDC, enterprise IdPs (PingFederate, Active Directory/Entra ID) | ★ | :material-progress-clock: To do |
+| 7 | [Resource server & client configuration in Spring](07-resource-server-and-client-configuration-in-spring.md) | ★ | :material-check-circle: Done |
+| 8 | [SSO, SAML vs OIDC, enterprise IdPs (PingFederate, Active Directory/Entra ID)](08-sso-saml-vs-oidc-enterprise-idps.md) | ★ | :material-check-circle: Done |
 | 9 | Service-to-service auth (mTLS, token exchange, propagation through gateways) | ★ | :material-progress-clock: To do |
 
 ★ = tied to a resume claim; expect deep follow-up questions.

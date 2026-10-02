@@ -250,13 +250,13 @@
           "title": "Resource server & client configuration in Spring",
           "slug": "07-resource-server-and-client-configuration-in-spring",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "SSO, SAML vs OIDC, enterprise IdPs (PingFederate, Active Directory/Entra ID)",
           "slug": "08-sso-saml-vs-oidc-enterprise-idps",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Service-to-service auth (mTLS, token exchange, propagation through gateways)",

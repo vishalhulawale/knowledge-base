@@ -118,6 +118,8 @@ nav:
           - "JWT: Structure, Signing (HS256 vs RS256), Validation, Revocation": spring-security-oauth2/04-jwt-structure-signing-validation-revocation.md
           - "OAuth2 Roles & Grant Types (Auth Code + PKCE, Client Credentials, Refresh Token)": spring-security-oauth2/05-oauth2-roles-and-grant-types.md
           - "OpenID Connect: ID Token, UserInfo & Discovery": spring-security-oauth2/06-openid-connect-id-token-userinfo-discovery.md
+          - "Resource Server & Client Configuration in Spring": spring-security-oauth2/07-resource-server-and-client-configuration-in-spring.md
+          - "SSO, SAML vs OIDC & Enterprise IdPs (PingFederate, Active Directory/Entra ID)": spring-security-oauth2/08-sso-saml-vs-oidc-enterprise-idps.md
       - "JPA / Hibernate":
           - Overview: jpa-hibernate/index.md
       - "Reactive Programming & Spring WebFlux":

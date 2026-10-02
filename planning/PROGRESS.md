@@ -12,7 +12,7 @@
 | Topic | Pages | Next step |
 |---|---|---|
 | Spring Boot & Spring Core | 10/10 | Run review pass, remove banner |
-| Spring Security, OAuth2/OIDC & JWT | 6/9 | Write 07, 08, 09; review all; remove banner |
+| Spring Security, OAuth2/OIDC & JWT | 8/9 | 07 and 08 are fact-checked. Write 09; review 01-06 and remove their banners |
 
 ## Not started (P0)
 Microservices (12), ReactJS (10), JavaScript & TypeScript (9), AWS (12), System Design (10), LLD & Design Patterns (7), Distributed Systems (9), Leadership & Behavioral (12)
