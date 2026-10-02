@@ -276,7 +276,7 @@
           "title": "Monolith vs microservices; when not to use microservices",
           "slug": "01-monolith-vs-microservices-when-not-to-use-microservices",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Decomposition strategies & monolith migration (strangler fig)",

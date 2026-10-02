@@ -24,3 +24,23 @@ Mock-interview results and revision schedule, updated by the `learn-topic` skill
 | 2026-10-02 | Java Concurrency & JVM: 08 JVM architecture | — (studied, mock skipped) | Confirm: JVM flags, pod limits, warm-up step, Lambda/SnapStart | 2026-10-03 |
 | 2026-10-02 | Java Concurrency & JVM: 09 Garbage collection | — (studied, mock skipped) | Confirm: collector + version; any GC-related incident | 2026-10-03 |
 | 2026-10-02 | Java Concurrency & JVM: 10 Diagnosing production issues | — (studied, mock skipped) | Confirm: real slow-upstream incident; baseline flags; PHI dump handling | 2026-10-03 |
+| 2026-10-02 | Spring Boot: 01 IoC, DI, scopes, lifecycle | — (studied, mock skipped) | Confirm: how 5 upstream clients were structured; per-request context mechanism; CCKM strategy beans | 2026-10-03 |
+| 2026-10-02 | Spring Boot: 02 Auto-configuration & starters | — (studied, mock skipped) | Confirm: Boot version; Spring for GraphQL vs DGS; shared starter/common lib | 2026-10-03 |
+| 2026-10-02 | Spring Boot: 03 Configuration & profiles | — (studied, mock skipped) | Confirm: typed props + validation; secret store at OptumRx; Deloitte Secrets Manager access | 2026-10-03 |
+| 2026-10-02 | Spring Boot: 04 AOP & proxies | — (studied, mock skipped) | Confirm: @Cacheable vs manual Redis; method security used | 2026-10-03 |
+| 2026-10-02 | Spring Boot: 05 MVC lifecycle, filters, errors | — (studied, mock skipped) | Confirm: GraphQL error resolver; correlation id to Kafka headers | 2026-10-03 |
+| 2026-10-02 | Spring Boot: 06 Transactions | — (studied, mock skipped) | Confirm: outbox/AFTER_COMMIT; Mongo multi-doc tx; CCKM partial-failure handling | 2026-10-03 |
+| 2026-10-02 | Spring Boot: 07 Spring Data | — (studied, mock skipped) | Confirm: repository vs MongoTemplate; cursor vs offset paging; N+1 fix story | 2026-10-03 |
+| 2026-10-02 | Spring Boot: 08 Actuator & metrics | — (studied, mock skipped) | Confirm: K8s probes, metrics backend, alerts, standard actuator config | 2026-10-03 |
+| 2026-10-02 | Spring Boot: 09 Validation & REST clients | — (studied, mock skipped) | Confirm: HTTP client used, timeouts, token flow, slow-upstream handling | 2026-10-03 |
+| 2026-10-02 | Spring Boot: 10 Boot 3.x | — (studied, mock skipped) | Confirm: Boot/Java versions; led a 2.7 → 3.x migration? | 2026-10-03 |
+| 2026-10-02 | Spring Security: 01 Filter chain | — (studied, mock skipped) | Confirm: Metasys custom filter; OptumRx oauth2ResourceServer; JWT vs opaque | 2026-10-03 |
+| 2026-10-02 | Spring Security: 02 Authn vs authz, method security | — (studied, mock skipped) | Confirm: Metasys role model; groups claim; member-level access enforcement | 2026-10-03 |
+| 2026-10-02 | Spring Security: 03 Sessions, CSRF, CORS | — (studied, mock skipped) | Confirm: SPA token storage / BFF; CORS setup; session timeout policy | 2026-10-03 |
+| 2026-10-02 | Spring Security: 04 JWT ★ | — (studied, mock skipped) | Confirm: Metasys HS256/RS256, TTL, refresh, logout | 2026-10-03 |
+| 2026-10-02 | Spring Security: 05 OAuth2 grants ★ | — (studied, mock skipped) | Confirm: PKCE in SPA or BFF; relay vs client credentials per upstream; token lifetimes | 2026-10-03 |
+| 2026-10-02 | Spring Security: 06 OIDC | — (studied, mock skipped) | Confirm: OIDC ID token used; JWKS discovery; Metasys token issuance | 2026-10-03 |
+| 2026-10-02 | Spring Security: 07 Resource server & client ★ | — (studied, mock skipped) | Confirm: claim mapping converter; client manager in Kafka consumers | 2026-10-03 |
+| 2026-10-02 | Spring Security: 08 SSO, SAML vs OIDC ★ | — (studied, mock skipped) | Confirm: OIDC vs SAML at OptumRx; boundary with identity team; Metasys SSO protocol | 2026-10-03 |
+| 2026-10-02 | Spring Security: 09 Service-to-service ★ | — (studied, mock skipped) | Confirm: auth per upstream; mTLS/mesh; secret rotation | 2026-10-03 |
+| 2026-10-02 | Microservices: 01 Monolith vs microservices | — (studied, mock skipped) | Confirm: Metasys migration driver; team ownership of OptumRx services/MFEs | 2026-10-03 |

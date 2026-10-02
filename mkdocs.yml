@@ -135,6 +135,7 @@ nav:
   - "Architecture":
       - "Microservices Architecture & Patterns":
           - Overview: microservices/index.md
+          - "Monolith vs Microservices; When Not to Use Microservices": microservices/01-monolith-vs-microservices-when-not-to-use-microservices.md
       - "Domain-Driven Design & Clean Architecture":
           - Overview: ddd-clean-architecture/index.md
       - "Distributed Systems Concepts":

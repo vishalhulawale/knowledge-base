@@ -4,7 +4,7 @@
 
 | # | Subtopic | Resume link | Status |
 |---|---|---|---|
-| 1 | Monolith vs microservices; when not to use microservices |  | :material-progress-clock: To do |
+| 1 | [Monolith vs microservices; when not to use microservices](01-monolith-vs-microservices-when-not-to-use-microservices.md) |  | :material-check-circle: Done |
 | 2 | Decomposition strategies & monolith migration (strangler fig) | ★ | :material-progress-clock: To do |
 | 3 | API gateway & BFF pattern |  | :material-progress-clock: To do |
 | 4 | Service discovery & client-side load balancing |  | :material-progress-clock: To do |
