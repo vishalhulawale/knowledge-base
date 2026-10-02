@@ -36,6 +36,11 @@ theme:
         icon: material/brightness-4
         name: Switch to light mode
 
+extra_css:
+  - assets/reader.css
+extra_javascript:
+  - assets/reader.js
+
 markdown_extensions:
   - abbr
   - admonition

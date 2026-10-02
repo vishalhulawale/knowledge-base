@@ -1,0 +1,90 @@
+/* Reader mode: distraction-free, tablet-friendly reading. Toggled by assets/reader.js */
+:root { --reader-scale: 1; }
+
+.reader-fab, .reader-bar button {
+  -webkit-tap-highlight-color: transparent;
+  font: inherit; cursor: pointer; border: 0;
+}
+.reader-fab {
+  position: fixed; z-index: 20;
+  right: calc(1rem + env(safe-area-inset-right)); bottom: calc(1rem + env(safe-area-inset-bottom));
+  width: 2.8rem; height: 2.8rem; border-radius: 50%;
+  background: var(--md-primary-fg-color); color: var(--md-primary-bg-color);
+  box-shadow: 0 2px 8px rgba(0,0,0,.3);
+  display: flex; align-items: center; justify-content: center;
+}
+.reader-fab svg { width: 1.4rem; height: 1.4rem; fill: currentColor; }
+html.reader .reader-fab { display: none; }
+
+.reader-bar {
+  display: none; position: fixed; z-index: 20; left: 50%; transform: translateX(-50%);
+  bottom: calc(.8rem + env(safe-area-inset-bottom));
+  background: var(--md-default-bg-color); color: var(--md-default-fg-color);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 2rem; padding: .25rem .4rem; gap: .15rem; align-items: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,.25); transition: opacity .25s, transform .25s;
+}
+html.reader .reader-bar { display: flex; }
+html.reader.reader-bar-hidden .reader-bar { opacity: 0; pointer-events: none; transform: translate(-50%, 1rem); }
+.reader-bar button {
+  min-width: 2.2rem; height: 2.2rem; padding: 0 .55rem; border-radius: 1.2rem;   /* ≥44px touch target at 20px root */
+  background: transparent; color: inherit; font-size: .75rem; font-weight: 600; white-space: nowrap;
+}
+.reader-bar button:hover, .reader-bar button:focus-visible { background: var(--md-default-fg-color--lightest); }
+.reader-bar .sep { width: 1px; height: 1.2rem; background: var(--md-default-fg-color--lightest); margin: 0 .1rem; }
+
+/* Reading progress */
+.reader-progress { display: none; position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 21; background: var(--md-accent-fg-color); }
+html.reader .reader-progress { display: block; }
+
+/* Layout: hide chrome, centre a comfortable column */
+html.reader .md-header, html.reader .md-tabs, html.reader .md-sidebar,
+html.reader .md-top, html.reader .md-source, html.reader .md-content__button { display: none !important; }
+html.reader .md-main__inner { margin-top: 0; }
+html.reader .md-grid { max-width: 46rem; }
+html.reader .md-content { margin: 0 auto; max-width: 100%; }
+html.reader .md-content__inner {
+  margin: 0 auto; padding: calc(1.2rem + env(safe-area-inset-top)) 1.2rem 5rem;
+}
+html.reader .md-content__inner::before { display: none; }
+
+/* Typography */
+html.reader .md-typeset {
+  font-size: calc(.92rem * var(--reader-scale));
+  line-height: 1.75;
+  -webkit-text-size-adjust: 100%;
+}
+html.reader .md-typeset h1 { font-size: 1.9em; line-height: 1.25; margin-bottom: .8em; }
+html.reader .md-typeset h2 { margin-top: 2em; }
+html.reader .md-typeset p, html.reader .md-typeset li { hyphens: manual; }
+html.reader .md-typeset code { font-size: .86em; }
+html.reader .md-typeset pre > code { font-size: .8em; line-height: 1.55; -webkit-overflow-scrolling: touch; }
+html.reader .md-typeset .md-typeset__table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+html.reader .md-typeset table:not([class]) { font-size: .82em; }
+html.reader .md-typeset details > summary { padding-top: .7em; padding-bottom: .7em; }   /* bigger tap area for Q&A */
+html.reader .md-typeset .mermaid { overflow-x: auto; }
+html.reader .md-footer__inner { max-width: 46rem; }
+
+/* Sepia paper theme (light scheme only) */
+html.reader[data-reader-theme="sepia"] body {
+  --md-default-bg-color: #f6efdf;
+  --md-default-fg-color: #3b3024;
+  --md-default-fg-color--light: #5d4f3f;
+  --md-default-fg-color--lighter: #8f8170;
+  --md-default-fg-color--lightest: #d9ccb4;
+  --md-typeset-color: #3b3024;
+  --md-code-bg-color: #ece2cc;
+  --md-code-fg-color: #3b3024;
+  --md-typeset-a-color: #8a4b12;
+  --md-footer-bg-color: #e8dcc3;
+  --md-footer-bg-color--dark: #e8dcc3;
+  --md-footer-fg-color: #3b3024;
+  --md-footer-fg-color--light: #5d4f3f;
+  --md-footer-fg-color--lighter: #8f8170;
+}
+
+@media print { .reader-fab, .reader-bar, .reader-progress { display: none !important; } }
+
+/* Callouts and Q&A blocks follow the reader text size instead of the theme's fixed small size */
+html.reader .md-typeset .admonition, html.reader .md-typeset details { font-size: .9em; }
+html.reader .md-typeset .tabbed-labels > label { font-size: .85em; padding-top: .9em; padding-bottom: .9em; }

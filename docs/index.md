@@ -27,3 +27,7 @@ My single source of truth for **Senior / Lead Software Engineer** interview prep
 
 - **P0**: must master · **P1**: strong working knowledge · **P2**: light coverage
 - **★**: tied to a resume claim; expect deep follow-ups
+
+## Reader mode
+
+Tap the round book button at the bottom right of any page for a distraction-free view that suits a tablet. The toolbar lets you change text size, switch between light, sepia and dark, open or close all answers, and exit. Your settings are remembered on that device.
