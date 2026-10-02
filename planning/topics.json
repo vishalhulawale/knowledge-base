@@ -750,19 +750,19 @@
           "title": "Rate limiting & API gateway design",
           "slug": "08-rate-limiting-and-api-gateway-design",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Availability, fault tolerance, disaster recovery",
           "slug": "09-availability-fault-tolerance-disaster-recovery",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Case studies: URL shortener, rate limiter, notification system, news feed, chat, payment system, healthcare/prescription platform",
           "slug": "10-case-studies-url-shortener-rate-limiter-notification-system",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },

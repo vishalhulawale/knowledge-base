@@ -267,6 +267,9 @@ nav:
           - "Database Scaling: Replication, Sharding, Partitioning, Consistent Hashing": system-design/05-database-scaling-replication-sharding-partitioning-consisten.md
           - "CAP & PACELC, Consistency Models": system-design/06-cap-and-pacelc-consistency-models.md
           - "Message Queues & Async Processing": system-design/07-message-queues-and-async-processing.md
+          - "Rate Limiting & API Gateway Design": system-design/08-rate-limiting-and-api-gateway-design.md
+          - "Availability, Fault Tolerance, Disaster Recovery": system-design/09-availability-fault-tolerance-disaster-recovery.md
+          - "Case Studies: URL Shortener, Rate Limiter, Notifications, News Feed, Chat, Payments, Prescription Platform": system-design/10-case-studies-url-shortener-rate-limiter-notification-system.md
       - "Low-Level Design & Design Patterns":
           - Overview: lld-design-patterns/index.md
       - "Performance Engineering":
