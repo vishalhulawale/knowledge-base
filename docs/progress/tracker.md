@@ -114,3 +114,34 @@ Mock-interview results and revision schedule, updated by the `learn-topic` skill
 | 2026-10-02 | System Design: 05 Replication & sharding | — (studied, mock skipped) | Confirm: MongoDB replica set vs sharded; read preference/write concern | 2026-10-03 |
 | 2026-10-02 | System Design: 06 CAP & consistency | — (studied, mock skipped) | Re-drill: linearisable vs serialisable; per-operation consistency story | 2026-10-03 |
 | 2026-10-02 | System Design: 07 Queues & async | — (studied, mock skipped) | Confirm: blocking vs @RetryableTopic; dedup store; DLT replay tooling | 2026-10-03 |
+| 2026-10-02 | System Design: 08 Rate limiting & API gateway | — (studied, mock skipped) | Confirm: GraphQL depth/complexity limits; gateway product in front of Meteor | 2026-10-03 |
+| 2026-10-02 | System Design: 09 Availability & DR | — (studied, mock skipped) | Confirm: resilience library, partial-response approach, one incident story | 2026-10-03 |
+| 2026-10-02 | System Design: 10 Case studies ★ | — (studied, mock skipped) | Confirm: 5 upstream domains, Kafka workflows, field-level auth; practise prescription case | 2026-10-03 |
+| 2026-10-02 | LLD: 01 SOLID & principles | — (studied, mock skipped) | Confirm: a real switch→strategy refactor; review standards you set | 2026-10-03 |
+| 2026-10-02 | LLD: 02 Creational patterns | — (studied, mock skipped) | Confirm: CCKM provider abstraction (factory/strategy per cloud) | 2026-10-03 |
+| 2026-10-02 | LLD: 03 Structural patterns | — (studied, mock skipped) | Confirm: adapters per upstream/HSM vendor; decorators vs annotations | 2026-10-03 |
+| 2026-10-02 | LLD: 04 Behavioural patterns | — (studied, mock skipped) | Confirm: CCKM key states; custom Spring Security filters | 2026-10-03 |
+| 2026-10-02 | LLD: 05 UML basics | — (studied, mock skipped) | Practise: 5-min class diagram (library, parking lot) | 2026-10-03 |
+| 2026-10-02 | LLD: 06 LLD approach | — (studied, mock skipped) | Practise: timed machine-coding (booking with holds); confirm LLD interviewing | 2026-10-03 |
+| 2026-10-02 | LLD: 07 Case studies | — (studied, mock skipped) | Practise: write LRU + token bucket + Splitwise simplify from memory | 2026-10-03 |
+| 2026-10-02 | Distributed: 01 Fallacies & failure modes | — (studied, mock skipped) | Confirm: upstream latency budgets; CCKM timeout handling | 2026-10-03 |
+| 2026-10-02 | Distributed: 02 Replication & quorums | — (studied, mock skipped) | Confirm: Kafka acks/min ISR; MongoDB write/read concerns | 2026-10-03 |
+| 2026-10-02 | Distributed: 03 Consensus (Raft) | — (studied, mock skipped) | Confirm: singleton-job mechanism (ShedLock / K8s Lease) | 2026-10-03 |
+| 2026-10-02 | Distributed: 04 Idempotency ★ | — (studied, mock skipped) | Confirm: consumer dedup store + key; keys passed to upstreams | 2026-10-03 |
+| 2026-10-02 | Distributed: 05 Retries & timeouts ★ | — (studied, mock skipped) | Confirm: timeout values, retry library, blocking vs retry topics | 2026-10-03 |
+| 2026-10-02 | Distributed: 06 2PC vs Saga | — (studied, mock skipped) | Confirm: any explicit compensations in OptumRx/Deloitte flows | 2026-10-03 |
+| 2026-10-02 | Distributed: 07 Exactly-once ★ | — (studied, mock skipped) | Confirm: at-least-once + idempotent writes; Kafka transactions used? | 2026-10-03 |
+| 2026-10-02 | Distributed: 08 Clocks & locks | — (studied, mock skipped) | Confirm: version checks in consumers; CCKM rotation concurrency control | 2026-10-03 |
+| 2026-10-02 | Distributed: 09 Backpressure & shedding | — (studied, mock skipped) | Confirm: per-upstream bulkheads, lag alerting, Lambda ESM caps | 2026-10-03 |
+| 2026-10-02 | Leadership: 01 STAR & story bank ★ | — (studied, mock skipped) | Fill story bank: numbers, 2 failures, 2 conflicts, 1 incident | 2026-10-03 |
+| 2026-10-02 | Leadership: 02 Intro & Meteor deep dive ★ | — (studied, mock skipped) | Rehearse 90-s pitch; confirm upstreams, traffic, latency, decisions | 2026-10-03 |
+| 2026-10-02 | Leadership: 03 Leading 8–10 ★ | — (studied, mock skipped) | Confirm: delegation growth story; accountability story | 2026-10-03 |
+| 2026-10-02 | Leadership: 04 Mentoring ★ | — (studied, mock skipped) | Confirm: mentee outcome; SBI feedback story | 2026-10-03 |
+| 2026-10-02 | Leadership: 05 Conflict ★ | — (studied, mock skipped) | Confirm: architect disagreement; time you were wrong | 2026-10-03 |
+| 2026-10-02 | Leadership: 06 Underperformance | — (studied, mock skipped) | Confirm: real case or closest example; reporting structure | 2026-10-03 |
+| 2026-10-02 | Leadership: 07 Estimation & stakeholders ★ | — (studied, mock skipped) | Confirm: missed/at-risk deadline story; saying-no story | 2026-10-03 |
+| 2026-10-02 | Leadership: 08 Incidents ★ | — (studied, mock skipped) | Confirm: at least one real incident (+ Kafka/DLQ one) | 2026-10-03 |
+| 2026-10-02 | Leadership: 09 Hiring ★ | — (studied, mock skipped) | Confirm: your interview questions/rubric; advocated hire; no-hire | 2026-10-03 |
+| 2026-10-02 | Leadership: 10 Standards & decisions ★ | — (studied, mock skipped) | Confirm: standards pain/results; significant decision; debt trade-off | 2026-10-03 |
+| 2026-10-02 | Leadership: 11 Failures | — (studied, mock skipped) | Prepare: 2 real failures (different types), 1 weakness with progress | 2026-10-03 |
+| 2026-10-02 | Leadership: 12 Questions & salary | — (studied, mock skipped) | Prepare: tailored questions per company; researched comp range (private) | 2026-10-03 |
