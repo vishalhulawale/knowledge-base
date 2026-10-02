@@ -31,7 +31,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Stamp deployment time
-        run: echo "window.KB_BUILD_TIME = '$(date -u +%Y-%m-%dT%H:%M:%SZ)';" > docs/assets/build-info.js
+        run: echo "window.DOCS_BUILD_TIME = '$(date -u +%Y-%m-%dT%H:%M:%SZ)';" > docs/javascripts/build-info.js
 
       - name: Build site
         run: zensical build --strict --clean   # fails on broken links and other warnings

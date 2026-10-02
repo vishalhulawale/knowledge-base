@@ -61,11 +61,9 @@ plugins:
 extra_css:
   - stylesheets/extra.css
 
-# assets/build-info.js is overwritten by the deploy workflow with the deployment time.
 extra_javascript:
+  - javascripts/build-info.js
   - javascripts/extra.js
-  - assets/build-info.js
-  - assets/last-updated.js
 
 markdown_extensions:
   - abbr

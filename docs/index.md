@@ -5,11 +5,11 @@ hide:
   - toc
 ---
 
-<div class="kb-hero" markdown>
+<div class="doc-hero" markdown>
 
 # Interview Prep Knowledge Base
 
-<p class="kb-tagline">My single source of truth for <strong>Senior / Lead Software Engineer</strong> interview preparation. 9+ years · Java · Spring Boot · Kafka · GraphQL · MongoDB · Redis · ReactJS · AWS (Solutions Architect – Associate) · Kubernetes · OAuth2</p>
+<p class="doc-tagline">My single source of truth for <strong>Senior / Lead Software Engineer</strong> interview preparation. 9+ years · Java · Spring Boot · Kafka · GraphQL · MongoDB · Redis · ReactJS · AWS (Solutions Architect – Associate) · Kubernetes · OAuth2</p>
 
 [Start with the study plan :lucide-arrow-right:](study-plan.md){ .md-button .md-button--primary }
 [Progress tracker](progress/tracker.md){ .md-button }

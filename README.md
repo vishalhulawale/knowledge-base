@@ -31,9 +31,22 @@ The site is protected by Cloudflare Access (Zero Trust), so only allowed identit
 - `.claude/skills/`: research and learning skills
 
 ## Look and feel
-The site uses the same theme as the NeuroTrade docs: Zensical's `modern` variant with Inter / JetBrains Mono, Lucide icons and a light / dark / system switch (`mkdocs.yml`).
-- `docs/stylesheets/extra.css`: indigo/teal palette, home hero, cards, tables, admonitions, `P0`–`P3` badges and reading mode.
-- `docs/javascripts/extra.js`: the reading-mode button in the header (hides tabs, sidebars and breadcrumbs; remembered per device), priority badges for inline `` `P0` ``–`` `P3` `` and an optional `kb-progress` checklist bar.
-- `docs/assets/last-updated.js` + `build-info.js`: the "Last updated on" footer stamped by the deploy workflow.
+The site shares one theme with the NeuroTrade docs ([vishalhulawale/neuro-trade](https://github.com/vishalhulawale/neuro-trade)): Zensical's `modern` variant with Inter / JetBrains Mono, Lucide icons and a light / dark / system switch. The two sites must stay identical in style and UI behaviour, so every theme change is made in both repos (see `CLAUDE.md`).
 
-Zensical is pre-1.0 and pinned to a minor range in `requirements.txt`; after upgrading it, check the site in light and dark mode.
+| Shared with NeuroTrade | Rule |
+|---|---|
+| `docs/stylesheets/extra.css`, `docs/javascripts/extra.js`, `docs/javascripts/build-info.js`, `scripts/check_docs_theme_sync.py` | Byte-identical. Class names use the neutral `doc-` prefix (`doc-hero`, `doc-tagline`, `doc-progress`, `doc-reading`) |
+| `theme:` block of `mkdocs.yml` | Identical except `icon.logo` (`lucide/graduation-cap` here) |
+| Zensical pin | Same range (`requirements.txt` here, `requirements-docs.txt` there) |
+| Deployment-time stamp | Same `DOCS_BUILD_TIME` command (`deploy.yml` here, `docs.yml` there) |
+
+What the shared files do:
+- `extra.css`: indigo/teal palette, home hero, cards, tables, admonitions, `P0`–`P3` badges and reading mode.
+- `extra.js`: the reading-mode button in the header (hides tabs, sidebars and breadcrumbs; remembered per device under `docs.readingMode`), badges for inline `` `P0` ``–`` `P3` ``, an optional `doc-progress` checklist bar, and the "Last updated on" footer.
+- `build-info.js`: holds `null`; the deploy workflow overwrites it with the deployment time. Don't commit a stamped copy.
+
+Check the two repos are in sync (with neuro-trade checked out next to this repo):
+```bash
+python scripts/check_docs_theme_sync.py               # or pass the path to neuro-trade
+```
+It prints `Docs theme in sync` or a diff per drifted item (exit 1). Zensical is pre-1.0 and pinned to a minor range; upgrade both sites together and check them in light and dark mode.
