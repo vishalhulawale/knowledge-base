@@ -272,6 +272,13 @@ nav:
           - "Case Studies: URL Shortener, Rate Limiter, Notifications, News Feed, Chat, Payments, Prescription Platform": system-design/10-case-studies-url-shortener-rate-limiter-notification-system.md
       - "Low-Level Design & Design Patterns":
           - Overview: lld-design-patterns/index.md
+          - "SOLID, DRY, KISS, YAGNI, Composition over Inheritance": lld-design-patterns/01-solid-dry-kiss-yagni-composition-over-inheritance.md
+          - "Creational Patterns (Singleton, Factory, Builder, Prototype)": lld-design-patterns/02-creational-patterns.md
+          - "Structural Patterns (Adapter, Decorator, Proxy, Facade, Composite)": lld-design-patterns/03-structural-patterns.md
+          - "Behavioural Patterns (Strategy, Observer, Template Method, Chain of Responsibility, Command, State)": lld-design-patterns/04-behavioural-patterns.md
+          - "UML & Class Diagram Basics for Interviews": lld-design-patterns/05-uml-and-class-diagram-basics-for-interviews.md
+          - "LLD Approach: Requirements \u2192 Entities \u2192 Relationships \u2192 APIs": lld-design-patterns/06-lld-approach-requirements-entities-relationships-apis.md
+          - "Case Studies: Parking Lot, LRU Cache, Rate Limiter, Elevator, Splitwise, Library System": lld-design-patterns/07-case-studies-parking-lot-lru-cache-rate-limiter-elevator-spl.md
       - "Performance Engineering":
           - Overview: performance-engineering/index.md
       - "Networking & Web Fundamentals":

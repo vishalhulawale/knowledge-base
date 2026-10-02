@@ -776,43 +776,43 @@
           "title": "SOLID, DRY, KISS, YAGNI, composition over inheritance",
           "slug": "01-solid-dry-kiss-yagni-composition-over-inheritance",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Creational patterns (Singleton, Factory, Builder, Prototype)",
           "slug": "02-creational-patterns",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Structural patterns (Adapter, Decorator, Proxy, Facade, Composite)",
           "slug": "03-structural-patterns",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Behavioural patterns (Strategy, Observer, Template, Chain of Responsibility, Command, State)",
           "slug": "04-behavioural-patterns",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "UML & class diagram basics for interviews",
           "slug": "05-uml-and-class-diagram-basics-for-interviews",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "LLD approach: requirements → entities → relationships → APIs",
           "slug": "06-lld-approach-requirements-entities-relationships-apis",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Case studies: parking lot, LRU cache, rate limiter, elevator, splitwise, library system",
           "slug": "07-case-studies-parking-lot-lru-cache-rate-limiter-elevator-spl",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
