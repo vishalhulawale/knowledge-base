@@ -1,6 +1,6 @@
 ---
 title: "Monolith vs Microservices; When Not to Use Microservices"
-description: What microservices really are, what they cost, the modular monolith in between, and how to decide (and defend the decision) in a Senior/Lead interview.
+description: "What microservices really are, what they cost, the modular monolith in between, and how to decide (and defend the decision) in a Senior/Lead interview."
 tags: [microservices, P0]
 ---
 

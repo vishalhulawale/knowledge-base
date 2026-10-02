@@ -136,6 +136,17 @@ nav:
       - "Microservices Architecture & Patterns":
           - Overview: microservices/index.md
           - "Monolith vs Microservices; When Not to Use Microservices": microservices/01-monolith-vs-microservices-when-not-to-use-microservices.md
+          - "Decomposition Strategies & Monolith Migration (Strangler Fig)": microservices/02-decomposition-strategies-and-monolith-migration.md
+          - "API Gateway & BFF Pattern": microservices/03-api-gateway-and-bff-pattern.md
+          - "Service Discovery & Client-Side Load Balancing": microservices/04-service-discovery-and-client-side-load-balancing.md
+          - "Inter-Service Communication: Sync vs Async": microservices/05-inter-service-communication-sync-vs-async.md
+          - "Resilience: Circuit Breaker, Retry, Bulkhead, Timeout, Rate Limiter (Resilience4j)": microservices/06-resilience-circuit-breaker-retry-bulkhead-timeout-rate-limit.md
+          - "Distributed Transactions: Saga (Choreography vs Orchestration), Outbox Pattern": microservices/07-distributed-transactions-saga-outbox-pattern.md
+          - "CQRS & Event Sourcing": microservices/08-cqrs-and-event-sourcing.md
+          - "Configuration & Secrets Management (Spring Cloud Config, Vault)": microservices/09-configuration-and-secrets-management.md
+          - "Distributed Tracing & Correlation IDs": microservices/10-distributed-tracing-and-correlation-ids.md
+          - "Deployment Strategies: Blue-Green, Canary, Feature Flags": microservices/11-deployment-strategies-blue-green-canary-feature-flags.md
+          - "Microservice Testing Strategy & Contract Testing": microservices/12-microservice-testing-strategy-and-contract-testing.md
       - "Domain-Driven Design & Clean Architecture":
           - Overview: ddd-clean-architecture/index.md
       - "Distributed Systems Concepts":

@@ -282,67 +282,67 @@
           "title": "Decomposition strategies & monolith migration (strangler fig)",
           "slug": "02-decomposition-strategies-and-monolith-migration",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "API gateway & BFF pattern",
           "slug": "03-api-gateway-and-bff-pattern",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Service discovery & client-side load balancing",
           "slug": "04-service-discovery-and-client-side-load-balancing",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Inter-service communication: sync vs async",
           "slug": "05-inter-service-communication-sync-vs-async",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Resilience: circuit breaker, retry, bulkhead, timeout, rate limiter (Resilience4j)",
           "slug": "06-resilience-circuit-breaker-retry-bulkhead-timeout-rate-limit",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Distributed transactions: Saga (choreography vs orchestration), outbox pattern",
           "slug": "07-distributed-transactions-saga-outbox-pattern",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "CQRS & event sourcing",
           "slug": "08-cqrs-and-event-sourcing",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Configuration & secrets management (Spring Cloud Config, Vault)",
           "slug": "09-configuration-and-secrets-management",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Distributed tracing & correlation IDs",
           "slug": "10-distributed-tracing-and-correlation-ids",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Deployment strategies: blue-green, canary, feature flags",
           "slug": "11-deployment-strategies-blue-green-canary-feature-flags",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Microservice testing strategy & contract testing",
           "slug": "12-microservice-testing-strategy-and-contract-testing",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
