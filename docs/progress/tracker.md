@@ -44,3 +44,23 @@ Mock-interview results and revision schedule, updated by the `learn-topic` skill
 | 2026-10-02 | Spring Security: 08 SSO, SAML vs OIDC ★ | — (studied, mock skipped) | Confirm: OIDC vs SAML at OptumRx; boundary with identity team; Metasys SSO protocol | 2026-10-03 |
 | 2026-10-02 | Spring Security: 09 Service-to-service ★ | — (studied, mock skipped) | Confirm: auth per upstream; mTLS/mesh; secret rotation | 2026-10-03 |
 | 2026-10-02 | Microservices: 01 Monolith vs microservices | — (studied, mock skipped) | Confirm: Metasys migration driver; team ownership of OptumRx services/MFEs | 2026-10-03 |
+| 2026-10-02 | Microservices: 02 Decomposition & strangler fig ★ | — (studied, mock skipped) | Confirm: Metasys migration path, user data sync, gateway in front | 2026-10-03 |
+| 2026-10-02 | Microservices: 03 API gateway & BFF | — (studied, mock skipped) | Confirm: GraphQL service as BFF vs shared layer; gateway product; DataLoader | 2026-10-03 |
+| 2026-10-02 | Microservices: 04 Service discovery | — (studied, mock skipped) | Confirm: ECS discovery; graceful shutdown config; any Eureka | 2026-10-03 |
+| 2026-10-02 | Microservices: 05 Sync vs async | — (studied, mock skipped) | Confirm: which flows on Kafka; idempotency; SQS vs SNS at Deloitte | 2026-10-03 |
+| 2026-10-02 | Microservices: 06 Resilience | — (studied, mock skipped) | Confirm: library, timeout values, breaker/bulkhead per upstream | 2026-10-03 |
+| 2026-10-02 | Microservices: 07 Saga & outbox | — (studied, mock skipped) | Confirm: compensations; publish-after-Mongo-write mechanism; CCKM partial failures | 2026-10-03 |
+| 2026-10-02 | Microservices: 08 CQRS & event sourcing | — (studied, mock skipped) | Confirm: how Elasticsearch index was fed; event-fed read models | 2026-10-03 |
+| 2026-10-02 | Microservices: 09 Config & secrets | — (studied, mock skipped) | Confirm: how Deloitte services read secrets; rotation; OptumRx secret store | 2026-10-03 |
+| 2026-10-02 | Microservices: 10 Tracing & correlation IDs | — (studied, mock skipped) | Confirm: tracing tool; Kafka header propagation; incident story | 2026-10-03 |
+| 2026-10-02 | Microservices: 11 Deployment strategies | — (studied, mock skipped) | Confirm: rollout strategy/tooling; feature flags; expand/contract | 2026-10-03 |
+| 2026-10-02 | Microservices: 12 Testing & contract testing | — (studied, mock skipped) | Confirm: test layers; Pact/SCC; E2E scope | 2026-10-03 |
+| 2026-10-02 | Kafka: 01 EDA fundamentals | — (studied, mock skipped) | Confirm: why events vs REST; choreography vs orchestration; dual-write handling | 2026-10-03 |
+| 2026-10-02 | Kafka: 02 Architecture | — (studied, mock skipped) | Confirm: partitions, RF, min ISR, hosting (MSK/Confluent/self) | 2026-10-03 |
+| 2026-10-02 | Kafka: 03 Producers | — (studied, mock skipped) | Confirm: producer settings; keys; send failure handling | 2026-10-03 |
+| 2026-10-02 | Kafka: 04 Consumers | — (studied, mock skipped) | Confirm: concurrency vs partitions; AckMode; rebalance/lag incident | 2026-10-03 |
+| 2026-10-02 | Kafka: 05 Delivery semantics ★ | — (studied, mock skipped) | Confirm: at-least-once + idempotency vs transactions; DLQ replay safety | 2026-10-03 |
+| 2026-10-02 | Kafka: 06 Ordering & keys ★ | — (studied, mock skipped) | Confirm: key choice; blocking vs retry topics; version guards | 2026-10-03 |
+| 2026-10-02 | Kafka: 07 Retry, DLQ, replay ★ | — (studied, mock skipped) | Confirm: DefaultErrorHandler vs @RetryableTopic; DLQ ownership & replay | 2026-10-03 |
+| 2026-10-02 | Kafka: 08 Idempotent consumers ★ | — (studied, mock skipped) | Confirm: dedupe technique; Redis use; concrete duplicate example | 2026-10-03 |
+| 2026-10-02 | Kafka: 09 Spring Kafka ★ | — (studied, mock skipped) | Confirm: Spring for Apache Kafka; listener config; tests; tracing | 2026-10-03 |
