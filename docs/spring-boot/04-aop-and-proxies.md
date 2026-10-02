@@ -6,10 +6,6 @@ tags: [spring-boot, P0]
 
 # AOP & Proxies (JDK vs CGLIB, Self-Invocation Pitfall)
 
-!!! warning "Draft: not yet fact-checked"
-    This page was written but its independent review pass has not run yet. Verify version numbers and defaults against the linked sources.
-
-
 !!! abstract "TL;DR"
     - Spring AOP is **proxy-based**: the container hands callers a wrapper object, and advice runs only when a call **goes through that wrapper**. `@Transactional`, `@Cacheable`, `@Async`, `@PreAuthorize`, `@Retryable` and `@Observed` all work this way.
     - **JDK dynamic proxy** = implements the bean's interfaces (interface-based). **CGLIB proxy** = a runtime-generated **subclass** of the bean (class-based). Spring Framework picks JDK when an interface exists; **Spring Boot defaults to CGLIB** (`spring.aop.proxy-target-class=true`).
@@ -62,7 +58,8 @@ flowchart TD
 Two details worth knowing:
 
 - With a **circular dependency**, Spring may need the proxy earlier. The same post-processor creates it through `getEarlyBeanReference`, so the early reference is still the proxy and not the raw bean.
-- In Spring Boot the auto-proxy creator is registered by `AopAutoConfiguration` (see [Auto-configuration](02-auto-configuration-and-starters.md)). You do not need `@EnableAspectJAutoProxy` yourself.
+- In Spring Boot the auto-proxy creator is registered by `AopAutoConfiguration` (see [Auto-configuration](02-auto-configuration-and-starters.md)). You do not need `@EnableAspectJAutoProxy` yourself. Your own `@Aspect` classes are only picked up when `aspectjweaver` is on the classpath, which is what `spring-boot-starter-aop` brings in (renamed `spring-boot-starter-aspectj` in Boot 4).
+- Not every annotation goes through this one post-processor. `@Async` (`AsyncAnnotationBeanPostProcessor`) and method validation (`MethodValidationPostProcessor`) have their own post-processors, which add their advisor to an existing proxy or create one. The result is the same: one proxy per bean, with the same rules and limits.
 
 ### JDK dynamic proxy vs CGLIB
 
@@ -182,7 +179,7 @@ class AuditAspect {
             return pjp.proceed();               // forgetting this silently skips the real method
         } catch (Throwable ex) {
             outcome = "FAILURE";
-            throw ex;                           // rethrow: never swallow, or @Transactional will not roll back
+            throw ex;                           // rethrow: never swallow, or the caller and any outer aspect see a success
         } finally {
             long ms = Duration.ofNanos(System.nanoTime() - start).toMillis();
             // Log identifiers only. Arguments may hold PHI or PII, so never log pjp.getArgs() blindly
@@ -285,9 +282,11 @@ When a refactor is not practical, these also work:
 // Option A: programmatic transaction. No proxy needed, the boundary is explicit in the code.
 @Service
 class ClaimService {
+    private final AuditRepository audits;
     private final TransactionTemplate requiresNew;
 
-    ClaimService(PlatformTransactionManager txManager) {
+    ClaimService(AuditRepository audits, PlatformTransactionManager txManager) {
+        this.audits = audits;
         this.requiresNew = new TransactionTemplate(txManager);
         this.requiresNew.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
     }

@@ -11,7 +11,7 @@
 ## Written, NOT yet fact-checked (pages carry a "Draft" banner)
 | Topic | Pages | Next step |
 |---|---|---|
-| Spring Boot & Spring Core | 10/10 | Run review pass, remove banner |
+| Spring Boot & Spring Core | 10/10 | 01-05 are fact-checked. Review 06-10 and remove their banners |
 | Spring Security, OAuth2/OIDC & JWT | 8/9 | 07 and 08 are fact-checked. Write 09; review 01-06 and remove their banners |
 
 ## Not started (P0)

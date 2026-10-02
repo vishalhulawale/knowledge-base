@@ -6,10 +6,6 @@ tags: [spring-boot, P0]
 
 # Auto-configuration & Starters (How Boot Works Internally)
 
-!!! warning "Draft: not yet fact-checked"
-    This page was written but its independent review pass has not run yet. Verify version numbers and defaults against the linked sources.
-
-
 !!! abstract "TL;DR"
     - A **starter** is only a dependency descriptor (a POM with no code). It puts libraries on the classpath. **Auto-configuration** is ordinary `@Configuration` code that reacts to what is on the classpath.
     - `@SpringBootApplication` = `@SpringBootConfiguration` + `@ComponentScan` + `@EnableAutoConfiguration`. The last one imports `AutoConfigurationImportSelector`, which reads candidate class names from `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports` in every jar.
@@ -39,7 +35,7 @@ Interviewers at senior level ask about this for a practical reason. When a servi
 | Where it lives | `spring-boot-starter-*` artifacts | `spring-boot-autoconfigure` (Boot 3.x), or the library's own autoconfigure module |
 | Job | Put the right jars on the classpath | Create beans when those jars are present |
 
-`spring-boot-starter-web` in Boot 3.x pulls in `spring-boot-starter` (core, logging, auto-configure, YAML), `spring-boot-starter-json` (Jackson), `spring-boot-starter-tomcat` and `spring-webmvc`. Nothing in the starter says "create a `DispatcherServlet`". That happens because `DispatcherServletAutoConfiguration` sees `DispatcherServlet.class` on the classpath.
+`spring-boot-starter-web` in Boot 3.x pulls in `spring-boot-starter` (core, logging, auto-configure, YAML), `spring-boot-starter-json` (Jackson), `spring-boot-starter-tomcat`, `spring-web` and `spring-webmvc`. Nothing in the starter says "create a `DispatcherServlet`". That happens because `DispatcherServletAutoConfiguration` sees `DispatcherServlet.class` on the classpath.
 
 The consequence: you get the same auto-configuration if you add the individual libraries by hand, and you get *no* behaviour from a starter whose auto-configuration conditions do not match.
 
@@ -130,7 +126,7 @@ sequenceDiagram
 
 ### How Boot inspects classes that may not exist
 
-`@ConditionalOnClass(DataSource.class)` refers to a class that may be missing at runtime. This works because Spring reads annotations with **ASM bytecode metadata**, not reflection, so the configuration class is never loaded if the condition fails. That is also why auto-configurations put risky types in nested `static` configuration classes: each nested class is loaded only if its own class condition passes. On a `@Bean` *method*, prefer the `name = "com.foo.Bar"` string form, because the method signature of the outer class is loaded by the JVM regardless.
+`@ConditionalOnClass(DataSource.class)` refers to a class that may be missing at runtime. This works because Spring reads annotations with **ASM bytecode metadata**, not reflection, so the configuration class is never loaded if the condition fails. That is also why auto-configurations put risky types in nested `static` configuration classes: each nested class is loaded only if its own class condition passes. Putting `@ConditionalOnClass` directly on a `@Bean` *method* is unsafe when the method's return type or parameters use the optional class: the JVM loads the outer class and its method signatures before the condition is evaluated, and the `name = "com.foo.Bar"` string form does not help with that. The reference documentation's fix is to isolate the method in a separate (nested) `@Configuration` class that carries the condition. The `name` form is required in one other case: when you use `@ConditionalOnClass` inside your own composed meta-annotation.
 
 ### Properties binding: the other half
 
@@ -139,6 +135,8 @@ Almost every auto-configuration is paired with a `@ConfigurationProperties` clas
 1. Set a property (`spring.jackson.serialization.indent-output=true`).
 2. Register a **customizer** bean (`Jackson2ObjectMapperBuilderCustomizer`, `WebServerFactoryCustomizer`). The default bean is kept and adjusted.
 3. Define your own bean of the type. The default backs off completely.
+
+The class and property names on this page are the Boot 3.x ones. Boot 4.0 defaults to Jackson 3 and renames some of them: `Jackson2ObjectMapperBuilderCustomizer` becomes `JsonMapperBuilderCustomizer`, and `spring.data.mongodb.*` becomes `spring.mongodb.*`. The mechanism is unchanged.
 
 See [Configuration: properties, profiles, `@ConfigurationProperties`](03-configuration-properties-profiles-configurationproperties.md) for binding rules.
 
@@ -150,7 +148,7 @@ See [Configuration: properties, profiles, `@ConfigurationProperties`](03-configu
 | Boot 2.7 | New `AutoConfiguration.imports` file and `@AutoConfiguration` annotation. Both mechanisms supported |
 | Boot 3.0 | `spring.factories` registration of auto-configurations **removed**. Old third-party starters silently stop configuring anything |
 | Boot 3.x | AOT processing: conditions can be evaluated at **build time** for native images |
-| Boot 4.0 | The single `spring-boot-autoconfigure` jar is split into per-technology modules, with matching starters (for example `spring-boot-starter-webmvc`) |
+| Boot 4.0 | The single `spring-boot-autoconfigure` jar is split into per-technology modules, with matching starters (for example `spring-boot-starter-webmvc`, which replaces the now deprecated `spring-boot-starter-web`) |
 
 `spring.factories` still exists in Boot 3 and 4 for other extension points (`ApplicationContextInitializer`, `EnvironmentPostProcessor`, `FailureAnalyzer`). Only auto-configuration registration moved.
 
@@ -191,7 +189,7 @@ public class JacksonAutoConfiguration {
         ObjectMapper objectMapper() {
             ObjectMapper mapper = new ObjectMapper();
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            return mapper;                 // LocalDate now serialises as an array or fails
+            return mapper;                 // LocalDate now fails to serialise (no JavaTimeModule registered)
         }
     }
     ```
@@ -215,7 +213,7 @@ The rule: **customise before you replace**. Replace only when you really want to
 
 ### Writing your own starter
 
-A typical platform-team starter: every service gets the same audit publisher without copy-paste. Third-party naming convention is `acme-spring-boot-starter` (the `spring-boot-starter-*` prefix is reserved for official ones).
+A typical platform-team starter: every service gets the same audit publisher without copy-paste. Third-party naming convention is `acme-spring-boot-starter` (module names starting with `spring-boot` are reserved for official ones).
 
 ```java
 // module: audit-spring-boot-autoconfigure
@@ -349,7 +347,7 @@ The report has four parts: **Positive matches**, **Negative matches** (with the 
 | Explicit `@Import` of plain config | Obvious and explicit | Each service must remember to import it | Small teams, few services |
 
 !!! warning "Gotchas"
-    - **Never component-scan an auto-configuration class.** If your starter's package sits under the application's base package, the class is processed as normal configuration, *before* user beans are all known, and `@ConditionalOnMissingBean` gives wrong answers. Keep starters in a separate package and register only through the imports file.
+    - **Never component-scan an auto-configuration class.** If your starter's package sits under the application's base package, the class is processed as normal configuration, *before* user beans are all known, and `@ConditionalOnMissingBean` gives wrong answers. Keep starters in a separate package and register only through the imports file. `@SpringBootApplication` gives partial protection: its scan uses `AutoConfigurationExcludeFilter`, which skips classes that are annotated `@AutoConfiguration` or listed in an imports file. A hand-written `@ComponentScan` elsewhere, or a starter class that is plain `@Configuration` and not registered, has no such protection.
     - **`@ConditionalOnMissingBean` in ordinary `@Configuration` is order-dependent.** It may work today and break after an unrelated refactor.
     - **`@ConditionalOnBean` needs ordering.** If the bean you depend on comes from another auto-configuration, declare `@AutoConfiguration(after = ...)`, otherwise the condition is evaluated before that bean definition exists.
     - **`before`/`after` control the order of bean *definitions*, not bean *creation*.** Creation order follows dependencies and `@DependsOn`.
@@ -361,11 +359,12 @@ The report has four parts: **Positive matches**, **Negative matches** (with the 
 ## How this connects to my experience
 
 - **Where I used it:**
-    - **OptumRx Meteor (Publicis Sapient):** the GraphQL Consumer Service and the other microservices were built on Spring Boot with Kafka, MongoDB, Redis and GraphQL. Each of those is wired by auto-configuration (`KafkaAutoConfiguration`, `MongoAutoConfiguration`, the Redis and Spring for GraphQL auto-configurations) and tuned through `spring.kafka.*`, `spring.data.mongodb.*` and `spring.data.redis.*` properties.
+    - **OptumRx Meteor (Publicis Sapient):** the GraphQL Consumer Service and the other microservices were built on Spring Boot with Kafka, MongoDB, Redis and GraphQL. Each of those is wired by auto-configuration (`KafkaAutoConfiguration`, `MongoAutoConfiguration`, the Redis and GraphQL auto-configurations) and tuned through `spring.kafka.*`, `spring.data.mongodb.*` and `spring.data.redis.*` properties. *[confirm the Boot version, and whether GraphQL was Spring for GraphQL or Netflix DGS]*
     - **"Established engineering standards around testing, CI/CD, code quality, and deployment practices":** this is the natural place for a shared starter story (common logging, correlation IDs, OAuth2 resource-server defaults, Kafka retry/DLQ configuration). *[confirm whether the team shipped a shared starter or common library, and what was in it]*
-    - **CipherTrust Cloud Key Management (Coriolis) and Metasys (Johnson Controls):** REST APIs with Spring Boot and Spring Security, where the default security filter chain backs off as soon as you define your own.
+    - **CipherTrust Cloud Key Management (Coriolis):** REST APIs built with Spring Boot, so the web, JSON and embedded-server auto-configuration described here.
+    - **Metasys (Johnson Controls):** user management microservices with JWT/SSO and Spring Security authorization. In a Boot application the default security filter chain backs off as soon as you define your own. *[confirm that Metasys services ran on Spring Boot, and which version]*
 - **Talking points:**
-    - "I customise before I replace." For Redis caching I kept Boot's connection factory and supplied my own `RedisCacheConfiguration` / serializer for TTLs and JSON. *[confirm the actual customisation]*
+    - "I customise before I replace." For Redis caching (OptumRx Meteor) I kept Boot's connection factory and supplied my own `RedisCacheConfiguration` / serializer for TTLs and JSON. *[confirm the actual customisation]*
     - For Kafka retry and DLQ handling, Boot auto-configures the `ConcurrentKafkaListenerContainerFactory` and picks up a `CommonErrorHandler` bean if one exists. I supplied the error handler with a `DeadLetterPublishingRecoverer` instead of rebuilding the factory. *[confirm]*
     - With 5 upstream systems behind OAuth2/PingFederate, I had more than one client configuration, so I know where auto-configuration stops (single-candidate conditions) and explicit beans start. *[confirm]*
     - When a bean is missing or duplicated, my first step is the condition evaluation report, not guessing.
@@ -414,7 +413,7 @@ The report has four parts: **Positive matches**, **Negative matches** (with the 
     **Answer:** The condition looks at bean definitions registered *so far*. For auto-configuration that means "all user beans", because of deferred processing and explicit `before`/`after` ordering. In a normal `@Configuration` class the processing order relative to other user configuration is not something you control, so the result can change with a package rename or a new import.
 
 ??? question "Q8. `@ConditionalOnClass` refers to a class that might not exist. Why does this not throw `NoClassDefFoundError`?"
-    **Answer:** Spring reads the annotation from bytecode with ASM instead of loading the class, so the referenced type is never resolved if it is absent. In addition, Boot's annotation processor writes the class conditions into `spring-autoconfigure-metadata.properties`, so many candidates are rejected without even opening the class file. On `@Bean` methods it is safer to use the `name` attribute or put the method in a nested static configuration class, because loading the outer class resolves its method signatures.
+    **Answer:** Spring reads the annotation from bytecode with ASM instead of loading the class, so the referenced type is never resolved if it is absent. In addition, Boot's annotation processor writes the class conditions into `spring-autoconfigure-metadata.properties`, so many candidates are rejected without even opening the class file. On `@Bean` methods whose signature uses the optional type, the condition comes too late, because the JVM loads the outer class and its method signatures first. The documented fix is to put the method in a nested static configuration class that carries the `@ConditionalOnClass`. The `name` attribute is mandatory only inside composed meta-annotations.
 
     **Interviewer listens for:** ASM metadata reading, nested configuration classes.
 
@@ -469,7 +468,7 @@ The report has four parts: **Positive matches**, **Negative matches** (with the 
 ??? question "Q18. Your team's starter works in the sample app but in one service its `@ConditionalOnMissingBean` bean is created in addition to the service's own bean, causing `NoUniqueBeanDefinitionException`. What do you check?"
     **Answer:** Three likely causes.
 
-    1. The starter's package is under the service's base package, so the auto-configuration is component-scanned and processed as normal configuration before the service's bean definition is registered.
+    1. The starter's package is under the service's base package, so the class is component-scanned and processed as normal configuration before the service's bean definition is registered. This happens when the service has its own `@ComponentScan` (which lacks the `AutoConfigurationExcludeFilter` that `@SpringBootApplication` applies) or when the starter class is a plain `@Configuration` that is not listed in the imports file.
     2. The service's bean is declared with a wider return type (an interface or `Object`) or comes from a `FactoryBean`, so the type-based condition cannot see it.
     3. The service's bean is defined in another auto-configuration that is ordered after the starter, so an `after` is missing.
 

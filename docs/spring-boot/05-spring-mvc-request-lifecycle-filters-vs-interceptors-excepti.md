@@ -6,10 +6,6 @@ tags: [spring-boot, P0]
 
 # Spring MVC Request Lifecycle, Filters vs Interceptors, Exception Handling
 
-!!! warning "Draft: not yet fact-checked"
-    This page was written but its independent review pass has not run yet. Verify version numbers and defaults against the linked sources.
-
-
 !!! abstract "TL;DR"
     - A request passes through **two worlds**: the servlet container (**filters**) and then Spring MVC (**`DispatcherServlet`** → `HandlerMapping` → **interceptors** → `HandlerAdapter` → controller).
     - **Filters** are Servlet API, run for *every* request (static files, `/error`, unmapped URLs), can **wrap or replace** the request and response, and know nothing about the controller. **Interceptors** are Spring MVC, run only when a handler was found, and **know the handler method** but should not replace the request/response.
@@ -128,9 +124,9 @@ sequenceDiagram
     DS->>I2: afterCompletion
     DS->>I1: afterCompletion
     DS-->>F: return from chain.doFilter
-    Note over F: code after doFilter runs last, status is final here
+    Note over F: code after doFilter runs last, status is final for handled outcomes
 ```
-*Notice that `postHandle` and `afterCompletion` run in reverse order, that `postHandle` disappears on the exception path, and that the filter is the only place that sees the final status for every outcome.*
+*Notice that `postHandle` and `afterCompletion` run in reverse order, that `postHandle` disappears on the exception path, and that the filter is the only place that runs for every outcome. It sees the final status whenever the response was produced inside the chain. If an exception escapes the chain, the container sets `500` only afterwards.*
 
 ### Exception handling
 
@@ -164,6 +160,7 @@ Validation itself is covered in [09-validation-rest-clients.md](09-validation-re
 @Order(Ordered.HIGHEST_PRECEDENCE)                 // before Spring Security (-100), so 401/403 are also traced
 class CorrelationIdFilter extends OncePerRequestFilter {
 
+    private static final Logger log = LoggerFactory.getLogger(CorrelationIdFilter.class);
     private static final String HEADER = "X-Correlation-Id";
 
     @Override
@@ -175,12 +172,17 @@ class CorrelationIdFilter extends OncePerRequestFilter {
         MDC.put("correlationId", id);
         res.setHeader(HEADER, id);                 // set BEFORE the chain: response is not committed yet
         long start = System.nanoTime();
+        boolean escaped = true;
         try {
             chain.doFilter(req, res);
+            escaped = false;
         } finally {
-            // runs for success, handled errors and unhandled errors: status is final here
+            // runs for success, handled errors and unhandled errors.
+            // If the exception escaped the chain, getStatus() is still 200 here:
+            // Tomcat sets 500 only after the filters have unwound, so report 500 ourselves.
+            int status = escaped ? 500 : res.getStatus();
             log.info("{} {} -> {} in {} ms", req.getMethod(), req.getRequestURI(),
-                    res.getStatus(), (System.nanoTime() - start) / 1_000_000);
+                    status, (System.nanoTime() - start) / 1_000_000);
             MDC.remove("correlationId");           // pooled threads are reused: always clean up
         }
     }
@@ -211,8 +213,11 @@ class AuditInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest req, HttpServletResponse res, Object handler, Exception ex) {
         // afterCompletion, not postHandle: must also record failed attempts
-        if (handler instanceof HandlerMethod hm && hm.getMethodAnnotation(AuditAccess.class) instanceof AuditAccess a) {
-            audit.publish(a.resource(), req.getUserPrincipal(), res.getStatus());
+        if (handler instanceof HandlerMethod hm) {
+            AuditAccess a = hm.getMethodAnnotation(AuditAccess.class);   // null when the method is not annotated
+            if (a != null) {
+                audit.publish(a.resource(), req.getUserPrincipal(), res.getStatus());
+            }
         }
     }
 }
@@ -283,7 +288,10 @@ class WebConfig implements WebMvcConfigurer {
             return handleExceptionInternal(ex, pd, headers, status, request);
         }
 
-        @ExceptionHandler(Exception.class)                        // true last resort
+        // True last resort. Caution: with method security (@PreAuthorize) this also catches
+        // AccessDeniedException / AuthenticationException and turns a 403/401 into a 500.
+        // Add a handler that rethrows them (or maps them to 403/401) if you use method security.
+        @ExceptionHandler(Exception.class)
         ProblemDetail unexpected(Exception e) {
             log.error("Unhandled exception", e);                  // full detail goes to logs, with correlation ID from MDC
             return ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR,
@@ -343,8 +351,8 @@ server:
 
 | Option | Pros | Cons | Use when |
 |---|---|---|---|
-| **Servlet `Filter`** | Sees every request and the final status. Can wrap request/response. Runs before security if ordered so. | No knowledge of the handler. Exceptions bypass `@ControllerAdvice`. Runs again on ERROR/ASYNC dispatch unless `OncePerRequestFilter`. | Auth, CORS, correlation ID, request/response logging, compression, rate limiting by IP or token. |
-| **`HandlerInterceptor`** | Knows the `HandlerMethod` and its annotations. Exceptions go to `@ExceptionHandler`. Path patterns use MVC matching. | Cannot wrap request/response. `postHandle` is useless for `@ResponseBody`. Not called when no handler matches. | Annotation-driven checks, tenant or locale resolution, per-endpoint audit and timing. |
+| **Servlet `Filter`** | Sees every request and the final status. Can wrap request/response. Runs before security if ordered so. | No knowledge of the handler. Exceptions bypass `@ControllerAdvice`. Runs again on ERROR/ASYNC/FORWARD dispatches when mapped to those dispatcher types (Boot maps a plain filter bean to `REQUEST` only, and an `OncePerRequestFilter` to all types but it skips the repeats itself). | Auth, CORS, correlation ID, request/response logging, compression, rate limiting by IP or token. |
+| **`HandlerInterceptor`** | Knows the `HandlerMethod` and its annotations. Exceptions go to `@ExceptionHandler`. Path patterns use MVC matching. | Cannot wrap request/response. `postHandle` is useless for `@ResponseBody`. Not called when no handler matches, or for handler mappings it is not registered on (actuator endpoints). | Annotation-driven checks, tenant or locale resolution, per-endpoint audit and timing. |
 | **`@ControllerAdvice` (`RequestBodyAdvice` / `ResponseBodyAdvice`)** | Works on the deserialised object, before/after conversion. | Only for message-converter based endpoints. | Response envelopes, field masking, decrypting request bodies. |
 | **AOP `@Around` on controllers or services** | Typed arguments and return value. Works on non-web calls too (Kafka listeners, schedulers). | No HTTP context by default. Proxy limits such as self-invocation. See [04-aop-and-proxies.md](04-aop-and-proxies.md). | Logic tied to a business method, not to HTTP. |
 
@@ -433,7 +441,7 @@ server:
 ### Senior
 
 ??? question "Q12. Where would you implement authentication, and why not in an interceptor?"
-    **Answer:** In the filter layer, through Spring Security. Reasons: it must cover every request, including static resources, actuator endpoints and URLs with no handler, which interceptors never see. It should reject before any MVC work such as body parsing. It needs to establish the `SecurityContext` before anything else runs. And interceptor path matching can differ from handler mapping, which has caused authorization bypasses. Fine-grained authorization that depends on the method goes to method security (`@PreAuthorize`), which is AOP, not an interceptor.
+    **Answer:** In the filter layer, through Spring Security. Reasons: it must cover every request, including actuator endpoints, other servlets and URLs with no handler, which interceptors registered through `WebMvcConfigurer` never see (they do see static resources, with a `ResourceHttpRequestHandler` as the handler). It should reject before any MVC work such as body parsing. It needs to establish the `SecurityContext` before anything else runs. And interceptor path matching can differ from handler mapping, which has caused authorization bypasses. Fine-grained authorization that depends on the method goes to method security (`@PreAuthorize`), which is AOP, not an interceptor.
 
     **Interviewer listens for:** defence in depth: URL-level rules in filters, method-level rules with AOP.
 

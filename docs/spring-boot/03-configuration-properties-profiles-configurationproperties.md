@@ -6,10 +6,6 @@ tags: [spring-boot, P0]
 
 # Configuration: properties, profiles, `@ConfigurationProperties`
 
-!!! warning "Draft: not yet fact-checked"
-    This page was written but its independent review pass has not run yet. Verify version numbers and defaults against the linked sources.
-
-
 !!! abstract "TL;DR"
     - All configuration ends up in one **`Environment`**: an ordered list of **`PropertySource`s**. A lookup walks the list and the **first source that has the key wins**.
     - Rough precedence, highest first: **command-line args → `SPRING_APPLICATION_JSON` → Java system properties → OS environment variables → config files outside the jar → config files inside the jar → `@PropertySource` → defaults**. Profile-specific files beat non-profile files at the same location.
@@ -204,9 +200,12 @@ Instead of spreading `@Value` strings across classes, bind one prefix to one obj
 | YAML or properties (recommended) | `claims.upstream.api-key` |
 | camelCase | `claims.upstream.apiKey` |
 | underscore | `claims.upstream.api_key` |
-| Environment variable | `CLAIMS_UPSTREAM_APIKEY` |
+| Environment variable (canonical) | `CLAIMS_UPSTREAM_APIKEY` |
+| Environment variable (legacy form, also accepted) | `CLAIMS_UPSTREAM_API_KEY` |
 
-The environment variable rule: replace `.` with `_`, **remove** `-`, upper-case everything. List elements use numbers: `claims.hosts[0]` becomes `CLAIMS_HOSTS_0`. The `prefix` in the annotation itself must be kebab-case.
+The documented environment variable rule: replace `.` with `_`, **remove** `-`, upper-case everything. List elements use numbers: `claims.hosts[0]` becomes `CLAIMS_HOSTS_0`. The `prefix` in the annotation itself must be kebab-case.
+
+The binder's `SystemEnvironmentPropertyMapper` also tries a **legacy form where `-` becomes `_`**. That is why `SPRING_DATASOURCE_DRIVER_CLASS_NAME` works for `spring.datasource.driver-class-name`. It works because the binder starts from the known property name `api-key` and generates both candidate env var names. It cannot work the other way round: an underscore that has no matching dash in the property name (`TIME_OUT` for a field `timeout`) is read as a new path segment, and map keys containing dashes cannot be recovered from an env var. Prefer the canonical form in your own manifests.
 
 **Conversion.** `Duration` (`500ms`, `2s`, `PT2S`), `DataSize` (`10MB`), `Period`, enums (case-insensitive), collections and maps work out of the box. A bare number for a `Duration` means milliseconds unless you add `@DurationUnit`.
 
@@ -367,7 +366,7 @@ class ClaimsUpstreamPropertiesTest {
 | `@ConfigurationProperties` | Typed, validated, testable, documented | A little more code | Any group of related settings |
 
 !!! warning "Gotchas"
-    - **Env var naming.** `claims.upstream.api-key` is `CLAIMS_UPSTREAM_APIKEY`, not `CLAIMS_UPSTREAM_API_KEY`. The second form binds to a property called `api.key`, and is silently ignored.
+    - **Env var naming.** The documented form for `claims.upstream.api-key` is `CLAIMS_UPSTREAM_APIKEY` (dashes removed). `CLAIMS_UPSTREAM_API_KEY` also binds, through the binder's legacy mapping, but only because the property name really contains a dash there. An underscore in the wrong place (`CLAIMS_UPSTREAM_TIME_OUT` for `timeout`) means `time.out`, matches nothing and is silently ignored. Map keys with dashes or dots cannot be expressed reliably as env vars.
     - **Unknown keys are ignored by default** (`ignoreUnknownFields = true`). A typo such as `time-out` does not fail. The default is used instead. Validation with `@NotNull` only catches missing mandatory values.
     - **Lists are replaced, not merged.** Overriding one element of a list from a profile file drops the others.
     - **A stray env var beats your file.** `SERVER_PORT` set on the host or in a base image overrides `application.yml`. Check `/actuator/env` or `/actuator/configprops` to see the winning source.
@@ -376,7 +375,7 @@ class ClaimsUpstreamPropertiesTest {
     - **YAML types.** Unquoted `on`, `off`, `yes`, `no` can be read as booleans, and a number with a leading zero may be read as octal. Quote such values.
     - **`@Value` in a `static` field or on a bean created with `new`** stays `null`, with no error.
     - **`spring.config.location` replaces the defaults.** If you set it, your packaged `application.yml` is no longer read. Use `additional-location` to add.
-    - **Do not inject `@ConfigurationProperties` values into the prefix of another one via SpEL.** SpEL is not evaluated in `@ConfigurationProperties` binding. Only `${...}` placeholders are.
+    - **No SpEL in `@ConfigurationProperties`.** `#{...}` expressions in a value are not evaluated during binding, and the `prefix` must be a literal. Only `${...}` placeholders are resolved.
 
 ## How this connects to my experience
 
@@ -420,11 +419,11 @@ class ClaimsUpstreamPropertiesTest {
     **Common wrong answer:** "Profiles are a Maven feature" (Maven profiles are a separate build-time concept).
 
 ??? question "Q5. What is relaxed binding? Which env var sets `claims.upstream.api-key`?"
-    **Answer:** Boot matches different naming styles to the same property: kebab-case, camelCase, underscore and upper-case env var form. For env vars: replace dots with underscores, remove dashes, upper-case. So the answer is `CLAIMS_UPSTREAM_APIKEY`.
+    **Answer:** Boot matches different naming styles to the same property: kebab-case, camelCase, underscore and upper-case env var form. For env vars the documented rule is: replace dots with underscores, remove dashes, upper-case. So the canonical answer is `CLAIMS_UPSTREAM_APIKEY`. In practice `CLAIMS_UPSTREAM_API_KEY` also binds, because the binder tries a legacy form in which dashes become underscores (the same reason `SPRING_DATASOURCE_DRIVER_CLASS_NAME` works).
 
-    **Interviewer listens for:** "dashes are removed".
+    **Interviewer listens for:** "dashes are removed" as the documented rule, and ideally awareness that the underscore form is tolerated for dashed names only.
 
-    **Common wrong answer:** `CLAIMS_UPSTREAM_API_KEY`. It does not bind to `apiKey`.
+    **Common wrong answer:** "Env vars must match the property name exactly", or claiming that `CLAIMS_UPSTREAM_API_KEY` is silently ignored. It is not. What is ignored is an underscore with no matching dash, such as `TIME_OUT` for `timeout`.
 
 ### Intermediate
 
@@ -485,7 +484,7 @@ class ClaimsUpstreamPropertiesTest {
 ??? question "Q16. Production is using the wrong database URL although `application-prod.yml` is correct. How do you debug it?"
     **Answer:** Assume a higher-priority source is winning.
 
-    1. Check the startup log line "The following profiles are active" to confirm `prod` is really active.
+    1. Check the startup log line `The following 1 profile is active: "prod"` (older versions: "The following profiles are active") to confirm `prod` is really active.
     2. Look at `/actuator/env/spring.datasource.url`. It shows the value's origin (file and line, or `systemEnvironment`). Values are masked by default, but the source is still visible.
     3. Inspect the pod spec for `SPRING_DATASOURCE_URL`, `SPRING_APPLICATION_JSON`, command-line args, or an external `config/` directory.
     4. Check whether `spring.config.location` replaced the default locations.
@@ -516,7 +515,7 @@ class ClaimsUpstreamPropertiesTest {
 | Profile documents | `spring.config.activate.on-profile`. Cannot set `spring.profiles.active` or `include` there |
 | Profile groups | `spring.profiles.group.prod=a,b` |
 | `@Profile` | Expressions: `&`, `|`, `!`. Default profile is `default` |
-| Env var mapping | `.` to `_`, drop `-`, upper-case. `my.api-key` is `MY_APIKEY`. Lists: `MY_HOSTS_0` |
+| Env var mapping | `.` to `_`, drop `-`, upper-case. `my.api-key` is `MY_APIKEY` (legacy `MY_API_KEY` also binds). Lists: `MY_HOSTS_0` |
 | Constructor binding | Automatic with a single constructor (Boot 3). Records plus `@DefaultValue` |
 | Registration | `@EnableConfigurationProperties` or `@ConfigurationPropertiesScan` |
 | Validation | `@Validated` on the class, `@Valid` on nested, starter-validation on classpath |

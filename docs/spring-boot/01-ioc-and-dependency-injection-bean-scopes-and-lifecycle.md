@@ -6,10 +6,6 @@ tags: [spring-boot, P0]
 
 # IoC & Dependency Injection, Bean Scopes & Lifecycle
 
-!!! warning "Draft: not yet fact-checked"
-    This page was written but its independent review pass has not run yet. Verify version numbers and defaults against the linked sources.
-
-
 !!! abstract "TL;DR"
     - **IoC** means the container, not your code, creates objects and hands them their collaborators. **DI** is how it does that. Prefer **constructor injection**: dependencies are `final`, mandatory, and visible in tests without Spring.
     - The container works in two phases: first it builds **bean definitions** (metadata), then it creates **bean instances**. `BeanFactoryPostProcessor` changes definitions, `BeanPostProcessor` changes instances (this is where AOP proxies are created).
@@ -86,6 +82,8 @@ flowchart TD
 
 Useful details:
 
+- The relative order of the last two tie-breakers changed between versions. Up to Spring Framework 6.1 the order is `@Primary` → highest `@Priority` → bean name equals the field or parameter name. From **6.2** the name match is checked **before** `@Priority` (`DefaultListableBeanFactory.determineAutowireCandidate`), and 6.2 also takes a shortcut when the parameter name matches a bean name of the right type. `@Qualifier` and `@Primary` behave the same in both, which is one more reason to rely on them.
+- `@Priority` here is `jakarta.annotation.Priority` on the class. `@Order` does **not** pick a single winner; it only sorts collections.
 - Injecting `List<T>` or `Map<String, T>` gives **all** beans of that type (the map key is the bean name). Order the list with `@Order` or `Ordered`. This is the natural way to build a strategy pattern.
 - `ObjectProvider<T>` is a lazy, optional handle: `getIfAvailable()`, `getIfUnique()`, `stream()`, and `getObject()` to fetch a fresh instance each time.
 - Spring Framework 6.2 added **`@Fallback`**, the opposite of `@Primary`: the bean is used only when no other candidate exists.
@@ -130,7 +128,7 @@ Points worth saying out loud:
 | Works on | Bean **definitions** | Bean **instances** |
 | Runs | Once, before any normal bean is created | Around the initialisation of every bean |
 | Examples | `ConfigurationClassPostProcessor`, `PropertySourcesPlaceholderConfigurer` | `AutowiredAnnotationBeanPostProcessor`, `CommonAnnotationBeanPostProcessor`, the AOP auto-proxy creator |
-| Declare as | `static @Bean` method | Normal bean, but keep its dependencies minimal |
+| Declare as | `static @Bean` method | `@Component`, or a `static @Bean` method. Keep its dependencies minimal |
 
 A bean that a `BeanPostProcessor` depends on is created early, before all post-processors are registered. Spring logs "is not eligible for getting processed by all BeanPostProcessors" for it, and that bean may silently miss its proxy.
 
@@ -382,7 +380,7 @@ Use `@PostConstruct` for cheap validation and in-memory setup. Do not start thre
 ## Real-world usage
 
 - **Netflix** described its move from an in-house, Guice-based stack to Spring Boot as its standard Java framework in the engineering post "Netflix OSS and Spring Boot: Coming Full Circle". A large part of the argument was the maturity of Spring's DI and abstraction model.
-- **Every Spring module is built on these extension points.** `@Transactional`, Spring Security method security, Spring Cache and Micrometer's `@Observed` are `BeanPostProcessor`s that wrap beans in proxies. Spring Cloud's `@RefreshScope` is a custom scope.
+- **Every Spring module is built on these extension points.** `@Transactional`, Spring Security method security, Spring Cache and Micrometer's `@Observed` are all applied the same way: a `BeanPostProcessor` (the AOP auto-proxy creator) wraps the bean in a proxy that carries the advice. Spring Cloud's `@RefreshScope` is a custom scope.
 - **A common production failure mode: mutable state in a singleton.** A controller or service stores the current user, tenant or member ID in an instance field. It works in single-user testing and leaks data between concurrent requests under load. In healthcare (PHI) and banking this is a reportable privacy incident, not just a bug. The same class of bug appears when a per-request object, such as a GraphQL `DataLoader`, is held by a singleton.
 - **Shutdown ordering matters on Kubernetes.** During a rolling update the pod receives `SIGTERM`. Spring stops `SmartLifecycle` beans in phase order (web server stops accepting requests, Kafka listener containers stop polling), then destroys beans. If the destroy order or the timeout is wrong, in-flight requests fail or messages are redelivered.
 - **Startup time is a container concern.** Hundreds of eagerly created singletons make slow pods and slow autoscaling. Teams measure with Actuator's `startup` endpoint (`BufferingApplicationStartup`) before reaching for lazy initialisation, AOT or native images.
@@ -491,7 +489,7 @@ Use `@PostConstruct` for cheap validation and in-memory setup. Do not start thre
     **Interviewer listens for:** Definitions versus instances, a real example of each, and the `static` detail.
 
 ??? question "Q8. There are three beans of type `PaymentGateway`. How does Spring decide which to inject?"
-    **Answer:** It finds candidates by type. A `@Qualifier` at the injection point selects the matching bean. Without one, a single `@Primary` bean wins. Then the highest `@Priority`. As a last fallback, a bean whose name equals the field or parameter name. If nothing decides it, startup fails with `NoUniqueBeanDefinitionException`. Alternatives: inject `List<PaymentGateway>` or `Map<String, PaymentGateway>` and choose at runtime, or use `ObjectProvider`. Spring 6.2 also has `@Fallback` to mark a bean as the last resort.
+    **Answer:** It finds candidates by type. A `@Qualifier` at the injection point selects the matching bean. Without one, a single `@Primary` bean wins. After that come two late tie-breakers: the highest `@Priority`, and a bean whose name equals the field or parameter name (up to Spring 6.1 priority is checked first, from 6.2 the name match is checked first). If nothing decides it, startup fails with `NoUniqueBeanDefinitionException`. Alternatives: inject `List<PaymentGateway>` or `Map<String, PaymentGateway>` and choose at runtime, or use `ObjectProvider`. Spring 6.2 also has `@Fallback` to mark a bean as the last resort.
 
     **Interviewer listens for:** By type first, an explicit ordering, and the collection-injection option.
 
@@ -567,7 +565,7 @@ Use `@PostConstruct` for cheap validation and in-memory setup. Do not start thre
 |---|---|
 | IoC vs DI | IoC is the principle, DI is the mechanism |
 | Injection style | Constructor, `final` fields, no `@Autowired` needed for a single constructor |
-| Resolution order | Type → `@Qualifier` → `@Primary` → `@Priority` → name. `@Fallback` since 6.2 |
+| Resolution order | Type → `@Qualifier` → `@Primary` → `@Priority` → name (6.2+: name before `@Priority`). `@Fallback` since 6.2 |
 | All beans of a type | `List<T>`, `Map<String, T>`, `ObjectProvider<T>.stream()` |
 | Two phases | Definitions (`BeanFactoryPostProcessor`) then instances (`BeanPostProcessor`) |
 | Init order | Constructor → inject → `Aware` → `@PostConstruct` → `afterPropertiesSet` → init method → proxy |
@@ -591,4 +589,6 @@ Use `@PostConstruct` for cheap validation and in-memory setup. Do not start thre
 5. [Spring Framework Reference: Fine-tuning Annotation-based Autowiring with @Primary or @Fallback](https://docs.spring.io/spring-framework/reference/core/beans/annotation-config/autowired-primary.html): candidate selection.
 6. [Spring Boot Reference: SpringApplication](https://docs.spring.io/spring-boot/reference/features/spring-application.html): lazy initialisation, startup tracking, application events and runners.
 7. [Spring Boot Reference: Graceful Shutdown](https://docs.spring.io/spring-boot/reference/web/graceful-shutdown.html): shutdown behaviour and the phase timeout.
-8. [Spring Boot 2.6 Release Notes](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.6-Release-Notes): circular references prohibited by default.
+8. [Spring Framework source: DefaultListableBeanFactory](https://github.com/spring-projects/spring-framework/blob/main/spring-beans/src/main/java/org/springframework/beans/factory/support/DefaultListableBeanFactory.java): `determineAutowireCandidate`, the exact tie-breaker order (primary, name, priority in 6.2+).
+9. [Netflix Technology Blog: Netflix OSS and Spring Boot, Coming Full Circle](https://netflixtechblog.com/netflix-oss-and-spring-boot-coming-full-circle-4855947713a0): Netflix's move from its Guice-based stack to Spring Boot.
+10. [Spring Boot 2.6 Release Notes](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.6-Release-Notes): circular references prohibited by default.
