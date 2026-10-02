@@ -64,3 +64,33 @@ Mock-interview results and revision schedule, updated by the `learn-topic` skill
 | 2026-10-02 | Kafka: 07 Retry, DLQ, replay ★ | — (studied, mock skipped) | Confirm: DefaultErrorHandler vs @RetryableTopic; DLQ ownership & replay | 2026-10-03 |
 | 2026-10-02 | Kafka: 08 Idempotent consumers ★ | — (studied, mock skipped) | Confirm: dedupe technique; Redis use; concrete duplicate example | 2026-10-03 |
 | 2026-10-02 | Kafka: 09 Spring Kafka ★ | — (studied, mock skipped) | Confirm: Spring for Apache Kafka; listener config; tests; tracing | 2026-10-03 |
+| 2026-10-02 | Kafka: 10 Schema management | — (studied, mock skipped) | Confirm: Avro vs Protobuf; Schema Registry use; compatibility mode chosen | 2026-10-03 |
+| 2026-10-02 | Kafka: 11 Streams & Connect | — (studied, mock skipped) | Confirm: any Streams/Connect/Debezium usage, or say "overview only" | 2026-10-03 |
+| 2026-10-02 | Kafka: 12 Performance & lag | — (studied, mock skipped) | Confirm: lag alerting tool; tuning knobs actually changed; throughput numbers | 2026-10-03 |
+| 2026-10-02 | GraphQL: 01 Fundamentals vs REST | — (studied, mock skipped) | Confirm: why GraphQL was picked over REST on your project | 2026-10-03 |
+| 2026-10-02 | GraphQL: 02 Schema design ★ | — (studied, mock skipped) | Confirm: nullability policy; pagination style; error model (payload vs errors) | 2026-10-03 |
+| 2026-10-02 | GraphQL: 03 Resolvers & Spring for GraphQL / DGS ★ | — (studied, mock skipped) | Confirm: Spring for GraphQL or DGS; schema-first? | 2026-10-03 |
+| 2026-10-02 | GraphQL: 04 N+1 & DataLoader ★ | — (studied, mock skipped) | Confirm: @BatchMapping/DataLoader use; measured query-count drop | 2026-10-03 |
+| 2026-10-02 | GraphQL: 05 Aggregating upstreams ★ | — (studied, mock skipped) | Confirm: number of upstreams; timeouts; partial-failure handling | 2026-10-03 |
+| 2026-10-02 | GraphQL: 06 Federation vs stitching ★ | — (studied, mock skipped) | Confirm: single graph vs federated; gateway product | 2026-10-03 |
+| 2026-10-02 | GraphQL: 07 Caching ★ | — (studied, mock skipped) | Confirm: client cache; persisted queries; server-side caching | 2026-10-03 |
+| 2026-10-02 | GraphQL: 08 Security ★ | — (studied, mock skipped) | Confirm: depth/complexity limits; introspection off in prod; field auth | 2026-10-03 |
+| 2026-10-02 | GraphQL: 09 Performance & observability | — (studied, mock skipped) | Confirm: per-resolver metrics/tracing; slow-query detection | 2026-10-03 |
+| 2026-10-02 | React: 01 JSX, props/state, reconciliation | — (studied, mock skipped) | Confirm: React version on your projects | 2026-10-03 |
+| 2026-10-02 | React: 02 Hooks deep dive | — (studied, mock skipped) | Confirm: a custom hook you wrote | 2026-10-03 |
+| 2026-10-02 | React: 03 Rendering behaviour | — (studied, mock skipped) | Re-drill: key bugs; batching; when a re-render happens | 2026-10-03 |
+| 2026-10-02 | React: 04 Context & composition | — (studied, mock skipped) | Confirm: state library (Context/Redux/Zustand/React Query) | 2026-10-03 |
+| 2026-10-02 | React: 05 Forms | — (studied, mock skipped) | Confirm: form library (React Hook Form / Formik) and validation | 2026-10-03 |
+| 2026-10-02 | React: 06 Performance | — (studied, mock skipped) | Confirm: a real perf fix (memo, splitting, virtualization) with numbers | 2026-10-03 |
+| 2026-10-02 | React: 07 Error boundaries & Suspense | — (studied, mock skipped) | Confirm: error-boundary placement; Suspense data fetching | 2026-10-03 |
+| 2026-10-02 | React: 08 React 18/19 & Compiler | — (studied, mock skipped) | Re-drill: transitions, Actions, use(), Compiler 1.0 | 2026-10-03 |
+| 2026-10-02 | React: 09 Routing & protected routes ★ | — (studied, mock skipped) | Confirm: React Router version; auth guard & token storage | 2026-10-03 |
+| 2026-10-02 | React: 10 Testing | — (studied, mock skipped) | Confirm: Jest or Vitest; RTL; MSW; coverage | 2026-10-03 |
+| 2026-10-02 | JS/TS: 01 Scope, closures, this, prototypes | — (studied, mock skipped) | Re-drill: `this` binding rules; closure-in-loop | 2026-10-03 |
+| 2026-10-02 | JS/TS: 02 Event loop | — (studied, mock skipped) | Re-drill: microtask vs macrotask output order | 2026-10-03 |
+| 2026-10-02 | JS/TS: 03 Promises & async/await | — (studied, mock skipped) | Re-drill: Promise.all vs allSettled; unhandled rejections | 2026-10-03 |
+| 2026-10-02 | JS/TS: 04 ES6+ features | — (studied, mock skipped) | Re-drill: generators/iterators; ?? vs || | 2026-10-03 |
+| 2026-10-02 | JS/TS: 05 Equality & copies | — (studied, mock skipped) | Re-drill: coercion table; structuredClone limits | 2026-10-03 |
+| 2026-10-02 | JS/TS: 06 Debounce, throttle, memoize | — (studied, mock skipped) | Practise: write debounce/throttle from memory | 2026-10-03 |
+| 2026-10-02 | JS/TS: 07 TS type system | — (studied, mock skipped) | Confirm: TS version and strictness on your projects | 2026-10-03 |
+| 2026-10-02 | JS/TS: 08 Advanced TS | — (studied, mock skipped) | Practise: write Partial/Pick/ReturnType from scratch | 2026-10-03 |
