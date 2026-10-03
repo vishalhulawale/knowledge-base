@@ -331,6 +331,11 @@ nav:
       - "Cryptography & Key Management":
           - Overview: cryptography-key-management/index.md
           - "Symmetric vs Asymmetric Encryption, Hashing, MAC & Digital Signatures": cryptography-key-management/01-symmetric-vs-asymmetric-encryption-hashing-mac-digital-signa.md
+          - "TLS & Certificates (PKI, mTLS)": cryptography-key-management/02-tls-and-certificates.md
+          - "Envelope Encryption & Data Keys": cryptography-key-management/03-envelope-encryption-and-data-keys.md
+          - "Cloud KMS (AWS KMS, Azure Key Vault, GCP KMS)": cryptography-key-management/04-cloud-kms.md
+          - "HSMs & BYOK/HYOK": cryptography-key-management/05-hsms-and-byok-hyok.md
+          - "Key Rotation Strategies Without Downtime": cryptography-key-management/06-key-rotation-strategies-without-downtime.md
       - "Compliance & Data Privacy":
           - Overview: compliance-privacy/index.md
   - "System Design":

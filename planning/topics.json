@@ -1324,31 +1324,31 @@
           "title": "TLS & certificates (PKI, mTLS)",
           "slug": "02-tls-and-certificates",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Envelope encryption & data keys",
           "slug": "03-envelope-encryption-and-data-keys",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Cloud KMS (AWS KMS, Azure Key Vault, GCP KMS)",
           "slug": "04-cloud-kms",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "HSMs & BYOK/HYOK",
           "slug": "05-hsms-and-byok-hyok",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Key rotation strategies without downtime",
           "slug": "06-key-rotation-strategies-without-downtime",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Password hashing & secrets management",
