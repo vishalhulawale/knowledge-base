@@ -1386,31 +1386,31 @@
           "title": "Linked lists, stacks & queues",
           "slug": "04-linked-lists-stacks-and-queues",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Trees & BST; tree traversal patterns",
           "slug": "05-trees-and-bst-tree-traversal-patterns",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Heaps & priority queues (top-K)",
           "slug": "06-heaps-and-priority-queues",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Graphs: BFS, DFS, topological sort, shortest path",
           "slug": "07-graphs-bfs-dfs-topological-sort-shortest-path",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Binary search patterns",
           "slug": "08-binary-search-patterns",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Recursion & backtracking",

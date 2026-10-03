@@ -377,6 +377,11 @@ nav:
           - "Complexity Analysis (Big-O)": dsa/01-complexity-analysis.md
           - "Arrays & Strings (Two Pointers, Sliding Window, Prefix Sums)": dsa/02-arrays-and-strings.md
           - "Hashing Patterns": dsa/03-hashing-patterns.md
+          - "Linked Lists, Stacks & Queues": dsa/04-linked-lists-stacks-and-queues.md
+          - "Trees & BST; Tree Traversal Patterns": dsa/05-trees-and-bst-tree-traversal-patterns.md
+          - "Heaps & Priority Queues (Top-K)": dsa/06-heaps-and-priority-queues.md
+          - "Graphs: BFS, DFS, Topological Sort, Shortest Path": dsa/07-graphs-bfs-dfs-topological-sort-shortest-path.md
+          - "Binary Search Patterns": dsa/08-binary-search-patterns.md
   - "Testing & Practices":
       - "Testing Strategy":
           - Overview: testing/index.md
