@@ -12,8 +12,8 @@
 | 6 | [Heaps & priority queues (top-K)](06-heaps-and-priority-queues.md) |  | :material-check-circle: Done |
 | 7 | [Graphs: BFS, DFS, topological sort, shortest path](07-graphs-bfs-dfs-topological-sort-shortest-path.md) |  | :material-check-circle: Done |
 | 8 | [Binary search patterns](08-binary-search-patterns.md) |  | :material-check-circle: Done |
-| 9 | Recursion & backtracking |  | :material-progress-clock: To do |
-| 10 | Dynamic programming patterns |  | :material-progress-clock: To do |
-| 11 | Greedy & intervals |  | :material-progress-clock: To do |
+| 9 | [Recursion & backtracking](09-recursion-and-backtracking.md) |  | :material-check-circle: Done |
+| 10 | [Dynamic programming patterns](10-dynamic-programming-patterns.md) |  | :material-check-circle: Done |
+| 11 | [Greedy & intervals](11-greedy-and-intervals.md) |  | :material-check-circle: Done |
 
 ★ = tied to a resume claim; expect deep follow-up questions.

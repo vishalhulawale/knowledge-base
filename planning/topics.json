@@ -1416,19 +1416,19 @@
           "title": "Recursion & backtracking",
           "slug": "09-recursion-and-backtracking",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Dynamic programming patterns",
           "slug": "10-dynamic-programming-patterns",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Greedy & intervals",
           "slug": "11-greedy-and-intervals",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },

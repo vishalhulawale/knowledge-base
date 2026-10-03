@@ -1,4 +1,4 @@
-# Content progress (saved 2026-10-02)
+# Content progress (saved 2026-10-03)
 
 ## P0 done, audited and fact-checked
 
@@ -19,19 +19,21 @@
 | Distributed Systems Concepts | 9/9 |
 | Leadership & Behavioral | 12/12 |
 
-## P0 still to write (promoted in the October 2026 audit)
+## P0 promoted in the October 2026 audit, now written (2026-10-03)
 
 | Topic | Pages |
 |---|---|
-| Frontend Architecture | 0/6 |
-| Redis & Caching | 0/7 |
-| MongoDB | 0/7 |
-| PostgreSQL / SQL | 0/8 |
-| JPA / Hibernate | 0/6 |
-| Docker & Kubernetes | 0/8 |
-| Cryptography & Key Management | 0/7 |
-| Data Structures & Algorithms | 0/11 |
-| API Design | 0/8 |
+| API Design | 8/8 |
+| JPA / Hibernate | 6/6 |
+| PostgreSQL / SQL | 8/8 |
+| Redis & Caching | 7/7 |
+| MongoDB | 7/7 |
+| Docker & Kubernetes | 8/8 |
+| Cryptography & Key Management | 7/7 |
+| Frontend Architecture | 6/6 |
+| Data Structures & Algorithms | 11/11 |
+
+**All 209 P0 pages are written.** Each has 14 questions and claims measured locally where feasible (PostgreSQL, Redis, MongoDB replica set and sharded cluster, kwok Kubernetes, SoftHSM, moto KMS, webpack/Chromium, jsdom, Turborepo, Java 21 with solutions checked against brute force). Cloud-only facts come from official docs and are phrased cautiously.
 
 ## Not started (P1/P2)
 See `planning/phase-1-topics.md` and `planning/topics.json` (status = todo).

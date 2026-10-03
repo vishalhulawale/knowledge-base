@@ -382,6 +382,9 @@ nav:
           - "Heaps & Priority Queues (Top-K)": dsa/06-heaps-and-priority-queues.md
           - "Graphs: BFS, DFS, Topological Sort, Shortest Path": dsa/07-graphs-bfs-dfs-topological-sort-shortest-path.md
           - "Binary Search Patterns": dsa/08-binary-search-patterns.md
+          - "Recursion & Backtracking": dsa/09-recursion-and-backtracking.md
+          - "Dynamic Programming Patterns": dsa/10-dynamic-programming-patterns.md
+          - "Greedy & Intervals": dsa/11-greedy-and-intervals.md
   - "Testing & Practices":
       - "Testing Strategy":
           - Overview: testing/index.md
