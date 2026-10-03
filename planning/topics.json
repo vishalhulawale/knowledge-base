@@ -968,25 +968,25 @@
           "title": "Micro-frontends: approaches (Module Federation, single-spa, iframes) & trade-offs",
           "slug": "01-micro-frontends-approaches-and-trade-offs",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Shared dependencies, routing & communication between micro-frontends",
           "slug": "02-shared-dependencies-routing-and-communication-between-micro",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "State management: Redux Toolkit, React Query/TanStack Query, when to use which",
           "slug": "03-state-management-redux-toolkit-react-query-tanstack-query-wh",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Design systems & component libraries (Storybook, MUI)",
           "slug": "04-design-systems-and-component-libraries",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Frontend security (XSS, token storage, CSP)",
@@ -1354,7 +1354,7 @@
           "title": "Password hashing & secrets management",
           "slug": "07-password-hashing-and-secrets-management",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },

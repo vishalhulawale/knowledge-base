@@ -257,6 +257,10 @@ nav:
           - "Output-Prediction & \\\"Gotcha\\\" Questions": javascript-typescript/09-output-prediction-and-gotcha-questions.md
       - "Frontend Architecture":
           - Overview: frontend-architecture/index.md
+          - "Micro-Frontends: Approaches & Trade-offs": frontend-architecture/01-micro-frontends-approaches-and-trade-offs.md
+          - "Shared Dependencies, Routing & Communication Between Micro-Frontends": frontend-architecture/02-shared-dependencies-routing-and-communication-between-micro.md
+          - "State Management: Redux Toolkit, React Query (TanStack Query) & When to Use What": frontend-architecture/03-state-management-redux-toolkit-react-query-tanstack-query-wh.md
+          - "Design Systems & Component Libraries (Storybook, MUI)": frontend-architecture/04-design-systems-and-component-libraries.md
       - "Browser, HTML/CSS & Web Performance":
           - Overview: browser-web-performance/index.md
       - "Next.js & SSR":
@@ -336,6 +340,7 @@ nav:
           - "Cloud KMS (AWS KMS, Azure Key Vault, GCP KMS)": cryptography-key-management/04-cloud-kms.md
           - "HSMs & BYOK/HYOK": cryptography-key-management/05-hsms-and-byok-hyok.md
           - "Key Rotation Strategies Without Downtime": cryptography-key-management/06-key-rotation-strategies-without-downtime.md
+          - "Password Hashing & Secrets Management": cryptography-key-management/07-password-hashing-and-secrets-management.md
       - "Compliance & Data Privacy":
           - Overview: compliance-privacy/index.md
   - "System Design":
