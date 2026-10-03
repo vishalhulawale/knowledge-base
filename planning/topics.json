@@ -1442,31 +1442,31 @@
           "title": "REST principles, resource modelling & HTTP semantics",
           "slug": "01-rest-principles-resource-modelling-and-http-semantics",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Status codes & error format (RFC 9457 problem details)",
           "slug": "02-status-codes-and-error-format",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Pagination, filtering & sorting",
           "slug": "03-pagination-filtering-and-sorting",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Versioning strategies",
           "slug": "04-versioning-strategies",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Idempotency keys & safe retries",
           "slug": "05-idempotency-keys-and-safe-retries",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "API security & rate limiting",

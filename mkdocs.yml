@@ -184,6 +184,11 @@ nav:
           - "Backpressure & Load Shedding": distributed-systems/09-backpressure-and-load-shedding.md
       - "API Design":
           - Overview: api-design/index.md
+          - "REST Principles, Resource Modelling & HTTP Semantics": api-design/01-rest-principles-resource-modelling-and-http-semantics.md
+          - "Status Codes & Error Format (RFC 9457 Problem Details)": api-design/02-status-codes-and-error-format.md
+          - "Pagination, Filtering & Sorting": api-design/03-pagination-filtering-and-sorting.md
+          - "Versioning Strategies": api-design/04-versioning-strategies.md
+          - "Idempotency Keys & Safe Retries": api-design/05-idempotency-keys-and-safe-retries.md
       - "Real-time & Inter-service Communication":
           - Overview: realtime-communication/index.md
       - "Service Mesh & Cloud-Native Platform":

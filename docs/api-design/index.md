@@ -4,11 +4,11 @@
 
 | # | Subtopic | Resume link | Status |
 |---|---|---|---|
-| 1 | REST principles, resource modelling & HTTP semantics |  | :material-progress-clock: To do |
-| 2 | Status codes & error format (RFC 9457 problem details) |  | :material-progress-clock: To do |
-| 3 | Pagination, filtering & sorting |  | :material-progress-clock: To do |
-| 4 | Versioning strategies |  | :material-progress-clock: To do |
-| 5 | Idempotency keys & safe retries | ★ | :material-progress-clock: To do |
+| 1 | [REST principles, resource modelling & HTTP semantics](01-rest-principles-resource-modelling-and-http-semantics.md) |  | :material-check-circle: Done |
+| 2 | [Status codes & error format (RFC 9457 problem details)](02-status-codes-and-error-format.md) |  | :material-check-circle: Done |
+| 3 | [Pagination, filtering & sorting](03-pagination-filtering-and-sorting.md) |  | :material-check-circle: Done |
+| 4 | [Versioning strategies](04-versioning-strategies.md) |  | :material-check-circle: Done |
+| 5 | [Idempotency keys & safe retries](05-idempotency-keys-and-safe-retries.md) | ★ | :material-check-circle: Done |
 | 6 | API security & rate limiting | ★ | :material-progress-clock: To do |
 | 7 | OpenAPI & API-first development |  | :material-progress-clock: To do |
 | 8 | REST vs GraphQL vs gRPC | ★ | :material-progress-clock: To do |
