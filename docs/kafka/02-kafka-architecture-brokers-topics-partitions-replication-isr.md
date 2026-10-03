@@ -91,6 +91,9 @@ sequenceDiagram
 ```
 *Notice that the producer is acknowledged only after every ISR member has the record. Consumers can't see it until the high watermark moves past it.*
 
+![Animation: the leader appends offsets 0 to 5, two followers copy them one and two steps behind, and the high watermark line advances only as far as the slowest in-sync follower](images/02-isr-high-watermark.svg){ loading=lazy }
+*Watch the high watermark: it follows the slowest in-sync follower, not the leader. Offsets to its right exist on the leader but aren't committed yet.*
+
 - **LEO (log end offset):** the next offset to write on that replica.
 - **HW (high watermark):** the minimum LEO across the ISR. Records below the HW are **committed** and visible to consumers.
 - **Leader epoch:** a counter bumped on every leader change and stored with each batch. A restarting follower asks the leader for the end offset of its last epoch and truncates to that (KIP-101), rather than blindly truncating to its own HW, which could lose or diverge data.

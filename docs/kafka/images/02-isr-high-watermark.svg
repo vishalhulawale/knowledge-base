@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Replication and the high watermark</title>
+  <desc id="d">The producer appends offsets 0 to 5 to the leader. Followers copy them at different speeds. The high watermark is the smallest offset all in-sync replicas have, and consumers can read only below it.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .slot{fill:#ffffff;stroke:#cbd5e1}
+    .rec{fill:#4f46e5}
+    .rec text,.rt{fill:#fff;font-size:14px;font-weight:700}
+    .hw{stroke:#0ea5a4;stroke-width:3}
+    .hwt{fill:#0f766e;font-size:13px;font-weight:700}
+    .leg{fill:#334155;font-size:13px}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl{fill:#e2e8f0}.sub,.leg{fill:#94a3b8}
+      .slot{fill:#111827;stroke:#475569}
+      .rec{fill:#818cf8}.rt{fill:#0f172a}.hw{stroke:#2dd4bf}.hwt{fill:#5eead4}
+    }
+    /* 10 s loop: leader gets records 0-5; F1 trails by 1, F2 trails by 2 */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes s0{0%,4%{opacity:0}6%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s1{0%,14%{opacity:0}16%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s2{0%,24%{opacity:0}26%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s3{0%,34%{opacity:0}36%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s4{0%,44%{opacity:0}46%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s5{0%,54%{opacity:0}56%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s6{0%,64%{opacity:0}66%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s7{0%,74%{opacity:0}76%,92%{opacity:1}96%,100%{opacity:0}}
+    .k0{animation-name:s0}.k1{animation-name:s1}.k2{animation-name:s2}.k3{animation-name:s3}
+    .k4{animation-name:s4}.k5{animation-name:s5}.k6{animation-name:s6}.k7{animation-name:s7}
+    /* high watermark = min offset across ISR (slowest follower F2) */
+    @keyframes hwm{0%,24%{transform:translateX(0)}26%,34%{transform:translateX(64px)}36%,44%{transform:translateX(128px)}46%,54%{transform:translateX(192px)}56%,64%{transform:translateX(256px)}66%,74%{transform:translateX(320px)}76%,92%{transform:translateX(384px)}96%,100%{transform:translateX(0)}}
+    .hwg{animation:hwm 10s infinite steps(1,end)}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.hwg{animation:none;transform:translateX(384px)}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">Replication and the high watermark (acks=all)</text>
+  <text class="sub" x="28" y="62">Consumers read only offsets below the high watermark, which is the smallest offset every in-sync replica has.</text>
+
+  <!-- rows -->
+  <g id="rows">
+    <text class="lbl" x="28" y="118">Leader</text><text class="sub" x="28" y="136">Broker 1</text>
+    <text class="lbl" x="28" y="198">Follower</text><text class="sub" x="28" y="216">Broker 2 (ISR)</text>
+    <text class="lbl" x="28" y="278">Follower</text><text class="sub" x="28" y="296">Broker 3 (ISR)</text>
+  </g>
+  <!-- empty slots, 6 per row at x=160+64i -->
+  <g>
+    <rect class="slot" x="160" y="96" width="56" height="44" rx="8"/><rect class="slot" x="224" y="96" width="56" height="44" rx="8"/><rect class="slot" x="288" y="96" width="56" height="44" rx="8"/><rect class="slot" x="352" y="96" width="56" height="44" rx="8"/><rect class="slot" x="416" y="96" width="56" height="44" rx="8"/><rect class="slot" x="480" y="96" width="56" height="44" rx="8"/>
+    <rect class="slot" x="160" y="176" width="56" height="44" rx="8"/><rect class="slot" x="224" y="176" width="56" height="44" rx="8"/><rect class="slot" x="288" y="176" width="56" height="44" rx="8"/><rect class="slot" x="352" y="176" width="56" height="44" rx="8"/><rect class="slot" x="416" y="176" width="56" height="44" rx="8"/><rect class="slot" x="480" y="176" width="56" height="44" rx="8"/>
+    <rect class="slot" x="160" y="256" width="56" height="44" rx="8"/><rect class="slot" x="224" y="256" width="56" height="44" rx="8"/><rect class="slot" x="288" y="256" width="56" height="44" rx="8"/><rect class="slot" x="352" y="256" width="56" height="44" rx="8"/><rect class="slot" x="416" y="256" width="56" height="44" rx="8"/><rect class="slot" x="480" y="256" width="56" height="44" rx="8"/>
+  </g>
+  <!-- leader records: k0..k5 -->
+  <g class="rec">
+    <g class="a k0"><rect x="160" y="96" width="56" height="44" rx="8"/><text class="rt" x="188" y="123" text-anchor="middle">0</text></g>
+    <g class="a k1"><rect x="224" y="96" width="56" height="44" rx="8"/><text class="rt" x="252" y="123" text-anchor="middle">1</text></g>
+    <g class="a k2"><rect x="288" y="96" width="56" height="44" rx="8"/><text class="rt" x="316" y="123" text-anchor="middle">2</text></g>
+    <g class="a k3"><rect x="352" y="96" width="56" height="44" rx="8"/><text class="rt" x="380" y="123" text-anchor="middle">3</text></g>
+    <g class="a k4"><rect x="416" y="96" width="56" height="44" rx="8"/><text class="rt" x="444" y="123" text-anchor="middle">4</text></g>
+    <g class="a k5"><rect x="480" y="96" width="56" height="44" rx="8"/><text class="rt" x="508" y="123" text-anchor="middle">5</text></g>
+  <!-- follower 1: one step behind -->
+    <g class="a k1"><rect x="160" y="176" width="56" height="44" rx="8"/><text class="rt" x="188" y="203" text-anchor="middle">0</text></g>
+    <g class="a k2"><rect x="224" y="176" width="56" height="44" rx="8"/><text class="rt" x="252" y="203" text-anchor="middle">1</text></g>
+    <g class="a k3"><rect x="288" y="176" width="56" height="44" rx="8"/><text class="rt" x="316" y="203" text-anchor="middle">2</text></g>
+    <g class="a k4"><rect x="352" y="176" width="56" height="44" rx="8"/><text class="rt" x="380" y="203" text-anchor="middle">3</text></g>
+    <g class="a k5"><rect x="416" y="176" width="56" height="44" rx="8"/><text class="rt" x="444" y="203" text-anchor="middle">4</text></g>
+    <g class="a k6"><rect x="480" y="176" width="56" height="44" rx="8"/><text class="rt" x="508" y="203" text-anchor="middle">5</text></g>
+  <!-- follower 2: two steps behind -->
+    <g class="a k2"><rect x="160" y="256" width="56" height="44" rx="8"/><text class="rt" x="188" y="283" text-anchor="middle">0</text></g>
+    <g class="a k3"><rect x="224" y="256" width="56" height="44" rx="8"/><text class="rt" x="252" y="283" text-anchor="middle">1</text></g>
+    <g class="a k4"><rect x="288" y="256" width="56" height="44" rx="8"/><text class="rt" x="316" y="283" text-anchor="middle">2</text></g>
+    <g class="a k5"><rect x="352" y="256" width="56" height="44" rx="8"/><text class="rt" x="380" y="283" text-anchor="middle">3</text></g>
+    <g class="a k6"><rect x="416" y="256" width="56" height="44" rx="8"/><text class="rt" x="444" y="283" text-anchor="middle">4</text></g>
+    <g class="a k7"><rect x="480" y="256" width="56" height="44" rx="8"/><text class="rt" x="508" y="283" text-anchor="middle">5</text></g>
+  </g>
+  <!-- high watermark line: starts left of slot 0 (x=156) -->
+  <g class="hwg">
+    <line class="hw" x1="156" y1="84" x2="156" y2="312"/>
+    <text class="hwt" x="156" y="330" text-anchor="middle">high watermark</text>
+  </g>
+  <!-- legend -->
+  <text class="lbl" x="584" y="116">Committed records</text>
+  <text class="leg" x="584" y="146">Records to the right of the</text>
+  <text class="leg" x="584" y="164">line are on the leader but not</text>
+  <text class="leg" x="584" y="182">yet on every ISR member, so</text>
+  <text class="leg" x="584" y="200">consumers can't see them.</text>
+  <text class="leg" x="584" y="236">If the leader fails now, a</text>
+  <text class="leg" x="584" y="254">follower becomes leader and</text>
+  <text class="leg" x="584" y="272">no committed record is lost.</text>
+  <text class="sub" x="28" y="362">Follower lag is exaggerated for clarity. In a healthy cluster followers trail by milliseconds.</text>
+</svg>
