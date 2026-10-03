@@ -315,6 +315,10 @@ nav:
           - "Kubernetes Architecture: Control Plane, Nodes & etcd": docker-kubernetes/02-kubernetes-architecture-control-plane-nodes-etcd.md
           - "Pods, Deployments, ReplicaSets, StatefulSets & DaemonSets": docker-kubernetes/03-pods-deployments-replicasets-statefulsets-daemonsets.md
           - "Services, Ingress & Networking": docker-kubernetes/04-services-ingress-and-networking.md
+          - "ConfigMaps, Secrets & Volumes": docker-kubernetes/05-configmaps-secrets-and-volumes.md
+          - "Probes, Resource Requests/Limits & Autoscaling (HPA)": docker-kubernetes/06-probes-resource-requests-limits-autoscaling.md
+          - "Rolling Updates, Rollbacks & Helm": docker-kubernetes/07-rolling-updates-rollbacks-and-helm.md
+          - "EKS/AKS Specifics & Troubleshooting Pods": docker-kubernetes/08-eks-aks-specifics-and-troubleshooting-pods.md
       - "CI/CD & DevOps":
           - Overview: cicd-devops/index.md
       - "Azure":
@@ -326,6 +330,7 @@ nav:
           - Overview: application-security/index.md
       - "Cryptography & Key Management":
           - Overview: cryptography-key-management/index.md
+          - "Symmetric vs Asymmetric Encryption, Hashing, MAC & Digital Signatures": cryptography-key-management/01-symmetric-vs-asymmetric-encryption-hashing-mac-digital-signa.md
       - "Compliance & Data Privacy":
           - Overview: compliance-privacy/index.md
   - "System Design":

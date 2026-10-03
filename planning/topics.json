@@ -1236,25 +1236,25 @@
           "title": "ConfigMaps, Secrets & volumes",
           "slug": "05-configmaps-secrets-and-volumes",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Probes, resource requests/limits, autoscaling (HPA)",
           "slug": "06-probes-resource-requests-limits-autoscaling",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Rolling updates, rollbacks & Helm",
           "slug": "07-rolling-updates-rollbacks-and-helm",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "EKS/AKS specifics & troubleshooting pods",
           "slug": "08-eks-aks-specifics-and-troubleshooting-pods",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
@@ -1318,7 +1318,7 @@
           "title": "Symmetric vs asymmetric encryption, hashing, MAC, digital signatures",
           "slug": "01-symmetric-vs-asymmetric-encryption-hashing-mac-digital-signa",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "TLS & certificates (PKI, mTLS)",

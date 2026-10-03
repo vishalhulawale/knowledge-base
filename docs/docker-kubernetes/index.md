@@ -8,9 +8,9 @@
 | 2 | [Kubernetes architecture: control plane, nodes, etcd](02-kubernetes-architecture-control-plane-nodes-etcd.md) |  | :material-check-circle: Done |
 | 3 | [Pods, Deployments, ReplicaSets, StatefulSets, DaemonSets](03-pods-deployments-replicasets-statefulsets-daemonsets.md) |  | :material-check-circle: Done |
 | 4 | [Services, Ingress & networking](04-services-ingress-and-networking.md) |  | :material-check-circle: Done |
-| 5 | ConfigMaps, Secrets & volumes |  | :material-progress-clock: To do |
-| 6 | Probes, resource requests/limits, autoscaling (HPA) |  | :material-progress-clock: To do |
-| 7 | Rolling updates, rollbacks & Helm |  | :material-progress-clock: To do |
-| 8 | EKS/AKS specifics & troubleshooting pods | ★ | :material-progress-clock: To do |
+| 5 | [ConfigMaps, Secrets & volumes](05-configmaps-secrets-and-volumes.md) |  | :material-check-circle: Done |
+| 6 | [Probes, resource requests/limits, autoscaling (HPA)](06-probes-resource-requests-limits-autoscaling.md) |  | :material-check-circle: Done |
+| 7 | [Rolling updates, rollbacks & Helm](07-rolling-updates-rollbacks-and-helm.md) |  | :material-check-circle: Done |
+| 8 | [EKS/AKS specifics & troubleshooting pods](08-eks-aks-specifics-and-troubleshooting-pods.md) | ★ | :material-check-circle: Done |
 
 ★ = tied to a resume claim; expect deep follow-up questions.
