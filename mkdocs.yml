@@ -270,10 +270,15 @@ nav:
           - "MVCC, Locking & Deadlocks": postgresql-sql/04-mvcc-locking-and-deadlocks.md
           - "Normalisation vs Denormalisation": postgresql-sql/05-normalisation-vs-denormalisation.md
           - "Query Optimisation & Common Performance Issues": postgresql-sql/06-query-optimisation-and-common-performance-issues.md
+          - "Partitioning, Replication & Connection Pooling": postgresql-sql/07-partitioning-replication-and-connection-pooling.md
+          - "Common SQL Interview Queries": postgresql-sql/08-common-sql-interview-queries.md
       - "MongoDB":
           - Overview: mongodb/index.md
       - "Redis & Caching":
           - Overview: redis-caching/index.md
+          - "Redis Data Structures & Use Cases": redis-caching/01-redis-data-structures-and-use-cases.md
+          - "Caching Patterns: Cache-Aside, Read/Write-Through, Write-Behind": redis-caching/02-caching-patterns-cache-aside-read-write-through-write-behind.md
+          - "TTL, Eviction Policies & Invalidation Strategies": redis-caching/03-ttl-eviction-policies-and-invalidation-strategies.md
       - "Data Modelling & Database Selection":
           - Overview: data-modelling/index.md
       - "Elasticsearch & DynamoDB":

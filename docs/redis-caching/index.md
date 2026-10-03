@@ -4,9 +4,9 @@
 
 | # | Subtopic | Resume link | Status |
 |---|---|---|---|
-| 1 | Redis data structures & use cases |  | :material-progress-clock: To do |
-| 2 | Caching patterns: cache-aside, read/write-through, write-behind | ★ | :material-progress-clock: To do |
-| 3 | TTL, eviction policies & invalidation strategies | ★ | :material-progress-clock: To do |
+| 1 | [Redis data structures & use cases](01-redis-data-structures-and-use-cases.md) |  | :material-check-circle: Done |
+| 2 | [Caching patterns: cache-aside, read/write-through, write-behind](02-caching-patterns-cache-aside-read-write-through-write-behind.md) | ★ | :material-check-circle: Done |
+| 3 | [TTL, eviction policies & invalidation strategies](03-ttl-eviction-policies-and-invalidation-strategies.md) | ★ | :material-check-circle: Done |
 | 4 | Cache stampede, penetration & avalanche | ★ | :material-progress-clock: To do |
 | 5 | Spring Cache abstraction with Redis | ★ | :material-progress-clock: To do |
 | 6 | Persistence (RDB/AOF), replication, Sentinel & Cluster |  | :material-progress-clock: To do |

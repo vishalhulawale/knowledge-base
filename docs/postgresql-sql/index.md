@@ -10,7 +10,7 @@
 | 4 | [MVCC, locking & deadlocks](04-mvcc-locking-and-deadlocks.md) |  | :material-check-circle: Done |
 | 5 | [Normalisation vs denormalisation](05-normalisation-vs-denormalisation.md) |  | :material-check-circle: Done |
 | 6 | [Query optimisation & common performance issues](06-query-optimisation-and-common-performance-issues.md) |  | :material-check-circle: Done |
-| 7 | Partitioning, replication & connection pooling (HikariCP) |  | :material-progress-clock: To do |
-| 8 | Common SQL interview queries (nth highest salary, etc.) |  | :material-progress-clock: To do |
+| 7 | [Partitioning, replication & connection pooling (HikariCP)](07-partitioning-replication-and-connection-pooling.md) |  | :material-check-circle: Done |
+| 8 | [Common SQL interview queries (nth highest salary, etc.)](08-common-sql-interview-queries.md) |  | :material-check-circle: Done |
 
 ★ = tied to a resume claim; expect deep follow-up questions.

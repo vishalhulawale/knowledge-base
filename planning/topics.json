@@ -1012,19 +1012,19 @@
           "title": "Redis data structures & use cases",
           "slug": "01-redis-data-structures-and-use-cases",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Caching patterns: cache-aside, read/write-through, write-behind",
           "slug": "02-caching-patterns-cache-aside-read-write-through-write-behind",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "TTL, eviction policies & invalidation strategies",
           "slug": "03-ttl-eviction-policies-and-invalidation-strategies",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Cache stampede, penetration & avalanche",
@@ -1148,13 +1148,13 @@
           "title": "Partitioning, replication & connection pooling (HikariCP)",
           "slug": "07-partitioning-replication-and-connection-pooling",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Common SQL interview queries (nth highest salary, etc.)",
           "slug": "08-common-sql-interview-queries",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
