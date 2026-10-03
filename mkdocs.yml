@@ -274,11 +274,16 @@ nav:
           - "Common SQL Interview Queries": postgresql-sql/08-common-sql-interview-queries.md
       - "MongoDB":
           - Overview: mongodb/index.md
+          - "Document Model & Schema Design": mongodb/01-document-model-and-schema-design.md
       - "Redis & Caching":
           - Overview: redis-caching/index.md
           - "Redis Data Structures & Use Cases": redis-caching/01-redis-data-structures-and-use-cases.md
           - "Caching Patterns: Cache-Aside, Read/Write-Through, Write-Behind": redis-caching/02-caching-patterns-cache-aside-read-write-through-write-behind.md
           - "TTL, Eviction Policies & Invalidation Strategies": redis-caching/03-ttl-eviction-policies-and-invalidation-strategies.md
+          - "Cache Stampede, Penetration & Avalanche": redis-caching/04-cache-stampede-penetration-and-avalanche.md
+          - "Spring Cache Abstraction with Redis": redis-caching/05-spring-cache-abstraction-with-redis.md
+          - "Persistence (RDB/AOF), Replication, Sentinel & Cluster": redis-caching/06-persistence-replication-sentinel-and-cluster.md
+          - "Distributed Locks, Rate Limiting & Pub/Sub with Redis": redis-caching/07-distributed-locks-rate-limiting-and-pub-sub-with-redis.md
       - "Data Modelling & Database Selection":
           - Overview: data-modelling/index.md
       - "Elasticsearch & DynamoDB":

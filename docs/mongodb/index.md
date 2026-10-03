@@ -4,7 +4,7 @@
 
 | # | Subtopic | Resume link | Status |
 |---|---|---|---|
-| 1 | Document model & schema design (embed vs reference) | ★ | :material-progress-clock: To do |
+| 1 | [Document model & schema design (embed vs reference)](01-document-model-and-schema-design.md) | ★ | :material-check-circle: Done |
 | 2 | CRUD, query operators & aggregation pipeline |  | :material-progress-clock: To do |
 | 3 | Indexing (compound, multikey, TTL) & explain plans | ★ | :material-progress-clock: To do |
 | 4 | Replica sets, read/write concerns |  | :material-progress-clock: To do |

@@ -1030,25 +1030,25 @@
           "title": "Cache stampede, penetration & avalanche",
           "slug": "04-cache-stampede-penetration-and-avalanche",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Spring Cache abstraction with Redis",
           "slug": "05-spring-cache-abstraction-with-redis",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Persistence (RDB/AOF), replication, Sentinel & Cluster",
           "slug": "06-persistence-replication-sentinel-and-cluster",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Distributed locks, rate limiting & pub/sub with Redis",
           "slug": "07-distributed-locks-rate-limiting-and-pub-sub-with-redis",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
@@ -1062,7 +1062,7 @@
           "title": "Document model & schema design (embed vs reference)",
           "slug": "01-document-model-and-schema-design",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "CRUD, query operators & aggregation pipeline",
