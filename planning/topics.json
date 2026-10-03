@@ -1168,13 +1168,13 @@
           "title": "Entity lifecycle & persistence context",
           "slug": "01-entity-lifecycle-and-persistence-context",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Relationships & fetching (lazy vs eager)",
           "slug": "02-relationships-and-fetching",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "N+1 problem & solutions (fetch joins, entity graphs, batch size)",
@@ -1472,19 +1472,19 @@
           "title": "API security & rate limiting",
           "slug": "06-api-security-and-rate-limiting",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "OpenAPI & API-first development",
           "slug": "07-openapi-and-api-first-development",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "REST vs GraphQL vs gRPC",
           "slug": "08-rest-vs-graphql-vs-grpc",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },

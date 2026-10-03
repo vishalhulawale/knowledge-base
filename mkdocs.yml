@@ -152,6 +152,8 @@ nav:
           - "Service-to-Service Auth: mTLS, Token Exchange & Propagation Through Gateways": spring-security-oauth2/09-service-to-service-auth.md
       - "JPA / Hibernate":
           - Overview: jpa-hibernate/index.md
+          - "Entity Lifecycle & Persistence Context": jpa-hibernate/01-entity-lifecycle-and-persistence-context.md
+          - "Relationships & Fetching (Lazy vs Eager)": jpa-hibernate/02-relationships-and-fetching.md
       - "Reactive Programming & Spring WebFlux":
           - Overview: reactive-webflux/index.md
   - "Architecture":
@@ -189,6 +191,9 @@ nav:
           - "Pagination, Filtering & Sorting": api-design/03-pagination-filtering-and-sorting.md
           - "Versioning Strategies": api-design/04-versioning-strategies.md
           - "Idempotency Keys & Safe Retries": api-design/05-idempotency-keys-and-safe-retries.md
+          - "API Security & Rate Limiting": api-design/06-api-security-and-rate-limiting.md
+          - "OpenAPI & API-First Development": api-design/07-openapi-and-api-first-development.md
+          - "REST vs GraphQL vs gRPC": api-design/08-rest-vs-graphql-vs-grpc.md
       - "Real-time & Inter-service Communication":
           - Overview: realtime-communication/index.md
       - "Service Mesh & Cloud-Native Platform":

@@ -9,8 +9,8 @@
 | 3 | [Pagination, filtering & sorting](03-pagination-filtering-and-sorting.md) |  | :material-check-circle: Done |
 | 4 | [Versioning strategies](04-versioning-strategies.md) |  | :material-check-circle: Done |
 | 5 | [Idempotency keys & safe retries](05-idempotency-keys-and-safe-retries.md) | ★ | :material-check-circle: Done |
-| 6 | API security & rate limiting | ★ | :material-progress-clock: To do |
-| 7 | OpenAPI & API-first development |  | :material-progress-clock: To do |
-| 8 | REST vs GraphQL vs gRPC | ★ | :material-progress-clock: To do |
+| 6 | [API security & rate limiting](06-api-security-and-rate-limiting.md) | ★ | :material-check-circle: Done |
+| 7 | [OpenAPI & API-first development](07-openapi-and-api-first-development.md) |  | :material-check-circle: Done |
+| 8 | [REST vs GraphQL vs gRPC](08-rest-vs-graphql-vs-grpc.md) | ★ | :material-check-circle: Done |
 
 ★ = tied to a resume claim; expect deep follow-up questions.

@@ -96,7 +96,7 @@ LIMIT 21;
 - **Multiple values:** `?status=PENDING,DENIED` or repeated `?status=PENDING&status=DENIED`; document which.
 - **Authorisation is a filter too:** a member's list endpoint always adds `member_id = :caller` server-side; never trust a `memberId` parameter alone.
 - **Full-text search** goes to a search engine (Elasticsearch/OpenSearch) or `tsvector`, not `LIKE '%term%'` on a large table.
-- **Long or complex queries:** if the filter outgrows a URL (about 2 KB is a safe limit across proxies), use `POST /claims/search` with a body, and treat it as a safe read in your docs (no side effects).
+- **Long or complex queries:** if the filter outgrows a URL (about 2 KB is a safe limit across proxies), use `POST /claims/search` with a body, and treat it as a safe read in your docs (no side effects). The IETF is standardising a **`QUERY`** method for exactly this (safe and idempotent, with a body); OpenAPI 3.2 can describe it, but server, proxy and client support is still limited, so `POST …/search` remains the practical choice.
 
 ### Sorting
 
