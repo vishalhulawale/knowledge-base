@@ -280,6 +280,7 @@ nav:
           - "Replica Sets, Read & Write Concerns": mongodb/04-replica-sets-read-write-concerns.md
           - "Sharding & Shard Key Selection": mongodb/05-sharding-and-shard-key-selection.md
           - "Transactions & Consistency": mongodb/06-transactions-and-consistency.md
+          - "Spring Data MongoDB": mongodb/07-spring-data-mongodb.md
       - "Redis & Caching":
           - Overview: redis-caching/index.md
           - "Redis Data Structures & Use Cases": redis-caching/01-redis-data-structures-and-use-cases.md
@@ -310,6 +311,10 @@ nav:
           - "Architecture Scenarios: HA, DR Strategies, Cost Optimisation": aws/12-architecture-scenarios-ha-dr-strategies-cost-optimisation.md
       - "Docker & Kubernetes":
           - Overview: docker-kubernetes/index.md
+          - "Containers vs VMs; Docker Images, Layers & Multi-Stage Builds": docker-kubernetes/01-containers-vs-vms-docker-images-layers-multi-stage-builds.md
+          - "Kubernetes Architecture: Control Plane, Nodes & etcd": docker-kubernetes/02-kubernetes-architecture-control-plane-nodes-etcd.md
+          - "Pods, Deployments, ReplicaSets, StatefulSets & DaemonSets": docker-kubernetes/03-pods-deployments-replicasets-statefulsets-daemonsets.md
+          - "Services, Ingress & Networking": docker-kubernetes/04-services-ingress-and-networking.md
       - "CI/CD & DevOps":
           - Overview: cicd-devops/index.md
       - "Azure":

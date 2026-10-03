@@ -1098,7 +1098,7 @@
           "title": "Spring Data MongoDB",
           "slug": "07-spring-data-mongodb",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
@@ -1212,25 +1212,25 @@
           "title": "Containers vs VMs; Docker images, layers, multi-stage builds",
           "slug": "01-containers-vs-vms-docker-images-layers-multi-stage-builds",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Kubernetes architecture: control plane, nodes, etcd",
           "slug": "02-kubernetes-architecture-control-plane-nodes-etcd",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Pods, Deployments, ReplicaSets, StatefulSets, DaemonSets",
           "slug": "03-pods-deployments-replicasets-statefulsets-daemonsets",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Services, Ingress & networking",
           "slug": "04-services-ingress-and-networking",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "ConfigMaps, Secrets & volumes",
