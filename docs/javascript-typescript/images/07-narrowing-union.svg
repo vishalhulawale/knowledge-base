@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Narrowing a union with control flow analysis</title>
+  <desc id="d">The format function from the page, with v declared as string or number or Date or null. Line by line, the type of v shrinks. On the null check line v can still be any of the four; after it returns for null, v is string, number or Date. After the typeof string check returns, v is number or Date. After the typeof number check returns, only Date is left, so v.toISOString() type-checks.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{fill:#334155;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .pn{fill:#ffffff;stroke:#cbd5e1}
+    .hlr{fill:#4f46e5;fill-opacity:.16;stroke:#4f46e5}
+    .chip{fill:#ffffff;stroke:#4f46e5;stroke-width:1.5}
+    .chipt{fill:#4f46e5;font-size:13px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .fin{fill:#16a34a}.fint{fill:#fff;font-size:13px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .chipd{fill:#64748b;font-size:13px}
+    .strk{stroke:#dc2626;stroke-width:3}
+    .rmt{fill:#dc2626;font-size:13px;font-weight:600}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.code{fill:#e2e8f0}.sub,.chipd{fill:#94a3b8}
+      .pn{fill:#111827;stroke:#475569}.hlr{fill:#818cf8;fill-opacity:.22;stroke:#818cf8}
+      .chip{fill:#111827;stroke:#818cf8}.chipt{fill:#818cf8}
+      .fin{fill:#4ade80}.fint{fill:#0f172a}.strk{stroke:#f87171}.rmt{fill:#f87171}
+    }
+    /* 10 s loop: one code line every ~18%; each check rules out one member of the union */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes l0{0%,2%{opacity:0}3%,17%{opacity:1}18%,100%{opacity:0}}
+    @keyframes l1{0%,20%{opacity:0}21%,35%{opacity:1}36%,100%{opacity:0}}
+    @keyframes l2{0%,38%{opacity:0}39%,53%{opacity:1}54%,100%{opacity:0}}
+    @keyframes l3{0%,56%{opacity:0}57%,71%{opacity:1}72%,100%{opacity:0}}
+    @keyframes l4{0%,73.5%{opacity:0}75%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes r1{0%,22.5%{opacity:0}24%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s1{0%,29.5%{opacity:0}31%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes r2{0%,40.5%{opacity:0}42%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s2{0%,47.5%{opacity:0}49%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes r3{0%,58.5%{opacity:0}60%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s3{0%,65.5%{opacity:0}67%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes r4{0%,76.5%{opacity:0}78%,92%{opacity:1}96%,100%{opacity:0}}
+    .l0{animation-name:l0}.l1{animation-name:l1}.l2{animation-name:l2}.l3{animation-name:l3}.l4{animation-name:l4}.r1{animation-name:r1}.s1{animation-name:s1}.r2{animation-name:r2}.s2{animation-name:s2}.r3{animation-name:r3}.s3{animation-name:s3}.r4{animation-name:r4}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.l0,.l1,.l2,.l3,.l4{opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Narrowing: the type of v shrinks line by line</text>
+  <text class="sub" x="28" y="62">Each check that returns early removes that case from v's type for the rest of the function.</text>
+  <rect class="pn" x="28" y="108" width="430" height="240" rx="10"/>
+  <text class="lbl" x="476" y="96">Type of v on this line</text><text class="lbl" x="28" y="96">Code</text>
+  <rect class="hlr a l0" x="34" y="121" width="418" height="24" rx="4"/><rect class="hlr a l1" x="34" y="159" width="418" height="24" rx="4"/><rect class="hlr a l2" x="34" y="197" width="418" height="24" rx="4"/><rect class="hlr a l3" x="34" y="235" width="418" height="24" rx="4"/><rect class="hlr a l4" x="34" y="273" width="418" height="24" rx="4"/><text class="code" x="44" y="138" xml:space="preserve">function format(v: string | number | Date | null) {</text><text class="code" x="44" y="176" xml:space="preserve">  if (v == null) return "—";</text><text class="code" x="44" y="214" xml:space="preserve">  if (typeof v === "string") return v.trim();</text><text class="code" x="44" y="252" xml:space="preserve">  if (typeof v === "number") return v.toFixed(2);</text><text class="code" x="44" y="290" xml:space="preserve">  return v.toISOString();</text><text class="code" x="44" y="328" xml:space="preserve">}</text><text class="chipd" x="476" y="138">declared: 4 possibilities</text><g class="a r1"><rect class="chip" x="476" y="159" width="64" height="24" rx="12"/><text class="chipt" x="508.0" y="176" text-anchor="middle">string</text><rect class="chip" x="546" y="159" width="68" height="24" rx="12"/><text class="chipt" x="580.0" y="176" text-anchor="middle">number</text><rect class="chip" x="620" y="159" width="52" height="24" rx="12"/><text class="chipt" x="646.0" y="176" text-anchor="middle">Date</text><rect class="chip" x="678" y="159" width="48" height="24" rx="12"/><text class="chipt" x="702.0" y="176" text-anchor="middle">null</text><g class="a s1"><line class="strk" x1="675" y1="171" x2="729" y2="171"/></g></g><g class="a r2"><rect class="chip" x="476" y="197" width="64" height="24" rx="12"/><text class="chipt" x="508.0" y="214" text-anchor="middle">string</text><g class="a s2"><line class="strk" x1="473" y1="209" x2="543" y2="209"/></g><rect class="chip" x="546" y="197" width="68" height="24" rx="12"/><text class="chipt" x="580.0" y="214" text-anchor="middle">number</text><rect class="chip" x="620" y="197" width="52" height="24" rx="12"/><text class="chipt" x="646.0" y="214" text-anchor="middle">Date</text></g><g class="a r3"><rect class="chip" x="476" y="235" width="68" height="24" rx="12"/><text class="chipt" x="510.0" y="252" text-anchor="middle">number</text><g class="a s3"><line class="strk" x1="473" y1="247" x2="547" y2="247"/></g><rect class="chip" x="550" y="235" width="52" height="24" rx="12"/><text class="chipt" x="576.0" y="252" text-anchor="middle">Date</text></g><g class="a r4"><rect class="fin" x="476" y="273" width="52" height="24" rx="12"/><text class="fint" x="502.0" y="290" text-anchor="middle">Date</text></g>
+  <text class="sub" x="28" y="378">Struck out: ruled out by that line's check. Only Date is left at the end, so v.toISOString() needs no cast.</text>
+</svg>

@@ -63,6 +63,9 @@ console.log("7");
 
 Why: synchronous `1`, `5` (async function body runs synchronously until the first `await`), `7`; then microtasks in queue order `3`, `4`, `6`; then the timer task `2`.
 
+![Animation: the example code runs line by line; logs 1, 5 and 7 print while callbacks 3, 4 and the await continuation 6 fill the microtask queue and the timer 2 waits in the task queue; then the microtasks drain printing 3, 4, 6, and finally the timer task prints 2](images/02-event-loop-trace.svg){ loading=lazy }
+*Watch the timer callback: it is queued second but runs last, because the whole microtask queue drains before the event loop takes the next task.*
+
 ### async/await mechanics
 
 - `async` functions always return a promise.
@@ -93,6 +96,9 @@ flowchart TD
 - Long tasks (> 50 ms) hurt **INP**. Break work into chunks (`scheduler.yield()` where supported, `setTimeout`, `requestIdleCallback`) or move it to a **Web Worker**.
 - `requestAnimationFrame` for visual updates synced to frames.
 - `MessageChannel` posts a task without the 4 ms timer clamp (used by React's scheduler).
+
+![Animation: two main-thread timelines; in one long task a click waits until the whole loop finishes, while with chunks and a yield between them the click handler runs at the next yield](images/02-long-task-vs-chunks.svg){ loading=lazy }
+*Notice the click arrives at the same moment in both rows. Chunking doesn't make the work faster; it gives input a gap to run in.*
 
 ## In practice: code & configuration
 

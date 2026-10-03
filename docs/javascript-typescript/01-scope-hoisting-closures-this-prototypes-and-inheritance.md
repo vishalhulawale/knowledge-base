@@ -73,6 +73,9 @@ const c = makeCounter(); c.inc(); c.get();   // 1
 - Memory: a long-lived closure (event listener, cache) keeps its captured scope alive; remove listeners and avoid capturing large objects unnecessarily.
 - React hooks rely on closures over each render; stale closures happen when a callback captured an old render.
 
+![Animation: a loop schedules three setTimeout callbacks; with var all three point to one binding that ends at 3 and log 3 3 3, with let each points to its own binding and they log 0 1 2](images/01-closure-loop-bindings.svg){ loading=lazy }
+*Watch where each callback's line points. With `var` all three share one `i`, which is already 3 when they run; with `let` each iteration gets its own `i`.*
+
 ### `this`
 
 ```mermaid
@@ -104,6 +107,9 @@ dog.speak();                            // found on animal via the chain, this =
 - `Object.getPrototypeOf(o)`, `Object.setPrototypeOf` (slow, avoid), `__proto__` (legacy accessor).
 - Constructor functions: `function Member(n) { this.name = n }`; methods on `Member.prototype`; `new` creates an object whose prototype is `Member.prototype`.
 - `instanceof` checks whether `C.prototype` is on the object's chain.
+
+![Animation: dog.speak() is not on dog, so the lookup moves to animal and finds it; dog.fly is not on dog, animal or Object.prototype, so the lookup reaches null and returns undefined](images/01-prototype-chain-lookup.svg){ loading=lazy }
+*Notice the method is found on `animal` but still runs with `this = dog`. A missing property walks the whole chain and ends as `undefined`, not an error.*
 
 ### Classes
 

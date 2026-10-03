@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 350" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Debounce versus throttle on the same events</title>
+  <desc id="d">A timeline from 0 to 1600 ms with a playhead. Events arrive every 80 ms from 0 to 560 ms, then pause, then arrive at 1100 and 1180 ms. debounce(fn, 300) calls fn only after 300 ms without events: at 860 ms and 1480 ms. throttle(fn, 300), as implemented on this page, calls fn at most once per 300 ms: at 0 ms (leading), 300 ms and 600 ms (trailing, with the latest arguments), at 1100 ms (leading again after the pause) and at 1400 ms.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{fill:#334155;font-size:14px;font-weight:600;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .ev{fill:#d97706}
+    .fd{fill:#0ea5a4}.ft{fill:#4f46e5}
+    .br{fill:none;stroke:#0f766e;stroke-width:1.5}.brt{fill:#0f766e;font-size:13px;font-weight:600}
+    .tk{stroke:#e2e8f0;stroke-width:1.5}
+    .row{stroke:#cbd5e1;stroke-width:1.5}
+    .ph{stroke:#334155;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.code{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .ev{fill:#fbbf24}.fd{fill:#2dd4bf}.ft{fill:#818cf8}
+      .br{stroke:#5eead4}.brt{fill:#5eead4}.tk{stroke:#334155}.row{stroke:#475569}.ph{stroke:#e2e8f0}
+    }
+    /* 10 s loop: 1600 ms of events slowed down, playhead 0-80%, hold to 92% */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes k0{0%,0%{opacity:0}0.4%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes k80{0%,2.9%{opacity:0}4.4%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes k160{0%,6.9%{opacity:0}8.4%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes k240{0%,10.9%{opacity:0}12.4%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes k320{0%,14.9%{opacity:0}16.4%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes k400{0%,18.9%{opacity:0}20.4%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes k480{0%,22.9%{opacity:0}24.4%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes k560{0%,26.9%{opacity:0}28.4%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes k1100{0%,53.9%{opacity:0}55.4%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes k1180{0%,57.9%{opacity:0}59.4%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes k860{0%,41.9%{opacity:0}43.4%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes k1480{0%,72.9%{opacity:0}74.4%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes k300{0%,13.9%{opacity:0}15.4%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes k600{0%,28.9%{opacity:0}30.4%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes k1400{0%,68.9%{opacity:0}70.4%,92%{opacity:1}96%,100%{opacity:0}}
+    .k0{animation-name:k0}.k80{animation-name:k80}.k160{animation-name:k160}.k240{animation-name:k240}.k320{animation-name:k320}.k400{animation-name:k400}.k480{animation-name:k480}.k560{animation-name:k560}.k1100{animation-name:k1100}.k1180{animation-name:k1180}.k860{animation-name:k860}.k1480{animation-name:k1480}.k300{animation-name:k300}.k600{animation-name:k600}.k1400{animation-name:k1400}
+    @keyframes ph{0%{transform:translateX(0);opacity:1}80%,92%{transform:translateX(576.0px);opacity:1}96%,100%{transform:translateX(576.0px);opacity:0}}
+    .ph{animation:ph 10s infinite linear}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.ph{animation:none;opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="348" rx="14"/>
+  <text class="h" x="28" y="40">Debounce vs throttle on the same events</text>
+  <text class="sub" x="28" y="62">Each mark on the lower rows is one call to fn. Slowed down to watch.</text>
+  <line class="tk" x1="160.0" y1="90" x2="160.0" y2="280"/><text class="sub" x="160.0" y="298" text-anchor="middle">0 ms</text><line class="tk" x1="304.0" y1="90" x2="304.0" y2="280"/><text class="sub" x="304.0" y="298" text-anchor="middle">400 ms</text><line class="tk" x1="448.0" y1="90" x2="448.0" y2="280"/><text class="sub" x="448.0" y="298" text-anchor="middle">800 ms</text><line class="tk" x1="592.0" y1="90" x2="592.0" y2="280"/><text class="sub" x="592.0" y="298" text-anchor="middle">1200 ms</text><line class="tk" x1="736.0" y1="90" x2="736.0" y2="280"/><text class="sub" x="736.0" y="298" text-anchor="middle">1600 ms</text>
+  <line class="row" x1="160" y1="112" x2="770" y2="112"/>
+  <line class="row" x1="160" y1="182" x2="770" y2="182"/>
+  <line class="row" x1="160" y1="252" x2="770" y2="252"/>
+  <text class="lbl" x="28" y="117">Events</text>
+  <text class="code" x="28" y="179">debounce</text><text class="sub" x="28" y="197">wait 300</text>
+  <text class="code" x="28" y="249">throttle</text><text class="sub" x="28" y="267">wait 300</text>
+  <line class="ph" x1="160" y1="90" x2="160" y2="280"/>
+  <circle class="ev a k0" cx="160.0" cy="112" r="7"/><circle class="ev a k80" cx="188.8" cy="112" r="7"/><circle class="ev a k160" cx="217.6" cy="112" r="7"/><circle class="ev a k240" cx="246.39999999999998" cy="112" r="7"/><circle class="ev a k320" cx="275.2" cy="112" r="7"/><circle class="ev a k400" cx="304.0" cy="112" r="7"/><circle class="ev a k480" cx="332.79999999999995" cy="112" r="7"/><circle class="ev a k560" cx="361.6" cy="112" r="7"/><circle class="ev a k1100" cx="556.0" cy="112" r="7"/><circle class="ev a k1180" cx="584.8" cy="112" r="7"/><rect class="fd a k860" x="463.59999999999997" y="166" width="12" height="32" rx="4"/><rect class="fd a k1480" x="686.8" y="166" width="12" height="32" rx="4"/><rect class="ft a k0" x="154.0" y="236" width="12" height="32" rx="4"/><rect class="ft a k300" x="262.0" y="236" width="12" height="32" rx="4"/><rect class="ft a k600" x="370.0" y="236" width="12" height="32" rx="4"/><rect class="ft a k1100" x="550.0" y="236" width="12" height="32" rx="4"/><rect class="ft a k1400" x="658.0" y="236" width="12" height="32" rx="4"/><g class="a k860"><path class="br" d="M361.6 156 V150 H469.59999999999997 V156"/><text class="brt" x="415.6" y="144" text-anchor="middle">300 ms quiet</text></g><g class="a k1480"><path class="br" d="M584.8 156 V150 H692.8 V156"/><text class="brt" x="638.8" y="144" text-anchor="middle">300 ms quiet</text></g>
+  <text class="sub" x="28" y="326">Throttle as implemented above: leading call, then a trailing call with the latest arguments.</text>
+</svg>

@@ -45,6 +45,9 @@ p.then(v => v + 1)              // returns a new promise with 43
 - Callbacks always run asynchronously (microtasks), even for already-resolved promises.
 - `Promise.resolve(x)` / `Promise.reject(e)` create settled promises.
 
+![Animation: the five links of the example chain each return a new promise, which settle left to right as fulfilled 42, fulfilled 43, rejected with the boom error, fulfilled "recovered" after catch, and fulfilled "recovered" after finally](images/03-promise-chain.svg){ loading=lazy }
+*Notice the rejected promise in the middle: `.catch` turns it back into a fulfilled one, and `.finally` passes that value on without changing it.*
+
 ### Combinators
 
 | Method | Resolves when | Rejects when | Use for |
@@ -53,6 +56,9 @@ p.then(v => v + 1)              // returns a new promise with 43
 | `Promise.allSettled` | All settle (`{status, value/reason}`) | Never | Partial results, dashboards |
 | `Promise.race` | First settles | First settles with rejection | Timeouts (prefer AbortSignal) |
 | `Promise.any` | First fulfils | All reject (`AggregateError`) | Redundant sources, fastest mirror |
+
+![Animation: three promises where B rejects at 100 ms, A fulfils at 200 ms and C at 300 ms; Promise.all and Promise.race reject at 100 ms with B's error, Promise.any fulfils at 200 ms with A's value, and Promise.allSettled fulfils at 300 ms with all three outcomes](images/03-promise-combinators.svg){ loading=lazy }
+*Watch when each combinator settles on the same inputs: `all` and `race` on the first rejection, `any` on the first fulfilment, `allSettled` only after the last promise.*
 
 ### async/await
 

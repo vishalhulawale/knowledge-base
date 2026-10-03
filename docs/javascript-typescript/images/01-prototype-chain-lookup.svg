@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Property lookup along the prototype chain</title>
+  <desc id="d">Four boxes linked left to right by [[Prototype]] arrows: dog with own property name "Rex", animal with method speak, Object.prototype with toString and hasOwnProperty, and null. First, dog.speak() is looked up: it is not an own property of dog, so the lookup moves to animal, finds speak there and calls it with this equal to dog, returning "Rex makes a sound". Then dog.fly is looked up: it is not on dog, animal or Object.prototype, the chain reaches null, and the result is undefined.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .code{fill:#334155;font-size:14px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .qc{fill:#4f46e5;font-size:16px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1;stroke-width:1.5}
+    .hl{fill:none;stroke:#4f46e5;stroke-width:4}
+    .ar{stroke:#64748b;stroke-width:2}
+    .ah{fill:#64748b}
+    .no{fill:#dc2626;font-size:13px;font-weight:600}
+    .ok{fill:#16a34a;font-size:13px;font-weight:700}
+    .res{fill:#334155;font-size:15px}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.code,.res{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .qc{fill:#818cf8}.box{fill:#111827;stroke:#475569}.hl{stroke:#818cf8}
+      .ar{stroke:#94a3b8}.ah{fill:#94a3b8}.no{fill:#f87171}.ok{fill:#4ade80}
+    }
+    /* 12 s loop. Phase 1 (0-46%): dog.speak(). Phase 2 (50-92%): dog.fly */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes q1{0%,45%{opacity:1}47%,100%{opacity:0}}
+    @keyframes h1{0%,3%{opacity:0}4%,13%{opacity:1}14%,100%{opacity:0}}
+    @keyframes h2{0%,13%{opacity:0}14%,45%{opacity:1}47%,100%{opacity:0}}
+    @keyframes n6{0%,5%{opacity:0}7%,45%{opacity:1}47%,100%{opacity:0}}
+    @keyframes n16{0%,15%{opacity:0}17%,45%{opacity:1}47%,100%{opacity:0}}
+    @keyframes n20{0%,19%{opacity:0}21%,45%{opacity:1}47%,100%{opacity:0}}
+    @keyframes q2{0%,48%{opacity:0}50%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes h3{0%,49%{opacity:0}50%,57%{opacity:1}58%,100%{opacity:0}}
+    @keyframes h4{0%,57%{opacity:0}58%,65%{opacity:1}66%,100%{opacity:0}}
+    @keyframes h5{0%,65%{opacity:0}66%,73%{opacity:1}74%,100%{opacity:0}}
+    @keyframes h6{0%,73%{opacity:0}74%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes m52{0%,51%{opacity:0}53%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes m60{0%,59%{opacity:0}61%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes m68{0%,67%{opacity:0}69%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes m76{0%,75%{opacity:0}77%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes m79{0%,78%{opacity:0}80%,92%{opacity:1}96%,100%{opacity:0}}
+    .q1{animation-name:q1}.h1{animation-name:h1}.h2{animation-name:h2}.n6{animation-name:n6}.n16{animation-name:n16}.n20{animation-name:n20}
+    .q2{animation-name:q2}.h3{animation-name:h3}.h4{animation-name:h4}.h5{animation-name:h5}.h6{animation-name:h6}
+    .m52{animation-name:m52}.m60{animation-name:m60}.m68{animation-name:m68}.m76{animation-name:m76}.m79{animation-name:m79}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:0}.q1,.h2,.n6,.n16,.n20{opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="338" rx="14"/>
+  <text class="h" x="28" y="40">Property lookup walks the prototype chain</text>
+  <text class="sub" x="28" y="62">Each arrow is a [[Prototype]] link. A read checks the object, then each prototype, up to null.</text>
+
+  <!-- boxes -->
+  <rect class="box" x="28" y="96" width="140" height="110" rx="10"/>
+  <text class="lbl" x="44" y="124">dog</text>
+  <text class="code" x="44" y="154">name: "Rex"</text>
+  <text class="sub" x="44" y="190">own properties</text>
+
+  <rect class="box" x="208" y="96" width="140" height="110" rx="10"/>
+  <text class="lbl" x="224" y="124">animal</text>
+  <text class="code" x="224" y="154">speak()</text>
+
+  <rect class="box" x="388" y="96" width="180" height="110" rx="10"/>
+  <text class="lbl" x="404" y="124">Object.prototype</text>
+  <text class="code" x="404" y="154">toString()</text>
+  <text class="code" x="404" y="176">hasOwnProperty()</text>
+
+  <rect class="box" x="608" y="96" width="100" height="110" rx="10"/>
+  <text class="lbl" x="658" y="156" text-anchor="middle">null</text>
+
+  <!-- [[Prototype]] arrows -->
+  <line class="ar" x1="172" y1="151" x2="196" y2="151"/><polygon class="ah" points="204,151 195,146 195,156"/>
+  <line class="ar" x1="352" y1="151" x2="376" y2="151"/><polygon class="ah" points="384,151 375,146 375,156"/>
+  <line class="ar" x1="572" y1="151" x2="596" y2="151"/><polygon class="ah" points="604,151 595,146 595,156"/>
+
+  <!-- phase 1: dog.speak() -->
+  <text class="lbl a q1" x="28" y="268">Lookup:</text>
+  <text class="qc a q1" x="104" y="268">dog.speak()</text>
+  <rect class="hl a h1" x="28" y="96" width="140" height="110" rx="10"/>
+  <rect class="hl a h2" x="208" y="96" width="140" height="110" rx="10"/>
+  <text class="no a n6" x="98" y="228" text-anchor="middle">not an own property</text>
+  <text class="ok a n16" x="278" y="228" text-anchor="middle">found speak</text>
+  <text class="res a n20" x="28" y="298">Runs animal's speak with this = dog, so it returns "Rex makes a sound".</text>
+
+  <!-- phase 2: dog.fly -->
+  <text class="lbl a q2" x="28" y="268">Lookup:</text>
+  <text class="qc a q2" x="104" y="268">dog.fly</text>
+  <rect class="hl a h3" x="28" y="96" width="140" height="110" rx="10"/>
+  <rect class="hl a h4" x="208" y="96" width="140" height="110" rx="10"/>
+  <rect class="hl a h5" x="388" y="96" width="180" height="110" rx="10"/>
+  <rect class="hl a h6" x="608" y="96" width="100" height="110" rx="10"/>
+  <text class="no a m52" x="98" y="228" text-anchor="middle">not here</text>
+  <text class="no a m60" x="278" y="228" text-anchor="middle">not here</text>
+  <text class="no a m68" x="478" y="228" text-anchor="middle">not here</text>
+  <text class="no a m76" x="658" y="228" text-anchor="middle">end of chain</text>
+  <text class="res a m79" x="28" y="298">The chain ended at null, so dog.fly is undefined (no error).</text>
+
+  <text class="sub" x="28" y="324">Writes don't walk it: dog.speak = … adds an own property that shadows animal's (setters aside).</text>
+</svg>

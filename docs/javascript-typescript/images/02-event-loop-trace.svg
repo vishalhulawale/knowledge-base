@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Tracing the event loop: sync code, microtasks, then a task</title>
+  <desc id="d">The page's classic output example runs step by step. While the script runs, console.log 1 prints, setTimeout puts a timer callback in the task queue, the promise then and queueMicrotask put callbacks 3 and 4 in the microtask queue, the async function prints 5 and its await puts the rest of the function in the microtask queue, and console.log 7 prints. When the call stack is empty, all microtasks drain in order, printing 3, 4 and 6. Only then does the event loop take the timer task, printing 2. Final output: 1 5 7 3 4 6 2.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .code{fill:#334155;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .pn{fill:#ffffff;stroke:#cbd5e1}
+    .hlr{fill:#4f46e5;fill-opacity:.16;stroke:#4f46e5}
+    .mi{fill:#4f46e5}.ti{fill:#d97706}
+    .it{fill:#fff;font-size:14px;font-weight:700}
+    .out{fill:#0f172a;font-size:20px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .st{fill:#0f766e;font-size:15px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.out{fill:#f1f5f9}.lbl,.code{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .pn{fill:#111827;stroke:#475569}.hlr{fill:#818cf8;fill-opacity:.22;stroke:#818cf8}
+      .mi{fill:#818cf8}.ti{fill:#fbbf24}.it{fill:#0f172a}.st{fill:#5eead4}
+    }
+    /* 12 s loop: script runs (3-45%), microtasks drain (46-71%), timer task runs (72-92%) */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes l1{0%,2%{opacity:0}3%,8.9%{opacity:1}9.9%,100%{opacity:0}}
+    @keyframes l2{0%,8%{opacity:0}9%,14.9%{opacity:1}15.9%,100%{opacity:0}}
+    @keyframes l3{0%,14%{opacity:0}15%,20.9%{opacity:1}21.9%,100%{opacity:0}}
+    @keyframes l4{0%,20%{opacity:0}21%,26.9%{opacity:1}27.9%,100%{opacity:0}}
+    @keyframes l6{0%,26%{opacity:0}27%,32.9%{opacity:1}33.9%,100%{opacity:0}}
+    @keyframes l7{0%,32%{opacity:0}33%,38.9%{opacity:1}39.9%,100%{opacity:0}}
+    @keyframes l10{0%,38%{opacity:0}39%,44.9%{opacity:1}45.9%,100%{opacity:0}}
+    @keyframes d3{0%,47%{opacity:0}48%,55.9%{opacity:1}56.9%,100%{opacity:0}}
+    @keyframes d4{0%,55%{opacity:0}56%,63.9%{opacity:1}64.9%,100%{opacity:0}}
+    @keyframes d8{0%,63%{opacity:0}64%,71.9%{opacity:1}72.9%,100%{opacity:0}}
+    @keyframes d2{0%,73%{opacity:0}74%,89%{opacity:1}90%,100%{opacity:0}}
+    @keyframes qt{0%,10%{opacity:0}11%,75.5%{opacity:1}76.5%,100%{opacity:0}}
+    @keyframes qm3{0%,16%{opacity:0}17%,49.5%{opacity:1}50.5%,100%{opacity:0}}
+    @keyframes qm4{0%,22%{opacity:0}23%,57.5%{opacity:1}58.5%,100%{opacity:0}}
+    @keyframes qm6{0%,34%{opacity:0}35%,65.5%{opacity:1}66.5%,100%{opacity:0}}
+    @keyframes o1{0%,3.5%{opacity:0}5%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes o5{0%,27.5%{opacity:0}29%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes o7{0%,39.5%{opacity:0}41%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes o3{0%,48.5%{opacity:0}50%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes o4{0%,56.5%{opacity:0}58%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes o6{0%,64.5%{opacity:0}66%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes o2{0%,74.5%{opacity:0}76%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s1{0%,45%{opacity:1}46%,100%{opacity:0}}
+    @keyframes s2{0%,45%{opacity:0}46%,71%{opacity:1}72%,100%{opacity:0}}
+    @keyframes s3{0%,70.5%{opacity:0}72%,92%{opacity:1}96%,100%{opacity:0}}
+    .l1{animation-name:l1}.l2{animation-name:l2}.l3{animation-name:l3}.l4{animation-name:l4}.l6{animation-name:l6}.l7{animation-name:l7}.l10{animation-name:l10}.d3{animation-name:d3}.d4{animation-name:d4}.d8{animation-name:d8}.d2{animation-name:d2}.qt{animation-name:qt}.qm3{animation-name:qm3}.qm4{animation-name:qm4}.qm6{animation-name:qm6}.o1{animation-name:o1}.o5{animation-name:o5}.o7{animation-name:o7}.o3{animation-name:o3}.o4{animation-name:o4}.o6{animation-name:o6}.o2{animation-name:o2}.s1{animation-name:s1}.s2{animation-name:s2}.s3{animation-name:s3}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:0}.out,.s3{opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Event loop trace: 1 5 7 3 4 6 2</text>
+  <text class="sub" x="28" y="62">Synchronous code first, then every queued microtask, then the next task.</text>
+
+  <rect class="pn" x="28" y="84" width="408" height="246" rx="10"/>
+  <rect class="hlr a l1" x="36" y="103" width="392" height="21" rx="4"/>
+  <rect class="hlr a l2" x="36" y="125" width="392" height="21" rx="4"/>
+  <rect class="hlr a l3" x="36" y="147" width="392" height="21" rx="4"/>
+  <rect class="hlr a l4" x="36" y="169" width="392" height="21" rx="4"/>
+  <rect class="hlr a l6" x="36" y="213" width="392" height="21" rx="4"/>
+  <rect class="hlr a l7" x="36" y="235" width="392" height="21" rx="4"/>
+  <rect class="hlr a l10" x="36" y="301" width="392" height="21" rx="4"/>
+  <rect class="hlr a d3" x="36" y="147" width="392" height="21" rx="4"/>
+  <rect class="hlr a d4" x="36" y="169" width="392" height="21" rx="4"/>
+  <rect class="hlr a d8" x="36" y="257" width="392" height="21" rx="4"/>
+  <rect class="hlr a d2" x="36" y="125" width="392" height="21" rx="4"/>
+  <text class="code" x="44" y="118" xml:space="preserve">console.log("1");</text>
+  <text class="code" x="44" y="140" xml:space="preserve">setTimeout(() =&gt; console.log("2"), 0);</text>
+  <text class="code" x="44" y="162" xml:space="preserve">Promise.resolve().then(() =&gt; console.log("3"));</text>
+  <text class="code" x="44" y="184" xml:space="preserve">queueMicrotask(() =&gt; console.log("4"));</text>
+  <text class="code" x="44" y="206" xml:space="preserve">(async () =&gt; {</text>
+  <text class="code" x="44" y="228" xml:space="preserve">  console.log("5");</text>
+  <text class="code" x="44" y="250" xml:space="preserve">  await null;</text>
+  <text class="code" x="44" y="272" xml:space="preserve">  console.log("6");</text>
+  <text class="code" x="44" y="294" xml:space="preserve">})();</text>
+  <text class="code" x="44" y="316" xml:space="preserve">console.log("7");</text>
+
+  <text class="lbl" x="456" y="100">Microtask queue</text>
+  <rect class="pn" x="456" y="110" width="316" height="44" rx="8"/>
+  <g class="a qm3"><rect class="mi" x="462" y="116" width="92" height="32" rx="6"/><text class="it" x="508" y="137" text-anchor="middle">log 3</text></g>
+  <g class="a qm4"><rect class="mi" x="560" y="116" width="92" height="32" rx="6"/><text class="it" x="606" y="137" text-anchor="middle">log 4</text></g>
+  <g class="a qm6"><rect class="mi" x="658" y="116" width="108" height="32" rx="6"/><text class="it" x="712" y="137" text-anchor="middle">resume: 6</text></g>
+
+  <text class="lbl" x="456" y="186">Task queue</text>
+  <rect class="pn" x="456" y="196" width="316" height="44" rx="8"/>
+  <g class="a qt"><rect class="ti" x="462" y="202" width="92" height="32" rx="6"/><text class="it" x="508" y="223" text-anchor="middle">timer: 2</text></g>
+
+  <text class="lbl" x="456" y="272">Console</text>
+  <rect class="pn" x="456" y="282" width="316" height="30" rx="8" style="opacity:0"/>
+  <text class="out a o1" x="474" y="301" text-anchor="middle">1</text>
+  <text class="out a o5" x="512" y="301" text-anchor="middle">5</text>
+  <text class="out a o7" x="550" y="301" text-anchor="middle">7</text>
+  <text class="out a o3" x="588" y="301" text-anchor="middle">3</text>
+  <text class="out a o4" x="626" y="301" text-anchor="middle">4</text>
+  <text class="out a o6" x="664" y="301" text-anchor="middle">6</text>
+  <text class="out a o2" x="702" y="301" text-anchor="middle">2</text>
+
+  <text class="st a s1" x="28" y="358">1. The script itself is a task: run it to the end, queueing callbacks.</text>
+  <text class="st a s2" x="28" y="358">2. Stack empty: drain all microtasks in FIFO order.</text>
+  <text class="st a s3" x="28" y="358">3. Microtask queue empty: take the next task, the timer.</text>
+  <text class="sub" x="28" y="384">The async function body runs synchronously until await; the rest becomes a microtask.</text>
+</svg>

@@ -96,6 +96,9 @@ export function throttle<A extends unknown[]>(fn: (...args: A) => void, wait: nu
 
 For visual updates, `requestAnimationFrame`-based throttling (once per frame) is often better than a fixed interval.
 
+![Animation: events arrive every 80 ms up to 560 ms and again at 1100 and 1180 ms; debounce with wait 300 calls fn only at 860 and 1480 ms, while throttle with wait 300 calls it at 0, 300, 600, 1100 and 1400 ms](images/06-debounce-vs-throttle.svg){ loading=lazy }
+*Watch the two lower rows while events keep coming: throttle keeps firing every 300 ms, debounce stays silent until there has been a 300 ms gap.*
+
 ### Memoize
 
 ```ts
@@ -217,6 +220,9 @@ class LRUCache<K, V> {
   }
 }
 ```
+
+![Animation: an LRU cache with capacity 3 stores A, B and C; get(A) moves A to the end, then put(D) makes the size 4 so the first key, B, is evicted, leaving C, A, D](images/06-lru-cache-map.svg){ loading=lazy }
+*Notice that `get` changes the order: re-inserting A moves it to the end, so B, not A, is evicted when D arrives.*
 
 ## Real-world usage
 

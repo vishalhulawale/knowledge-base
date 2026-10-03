@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">A promise chain settling step by step</title>
+  <desc id="d">Five links of the chain from the page: new Promise resolving 42, then adding 1, then throwing an error, catch returning "recovered", and finally running cleanup. Under each link is the new promise it returns. They settle left to right: fulfilled with 42, fulfilled with 43, rejected with the boom error, fulfilled with "recovered" because catch handled the rejection, and fulfilled with "recovered" again because finally passes the value through.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{fill:#334155;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .ar,.st2{stroke:#64748b;stroke-width:2}.st2{stroke-dasharray:3 3}
+    .ah{fill:#64748b}
+    .pend{fill:#ffffff;stroke:#94a3b8;stroke-dasharray:5 4}
+    .pt2{fill:#64748b;font-size:14px;font-weight:600}
+    .okf{fill:#16a34a}.badf{fill:#dc2626}
+    .pt{fill:#fff;font-size:13px;font-weight:700}
+    .pv{fill:#fff;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.code{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.ar,.st2{stroke:#94a3b8}.ah{fill:#94a3b8}
+      .pend{fill:#111827;stroke:#64748b}.pt2{fill:#94a3b8}
+      .okf{fill:#4ade80}.badf{fill:#f87171}.pt,.pv{fill:#0f172a}
+    }
+    /* 10 s loop: returned promises settle at 8, 22, 36, 50, 64%; hold to 92% */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes pd0{0%,7%{opacity:1}8%,95%{opacity:0}97%,100%{opacity:1}}
+    @keyframes s0{0%,6.5%{opacity:0}8%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes pd1{0%,21%{opacity:1}22%,95%{opacity:0}97%,100%{opacity:1}}
+    @keyframes s1{0%,20.5%{opacity:0}22%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes pd2{0%,35%{opacity:1}36%,95%{opacity:0}97%,100%{opacity:1}}
+    @keyframes s2{0%,34.5%{opacity:0}36%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes pd3{0%,49%{opacity:1}50%,95%{opacity:0}97%,100%{opacity:1}}
+    @keyframes s3{0%,48.5%{opacity:0}50%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes pd4{0%,63%{opacity:1}64%,95%{opacity:0}97%,100%{opacity:1}}
+    @keyframes s4{0%,62.5%{opacity:0}64%,92%{opacity:1}96%,100%{opacity:0}}
+    .pd0{animation:pd0 10s infinite linear}.s0{animation-name:s0}.pd1{animation:pd1 10s infinite linear}.s1{animation-name:s1}.pd2{animation:pd2 10s infinite linear}.s2{animation-name:s2}.pd3{animation:pd3 10s infinite linear}.s3{animation-name:s3}.pd4{animation:pd4 10s infinite linear}.s4{animation-name:s4}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.pd0,.pd1,.pd2,.pd3,.pd4{animation:none;opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="298" rx="14"/>
+  <text class="h" x="28" y="40">Every .then, .catch and .finally returns a new promise</text>
+  <text class="sub" x="28" y="62">The chain from "Creating and chaining". Below each link: the promise it returns.</text>
+  <rect class="box" x="28" y="92" width="136" height="58" rx="8"/><text class="code" x="38" y="116" xml:space="preserve">new Promise</text><text class="code" x="38" y="136" xml:space="preserve">resolve(42)</text><line class="ar" x1="166" y1="121" x2="173" y2="121"/><polygon class="ah" points="177,121 172,117 172,125"/><line class="st2" x1="96.0" y1="150" x2="96.0" y2="174"/><g class="pd0"><rect class="pend" x="28" y="174" width="136" height="48" rx="10"/><text class="pt2" x="96.0" y="203" text-anchor="middle">pending</text></g><g class="a s0"><rect class="okf" x="28" y="174" width="136" height="48" rx="10"/><text class="pt" x="96.0" y="194" text-anchor="middle">fulfilled</text><text class="pv" x="96.0" y="213" text-anchor="middle">42</text></g><rect class="box" x="178" y="92" width="136" height="58" rx="8"/><text class="code" x="188" y="116" xml:space="preserve">.then(v =></text><text class="code" x="188" y="136" xml:space="preserve"> v + 1)</text><line class="ar" x1="316" y1="121" x2="323" y2="121"/><polygon class="ah" points="327,121 322,117 322,125"/><line class="st2" x1="246.0" y1="150" x2="246.0" y2="174"/><g class="pd1"><rect class="pend" x="178" y="174" width="136" height="48" rx="10"/><text class="pt2" x="246.0" y="203" text-anchor="middle">pending</text></g><g class="a s1"><rect class="okf" x="178" y="174" width="136" height="48" rx="10"/><text class="pt" x="246.0" y="194" text-anchor="middle">fulfilled</text><text class="pv" x="246.0" y="213" text-anchor="middle">43</text></g><rect class="box" x="328" y="92" width="136" height="58" rx="8"/><text class="code" x="338" y="116" xml:space="preserve">.then(v => {</text><text class="code" x="338" y="136" xml:space="preserve"> throw boom })</text><line class="ar" x1="466" y1="121" x2="473" y2="121"/><polygon class="ah" points="477,121 472,117 472,125"/><line class="st2" x1="396.0" y1="150" x2="396.0" y2="174"/><g class="pd2"><rect class="pend" x="328" y="174" width="136" height="48" rx="10"/><text class="pt2" x="396.0" y="203" text-anchor="middle">pending</text></g><g class="a s2"><rect class="badf" x="328" y="174" width="136" height="48" rx="10"/><text class="pt" x="396.0" y="194" text-anchor="middle">rejected</text><text class="pv" x="396.0" y="213" text-anchor="middle">Error "boom"</text></g><rect class="box" x="478" y="92" width="136" height="58" rx="8"/><text class="code" x="488" y="116" xml:space="preserve">.catch(e =></text><text class="code" x="488" y="136" xml:space="preserve"> "recovered")</text><line class="ar" x1="616" y1="121" x2="623" y2="121"/><polygon class="ah" points="627,121 622,117 622,125"/><line class="st2" x1="546.0" y1="150" x2="546.0" y2="174"/><g class="pd3"><rect class="pend" x="478" y="174" width="136" height="48" rx="10"/><text class="pt2" x="546.0" y="203" text-anchor="middle">pending</text></g><g class="a s3"><rect class="okf" x="478" y="174" width="136" height="48" rx="10"/><text class="pt" x="546.0" y="194" text-anchor="middle">fulfilled</text><text class="pv" x="546.0" y="213" text-anchor="middle">"recovered"</text></g><rect class="box" x="628" y="92" width="136" height="58" rx="8"/><text class="code" x="638" y="116" xml:space="preserve">.finally(</text><text class="code" x="638" y="136" xml:space="preserve"> cleanup)</text><line class="st2" x1="696.0" y1="150" x2="696.0" y2="174"/><g class="pd4"><rect class="pend" x="628" y="174" width="136" height="48" rx="10"/><text class="pt2" x="696.0" y="203" text-anchor="middle">pending</text></g><g class="a s4"><rect class="okf" x="628" y="174" width="136" height="48" rx="10"/><text class="pt" x="696.0" y="194" text-anchor="middle">fulfilled</text><text class="pv" x="696.0" y="213" text-anchor="middle">"recovered"</text></g>
+  <text class="sub" x="28" y="256">A rejection skips .then success handlers until a .catch; returning a value from .catch fulfils again.</text>
+  <text class="sub" x="28" y="276">.finally runs either way and passes the value (or error) through unchanged.</text>
+</svg>

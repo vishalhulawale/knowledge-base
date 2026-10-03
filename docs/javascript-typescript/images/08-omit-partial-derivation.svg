@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">How Omit and Partial derive a type from Member</title>
+  <desc id="d">Five steps derive types from interface Member with properties id, name, email and phone. keyof Member is the union "id" | "name" | "email" | "phone". Exclude of that union and "id" removes "id", leaving "name" | "email" | "phone". Omit of Member and "id" is Pick of Member with that union, giving an object with name, email and phone, used as MemberForm. Partial of it makes every key optional, giving name?, email? and phone?, used as MemberUpdate.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .lab{fill:#4f46e5;font-size:14px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .prop{fill:#ffffff;stroke:#4f46e5;stroke-width:1.5}
+    .pt{fill:#0f172a;font-size:14px;font-weight:600;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .lit{fill:#ffffff;stroke:#0ea5a4;stroke-width:1.5}
+    .ltt{fill:#0f766e;font-size:14px;font-weight:600;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .brace,.bar{fill:#64748b;font-size:22px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .strk{stroke:#dc2626;stroke-width:3}
+    .ar{stroke:#94a3b8;stroke-width:2}.ah{fill:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.pt{fill:#f1f5f9}.sub,.brace,.bar{fill:#94a3b8}.lab{fill:#818cf8}
+      .prop{fill:#111827;stroke:#818cf8}.lit{fill:#111827;stroke:#2dd4bf}.ltt{fill:#5eead4}
+      .strk{stroke:#f87171}.ar{stroke:#64748b}.ah{fill:#64748b}
+    }
+    /* 10 s loop: one derivation step every ~15%, hold to 92% */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes r0{0%,3.5%{opacity:0}5%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes r1{0%,18.5%{opacity:0}20%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes r2{0%,33.5%{opacity:0}35%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s2{0%,39.5%{opacity:0}41%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes r3{0%,50.5%{opacity:0}52%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes r4{0%,66.5%{opacity:0}68%,92%{opacity:1}96%,100%{opacity:0}}
+    .r0{animation-name:r0}.r1{animation-name:r1}.r2{animation-name:r2}.s2{animation-name:s2}.r3{animation-name:r3}.r4{animation-name:r4}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="448" rx="14"/>
+  <text class="h" x="28" y="40">Deriving MemberForm and MemberUpdate from Member</text>
+  <text class="sub" x="28" y="62">Each utility type is built from keyof, Exclude and a mapped type. Every property here is a string.</text>
+  <g class="a r0"><text class="lab" x="28" y="117">interface Member</text><text class="brace" x="354" y="120">{</text><rect class="prop" x="372" y="98" width="52" height="28" rx="6"/><text class="pt" x="398.0" y="117" text-anchor="middle">id</text><rect class="prop" x="432" y="98" width="68" height="28" rx="6"/><text class="pt" x="466.0" y="117" text-anchor="middle">name</text><rect class="prop" x="508" y="98" width="74" height="28" rx="6"/><text class="pt" x="545.0" y="117" text-anchor="middle">email</text><rect class="prop" x="590" y="98" width="74" height="28" rx="6"/><text class="pt" x="627.0" y="117" text-anchor="middle">phone</text><text class="brace" x="672" y="120">}</text><line class="ar" x1="350" y1="132" x2="350" y2="152"/><polygon class="ah" points="350,159 345,150 355,150"/></g><g class="a r1"><text class="lab" x="28" y="178">keyof Member</text><text class="sub" x="28" y="198">union of its keys</text><rect class="lit" x="372" y="164" width="60" height="28" rx="14"/><text class="ltt" x="402.0" y="183" text-anchor="middle">"id"</text><text class="bar" x="441" y="183" text-anchor="middle">|</text><rect class="lit" x="452" y="164" width="76" height="28" rx="14"/><text class="ltt" x="490.0" y="183" text-anchor="middle">"name"</text><text class="bar" x="537" y="183" text-anchor="middle">|</text><rect class="lit" x="548" y="164" width="82" height="28" rx="14"/><text class="ltt" x="589.0" y="183" text-anchor="middle">"email"</text><text class="bar" x="639" y="183" text-anchor="middle">|</text><rect class="lit" x="650" y="164" width="82" height="28" rx="14"/><text class="ltt" x="691.0" y="183" text-anchor="middle">"phone"</text><line class="ar" x1="350" y1="198" x2="350" y2="218"/><polygon class="ah" points="350,225 345,216 355,216"/></g><g class="a r2"><text class="lab" x="28" y="244">Exclude&lt;keyof Member, "id"&gt;</text><text class="sub" x="28" y="264">drop "id" from the union</text><rect class="lit" x="372" y="230" width="60" height="28" rx="14"/><text class="ltt" x="402.0" y="249" text-anchor="middle">"id"</text><line class="strk a s2" x1="368" y1="244" x2="436" y2="244"/><text class="bar" x="441" y="249" text-anchor="middle">|</text><rect class="lit" x="452" y="230" width="76" height="28" rx="14"/><text class="ltt" x="490.0" y="249" text-anchor="middle">"name"</text><text class="bar" x="537" y="249" text-anchor="middle">|</text><rect class="lit" x="548" y="230" width="82" height="28" rx="14"/><text class="ltt" x="589.0" y="249" text-anchor="middle">"email"</text><text class="bar" x="639" y="249" text-anchor="middle">|</text><rect class="lit" x="650" y="230" width="82" height="28" rx="14"/><text class="ltt" x="691.0" y="249" text-anchor="middle">"phone"</text><line class="ar" x1="350" y1="264" x2="350" y2="284"/><polygon class="ah" points="350,291 345,282 355,282"/></g><g class="a r3"><text class="lab" x="28" y="310">Omit&lt;Member, "id"&gt;</text><text class="sub" x="28" y="330">= Pick&lt;Member, that union&gt; → MemberForm</text><text class="brace" x="354" y="318">{</text><rect class="prop" x="372" y="296" width="68" height="28" rx="6"/><text class="pt" x="406.0" y="315" text-anchor="middle">name</text><rect class="prop" x="448" y="296" width="74" height="28" rx="6"/><text class="pt" x="485.0" y="315" text-anchor="middle">email</text><rect class="prop" x="530" y="296" width="74" height="28" rx="6"/><text class="pt" x="567.0" y="315" text-anchor="middle">phone</text><text class="brace" x="612" y="318">}</text><line class="ar" x1="350" y1="330" x2="350" y2="350"/><polygon class="ah" points="350,357 345,348 355,348"/></g><g class="a r4"><text class="lab" x="28" y="376">Partial&lt;Omit&lt;Member, "id"&gt;&gt;</text><text class="sub" x="28" y="396">every key optional → MemberUpdate</text><text class="brace" x="354" y="384">{</text><rect class="prop" x="372" y="362" width="78" height="28" rx="6"/><text class="pt" x="411.0" y="381" text-anchor="middle">name?</text><rect class="prop" x="458" y="362" width="84" height="28" rx="6"/><text class="pt" x="500.0" y="381" text-anchor="middle">email?</text><rect class="prop" x="550" y="362" width="84" height="28" rx="6"/><text class="pt" x="592.0" y="381" text-anchor="middle">phone?</text><text class="brace" x="642" y="384">}</text></g>
+  <text class="sub" x="28" y="428">Add a field to Member and every derived type picks it up; no copy to keep in sync.</text>
+</svg>

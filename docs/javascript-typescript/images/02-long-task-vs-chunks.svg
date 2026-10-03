@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">A long task blocks input; chunked work lets it run</title>
+  <desc id="d">Two main-thread timelines with a playhead moving left to right. In the top one, processClaims normalises all claims in one long task; a click arrives early but its handler has to wait until the whole task finishes. In the bottom one, the same work is split into chunks with a yield between them; the click arrives at the same moment and its handler runs at the next yield, before the remaining chunks. Schematic, not to scale.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .blk{fill:#4f46e5}
+    .bt{fill:#fff;font-size:14px;font-weight:700}
+    .hd{fill:#0ea5a4}
+    .hdt{fill:#0f766e;font-size:13px;font-weight:700}
+    .wait{fill:#dc2626}
+    .wt{fill:#dc2626;font-size:13px;font-weight:700}
+    .ax{stroke:#cbd5e1;stroke-width:1.5}
+    .clk{stroke:#d97706;stroke-width:2;stroke-dasharray:5 4}
+    .ct{fill:#d97706;font-size:13px;font-weight:700}
+    .ph{stroke:#334155;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .blk{fill:#818cf8}.bt{fill:#0f172a}.hd{fill:#2dd4bf}.hdt{fill:#5eead4}
+      .wait,.wt{fill:#f87171}.ax{stroke:#475569}.clk{stroke:#fbbf24}.ct{fill:#fbbf24}.ph{stroke:#e2e8f0}
+    }
+    /* 10 s loop: playhead sweeps 0-80%, hold to 92% */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes kc{0%,12.1%{opacity:0}13.6%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes kh1{0%,70.4%{opacity:0}71.9%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes kh2{0%,15.3%{opacity:0}16.8%,92%{opacity:1}96%,100%{opacity:0}}
+    .kc{animation-name:kc}.kh1{animation-name:kh1}.kh2{animation-name:kh2}
+    @keyframes ph{0%{transform:translateX(0);opacity:1}80%,92%{transform:translateX(590px);opacity:1}96%,100%{transform:translateX(590px);opacity:0}}
+    .ph{animation:ph 10s infinite linear}
+    @keyframes wg{0%,13.6%{transform:scaleX(0);opacity:1}71.9%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+    .wg{transform-box:fill-box;transform-origin:left center;animation:wg 10s infinite linear}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.ph{animation:none;opacity:0}.wg{animation:none;transform:none}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="338" rx="14"/>
+  <text class="h" x="28" y="40">A long task blocks input; chunking lets it in</text>
+  <text class="sub" x="28" y="62">Main-thread timeline. The same click arrives while processClaims is running.</text>
+
+  <line class="ax" x1="170" y1="138" x2="770" y2="138"/>
+  <line class="ax" x1="170" y1="242" x2="770" y2="242"/>
+
+  <text class="lbl" x="28" y="116">One long task</text>
+  <text class="sub" x="28" y="134">loop over all claims</text>
+  <rect class="blk" x="170" y="102" width="530" height="36" rx="4"/>
+  <text class="bt" x="435" y="125" text-anchor="middle">heavyNormalise × all claims</text>
+  <rect class="wait wg" x="270" y="144" width="430" height="8" rx="3"/>
+  <text class="wt a kh1" x="276" y="172">input waits for the whole task</text>
+  <g class="a kh1"><rect class="hd" x="700" y="102" width="40" height="36" rx="4"/><text class="hdt" x="720" y="94" text-anchor="middle">handler</text></g>
+
+  <text class="lbl" x="28" y="220">Chunks + yield</text>
+  <text class="sub" x="28" y="238">await yieldToMain()</text>
+  <rect class="blk" x="170" y="206" width="56" height="36" rx="4"/><rect class="blk" x="238" y="206" width="56" height="36" rx="4"/><rect class="blk" x="346" y="206" width="56" height="36" rx="4"/><rect class="blk" x="414" y="206" width="56" height="36" rx="4"/><rect class="blk" x="482" y="206" width="56" height="36" rx="4"/><rect class="blk" x="550" y="206" width="56" height="36" rx="4"/><rect class="blk" x="618" y="206" width="56" height="36" rx="4"/><rect class="blk" x="686" y="206" width="56" height="36" rx="4"/>
+  <rect class="wait a kh2" x="270" y="248" width="24" height="8" rx="3"/>
+  <g class="a kh2"><rect class="hd" x="294" y="206" width="40" height="36" rx="4"/><text class="hdt" x="314" y="198" text-anchor="middle">handler</text></g>
+  <text class="hdt a kh2" x="276" y="276">handled at the next yield</text>
+
+  <g class="a kc"><line class="clk" x1="270" y1="92" x2="270" y2="258"/><text class="ct" x="270" y="86" text-anchor="middle">click</text></g>
+  <line class="ph" x1="170" y1="92" x2="170" y2="258"/>
+
+  <text class="sub" x="28" y="306">Schematic, not to scale. Tasks over 50 ms hurt INP. Truly CPU-heavy work belongs in a Web Worker.</text>
+  <text class="sub" x="28" y="324">Rendering can also run in the gaps between chunks.</text>
+</svg>

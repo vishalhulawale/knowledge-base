@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">A mapped type visits each key</title>
+  <desc id="d">Input type T is id: string and age: number. First, Getters of T maps each key K with key remapping: K equal to "id" becomes the key getId with type () =&gt; string, and K equal to "age" becomes getAge with type () =&gt; number. Then, OnlyStrings of T maps each key to itself when T[K] extends string and to never otherwise: id is kept with type string, and age maps to never, so it is dropped from the result.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{fill:#334155;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .pn{fill:#ffffff;stroke:#cbd5e1}
+    .row{fill:#0f172a;font-size:14px;font-weight:600;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .hlr{fill:#4f46e5;fill-opacity:.16;stroke:#4f46e5}
+    .k{fill:#4f46e5;font-size:15px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .st{fill:#334155;font-size:14px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .okr{fill:#16a34a;font-size:14px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .strk{stroke:#dc2626;stroke-width:2.5}
+    .ar{stroke:#64748b;stroke-width:2}.ah{fill:#64748b}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.row{fill:#f1f5f9}.lbl,.code,.st{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .pn{fill:#111827;stroke:#475569}.hlr{fill:#818cf8;fill-opacity:.22;stroke:#818cf8}
+      .k{fill:#818cf8}.okr{fill:#4ade80}.bad{fill:#f87171}.strk{stroke:#f87171}
+      .ar{stroke:#94a3b8}.ah{fill:#94a3b8}
+    }
+    /* 12 s loop. Phase A (0-46%): Getters, key remapping. Phase B (50-92%): OnlyStrings, filtering with never */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes pa{0%,46%{opacity:1}47.5%,98%{opacity:0}100%{opacity:1}}
+    @keyframes pb{0%,48.5%{opacity:0}50%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes ka1{0%,5%{opacity:0}6%,20%{opacity:1}21%,100%{opacity:0}}
+    @keyframes ka2{0%,21%{opacity:0}22%,46%{opacity:1}47%,100%{opacity:0}}
+    @keyframes oa1{0%,12%{opacity:0}13%,46%{opacity:1}47%,100%{opacity:0}}
+    @keyframes oa2{0%,28%{opacity:0}29%,46%{opacity:1}47%,100%{opacity:0}}
+    @keyframes kb1{0%,52%{opacity:0}53%,65%{opacity:1}66%,100%{opacity:0}}
+    @keyframes kb2{0%,65.5%{opacity:0}67%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes ob1{0%,57.5%{opacity:0}59%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes ob2{0%,71.5%{opacity:0}73%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes ha1{0%,5%{opacity:0}6%,20%{opacity:1}21%,100%{opacity:0}}
+    @keyframes ha2{0%,21%{opacity:0}22%,36%{opacity:1}37%,100%{opacity:0}}
+    @keyframes hb1{0%,52%{opacity:0}53%,65%{opacity:1}66%,100%{opacity:0}}
+    @keyframes hb2{0%,66%{opacity:0}67%,79%{opacity:1}80%,100%{opacity:0}}
+    .pa{animation-name:pa}.pb{animation-name:pb}.ka1{animation-name:ka1}.ka2{animation-name:ka2}.oa1{animation-name:oa1}.oa2{animation-name:oa2}.kb1{animation-name:kb1}.kb2{animation-name:kb2}.ob1{animation-name:ob1}.ob2{animation-name:ob2}.ha1{animation-name:ha1}.ha2{animation-name:ha2}.hb1{animation-name:hb1}.hb2{animation-name:hb2}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:0}.pa,.ka2,.oa1,.oa2{opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="338" rx="14"/>
+  <text class="h" x="28" y="40">A mapped type visits each key of T</text>
+  <g class="a pa"><text class="code" x="28" y="68">type Getters&lt;T&gt; = {</text><text class="code" x="28" y="88" xml:space="preserve">  [K in keyof T as `get${Capitalize&lt;string &amp; K&gt;}`]: () =&gt; T[K] };</text></g>
+  <g class="a pb"><text class="code" x="28" y="68">type OnlyStrings&lt;T&gt; = {</text><text class="code" x="28" y="88" xml:space="preserve">  [K in keyof T as T[K] extends string ? K : never]: T[K] };</text></g>
+
+  <text class="lbl" x="28" y="126">Input T</text>
+  <rect class="pn" x="28" y="138" width="200" height="110" rx="10"/>
+  <rect class="hlr a ha1" x="36" y="160" width="184" height="26" rx="4"/><rect class="hlr a ha2" x="36" y="200" width="184" height="26" rx="4"/>
+  <rect class="hlr a hb1" x="36" y="160" width="184" height="26" rx="4"/><rect class="hlr a hb2" x="36" y="200" width="184" height="26" rx="4"/>
+  <text class="row" x="48" y="178">id: string</text>
+  <text class="row" x="48" y="218">age: number</text>
+
+  <line class="ar" x1="236" y1="193" x2="262" y2="193"/><polygon class="ah" points="270,193 261,188 261,198"/>
+  <text class="lbl" x="280" y="126">For each K</text>
+  <rect class="pn" x="280" y="138" width="230" height="110" rx="10"/>
+  <g class="a ka1"><text class="k" x="296" y="178">K = "id"</text><text class="st" x="296" y="210">key → "getId"</text><text class="st" x="296" y="232">T["id"] → string</text></g>
+  <g class="a ka2"><text class="k" x="296" y="178">K = "age"</text><text class="st" x="296" y="210">key → "getAge"</text><text class="st" x="296" y="232">T["age"] → number</text></g>
+  <g class="a kb1"><text class="k" x="296" y="178">K = "id"</text><text class="st" x="296" y="210">T["id"] is string</text><text class="okr" x="296" y="232">→ keep "id"</text></g>
+  <g class="a kb2"><text class="k" x="296" y="178">K = "age"</text><text class="st" x="296" y="210">T["age"] is number</text><text class="bad" x="296" y="232">→ never: drop it</text></g>
+
+  <line class="ar" x1="518" y1="193" x2="544" y2="193"/><polygon class="ah" points="552,193 543,188 543,198"/>
+  <text class="lbl" x="562" y="126">Result</text>
+  <rect class="pn" x="562" y="138" width="210" height="110" rx="10"/>
+  <text class="row a oa1" x="578" y="178">getId: () =&gt; string</text>
+  <text class="row a oa2" x="578" y="218">getAge: () =&gt; number</text>
+  <text class="row a ob1" x="578" y="178">id: string</text>
+  <g class="a ob2"><text class="sub" x="578" y="218" style="font-size:14px">age: number</text><line class="strk" x1="574" y1="213" x2="676" y2="213"/><text class="bad" x="686" y="218">gone</text></g>
+
+  <text class="sub a pa" x="28" y="286">Key remapping with as renames each key; T[K] still reads the original property's type.</text>
+  <text class="sub a pb" x="28" y="286">Remapping a key to never removes it, so a mapped type can filter properties.</text>
+  <text class="sub" x="28" y="316">Without as, keys stay the same and only the value types (or readonly / ? modifiers) change.</text>
+</svg>

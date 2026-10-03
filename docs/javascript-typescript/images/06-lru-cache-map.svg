@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 330" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">LRU cache with a Map, capacity 3</title>
+  <desc id="d">A Map keeps keys in insertion order, shown left to right from least to most recently used. put A, put B and put C fill the three slots. get A deletes A and sets it again, so it moves to the right end and B becomes the first key. put D adds a fourth key; the size exceeds the capacity of 3, so the first key, B, is deleted. The final order is C, A, D.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .slot{fill:#ffffff;stroke:#cbd5e1;stroke-dasharray:5 4}
+    .ovs{fill:none;stroke:#dc2626;stroke-width:1.5;stroke-dasharray:5 4}
+    .key{fill:#4f46e5}
+    .kt{fill:#fff;font-size:20px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .ring{fill:none;stroke:#0ea5a4;stroke-width:3}
+    .evict{fill:#dc2626}
+    .bad{fill:#dc2626;font-size:13px;font-weight:700}
+    .op{fill:#4f46e5;font-size:17px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .opn{fill:#334155;font-size:15px}
+    .ax{stroke:#64748b;stroke-width:1.5}.axh{fill:#64748b}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.opn{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .slot{fill:#111827;stroke:#475569}.ovs{stroke:#f87171}
+      .key{fill:#818cf8}.kt{fill:#0f172a}.ring{stroke:#2dd4bf}.evict{fill:#f87171}.bad{fill:#f87171}
+      .op{fill:#818cf8}.ax{stroke:#94a3b8}.axh{fill:#94a3b8}
+    }
+    /* 12 s loop: put A/B/C (4-20%), get A (28-36%), put D + evict B (50-66%), hold to 92% */
+    .a{opacity:0;animation:12s infinite linear}
+    .oB{opacity:0;animation:oB 12s infinite linear}
+    .mv{animation:12s infinite ease-in-out}
+    @keyframes mA{0%{transform:translateX(0px)}33%{transform:translateX(0px)}36%{transform:translateX(248px)}62%{transform:translateX(248px)}66%{transform:translateX(124px)}100%{transform:translateX(124px)}}
+    @keyframes mB{0%{transform:translateX(124px)}33%{transform:translateX(124px)}36%{transform:translateX(0px)}100%{transform:translateX(0px)}}
+    @keyframes mC{0%{transform:translateX(248px)}33%{transform:translateX(248px)}36%{transform:translateX(124px)}62%{transform:translateX(124px)}66%{transform:translateX(0px)}100%{transform:translateX(0px)}}
+    @keyframes mD{0%{transform:translateX(372px)}62%{transform:translateX(372px)}66%{transform:translateX(248px)}100%{transform:translateX(248px)}}
+    @keyframes oA{0%,2.5%{opacity:0}4%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes oC{0%,18.5%{opacity:0}20%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes oD{0%,48.5%{opacity:0}50%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes oB{0%,11%{opacity:0}12%,57%{opacity:1}60%,100%{opacity:0}}
+    @keyframes rB{0%,50%{opacity:0}51%,57%{opacity:1}58%,100%{opacity:0}}
+    @keyframes hA{0%,27%{opacity:0}28%,37%{opacity:1}38%,100%{opacity:0}}
+    @keyframes ov{0%,49%{opacity:0}50%,63%{opacity:1}64%,100%{opacity:0}}
+    @keyframes t1{0%,2%{opacity:0}3%,10%{opacity:1}11%,100%{opacity:0}}
+    @keyframes t2{0%,10%{opacity:0}11%,18%{opacity:1}19%,100%{opacity:0}}
+    @keyframes t3{0%,18%{opacity:0}19%,26%{opacity:1}27%,100%{opacity:0}}
+    @keyframes t4{0%,26%{opacity:0}27%,48%{opacity:1}49%,100%{opacity:0}}
+    @keyframes t5{0%,47.5%{opacity:0}49%,92%{opacity:1}96%,100%{opacity:0}}
+    .mA{animation-name:mA}.mB{animation-name:mB}.mC{animation-name:mC}.mD{animation-name:mD}
+    .oA{animation-name:oA}.oC{animation-name:oC}.oD{animation-name:oD}.rB{animation-name:rB}.hA{animation-name:hA}.ov{animation-name:ov}
+    .t1{animation-name:t1}.t2{animation-name:t2}.t3{animation-name:t3}.t4{animation-name:t4}.t5{animation-name:t5}
+    @media (prefers-reduced-motion: reduce){
+      .a,.oB,.mv{animation:none}.a{opacity:1}.oB,.rB,.hA,.ov,.t1,.t2,.t3,.t4{opacity:0}
+      .mA{transform:translateX(124px)}.mC{transform:none}.mD{transform:translateX(248px)}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="328" rx="14"/>
+  <text class="h" x="28" y="40">LRU cache with a Map (capacity 3)</text>
+  <text class="sub" x="28" y="62">A Map iterates keys in insertion order, so the first key is always the least recently used.</text>
+  <g class="a t1"><text class="op" x="28" y="104">put(A)</text><text class="opn" x="120" y="104"></text></g><g class="a t2"><text class="op" x="28" y="104">put(B)</text><text class="opn" x="120" y="104"></text></g><g class="a t3"><text class="op" x="28" y="104">put(C)</text><text class="opn" x="120" y="104">cache is full (capacity 3)</text></g><g class="a t4"><text class="op" x="28" y="104">get(A)</text><text class="opn" x="120" y="104">delete + set moves A to the end</text></g><g class="a t5"><text class="op" x="28" y="104">put(D)</text><text class="opn" x="120" y="104">size 4 > 3: delete the first key, B</text></g>
+  <rect class="slot" x="150" y="150" width="104" height="56" rx="10"/><rect class="slot" x="274" y="150" width="104" height="56" rx="10"/><rect class="slot" x="398" y="150" width="104" height="56" rx="10"/><rect class="ovs a ov" x="522" y="150" width="104" height="56" rx="10"/><text class="bad a ov" x="574" y="230" text-anchor="middle">size 4 &gt; 3</text><g class="a oA"><g class="mv mA"><rect class="key" x="150" y="150" width="104" height="56" rx="10"/><text class="kt" x="202" y="185" text-anchor="middle">A</text><rect class="ring a hA" x="145" y="145" width="114" height="66" rx="13"/></g></g><g class="oB"><g class="mv mB"><rect class="key" x="150" y="150" width="104" height="56" rx="10"/><text class="kt" x="202" y="185" text-anchor="middle">B</text><rect class="evict a rB" x="150" y="150" width="104" height="56" rx="10"/><text class="bad a rB" x="202" y="138" text-anchor="middle">evicted</text></g></g><g class="a oC"><g class="mv mC"><rect class="key" x="150" y="150" width="104" height="56" rx="10"/><text class="kt" x="202" y="185" text-anchor="middle">C</text></g></g><g class="a oD"><g class="mv mD"><rect class="key" x="150" y="150" width="104" height="56" rx="10"/><text class="kt" x="202" y="185" text-anchor="middle">D</text></g></g>
+  <line class="ax" x1="150" y1="262" x2="498" y2="262"/><polygon class="axh" points="502,262 493,257 493,267"/>
+  <text class="sub" x="150" y="284">map.keys().next(): evicted next</text>
+  <text class="sub" x="502" y="284" text-anchor="end">most recently used</text>
+  <text class="sub" x="28" y="314">get and put are O(1): Map delete, set and keys().next() don't scan the entries.</text>
+</svg>

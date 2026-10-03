@@ -72,6 +72,9 @@ type OnlyStrings<T> = { [K in keyof T as T[K] extends string ? K : never]: T[K] 
 type MemberGetters = Getters<{ id: string; age: number }>;   // { getId: () => string; getAge: () => number }
 ```
 
+![Animation: for T with id: string and age: number, Getters remaps each key, turning id into getId: () => string and age into getAge: () => number; then OnlyStrings keeps id because its type is string and maps age to never, which drops it](images/08-mapped-type-keys.svg){ loading=lazy }
+*Watch the middle box: the mapped type handles one key at a time. `as` computes the new key, and a key that becomes `never` disappears from the result.*
+
 ### Conditional types and infer
 
 ```ts
@@ -154,6 +157,9 @@ Recursion depth is limited (and slows the checker); TypeScript 7's native compil
     setField(form, "email", "a@b.com");   // ok
     setField(form, "email", 42);          // error: number not assignable to string
     ```
+
+![Animation: from interface Member with id, name, email and phone, keyof gives the union of the four keys, Exclude removes "id", Omit picks the remaining three properties as MemberForm, and Partial makes them optional as MemberUpdate](images/08-omit-partial-derivation.svg){ loading=lazy }
+*Notice that `Omit` is just `keyof`, `Exclude` and `Pick` chained together, and `Partial` adds `?` to each key. None of the derived types repeats a field name.*
 
 ### Typed event emitter
 

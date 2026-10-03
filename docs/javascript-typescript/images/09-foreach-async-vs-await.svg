@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">forEach with async versus Promise.all versus for…of</title>
+  <desc id="d">Three timelines saving the same three items, which take 300, 500 and 200 ms. With forEach and an async callback, all three saves start at 0 ms but nothing waits for them, so "all saved" is logged at 0 ms, before any save has finished. With await Promise.all over map, all three start at 0 ms and "all saved" is logged at 500 ms, when the slowest finishes. With for…of and await, the saves run one after another, finishing at 300, 800 and 1000 ms, and "all saved" is logged at 1000 ms.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{fill:#334155;font-size:14px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .bar{fill:#4f46e5}
+    .dt{fill:#4f46e5;font-size:13px;font-weight:700}
+    .row{stroke:#cbd5e1;stroke-width:1.5}
+    .tk{stroke:#e2e8f0;stroke-width:1.5}
+    .badl{stroke:#dc2626;stroke-width:3}.badt{fill:#dc2626;font-size:13px;font-weight:700}
+    .okl{stroke:#16a34a;stroke-width:3}.okt{fill:#16a34a;font-size:13px;font-weight:700}
+    .g{transform-box:fill-box;transform-origin:left center}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.code{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .bar{fill:#818cf8}.dt{fill:#818cf8}.row{stroke:#475569}.tk{stroke:#334155}
+      .badl{stroke:#f87171}.badt{fill:#f87171}.okl{stroke:#4ade80}.okt{fill:#4ade80}
+    }
+    /* 10 s loop: 1000 ms of saves slowed down over 0-80%, hold to 92% */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes g00{0%,0.0%{transform:scaleX(0);opacity:1}24.0%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+    @keyframes d00{0%,22.8%{opacity:0}24.3%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes g01{0%,0.0%{transform:scaleX(0);opacity:1}40.0%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+    @keyframes d01{0%,38.8%{opacity:0}40.3%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes g02{0%,0.0%{transform:scaleX(0);opacity:1}16.0%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+    @keyframes d02{0%,14.8%{opacity:0}16.3%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes L0{0%,0%{opacity:0}0.5%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes g10{0%,0.0%{transform:scaleX(0);opacity:1}24.0%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+    @keyframes d10{0%,22.8%{opacity:0}24.3%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes g11{0%,0.0%{transform:scaleX(0);opacity:1}40.0%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+    @keyframes d11{0%,38.8%{opacity:0}40.3%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes g12{0%,0.0%{transform:scaleX(0);opacity:1}16.0%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+    @keyframes d12{0%,14.8%{opacity:0}16.3%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes L1{0%,39%{opacity:0}40.5%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes g20{0%,0.0%{transform:scaleX(0);opacity:1}24.0%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+    @keyframes d20{0%,22.8%{opacity:0}24.3%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes g21{0%,24.0%{transform:scaleX(0);opacity:1}64.0%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+    @keyframes d21{0%,62.8%{opacity:0}64.3%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes g22{0%,64.0%{transform:scaleX(0);opacity:1}80.0%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+    @keyframes d22{0%,78.8%{opacity:0}80.3%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes L2{0%,79%{opacity:0}80.5%,92%{opacity:1}96%,100%{opacity:0}}
+    .g00{animation:g00 10s infinite linear}.d00{animation-name:d00}.g01{animation:g01 10s infinite linear}.d01{animation-name:d01}.g02{animation:g02 10s infinite linear}.d02{animation-name:d02}.L0{animation-name:L0}.g10{animation:g10 10s infinite linear}.d10{animation-name:d10}.g11{animation:g11 10s infinite linear}.d11{animation-name:d11}.g12{animation:g12 10s infinite linear}.d12{animation-name:d12}.L1{animation-name:L1}.g20{animation:g20 10s infinite linear}.d20{animation-name:d20}.g21{animation:g21 10s infinite linear}.d21{animation-name:d21}.g22{animation:g22 10s infinite linear}.d22{animation-name:d22}.L2{animation-name:L2}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.g{animation:none;transform:none}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Who waits for the saves?</text>
+  <text class="sub" x="28" y="62">Three saves taking 300, 500 and 200 ms, then console.log("all saved"). Slowed down to watch.</text>
+  <line class="tk" x1="210.0" y1="92" x2="210.0" y2="352"/><text class="sub" x="210.0" y="370" text-anchor="middle">0 ms</text><line class="tk" x1="340.0" y1="92" x2="340.0" y2="352"/><text class="sub" x="340.0" y="370" text-anchor="middle">250 ms</text><line class="tk" x1="470.0" y1="92" x2="470.0" y2="352"/><text class="sub" x="470.0" y="370" text-anchor="middle">500 ms</text><line class="tk" x1="600.0" y1="92" x2="600.0" y2="352"/><text class="sub" x="600.0" y="370" text-anchor="middle">750 ms</text><line class="tk" x1="730.0" y1="92" x2="730.0" y2="352"/><text class="sub" x="730.0" y="370" text-anchor="middle">1000 ms</text>
+  <text class="code" x="28" y="120">forEach(async …)</text><text class="sub" x="28" y="138">callbacks not awaited</text><line class="row" x1="210" y1="152" x2="772" y2="152"/><rect class="bar g g00" x="210.0" y="104" width="156.0" height="12" rx="3"/><text class="dt a d00" x="371.0" y="115">1</text><rect class="bar g g01" x="210.0" y="119" width="260.0" height="12" rx="3"/><text class="dt a d01" x="475.0" y="130">2</text><rect class="bar g g02" x="210.0" y="134" width="104.0" height="12" rx="3"/><text class="dt a d02" x="319.0" y="145">3</text><g class="a L0"><line class="badl" x1="210.0" y1="100" x2="210.0" y2="158"/><text class="badt" x="218.0" y="172" text-anchor="start">log "all saved" too early</text></g><text class="code" x="28" y="204">Promise.all(map)</text><text class="sub" x="28" y="222">start all, then wait</text><line class="row" x1="210" y1="236" x2="772" y2="236"/><rect class="bar g g10" x="210.0" y="188" width="156.0" height="12" rx="3"/><text class="dt a d10" x="371.0" y="199">1</text><rect class="bar g g11" x="210.0" y="203" width="260.0" height="12" rx="3"/><text class="dt a d11" x="475.0" y="214">2</text><rect class="bar g g12" x="210.0" y="218" width="104.0" height="12" rx="3"/><text class="dt a d12" x="319.0" y="229">3</text><g class="a L1"><line class="okl" x1="470.0" y1="184" x2="470.0" y2="242"/><text class="okt" x="478.0" y="256" text-anchor="start">log "all saved"</text></g><text class="code" x="28" y="288">for…of + await</text><text class="sub" x="28" y="306">one save at a time</text><line class="row" x1="210" y1="320" x2="772" y2="320"/><rect class="bar g g20" x="210.0" y="272" width="156.0" height="12" rx="3"/><text class="dt a d20" x="371.0" y="283">1</text><rect class="bar g g21" x="366.0" y="287" width="260.0" height="12" rx="3"/><text class="dt a d21" x="631.0" y="298">2</text><rect class="bar g g22" x="626.0" y="302" width="104.0" height="12" rx="3"/><text class="dt a d22" x="735.0" y="313">3</text><g class="a L2"><line class="okl" x1="730.0" y1="268" x2="730.0" y2="326"/><text class="okt" x="722.0" y="340" text-anchor="end">log "all saved"</text></g>
+  <text class="sub" x="28" y="400">forEach ignores the promises its callback returns; a rejected save there becomes an unhandled rejection.</text>
+</svg>

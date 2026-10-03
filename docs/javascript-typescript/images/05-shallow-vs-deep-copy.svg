@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Shallow copy versus deep copy</title>
+  <desc id="d">Two panels. In both, member points to an object with name "Ana" and an address object with zip "10001", and draft is a copy. On the left, the copy was made with spread, so draft is a new top-level object but its address arrow points to the same address object as member. On the right, the copy was made with structuredClone, so draft has its own address object. Then draft.address.zip is set to "00000". On the left the shared address changes, so member's zip changes too. On the right only draft's address changes and member keeps "10001".</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{fill:#334155;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .var{fill:#4f46e5;font-size:14px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .ob{fill:#ffffff;stroke:#4f46e5;stroke-width:1.5}
+    .ad{fill:#ffffff;stroke:#0ea5a4;stroke-width:1.5}
+    .dot{fill:#334155}
+    .ln{stroke:#64748b;stroke-width:1.8}.lnh{fill:#64748b}
+    .chg{fill:#dc2626;font-size:13px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .mut{fill:#d97706;font-size:14px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}.good{fill:#16a34a;font-size:14px;font-weight:700}
+    .div{stroke:#e2e8f0;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.code{fill:#e2e8f0}.sub{fill:#94a3b8}.var{fill:#818cf8}
+      .ob{fill:#111827;stroke:#818cf8}.ad{fill:#111827;stroke:#2dd4bf}.dot{fill:#e2e8f0}
+      .ln{stroke:#94a3b8}.lnh{fill:#94a3b8}.chg,.bad{fill:#f87171}.mut{fill:#fbbf24}.good{fill:#4ade80}.div{stroke:#334155}
+    }
+    /* 10 s loop: mutation line at 30%, zip changes at 42%, verdicts at 52%, hold to 92% */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes z0{0%,41%{opacity:1}42%,95%{opacity:0}97%,100%{opacity:1}}
+    @keyframes z1{0%,40.5%{opacity:0}42%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes m{0%,28.5%{opacity:0}30%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes r{0%,50.5%{opacity:0}52%,92%{opacity:1}96%,100%{opacity:0}}
+    .z0{animation-name:z0}.z1{animation-name:z1}.m{animation-name:m}.r{animation-name:r}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.z0{opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Shallow copy shares nested objects</text>
+  <text class="sub" x="28" y="62">Both copies get a new top-level object. Only the deep copy gets a new address too.</text>
+  <line class="div" x1="406" y1="84" x2="406" y2="350"/>
+  <text class="lbl" x="28" y="96">Shallow: { ...member }</text>
+  <text class="code" x="28" y="118">const draft = { ...member };</text>
+  <text class="var" x="28" y="169">member</text><line class="ln" x1="86" y1="164" x2="89.0" y2="164.0"/><polygon class="lnh" points="98,164 89.0,168.5 89.0,159.5"/>
+  <text class="var" x="28" y="259">draft</text><line class="ln" x1="70" y1="254" x2="89.0" y2="254.0"/><polygon class="lnh" points="98,254 89.0,258.5 89.0,249.5"/>
+  <rect class="ob" x="100" y="136" width="132" height="56" rx="8"/><text class="code" x="110" y="158">name: "Ana"</text><text class="code" x="110" y="180">address:</text><circle class="dot" cx="212" cy="176" r="5"/><rect class="ob" x="100" y="226" width="132" height="56" rx="8"/><text class="code" x="110" y="248">name: "Ana"</text><text class="code" x="110" y="270">address:</text><circle class="dot" cx="212" cy="266" r="5"/>
+  <rect class="ad" x="272" y="187.0" width="120" height="44" rx="8"/><text class="code a z0" x="282" y="214.0">zip: "10001"</text><text class="chg a z1" x="282" y="214.0">zip: "00000"</text>
+  <line class="ln" x1="217" y1="176" x2="262.0" y2="198.9"/><polygon class="lnh" points="270,203.0 259.9,202.9 264.0,194.9"/><line class="ln" x1="217" y1="266" x2="263.5" y2="221.2"/><polygon class="lnh" points="270,215.0 266.6,224.5 260.4,218.0"/>
+  <text class="lbl" x="420" y="96">Deep: structuredClone</text>
+  <text class="code" x="420" y="118">const draft = structuredClone(member);</text>
+  <text class="var" x="420" y="169">member</text><line class="ln" x1="478" y1="164" x2="481.0" y2="164.0"/><polygon class="lnh" points="490,164 481.0,168.5 481.0,159.5"/>
+  <text class="var" x="420" y="259">draft</text><line class="ln" x1="462" y1="254" x2="481.0" y2="254.0"/><polygon class="lnh" points="490,254 481.0,258.5 481.0,249.5"/>
+  <rect class="ob" x="492" y="136" width="132" height="56" rx="8"/><text class="code" x="502" y="158">name: "Ana"</text><text class="code" x="502" y="180">address:</text><circle class="dot" cx="604" cy="176" r="5"/><rect class="ob" x="492" y="226" width="132" height="56" rx="8"/><text class="code" x="502" y="248">name: "Ana"</text><text class="code" x="502" y="270">address:</text><circle class="dot" cx="604" cy="266" r="5"/>
+  <rect class="ad" x="664" y="142" width="120" height="44" rx="8"/><text class="code" x="674" y="169">zip: "10001"</text><rect class="ad" x="664" y="232" width="120" height="44" rx="8"/><text class="code a z0" x="674" y="259">zip: "10001"</text><text class="chg a z1" x="674" y="259">zip: "00000"</text>
+  <line class="ln" x1="609" y1="176" x2="653.2" y2="166.0"/><polygon class="lnh" points="662,164 654.2,170.4 652.2,161.6"/><line class="ln" x1="609" y1="266" x2="653.2" y2="256.0"/><polygon class="lnh" points="662,254 654.2,260.4 652.2,251.6"/>
+  <text class="mut a m" x="28" y="318">draft.address.zip = "00000";</text>
+  <text class="mut a m" x="420" y="318">draft.address.zip = "00000";</text>
+  <text class="bad a r" x="28" y="344">member.address.zip is "00000" too</text>
+  <text class="good a r" x="420" y="344">member.address.zip is still "10001"</text>
+  <text class="sub" x="28" y="384">Spread, Object.assign, slice and Array.from copy one level. structuredClone copies every level,</text>
+  <text class="sub" x="28" y="402">including Dates, Maps, Sets and cycles, but throws on functions and DOM nodes.</text>
+</svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Promise.all, allSettled, race and any on the same inputs</title>
+  <desc id="d">Three input promises start together: B rejects at 100 ms, A fulfils at 200 ms and C fulfils at 300 ms. A playhead moves along the timeline. Promise.all rejects at 100 ms with B's error. Promise.race also rejects at 100 ms, because B is the first to settle. Promise.any fulfils at 200 ms with A's value, the first fulfilment. Promise.allSettled waits until 300 ms and fulfils with all three outcomes: A fulfilled, B rejected, C fulfilled.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{fill:#334155;font-size:14px;font-weight:600;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .pend{fill:#94a3b8}
+    .okf{fill:#16a34a}.badf{fill:#dc2626}
+    .okt{fill:#16a34a;font-size:14px;font-weight:700}.badt{fill:#dc2626;font-size:14px;font-weight:700}
+    .pt{fill:#fff;font-size:13px;font-weight:700}
+    .tk{stroke:#e2e8f0;stroke-width:1.5}
+    .sep{stroke:#cbd5e1;stroke-width:1}
+    .ph{stroke:#4f46e5;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.code{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .pend{fill:#64748b}.okf{fill:#4ade80}.badf{fill:#f87171}.okt{fill:#4ade80}.badt{fill:#f87171}
+      .pt{fill:#0f172a}.tk{stroke:#334155}.sep{stroke:#475569}.ph{stroke:#818cf8}
+    }
+    /* 10 s loop: playhead 0 to 350 ms over 0-75%, hold to 92% */
+    .a{opacity:0;animation:10s infinite linear}
+    .g{transform-box:fill-box;transform-origin:left center}
+    @keyframes gi0{0%{transform:scaleX(0);opacity:1}42.0%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+    @keyframes ai0{0%,41%{opacity:0}42.5%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes gi1{0%{transform:scaleX(0);opacity:1}21.0%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+    @keyframes ai1{0%,20%{opacity:0}21.5%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes gi2{0%{transform:scaleX(0);opacity:1}63.0%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+    @keyframes ai2{0%,62%{opacity:0}63.5%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes gr0{0%{transform:scaleX(0);opacity:1}21.0%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+    @keyframes ar0{0%,20%{opacity:0}21.5%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes gr1{0%{transform:scaleX(0);opacity:1}63.0%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+    @keyframes ar1{0%,62%{opacity:0}63.5%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes gr2{0%{transform:scaleX(0);opacity:1}21.0%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+    @keyframes ar2{0%,20%{opacity:0}21.5%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes gr3{0%{transform:scaleX(0);opacity:1}42.0%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+    @keyframes ar3{0%,41%{opacity:0}42.5%,92%{opacity:1}96%,100%{opacity:0}}
+    .gi0{animation:gi0 10s infinite linear}.ai0{animation-name:ai0}.gi1{animation:gi1 10s infinite linear}.ai1{animation-name:ai1}.gi2{animation:gi2 10s infinite linear}.ai2{animation-name:ai2}.gr0{animation:gr0 10s infinite linear}.ar0{animation-name:ar0}.gr1{animation:gr1 10s infinite linear}.ar1{animation-name:ar1}.gr2{animation:gr2 10s infinite linear}.ar2{animation-name:ar2}.gr3{animation:gr3 10s infinite linear}.ar3{animation-name:ar3}
+    @keyframes ph{0%{transform:translateX(0);opacity:1}75%,92%{transform:translateX(500px);opacity:1}96%,100%{transform:translateX(500px);opacity:0}}
+    .ph{animation:ph 10s infinite linear}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.g{animation:none;transform:none}.ph{animation:none;opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="438" rx="14"/>
+  <text class="h" x="28" y="40">Same three promises, four combinators</text>
+  <text class="sub" x="28" y="62">Each combinator settles at a different moment, with a different result.</text>
+  <line class="tk" x1="200" y1="80" x2="200" y2="380"/><text class="sub" x="200" y="398" text-anchor="middle">0 ms</text><line class="tk" x1="340" y1="80" x2="340" y2="380"/><text class="sub" x="340" y="398" text-anchor="middle">100 ms</text><line class="tk" x1="480" y1="80" x2="480" y2="380"/><text class="sub" x="480" y="398" text-anchor="middle">200 ms</text><line class="tk" x1="620" y1="80" x2="620" y2="380"/><text class="sub" x="620" y="398" text-anchor="middle">300 ms</text>
+  <line class="sep" x1="28" y1="200" x2="772" y2="200"/>
+  <line class="ph" x1="200" y1="80" x2="200" y2="380"/>
+  <text class="lbl" x="28" y="109">A</text><text class="sub" x="52" y="109">fulfils at 200 ms</text><rect class="pend g gi0" x="200" y="101" width="280" height="6" rx="3"/><g class="a ai0"><circle class="okf" cx="480" cy="104" r="9"/><text class="okt" x="496" y="109">a</text></g><text class="lbl" x="28" y="143">B</text><text class="sub" x="52" y="143">rejects at 100 ms</text><rect class="pend g gi1" x="200" y="135" width="140" height="6" rx="3"/><g class="a ai1"><circle class="badf" cx="340" cy="138" r="9"/><text class="badt" x="356" y="143">err</text></g><text class="lbl" x="28" y="177">C</text><text class="sub" x="52" y="177">fulfils at 300 ms</text><rect class="pend g gi2" x="200" y="169" width="420" height="6" rx="3"/><g class="a ai2"><circle class="okf" cx="620" cy="172" r="9"/><text class="okt" x="636" y="177">c</text></g><text class="code" x="28" y="241">Promise.all</text><rect class="pend g gr0" x="200" y="233" width="140" height="6" rx="3"/><g class="a ar0"><rect class="badf" x="340" y="221" width="184" height="30" rx="15"/><text class="pt" x="432.0" y="241" text-anchor="middle">rejects with B's error</text></g><text class="code" x="28" y="285">Promise.allSettled</text><rect class="pend g gr1" x="200" y="277" width="420" height="6" rx="3"/><g class="a ar1"><rect class="okf" x="620" y="265" width="146" height="30" rx="15"/><text class="pt" x="693.0" y="285" text-anchor="middle">[A ✓, B ✗, C ✓]</text></g><text class="code" x="28" y="329">Promise.race</text><rect class="pend g gr2" x="200" y="321" width="140" height="6" rx="3"/><g class="a ar2"><rect class="badf" x="340" y="309" width="184" height="30" rx="15"/><text class="pt" x="432.0" y="329" text-anchor="middle">rejects with B's error</text></g><text class="code" x="28" y="373">Promise.any</text><rect class="pend g gr3" x="200" y="365" width="280" height="6" rx="3"/><g class="a ar3"><rect class="okf" x="480" y="353" width="176" height="30" rx="15"/><text class="pt" x="568.0" y="373" text-anchor="middle">fulfils with A's value</text></g>
+  <text class="sub" x="28" y="424">Promise.all and race don't stop A and C after rejecting; they keep running unless you pass an AbortSignal.</text>
+</svg>

@@ -106,6 +106,9 @@ flowchart LR
 | `structuredClone(x)` | Deep | Date, RegExp, Map, Set, ArrayBuffer, typed arrays, Error, cycles | Functions, DOM nodes, class prototypes/methods, symbols as keys → throws/lost |
 | Library (lodash `cloneDeep`) | Deep | More types | Bundle size |
 
+![Animation: a spread copy creates a new member object that still points to the same address object, so setting draft.address.zip to "00000" changes member too; a structuredClone copy has its own address object, so member keeps "10001"](images/05-shallow-vs-deep-copy.svg){ loading=lazy }
+*Watch the zip after the assignment. With spread both arrows lead to one address object, so the original changes as well.*
+
 ## In practice: code & configuration
 
 === "❌ Common mistake"

@@ -66,6 +66,9 @@ function log(level, ...messages) {}                  // rest parameters (real ar
 - Import attributes: `import data from "./x.json" with { type: "json" }` (ES2025; TypeScript 6 removed the old `assert` syntax).
 - Default vs named exports: named exports are better for refactoring, auto-imports and tree shaking.
 
+![Animation: an ES module and a CommonJS module each export a counter; after the importer calls inc(), the ESM importer sees count 1 through a live binding, while the CommonJS importer still holds its copied value 0](images/04-esm-live-bindings.svg){ loading=lazy }
+*Watch the importer's box after `inc()` runs. In ESM it is a view of the exporter's variable; in CommonJS it is a value copied once, which never changes.*
+
 ### Optional chaining and nullish coalescing
 
 ```js
@@ -75,6 +78,9 @@ const pageSize = settings.pageSize ?? 20;  // 0 stays 0
 const label = input || "N/A";              // "" and 0 become "N/A" (often a bug)
 config.retries ??= 3;                      // assign only if null/undefined
 ```
+
+![Grid comparing x || 25 and x ?? 25 for 0, empty string, false, NaN, null, undefined and 10: || replaces every falsy value with 25, ?? replaces only null and undefined](images/04-nullish-vs-or.svg){ loading=lazy }
+*Notice the four left columns: valid values like `0` and `""` survive `??` but are lost with `||`.*
 
 ### Iterators and generators
 

@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">var vs let in a loop with setTimeout callbacks</title>
+  <desc id="d">A loop runs three times and schedules a setTimeout callback each time. On the left, with var, there is one binding i that changes from 0 to 1 to 2 and ends at 3; all three callbacks point to that same binding, so when they run after the loop they log 3, 3, 3. On the right, with let, each iteration creates a new binding holding 0, 1 and 2; each callback points to its own binding, so they log 0, 1, 2.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .code{fill:#334155;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#4f46e5;stroke-width:2}
+    .bt{fill:#0f172a;font-size:20px;font-weight:700}
+    .bk{fill:#64748b;font-size:15px}
+    .cb{fill:#0ea5a4}
+    .cbt{fill:#fff;font-size:14px;font-weight:700}
+    .ln{stroke:#0ea5a4;stroke-width:2;fill:none}
+    .div{stroke:#e2e8f0;stroke-width:2}
+    .bad{fill:#dc2626;font-size:20px;font-weight:700}
+    .good{fill:#16a34a;font-size:20px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.code{fill:#e2e8f0}.sub,.bk{fill:#94a3b8}
+      .box{fill:#111827;stroke:#818cf8}.bt{fill:#f1f5f9}
+      .cb{fill:#2dd4bf}.cbt{fill:#0f172a}.ln{stroke:#2dd4bf}
+      .div{stroke:#334155}.bad{fill:#f87171}.good{fill:#4ade80}
+    }
+    /* 10 s loop: iterations at 4%, 18%, 32%; loop ends 46%; callbacks log at 58%, 68%, 78% */
+    .a,.w{opacity:0;animation:10s infinite linear}
+    @keyframes p4{0%,3%{opacity:0}5%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes p18{0%,17%{opacity:0}19%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes p32{0%,31%{opacity:0}33%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes p46{0%,45%{opacity:0}47%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes p58{0%,57%{opacity:0}59%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes p68{0%,67%{opacity:0}69%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes p78{0%,77%{opacity:0}79%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes w0{0%,3%{opacity:0}5%,17%{opacity:1}18%,100%{opacity:0}}
+    @keyframes w1{0%,17%{opacity:0}18%,31%{opacity:1}32%,100%{opacity:0}}
+    @keyframes w2{0%,31%{opacity:0}32%,45%{opacity:1}46%,100%{opacity:0}}
+    .k4{animation-name:p4}.k18{animation-name:p18}.k32{animation-name:p32}.k46{animation-name:p46}
+    .k58{animation-name:p58}.k68{animation-name:p68}.k78{animation-name:p78}
+    .w0{animation-name:w0}.w1{animation-name:w1}.w2{animation-name:w2}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.w{animation:none;opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Closures capture bindings, not values</text>
+  <text class="code" x="28" y="64">for (… i = 0; i &lt; 3; i++) setTimeout(() =&gt; console.log(i));</text>
+  <line class="div" x1="400" y1="84" x2="400" y2="350"/>
+
+  <!-- left: var -->
+  <text class="lbl" x="28" y="104">var i: one binding for the whole loop</text>
+  <rect class="box" x="140" y="124" width="120" height="56" rx="10"/>
+  <text class="bk" x="158" y="159">i =</text>
+  <text class="bt w w0" x="222" y="160" text-anchor="middle">0</text>
+  <text class="bt w w1" x="222" y="160" text-anchor="middle">1</text>
+  <text class="bt w w2" x="222" y="160" text-anchor="middle">2</text>
+  <text class="bt a k46" x="222" y="160" text-anchor="middle">3</text>
+  <g class="a k46"><text class="sub" x="272" y="148">i++ made it 3,</text><text class="sub" x="272" y="166">loop ended</text></g>
+  <g class="a k4"><path class="ln" d="M80 244 L176 182"/><rect class="cb" x="40" y="244" width="80" height="34" rx="17"/><text class="cbt" x="80" y="266" text-anchor="middle">cb 1</text></g>
+  <g class="a k18"><path class="ln" d="M200 244 L200 182"/><rect class="cb" x="160" y="244" width="80" height="34" rx="17"/><text class="cbt" x="200" y="266" text-anchor="middle">cb 2</text></g>
+  <g class="a k32"><path class="ln" d="M320 244 L224 182"/><rect class="cb" x="280" y="244" width="80" height="34" rx="17"/><text class="cbt" x="320" y="266" text-anchor="middle">cb 3</text></g>
+  <text class="lbl" x="40" y="330">Logs:</text>
+  <text class="bad a k58" x="110" y="331">3</text>
+  <text class="bad a k68" x="140" y="331">3</text>
+  <text class="bad a k78" x="170" y="331">3</text>
+
+  <!-- right: let -->
+  <text class="lbl" x="428" y="104">let i: a new binding per iteration</text>
+  <g class="a k4"><rect class="box" x="430" y="124" width="100" height="56" rx="10"/><text class="bk" x="448" y="159">i =</text><text class="bt" x="502" y="160" text-anchor="middle">0</text></g>
+  <g class="a k18"><rect class="box" x="540" y="124" width="100" height="56" rx="10"/><text class="bk" x="558" y="159">i =</text><text class="bt" x="612" y="160" text-anchor="middle">1</text></g>
+  <g class="a k32"><rect class="box" x="650" y="124" width="100" height="56" rx="10"/><text class="bk" x="668" y="159">i =</text><text class="bt" x="722" y="160" text-anchor="middle">2</text></g>
+  <g class="a k4"><path class="ln" d="M480 244 L480 182"/><rect class="cb" x="440" y="244" width="80" height="34" rx="17"/><text class="cbt" x="480" y="266" text-anchor="middle">cb 1</text></g>
+  <g class="a k18"><path class="ln" d="M590 244 L590 182"/><rect class="cb" x="550" y="244" width="80" height="34" rx="17"/><text class="cbt" x="590" y="266" text-anchor="middle">cb 2</text></g>
+  <g class="a k32"><path class="ln" d="M700 244 L700 182"/><rect class="cb" x="660" y="244" width="80" height="34" rx="17"/><text class="cbt" x="700" y="266" text-anchor="middle">cb 3</text></g>
+  <text class="lbl" x="440" y="330">Logs:</text>
+  <text class="good a k58" x="510" y="331">0</text>
+  <text class="good a k68" x="540" y="331">1</text>
+  <text class="good a k78" x="570" y="331">2</text>
+
+  <text class="sub" x="28" y="380">Callbacks are timer tasks, so they run after the loop ends. Each reads the binding it closed over.</text>
+</svg>

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Union versus intersection of object types</title>
+  <desc id="d">Two Venn diagrams of the sets of values for Member, which has id and name, and Insured, which has id and plan. On the left, Member | Insured covers both circles: a value may be either, so without narrowing only the shared property id is safe to read. On the right, Member &amp; Insured is only the overlap: a value must be both, so it has id, name and plan. More properties means fewer possible values.</desc>
+  <defs>
+    <clipPath id="cl"><circle cx="560" cy="220" r="78"/></clipPath>
+  </defs>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{fill:#334155;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .ttl{fill:#4f46e5;font-size:16px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .fill{fill:#4f46e5;fill-opacity:.22}
+    .ring{fill:none;stroke:#4f46e5;stroke-width:2}
+    .ring2{fill:none;stroke:#94a3b8;stroke-width:1.5;stroke-dasharray:5 4}
+    .cn{fill:#334155;font-size:14px;font-weight:700}
+    .body{fill:#334155;font-size:14px}
+    .ok{fill:#16a34a;font-size:14px;font-weight:700}
+    .warn{fill:#d97706;font-size:14px;font-weight:700}
+    .div{stroke:#e2e8f0;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.code,.cn,.body{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .ttl{fill:#818cf8}.fill{fill:#818cf8;fill-opacity:.28}.ring{stroke:#818cf8}.ring2{stroke:#64748b}
+      .ok{fill:#4ade80}.warn{fill:#fbbf24}.div{stroke:#334155}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Union vs intersection: sets of values</text>
+  <text class="code" x="28" y="66" xml:space="preserve">type Member  = { id: string; name: string };</text>
+  <text class="code" x="28" y="86">type Insured = { id: string; plan: string };</text>
+  <line class="div" x1="400" y1="108" x2="400" y2="376"/>
+
+  <!-- union -->
+  <text class="ttl" x="28" y="124">Member | Insured</text>
+  <circle class="fill" cx="160" cy="220" r="78"/><circle class="fill" cx="240" cy="220" r="78"/>
+  <circle class="ring" cx="160" cy="220" r="78"/><circle class="ring" cx="240" cy="220" r="78"/>
+  <text class="cn" x="122" y="225" text-anchor="middle">Member</text>
+  <text class="cn" x="272" y="225" text-anchor="middle">Insured</text>
+  <text class="body" x="28" y="330">A value is either one, so only shared</text>
+  <text class="body" x="28" y="350">properties are safe until you narrow:</text>
+  <text class="warn" x="28" y="370">v.id ✓</text><text class="warn" x="100" y="370">v.name ✗</text><text class="warn" x="196" y="370">v.plan ✗</text>
+
+  <!-- intersection -->
+  <text class="ttl" x="420" y="124">Member &amp; Insured</text>
+  <circle class="fill" cx="640" cy="220" r="78" clip-path="url(#cl)"/>
+  <circle class="ring2" cx="560" cy="220" r="78"/><circle class="ring2" cx="640" cy="220" r="78"/>
+  <path class="ring" d="M600 153 A78 78 0 0 1 600 287 A78 78 0 0 1 600 153 Z"/>
+  <text class="cn" x="530" y="225" text-anchor="middle">Member</text>
+  <text class="cn" x="672" y="225" text-anchor="middle">Insured</text>
+  <text class="body" x="420" y="330">A value must be both, so it has every</text>
+  <text class="body" x="420" y="350">property of each type:</text>
+  <text class="ok" x="420" y="370">v.id ✓</text><text class="ok" x="492" y="370">v.name ✓</text><text class="ok" x="588" y="370">v.plan ✓</text>
+</svg>

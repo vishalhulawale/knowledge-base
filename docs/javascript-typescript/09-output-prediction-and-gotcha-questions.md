@@ -117,6 +117,9 @@ The two places these gotchas cause real bugs: `async` inside `forEach`, and a sh
     }
     ```
 
+![Animation: three saves of 300, 500 and 200 ms; with forEach and an async callback "all saved" is logged at 0 ms before any save finishes, with Promise.all it is logged at 500 ms when the slowest save finishes, and with for…of and await the saves run one after another and it is logged at 1000 ms](images/09-foreach-async-vs-await.svg){ loading=lazy }
+*Watch where each green or red line lands. `forEach` logs before any save is done; `Promise.all` waits for the slowest save; `for…of` waits for all three in turn.*
+
 ## Real-world usage
 
 - **Code review:** the patterns above (`forEach(async…)`, a missing `await`, an unhandled rejection, a method passed as a callback that loses `this`) are among the most common review comments in TypeScript code. Lint rules catch many of them: `@typescript-eslint/no-floating-promises`, `no-misused-promises` and `no-loop-func`.

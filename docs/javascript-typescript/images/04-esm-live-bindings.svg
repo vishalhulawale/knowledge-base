@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">ESM live bindings versus CommonJS copied values</title>
+  <desc id="d">Two side-by-side examples of a counter module. On the left, an ES module exports let count and an inc function; the importer's count is a live view of the exporter's binding, so after calling inc() both show 1 and console.log(count) prints 1. On the right, a CommonJS module puts count into module.exports; the object holds a copy of the value 0, so after inc() the module's own variable is 1 but the importer still sees 0 and console.log(count) prints 0.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{fill:#334155;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .pn{fill:#ffffff;stroke:#cbd5e1}
+    .hlr{fill:#4f46e5;fill-opacity:.16;stroke:#4f46e5}
+    .cellx{fill:#ffffff;stroke:#4f46e5;stroke-width:2}
+    .celll{fill:#ffffff;stroke:#4f46e5;stroke-width:2;stroke-dasharray:6 4}
+    .cellc{fill:#ffffff;stroke:#94a3b8;stroke-width:2}
+    .cv{fill:#0f172a;font-size:15px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .lk{stroke:#4f46e5;stroke-width:2}.lkh{fill:#4f46e5}.lkt{fill:#4f46e5;font-size:13px;font-weight:600}
+    .cp{stroke:#94a3b8;stroke-width:2;stroke-dasharray:4 4}.cph{fill:#94a3b8}.cpt{fill:#64748b;font-size:13px;font-weight:600}
+    .okt{fill:#16a34a;font-size:15px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .badt{fill:#dc2626;font-size:15px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.cv{fill:#f1f5f9}.lbl,.code{fill:#e2e8f0}.sub,.cpt{fill:#94a3b8}
+      .pn{fill:#111827;stroke:#475569}.hlr{fill:#818cf8;fill-opacity:.22;stroke:#818cf8}
+      .cellx,.celll{fill:#111827;stroke:#818cf8}.cellc{fill:#111827;stroke:#64748b}
+      .lk{stroke:#818cf8}.lkh,.lkt{fill:#818cf8}.cp{stroke:#64748b}.cph{fill:#64748b}
+      .okt{fill:#4ade80}.badt{fill:#f87171}
+    }
+    /* 10 s loop: inc() runs at 30-50%, console.log at 52%, hold to 92% */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes v0{0%,34%{opacity:1}35%,95%{opacity:0}97%,100%{opacity:1}}
+    @keyframes v1{0%,33.5%{opacity:0}35%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes hi{0%,27%{opacity:0}28%,49%{opacity:1}50%,100%{opacity:0}}
+    @keyframes hc{0%,50.5%{opacity:0}52%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes ko{0%,56.5%{opacity:0}58%,92%{opacity:1}96%,100%{opacity:0}}
+    .v0{animation-name:v0}.v1{animation-name:v1}.hi{animation-name:hi}.hc{animation-name:hc}.ko{animation-name:ko}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.v0,.hi,.hc{opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="438" rx="14"/>
+  <text class="h" x="28" y="40">Live bindings (ESM) vs copied values (CommonJS)</text>
+  <text class="sub" x="28" y="62">The same counter module, then inc() is called from the importing file.</text>
+  <text class="lbl" x="28" y="96">ES modules: live binding</text>
+  <rect class="pn" x="28" y="110" width="364" height="114" rx="10"/><text class="sub" x="40" y="130">counter.mjs</text>
+  <text class="code" x="40" y="150" xml:space="preserve">export let count = 0;</text>
+  <text class="code" x="40" y="170" xml:space="preserve">export function inc() {</text>
+  <text class="code" x="40" y="190" xml:space="preserve">  count++;</text>
+  <text class="code" x="40" y="210" xml:space="preserve">}</text>
+  <rect class="pn" x="28" y="250" width="364" height="116" rx="10"/><text class="sub" x="40" y="270">app.mjs</text>
+  <rect class="hlr a hi" x="34" y="317" width="226" height="20" rx="4"/><rect class="hlr a hc" x="34" y="337" width="226" height="20" rx="4"/>
+  <text class="code" x="40" y="292" xml:space="preserve">import { count, inc }</text>
+  <text class="code" x="40" y="312" xml:space="preserve">  from "./counter.mjs";</text>
+  <text class="code" x="40" y="332" xml:space="preserve">inc();</text>
+  <text class="code" x="40" y="352" xml:space="preserve">console.log(count);</text>
+  <text class="sub" x="330" y="141" text-anchor="middle">module&apos;s count</text>
+  <rect class="cellx" x="280" y="147" width="100" height="44" rx="8"/><text class="cv a v0" x="330" y="175" text-anchor="middle">count: 0</text><text class="cv a v1" x="330" y="175" text-anchor="middle">count: 1</text>
+  <rect class="celll" x="280" y="289" width="100" height="44" rx="8"/><text class="cv a v0" x="330" y="317" text-anchor="middle">count: 0</text><text class="cv a v1" x="330" y="317" text-anchor="middle">count: 1</text>
+  <line class="lk" x1="330" y1="286" x2="330" y2="200"/><polygon class="lkh" points="330,193 325,202 335,202"/><text class="lkt" x="272" y="242" text-anchor="end">reads the same binding</text>
+  <text class="okt a ko" x="28" y="394">console.log(count) → 1</text>
+  <text class="lbl" x="408" y="96">CommonJS: a copy of the value</text>
+  <rect class="pn" x="408" y="110" width="364" height="114" rx="10"/><text class="sub" x="420" y="130">counter.cjs</text>
+  <text class="code" x="420" y="150" xml:space="preserve">let count = 0;</text>
+  <text class="code" x="420" y="170" xml:space="preserve">const inc = () =&gt; count++;</text>
+  <text class="code" x="420" y="190" xml:space="preserve">module.exports =</text>
+  <text class="code" x="420" y="210" xml:space="preserve">  { count, inc };</text>
+  <rect class="pn" x="408" y="250" width="364" height="116" rx="10"/><text class="sub" x="420" y="270">app.cjs</text>
+  <rect class="hlr a hi" x="414" y="317" width="226" height="20" rx="4"/><rect class="hlr a hc" x="414" y="337" width="226" height="20" rx="4"/>
+  <text class="code" x="420" y="292" xml:space="preserve">const { count, inc } =</text>
+  <text class="code" x="420" y="312" xml:space="preserve">  require("./counter.cjs");</text>
+  <text class="code" x="420" y="332" xml:space="preserve">inc();</text>
+  <text class="code" x="420" y="352" xml:space="preserve">console.log(count);</text>
+  <text class="sub" x="710" y="141" text-anchor="middle">module&apos;s count</text>
+  <rect class="cellx" x="660" y="147" width="100" height="44" rx="8"/><text class="cv a v0" x="710" y="175" text-anchor="middle">count: 0</text><text class="cv a v1" x="710" y="175" text-anchor="middle">count: 1</text>
+  <rect class="cellc" x="660" y="289" width="100" height="44" rx="8"/><text class="cv" x="710" y="317" text-anchor="middle">count: 0</text><text class="sub" x="710" y="352" text-anchor="middle">app&apos;s own copy</text>
+  <line class="cp" x1="710" y1="194" x2="710" y2="280"/><polygon class="cph" points="710,287 705,278 715,278"/><text class="cpt" x="652" y="242" text-anchor="end">value copied at export</text>
+  <text class="badt a ko" x="408" y="394">console.log(count) → 0</text>
+  <text class="sub" x="28" y="424">ESM imports are read-only views: the importer can't assign count, but sees every update.</text>
+</svg>

@@ -76,6 +76,9 @@ type ApiResponse<T, E = ApiError> = { data: T; errors?: E[] };
 - `as const` freezes literals: `const roles = ["member", "pharmacist"] as const; type Role = typeof roles[number]`.
 - `satisfies` (TS 4.9) checks a value against a type without widening it.
 
+![Two Venn diagrams for Member with id and name and Insured with id and plan: Member | Insured covers both circles, so only id is safe without narrowing; Member & Insured is only the overlap, so id, name and plan are all available](images/07-union-vs-intersection.svg){ loading=lazy }
+*Notice the direction: a union allows more values but fewer safe properties; an intersection allows fewer values, each with every property.*
+
 ### Narrowing
 
 ```ts
@@ -88,6 +91,9 @@ function format(v: string | number | Date | null) {
 ```
 
 Techniques: `typeof`, `instanceof`, `in` operator, equality/truthiness, `Array.isArray`, control flow analysis (assignments, early returns), discriminated unions, **user-defined type guards** (`function isMember(x: unknown): x is Member`), **assertion functions** (`asserts x is T`).
+
+![Animation: the format function runs line by line while the type of v shrinks from string, number, Date or null to string, number or Date, then number or Date, and finally only Date](images/07-narrowing-union.svg){ loading=lazy }
+*Watch the right column: each early return strikes one member out of the union, so by the last line the compiler knows `v` is a `Date`.*
 
 ### Discriminated unions and exhaustiveness
 
