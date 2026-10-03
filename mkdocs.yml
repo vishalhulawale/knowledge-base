@@ -265,6 +265,11 @@ nav:
       - "PostgreSQL / SQL":
           - Overview: postgresql-sql/index.md
           - "SQL Essentials: Joins, GROUP BY, Window Functions, CTEs": postgresql-sql/01-sql-essentials-joins-group-by-window-functions-ctes.md
+          - "Indexes (B-tree, Hash, GIN, Partial, Covering) & EXPLAIN ANALYZE": postgresql-sql/02-indexes-and-explain-analyze.md
+          - "Transactions, ACID & Isolation Levels": postgresql-sql/03-transactions-acid-and-isolation-levels.md
+          - "MVCC, Locking & Deadlocks": postgresql-sql/04-mvcc-locking-and-deadlocks.md
+          - "Normalisation vs Denormalisation": postgresql-sql/05-normalisation-vs-denormalisation.md
+          - "Query Optimisation & Common Performance Issues": postgresql-sql/06-query-optimisation-and-common-performance-issues.md
       - "MongoDB":
           - Overview: mongodb/index.md
       - "Redis & Caching":

@@ -1118,31 +1118,31 @@
           "title": "Indexes (B-tree, hash, GIN, partial, composite) & EXPLAIN ANALYZE",
           "slug": "02-indexes-and-explain-analyze",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Transactions, ACID & isolation levels (anomalies)",
           "slug": "03-transactions-acid-and-isolation-levels",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "MVCC, locking & deadlocks",
           "slug": "04-mvcc-locking-and-deadlocks",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Normalisation vs denormalisation",
           "slug": "05-normalisation-vs-denormalisation",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Query optimisation & common performance issues",
           "slug": "06-query-optimisation-and-common-performance-issues",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Partitioning, replication & connection pooling (HikariCP)",
