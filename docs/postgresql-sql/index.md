@@ -4,7 +4,7 @@
 
 | # | Subtopic | Resume link | Status |
 |---|---|---|---|
-| 1 | SQL essentials: joins, group by, window functions, CTEs |  | :material-progress-clock: To do |
+| 1 | [SQL essentials: joins, group by, window functions, CTEs](01-sql-essentials-joins-group-by-window-functions-ctes.md) |  | :material-check-circle: Done |
 | 2 | Indexes (B-tree, hash, GIN, partial, composite) & EXPLAIN ANALYZE |  | :material-progress-clock: To do |
 | 3 | Transactions, ACID & isolation levels (anomalies) |  | :material-progress-clock: To do |
 | 4 | MVCC, locking & deadlocks |  | :material-progress-clock: To do |

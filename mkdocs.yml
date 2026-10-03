@@ -154,6 +154,10 @@ nav:
           - Overview: jpa-hibernate/index.md
           - "Entity Lifecycle & Persistence Context": jpa-hibernate/01-entity-lifecycle-and-persistence-context.md
           - "Relationships & Fetching (Lazy vs Eager)": jpa-hibernate/02-relationships-and-fetching.md
+          - "N+1 Problem & Solutions (Fetch Joins, Entity Graphs, Batch Size)": jpa-hibernate/03-n-plus-1-problem-and-solutions.md
+          - "First- and Second-Level Cache": jpa-hibernate/04-first-and-second-level-cache.md
+          - "Optimistic vs Pessimistic Locking": jpa-hibernate/05-optimistic-vs-pessimistic-locking.md
+          - "Schema Migration with Liquibase/Flyway": jpa-hibernate/06-schema-migration-with-liquibase-flyway.md
       - "Reactive Programming & Spring WebFlux":
           - Overview: reactive-webflux/index.md
   - "Architecture":
@@ -260,6 +264,7 @@ nav:
   - "Data":
       - "PostgreSQL / SQL":
           - Overview: postgresql-sql/index.md
+          - "SQL Essentials: Joins, GROUP BY, Window Functions, CTEs": postgresql-sql/01-sql-essentials-joins-group-by-window-functions-ctes.md
       - "MongoDB":
           - Overview: mongodb/index.md
       - "Redis & Caching":

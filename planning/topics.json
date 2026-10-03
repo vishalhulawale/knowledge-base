@@ -1112,7 +1112,7 @@
           "title": "SQL essentials: joins, group by, window functions, CTEs",
           "slug": "01-sql-essentials-joins-group-by-window-functions-ctes",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Indexes (B-tree, hash, GIN, partial, composite) & EXPLAIN ANALYZE",
@@ -1180,25 +1180,25 @@
           "title": "N+1 problem & solutions (fetch joins, entity graphs, batch size)",
           "slug": "03-n-plus-1-problem-and-solutions",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "First- and second-level cache",
           "slug": "04-first-and-second-level-cache",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Optimistic vs pessimistic locking",
           "slug": "05-optimistic-vs-pessimistic-locking",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Schema migration with Liquibase/Flyway",
           "slug": "06-schema-migration-with-liquibase-flyway",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
