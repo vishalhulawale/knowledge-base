@@ -1,5 +1,5 @@
 // Shared docs enhancements for NeuroTrade and the knowledge base. Runs on every page load, including
-// instant navigation. Keep byte-identical in both repos: scripts/check-docs-theme-sync.sh.
+// instant navigation. Keep byte-identical in both repos: scripts/check_docs_theme_sync.py.
 
 function decoratePriorityBadges(root) {
   root.querySelectorAll(".md-typeset code").forEach((el) => {

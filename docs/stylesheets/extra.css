@@ -1,5 +1,9 @@
 /* Shared docs theme for NeuroTrade and the knowledge base, layered on Zensical's "modern" variant.
-   Keep byte-identical in both repos: scripts/check-docs-theme-sync.sh. */
+   Keep byte-identical in both repos: scripts/check_docs_theme_sync.py. */
+
+/* Figtree for the interface, and Source Serif 4 as a variable font (true semi-bold headings and
+   optical sizing; Zensical itself loads only its 300/400/500/700 weights). */
+@import url("https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..800;1,300..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..800;1,8..60,300..800&display=swap");
 
 /* ---------- Palette ---------- */
 
@@ -37,24 +41,43 @@
 
 /* ---------- Typography ---------- */
 
-/* Figtree (body, set in mkdocs.yml): open, rounded letterforms and a tall x-height for long reading. */
+/* Claude-style pairing: page text in a bookish serif (Source Serif 4, set as the text font in
+   mkdocs.yml), the interface around it in a clean geometric sans (Figtree). */
+:root {
+  --doc-ui-font: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+.md-header,
+.md-tabs,
+.md-sidebar,
+.md-path,
+.md-footer,
+.md-search,
+.md-source,
+.md-typeset .md-button,
+.md-typeset .tabbed-labels,
+.md-typeset .admonition-title,
+.md-typeset summary,
+.md-typeset table:not([class]) th,
+.doc-progress-meta {
+  font-family: var(--doc-ui-font);
+}
+
 .md-typeset {
+  font-size: 0.84rem;
   line-height: 1.7;
 }
 
-.md-typeset h1 {
-  font-weight: 750;
-  letter-spacing: -0.025em;
+/* Serif headings read best semi-bold with natural spacing. */
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3 {
+  font-weight: 600;
+  letter-spacing: -0.005em;
 }
 
 .md-typeset h2 {
-  font-weight: 700;
-  letter-spacing: -0.015em;
   margin-top: 2.2em;
-}
-
-.md-typeset h3 {
-  font-weight: 650;
 }
 
 /* ---------- Home hero ---------- */
@@ -158,7 +181,7 @@
 /* ---------- Priority badges (added by extra.js) ---------- */
 
 .md-typeset code.doc-badge {
-  font-family: var(--md-text-font-family);
+  font-family: var(--doc-ui-font);
   font-size: 0.68em;
   font-weight: 700;
   letter-spacing: 0.04em;

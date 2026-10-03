@@ -31,7 +31,7 @@ The site is protected by Cloudflare Access (Zero Trust), so only allowed identit
 - `.claude/skills/`: research and learning skills
 
 ## Look and feel
-The site shares one theme with the NeuroTrade docs ([vishalhulawale/neuro-trade](https://github.com/vishalhulawale/neuro-trade)): Zensical's `modern` variant with Figtree (body) / JetBrains Mono (code), Lucide icons and a light / dark / system switch. The two sites must stay identical in style and UI behaviour, so every theme change is made in both repos (see `CLAUDE.md`).
+The site shares one theme with the NeuroTrade docs ([vishalhulawale/neuro-trade](https://github.com/vishalhulawale/neuro-trade)): Zensical's `modern` variant with a Claude-style font pairing: Source Serif 4 for page text, Figtree for the interface (header, tabs, sidebars, buttons) and JetBrains Mono for code, Lucide icons and a light / dark / system switch. The two sites must stay identical in style and UI behaviour, so every theme change is made in both repos (see `CLAUDE.md`).
 
 | Shared with NeuroTrade | Rule |
 |---|---|
@@ -41,7 +41,7 @@ The site shares one theme with the NeuroTrade docs ([vishalhulawale/neuro-trade]
 | Deployment-time stamp | Same `DOCS_BUILD_TIME` command (`deploy.yml` here, `docs.yml` there) |
 
 What the shared files do:
-- `extra.css`: indigo/teal palette, home hero, cards, tables, admonitions, `P0`–`P3` badges and reading mode.
+- `extra.css`: the Figtree + Source Serif 4 font pairing, indigo/teal palette, home hero, cards, tables, admonitions, `P0`–`P3` badges and reading mode.
 - `extra.js`: the reading-mode button in the header (hides tabs, sidebars and breadcrumbs; remembered per device under `docs.readingMode`), badges for inline `` `P0` ``–`` `P3` ``, an optional `doc-progress` checklist bar, and the "Last updated on" footer.
 - `build-info.js`: holds `null`; the deploy workflow overwrites it with the deployment time. Don't commit a stamped copy.
 
