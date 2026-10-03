@@ -992,13 +992,13 @@
           "title": "Frontend security (XSS, token storage, CSP)",
           "slug": "05-frontend-security",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Frontend CI/CD & monorepos",
           "slug": "06-frontend-ci-cd-and-monorepos",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
@@ -1368,19 +1368,19 @@
           "title": "Complexity analysis (Big-O)",
           "slug": "01-complexity-analysis",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Arrays & strings (two pointers, sliding window, prefix sums)",
           "slug": "02-arrays-and-strings",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Hashing patterns",
           "slug": "03-hashing-patterns",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Linked lists, stacks & queues",

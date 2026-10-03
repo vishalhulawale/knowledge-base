@@ -4,9 +4,9 @@
 
 | # | Subtopic | Resume link | Status |
 |---|---|---|---|
-| 1 | Complexity analysis (Big-O) |  | :material-progress-clock: To do |
-| 2 | Arrays & strings (two pointers, sliding window, prefix sums) |  | :material-progress-clock: To do |
-| 3 | Hashing patterns |  | :material-progress-clock: To do |
+| 1 | [Complexity analysis (Big-O)](01-complexity-analysis.md) |  | :material-check-circle: Done |
+| 2 | [Arrays & strings (two pointers, sliding window, prefix sums)](02-arrays-and-strings.md) |  | :material-check-circle: Done |
+| 3 | [Hashing patterns](03-hashing-patterns.md) |  | :material-check-circle: Done |
 | 4 | Linked lists, stacks & queues |  | :material-progress-clock: To do |
 | 5 | Trees & BST; tree traversal patterns |  | :material-progress-clock: To do |
 | 6 | Heaps & priority queues (top-K) |  | :material-progress-clock: To do |
