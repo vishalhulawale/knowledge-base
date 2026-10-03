@@ -6,7 +6,7 @@ tags: [jpa-hibernate, P0]
 
 # First- and Second-Level Cache
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **First-level cache (L1)** = the persistence context. Always on, **per transaction/EntityManager**: the same id returns the same instance with one SQL load. It is about **identity and consistency**, not cross-request performance, and it dies with the transaction.
     - **Second-level cache (L2)** = optional, **per `EntityManagerFactory` (per JVM)**, shared across sessions. Stores entity **data** (not instances) by id. Enable per entity with `@Cacheable` + `@Cache(usage = …)` and a provider (Ehcache 3/JCache, Infinispan, Caffeine via JCache, Redis via Redisson). Measured: second transaction's `findById` → **0 SQL statements**, 1 cache hit.
     - **Concurrency strategies:** `READ_ONLY` (immutable reference data, fastest), `NONSTRICT_READ_WRITE` (rare updates, short staleness OK), `READ_WRITE` (soft locks, consistent within one JVM), `TRANSACTIONAL` (JTA/XA providers).

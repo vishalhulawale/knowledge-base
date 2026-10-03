@@ -6,7 +6,7 @@ tags: [microservices, P0]
 
 # Inter-Service Communication: Sync vs Async
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Synchronous** (request/response: REST, gRPC, GraphQL): the caller waits. Simple and immediate, but creates **temporal coupling**: if the callee is down or slow, so is the caller. Chains multiply latency and reduce availability.
     - **Asynchronous** (messages/events: Kafka, RabbitMQ, SQS/SNS): the sender doesn't wait. Decouples availability and load, absorbs spikes, lets many consumers react, but brings **eventual consistency, duplicates, ordering and harder debugging**.
     - Choose **per interaction**, not per system: queries that need an answer now → sync; state changes others react to, long-running work, fan-out → async.

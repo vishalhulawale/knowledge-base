@@ -6,7 +6,7 @@ tags: [spring-boot, P0]
 
 # Spring Boot 3.x: Jakarta EE, GraalVM Native Image, Virtual Threads, Observability
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Boot 3.0 = Spring Framework 6 + Java 17 baseline + Jakarta EE 9/10.** Every `javax.servlet`, `javax.persistence`, `javax.validation` import becomes `jakarta.*`. JDK packages such as `javax.sql` and `javax.crypto` do **not** change.
     - **Native image** compiles the app ahead of time under a **closed-world assumption**. Spring's **AOT engine** runs at build time, fixes the bean graph, and generates hints for reflection, proxies and resources. You gain fast startup and low memory. You lose runtime flexibility and pay with long builds.
     - **Virtual threads** (Java 21, Boot 3.2+): `spring.threads.virtual.enabled=true` gives one cheap thread per request. Blocking code scales like async code. They do not make CPU work faster and they do not add database connections.

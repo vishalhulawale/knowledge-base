@@ -6,7 +6,7 @@ tags: [spring-security-oauth2, P0]
 
 # Service-to-Service Auth: mTLS, Token Exchange & Propagation Through Gateways
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Every internal call carries up to **two identities**: the **calling service** (workload identity) and the **end user** it acts for. Decide how each one is proven. They are different problems.
     - **mTLS** proves the *service* at the transport layer: both sides present X.509 certificates. It says nothing about the user and only covers one hop.
     - **Client credentials** gives a service its own token (no user). **Token relay** forwards the user's token unchanged. **Token exchange (RFC 8693)** swaps the incoming token for a new one that is scoped down and has the right **audience** for the next hop.

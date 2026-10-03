@@ -6,7 +6,7 @@ tags: [distributed-systems, P0]
 
 # Distributed Transactions: 2PC vs Saga
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - When one business operation changes data in **several databases or services**, you can't use one local ACID transaction. The options are **2PC** (atomic, blocking, tightly coupled) or **sagas** (a sequence of local transactions with **compensations**: available and loosely coupled, but **not isolated**).
     - **2PC:**
         - A **coordinator** asks every participant to **prepare** (durably promise it can commit, holding locks). If all vote yes, it sends **commit**. Otherwise **abort**.

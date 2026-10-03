@@ -6,7 +6,7 @@ tags: [dsa, P0]
 
 # Complexity Analysis (Big-O)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Big-O** describes how running time or memory **grows** with input size `n`, ignoring constants and lower-order terms: `3n² + 10n + 7` is `O(n²)`. Strictly, O is an upper bound, Ω a lower bound and Θ a tight bound. In interviews "Big-O" usually means the tight worst-case bound.
     - **Growth classes to know:** `O(1)` < `O(log n)` < `O(n)` < `O(n log n)` < `O(n²)` < `O(2ⁿ)` < `O(n!)`. Doubling `n` roughly **quadruples** `O(n²)` work: measured nested-loop duplicate check 10 → 40 → 154 ms for n = 10k → 20k → 40k, and `String +=` in a loop 29 → 101 → 448 ms. Sorting-based and hash-based versions took 1–2.5 ms.
     - **Rules:** sequential steps add (`O(n + m)`), nested loops multiply (`O(n·m)`), halving the problem each step gives `O(log n)`, recursion cost = (number of calls) × (work per call). Naive Fibonacci made **2,692,537** calls for `fib(30)`; with memoisation **59** (measured).

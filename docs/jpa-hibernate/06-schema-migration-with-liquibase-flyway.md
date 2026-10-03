@@ -6,7 +6,7 @@ tags: [jpa-hibernate, P0]
 
 # Schema Migration with Liquibase/Flyway
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Production schemas change through **versioned migration scripts in Git**, applied in order by a tool that records what ran: **Flyway** (`flyway_schema_history`) or **Liquibase** (`DATABASECHANGELOG` + `DATABASECHANGELOGLOCK`). Never `spring.jpa.hibernate.ddl-auto=update` in production; use `validate` or `none`.
     - **Flyway:** plain SQL files named `V2__add_member_phone.sql` (versioned, run once), `R__member_view.sql` (repeatable, re-run when changed). Each applied script's **checksum** is stored; editing an applied script fails validation (verified: "Migration checksum mismatch for migration version 2").
     - **Liquibase:** changelogs (YAML/XML/SQL/JSON) of **changesets** identified by `id` + `author` + file. Database-agnostic change types, **rollback** blocks, **contexts/labels**, **preconditions**.

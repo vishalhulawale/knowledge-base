@@ -6,7 +6,7 @@ tags: [aws, P0]
 
 # Serverless: Lambda (Cold Starts, Concurrency, Limits) & API Gateway
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Execution environment lifecycle:** INIT (download code, start the runtime, run your static/constructor code) → INVOKE (many times, reused while warm) → SHUTDOWN. A **cold start** is the INIT phase on a new environment. **One environment handles one request at a time.**
     - **Concurrency** is the number of in-flight requests (≈ RPS × duration):
         - Default account limit is **1,000 per Region** (raisable).

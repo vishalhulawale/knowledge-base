@@ -6,7 +6,7 @@ tags: [java-concurrency-jvm, P0]
 
 # Garbage Collection (G1, ZGC, Tuning, GC Logs)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - GC finds objects **reachable from GC roots** (thread stacks, statics, JNI handles) and reclaims everything else. Cost is driven by **live data and allocation rate**, not by the amount of garbage.
     - **G1** (default since Java 9) splits the heap into equal **regions**, collects young regions in short stop-the-world (STW) pauses, marks the old generation **concurrently**, then cleans the most garbage-filled old regions in **mixed** collections. You tune it with one goal: `-XX:MaxGCPauseMillis` (default 200 ms).
     - **ZGC** does marking **and** relocation concurrently using **coloured pointers and load barriers**. Pauses are sub-millisecond and do not grow with heap size. It is **generational** since Java 21 (JEP 439), generational by default in Java 23, and generational-only from Java 24.

@@ -6,7 +6,7 @@ tags: [api-design, P0]
 
 # OpenAPI & API-First Development
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **OpenAPI** is the standard, machine-readable description of an HTTP API: paths, operations, parameters, request/response schemas, status codes, security schemes. **3.1** (2021) aligned schemas with **JSON Schema 2020-12**; **3.2** (September 2025) added the `QUERY` method, streaming media types (SSE, JSON Lines) and hierarchical tags.
     - **Design-first (API-first):** write and review the spec *before* code, then generate server stubs, clients, mocks and docs from it. **Code-first:** annotate controllers and generate the spec (springdoc). Design-first suits public/partner and cross-team APIs; code-first is fine for small internal APIs, if the generated spec is still reviewed and checked.
     - Make the spec **enforced, not decorative**: generate Spring **interfaces** the controller must implement (`openapi-generator`, `interfaceOnly`), so contract drift is a compile error.

@@ -6,7 +6,7 @@ tags: [microservices, P0]
 
 # Deployment Strategies: Blue-Green, Canary, Feature Flags
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Rolling** (Kubernetes default: `maxSurge` 25%, `maxUnavailable` 25%): replace pods gradually. Simple, no extra capacity, but old and new versions run together and rollback is another rollout.
     - **Blue-green:** run the new version (green) beside the old (blue), switch all traffic at once, keep blue for **instant rollback**. Costs double capacity during the switch and needs care with databases.
     - **Canary:** send a small share of traffic (1% → 5% → 25% → 100%) to the new version, compare its metrics with the baseline, **promote or roll back automatically** (Argo Rollouts, Flagger, mesh traffic splitting).

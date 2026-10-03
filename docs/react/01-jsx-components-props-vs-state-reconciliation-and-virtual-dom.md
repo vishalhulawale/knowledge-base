@@ -6,7 +6,7 @@ tags: [react, P0]
 
 # JSX, Components, Props vs State, Reconciliation & Virtual DOM
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **JSX** is syntax for creating React elements: `<Card title="x"/>` compiles to a `jsx(Card, { title: "x" })` call (automatic runtime since React 17). Elements are plain, immutable object descriptions of UI, not DOM nodes.
     - A **component** is a function from props (and state) to elements. It must be **pure** during render: same inputs, same output, no side effects.
     - **Props** are inputs owned by the parent (read-only in the child). **State** is memory owned by the component, changed only through its setter, which **schedules a re-render**.

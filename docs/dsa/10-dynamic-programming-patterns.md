@@ -6,7 +6,7 @@ tags: [dsa, P0]
 
 # Dynamic Programming Patterns
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **DP = recursion + reuse.** It applies when a problem has **overlapping subproblems** (the same sub-question is asked many times) and **optimal substructure** (the best answer is built from best answers to sub-questions). Naive edit distance on two 12-character strings made **46,992,969** calls; memoised, **353** (measured).
     - **Recipe:**
         1. Define the **state** precisely: "`dp[i]` = best answer for the first i items".

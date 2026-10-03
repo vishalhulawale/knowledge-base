@@ -6,7 +6,7 @@ tags: [distributed-systems, P0]
 
 # Fallacies of Distributed Computing, Failure Modes
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **The 8 fallacies** (Deutsch, Gosling): the network is reliable, latency is zero, bandwidth is infinite, the network is secure, topology doesn't change, there is one administrator, transport cost is zero, the network is homogeneous. Each false assumption shows up as a class of production bugs.
     - **Partial failure** is what makes distributed systems hard. Part of the system fails while the rest keeps running, and **you often can't tell what failed**. After a timeout, the request may have failed, may still be running, or may have succeeded with the response lost.
     - **Failure models**, from easiest to hardest: **crash-stop** → **crash-recovery** (comes back, possibly with stale state) → **omission** (lost messages) → **timing/performance** (too slow) → **Byzantine** (arbitrary or malicious behaviour). Most business systems assume crash-recovery + omission + timing faults, not Byzantine ones.

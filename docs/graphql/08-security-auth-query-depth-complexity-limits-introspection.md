@@ -6,7 +6,7 @@ tags: [graphql, P0]
 
 # GraphQL Security: Auth, Depth/Complexity Limits & Introspection
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Authentication** happens once per request (OAuth2/OIDC bearer token validated by the gateway or Spring Security resource server). **Authorization** must happen **per field/object**, because one endpoint serves everything.
     - Put authorization in the **domain/service layer** (or method security), not only in resolvers. Check **object-level access** (BOLA/IDOR: "can *this* member see prescription X?").
     - Bound query cost: **max depth, max complexity/cost, max page size, timeouts, rate limits per client**, and ideally **persisted/allow-listed queries**.

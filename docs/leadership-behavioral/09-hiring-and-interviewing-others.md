@@ -6,7 +6,7 @@ tags: [leadership-behavioral, P0]
 
 # Hiring & Interviewing Others
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Hiring is a leverage decision:** one strong hire improves the team for years, and one bad hire costs months. Senior engineers are expected to **interview well, calibrate the bar, and improve the process**.
     - **Structured interviewing beats gut feel:** define the **competencies** for the role (coding, design, debugging, communication, ownership, collaboration), assign each interviewer a **focus area**, use **the same core questions** and a **scoring rubric** (1–4 with behavioural anchors), and **write feedback before discussing** with other interviewers.
     - **Good questions:**

@@ -6,7 +6,7 @@ tags: [java-concurrency-jvm, P0]
 
 # Virtual Threads (Project Loom) & Structured Concurrency
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A **virtual thread** is a `java.lang.Thread` scheduled by the **JVM**, not the OS. Its stack lives on the **heap**. When it blocks, it **unmounts** from its **carrier** (platform) thread, so the carrier can run another virtual thread. Final in **Java 21** (JEP 444).
     - They make **blocking I/O cheap**, not code faster. The win is **throughput** for I/O-bound work written in plain thread-per-request style. They give **no benefit for CPU-bound work**.
     - **Never pool** virtual threads. Create one per task (`Executors.newVirtualThreadPerTaskExecutor()`). Limit scarce resources with a **`Semaphore`**, not with pool size.

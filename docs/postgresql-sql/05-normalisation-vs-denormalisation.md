@@ -6,7 +6,7 @@ tags: [postgresql-sql, P0]
 
 # Normalisation vs Denormalisation
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Normalisation** stores each fact **once**, so it can't become inconsistent. It removes **update anomalies** (change a pharmacy's phone in 10,000 rows), **insert anomalies** (can't add a pharmacy until it has a prescription) and **delete anomalies** (deleting the last prescription loses the pharmacy).
     - Normal forms in one line each: **1NF** atomic values, no repeating groups; **2NF** no attribute depends on part of a composite key; **3NF** no attribute depends on another non-key attribute; **BCNF** every determinant is a candidate key. For OLTP, aim for **3NF/BCNF** by default.
     - **Denormalisation** deliberately duplicates or pre-computes data to make **reads** cheaper: copied columns, summary/counter tables, **materialized views**, JSONB documents, read models fed by events. Every copy needs a **sync mechanism** and a defined staleness.

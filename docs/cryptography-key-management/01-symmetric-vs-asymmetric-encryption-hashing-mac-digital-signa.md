@@ -6,7 +6,7 @@ tags: [cryptography-key-management, P0]
 
 # Symmetric vs Asymmetric Encryption, Hashing, MAC & Digital Signatures
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Know which **property** you need: **confidentiality** (encryption), **integrity + authenticity with a shared key** (MAC), **integrity + authenticity + non-repudiation with a key pair** (digital signature), or just a **fingerprint** (hash, no key).
     - **Symmetric** (AES) uses one shared key and is fast: AES-256-GCM ran at **~1.2 GB/s** in warmed Java 21 (OpenSSL 3.4 GB/s with AES-NI). Use an **AEAD** mode (AES-GCM, ChaCha20-Poly1305): a one-bit change or wrong associated data raised `AEADBadTagException`. **Never reuse a nonce with the same key**: reusing one let an attacker who knew one plaintext recover the other ("PAY MALLORY 9999999"). **Never use ECB**: identical 16-byte blocks produced identical ciphertext blocks.
     - **Asymmetric** (RSA, elliptic curves) uses a public/private key pair, is slow, and is limited in size: RSA-2048 OAEP can encrypt at most **190 bytes**, and unwrap took **~1.4 ms**. Use it to **exchange or wrap keys** (hybrid encryption, key agreement with X25519/ECDHE) and to **sign**.

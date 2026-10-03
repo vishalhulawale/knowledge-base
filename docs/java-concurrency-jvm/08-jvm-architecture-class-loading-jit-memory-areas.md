@@ -6,7 +6,7 @@ tags: [java-concurrency-jvm, P0]
 
 # JVM Architecture: Class Loading, JIT, Memory Areas
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - The JVM has three big parts: the **class loader subsystem** (load → link → initialise), the **runtime data areas** (heap, Metaspace, stacks, code cache) and the **execution engine** (interpreter + JIT + GC).
     - Class loading is **lazy** and uses **parent-first delegation**: Application → Platform → Bootstrap. A class's identity is **fully qualified name + defining class loader**.
     - HotSpot uses **tiered compilation**: interpreter (tier 0) → C1 with profiling (tier 3) → C2 (tier 4). Optimisations are **speculative**, so the JVM can **deoptimise** back to the interpreter.

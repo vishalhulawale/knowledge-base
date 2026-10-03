@@ -6,7 +6,7 @@ tags: [spring-security-oauth2, P0]
 
 # SSO, SAML vs OIDC & Enterprise IdPs (PingFederate, Active Directory/Entra ID)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **SSO is a session at the identity provider (IdP).** Each application still has its own session or token. The second app logs you in silently because the browser already carries the IdP's session cookie.
     - **SAML 2.0** = signed **XML assertions** delivered through the browser (usually an auto-submitted form POST). **OIDC** = an identity layer on OAuth2: a signed **JWT ID token** obtained through the back channel with the authorization code flow.
     - SAML only solves **browser login**. OIDC/OAuth2 also solves **API access, SPAs, mobile apps and service-to-service calls**, which is why new work defaults to OIDC and SAML stays for legacy and vendor (SaaS) integrations.

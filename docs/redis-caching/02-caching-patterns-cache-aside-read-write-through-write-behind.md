@@ -6,7 +6,7 @@ tags: [redis-caching, P0]
 
 # Caching Patterns: Cache-Aside, Read/Write-Through, Write-Behind
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Cache-aside** (lazy loading) is the default: the app reads the cache, loads from the database on a miss and populates the cache with a TTL. On write, it updates the database, then **deletes** the cache entry. It's simple and resilient (the cache can be down), but the first read after a miss is slow and there are race windows.
     - **Read-through / write-through** move that logic into a cache layer or library, so the app talks only to the cache. Write-through keeps the cache fresh on every write, at the cost of write latency and caching data nobody reads.
     - **Write-behind** (write-back) acknowledges writes once they're in the cache and flushes to the database asynchronously in batches. Measured: 20,000 counter updates took **9.3 s** as individual database upserts and **0.28 s** via Redis plus one batched flush, but un-flushed writes are lost if the cache fails.

@@ -6,7 +6,7 @@ tags: [lld-design-patterns, P0]
 
 # UML & Class Diagram Basics for Interviews
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - In interviews UML is a **communication tool**, not a spec. Draw **classes, key attributes and methods, relationships and multiplicities**. Skip getters and setters.
     - **Class box:** name / attributes / operations. **Visibility:** `+` public, `-` private, `#` protected, `~` package. `<<interface>>`, `<<abstract>>` and `<<enum>>` stereotypes. Static members are underlined (or noted).
     - **Six relationships**, weakest to strongest:

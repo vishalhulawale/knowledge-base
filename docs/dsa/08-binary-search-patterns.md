@@ -6,7 +6,7 @@ tags: [dsa, P0]
 
 # Binary Search Patterns
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Binary search works on anything **monotonic**: a sorted array, or any yes/no predicate that flips **once** from false to true over a range (`canFinish(speed)`, `fitsIn(capacity)`). Each step halves the range: **O(log n)**. 10M elements need at most **24** probes. Measured: 1,000,000 binary searches over 10M sorted ints took **368 ms** (368 ns each), while one linear scan averaged **2,020 µs**.
     - **Use one template and state its invariant.** The most reusable is **"first index where the predicate is true"** on a half-open range `[lo, hi)`: `while (lo < hi) { mid = (lo+hi)>>>1; if (ok(mid)) hi = mid; else lo = mid + 1; }`. `lowerBound` (first ≥ t) and `upperBound` (first > t) are instances of it. Together they give the first and last positions of a value and the count of duplicates.
     - **Midpoints:** `(lo + hi) / 2` **overflowed** to −397,483,648 for lo = 1.5e9, hi = 2e9. `lo + (hi − lo) / 2` and `(lo + hi) >>> 1` gave 1,750,000,000 (measured). Pairing `lo = mid` with a floor midpoint **loops forever** on a two-element range (measured: stuck at lo=0, hi=1). Use a ceiling midpoint in that case.

@@ -6,7 +6,7 @@ tags: [spring-boot, P0]
 
 # Auto-configuration & Starters (How Boot Works Internally)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A **starter** is only a dependency descriptor (a POM with no code). It puts libraries on the classpath. **Auto-configuration** is ordinary `@Configuration` code that reacts to what is on the classpath.
     - `@SpringBootApplication` = `@SpringBootConfiguration` + `@ComponentScan` + `@EnableAutoConfiguration`. The last one imports `AutoConfigurationImportSelector`, which reads candidate class names from `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports` in every jar.
     - Each candidate is guarded by **`@Conditional...` annotations** (`OnClass`, `OnMissingBean`, `OnProperty`, `OnWebApplication`). Most candidates are discarded. Only the matching ones contribute beans.

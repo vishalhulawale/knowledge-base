@@ -6,7 +6,7 @@ tags: [microservices, P0]
 
 # Microservice Testing Strategy & Contract Testing
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Keep the **test pyramid**: many fast **unit** tests, fewer **integration/component** tests with real dependencies in containers, very few **end-to-end** tests. Microservices add a layer: **contract tests** between services.
     - **Component tests** run one service in isolation with real infrastructure (Postgres, Kafka, Redis via **Testcontainers**) and fake its collaborators (WireMock, stubs). They catch most bugs at a fraction of E2E cost.
     - **Consumer-driven contract testing:** the consumer states what it needs from a provider (requests and the response fields it actually uses); the provider verifies it can satisfy every consumer's contract in its own pipeline. Tools: **Pact** (with a Pact Broker and `can-i-deploy`) and **Spring Cloud Contract** (provider-defined contracts, generated stubs).

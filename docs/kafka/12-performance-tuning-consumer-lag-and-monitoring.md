@@ -6,7 +6,7 @@ tags: [kafka, P0]
 
 # Performance Tuning, Consumer Lag & Monitoring
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Tune with a method: **define the SLO** (throughput or latency) → **measure** → find the **bottleneck** (producer, broker, network, consumer, downstream) → change **one knob** → re-measure.
     - **Producer throughput:** batching (`linger.ms`, `batch.size`), compression (`lz4`/`zstd`), async sends. **Consumer throughput:** partitions × concurrency, `max.poll.records`, `fetch.min.bytes`, batch processing, and fast downstream calls.
     - **Consumer lag** (log end offset − committed offset, per partition per group) is the #1 application metric. Alert on **lag growth and time-lag**, not just absolute numbers.

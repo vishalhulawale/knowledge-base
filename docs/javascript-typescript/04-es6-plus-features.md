@@ -6,7 +6,7 @@ tags: [javascript-typescript, P0]
 
 # ES6+ Features (Destructuring, Modules, Spread, Optional Chaining, Iterators/Generators)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Destructuring** pulls values out of objects/arrays with defaults and renames; **spread** (`...`) copies/merges (shallow); **rest** collects the remaining items/props.
     - **ES modules** (`import`/`export`) are static, strict, live-binding, and tree-shakable; **CommonJS** (`require`) is dynamic, synchronous and copies values. Node supports both; modern code is ESM (TypeScript 6.0 defaults `module` to `esnext`).
     - **Optional chaining** `a?.b?.()` stops at `null`/`undefined`; **nullish coalescing** `??` defaults only on `null`/`undefined` (unlike `||`, which also replaces `0`, `""`, `false`). `??=`, `||=`, `&&=` logical assignment.

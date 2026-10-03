@@ -6,7 +6,7 @@ tags: [leadership-behavioral, P0]
 
 # "Tell Me About Yourself" & Project Deep-Dive Narrative (OptumRx Meteor)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **"Tell me about yourself" is your 60–90 second pitch**, and it sets the agenda for the interview. Structure: **Present** (role, scope, what you own) → **Past** (2–3 career highlights that build to now) → **Future** (why this role, what you want to do next). Close with a **hook** that invites a follow-up on your strongest story.
     - **Tailor the emphasis:**
         - Hiring manager: leadership + delivery.

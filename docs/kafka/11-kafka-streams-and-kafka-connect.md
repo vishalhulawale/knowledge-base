@@ -6,7 +6,7 @@ tags: [kafka, P0]
 
 # Kafka Streams & Kafka Connect (Overview)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Kafka Streams** is a **Java library** (no separate cluster) for stateful stream processing: filter, map, join, aggregate, windowing. It scales by running more app instances (one task per input partition).
     - Core abstractions: **KStream** (an event stream), **KTable** (a changelog / latest value per key), **GlobalKTable** (fully replicated table). State lives in local **RocksDB** stores backed by **changelog topics**.
     - **Kafka Connect** is a framework for **moving data in and out of Kafka without code**: **source** connectors (DB/CDC → Kafka) and **sink** connectors (Kafka → S3/Elasticsearch/DB), with **SMTs** for light transforms.

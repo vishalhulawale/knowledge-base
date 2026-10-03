@@ -6,7 +6,7 @@ tags: [leadership-behavioral, P0]
 
 # Production Incidents & Postmortems
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **During an incident: mitigate first, diagnose later.**
         - Restore service with the safest reversible action: **roll back**, **disable the feature flag**, **fail over**, **shed load**, **scale**.
         - Root cause analysis comes after users are OK.

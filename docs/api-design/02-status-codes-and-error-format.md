@@ -6,7 +6,7 @@ tags: [api-design, P0]
 
 # Status Codes & Error Format (RFC 9457 Problem Details)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - The status code is for **machines** (clients, retries, caches, monitoring); the body is for **developers and users**. The class matters most: **2xx** success, **4xx** the client must change something, **5xx** the server failed and a retry *may* help.
     - Learn the confusing pairs: **400** malformed vs **422** well-formed but invalid; **401** not authenticated vs **403** not allowed; **409** state conflict vs **412** failed precondition (`If-Match`); **502** bad upstream response vs **503** overloaded/unavailable vs **504** upstream timeout; **429** rate-limited with `Retry-After`.
     - Use one error body everywhere: **RFC 9457 Problem Details** (`application/problem+json`) with `type`, `title`, `status`, `detail`, `instance`, plus **extension members** such as a stable `code`, field `errors[]` and a `traceId`. RFC 9457 replaced RFC 7807 in 2023.

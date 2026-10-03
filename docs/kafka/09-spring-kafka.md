@@ -6,7 +6,7 @@ tags: [kafka, P0]
 
 # Spring Kafka in Practice
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **`KafkaTemplate`** sends (returns `CompletableFuture<SendResult>` since 3.0). **`@KafkaListener`** consumes via a **listener container** (`ConcurrentMessageListenerContainer`).
     - Spring Boot auto-configures producer and consumer factories from `spring.kafka.*`. Spring sets `enable.auto.commit=false` and commits via **AckMode** (default `BATCH`).
     - `concurrency = N` creates N consumer threads, which is useful only up to the partition count.

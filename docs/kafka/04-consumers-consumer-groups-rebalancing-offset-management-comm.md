@@ -6,7 +6,7 @@ tags: [kafka, P0]
 
 # Consumers: Groups, Rebalancing & Offset Management
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A **consumer group** shares a topic's partitions: **each partition goes to exactly one consumer in the group**. More consumers than partitions means idle consumers.
     - Consumers **pull** with `poll()`. Progress is the **committed offset** per partition, stored in `__consumer_offsets`.
     - **Commit after processing = at-least-once** (duplicates possible). Commit before processing = at-most-once (loss possible).

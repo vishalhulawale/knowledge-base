@@ -6,7 +6,7 @@ tags: [postgresql-sql, P0]
 
 # Transactions, ACID & Isolation Levels
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A transaction groups statements into one unit: **Atomic** (all or nothing), **Consistent** (constraints hold), **Isolated** (concurrent transactions don't see each other's partial work, to a configurable degree), **Durable** (committed data survives a crash, via the write-ahead log).
     - Isolation is a **trade-off between correctness and concurrency**. The SQL standard defines anomalies; each level allows some. PostgreSQL's levels: **READ COMMITTED** (default), **REPEATABLE READ** (snapshot isolation), **SERIALIZABLE** (serializable snapshot isolation, SSI). READ UNCOMMITTED behaves like READ COMMITTED (no dirty reads ever).
     - Reproduced on PostgreSQL 16: under READ COMMITTED a second read in the same transaction saw another transaction's commit (**non-repeatable read**) and a new row (**phantom**); under REPEATABLE READ neither happened.

@@ -6,7 +6,7 @@ tags: [redis-caching, P0]
 
 # TTL, Eviction Policies & Invalidation Strategies
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Expiry** removes keys whose TTL has passed. It happens lazily when a key is accessed, plus an active background cycle that samples keys with TTLs. Measured: 200,000 never-read keys with a 1-second TTL were all gone within about **1.5 s**.
     - **Eviction** removes keys when `maxmemory` is reached, according to `maxmemory-policy`. The default `noeviction` rejects writes with an OOM error (it failed at key 18,295 of a 20 MB test) while reads keep working. `volatile-*` policies only evict keys **with a TTL**, so with no TTLs they fail just like `noeviction`.
     - For a pure cache use **`allkeys-lru`** or **`allkeys-lfu`**. LFU resists scan pollution: after 40,000 one-off writes, LFU kept **all 5,000** hot keys, LRU kept **162** and random kept 1,178.

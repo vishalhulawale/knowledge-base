@@ -6,7 +6,7 @@ tags: [docker-kubernetes, P0]
 
 # Kubernetes Architecture: Control Plane, Nodes & etcd
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Kubernetes is a **declarative, level-triggered control system**. You store *desired state* through the **API server** in **etcd**, and **controllers** keep moving *actual state* toward it. Measured: a deleted pod was replaced and running again **184 ms** later.
     - **Control plane:** `kube-apiserver` (the only component that talks to etcd; authentication, authorisation, admission, validation), **etcd** (a Raft-replicated key-value store, keys like `/registry/deployments/default/web`, values in protobuf), `kube-scheduler` (assigns pods to nodes), `kube-controller-manager` (Deployment, ReplicaSet, Node, Job… controllers) and the `cloud-controller-manager`.
     - **Nodes:** `kubelet` (makes the node's pods match their specs via the CRI runtime), a **container runtime** (containerd/CRI-O), **kube-proxy** (or an eBPF CNI) for Services, and the **CNI** plugin for pod networking.

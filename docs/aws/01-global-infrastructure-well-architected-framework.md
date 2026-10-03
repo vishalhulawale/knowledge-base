@@ -6,7 +6,7 @@ tags: [aws, P0]
 
 # Global Infrastructure & Well-Architected Framework
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Region:** a separate geographic area with its own control plane. Choose it by **data residency/compliance, latency to users, service availability and price**. Data doesn't leave a Region unless you move it.
     - **Availability Zone (AZ):** one or more data centres with independent power, cooling and networking, linked to the other AZs in the Region by low-latency links. Most Regions have 3 or more. **Multi-AZ is the default for anything production.**
     - **Edge locations** (CloudFront, Route 53, Global Accelerator) bring traffic closer to users. **Local Zones** and **Wavelength** put compute near specific cities or 5G networks. **Outposts** put AWS hardware in your data centre.

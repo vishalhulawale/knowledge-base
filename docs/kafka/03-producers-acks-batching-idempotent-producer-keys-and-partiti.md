@@ -6,7 +6,7 @@ tags: [kafka, P0]
 
 # Producers: acks, Batching, Idempotence, Keys & Partitioning
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - `send()` is **asynchronous**: the record goes into an in-memory **accumulator**, gets batched per partition, and a background **sender thread** ships batches to partition leaders.
     - **Partitioning:** keyed records use `murmur2(key) % partitions` (same key → same partition → ordered). Null-key records use the **sticky partitioner** (fill a batch for one partition, then switch).
     - **`acks`**: `0` (fire-and-forget), `1` (leader wrote it), `all` (all ISR have it). Since Kafka 3.0 the defaults are **`acks=all` and `enable.idempotence=true`**.

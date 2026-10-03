@@ -6,7 +6,7 @@ tags: [react, P0]
 
 # Rendering Behaviour: Re-render Triggers, Keys, Batching
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A component re-renders when **its state changes**, **its parent re-renders**, or **a context it reads changes** (plus external store subscriptions). **Props changing is not a trigger by itself**: props change because the parent re-rendered.
     - By default **a re-render cascades to all children**, whether or not their props changed. `memo` lets a child skip if its props are shallowly equal; stable references (or React Compiler) make that work.
     - **Re-rendering is not DOM updating.** Render is cheap calculation; commit only touches what changed. Unnecessary renders matter only when they're expensive or very frequent.

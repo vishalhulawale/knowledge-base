@@ -6,7 +6,7 @@ tags: [core-java, P0]
 
 # Java Memory Basics: Stack vs Heap, Pass-by-Value, Object Lifecycle
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Stack = per thread, per method call.** Each call pushes a *frame* holding local variables (primitives and **references**) and is popped on return. **Heap = shared by all threads**, holds every object and array, and is managed by the garbage collector.
     - **Java is always pass-by-value.** For objects, the value that gets copied is the **reference** (the "address"), not the object. A method can *mutate* the object you passed, but it can never make *your variable* point to a different object.
     - An object is **eligible for GC when it is unreachable from any GC root** (thread stacks, static fields, JNI handles), not when its reference count is zero and not when you set a variable to `null`.

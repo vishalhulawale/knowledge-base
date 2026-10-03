@@ -6,7 +6,7 @@ tags: [leadership-behavioral, P0]
 
 # Failures, Mistakes & Lessons Learned
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Interviewers ask about failure to test self-awareness, ownership and learning**, not to catch you out. "I've never really failed" is the worst answer.
     - **Pick a real failure with stakes**, where **you** made a meaningful mistake (not a teammate, and not a trivial typo), that is **not catastrophic or disqualifying** for the role (no ethics or integrity breaches), and that has a **clear lesson you've since applied**.
     - **Structure (STAR-L, with emphasis on L):**

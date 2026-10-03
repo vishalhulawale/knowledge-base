@@ -6,7 +6,7 @@ tags: [frontend-architecture, P0]
 
 # Frontend CI/CD & Monorepos
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A frontend pipeline runs **install (lockfile, `npm ci`) → lint + typecheck → unit tests → build → E2E/visual on a preview → bundle-size budget → deploy to CDN → smoke test**, with fast feedback on every PR and the same artifact promoted across environments.
     - **Monorepo vs polyrepo:** a monorepo gives atomic cross-package changes, one toolchain and easy code sharing (design system, API clients), but needs **tooling** so CI doesn't rebuild everything. A polyrepo gives hard boundaries and independent pipelines, at the cost of version juggling and slower cross-cutting changes.
     - **Workspaces** (npm, pnpm, Yarn) link local packages. **Orchestrators** (Turborepo, Nx) add a **task graph** (`dependsOn: ["^build"]` builds dependencies first), **caching** keyed by input hashes, and **affected-only** runs. Measured with Turborepo 2.11 on 5 packages: cold build 5.2 s, unchanged re-run **11 ms "FULL TURBO"** (5/5 cached), outputs restored from cache after deleting `dist/` (70 ms). Changing `@org/ui` rebuilt only `ui`, `claims` and `pharmacy` (2/5 cached), and `--filter='...[HEAD]'` scoped a change in a leaf app to just that app.

@@ -6,7 +6,7 @@ tags: [leadership-behavioral, P0]
 
 # Driving Engineering Standards & Technical Decisions
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Standards exist to make the right thing the easy thing.** Pick the few that reduce real pain (escaped defects, slow reviews, risky deploys), not a long rulebook.
     - **How standards stick:**
         1. **Problem first** (data: incidents, rework, lead time).

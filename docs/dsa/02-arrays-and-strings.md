@@ -6,7 +6,7 @@ tags: [dsa, P0]
 
 # Arrays & Strings (Two Pointers, Sliding Window, Prefix Sums)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Most array and string problems reduce an **O(n²) brute force over all pairs or subarrays** to **O(n)** with one of three patterns:
         - **Two pointers:** opposite ends on sorted data (pair sums, container with most water, 3Sum after sorting), or a read and a write pointer for in-place filtering (remove duplicates).
         - **Sliding window:** a contiguous range that expands on the right and shrinks on the left while maintaining a condition (longest substring without repeats, minimum window substring, minimum-length subarray with sum ≥ target). It works when moving the left edge can only *help* restore the condition (monotonic).

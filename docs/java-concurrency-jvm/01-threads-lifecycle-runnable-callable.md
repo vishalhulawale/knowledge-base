@@ -6,7 +6,7 @@ tags: [java-concurrency-jvm, P0]
 
 # Threads, Lifecycle, `Runnable`/`Callable`
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A **platform thread** is a thin wrapper over an OS thread: it costs a stack (about 1 MB reserved by default on 64-bit Linux) and a kernel context switch. Since Java 21 there are also **virtual threads**, which are cheap and scheduled by the JVM.
     - A thread has exactly six states (`Thread.State`): **NEW, RUNNABLE, BLOCKED, WAITING, TIMED_WAITING, TERMINATED**. `BLOCKED` means only "waiting for a `synchronized` monitor". A thread stuck in socket I/O shows as **RUNNABLE**.
     - `start()` creates a new thread and can be called **once**. `run()` is a plain method call on the current thread.

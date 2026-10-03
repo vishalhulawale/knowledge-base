@@ -6,7 +6,7 @@ tags: [docker-kubernetes, P0]
 
 # Services, Ingress & Networking
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Every pod gets its own IP** on a flat network where any pod can reach any pod without NAT. The **CNI** plugin (AWS VPC CNI, Azure CNI, Cilium, Calico) implements it.
     - Pod IPs change, so a **Service** gives a stable virtual IP and DNS name in front of pods selected by **labels**. **EndpointSlices** list the ready backends: a pod whose `Ready` condition went false was marked `ready=false` and left the rotation, and a selector typo produced **no endpoints at all**.
     - Service types: **ClusterIP** (internal, default), **headless** (`clusterIP: None`, DNS returns pod IPs, for StatefulSets), **NodePort** (30000–32767 on every node; a clash and port 80 were both rejected), **LoadBalancer** (a cloud LB via the cloud controller; stays `<pending>` without one), **ExternalName** (DNS CNAME).

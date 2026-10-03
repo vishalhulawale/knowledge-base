@@ -6,7 +6,7 @@ tags: [system-design, P0]
 
 # Scalability: Vertical vs Horizontal, Stateless Services, Load Balancing
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Vertical scaling (scale up):** a bigger machine. It's simple, needs no code changes and keeps strong consistency, but it has a **ceiling**, a **single point of failure** and **step-function cost**. **Horizontal scaling (scale out):** more machines. It's practically unlimited and fault tolerant, but it needs **stateless services** or **partitioned state**, plus load balancing.
     - **Stateless services** keep no client-specific state in memory between requests. Sessions go in tokens (JWT) or a shared store (Redis), files in object storage, and data in databases. Any instance can serve any request, so you can add, remove and replace instances freely.
     - **Load balancers:**

@@ -6,7 +6,7 @@ tags: [microservices, P0]
 
 # Decomposition Strategies & Monolith Migration (Strangler Fig)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Cut services along **business capabilities** or **DDD bounded contexts**, never along technical layers or single entities. Test a boundary by asking: can one team change it and deploy it alone, and does it own its data?
     - Migrate a monolith **incrementally** with the **strangler fig** pattern: put a routing layer (proxy or gateway) in front, build new functionality beside the old, move traffic slice by slice, then retire the old code. Never a big-bang rewrite.
     - Inside the code, use **branch by abstraction** (an interface with old and new implementations behind a toggle) and **parallel run** (call both, compare, serve the old result) to reduce risk.

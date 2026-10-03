@@ -6,7 +6,7 @@ tags: [system-design, P0]
 
 # Caching Strategies & CDN
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Cache to cut latency and offload the source of truth.** Cache data that is **read often, changes rarely, and is expensive to compute or fetch**, and where **some staleness is acceptable**. Measure the **hit ratio**: a cache with a 30% hit ratio mostly adds complexity.
     - **Layers:** browser → CDN/edge → API gateway → **in-process (L1, e.g. Caffeine)** → **distributed (L2, e.g. Redis)** → DB buffer pool. Each layer closer to the user is faster but harder to invalidate.
     - **Patterns:**

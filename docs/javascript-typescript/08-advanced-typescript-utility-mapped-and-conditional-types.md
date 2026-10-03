@@ -6,7 +6,7 @@ tags: [javascript-typescript, P0]
 
 # Advanced TypeScript: Utility, Mapped & Conditional Types
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Type operators:** `keyof T` (union of keys), `typeof value` (type of a value), `T[K]` (indexed access), `T[number]` (element type of an array/tuple).
     - **Utility types** are built from those: `Partial`, `Required`, `Readonly`, `Pick`, `Omit`, `Record`, `Exclude`, `Extract`, `NonNullable`, `ReturnType`, `Parameters`, `Awaited`, `InstanceType`, `NoInfer` (5.4).
     - **Mapped types** transform each property: `{ [K in keyof T]: ... }`, with modifiers (`readonly`, `?`, `-readonly`, `-?`) and **key remapping** via `as` (rename/filter keys).

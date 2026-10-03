@@ -6,7 +6,7 @@ tags: [java-concurrency-jvm, P0]
 
 # Synchronization, `volatile`, Java Memory Model, happens-before
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Shared mutable state has three separate problems: **atomicity** (compound actions interleave), **visibility** (a write may never be seen by another thread) and **ordering** (the compiler and CPU may reorder). Fix all three, not just the first.
     - The **Java Memory Model (JMM, JLS §17.4)** does not talk about caches or CPUs. It defines **happens-before**: if action A happens-before B, B is guaranteed to see A's effects. No happens-before edge between a write and a read of the same variable = a **data race** = the read may see a stale value forever.
     - **`synchronized`** gives mutual exclusion **and** visibility: unlocking a monitor happens-before every later lock of the *same* monitor. It is reentrant and, on modern JVMs, cheap when uncontended.

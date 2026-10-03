@@ -6,7 +6,7 @@ tags: [api-design, P0]
 
 # Versioning Strategies
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **The best version is the one you never ship.** Evolve **additively** (new optional fields, new endpoints, new enum values clients were told to expect) and make clients **tolerant readers** (ignore unknown fields). Version only for **breaking** changes.
     - **Breaking** = an existing, correctly written client stops working: removing or renaming a field, changing a type or meaning, making an optional input required, tightening validation, changing status codes or error codes, changing defaults or pagination.
     - Where the version goes: **URI path** (`/v1/…`, most common, visible, cache-friendly), **header** (`API-Version: 2`), **query** (`?version=2`), or **media type** (`Accept: application/vnd.acme.v2+json`). Pick one per organisation and stay consistent.

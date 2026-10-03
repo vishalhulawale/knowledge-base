@@ -6,7 +6,7 @@ tags: [mongodb, P0]
 
 # Document Model & Schema Design
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - MongoDB stores **documents** (BSON, up to **16 MB**) in collections. The design rule is **"data that is accessed together should be stored together."** Model for your queries, not for normal forms.
     - **Embed** when the child belongs to the parent, is read with it and is bounded in size (order lines, addresses). **Reference** when the data is shared, large, unbounded or accessed independently (products, members, audit events). Measured: reading an order with 5 items took **473 µs** embedded, **678 µs** with `$lookup` and **989 µs** with two queries.
     - **Unbounded arrays are the classic mistake.** Pushing 20,000 events into one document grew it to **1.5 MB**, and each `$push` slowed from **2 ms to 14 ms**. Use a separate collection or the **bucket pattern**.

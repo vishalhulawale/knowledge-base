@@ -6,7 +6,7 @@ tags: [aws, P0]
 
 # Architecture Scenarios: HA, DR Strategies, Cost Optimisation
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **HA ≠ DR.** **High availability** keeps you running through *component and AZ failures* inside a Region (Multi-AZ, health checks, auto-recovery). **Disaster recovery** restores service after a *Region-level or data-destroying* event (a bad deploy that corrupts data, ransomware, a Region outage).
     - **RPO** = how much data you can lose (time). **RTO** = how long until you're back. Get them from the **business, per workload**, and design and price against them.
     - **Four DR strategies**, cheapest to most expensive:

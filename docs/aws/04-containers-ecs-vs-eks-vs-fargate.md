@@ -6,7 +6,7 @@ tags: [aws, P0]
 
 # Containers: ECS vs EKS vs Fargate
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Two orchestrators, several compute choices.**
         - **ECS** is AWS's own orchestrator: simple, deeply integrated, and free (you pay only for compute).
         - **EKS** is managed **Kubernetes**: portable, with a huge ecosystem, more moving parts, and a per-cluster fee.

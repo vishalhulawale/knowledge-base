@@ -6,7 +6,7 @@ tags: [postgresql-sql, P0]
 
 # Common SQL Interview Queries
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Almost every "tricky" SQL question is one of about eight patterns: **rank and filter** (Nth highest, top-N per group), **aggregate and filter** (`GROUP BY … HAVING`), **anti-join** (rows with no match), **self-join** (employee vs manager), **window over order** (running totals, `LAG`/`LEAD`), **gaps and islands** (streaks, missing ranges), **conditional aggregation** (pivot) and **recursion** (hierarchies).
     - Say out loud how you handle **ties**: `ROW_NUMBER` picks one arbitrarily, `RANK` leaves gaps, `DENSE_RANK` doesn't. "Second highest salary" usually means the second highest *distinct* value.
     - Watch the **NULL traps**: `NOT IN` against a subquery that contains a NULL returns no rows (measured: 0 rows instead of 5). Use `NOT EXISTS`. `COUNT(col)` skips NULLs, while `COUNT(*)` doesn't.

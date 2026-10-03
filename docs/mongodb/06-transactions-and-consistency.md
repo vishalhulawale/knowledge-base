@@ -6,7 +6,7 @@ tags: [mongodb, P0]
 
 # Transactions & Consistency
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Single-document writes are always atomic**, including nested arrays. Modelling data that changes together into one document is the cheapest consistency tool. A one-document "transfer" took **2.4 ms** with `w:"majority"`.
     - **Multi-document ACID transactions** (replica sets 4.0+, sharded clusters 4.2+) run in a session with **snapshot isolation**. Measured: a failed transfer left both balances unchanged, and a committed one moved 30 atomically.
     - Concurrency is **optimistic**: a second transaction writing the same document fails fast with **WriteConflict (112)** labelled **TransientTransactionError**. Use `withTransaction` (the callback API) to retry automatically: 400 contended transfers stayed exactly consistent with **935 automatic retries**.

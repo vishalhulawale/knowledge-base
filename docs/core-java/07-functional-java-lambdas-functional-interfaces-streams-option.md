@@ -6,7 +6,7 @@ tags: [core-java, P0]
 
 # Functional Java: Lambdas, Functional Interfaces, Streams, Optional
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A **lambda** is an implementation of a **functional interface** (exactly one abstract method). It is compiled to a private method plus an `invokedynamic` call site, **not** to an anonymous inner class file.
     - Lambdas can capture only **effectively final** locals, and `this` inside a lambda means the **enclosing** object (unlike an anonymous class).
     - A **Stream** is a lazy, single-use pipeline: *source → zero or more intermediate ops → one terminal op*. Nothing runs until the terminal op, and elements flow **one at a time through the whole chain** (vertical, not stage by stage).

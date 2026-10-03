@@ -6,7 +6,7 @@ tags: [dsa, P0]
 
 # Linked Lists, Stacks & Queues
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Linked lists** trade O(1) insertion and removal at a known node for O(n) access by index. Interview techniques:
         - A **dummy head** removes edge cases at the front.
         - **Iterative reversal** uses three pointers: `prev`, `cur`, `next`.

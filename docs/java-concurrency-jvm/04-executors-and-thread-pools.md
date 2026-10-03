@@ -6,7 +6,7 @@ tags: [java-concurrency-jvm, P0]
 
 # Executors & Thread Pools (Sizing, Rejection Policies, ForkJoinPool)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A `ThreadPoolExecutor` fills in this order: **core threads → queue → extra threads up to max → rejection**. With an unbounded queue, `maximumPoolSize` and the rejection policy are never used.
     - The `Executors` factory methods hide dangerous defaults: `newFixedThreadPool` has an **unbounded queue** (memory risk), `newCachedThreadPool` has **unbounded threads**. In production, build the pool yourself with a **bounded queue**, **named threads** and an explicit **rejection policy**.
     - Sizing: CPU-bound work needs about **N cores** threads. Blocking I/O work needs roughly **N cores × (1 + wait time / compute time)**, capped by what the downstream system can take. Measure, don't guess.

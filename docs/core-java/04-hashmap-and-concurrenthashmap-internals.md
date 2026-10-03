@@ -6,7 +6,7 @@ tags: [core-java, P0]
 
 # HashMap & ConcurrentHashMap Internals
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **HashMap** is an array of buckets ("bins"). Index = `(n - 1) & hash`, where `hash = h ^ (h >>> 16)` spreads the high bits. Defaults: **capacity 16, load factor 0.75**, table created lazily on the first `put`.
     - When `size > capacity × loadFactor` the table **doubles**. Each bin splits into a "low" and "high" list (stay at `i` or move to `i + oldCap`) with no rehash call. A bin that grows **past 8 entries becomes a red-black tree** (only if capacity ≥ 64; the insert into a bin already holding 8 nodes triggers it), giving `O(log n)` worst case instead of `O(n)` (JEP 180, Java 8).
     - HashMap is **not thread-safe**. Concurrent writes lose updates, and in Java 7 a concurrent resize could create a **cycle in a bucket list** (100% CPU in `get`). Never share a mutable HashMap across threads.

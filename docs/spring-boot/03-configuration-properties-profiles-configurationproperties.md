@@ -6,7 +6,7 @@ tags: [spring-boot, P0]
 
 # Configuration: properties, profiles, `@ConfigurationProperties`
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - All configuration ends up in one **`Environment`**: an ordered list of **`PropertySource`s**. A lookup walks the list and the **first source that has the key wins**.
     - Rough precedence, highest first: **command-line args → `SPRING_APPLICATION_JSON` → Java system properties → OS environment variables → config files outside the jar → config files inside the jar → `@PropertySource` → defaults**. Profile-specific files beat non-profile files at the same location.
     - **Profiles** are named switches (`dev`, `prod`) that activate extra config documents and `@Profile` beans. With several active profiles, the **last one listed wins**.

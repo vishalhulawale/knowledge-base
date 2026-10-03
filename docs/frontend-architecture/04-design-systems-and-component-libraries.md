@@ -6,7 +6,7 @@ tags: [frontend-architecture, P0]
 
 # Design Systems & Component Libraries (Storybook, MUI)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A **design system** is more than a component library: it's **design tokens** (colour, spacing, typography as named decisions), **components** built on those tokens, **patterns and guidelines** (when to use what, content, accessibility), **tooling** (Storybook, Figma library, lint rules) and **governance** (who owns it, how changes get in, how it's versioned).
     - **Tokens** are the single source of truth. A tool such as **Style Dictionary** turns one JSON file into CSS variables, JS constants, iOS/Android values. Semantic tokens reference primitives (`action.primary.bg → brand.primary`), and with `outputReferences` the CSS keeps the alias (`var(--color-brand-primary)`), so a rebrand changes one line (measured).
     - **MUI** gives a complete styled, accessible component set. Brand it with `createTheme`: palette (MUI derives `dark` and `contrastText` from `main`, measured), typography, shape, and per-component `defaultProps` and `styleOverrides`. With `cssVariables: true` the theme emits `--mui-*` custom properties and components read them (measured). Wrap MUI in your own components only where you need to constrain the API.

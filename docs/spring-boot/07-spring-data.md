@@ -6,7 +6,7 @@ tags: [spring-boot, P0]
 
 # Spring Data (repositories, projections, pagination)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A repository is **an interface with no implementation**. At startup Spring Data builds a **JDK proxy** that routes each call to a base class (`SimpleJpaRepository`, `SimpleMongoRepository`), a parsed query method, or your custom fragment.
     - **Derived queries** (`findByStatusAndCreatedAtAfter`) are parsed and validated **at startup**, so a typo fails the boot, not production. Use `@Query` when the method name gets unreadable.
     - **Projections** load fewer columns: closed interface projections and record DTOs narrow the `SELECT`. Open projections (`@Value` SpEL) do **not**.

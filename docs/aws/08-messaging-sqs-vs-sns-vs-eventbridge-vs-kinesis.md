@@ -6,7 +6,7 @@ tags: [aws, P0]
 
 # Messaging: SQS vs SNS vs EventBridge vs Kinesis
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **SQS = queue (point-to-point, pull).** Consumers poll and delete. A message goes to **one** consumer group.
         - **Standard:** at-least-once, best-effort order, practically unlimited throughput.
         - **FIFO:** ordered per **message group**, with deduplication in a 5-minute window.

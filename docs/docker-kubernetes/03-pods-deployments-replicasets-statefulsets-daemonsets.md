@@ -6,7 +6,7 @@ tags: [docker-kubernetes, P0]
 
 # Pods, Deployments, ReplicaSets, StatefulSets & DaemonSets
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A **Pod** is the smallest deployable unit: one or more containers sharing a network namespace (one IP, localhost), volumes and a lifecycle, scheduled together onto one node. Pods are **disposable**: you never manage them directly, controllers do.
     - A **ReplicaSet** keeps N pods matching a **label selector**. It even deleted a hand-made pod that matched its labels ("Deleted pod: stray"). A **Deployment** manages ReplicaSets to give rolling updates and rollbacks for **stateless** apps. Use Deployments, never bare ReplicaSets.
     - A **StatefulSet** gives each pod a **stable name** (`db-0`, `db-1`…), a **stable PVC** (`data-db-1` reattached after the pod was deleted), stable DNS through a headless Service, and **ordered** create and scale-down (measured: created 0→1→2, deleted 2 then 1, with PVCs kept).

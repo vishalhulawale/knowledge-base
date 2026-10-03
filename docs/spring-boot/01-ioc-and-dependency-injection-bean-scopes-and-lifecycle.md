@@ -6,7 +6,7 @@ tags: [spring-boot, P0]
 
 # IoC & Dependency Injection, Bean Scopes & Lifecycle
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **IoC** means the container, not your code, creates objects and hands them their collaborators. **DI** is how it does that. Prefer **constructor injection**: dependencies are `final`, mandatory, and visible in tests without Spring.
     - The container works in two phases: first it builds **bean definitions** (metadata), then it creates **bean instances**. `BeanFactoryPostProcessor` changes definitions, `BeanPostProcessor` changes instances (this is where AOP proxies are created).
     - Lifecycle order: **constructor → injection → `Aware` callbacks → `@PostConstruct` → `afterPropertiesSet()` → custom init method → proxy wrapping → ready → `@PreDestroy` → `destroy()`**.

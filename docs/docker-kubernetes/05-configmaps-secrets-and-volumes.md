@@ -6,7 +6,7 @@ tags: [docker-kubernetes, P0]
 
 # ConfigMaps, Secrets & Volumes
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **ConfigMaps** hold non-secret configuration and **Secrets** hold credentials. Both are consumed as **environment variables** (read once at container start) or **mounted files** (updated in place, eventually, except with `subPath`). Both are limited to **1 MiB** (a 1.1 MB ConfigMap was rejected), and `immutable: true` blocks changes ("field is immutable").
     - **Secrets are base64, not encrypted.** The password `S3cr3t!` was readable **in clear text directly in etcd** on a cluster without encryption at rest. Protect Secrets with **RBAC** (a service account could `get` one named Secret but couldn't `list` secrets), **KMS encryption at rest**, and preferably an **external store** (AWS Secrets Manager, Azure Key Vault) synced via the CSI driver or External Secrets, with **workload identity** (IRSA/EKS Pod Identity, Azure Workload Identity) instead of static keys.
     - **Volumes:** `emptyDir` (pod-lifetime scratch), `configMap`/`secret`/`projected`, `hostPath` (avoid), and **PersistentVolumeClaims** for durable storage.

@@ -6,7 +6,7 @@ tags: [leadership-behavioral, P0]
 
 # Mentoring & Growing Engineers
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Three modes:**
         - **Mentoring:** share your experience and advice ("here's how I'd approach it").
         - **Coaching:** ask questions so they find the answer ("what options do you see?").

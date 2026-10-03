@@ -6,7 +6,7 @@ tags: [graphql, P0]
 
 # Caching in GraphQL (Client, Server, Persisted Queries)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - GraphQL loses easy HTTP caching (one URL, POST, varied queries), so you cache **at other layers**.
     - **Client:** normalized caches (Apollo Client `InMemoryCache`, Relay) keyed by `__typename:id`. Mutations returning updated objects refresh the UI automatically.
     - **Server per request:** DataLoader memoisation. **Server cross-request:** Redis/Caffeine caching of **upstream results** (reference data, slow lookups) at the resolver or client-adapter level.

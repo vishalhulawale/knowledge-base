@@ -6,7 +6,7 @@ tags: [api-design, P0]
 
 # REST Principles, Resource Modelling & HTTP Semantics
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **REST** is an architectural style (Fielding, 2000) with six constraints: client-server, **stateless**, cacheable, **uniform interface**, layered system, optional code-on-demand. Most "REST APIs" are really *HTTP + JSON resource APIs*; that is fine, as long as you use HTTP semantics correctly.
     - Model **resources (nouns)**, not procedures: `GET /members/42/prescriptions`, not `POST /getPrescriptions`. Collections are plural; nest only one level for ownership.
     - **Method semantics (RFC 9110):** `GET`/`HEAD` are **safe**; `GET`, `HEAD`, `PUT`, `DELETE`, `OPTIONS` are **idempotent**; **`POST` and `PATCH` are not** (PATCH can be made idempotent). Retries, caches and proxies rely on these promises.

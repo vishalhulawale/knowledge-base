@@ -6,7 +6,7 @@ tags: [graphql, P0]
 
 # GraphQL Schema Design Best Practices
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Design **from client use cases (demand-driven)**, not by mirroring backend services or database tables.
     - **Nullability is a contract**: non-null only when you can always deliver. Fields backed by flaky upstreams should be nullable.
     - **Pagination:** use Relay-style **cursor connections** (`edges`, `node`, `pageInfo`) for lists that can grow.

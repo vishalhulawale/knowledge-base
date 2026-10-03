@@ -6,7 +6,7 @@ tags: [graphql, P0]
 
 # Performance & Observability of GraphQL Services
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - HTTP-level metrics are nearly useless for GraphQL: one URL, mostly 200s. Observe by **operation name**, **resolver/field** and **upstream call**.
     - Require clients to send **named operations** (and client name/version headers). Reject or flag anonymous operations.
     - Key signals: operation latency p50/p95/p99, **error rate from `errors[]`**, resolver latency, **upstream calls per operation**, DataLoader batch sizes, query cost, and pool saturation.

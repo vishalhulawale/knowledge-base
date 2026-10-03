@@ -6,7 +6,7 @@ tags: [spring-security-oauth2, P0]
 
 # JWT: Structure, Signing (HS256 vs RS256), Validation, Revocation
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A JWT is `base64url(header).base64url(payload).base64url(signature)`. It is **signed, not encrypted**: anyone who holds it can read the claims, so never put secrets or sensitive personal data in it.
     - **HS256** is an HMAC with one **shared secret**: every service that can verify can also forge. **RS256/ES256** use a **private key to sign and a public key to verify**, so only the issuer can mint tokens. Use asymmetric signing as soon as more than one party verifies.
     - Validation is more than the signature: pin the **algorithm**, then check `iss`, `aud`, `exp`/`nbf` (with a small clock skew), and the token type. Spring Security checks signature, timestamps and issuer by default. **Audience needs explicit configuration.**

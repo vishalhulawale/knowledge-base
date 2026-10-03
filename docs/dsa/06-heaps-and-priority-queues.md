@@ -6,7 +6,7 @@ tags: [dsa, P0]
 
 # Heaps & Priority Queues (Top-K)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A **binary heap** is a complete binary tree stored in an array. Each parent is ≤ its children (min-heap) or ≥ them (max-heap), so the min or max is always at index 0. Children of `i` are `2i+1` and `2i+2`, and the parent is `(i−1)/2`.
     - **Costs:** `peek` O(1); `offer` and `poll` O(log n) (sift-up and sift-down); **building from n items is O(n)** with bottom-up heapify. Measured on 1,048,576 ints: heapify used **1.88** comparisons per element; n inserts in random order used 2.28 per element; descending input (worst case for a min-heap) used **18** per element (≈ log₂ n).
     - Java's **`PriorityQueue`** is a min-heap by default. Use `Comparator.reverseOrder()` for a max-heap. **Iteration and `toString` aren't sorted** (`[1, 2, 4, 5, 3]`, while polling gave 1..5, measured). `remove(Object)` is O(n) (2,000 removals from 100k took 188 ms). Never write comparators as `a - b`: it overflowed and sorted `MAX_VALUE` first (measured). Use `Integer.compare`.

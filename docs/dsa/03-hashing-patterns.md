@@ -6,7 +6,7 @@ tags: [dsa, P0]
 
 # Hashing Patterns
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A **hash map** gives expected **O(1)** insert, lookup and delete by turning a key into a bucket index. In Java's `HashMap`: the key's `hashCode()` is spread (`h ^ (h >>> 16)`), masked to a power-of-two table, collisions are chained in buckets, the table **doubles** when size > capacity × **0.75**, and since Java 8 a bucket with **≥ 8** entries (table ≥ 64) becomes a **red-black tree**.
     - **The contract:** equal objects must have equal hash codes, and keys must not change while in the map. Measured: a key mutated after `put` became **unfindable** (`get` returned null for both the mutated key and an equal fresh one, size still 1). `equals` without `hashCode` let a `HashSet` hold **two "equal" objects**. Records generate both correctly.
     - **Collisions:** 50,000 inserts took **11 ms** with good hashes, **58 ms** with a constant hash on `Comparable` keys (tree bins give O(log n)), and **19,162 ms** with a constant hash on non-`Comparable` keys (effectively O(n) per operation) (measured).

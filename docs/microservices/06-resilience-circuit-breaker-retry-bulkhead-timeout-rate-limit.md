@@ -6,7 +6,7 @@ tags: [microservices, P0]
 
 # Resilience: Circuit Breaker, Retry, Bulkhead, Timeout, Rate Limiter (Resilience4j)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - In a distributed system, dependencies **will** be slow or down. Most outages spread through **resource exhaustion**: threads and connections pile up waiting on a slow dependency.
     - **Timeout** bounds waiting. **Retry** handles transient failures (idempotent calls only, with backoff + jitter). **Circuit breaker** stops calling a failing dependency and fails fast. **Bulkhead** caps concurrent calls per dependency so one can't consume everything. **Rate limiter** caps call rate (protect yourself or a downstream). **Fallback** returns a degraded answer.
     - **Resilience4j** (the successor to Netflix Hystrix, which is in maintenance) provides all of these. Spring Boot annotation order by default: `Retry ( CircuitBreaker ( RateLimiter ( TimeLimiter ( Bulkhead ( call ) ) ) ) )`, so retry is outermost.

@@ -6,7 +6,7 @@ tags: [frontend-architecture, P0]
 
 # Frontend Security (XSS, Token Storage, CSP)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **XSS is the main frontend threat:** attacker script running in your origin can read the DOM, call your APIs with the user's session and steal anything JavaScript can reach. **React escapes text by default** (a payload rendered as `{text}` showed as literal text, measured). The escape hatches are where XSS gets in: `dangerouslySetInnerHTML` ran an `onerror` payload (measured), so **sanitise with DOMPurify** (it stripped the handler, measured). **React 19 blocks `javascript:` URLs** in `href` (replaced with a throwing URL, measured). Also watch `ref.innerHTML`, `eval`, third-party scripts and unsafe markdown renderers.
     - **Content Security Policy** limits damage if an injection happens: with `script-src 'nonce-…'`, the nonce'd script ran, while an injected inline event handler, a dynamically created inline script and `eval` were all **blocked** (measured). The same handler ran on a page without CSP. Use nonces or hashes (+ `'strict-dynamic'`), `object-src 'none'`, `base-uri 'none'`, `frame-ancestors`, and roll out with `Content-Security-Policy-Report-Only` first.
     - **Trusted Types** (`require-trusted-types-for 'script'`) make DOM XSS sinks reject strings: `innerHTML = '<b>x</b>'` threw a `TypeError`, and only values from a named policy were accepted (measured in Chromium).

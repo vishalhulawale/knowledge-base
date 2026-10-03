@@ -6,7 +6,7 @@ tags: [dsa, P0]
 
 # Recursion & Backtracking
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Recursion:** solve a problem by calling yourself on a **smaller** input. You need a **base case**, progress towards it, and to trust that the recursive call returns the right answer for the smaller input. Each call uses a stack frame: the default 1 MB Java thread stack held about **45,000** frames of a trivial method before `StackOverflowError`, and a thread created with a 64 MB stack held about 4.2 million (measured). Real frames are bigger, so practical depth limits are lower.
     - **Backtracking** builds candidates step by step and abandons a partial candidate as soon as it can't lead to a valid solution. The template is **choose → explore → unchoose**, with **copies** taken only when you record a solution (`new ArrayList<>(path)`).
     - **The four shapes:**

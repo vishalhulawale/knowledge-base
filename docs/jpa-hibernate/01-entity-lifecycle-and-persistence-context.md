@@ -6,7 +6,7 @@ tags: [jpa-hibernate, P0]
 
 # Entity Lifecycle & Persistence Context
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - An entity is in one of four states: **transient** (new, unknown to JPA), **managed** (attached to a persistence context, changes tracked), **detached** (was managed, context closed), **removed** (scheduled for delete).
     - The **persistence context** (Hibernate `Session`, JPA `EntityManager`) is an **identity map** (one Java object per row per context) and a **unit of work**: it records changes and writes them at **flush**, normally just before commit.
     - **Dirty checking:** modify a managed entity and the `UPDATE` happens at flush **without calling `save()`**. Changes to **detached** objects are ignored unless you `merge()` them.

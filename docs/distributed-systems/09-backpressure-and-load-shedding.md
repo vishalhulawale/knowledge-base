@@ -6,7 +6,7 @@ tags: [distributed-systems, P0]
 
 # Backpressure & Load Shedding
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Overload is inevitable** (spikes, retries, slow dependencies). The goal is to **degrade gracefully instead of collapsing**. As utilisation ρ → 1, queueing delay grows without bound (≈ ρ/(1−ρ)), and unbounded queues turn overload into **latency for everyone, then timeouts, then retry storms**.
     - **Little's law:** items in system = arrival rate × time in system (**L = λW**). It sizes pools and concurrency: 200 req/s × 0.25 s = 50 concurrent requests.
     - **Backpressure** pushes "slow down" signals **upstream** so producers don't outrun consumers:

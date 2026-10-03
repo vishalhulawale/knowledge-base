@@ -6,7 +6,7 @@ tags: [react, P0]
 
 # Context API & Component Composition Patterns
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Context** passes a value deep into the tree without prop drilling. It's a **dependency injection** mechanism, not a state manager: the state still lives in a component (or store) that provides it.
     - Every component that reads a context **re-renders when the provider's value changes** (by `Object.is`), even if wrapped in `memo`. Keep values stable (`useMemo`), **split** contexts by update frequency, and put state close to where it's used.
     - Good fits: theme, locale, authenticated user/session, feature flags, design-system internals (compound components). Poor fit: frequently changing app-wide state (use a store with selectors) and **server data** (use React Query/Apollo).

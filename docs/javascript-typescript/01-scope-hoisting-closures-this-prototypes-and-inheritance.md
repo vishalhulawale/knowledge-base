@@ -6,7 +6,7 @@ tags: [javascript-typescript, P0]
 
 # Scope, Hoisting, Closures, `this`, Prototypes & Inheritance
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Scope is lexical:** a variable is resolved by where code is written, walking outward through enclosing scopes. `let`/`const`/`class` are **block-scoped**; `var` is **function-scoped**.
     - **Hoisting:** declarations are registered before code runs. `var` is initialised to `undefined`; function declarations are fully hoisted; `let`/`const`/`class` are hoisted but stay in the **temporal dead zone (TDZ)** until their line runs (access throws `ReferenceError`).
     - **Closure:** a function keeps access to the variables of the scope where it was created, even after that scope returned. Basis of private state, callbacks, React hooks and module patterns; also of the classic `var` in a loop bug.

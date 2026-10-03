@@ -6,7 +6,7 @@ tags: [leadership-behavioral, P0]
 
 # Questions to Ask the Interviewer; Salary/Role Conversations
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **"Do you have any questions?" is part of the evaluation**, and it's your chance to evaluate them. Ask **specific, role-relevant** questions that show you think like a lead: team, architecture, delivery, ownership, success criteria. Prepare 2–3 per interviewer type.
     - **Listen for red flags:**
         - vague ownership

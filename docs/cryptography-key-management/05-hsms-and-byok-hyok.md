@@ -6,7 +6,7 @@ tags: [cryptography-key-management, P0]
 
 # HSMs & BYOK/HYOK
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - An **HSM** is a tamper-resistant device that generates, stores and uses keys so that **private and secret keys never leave it in plaintext**. Applications send data in and get results out. Measured with SoftHSM2 (a software PKCS#11 token with the same API): a key created as `sensitive, never extractable` couldn't be read (`--read-object` aborted), and Java's `getEncoded()` returned **null**, yet the key wrapped a DEK inside the token in **~44 µs**.
     - Interfaces: **PKCS#11** (C API, the lingua franca), **JCE/SunPKCS11** in Java, Microsoft CNG/KSP, **KMIP** for key management servers, and vendor REST APIs. Assurance comes from **FIPS 140-3** (Level 3: tamper-evident/responsive, identity-based auth) and Common Criteria.
     - Operational controls: **partitions** (tenant isolation), **role separation** (security officer vs crypto user), **M-of-N quorum** for sensitive operations, PIN lockout (three wrong PINs gave `CKR_PIN_INCORRECT` each time), HA groups and **secure backups** of key material.

@@ -6,7 +6,7 @@ tags: [kafka, P0]
 
 # Kafka Architecture: Brokers, Topics, Partitions, Replication & KRaft
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A **topic** is split into **partitions**. Each partition is an ordered, append-only log stored as **segment files** on a broker's disk.
     - Each partition has one **leader** and N−1 **followers**. Producers and consumers talk to the leader (consumers *can* read from followers with rack-aware fetching).
     - **ISR** (in-sync replicas) = replicas caught up with the leader. With `acks=all`, a write is committed when all ISR members have it, and `min.insync.replicas` sets the minimum ISR size required to accept writes.

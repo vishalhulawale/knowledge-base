@@ -6,7 +6,7 @@ tags: [microservices, P0]
 
 # CQRS & Event Sourcing
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **CQRS (Command Query Responsibility Segregation):** use **different models for writes and reads**. Commands go to a write model that enforces rules; queries go to read models shaped for each screen or API, often in a different store, updated from events.
     - **Event sourcing:** instead of storing current state, store the **append-only sequence of events** that led to it (`RefillRequested`, `RefillApproved`). Current state = replay (fold) of events. You get a full audit trail and time travel.
     - They're **independent**: CQRS without event sourcing is common (read replicas, denormalised views, Elasticsearch fed by CDC). Event sourcing almost always needs CQRS, because querying an event log directly is impractical.

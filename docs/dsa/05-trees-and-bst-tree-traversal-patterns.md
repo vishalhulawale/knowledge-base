@@ -6,7 +6,7 @@ tags: [dsa, P0]
 
 # Trees & BST; Tree Traversal Patterns
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Traversals:**
         - **DFS:** pre-order (node, left, right), **in-order** (left, node, right: **sorted order for a BST**), post-order (left, right, node: children before parent).
         - **BFS level order** uses a queue and processes `queue.size()` nodes per level.

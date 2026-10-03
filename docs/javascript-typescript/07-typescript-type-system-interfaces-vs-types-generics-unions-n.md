@@ -6,7 +6,7 @@ tags: [javascript-typescript, P0]
 
 # TypeScript Type System: Interfaces vs Types, Generics, Unions, Narrowing
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - TypeScript is **structurally typed**: compatibility depends on shape, not declared names. Types are **erased** at compile time: no runtime checks unless you write them (or use a schema library like Zod).
     - **`interface`** vs **`type`**: both describe object shapes; interfaces can be **merged** (declaration merging) and `extends`; type aliases can name **unions, intersections, tuples, primitives, mapped/conditional types**. Use either for objects consistently; `type` for everything else.
     - **Generics** parameterise types (`function first<T>(xs: T[]): T | undefined`), with **constraints** (`T extends { id: string }`) and defaults; inference usually fills them in.

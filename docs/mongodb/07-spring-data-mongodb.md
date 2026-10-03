@@ -6,7 +6,7 @@ tags: [mongodb, P0]
 
 # Spring Data MongoDB
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Spring Data MongoDB maps classes to documents (`@Document`, `@Id`, `@Field`) and gives you two APIs: **repositories** (derived queries, `@Query`, `@Aggregation`, projections, paging) and **`MongoTemplate`** (`Query`/`Criteria`/`Update`, aggregations, bulk ops) for anything precise or atomic.
     - **`@Indexed(unique = true)` does nothing by default**: `auto-index-creation` has been `false` since Spring Data MongoDB 3.0. Measured: only `_id_` existed and a **duplicate `claimNo` was accepted**. With indexes created, the duplicate threw `DuplicateKeyException`. Create indexes through migrations or `IndexOperations` at startup.
     - **`save()` replaces the whole document**: a field written by another service disappeared after `save()`, while `updateFirst` with `$set` kept it. Use `@Version` to stop lost updates (a stale save threw `OptimisticLockingFailureException`) and `Update` operations for partial changes. 500 find-and-save calls took **2.3 s**, and one `updateMulti` over 6,665 docs took **0.34 s**.

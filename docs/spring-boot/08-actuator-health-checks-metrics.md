@@ -6,7 +6,7 @@ tags: [spring-boot, P0]
 
 # Actuator, Health Checks & Metrics (Micrometer)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Actuator** = production endpoints (`/actuator/health`, `metrics`, `prometheus`, `env`, `loggers`, ...). Over HTTP, **only `health` is exposed by default**. Everything else is opt-in via `management.endpoints.web.exposure.include`.
     - **Health** is a tree of `HealthIndicator`s combined by a `StatusAggregator` (`DOWN` > `OUT_OF_SERVICE` > `UP` > `UNKNOWN`). `DOWN` and `OUT_OF_SERVICE` return **HTTP 503**.
     - **Liveness** = "restart me", **readiness** = "stop sending me traffic". Liveness must **never** check external dependencies, or one database blip restarts the whole fleet.

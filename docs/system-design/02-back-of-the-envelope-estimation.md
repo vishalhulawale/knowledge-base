@@ -6,7 +6,7 @@ tags: [system-design, P0]
 
 # Back-of-the-Envelope Estimation
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Goal:** an **order of magnitude** that drives decisions (one DB or sharded? cache fits in RAM? CDN needed?), not precision. Round hard and say what each number **implies**.
     - **Shortcuts:**
         - 1 day ≈ **10⁵ s** (86,400), so **1M requests/day ≈ 12 QPS** and **100M/day ≈ 1,200 QPS**.

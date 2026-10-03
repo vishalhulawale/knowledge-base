@@ -6,7 +6,7 @@ tags: [mongodb, P0]
 
 # Indexing & Explain Plans
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Without an index MongoDB does a **COLLSCAN**. Finding one member's 10 claims examined **200,000 documents in 123 ms**. With an index on `memberId` it examined **10 keys and 10 documents in 2 ms**.
     - **Compound index order follows ESR: Equality, Sort, Range.** For "DENIED claims in March, top 20 by amount", `{status, serviceDate}` examined 4,105 documents plus an in-memory SORT (24 ms), while `{status: 1, amount: -1, serviceDate: 1}` examined **143 keys, 20 documents, no SORT stage (2 ms)**.
     - **Covered queries** read only the index (`totalDocsExamined: 0`, `PROJECTION_COVERED`). Remember to exclude `_id` unless it's in the index.

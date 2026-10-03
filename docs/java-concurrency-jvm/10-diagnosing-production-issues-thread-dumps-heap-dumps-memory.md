@@ -6,7 +6,7 @@ tags: [java-concurrency-jvm, P0]
 
 # Diagnosing Production Issues: Thread Dumps, Heap Dumps, Memory Leaks
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Start from the symptom, not the tool.** High CPU and hangs → **thread dumps** (take 3, about 10 seconds apart). Growing memory or `OutOfMemoryError` → **GC logs first, then a heap dump**. Container killed with exit code 137 → **native memory**, not the heap.
     - A **thread dump** is a snapshot of every thread's stack, state and locks. One dump shows where threads are; several dumps show which threads are **not moving**.
     - A **heap dump** is a snapshot of every object and reference. You analyse it by **retained size** and the **path to GC roots**: a leak is an object that is still *reachable* but no longer *needed*.

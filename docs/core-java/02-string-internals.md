@@ -6,7 +6,7 @@ tags: [core-java, P0]
 
 # String Internals (Pool, Immutability, StringBuilder)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A `String` is an **immutable** object wrapping a `byte[]` plus a `coder` flag (LATIN1 or UTF16) since **Java 9 Compact Strings (JEP 254)**. Before Java 9 it was a `char[]`.
     - **String literals** and compile-time constants are **interned** in the **string pool** (a JVM `StringTable` living on the **heap** since Java 7). `new String("x")` always creates a new object.
     - `==` compares **references**, `equals()` compares **content**. Interview code that "works" with `==` usually works only because both sides are pooled literals.

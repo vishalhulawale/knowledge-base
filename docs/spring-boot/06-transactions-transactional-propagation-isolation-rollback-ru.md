@@ -6,7 +6,7 @@ tags: [spring-boot, P0]
 
 # Transactions: `@Transactional`, propagation, isolation, rollback rules
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - `@Transactional` is **AOP around advice**: a proxy asks a `PlatformTransactionManager` to begin, then commits or rolls back after your method returns. No proxy call (self-invocation, private method, object created with `new`) means **no transaction**.
     - Defaults: propagation **`REQUIRED`**, isolation **`DEFAULT`** (whatever the database uses), not read-only, no timeout, rollback on **`RuntimeException` and `Error` only**. Checked exceptions **commit**.
     - **Propagation** answers "what if a transaction already exists?". `REQUIRED` joins it, `REQUIRES_NEW` suspends it and opens a second connection, `NESTED` uses a savepoint.

@@ -6,7 +6,7 @@ tags: [java-concurrency-jvm, P0]
 
 # Concurrent Collections & Atomics (CAS, LongAdder)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **CAS (compare-and-set)** is one CPU instruction: "write the new value only if the current value is still what I read". Atomics and most concurrent collections are built from a **read, compute, CAS, retry** loop instead of a lock.
     - **`ConcurrentHashMap` (Java 8+)** uses CAS to fill an empty bucket and `synchronized` on the **first node of one bucket** for everything else. Reads never lock. No `null` keys or values. Iterators are **weakly consistent** and never throw `ConcurrentModificationException`.
     - **Each method is atomic, a sequence of methods is not.** `if (!map.containsKey(k)) map.put(k, v)` is a race. Use `putIfAbsent`, `computeIfAbsent`, `compute`, `merge`.

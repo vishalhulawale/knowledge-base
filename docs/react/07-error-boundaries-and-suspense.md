@@ -6,7 +6,7 @@ tags: [react, P0]
 
 # Error Boundaries & Suspense
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - An **error boundary** catches errors thrown **during rendering, in lifecycle methods and in constructors** of its children, and shows a fallback instead of unmounting the whole app. It does **not** catch errors in event handlers, async code (`setTimeout`, promises outside render), SSR, or in the boundary itself.
     - Error boundaries are still **class components** (`static getDerivedStateFromError` + `componentDidCatch`); most teams use `react-error-boundary` (`<ErrorBoundary FallbackComponent onReset resetKeys>`).
     - React 19 adds root options **`onCaughtError`** / **`onUncaughtError`** / `onRecoverableError` for central reporting, and no longer re-throws caught errors in production logs twice.

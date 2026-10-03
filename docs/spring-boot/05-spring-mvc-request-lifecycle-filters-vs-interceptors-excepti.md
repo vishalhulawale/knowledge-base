@@ -6,7 +6,7 @@ tags: [spring-boot, P0]
 
 # Spring MVC Request Lifecycle, Filters vs Interceptors, Exception Handling
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A request passes through **two worlds**: the servlet container (**filters**) and then Spring MVC (**`DispatcherServlet`** → `HandlerMapping` → **interceptors** → `HandlerAdapter` → controller).
     - **Filters** are Servlet API, run for *every* request (static files, `/error`, unmapped URLs), can **wrap or replace** the request and response, and know nothing about the controller. **Interceptors** are Spring MVC, run only when a handler was found, and **know the handler method** but should not replace the request/response.
     - Interceptor callbacks: `preHandle` (in order, can short-circuit) → controller → `postHandle` (reverse order, **skipped on exception**) → `afterCompletion` (reverse order, always, only for interceptors whose `preHandle` returned `true`).

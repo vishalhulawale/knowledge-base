@@ -6,7 +6,7 @@ tags: [lld-design-patterns, P0]
 
 # Case Studies: Parking Lot, LRU Cache, Rate Limiter, Elevator, Splitwise, Library System
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     | Problem | Core of the answer | Pattern / data structure | Twist to expect |
     |---|---|---|---|
     | **Parking lot** | Levels → spots by size, tickets, fees | Strategy (allocation, pricing), Factory (vehicle types), State (ticket) | EV charging spots, multiple entry gates (concurrency), reservations |

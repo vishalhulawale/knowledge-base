@@ -6,7 +6,7 @@ tags: [postgresql-sql, P0]
 
 # Indexes (B-tree, Hash, GIN, Partial, Covering) & EXPLAIN ANALYZE
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - An index is a separate sorted structure (usually a **B-tree**) that lets PostgreSQL find rows without reading the whole table. Measured on 1 M rows: `WHERE member_id = 4242` went from a **129 ms sequential scan** to **0.15 ms** with a B-tree index.
     - The planner uses an index only when it's cheaper: for **selective** predicates. For `status = 'PAID'` (90 % of rows) it ignored the index and scanned the table; for `status = 'PENDING'` (1 %) it used it.
     - **Composite index order matters:** `(member_id, service_date)` serves `WHERE member_id = ?` and `WHERE member_id = ? ORDER BY service_date`, but not efficiently `WHERE service_date = ?` alone (leading-column rule; PostgreSQL 18 adds skip scan for some cases).

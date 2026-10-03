@@ -6,7 +6,7 @@ tags: [postgresql-sql, P0]
 
 # SQL Essentials: Joins, GROUP BY, Window Functions, CTEs
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - SQL is evaluated **logically** in this order: `FROM`/`JOIN` → `WHERE` → `GROUP BY` → `HAVING` → `SELECT` (including window functions) → `DISTINCT` → `ORDER BY` → `LIMIT`. That explains why you can't use a `SELECT` alias in `WHERE` or a window function in `WHERE`.
     - **Joins:** `INNER` keeps matches only; `LEFT` keeps every left row (NULLs for missing right side); filtering the right table in **`WHERE` turns a LEFT JOIN back into an INNER JOIN**, so put that condition in `ON`. Use `EXISTS` / `NOT EXISTS` for semi/anti joins.
     - **NULL is "unknown":** `NULL = NULL` is NULL (not true), aggregates skip NULLs (`COUNT(col)` vs `COUNT(*)`), and **`NOT IN` with a NULL in the subquery returns no rows**. Prefer `NOT EXISTS`.

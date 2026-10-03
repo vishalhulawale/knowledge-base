@@ -6,7 +6,7 @@ tags: [kafka, P0]
 
 # Schema Management: Avro, Protobuf, JSON Schema & Schema Registry
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Kafka stores **bytes**. Schemas are an application-level contract, and without governance one producer change can break every consumer.
     - **Schema Registry** stores versioned schemas per **subject**. Serializers register or look up the schema and prefix each message with a small **schema ID** (magic byte `0x0` + 4-byte big-endian ID; Protobuf adds message-index bytes after the ID).
     - **Compatibility modes:** `BACKWARD` (default: new readers can read old data → **upgrade consumers first**), `FORWARD` (old readers can read new data → upgrade producers first), `FULL` (both), plus `_TRANSITIVE` variants against all versions, and `NONE`.

@@ -6,7 +6,7 @@ tags: [frontend-architecture, P0]
 
 # State Management: Redux Toolkit, React Query (TanStack Query) & When to Use What
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - First classify the state: **server state** (data owned by the backend: claims, members), **client/UI state** (modals, selections, wizard steps), **URL state** (filters, page, selected id), and **form state**. Most "state management" pain comes from treating server state as client state.
     - **TanStack Query (React Query)** manages server state: caching by **query key**, **request deduplication** (5 concurrent requests for the same key → **1** network call, measured), **staleness** (`staleTime`: refetch skipped within it), **invalidation** after mutations, **optimistic updates with rollback**, and **retries** (3 attempts with `retry: 2`, measured).
     - **Redux Toolkit** manages complex shared client state with predictable updates: `createSlice` + **Immer** (new state object, untouched branches shared, frozen in dev, measured), selectors, DevTools and middleware. **RTK Query** is its server-state counterpart if you're already all-in on Redux.

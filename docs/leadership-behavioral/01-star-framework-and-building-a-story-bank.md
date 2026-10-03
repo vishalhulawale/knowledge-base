@@ -6,7 +6,7 @@ tags: [leadership-behavioral, P0]
 
 # STAR Framework & Building a Story Bank
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **STAR** = **Situation** (brief context) → **Task** (your responsibility or goal) → **Action** (what **you** did, step by step, most of the time) → **Result** (measurable outcome). Add **L**earning (**STAR-L**) for senior roles: what you'd repeat or change.
     - **Time split** for a 2–3 minute answer: S+T ≈ 20%, **A ≈ 60%**, R+L ≈ 20%. Interviewers score the **Action**: decisions, trade-offs, influence, how you handled people.
     - **Say "I" for your actions, "we" for the team's.** Quantify results (latency, defects, delivery dates, team growth). Where you don't have exact numbers, give an honest estimate and **say it's an estimate**.

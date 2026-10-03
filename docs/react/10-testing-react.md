@@ -6,7 +6,7 @@ tags: [react, P0]
 
 # Testing React (Jest, React Testing Library)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **React Testing Library (RTL)** tests components through the DOM the way users do: find elements by **role, label and text**, interact with **`@testing-library/user-event`**, assert visible outcomes. Avoid testing implementation details (state, internal methods, CSS classes).
     - **Query priority:** `getByRole` (with `name`) > `getByLabelText` > `getByPlaceholderText` > `getByText` > `getByDisplayValue` > `getByAltText`/`getByTitle` > `getByTestId` (last resort). `getBy` throws, `queryBy` returns null (for absence), `findBy` waits (async).
     - **Runner:** Jest (with jsdom) or **Vitest** (Vite-native, Jest-compatible API, faster in Vite projects). Use `jest-dom` matchers (`toBeInTheDocument`, `toBeDisabled`, `toHaveAccessibleName`).

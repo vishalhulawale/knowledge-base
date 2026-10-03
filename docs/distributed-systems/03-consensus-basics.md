@@ -6,7 +6,7 @@ tags: [distributed-systems, P0]
 
 # Consensus Basics (Raft, Leader Election)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Consensus** gets a group of nodes to **agree on a value**, or on a sequence of values (a **replicated log**), despite crashes and message loss. It's the foundation for **leader election, distributed locks, configuration, membership and linearisable storage**.
     - **It tolerates f failures with 2f + 1 nodes** (a majority quorum): 3 nodes tolerate 1 failure, 5 tolerate 2. The minority side of a partition **stops making progress** (CP). Safety is never violated, and liveness needs a working majority and timeouts (FLP).
     - **Raft:**

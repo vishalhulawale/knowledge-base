@@ -6,7 +6,7 @@ tags: [microservices, P0]
 
 # Distributed Tracing & Correlation IDs
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A **trace** is the whole journey of one request; it is made of **spans** (one unit of work each: an HTTP call, a DB query, a Kafka publish), linked by parent/child ids. Traces show **where time goes and where errors happen** across services.
     - **Context propagation** carries the trace id between services. The standard is **W3C Trace Context**: `traceparent: 00-<32-hex trace-id>-<16-hex parent-id>-<flags>` plus optional `tracestate`. For Kafka the same values travel in **record headers**.
     - **OpenTelemetry (OTel)** is the vendor-neutral standard for traces, metrics and logs (APIs, SDKs, OTLP protocol, Collector). Spring Boot 3 uses **Micrometer Tracing** with an OTel or Brave bridge; the old Spring Cloud Sleuth is replaced.

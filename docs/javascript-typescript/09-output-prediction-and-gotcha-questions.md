@@ -6,7 +6,7 @@ tags: [javascript-typescript, P0]
 
 # Output-Prediction & "Gotcha" Questions
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Answer these with a **method**, not memory: (1) run all synchronous code first, (2) drain **microtasks** (promise callbacks, `await` continuations, `queueMicrotask`), (3) run the next **task** (`setTimeout`, I/O), then repeat.
     - `await x` runs the awaited function **synchronously up to its first `await`**, then puts the rest of the caller in a microtask. Code before the first `await` is synchronous.
     - **Closures capture variables, not values.** `var` gives one shared binding for the whole loop (`3 3 3`); `let` gives a new binding per iteration (`0 1 2`).

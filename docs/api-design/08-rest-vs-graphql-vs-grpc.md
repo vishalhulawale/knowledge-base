@@ -6,7 +6,7 @@ tags: [api-design, P0]
 
 # REST vs GraphQL vs gRPC
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **REST:** resources over HTTP with standard methods and status codes. Universal, cacheable by any HTTP cache, easy to secure at a gateway, the default for **public and partner APIs**. Weakness: fixed response shapes, so UIs over-fetch or make many calls.
     - **GraphQL:** one endpoint, a typed schema, and **clients choose exactly the fields** they need, across many backends in one round trip. Great as a **BFF / aggregation layer for UIs**. Costs: harder HTTP caching, N+1 resolver problems (DataLoader), query-cost limits for security, everything returns `200` with an `errors` array.
     - **gRPC:** **contract-first RPC** with Protocol Buffers over **HTTP/2**: compact binary messages, generated typed clients in many languages, **deadlines**, four call types including **bidirectional streaming**. Best for **internal service-to-service** calls with high volume or low latency. Weak in browsers (needs gRPC-Web or a gateway) and not human-readable.

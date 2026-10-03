@@ -6,7 +6,7 @@ tags: [leadership-behavioral, P0]
 
 # Managing Underperformance & Difficult Conversations
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Diagnose before you act.** Underperformance comes from **skill** (doesn't know how), **will** (motivation, engagement), **clarity** (unclear expectations), or **context** (personal issues, wrong role, team or process problems, unrealistic load). The fix differs for each.
     - **Start early, privately and specifically.** Use **SBI** (Situation, Behaviour, Impact), listen to their side, and agree **concrete expectations** with a timeline and **support** (pairing, training, scope change).
     - **Document facts** (dates, examples, agreements), not opinions. Follow up regularly, and recognise improvement quickly.

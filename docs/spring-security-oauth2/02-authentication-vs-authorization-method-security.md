@@ -6,7 +6,7 @@ tags: [spring-security-oauth2, P0]
 
 # Authentication vs Authorization; Method Security
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Authentication (authn)** proves identity and produces an `Authentication` object in the `SecurityContext`. **Authorization (authz)** takes that object and decides *allow or deny* for one request, one method or one object. Failures map to **401** (not authenticated) and **403** (authenticated, not allowed).
     - Spring Security authorizes at two layers: **request level** (`authorizeHttpRequests`, enforced by `AuthorizationFilter`) and **method level** (`@EnableMethodSecurity` + `@PreAuthorize` / `@PostAuthorize` / `@PreFilter` / `@PostFilter`, enforced by Spring AOP interceptors). Both delegate to the same abstraction: `AuthorizationManager`.
     - `hasRole('ADMIN')` checks for the authority `ROLE_ADMIN`. `hasAuthority('SCOPE_read')` checks the exact string. Mixing them up is the most common silent bug.

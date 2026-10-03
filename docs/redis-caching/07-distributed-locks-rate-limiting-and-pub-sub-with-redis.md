@@ -6,7 +6,7 @@ tags: [redis-caching, P0]
 
 # Distributed Locks, Rate Limiting & Pub/Sub with Redis
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Lock** = `SET lock:x <random token> NX PX <ttl>`. **Release** with a Lua compare-and-delete so you only delete your own lock. Measured: a naive `DEL` after the lock had expired deleted the *next* holder's lock, and a third client acquired it while the second was still working.
     - A lock with a TTL is a **lease**: GC pauses or slow I/O can outlive it, leaving two holders. For correctness, pass a **fencing token** (an increasing number from `INCR`) to the protected resource and reject stale tokens (measured: the paused holder's write with token 1 was rejected after token 2 wrote). Redlock (multi-node) doesn't remove this problem. Use locks for **efficiency** (avoid duplicate work) unless the resource checks tokens.
     - **Rate limiting** must be atomic (Lua or single commands). A **fixed window** allowed **20** requests in 90 ms across a window boundary with a limit of 10/s. A **sliding log** and a **token bucket** allowed 10. A token bucket (capacity 10, refill 10/s) allowed 59 of 200 requests over 5 s: the burst plus the refill.

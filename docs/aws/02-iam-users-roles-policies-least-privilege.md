@@ -6,7 +6,7 @@ tags: [aws, P0]
 
 # IAM: Users, Roles, Policies & Least Privilege
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Every AWS API call is authenticated and authorised by IAM.** A request has a **principal**, an **action**, a **resource** and a **context** (IP, MFA, tags, time, VPC endpoint).
     - **Prefer roles over users.** Roles give **temporary credentials** through STS (`AssumeRole`). Humans come in through **IAM Identity Center** (SSO). Workloads use **instance profiles, ECS task roles, EKS Pod Identity/IRSA and Lambda execution roles**. Long-lived access keys are a last resort.
     - **Evaluation rule:**

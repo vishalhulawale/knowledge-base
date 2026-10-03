@@ -6,7 +6,7 @@ tags: [spring-security-oauth2, P0]
 
 # OpenID Connect: ID Token, UserInfo & Discovery
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **OAuth2 answers "what may this app do?" OIDC answers "who just logged in?"** OIDC is a thin identity layer on top of OAuth2, switched on by the `openid` scope.
     - The **ID token** is a signed JWT *for the client*. Its audience is the `client_id`. It proves an authentication event (`iss`, `sub`, `aud`, `exp`, `iat`, plus `nonce`, `auth_time`, `acr`, `amr`). It is **not** an API credential.
     - The **access token** is for the resource server. The client should treat it as opaque. Never swap the two.

@@ -6,7 +6,7 @@ tags: [cryptography-key-management, P0]
 
 # Key Rotation Strategies Without Downtime
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Rotation limits **how much data one key protects** and **how long a leaked key is useful**. Drivers: cryptoperiods (NIST SP 800-57), usage limits (AES-GCM nonces), compliance (PCI DSS, HIPAA programmes), people leaving, and **suspected compromise**.
     - The universal pattern is **add → switch → migrate → retire**: introduce the new key while old ones remain valid for reading, switch writers to it, migrate what must move, and only then retire the old key. Every ciphertext, token and signature must carry a **key ID / version**.
     - Measured: after adding v2 to a keyring, **10,000/10,000** v1 records stayed readable. Lazy re-encryption on 30% of reads migrated 3,037, and a background job re-encrypted the remaining **6,963 in ~0.5 s**. Retiring a key **before** migration made its records unreadable ("key version 2 retired").

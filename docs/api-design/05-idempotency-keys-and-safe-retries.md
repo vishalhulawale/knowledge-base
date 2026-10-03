@@ -6,7 +6,7 @@ tags: [api-design, P0]
 
 # Idempotency Keys & Safe Retries
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A timeout gives the client an **unknown outcome**: the server may or may not have done the work. Safe retries need **idempotent** operations. `GET`, `PUT` and `DELETE` are idempotent by definition; **`POST` and `PATCH` need an `Idempotency-Key`**.
     - Contract (IETF draft, Stripe-style): the client sends `Idempotency-Key: "<uuid>"` **once per logical operation and reuses it on every retry**. The server stores key → request fingerprint → result and **replays** the stored result. Missing key on an endpoint that requires it → **400**; same key, different body → **422**; same key still processing → **409**.
     - Server must **claim the key atomically** (unique constraint, insert first) and **store the result in the same transaction** as the business change. Pass the key on to downstream providers (payments, pharmacy) so the whole chain is idempotent.

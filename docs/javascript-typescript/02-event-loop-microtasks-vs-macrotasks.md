@@ -6,7 +6,7 @@ tags: [javascript-typescript, P0]
 
 # Event Loop, Microtasks vs Macrotasks
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - JavaScript runs on **one thread per agent** with a **call stack**. Long synchronous work blocks everything (input, rendering). Async APIs (timers, network, I/O) are provided by the host (browser or Node) and report back by queuing callbacks.
     - **Event loop:** take one **task (macrotask)** from a task queue, run it to completion, then **drain the entire microtask queue**, then (in browsers) maybe **render**, repeat.
     - **Tasks:** `setTimeout`, `setInterval`, I/O callbacks, UI events, `MessageChannel`, `setImmediate` (Node). **Microtasks:** promise reactions (`.then`, `await` continuations), `queueMicrotask`, `MutationObserver`; Node's `process.nextTick` runs even before promise microtasks.

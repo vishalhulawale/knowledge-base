@@ -6,7 +6,7 @@ tags: [redis-caching, P0]
 
 # Persistence (RDB/AOF), Replication, Sentinel & Cluster
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **RDB** = point-in-time snapshots made by a forked child: compact files and fast restarts, but you lose everything since the last snapshot. **AOF** = a log of every write, replayed on restart. Its loss window depends on `appendfsync`: `always` (about 0), `everysec` (about 1 s, the default) or `no` (OS-dependent). Redis 7 uses a hybrid RDB preamble plus an AOF tail, with a multi-part AOF.
     - Measured on one machine: single-client `SET` throughput was **2,879/s** with `appendfsync always` vs **14,055/s** with `everysec`. A 2M-key (352 MB) dataset snapshotted in **4.1 s** (10.6 ms fork) and reloaded in **2.6 s**.
     - **Replication is asynchronous.** A replica can be behind when the primary dies, so acknowledged writes can be lost on failover. `WAIT` and `min-replicas-to-write` narrow the window (measured: writes were rejected with `NOREPLICAS` once the replica lagged), but they don't make Redis strongly consistent.

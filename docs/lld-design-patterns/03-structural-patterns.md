@@ -6,7 +6,7 @@ tags: [lld-design-patterns, P0]
 
 # Structural Patterns (Adapter, Decorator, Proxy, Facade, Composite)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Adapter:** converts one interface into the one clients expect. Wrap a **legacy or third-party** API behind **your** port (an anti-corruption layer at class level).
     - **Decorator:** wraps an object implementing the **same interface** to **add behaviour** (caching, retries, metrics, logging). Decorators stack, and the order matters. `java.io` streams are the classic example.
     - **Proxy:** same interface, but the purpose is **controlling access**: lazy loading (Hibernate), remote calls, security, transactions.

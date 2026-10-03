@@ -6,7 +6,7 @@ tags: [dsa, P0]
 
 # Greedy & Intervals
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A **greedy algorithm** makes the locally best choice at each step and never revisits it. It's correct only when the problem has the **greedy-choice property** (some optimal solution starts with the greedy choice) and **optimal substructure**. Prove it with an **exchange argument**: any optimal solution can be changed to include the greedy choice without getting worse. Otherwise use [DP](10-dynamic-programming-patterns.md).
     - **The sort key is the algorithm.** For maximum non-overlapping intervals (activity selection), **sort by end time**. On `[0,10],[1,2],[3,4],[5,6]`, earliest-end picked **3**, earliest-start picked **1**. "Shortest first" picked 1 where 2 was optimal (measured).
     - **Interval toolkit** (sort first, O(n log n)):

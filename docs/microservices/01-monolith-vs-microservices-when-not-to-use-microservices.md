@@ -6,7 +6,7 @@ tags: [microservices, P0]
 
 # Monolith vs Microservices; When Not to Use Microservices
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Microservices** are "a suite of small services, each running in its own process and communicating with lightweight mechanisms", built around business capabilities and **independently deployable** (Lewis & Fowler, 2014). Independent deployability is the defining property, not size.
     - A **monolith** is one deployable unit. That is a deployment choice, not a quality problem. The problem is a **big ball of mud**: no internal boundaries.
     - Microservices buy **team autonomy, independent deployment and scaling, fault isolation and technology freedom**. They cost **network calls, eventual consistency, distributed debugging, operational overhead and harder refactoring across boundaries**. Fowler calls this the **microservice premium**.

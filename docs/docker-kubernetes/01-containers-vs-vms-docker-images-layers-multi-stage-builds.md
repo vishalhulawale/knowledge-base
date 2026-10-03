@@ -6,7 +6,7 @@ tags: [docker-kubernetes, P0]
 
 # Containers vs VMs; Docker Images, Layers & Multi-Stage Builds
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A **container** is an ordinary Linux process isolated with **namespaces** (what it can see) and limited with **cgroups** (what it can use), sharing the host kernel. A **VM** runs its own kernel on a hypervisor. Containers start in milliseconds and pack densely. VMs isolate more strongly.
     - An **image** is a stack of read-only, content-addressed **layers** plus config. Each Dockerfile instruction that changes files adds a layer, and unchanged layers are reused from cache and never re-pushed.
     - **Multi-stage builds** keep build tools out of the runtime image, and **layered jars** put rarely changing dependencies in their own layer. Measured for a Spring Boot app: image **248 MB** (JDK + fat jar) → **95 MB** (JRE Alpine, layered) → **84 MB** (distroless). After a one-line code change, the new layer was **23.6 MB** (fat jar) vs **69.6 kB** (layered).

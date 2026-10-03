@@ -6,7 +6,7 @@ tags: [core-java, P0]
 
 # Serialization, Reflection & Annotations
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Java native serialization** (`Serializable`) writes an object graph as bytes. Deserialization **builds objects without calling their constructors**, so it bypasses your validation. It is a hidden, public "constructor" that accepts attacker-controlled bytes.
     - **Never deserialize untrusted data with `ObjectInputStream`.** Prefer JSON/Avro/Protobuf. If you must, use an allow-list **`ObjectInputFilter`** (JEP 290, Java 9; context-specific filters in JEP 415, Java 17).
     - **Reflection** lets code inspect classes and call members by name at runtime. It powers Spring DI, Jackson, Hibernate and JUnit. Costs: no compile-time safety, broken encapsulation, slower than direct calls, and friction with modules (strong encapsulation since Java 17) and GraalVM native images.

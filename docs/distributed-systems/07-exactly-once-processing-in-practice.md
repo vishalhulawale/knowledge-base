@@ -6,7 +6,7 @@ tags: [distributed-systems, P0]
 
 # Exactly-Once Processing in Practice
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Exactly-once *delivery* over an unreliable network is impossible** (Two Generals: an ack can always be lost). What systems provide is **exactly-once *effect*** (also called *effectively-once*): **at-least-once delivery + deduplication or atomicity**, so duplicates have no extra effect.
     - **Inside Kafka, exactly-once semantics (EOS) works:**
         - **Idempotent producer:** PID + sequence numbers dedupe retries per partition.

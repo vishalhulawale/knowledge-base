@@ -6,7 +6,7 @@ tags: [cryptography-key-management, P0]
 
 # Password Hashing & Secrets Management
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Passwords are hashed, never encrypted**, with a **slow, salted, ideally memory-hard** function: **Argon2id** (first choice), **scrypt**, **bcrypt**, or **PBKDF2** (FIPS environments). Measured on one core: **SHA-256 ran 3.25 million hashes/s** (what an attacker would love), while bcrypt cost 12 took **300 ms**, Argon2id (19 MiB, t=2) **~40–65 ms**, PBKDF2-SHA256 at 310k iterations **294 ms**.
     - Each hash has a unique **salt** (the same password hashed twice gave two different bcrypt strings), parameters are stored in the hash string (`$2a$12$…`), and comparison is constant-time inside the library. bcrypt only uses the first **72 bytes** (Spring Security now rejects longer input: "password cannot be more than 72 bytes").
     - Upgrade legacy hashes **on login** with Spring Security's `DelegatingPasswordEncoder`: `{bcrypt}…` by default, a legacy `{sha256}` hash still matched and reported **`upgradeEncoding = true`**, so you re-hash it with the current algorithm right after a successful login.

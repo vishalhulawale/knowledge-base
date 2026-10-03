@@ -6,7 +6,7 @@ tags: [frontend-architecture, P0]
 
 # Micro-Frontends: Approaches & Trade-offs
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Micro-frontends** apply microservice ideas to the UI: a large web app is split into **vertical slices owned by autonomous teams** (claims, pharmacy, profile), each **deployed independently**, then composed into one experience by a **shell** (host).
     - Composition options: **build-time** (npm packages: simple, but couples releases), **server-side** (SSI/ESI, edge or Node composition), **iframes** (strong isolation, poor UX integration), **runtime JavaScript** (**Module Federation**, single-spa, Native Federation, import maps), and **Web Components** (framework-agnostic boundaries).
     - Demo: a webpack 5 **Module Federation** shell loaded a `claims/ClaimsWidget` remote from another origin at runtime. With React shared as a **singleton**, it rendered, and a `CustomEvent` reached the shell ("last selected: C42"). Without sharing, two React copies loaded and the remote crashed with **"Cannot read properties of null (reading 'useState')"**. Shared dependency management is the heart of runtime composition.

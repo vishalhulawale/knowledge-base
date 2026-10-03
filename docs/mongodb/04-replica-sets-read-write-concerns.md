@@ -6,7 +6,7 @@ tags: [mongodb, P0]
 
 # Replica Sets, Read & Write Concerns
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A **replica set** is one primary plus secondaries that copy its **oplog** asynchronously. If the primary is lost, the members **elect** a new one. Measured with defaults (`electionTimeoutMillis` 10,000): a new primary about **10–11 s** after the primary was killed, and the driver's retryable write succeeded right after.
     - **Write concern** says how many members must have a write before it's acknowledged. The default since 5.0 is **`w: "majority"`**. Measured medians: `w:0` 75 µs, `w:1` 0.85 ms, `w:"majority"` 2.2 ms, `w:3` 2.6 ms.
     - `w:1` writes **can be lost**. In my test, a primary acknowledged a `w:1` write while its secondaries were down and then crashed. The new primary didn't have it, and it was gone after the old primary rejoined. `w:"majority"` writes survive any failover.

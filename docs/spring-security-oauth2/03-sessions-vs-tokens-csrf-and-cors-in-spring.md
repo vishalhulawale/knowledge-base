@@ -6,7 +6,7 @@ tags: [spring-security-oauth2, P0]
 
 # Sessions vs Tokens; CSRF & CORS in Spring
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Session** = the server keeps the state and the browser holds an opaque ID in a cookie. **Token** = the client holds a self-contained (or opaque) credential and sends it explicitly in the `Authorization` header.
     - **CSRF exists because browsers attach cookies automatically.** If the credential is a cookie (session cookie *or* a JWT in a cookie), you need CSRF protection. If it is a header the JavaScript adds itself, you don't.
     - **CORS is not a defence, it is a relaxation.** It loosens the browser's same-origin policy so another origin may *read* your responses. It does not stop a request from being sent, and it does nothing against curl or Postman.

@@ -6,7 +6,7 @@ tags: [graphql, P0]
 
 # The N+1 Problem & DataLoader Batching
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **N+1:** one call fetches N parents, then each parent's child field triggers its own call, so you make **1 + N** (and nested levels multiply it) backend requests.
     - **DataLoader** collects all keys requested during an execution level, then calls a **batch function once** (`List<K> → List<V>` in key order, or `Set<K> → Map<K,V>` for the mapped variant), and **caches per request** (the same key is fetched once).
     - In Spring for GraphQL, **`@BatchMapping`** is the one-annotation solution. For more control, register loaders via `BatchLoaderRegistry`.

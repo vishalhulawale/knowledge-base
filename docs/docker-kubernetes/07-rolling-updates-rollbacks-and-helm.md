@@ -6,7 +6,7 @@ tags: [docker-kubernetes, P0]
 
 # Rolling Updates, Rollbacks & Helm
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A Deployment rollout creates a **new ReplicaSet** and shifts replicas from old to new, bounded by **`maxSurge`** (extra pods allowed) and **`maxUnavailable`** (pods allowed to be missing). With `maxSurge: 1, maxUnavailable: 0`, 4 replicas went `1.0=4/4` → `1.1=3/4, 1.0=1/1` → `1.1=4/4`. **Recreate** kills everything first, so there's downtime (`1.1=4/0` before `1.3` started).
     - A rollout that never becomes ready doesn't take the service down when `maxUnavailable: 0`: old pods stayed **4/4 available** while the new ReplicaSet had 0 ready, and after **`progressDeadlineSeconds`** the Deployment reported **`Progressing=False ProgressDeadlineExceeded`** and `rollout status` exited with an error. Kubernetes **doesn't roll back automatically**.
     - **`kubectl rollout undo`** re-applies an older ReplicaSet's template as a new revision (revision 2 became revision **4**) and completed in about **0.6 s** here. Keep `revisionHistoryLimit` > 0 and record change causes.

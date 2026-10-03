@@ -6,7 +6,7 @@ tags: [system-design, P0]
 
 # CAP & PACELC, Consistency Models
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **CAP:** during a **network partition**, a replicated system must choose between **Consistency** (meaning *linearisability*: every read sees the latest write) and **Availability** (every request to a non-failed node gets a non-error response). Partitions **will** happen, so the real choice is **CP or AP while partitioned**. "Pick 2 of 3" is a misreading. You can't opt out of P.
     - **PACELC:** if **P**artitioned, choose **A** or **C**; **E**lse (normal operation), choose **L**atency or **C**onsistency. Strong consistency costs coordination, and coordination costs latency even when nothing is broken. Examples:
         - DynamoDB, Cassandra: PA/EL by default, tunable.

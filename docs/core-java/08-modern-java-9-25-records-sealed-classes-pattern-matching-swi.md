@@ -6,7 +6,7 @@ tags: [core-java, P0]
 
 # Modern Java 9–25: Records, Sealed Classes, Pattern Matching, Switch Expressions, Text Blocks
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Records** (final in Java 16) are transparent, shallowly immutable data carriers: the compiler generates private final fields, a canonical constructor, accessors (`name()`, not `getName()`), `equals`, `hashCode` and `toString`. Validate and defensively copy in a **compact constructor**.
     - **Sealed classes/interfaces** (Java 17) restrict who may extend a type with `permits`. Every permitted subclass must be `final`, `sealed` or `non-sealed`. This gives the compiler a **closed set** of subtypes.
     - **Switch expressions** (Java 14) return a value, use `->` with no fall-through, and must be **exhaustive**. `yield` returns a value from a block.

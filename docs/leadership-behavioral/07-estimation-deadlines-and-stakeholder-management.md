@@ -6,7 +6,7 @@ tags: [leadership-behavioral, P0]
 
 # Estimation, Deadlines & Stakeholder Management
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Estimates are forecasts with uncertainty, not promises.** Give **ranges with confidence** ("4–6 weeks, 80% confident"). Narrow them as you learn (the **cone of uncertainty**). Separate **estimate** (effort) from **commitment** (a date the team agrees to) from **target** (what the business wants).
     - **Techniques:**
         - **Relative sizing** (story points, t-shirt sizes) plus **velocity** for sprints.

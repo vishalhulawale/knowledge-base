@@ -6,7 +6,7 @@ tags: [graphql, P0]
 
 # Aggregating Multiple Upstream Systems: Orchestration, Timeouts & Partial Failures
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A GraphQL aggregation layer (BFF / integration layer) maps a **client-centric graph** onto many backends. It's the core of my GraphQL Consumer Service role on OptumRx Meteor at Publicis Sapient (5 upstream systems).
     - **Latency** = the slowest path through dependent calls. Run independent calls **in parallel**, batch with DataLoader, and keep dependency chains short.
     - Every upstream call needs a **timeout**, and per-upstream **bulkheads**, **circuit breakers** and (only for idempotent reads) **retries with backoff**.

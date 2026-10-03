@@ -6,7 +6,7 @@ tags: [microservices, P0]
 
 # Distributed Transactions: Saga (Choreography vs Orchestration), Outbox Pattern
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - With a database per service there is **no ACID transaction across services**. Two-phase commit (2PC/XA) exists but couples availability, holds locks across the network and isn't supported by most brokers and NoSQL stores. Avoid it.
     - A **saga** is a sequence of **local transactions**; each publishes an event or triggers the next step. If a step fails, earlier steps are undone by **compensating transactions** (semantic undo: refund, release, cancel).
     - **Choreography:** services react to each other's events, no coordinator. Simple for 2–4 steps, hard to follow beyond that. **Orchestration:** a coordinator tells each participant what to do and tracks state. Clearer, testable, a single place for the flow (Temporal, Camunda, or a state machine).

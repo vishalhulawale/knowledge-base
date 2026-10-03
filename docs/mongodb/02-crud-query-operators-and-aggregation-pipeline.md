@@ -6,7 +6,7 @@ tags: [mongodb, P0]
 
 # CRUD, Query Operators & Aggregation Pipeline
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Queries are documents: `{status: "PAID", amount: {$gte: 100}}`. Arrays have special semantics: dot notation conditions can match **different** elements, while `$elemMatch` requires **one** element to satisfy all of them (measured: 319 vs 125 matches for the same conditions).
     - `{x: null}` matches documents where `x` is null **or missing**. Use `$exists` or `$type: "null"` to tell them apart. `{tags: ["rx","mail"]}` is exact array equality, so use `$all` for "contains both".
     - Update with **operators**, not read-modify-write: `$set`, `$inc`, `$push` (with `$each`/`$slice`), `$addToSet`, positional `$` (first match) and `$[id]` with `arrayFilters` (all matches). `findOneAndUpdate` + `upsert` is the atomic counter or claim pattern. Batch with `bulkWrite`: 2,000 updates took **4.7 s** one by one and **0.31 s** in bulk.

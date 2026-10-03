@@ -6,7 +6,7 @@ tags: [jpa-hibernate, P0]
 
 # N+1 Problem & Solutions (Fetch Joins, Entity Graphs, Batch Size)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **N+1:** one query loads N parent rows, then accessing a lazy association on each parent fires **one more query per parent**. 20 members → 21 queries; 10,000 members → 10,001. It hides in loops, mappers, JSON serialisation and `toString()`.
     - **Detect it** before production: Hibernate statistics or a datasource proxy in tests with **query-count assertions**, SQL logging in development, APM traces in production.
     - **Fix it by fetching per use case:** `JOIN FETCH` in JPQL, `@EntityGraph` on repository methods, or a **DTO projection** (usually best for read endpoints). Measured on PostgreSQL 16: the N+1 loop ran **21** statements; join fetch, entity graph and DTO projection each ran **1**.

@@ -6,7 +6,7 @@ tags: [aws, P0]
 
 # Networking: VPC, Subnets, Security Groups vs NACLs, Route 53, CloudFront
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **VPC basics:**
         - A **VPC** is your private network in one Region (CIDR, e.g. `10.0.0.0/16`).
         - **Subnets** live in **one AZ**. A subnet is "public" only because its **route table** sends `0.0.0.0/0` to an **Internet Gateway**.

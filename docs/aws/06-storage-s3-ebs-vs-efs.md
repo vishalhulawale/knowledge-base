@@ -6,7 +6,7 @@ tags: [aws, P0]
 
 # Storage: S3 (Classes, Consistency, Security), EBS vs EFS
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **S3 is object storage:** a key → object (up to **50 TB** since December 2025, multipart required above 5 GB). It's designed for **11 nines durability**, data is stored across ≥ 3 AZs (except One Zone classes), and it has **strong read-after-write consistency** for all PUTs, DELETEs and LISTs since December 2020.
     - **Storage classes** trade access cost and latency for storage price:
         - Standard → Intelligent-Tiering → Standard-IA / One Zone-IA (30-day minimum)

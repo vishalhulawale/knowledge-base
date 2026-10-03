@@ -6,7 +6,7 @@ tags: [javascript-typescript, P0]
 
 # Promises, async/await & Error Handling
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A **Promise** is a placeholder for a future value: **pending → fulfilled or rejected** (settled once, immutable). `.then` returns a **new promise**, so chains pass values (or thrown errors) along.
     - **Combinators:** `Promise.all` (all succeed, fails fast), `allSettled` (wait for all, never rejects), `race` (first to settle), `any` (first to fulfil, `AggregateError` if all reject). Plus `Promise.withResolvers()` (ES2024) and `Promise.try()` (ES2025).
     - **async/await** is syntax over promises: `await` pauses the function (not the thread); use `try/catch/finally`. Run independent work **in parallel** (`Promise.all`), not with sequential `await`s in a loop.

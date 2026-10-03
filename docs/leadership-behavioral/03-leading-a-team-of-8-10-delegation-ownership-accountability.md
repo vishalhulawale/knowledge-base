@@ -6,7 +6,7 @@ tags: [leadership-behavioral, P0]
 
 # Leading a Team of 8–10: Delegation, Ownership, Accountability
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **A tech lead's job is team output, not personal output.** Success means the team delivers predictably, with quality, and **people grow**. Your own code is one input among several.
     - **Delegation:** match **how much you hand over** to each person's **task-relevant maturity**. Direct a newcomer on an unfamiliar task, coach a growing engineer, support or delegate fully to an expert. Delegate **outcomes + context + constraints**, not step-by-step instructions.
     - **Ownership:**

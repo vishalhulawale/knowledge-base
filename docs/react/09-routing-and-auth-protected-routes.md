@@ -6,7 +6,7 @@ tags: [react, P0]
 
 # Routing (React Router) & Auth-Protected Routes
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Client-side routing** maps URLs to components without full page reloads using the History API. React Router is the de facto library; **v8** (current) ships everything from the `react-router` package (`react-router-dom` removed) and requires React 19.2+.
     - Three modes: **declarative** (`<BrowserRouter>`, `<Routes>`), **data** (`createBrowserRouter` with loaders, actions, error boundaries, lazy routes) and **framework** (Vite plugin, file routes, SSR, type-safe route modules).
     - **Nested routes + `<Outlet>`** give shared layouts; URL **params** and **search params** hold navigational state (filters, pagination).

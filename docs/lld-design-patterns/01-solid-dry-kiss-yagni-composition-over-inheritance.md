@@ -6,7 +6,7 @@ tags: [lld-design-patterns, P0]
 
 # SOLID, DRY, KISS, YAGNI, Composition over Inheritance
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **S**ingle Responsibility: a class should have **one reason to change**, meaning one actor or stakeholder it serves (not "does one thing").
     - **O**pen/Closed: **open for extension, closed for modification**. Add behaviour by adding new types (polymorphism, strategies), not by editing a growing `if/switch`.
     - **L**iskov Substitution: subtypes must honour the **contract** of their base type (pre-conditions no stronger, post-conditions no weaker, invariants kept). Square-extends-Rectangle and `UnsupportedOperationException` overrides are the classic violations.

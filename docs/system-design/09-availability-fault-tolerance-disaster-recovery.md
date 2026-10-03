@@ -6,7 +6,7 @@ tags: [system-design, P0]
 
 # Availability, Fault Tolerance, Disaster Recovery
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Availability** is the fraction of time (or of requests) served successfully. Express it as an **SLO** with an **error budget**. Serial dependencies **multiply** (lower availability). Redundancy **in parallel** raises it, if failures are independent and failover works.
     - **Fault tolerance** = **redundancy** (no single point of failure: N+1, multi-AZ, replicas) + **detection** (health checks, heartbeats, outlier ejection, watching for **gray failures**) + **recovery** (automatic failover, restart, re-route).
     - **Contain the blast radius:**

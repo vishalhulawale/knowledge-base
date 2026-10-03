@@ -6,7 +6,7 @@ tags: [java-concurrency-jvm, P0]
 
 # CompletableFuture & Async Composition
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A `CompletableFuture` (CF) is a **result holder plus a list of callbacks**. You don't block for the value, you attach the next stage (`thenApply`, `thenCompose`, `thenCombine`) and the stage runs when the value arrives.
     - **`thenApply` = map, `thenCompose` = flatMap, `thenCombine` = zip** of two independent futures, `allOf` / `anyOf` = wait for many / first of many.
     - **Which thread runs a stage?** Non-`Async` methods run on whichever thread completes the previous stage, *or on the caller's thread if it is already complete*. `*Async` methods run on the default executor (`ForkJoinPool.commonPool()`) or the executor you pass.

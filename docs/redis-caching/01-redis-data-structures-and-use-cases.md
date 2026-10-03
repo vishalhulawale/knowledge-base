@@ -6,7 +6,7 @@ tags: [redis-caching, P0]
 
 # Redis Data Structures & Use Cases
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Redis is an **in-memory data-structure server**. Commands run one at a time on a single main thread (I/O threads only help with sockets), so each command is atomic, and a slow command blocks everyone.
     - Pick the type by the **operation you need**: string (cache value, counter with `INCR`), hash (object fields), list (queue, recent-N), set (membership, dedupe), sorted set (leaderboard, priority, sliding window), stream (durable log with consumer groups), bitmap/HyperLogLog (compact counting), geo (radius search).
     - Small collections use **compact encodings** (listpack, intset) and switch to hash tables or skiplists past a threshold. Measured: 10,000 users stored as hashes used **1.41 MB** vs **2.78 MB** as three string keys each.

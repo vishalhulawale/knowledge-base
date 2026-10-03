@@ -6,7 +6,7 @@ tags: [distributed-systems, P0]
 
 # Clocks, Ordering, Distributed Locks
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Physical clocks drift** (quartz runs at ~tens of ppm) and get **corrected by NTP** (sometimes jumping backwards). VMs pause. So wall-clock timestamps from different machines **can't reliably order events**. Within one process, measure durations with a **monotonic clock** (`System.nanoTime`), never wall time.
     - **Logical clocks order events without synchronised time:**
         - **Lamport timestamps** give a total order consistent with causality (if a → b then L(a) < L(b), but not the reverse).

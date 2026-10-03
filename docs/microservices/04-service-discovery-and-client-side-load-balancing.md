@@ -6,7 +6,7 @@ tags: [microservices, P0]
 
 # Service Discovery & Client-Side Load Balancing
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - In a dynamic environment, instance IPs change all the time (autoscaling, deploys, failures). **Service discovery** maps a logical name (`pharmacy-service`) to the current healthy instances.
     - **Client-side discovery:** the client asks a registry (Eureka, Consul) for instances and load-balances itself (Spring Cloud LoadBalancer, round-robin by default). **Server-side discovery:** the client calls a stable address and a load balancer/proxy picks the instance (Kubernetes Service, AWS ALB, service mesh).
     - **On Kubernetes, use the platform:** a `Service` gives a stable DNS name and virtual IP; kube-proxy (or the mesh) spreads traffic over ready pods. You usually don't need Eureka there.

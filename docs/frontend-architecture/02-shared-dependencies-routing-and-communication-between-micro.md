@@ -6,7 +6,7 @@ tags: [frontend-architecture, P0]
 
 # Shared Dependencies, Routing & Communication Between Micro-Frontends
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Share** the things that must be single instances or are big and common: the framework (React/ReactDOM), router, design system/UI library, and possibly state or query libraries. Don't share app-specific code. Measured with Module Federation: a remote requiring `^18.2.0` while the shell provided React 19 still **ran on the single 19.3 copy** when `strictVersion` was off (a console warning), and **failed** with **"Unsatisfied version 19.3.0 … (required ^18.2.0)"** when `strictVersion: true`. Without sharing at all, two React copies broke hooks ([previous page](01-micro-frontends-approaches-and-trade-offs.md)).
     - **Routing:** the **shell owns top-level routes** (`/claims/*`, `/pharmacy/*`) and mounts the owning MFE. Each MFE owns its **nested** routes under its prefix with a shared router instance or a basename. The URL is the shared state for deep links, refresh and back/forward.
     - **Communication**, in order of preference: **URL** (navigational state) → **props/attributes** from the shell (context such as `memberId`) → **custom DOM events / typed event bus** for fire-and-forget notifications (demo: `claims:selected` reached the shell) → **backend** as the source of truth for shared business data. Avoid a global shared store that every MFE mutates.

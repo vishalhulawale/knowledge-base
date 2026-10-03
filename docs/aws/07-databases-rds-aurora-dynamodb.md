@@ -6,7 +6,7 @@ tags: [aws, P0]
 
 # Databases: RDS/Aurora, DynamoDB (Keys, GSI/LSI, Capacity)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **RDS** is managed relational databases (PostgreSQL, MySQL, MariaDB, Oracle, SQL Server, Db2).
         - **Multi-AZ** is a synchronous standby for **HA**, with automatic failover in about a minute or two. A *Multi-AZ DB cluster* has 2 readable standbys and faster failover.
         - **Read replicas** are **async** copies used to scale **reads** (and for cross-Region DR).

@@ -6,7 +6,7 @@ tags: [microservices, P0]
 
 # API Gateway & BFF Pattern
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - An **API gateway** is the single entry point for external clients: **routing, authentication, rate limiting, TLS termination, request/response transformation, observability**. It hides the internal service layout.
     - A **Backend-for-Frontend (BFF)** is a gateway/aggregation layer **per client experience** (web, mobile, partner), owned by the team that builds that frontend. It shapes data for one UI and keeps UI-specific logic out of core services.
     - Keep the gateway **thin**: cross-cutting concerns only. Business logic in the gateway creates a new monolith that every team must change.

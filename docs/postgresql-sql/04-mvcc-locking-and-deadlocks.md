@@ -6,7 +6,7 @@ tags: [postgresql-sql, P0]
 
 # MVCC, Locking & Deadlocks
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **MVCC:** an `UPDATE` doesn't overwrite a row; it writes a **new row version** and marks the old one dead (`xmax`). Each transaction reads the versions visible to its **snapshot**, so **readers never block writers and writers never block readers**.
     - The price is **dead tuples**: updating all 100,000 rows of a table left 100,000 dead tuples and grew it from 5.6 MB to 10 MB. **VACUUM** makes dead space reusable (size stayed 10 MB); only `VACUUM FULL`/`pg_repack` give space back (5.6 MB). **Autovacuum** must keep up, or tables bloat and queries slow down.
     - **HOT updates** (heap-only tuples) avoid touching indexes when no indexed column changes and the page has room: 44 % HOT for updates to an unindexed column with `fillfactor = 70`, **0 %** for updates to an indexed column.

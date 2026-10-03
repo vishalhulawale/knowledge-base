@@ -48,7 +48,7 @@ hide:
 
 ## How every page is structured
 
-1. **TL;DR**: five bullets to revise in a minute
+1. **Key takeaways**: five bullets to revise in a minute
 2. **Core concepts**: from first principles, with diagrams
 3. **Code & config**: production-style examples
 4. **Trade-offs & gotchas**: what breaks in production

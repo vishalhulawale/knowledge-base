@@ -6,7 +6,7 @@ tags: [kafka, P0]
 
 # Event-Driven Architecture Fundamentals
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - An **event** is an immutable fact that something *happened* (`OrderPlaced`). A **command** is a request for something to *happen* (`PlaceOrder`) and can be rejected.
     - EDA **decouples producers from consumers in time, space and knowledge**. The producer doesn't know who listens.
     - Two coordination styles: **choreography** (services react to each other's events) and **orchestration** (a coordinator tells services what to do).

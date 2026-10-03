@@ -6,7 +6,7 @@ tags: [distributed-systems, P0]
 
 # Retries, Backoff, Jitter, Timeouts
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Retry only when it can help and is safe:** a **transient** failure (connection reset, 503, 429, timeout) on an **idempotent** operation (or one with an idempotency key). Never retry validation errors (4xx except 408/429), and be careful with non-idempotent POSTs.
     - **Backoff** spreads retries over time: `delay = min(cap, base × 2^attempt)`. **Jitter** de-synchronises clients:
         - **Full jitter:** `random(0, delay)`. The usual default.

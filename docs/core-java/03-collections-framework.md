@@ -6,7 +6,7 @@ tags: [core-java, P0]
 
 # Collections Framework (List/Set/Map/Queue Implementations and Complexity)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - The framework is **interfaces first**: `Collection` → `List`, `Set`, `Queue`/`Deque`, plus the separate `Map` hierarchy. Java 21 added **`SequencedCollection` / `SequencedSet` / `SequencedMap` (JEP 431)** for anything with a defined encounter order (`getFirst()`, `getLast()`, `reversed()`).
     - **Default picks:** `ArrayList` (list), `HashMap`/`HashSet` (lookup), `ArrayDeque` (stack and queue), `LinkedHashMap` (insertion order or LRU), `TreeMap` (sorted/range queries), `PriorityQueue` (top-K, scheduling).
     - **Complexity to remember:** `ArrayList.get` O(1), add at end amortised O(1), insert/remove in the middle O(n). `HashMap` get/put O(1) average (O(log n) worst case per bucket once treeified, Java 8+). `TreeMap` O(log n). `PriorityQueue` offer/poll O(log n), peek O(1).

@@ -6,7 +6,7 @@ tags: [javascript-typescript, P0]
 
 # Equality, Type Coercion, Immutability, Shallow vs Deep Copy
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **`===`** (strict): no coercion; `NaN !== NaN`, `+0 === -0`. **`==`** (loose): coerces types first (`"1" == 1`, `null == undefined`, but `null != 0`). **`Object.is`**: like `===` but `Object.is(NaN, NaN)` is true and `+0`/`-0` differ (what React uses for state).
     - **Coercion:** objects become primitives via `Symbol.toPrimitive` / `valueOf` / `toString`; `+` concatenates if either side is a string, other arithmetic converts to numbers. Eight falsy values: `false, 0, -0, 0n, "", null, undefined, NaN`. Everything else is truthy (including `[]`, `{}`, `"0"`).
     - **Primitives are immutable values; objects are references.** Comparing objects compares identity, not contents. Assigning or passing an object copies the reference.

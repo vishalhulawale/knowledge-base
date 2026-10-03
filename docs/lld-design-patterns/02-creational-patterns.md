@@ -6,7 +6,7 @@ tags: [lld-design-patterns, P0]
 
 # Creational Patterns (Singleton, Factory, Builder, Prototype)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Creational patterns **decouple object creation from use**, so callers don't hard-code `new ConcreteThing(...)` with complex wiring.
     - **Singleton:** one instance per JVM/classloader.
         - Safest forms are the **`enum` singleton** and the **holder idiom**. Double-checked locking needs a **`volatile`** field.

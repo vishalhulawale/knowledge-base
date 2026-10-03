@@ -6,7 +6,7 @@ tags: [graphql, P0]
 
 # Federation vs Schema Stitching
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Three ways to build one graph over many services: a **monolithic aggregator** (one GraphQL service calling REST backends, like the OptumRx Consumer Service), **schema stitching** (a gateway merges remote GraphQL schemas plus hand-written links), and **federation** (each team owns a **subgraph**, and a **router** composes a **supergraph** and plans queries).
     - **Federation (Apollo Federation v2)**: entities with `@key` can be **extended across subgraphs**. The router resolves them via the `_entities` query. Composition is checked at build time.
     - Spring for GraphQL (1.3+) supports subgraphs via **`FederationSchemaFactory` + `@EntityMapping`**, built on Apollo's `federation-jvm` library. DGS supports federation natively.

@@ -6,7 +6,7 @@ tags: [redis-caching, P0]
 
 # Cache Stampede, Penetration & Avalanche
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Stampede (thundering herd, dog-piling):** a hot key expires and every concurrent request misses and recomputes it. Measured: 200 concurrent requests for one expired key caused **200 database queries**, with a 1.2 s median latency behind a 20-connection pool. A Redis lock or single-flight cut that to **1 query**.
     - **Defences for stampedes:** a mutex on recompute (`SET lock NX PX`), request coalescing (single-flight), **probabilistic early refresh** (XFetch), serve-stale-while-revalidating, and background refresh of known hot keys.
     - **Penetration:** requests for IDs that don't exist always miss and go to the database, whether from bugs or from attacks. **Cache the "not found"** with a short TTL (2,000 requests → 494 queries here), validate inputs, and put a **Bloom filter** in front (0.67% false positives for 100k ids in 128 KB, which matches theory).

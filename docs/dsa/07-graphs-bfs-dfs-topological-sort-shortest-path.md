@@ -6,7 +6,7 @@ tags: [dsa, P0]
 
 # Graphs: BFS, DFS, Topological Sort, Shortest Path
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Model first:** nodes, edges, directed or undirected, weighted or not, possibly implicit (grid cells, word ladders, states). Use an **adjacency list** (`List<List<Integer>>`), which takes O(V + E) memory. An adjacency matrix for 200k nodes would need about **40 GB** as `boolean[][]` (computed).
     - **BFS** (queue) visits by distance, so it finds **shortest paths in unweighted graphs**, levels and the nearest target. **DFS** (stack or recursion) explores deeply: connectivity, flood fill, cycle detection, path enumeration, topological order. Both are O(V + E). **Mark nodes visited when you enqueue them**, not when you dequeue.
     - **Recursion depth is real:** recursive DFS flood fill on a 1000×1000 all-land grid threw **`StackOverflowError`**. The iterative version finished in **177 ms** (measured).

@@ -6,7 +6,7 @@ tags: [spring-security-oauth2, P0]
 
 # OAuth2 Roles & Grant Types (Auth Code + PKCE, Client Credentials, Refresh Token)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - OAuth2 is a **delegated authorization** framework: a **client** gets a limited **access token** to call a **resource server** on behalf of a **resource owner**, issued by an **authorization server**. The client never sees the user's password.
     - **Authorization code + PKCE** is the grant for anything with a user (web apps, SPAs, mobile). The code travels through the browser (front channel), the tokens travel server to server (back channel), and PKCE binds the two together.
     - **Client credentials** is for machine-to-machine calls with **no user**. The token represents the application itself. There is no refresh token, the client simply asks again.

@@ -6,7 +6,7 @@ tags: [system-design, P0]
 
 # Database Scaling: Replication, Sharding, Partitioning, Consistent Hashing
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Order of operations:**
         1. Optimise queries and indexes.
         2. Scale up.

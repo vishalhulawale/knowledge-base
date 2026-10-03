@@ -6,7 +6,7 @@ tags: [redis-caching, P0]
 
 # Spring Cache Abstraction with Redis
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Spring's cache abstraction is **AOP around methods**: `@Cacheable` checks the cache before the method runs, `@CachePut` always runs it and stores the result, and `@CacheEvict` removes entries. `@EnableCaching` turns it on, and a `CacheManager` (here `RedisCacheManager`) supplies the store.
     - It's a **proxy**, so calling a cached method from the same class (`this.find()`) bypasses the cache. Measured: 2 database calls for 2 calls, and no Redis key. Private and final methods aren't intercepted either.
     - Configure it properly in Spring Boot 3: **per-cache TTLs**, a **versioned key prefix**, **JSON** values instead of JDK serialisation, a decision about **nulls** (`unless = "#result == null"`), **transaction-aware** eviction (a rolled-back update left the entry in place, and a committed one removed it), and a lenient **`CacheErrorHandler`** so a Redis outage falls back to the database (measured: the call succeeded in 333 ms with Redis down).

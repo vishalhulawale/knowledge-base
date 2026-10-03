@@ -6,7 +6,7 @@ tags: [jpa-hibernate, P0]
 
 # Relationships & Fetching (Lazy vs Eager)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Every bidirectional association has an **owning side** (the one with the foreign key, usually `@ManyToOne`) and an **inverse side** (`mappedBy`). **Only the owning side is written to the database**, so set it, and keep both sides in sync with helper methods (`addRx()`/`removeRx()`).
     - JPA defaults: **`@ManyToOne` and `@OneToOne` are EAGER**, `@OneToMany` and `@ManyToMany` are LAZY. Make **every association `LAZY`** and fetch what each use case needs with a join fetch, entity graph or DTO projection. EAGER can't be turned off per query and causes hidden extra queries.
     - Prefer **bidirectional `@OneToMany(mappedBy)` + `@ManyToOne`** or just the `@ManyToOne`. A **unidirectional `@OneToMany` without `@JoinColumn` creates a join table** and extra SQL.

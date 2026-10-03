@@ -6,7 +6,7 @@ tags: [cryptography-key-management, P0]
 
 # Envelope Encryption & Data Keys
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Envelope encryption** encrypts data locally with a random **data encryption key (DEK)**, then encrypts (**wraps**) the DEK with a **key encryption key (KEK)** that never leaves the KMS or HSM. You store the **wrapped DEK next to the ciphertext**: 67 bytes alongside 1 MiB of AES-256-GCM ciphertext in the demo.
     - It solves three problems: KMS APIs can't encrypt bulk data (AWS KMS `Encrypt` takes at most 4 KB) and are network calls, the master key stays in hardware, and **rotation becomes cheap**. Re-wrapping 2,000 DEKs under a new KEK took **24 ms**, while re-encrypting the same 2,000 MiB of data took **3.2 s** in memory (and far longer with real storage I/O).
     - Bind context with **encryption context / AAD** (`tenant=acme|table=claims|id=C42`): decrypting with a different context failed (`AEADBadTagException`). AWS KMS also logs it in CloudTrail for audit.

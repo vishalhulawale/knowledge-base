@@ -6,7 +6,7 @@ tags: [aws, P0]
 
 # Observability: CloudWatch, X-Ray
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **CloudWatch Metrics:** time series in **namespaces** with **dimensions**. Standard resolution is 1 minute (high-resolution down to 1 s), and data is retained for 15 months with roll-ups. Publish custom metrics cheaply with the **Embedded Metric Format (EMF)**: structured log lines that become metrics.
     - **CloudWatch Logs:** log groups → streams. **Set retention** (the default is *never expire*). Query with **Logs Insights**, filter with **metric filters** and **subscription filters** (to Lambda, Firehose or OpenSearch), and use **data protection policies** to mask PII/PHI.
     - **Alarms:** static threshold, **anomaly detection**, **composite** alarms (cut noise), **metric math**, M-of-N datapoints, and **missing-data** handling. Actions go to SNS, Auto Scaling, EC2, or Systems Manager incidents.

@@ -47,5 +47,5 @@ Process subtopics in order. After each page: build, then continue. Commit per to
 
 ## Quality bar
 - Accurate over exhaustive; every non-obvious claim traceable to a source in the Sources section.
-- Scannable: short paragraphs, headings every few screens, a TL;DR anyone could revise in one minute.
+- Scannable: short paragraphs, headings every few screens, a "Key takeaways" box anyone could revise in one minute.
 - Length guide: P0 ≈ 2,500–4,500 words, P1 ≈ 1,500–3,000, P2 ≈ 800–1,500.

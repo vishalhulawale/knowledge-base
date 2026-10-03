@@ -16,6 +16,19 @@ theme:
   icon:
     logo: lucide/graduation-cap
     repo: fontawesome/brands/github
+    admonition:
+      note: lucide/notebook-pen
+      abstract: lucide/list-checks
+      info: lucide/info
+      tip: lucide/lightbulb
+      success: lucide/circle-check
+      question: lucide/message-circle-question
+      warning: lucide/triangle-alert
+      failure: lucide/circle-x
+      danger: lucide/zap
+      bug: lucide/bug
+      example: lucide/flask-conical
+      quote: lucide/quote
   palette:
     - media: "(prefers-color-scheme)"
       toggle:

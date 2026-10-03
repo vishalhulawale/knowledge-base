@@ -6,7 +6,7 @@ tags: [microservices, P0]
 
 # Configuration & Secrets Management (Spring Cloud Config, Vault)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Externalise configuration** (12-factor): one immutable artifact promoted across environments; only config differs. Config lives in version control and is reviewed like code.
     - **Config ≠ secrets.** Config (timeouts, feature flags, URLs) can live in git/ConfigMaps. Secrets (DB passwords, API keys, private keys) belong in a **secret manager** (Vault, AWS Secrets Manager, Azure Key Vault, GCP Secret Manager) with access control, audit and rotation.
     - Options for delivery: **Spring Cloud Config Server** (git-backed, `spring.config.import=configserver:`), **Kubernetes ConfigMaps/Secrets** (env vars or mounted files), **direct secret-store integration** (Spring Cloud Vault, Spring Cloud AWS `aws-secretsmanager:`), or an operator syncing secrets into Kubernetes (**External Secrets Operator**, CSI driver).

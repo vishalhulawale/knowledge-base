@@ -6,7 +6,7 @@ tags: [postgresql-sql, P0]
 
 # Partitioning, Replication & Connection Pooling
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Partitioning** splits one logical table into child tables by a key (range by month, list by region, hash). Wins: **partition pruning** (a query for 10 days of February scanned only the February partition), **instant retention** (detach + drop a month in ~10 ms instead of a huge `DELETE`), smaller indexes, per-partition maintenance. Costs: queries without the partition key touch **every** partition, and **unique constraints must include the partition key**.
     - **Streaming replication** ships WAL to standbys that stay read-only (`25006 cannot execute INSERT in a read-only transaction`). It provides HA (failover) and **read scaling**, but async replicas **lag**: an immediate read after a write missed **198 of 200** rows on a local replica, and a bulk insert put it **30 MB / 360 ms** behind.
     - Route reads that need **read-your-writes** to the primary (or wait for the replica to reach the write's LSN); send reports and tolerant reads to replicas. Synchronous replication trades write latency for zero data loss on failover.

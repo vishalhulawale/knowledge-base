@@ -6,7 +6,7 @@ tags: [system-design, P0]
 
 # Rate Limiting & API Gateway Design
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Rate limiting** protects availability (noisy neighbours, abuse, retry storms), enforces **fairness and quotas** (per user, API key, tenant or plan) and controls **cost**. Reject with **HTTP 429** + `Retry-After` and quota headers.
     - **Algorithms:**
         - **Token bucket:** refill rate r, capacity b. Allows bursts up to b. The most common choice.

@@ -6,7 +6,7 @@ tags: [graphql, P0]
 
 # Resolvers & Execution Model (Spring for GraphQL / DGS)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Every request goes through **parse → validate (against the schema) → execute**. Execution walks the query tree **field by field**, calling a **resolver (DataFetcher)** for each field.
     - A child resolver receives its **parent object** (the "source"). Default resolvers just read a property of the same name.
     - Query fields can run **concurrently**, but only if DataFetchers are async (`CompletableFuture`/`Mono`, or blocking methods dispatched to an executor). GraphQL Java creates no threads itself. Top-level mutation fields run **serially**.

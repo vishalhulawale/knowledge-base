@@ -6,7 +6,7 @@ tags: [spring-boot, P0]
 
 # AOP & Proxies (JDK vs CGLIB, Self-Invocation Pitfall)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Spring AOP is **proxy-based**: the container hands callers a wrapper object, and advice runs only when a call **goes through that wrapper**. `@Transactional`, `@Cacheable`, `@Async`, `@PreAuthorize`, `@Retryable` and `@Observed` all work this way.
     - **JDK dynamic proxy** = implements the bean's interfaces (interface-based). **CGLIB proxy** = a runtime-generated **subclass** of the bean (class-based). Spring Framework picks JDK when an interface exists; **Spring Boot defaults to CGLIB** (`spring.aop.proxy-target-class=true`).
     - **Self-invocation** (`this.other()`) never touches the proxy, so the annotation on `other()` is silently ignored. Fix it by moving the method to another bean; self-injection, `TransactionTemplate` or AspectJ weaving are the fallbacks.

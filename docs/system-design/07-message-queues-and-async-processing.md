@@ -6,7 +6,7 @@ tags: [system-design, P0]
 
 # Message Queues & Async Processing
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Go async** to decouple services, absorb spikes (**load levelling**), cut user-facing latency (do slow work later), isolate failures, and fan out events to many consumers. The cost: **eventual consistency**, harder debugging, and duplicate and ordering issues.
     - **Three shapes:**
         - **Queue:** point-to-point, competing consumers, delete on ack. SQS, RabbitMQ queues.

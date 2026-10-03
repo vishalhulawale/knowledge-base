@@ -6,7 +6,7 @@ tags: [api-design, P0]
 
 # Pagination, Filtering & Sorting
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Never return unbounded lists.** Every collection endpoint has a default and a **maximum** page size.
     - **Offset pagination** (`?page=3&size=20` → `LIMIT 20 OFFSET 60`) is simple and supports "jump to page 7", but the database still reads and discards all skipped rows, so **deep pages get slow**, and rows **shift** (duplicates or gaps) when data changes between requests.
     - **Keyset / cursor pagination** (`WHERE (created_at, id) < (:lastCreatedAt, :lastId) ORDER BY created_at DESC, id DESC LIMIT 20`) uses an index to jump straight to the next page: constant cost at any depth and stable under inserts. Expose it as an **opaque cursor** (`?after=eyJ…`). Trade-off: no random page jumps.

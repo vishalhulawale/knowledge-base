@@ -6,7 +6,7 @@ tags: [lld-design-patterns, P0]
 
 # LLD Approach: Requirements → Entities → Relationships → APIs
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - LLD rounds test **object modelling + clean code + extensibility + concurrency**, usually in 45–90 minutes (whiteboard or machine coding). Use a fixed sequence:
         1. **Clarify** (use cases, constraints, scale within one service, concurrency, persistence in scope?)
         2. **Entities** (nouns) and **behaviours** (verbs)

@@ -6,7 +6,7 @@ tags: [react, P0]
 
 # Performance Optimisation: Memoization, Code Splitting, Lazy Loading, Virtualization
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Measure first:** React DevTools Profiler for render cost, Chrome Performance panel (with React Performance Tracks in 19.2), Lighthouse and real-user **Core Web Vitals** (LCP, **INP**, CLS).
     - **Render cost:** colocate state, keep components pure, `memo` + stable props for proven hot spots, or let **React Compiler** memoise automatically; `useDeferredValue`/`useTransition` keep typing responsive during heavy updates.
     - **Bundle cost:** route-level **code splitting** with `lazy()` + `Suspense` (or the router's lazy routes), tree shaking, avoiding huge dependencies, analysing the bundle.

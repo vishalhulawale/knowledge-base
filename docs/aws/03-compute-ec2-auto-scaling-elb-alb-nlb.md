@@ -6,7 +6,7 @@ tags: [aws, P0]
 
 # Compute: EC2, Auto Scaling, ELB/ALB/NLB
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **EC2 instance types:** family + generation + options. For example `m7g.large` is general purpose, 7th gen, **Graviton** (ARM, ~20–40% better price/performance for Java). Other families: C (compute), R (memory), M (general), T (burstable credits), I (storage-optimised), G/P (GPU).
     - **Pricing:** On-Demand < **Savings Plans / Reserved** (1–3 years, up to ~72% off) < **Spot** (up to ~90% off, 2-minute interruption notice). Mix them in an ASG.
     - **Auto Scaling group (ASG):** a **launch template**, subnets in **multiple AZs**, min/desired/max capacity and health checks (use ELB health checks, not only EC2 status). Scaling policies:

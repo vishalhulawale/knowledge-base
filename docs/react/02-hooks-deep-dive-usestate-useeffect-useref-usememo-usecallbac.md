@@ -6,7 +6,7 @@ tags: [react, P0]
 
 # Hooks Deep Dive: useState, useEffect, useRef, useMemo, useCallback, Custom Hooks
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Hooks store per-component data in a **list indexed by call order**. That's why the **Rules of Hooks** exist: call them at the top level of components or custom hooks, never in conditions, loops or after early returns.
     - Each render's functions **close over that render's props and state** (snapshots). Stale closures come from effects, intervals or callbacks that captured an old render.
     - **`useEffect` synchronises with external systems** (subscriptions, timers, DOM APIs, network). It runs after paint; its cleanup runs before the next run and on unmount. List every reactive value it uses in the dependency array. If it's not syncing with something external, you probably don't need an effect.

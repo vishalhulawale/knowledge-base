@@ -6,7 +6,7 @@ tags: [kafka, P0]
 
 # Delivery Semantics & Kafka Transactions (Exactly-Once)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **At-most-once:** never duplicated, may be lost. **At-least-once:** never lost, may be duplicated (the default practical choice). **Exactly-once:** each record's *effect* happens once.
     - Kafka's **exactly-once semantics (EOS)** = idempotent producer + **transactions** + consumers using `isolation.level=read_committed`.
     - EOS covers **read-from-Kafka → process → write-to-Kafka** (including the consumer offset commit) **atomically**. It does **not** cover side effects outside Kafka (DB writes, HTTP calls, emails).

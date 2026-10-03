@@ -6,7 +6,7 @@ tags: [docker-kubernetes, P0]
 
 # Probes, Resource Requests/Limits & Autoscaling (HPA)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Probes:** *readiness* decides whether a pod gets traffic, *liveness* decides whether the kubelet restarts the container, and *startup* holds off the other two until a slow app has started. Never make liveness depend on downstream systems (database, Kafka), or one outage restarts every pod.
     - **Requests** are what the scheduler reserves (a 64-CPU request stayed `Pending`: "3 Insufficient cpu"). **Limits** are enforced at runtime: CPU is **throttled** (a workload took **3.1 s** unlimited, **6.2 s** at 0.5 CPU and **12.6 s** at 0.25 CPU, throttled in 129 of 129 periods), and memory over the limit is **OOM-killed** (exit 137, `OOMKilled=true` at about 90 MB of a 100 MB limit).
     - **QoS classes** follow from requests and limits: Guaranteed, Burstable, BestEffort (all three verified). They decide eviction order under node pressure. Common practice: set memory request = limit, set a CPU request, and often no CPU limit for latency-sensitive services.

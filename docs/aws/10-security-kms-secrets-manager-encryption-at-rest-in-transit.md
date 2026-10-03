@@ -6,7 +6,7 @@ tags: [aws, P0]
 
 # Security: KMS, Secrets Manager, Encryption at Rest & in Transit
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **KMS keys never leave KMS's HSMs** (FIPS 140-3 Level 3 validated) in plaintext. You call `Encrypt` (≤ **4 KB**), `Decrypt`, `GenerateDataKey`, `Sign` and so on. Every use is logged in **CloudTrail**.
     - **Envelope encryption:** `GenerateDataKey` returns a **plaintext data key** (encrypt your data locally, then discard it) and the **same key encrypted** under the KMS key (store it next to the data). Decrypting means sending the encrypted data key to KMS. S3, EBS, RDS and DynamoDB all work this way.
     - **Access control:**

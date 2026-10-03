@@ -6,7 +6,7 @@ tags: [core-java, P0]
 
 # Generics (Wildcards, PECS, Type Erasure)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Generics move type checks from **runtime casts** to **compile time**. They were added in Java 5 (JSR 14) and implemented by **type erasure**: the compiler checks types, inserts casts, and the bytecode mostly forgets the type arguments (`List<String>` and `List<Integer>` share one `List.class`).
     - Generics are **invariant**: `List<Integer>` is *not* a `List<Number>`. Arrays are **covariant** (`Integer[]` *is* a `Number[]`), which is why arrays fail at runtime with `ArrayStoreException` while generics fail at compile time.
     - **Wildcards** add flexibility: `? extends T` (you can read `T` out, cannot add), `? super T` (you can add `T` in, reads give `Object`), `?` (read as `Object`, add nothing but `null`).

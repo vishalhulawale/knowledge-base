@@ -6,7 +6,7 @@ tags: [system-design, P0]
 
 # Approach & Framework for the Design Interview
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A design interview tests **judgement under ambiguity**, not memorised diagrams. The interviewer scores how you **scope**, **reason about scale**, **make and justify trade-offs**, **find bottlenecks** and **communicate**.
     - Use a fixed framework and say it out loud:
         1. **Requirements** (functional + non-functional), ~5 min

@@ -6,7 +6,7 @@ tags: [spring-security-oauth2, P0]
 
 # Spring Security Architecture: Filter Chain, SecurityContext, Authentication Providers
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Spring Security for servlet apps is **a chain of servlet filters**. The container sees one filter (`DelegatingFilterProxy`), which hands over to the `FilterChainProxy` bean, which picks **the first matching `SecurityFilterChain`** and runs its filters in a fixed order.
     - **Authentication** is done by a filter that builds an unauthenticated `Authentication` token and passes it to the `AuthenticationManager` (`ProviderManager`), which loops over `AuthenticationProvider`s until one that `supports()` the token type succeeds or fails.
     - The result lives in the **`SecurityContext`**, held by `SecurityContextHolder` in a **`ThreadLocal`** by default. It is cleared at the end of every request and does **not** follow work onto other threads unless you propagate it.

@@ -6,7 +6,7 @@ tags: [<topic-slug>, <P0|P1|P2>]
 
 # <Subtopic title>
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - <5 bullets: the facts to remember>
 
 ## Why it matters

@@ -6,7 +6,7 @@ tags: [mongodb, P0]
 
 # Sharding & Shard Key Selection
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Sharding** splits a collection across **shards** (each a replica set) by a **shard key**. **mongos** routers send queries to the right shards using metadata held by the **config servers**. The **balancer** moves ranges (chunks, 128 MB by default since 6.0) to even out data.
     - The shard key decides everything. Measured: a **monotonically increasing** ranged key (`createdAt`) sent **50,001 of 50,002** new documents to one shard (a hot shard). A **hashed** key split them **24,979 / 25,021**.
     - Queries that include the shard key are **targeted** (`SINGLE_SHARD`: 5 docs examined, 7 ms). Queries without it are **scatter-gather** (`SHARD_MERGE` across all shards: 100,000 docs examined, 44 ms). Pick a key that matches your most frequent queries.

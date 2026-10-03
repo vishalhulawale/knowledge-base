@@ -6,7 +6,7 @@ tags: [graphql, P0]
 
 # GraphQL Fundamentals vs REST
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - GraphQL is a **query language and runtime** for APIs: one endpoint, a **strongly typed schema**, and **clients ask for exactly the fields they need**.
     - Three operation types: **query** (read), **mutation** (write, executed serially at the top level), **subscription** (server push, usually over WebSocket).
     - It solves REST's **over-fetching, under-fetching and N round-trips**, and it's a great **aggregation layer** over many backends.

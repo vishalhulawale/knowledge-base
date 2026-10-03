@@ -6,7 +6,7 @@ tags: [postgresql-sql, P0]
 
 # Query Optimisation & Common Performance Issues
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Method:** find the queries that cost the most in total (`pg_stat_statements`: calls × mean time), reproduce with real parameters, read `EXPLAIN (ANALYZE, BUFFERS)`, change one thing, verify, and add a regression guard. Don't guess.
     - **Most fixes are access-path fixes:** the right composite/partial/expression index, keeping columns bare in predicates, and letting an index provide order for `ORDER BY … LIMIT`. Measured: top-10 by amount went from **308 ms** (scan + top-N sort) to **0.085 ms** with an index on `amount DESC`.
     - **Shape the query:** select only needed columns, replace per-row correlated subqueries with joins/aggregates (862 ms → 554 ms here), use `EXISTS` for existence, keyset instead of deep `OFFSET`, and a trigram GIN index for `LIKE '%term%'` (257 ms → 6 ms).

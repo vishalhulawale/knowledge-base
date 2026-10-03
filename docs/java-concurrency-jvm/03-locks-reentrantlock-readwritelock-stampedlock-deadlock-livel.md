@@ -6,7 +6,7 @@ tags: [java-concurrency-jvm, P0]
 
 # Locks: ReentrantLock, ReadWriteLock, StampedLock; Deadlock, Livelock, Starvation
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **`ReentrantLock`** does what `synchronized` does, plus four things `synchronized` cannot: **`tryLock` with timeout**, **interruptible waiting**, **optional fairness** and **multiple `Condition`s**. The price: you must `unlock()` in `finally` yourself.
     - **`ReentrantReadWriteLock`** allows many readers *or* one writer. It only pays off when reads are **frequent and long**. You can **downgrade** (write → read) but never **upgrade** (read → write hangs forever).
     - **`StampedLock`** adds an **optimistic read** that takes no lock at all: read, then `validate(stamp)`. It is **not reentrant**, has no `Condition`, and has no owner.

@@ -6,7 +6,7 @@ tags: [kafka, P0]
 
 # Error Handling: Retry Topics, DLQ, Poison Messages & Replay
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Kafka has **no built-in DLQ for plain consumers**. Retries and dead-lettering are patterns you build (Spring Kafka gives you most of the machinery). Only Kafka Connect sinks and, since Kafka 4.2, Kafka Streams ship a DLQ setting.
     - First **classify the failure**: *transient* (retry it), *permanent* (don't retry, dead-letter it), *poison pill* (can't even deserialize it, dead-letter it immediately).
     - **Blocking retries** (`DefaultErrorHandler`) keep ordering but stall the partition. **Non-blocking retries** (retry topics, `@RetryableTopic`) keep the partition flowing but **lose ordering**.

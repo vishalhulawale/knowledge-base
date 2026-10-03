@@ -6,7 +6,7 @@ tags: [core-java, P0]
 
 # Exceptions: Checked vs Unchecked, try-with-resources, Best Practices
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Hierarchy:** `Throwable` → `Error` (JVM/system problems, don't catch) and `Exception`. `RuntimeException` and `Error` (and their subclasses) are **unchecked**. Every other `Throwable` is **checked**: the compiler forces you to catch it or declare it with `throws`.
     - Checked-ness is **only a compiler rule**. The JVM does not know about it, which is why Kotlin has no checked exceptions and why "sneaky throw" works.
     - **try-with-resources** (Java 7) closes resources in **reverse order**, even on failure. If both the body and `close()` throw, the body's exception wins and the close exception is attached via `getSuppressed()`. Java 9 lets you use an existing *effectively final* variable as the resource.

@@ -6,7 +6,7 @@ tags: [spring-boot, P0]
 
 # Validation, REST clients (RestClient, WebClient, Feign)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Validation = Jakarta Bean Validation (the spec) + Hibernate Validator (the implementation)**. Since Boot 2.3 it is *not* part of the web starter. You must add `spring-boot-starter-validation`, otherwise the annotations are silently ignored.
     - **Where it runs decides the exception:** `@Valid @RequestBody` → `MethodArgumentNotValidException` (400). Constraints directly on controller parameters (Spring 6.1+) → `HandlerMethodValidationException` (400). `@Validated` on a service class → AOP proxy → `ConstraintViolationException` (500 unless you map it).
     - **Most constraints treat `null` as valid** (`@Size`, `@Email`, `@Pattern`, `@Min`). Add `@NotNull` / `@NotBlank`. Nested objects are validated only if the field has `@Valid`.

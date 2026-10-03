@@ -6,7 +6,7 @@ tags: [leadership-behavioral, P0]
 
 # Handling Conflict & Technical Disagreements (incl. with Architects)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Healthy conflict is about ideas, not people.** Aim for the **best decision for the product**, reached **fairly and quickly**, with **relationships intact**.
     - **Process for technical disagreements:**
         1. **Understand** their position and the **interests** behind it (risk, consistency, past incidents, roadmap).

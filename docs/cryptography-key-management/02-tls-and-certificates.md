@@ -6,7 +6,7 @@ tags: [cryptography-key-management, P0]
 
 # TLS & Certificates (PKI, mTLS)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **TLS** gives a connection **confidentiality** (AEAD), **integrity** and **server authentication** (and client authentication with **mTLS**). TLS 1.3 negotiated `TLS_AES_256_GCM_SHA384`, an **X25519** ephemeral key exchange (forward secrecy) and an **ECDSA** certificate signature in the demo, in one round trip.
     - A **certificate** binds a public key to names (the **SAN** list) and is signed by a CA. Clients build a **chain** leaf → intermediate → trusted root. A server that omitted its intermediate failed with "**unable to verify the first certificate**" (code 21). A wrong hostname failed in both OpenSSL and Java ("No subject alternative names matching IP address 127.0.0.2"), and expiry failed with "certificate has expired".
     - Java's default trust store doesn't know private CAs: "**PKIX path building failed / unable to find valid certification path**". The fix is a trust store containing the private root (HTTP 200 over TLS 1.3 afterwards), **never** a trust-all `TrustManager`.

@@ -6,7 +6,7 @@ tags: [distributed-systems, P0]
 
 # Idempotency & Idempotency Keys
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Idempotent** means doing an operation **once or many times has the same effect** (the *response* may differ, the *state change* must not). It's what makes **retries** and **at-least-once delivery** safe, and those are unavoidable in distributed systems (timeouts mean unknown outcomes).
     - **HTTP semantics:** `GET`, `HEAD`, `PUT`, `DELETE` and `OPTIONS` are defined as idempotent. **`POST` isn't.** `PATCH` isn't guaranteed. Your implementation must still honour the semantics (a `PUT` that appends breaks it).
     - **Engineered idempotency** for creates and side effects: the client sends a unique **`Idempotency-Key`** (UUID per logical operation). The server stores **key → request fingerprint + status + response**, with a **unique constraint**:

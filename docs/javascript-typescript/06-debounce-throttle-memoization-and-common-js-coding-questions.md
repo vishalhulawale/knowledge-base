@@ -6,7 +6,7 @@ tags: [javascript-typescript, P0]
 
 # Debounce, Throttle, Memoization & Common JS Coding Questions
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Debounce:** run once after calls **stop** for `wait` ms (search-as-you-type, resize end, autosave). Optional `leading` edge, `cancel`/`flush`.
     - **Throttle:** run **at most once per** `wait` ms during continuous calls (scroll, mousemove, analytics). Leading and/or trailing calls.
     - **Memoize:** cache results by arguments for pure functions; choose a key strategy and bound the cache (LRU) to avoid leaks; handle promises (cache the in-flight promise, evict on rejection).

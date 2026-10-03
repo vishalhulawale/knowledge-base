@@ -6,7 +6,7 @@ tags: [system-design, P0]
 
 # Case Studies: URL Shortener, Rate Limiter, Notifications, News Feed, Chat, Payments, Prescription Platform
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     Each case has one or two **signature problems**. Name them early and spend your deep-dive time there:
 
     | Case | Signature problems | Key choices |

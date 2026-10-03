@@ -39,7 +39,7 @@ We work **phase by phase**. Do not start a phase until I've approved the output 
 4. Run the skill on one subtopic as a sample, show it to me, and only then batch the rest topic by topic.
 
 **Page template**
-- TL;DR (5 bullets)
+- Key takeaways (5 bullets)
 - Core concepts, explained simply, with diagrams where useful
 - Code examples (Java / TypeScript as relevant)
 - Trade-offs, pitfalls, and production gotchas

@@ -6,7 +6,7 @@ tags: [distributed-systems, P0]
 
 # Consistency Models & Replication (Leader/Follower, Quorum)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Replication** keeps copies of data on several nodes for **durability, availability, read scaling and latency**. The hard part is keeping copies **in sync while things fail**.
     - **Leader/follower:**
         - The leader orders writes into a **replication log**: statement-based, **physical WAL shipping**, or **logical/row-based**. Followers apply the log in order.

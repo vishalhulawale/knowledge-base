@@ -6,7 +6,7 @@ tags: [cryptography-key-management, P0]
 
 # Cloud KMS (AWS KMS, Azure Key Vault, GCP KMS)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - A cloud **KMS** stores keys in FIPS-validated **HSMs** that you never see, and exposes **operations** (encrypt, decrypt, generate data key, sign, wrap) under fine-grained **authorisation** with full **audit**. Keys don't leave the service: there's no API to export a KMS private or symmetric key.
     - **AWS KMS:** symmetric keys (AES-256-GCM), asymmetric RSA/ECC (sign or encrypt), HMAC keys. Authorisation = **key policy** + IAM + **grants**. **Encryption context** is enforced and logged in CloudTrail. Direct `Encrypt` is limited to **4,096 bytes** (5,000 failed with a validation error), so bulk data uses `GenerateDataKey` (a 32-byte plaintext DEK plus its wrapped blob, verified against the mock). Deletion requires a **7–30 day** waiting period, and cancelling leaves the key **Disabled**.
     - **Azure Key Vault:** keys, secrets and certificates in one service. **Standard** (software-protected) vs **Premium** (HSM-backed), plus **Managed HSM** (single-tenant, FIPS 140-3 Level 3). Azure RBAC, **soft delete + purge protection**, and key rotation policies.

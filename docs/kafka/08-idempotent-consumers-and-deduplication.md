@@ -6,7 +6,7 @@ tags: [kafka, P0]
 
 # Idempotent Consumers & Deduplication
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Under at-least-once delivery, **every consumer will eventually see duplicates**: from retries, rebalances, replays and producer resends.
     - An **idempotent consumer** produces the same final state no matter how many times it processes a record.
     - Techniques, best first: **natural idempotency** (upsert / set-state), **version checks** (conditional updates), a **dedupe store** keyed by `eventId` (unique constraint in the **same transaction**), and **idempotency keys** for external APIs.

@@ -6,7 +6,7 @@ tags: [jpa-hibernate, P0]
 
 # Optimistic vs Pessimistic Locking
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - The default isolation level (READ COMMITTED) does **not** stop **lost updates**: two transactions read a balance of 100, both write 90, one debit disappears. Measured: 10 concurrent read-modify-write debits of 10 on a row without a version column ended at **90, not 0**.
     - **Optimistic locking** (`@Version`): no locks held; the `UPDATE … WHERE id = ? AND version = ?` fails if someone else committed first → `OptimisticLockException` (Spring: `ObjectOptimisticLockingFailureException`). Best when conflicts are **rare** and for long user think-time (pair it with HTTP `ETag`/`If-Match`). Measured: 9 of 10 concurrent updaters failed fast, no update was lost.
     - **Pessimistic locking** (`@Lock(PESSIMISTIC_WRITE)` → `SELECT … FOR UPDATE`; Hibernate 6 on PostgreSQL emits `FOR NO KEY UPDATE`): blocks other writers until commit. Best for **short, high-contention** critical sections. Always set a **lock timeout**. Measured: 10 concurrent debits serialised, balance 0, no failures.

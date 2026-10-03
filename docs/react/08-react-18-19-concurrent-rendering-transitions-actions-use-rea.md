@@ -6,7 +6,7 @@ tags: [react, P0]
 
 # React 18/19: Concurrent Rendering, Transitions, Actions, use, React Compiler
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **React 18 (March 2022):** `createRoot` enables **concurrent rendering** (interruptible, prioritised renders), **automatic batching** everywhere, **transitions** (`useTransition`, `startTransition`, `useDeferredValue`), `useId`, `useSyncExternalStore`, streaming SSR with Suspense and selective hydration. Strict Mode double-invokes effects in dev.
     - **React 19 (December 2024):** **Actions** (`<form action>`, `useActionState`, `useFormStatus`, `useOptimistic`), the **`use`** API (read promises and context, conditionally), **`ref` as a prop** (forwardRef deprecated), ref cleanup, `<Context>` as provider, document metadata and stylesheet support, resource preloading, **Server Components and Server Functions** stable, better error reporting. Removed: `ReactDOM.render`, string refs, legacy context, `propTypes`, function `defaultProps`.
     - **19.2 (Oct 2025):** `<Activity>`, `useEffectEvent`, Performance Tracks, partial pre-rendering. **19.3 (Sep 2026):** `<ViewTransition>`, Fragment refs, `browser()`, Trusted Types.

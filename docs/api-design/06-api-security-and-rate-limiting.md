@@ -6,7 +6,7 @@ tags: [api-design, P0]
 
 # API Security & Rate Limiting
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - The **OWASP API Security Top 10 (2023)** is the checklist. Number one is **BOLA** (Broken Object Level Authorization): a valid user changes `/members/42` to `/members/43` and sees someone else's data. **Authenticating the caller is not authorising the object.**
     - **Authentication:** OAuth2 access tokens (JWT validated for signature, `iss`, `aud`, `exp`) for users and services; **mTLS** for service identity; **API keys only identify a client** (for quotas and analytics) and are not strong user authentication.
     - **Authorisation at three levels:** function (can this role call `POST /refunds`?), object (does this caller own claim 7?), property (may they read `ssn`, or write `status`?). Enforce all three in the service, not just the gateway.

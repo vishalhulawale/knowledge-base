@@ -6,7 +6,7 @@ tags: [lld-design-patterns, P0]
 
 # Behavioural Patterns (Strategy, Observer, Template Method, Chain of Responsibility, Command, State)
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Strategy:** encapsulate interchangeable algorithms behind an interface and choose one at runtime (pricing, shipping, retry policies). In Java 8+ a strategy is often just a **lambda** (`Comparator`, `Function`).
     - **Observer:** subjects notify subscribers of events without knowing them.
         - In-process, use **Spring `ApplicationEventPublisher`** + `@EventListener` / **`@TransactionalEventListener(AFTER_COMMIT)`**.

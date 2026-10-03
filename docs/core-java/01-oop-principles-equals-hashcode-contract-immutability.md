@@ -6,7 +6,7 @@ tags: [core-java, P0]
 
 # OOP Principles, equals/hashCode Contract & Immutability
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **OOP pillars:** encapsulation (hide state behind behaviour), abstraction (depend on contracts), inheritance (reuse via "is-a"), polymorphism (one call, many runtime implementations through **dynamic dispatch**). Prefer **composition over inheritance**.
     - **equals contract:** reflexive, symmetric, transitive, consistent, and `x.equals(null) == false`. **hashCode contract:** equal objects **must** have equal hash codes. Unequal objects *may* collide.
     - **Override both or neither.** `HashMap`/`HashSet` look up by `hashCode()` first to pick a bucket, then by `equals()` inside the bucket. Break the link and lookups silently fail.

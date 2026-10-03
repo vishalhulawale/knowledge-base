@@ -6,7 +6,7 @@ tags: [spring-security-oauth2, P0]
 
 # Resource Server & Client Configuration in Spring
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Two different jobs, two different starters.** A **resource server** *validates* tokens on incoming requests (`oauth2ResourceServer`). An **OAuth2 client** *obtains* tokens, either to log a user in (`oauth2Login`) or to call another API (`oauth2Client`). One app is often both.
     - Resource server pipeline: `BearerTokenAuthenticationFilter` → `JwtAuthenticationProvider` → `JwtDecoder` (signature + validators) → `JwtAuthenticationConverter` (claims → authorities) → `JwtAuthenticationToken`.
     - With only `issuer-uri` set you get signature, `exp`/`nbf` (60 s clock skew) and `iss` checks. **Audience is not checked** unless you set `audiences` or add a validator. Authorities come from `scope`/`scp` with the prefix `SCOPE_`; roles and groups need a custom converter.

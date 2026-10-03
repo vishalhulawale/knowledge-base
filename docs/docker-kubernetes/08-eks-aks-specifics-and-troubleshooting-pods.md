@@ -6,7 +6,7 @@ tags: [docker-kubernetes, P0]
 
 # EKS/AKS Specifics & Troubleshooting Pods
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **EKS and AKS run the control plane for you** (API servers and etcd across zones). You own **nodes, networking add-ons, identity, upgrades and workloads**. Both follow upstream Kubernetes, so the differences are in integrations: CNI, load balancers, IAM, storage and node provisioning.
     - **EKS:** the VPC CNI gives pods real VPC IPs, so **max pods per node is limited by ENIs × IPs** (m5.large = 29, t3.medium = 17) unless you use prefix delegation. The AWS Load Balancer Controller handles ALB/NLB, **access entries** handle cluster auth (replacing `aws-auth`), **IRSA/EKS Pod Identity** handle pod-to-AWS auth, and you choose **managed node groups, Fargate, Karpenter or EKS Auto Mode**.
     - **AKS:** Azure CNI (Overlay) or kubenet, **Entra ID** with Kubernetes RBAC or Azure RBAC for cluster auth, **Workload Identity** for pods, node pools (system and user) with the cluster autoscaler or Node Auto Provisioning, and Application Gateway for Containers or the app routing add-on for ingress.

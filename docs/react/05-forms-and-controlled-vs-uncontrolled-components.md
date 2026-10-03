@@ -6,7 +6,7 @@ tags: [react, P0]
 
 # Forms & Controlled vs Uncontrolled Components
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - **Controlled input:** React state is the source of truth (`value` + `onChange`). Easy to validate, format and derive UI from, but re-renders on every keystroke.
     - **Uncontrolled input:** the DOM holds the value (`defaultValue`, read via ref or `FormData` on submit). Fewer renders, simpler for large forms and file inputs, but less instant control.
     - Never switch an input between controlled and uncontrolled (`value` going from `undefined` to a string triggers a warning). Initialise with `""`, not `undefined`.

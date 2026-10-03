@@ -6,7 +6,7 @@ tags: [kafka, P0]
 
 # Ordering Guarantees & Partition Key Design
 
-!!! abstract "TL;DR"
+!!! abstract "Key takeaways"
     - Kafka guarantees order **only within a single partition**. There is no global topic order (unless the topic has one partition).
     - **Same key → same partition → ordered.** Pick the key = *the entity whose events must be applied in order* (e.g. `prescriptionId`).
     - Good keys: **high cardinality, stable, evenly distributed**. Bad keys: status, country, a constant, a frequently changing field.
