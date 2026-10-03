@@ -275,6 +275,11 @@ nav:
       - "MongoDB":
           - Overview: mongodb/index.md
           - "Document Model & Schema Design": mongodb/01-document-model-and-schema-design.md
+          - "CRUD, Query Operators & Aggregation Pipeline": mongodb/02-crud-query-operators-and-aggregation-pipeline.md
+          - "Indexing & Explain Plans": mongodb/03-indexing-and-explain-plans.md
+          - "Replica Sets, Read & Write Concerns": mongodb/04-replica-sets-read-write-concerns.md
+          - "Sharding & Shard Key Selection": mongodb/05-sharding-and-shard-key-selection.md
+          - "Transactions & Consistency": mongodb/06-transactions-and-consistency.md
       - "Redis & Caching":
           - Overview: redis-caching/index.md
           - "Redis Data Structures & Use Cases": redis-caching/01-redis-data-structures-and-use-cases.md

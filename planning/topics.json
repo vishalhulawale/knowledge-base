@@ -1068,31 +1068,31 @@
           "title": "CRUD, query operators & aggregation pipeline",
           "slug": "02-crud-query-operators-and-aggregation-pipeline",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Indexing (compound, multikey, TTL) & explain plans",
           "slug": "03-indexing-and-explain-plans",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Replica sets, read/write concerns",
           "slug": "04-replica-sets-read-write-concerns",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Sharding & shard key selection",
           "slug": "05-sharding-and-shard-key-selection",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Transactions & consistency",
           "slug": "06-transactions-and-consistency",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Spring Data MongoDB",
