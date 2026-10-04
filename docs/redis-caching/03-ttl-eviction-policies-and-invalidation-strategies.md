@@ -109,6 +109,9 @@ Redis doesn't keep a global linked list of keys (that would cost memory per key)
 
 LRU only knows "recently touched", so a flood of new keys pushes out the genuinely popular ones. LFU knows they were accessed repeatedly.
 
+![Animation: two grids of hot keys in a full cache. Under allkeys-lru, a flood of one-off keys replaces almost every hot key, leaving 162 of 5,000. Under allkeys-lfu, the one-off keys are evicted first and all 5,000 hot keys stay](images/03-scan-pollution-lru-lfu.svg){ loading=lazy }
+*Watch the left grid fill with one-off keys while the right grid doesn't change: LFU evicts the keys that were only touched once.*
+
 **Sample-size test:** 12,000 keys written, the newest 6,000 read again, then 9,000 more keys written, forcing about 2,750 evictions:
 
 | `maxmemory-samples` | Untouched half surviving | Recently read half surviving |
@@ -200,6 +203,9 @@ String key = "catalog:v" + v + ":page:" + page + ":" + locale;
 // On a catalog import:
 redis.opsForValue().increment("catalog:version");   // all old keys are now unreachable and expire by TTL
 ```
+
+![Animation: catalog:version goes from 41 to 42 with one INCR, cached keys named catalog:v41 become unreachable and wait for their TTL, and readers repopulate fresh catalog:v42 keys on their next miss](images/03-versioned-keys.svg){ loading=lazy }
+*Notice that nothing is deleted at bump time. The old keys simply stop being read, which is why they still need a TTL.*
 
 ```java
 // Tag-based invalidation for derived entries

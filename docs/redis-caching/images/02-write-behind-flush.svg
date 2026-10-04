@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Write-behind buffer and flush</title>
+  <desc id="d">Animation in four steps. 1: the app sends HINCRBY to a Redis hash called views:pending for each view event and gets an immediate acknowledgement; counts grow to product 42: 3, product 7: 2, product 13: 1. 2: the flusher atomically renames views:pending to views:flushing, and new events start a fresh views:pending hash. 3: the flusher reads views:flushing and writes the database once with a batched upsert adding 3, 2 and 1 views. 4: it deletes views:flushing only after the database write succeeds. Until then the buffered counts exist only in Redis.</desc>
+  <style>
+    .arr{stroke:#64748b;stroke-width:1.8;fill:none}
+    .ah{fill:#64748b}
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .pt{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .panel{fill:#ffffff;stroke:#e2e8f0}
+    .pri{fill:#4f46e5}.prs{stroke:#4f46e5}
+    .teal{fill:#0ea5a4}.tls{stroke:#0ea5a4}
+    .okf{fill:#16a34a}.oks{stroke:#16a34a}
+    .badf{fill:#dc2626}.bads{stroke:#dc2626}
+    .warnf{fill:#d97706}.warns{stroke:#d97706}
+    .soft-ok{fill:#16a34a;fill-opacity:.14;stroke:#16a34a}
+    .soft-bad{fill:#dc2626;fill-opacity:.12;stroke:#dc2626}
+    .soft-warn{fill:#d97706;fill-opacity:.16;stroke:#d97706}
+    .soft-pri{fill:#4f46e5;fill-opacity:.12;stroke:#4f46e5}
+    .soft-teal{fill:#0ea5a4;fill-opacity:.14;stroke:#0ea5a4}
+    .tl{fill:#ffffff;font-size:13px;font-weight:700}
+    .tlb{fill:#ffffff;font-size:14px;font-weight:700}
+    .prt{fill:#4f46e5;font-weight:700}
+    .tealt{fill:#0f766e;font-weight:700}
+    .okt{fill:#15803d;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}
+    .warnt{fill:#b45309;font-weight:700}
+    .dash{stroke-dasharray:5 4}
+    @media (prefers-color-scheme: dark){
+      .arr{stroke:#94a3b8}.ah{fill:#94a3b8}
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.pt{fill:#f1f5f9}.lbl,.body,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .panel{fill:#171b24;stroke:#334155}
+      .pri{fill:#818cf8}.prs{stroke:#818cf8}
+      .teal{fill:#2dd4bf}.tls{stroke:#2dd4bf}
+      .okf{fill:#4ade80}.oks{stroke:#4ade80}
+      .badf{fill:#f87171}.bads{stroke:#f87171}
+      .warnf{fill:#fbbf24}.warns{stroke:#fbbf24}
+      .soft-ok{fill:#4ade80;stroke:#4ade80}
+      .soft-bad{fill:#f87171;stroke:#f87171}
+      .soft-warn{fill:#fbbf24;stroke:#fbbf24}
+      .soft-pri{fill:#818cf8;stroke:#818cf8}
+      .soft-teal{fill:#2dd4bf;stroke:#2dd4bf}
+      .tl,.tlb{fill:#0f172a}
+      .prt{fill:#a5b4fc}.tealt{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+    }
+    @keyframes kw5_8p5{0%,3.5%{opacity:0}5%,7.0%{opacity:1}8.5%,100%{opacity:0}}
+    .w5_8p5{opacity:0;animation:kw5_8p5 12s infinite linear}
+    @keyframes kw10_13p5{0%,8.5%{opacity:0}10%,12.0%{opacity:1}13.5%,100%{opacity:0}}
+    .w10_13p5{opacity:0;animation:kw10_13p5 12s infinite linear}
+    @keyframes kw15_18p5{0%,13.5%{opacity:0}15%,17.0%{opacity:1}18.5%,100%{opacity:0}}
+    .w15_18p5{opacity:0;animation:kw15_18p5 12s infinite linear}
+    @keyframes kw20_23p5{0%,18.5%{opacity:0}20%,22.0%{opacity:1}23.5%,100%{opacity:0}}
+    .w20_23p5{opacity:0;animation:kw20_23p5 12s infinite linear}
+    @keyframes kw25_28p5{0%,23.5%{opacity:0}25%,27.0%{opacity:1}28.5%,100%{opacity:0}}
+    .w25_28p5{opacity:0;animation:kw25_28p5 12s infinite linear}
+    @keyframes kw30_33p5{0%,28.5%{opacity:0}30%,32.0%{opacity:1}33.5%,100%{opacity:0}}
+    .w30_33p5{opacity:0;animation:kw30_33p5 12s infinite linear}
+    @keyframes kw50_53p5{0%,48.5%{opacity:0}50%,52.0%{opacity:1}53.5%,100%{opacity:0}}
+    .w50_53p5{opacity:0;animation:kw50_53p5 12s infinite linear}
+    @keyframes kw0_36{0%,34.5%{opacity:1}36%,97.5%{opacity:0}100%{opacity:1}}
+    .w0_36{opacity:0;animation:kw0_36 12s infinite linear}
+    @keyframes kw36_99{0%,34.5%{opacity:0}36%,97.5%{opacity:1}99%,100%{opacity:0}}
+    .w36_99{opacity:0;animation:kw36_99 12s infinite linear}
+    @keyframes kw5_99{0%,3.5%{opacity:0}5%,97.5%{opacity:1}99%,100%{opacity:0}}
+    .w5_99{opacity:0;animation:kw5_99 12s infinite linear}
+    @keyframes kw5_15{0%,3.5%{opacity:0}5%,13.5%{opacity:1}15%,100%{opacity:0}}
+    .w5_15{opacity:0;animation:kw5_15 12s infinite linear}
+    @keyframes kw15_25{0%,13.5%{opacity:0}15%,23.5%{opacity:1}25%,100%{opacity:0}}
+    .w15_25{opacity:0;animation:kw15_25 12s infinite linear}
+    @keyframes kw25_99{0%,23.5%{opacity:0}25%,97.5%{opacity:1}99%,100%{opacity:0}}
+    .w25_99{opacity:0;animation:kw25_99 12s infinite linear}
+    @keyframes kw10_99{0%,8.5%{opacity:0}10%,97.5%{opacity:1}99%,100%{opacity:0}}
+    .w10_99{opacity:0;animation:kw10_99 12s infinite linear}
+    @keyframes kw10_20{0%,8.5%{opacity:0}10%,18.5%{opacity:1}20%,100%{opacity:0}}
+    .w10_20{opacity:0;animation:kw10_20 12s infinite linear}
+    @keyframes kw20_99{0%,18.5%{opacity:0}20%,97.5%{opacity:1}99%,100%{opacity:0}}
+    .w20_99{opacity:0;animation:kw20_99 12s infinite linear}
+    @keyframes kw30_99{0%,28.5%{opacity:0}30%,97.5%{opacity:1}99%,100%{opacity:0}}
+    .w30_99{opacity:0;animation:kw30_99 12s infinite linear}
+    @keyframes kw40_96{0%,38.5%{opacity:0}40%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w40_96{opacity:0;animation:kw40_96 12s infinite linear}
+    @keyframes kw50_96{0%,48.5%{opacity:0}50%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w50_96{opacity:0;animation:kw50_96 12s infinite linear}
+    @keyframes kw35_55{0%,33.5%{opacity:0}35%,53.5%{opacity:1}55%,100%{opacity:0}}
+    .w35_55{opacity:0;animation:kw35_55 12s infinite linear}
+    @keyframes kw70_90{0%,68.5%{opacity:0}70%,88.5%{opacity:1}90%,100%{opacity:0}}
+    .w70_90{opacity:0;animation:kw70_90 12s infinite linear}
+    @keyframes kw60_96{0%,58.5%{opacity:0}60%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w60_96{opacity:0;animation:kw60_96 12s infinite linear}
+    @keyframes kw55_72{0%,53.5%{opacity:0}55%,70.5%{opacity:1}72%,100%{opacity:0}}
+    .w55_72{opacity:0;animation:kw55_72 12s infinite linear}
+    @keyframes kw0_35{0%,33.5%{opacity:1}35%,97.5%{opacity:0}100%{opacity:1}}
+    .w0_35{opacity:0;animation:kw0_35 12s infinite linear}
+    @keyframes kw55_70{0%,53.5%{opacity:0}55%,68.5%{opacity:1}70%,100%{opacity:0}}
+    .w55_70{opacity:0;animation:kw55_70 12s infinite linear}
+    @keyframes kw70_96{0%,68.5%{opacity:0}70%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w70_96{opacity:0;animation:kw70_96 12s infinite linear}
+
+    @keyframes kmv{0%,34%{transform:translateY(0)}40%,74%{transform:translateY(124px)}75%,100%{transform:translateY(0)}}
+    @keyframes kfd{0%,70%{opacity:1}73%,98%{opacity:0}100%{opacity:1}}
+    .mvp{animation:kmv 12s infinite linear}.fdp{animation:kfd 12s infinite linear}
+    @media (prefers-reduced-motion: reduce){.w10_99,.w20_99,.w25_99,.w30_99,.w36_99,.w40_96,.w50_96,.w55_70,.w55_72,.w5_99,.w60_96{animation:none;opacity:1}.w0_35,.w0_36,.w10_13p5,.w10_20,.w15_18p5,.w15_25,.w20_23p5,.w25_28p5,.w30_33p5,.w35_55,.w50_53p5,.w5_15,.w5_8p5,.w70_90,.w70_96{animation:none;opacity:0}.mvp{animation:none;transform:translateY(124px)}.fdp{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="458" rx="14"/>
+  <text class="h" x="28" y="40">Write-behind: buffer in Redis, flush in one batch</text>
+  <text class="sub" x="28" y="62">View events increment a hash. A scheduled flusher swaps it out and writes the database once.</text>
+  <rect class="panel" x="20" y="84" width="196" height="120" rx="10"/>
+  <text class="pt" x="36" y="110">App</text>
+  <text class="sm" x="36" y="136">each view event:</text>
+  <text class="sm mono" x="36" y="158">HINCRBY</text>
+  <text class="sm mono" x="36" y="178">views:pending id 1</text>
+  <g class="w5_8p5"><line class="arr prs " x1="220" y1="140" x2="253.0" y2="140.0"/><path class="pri " d="M262 140 L253.0 144.5 L253.0 135.5z"/></g>
+  <g class="w10_13p5"><line class="arr prs " x1="220" y1="140" x2="253.0" y2="140.0"/><path class="pri " d="M262 140 L253.0 144.5 L253.0 135.5z"/></g>
+  <g class="w15_18p5"><line class="arr prs " x1="220" y1="140" x2="253.0" y2="140.0"/><path class="pri " d="M262 140 L253.0 144.5 L253.0 135.5z"/></g>
+  <g class="w20_23p5"><line class="arr prs " x1="220" y1="140" x2="253.0" y2="140.0"/><path class="pri " d="M262 140 L253.0 144.5 L253.0 135.5z"/></g>
+  <g class="w25_28p5"><line class="arr prs " x1="220" y1="140" x2="253.0" y2="140.0"/><path class="pri " d="M262 140 L253.0 144.5 L253.0 135.5z"/></g>
+  <g class="w30_33p5"><line class="arr prs " x1="220" y1="140" x2="253.0" y2="140.0"/><path class="pri " d="M262 140 L253.0 144.5 L253.0 135.5z"/></g>
+  <g class="w50_53p5"><line class="arr prs " x1="220" y1="140" x2="253.0" y2="140.0"/><path class="pri " d="M262 140 L253.0 144.5 L253.0 135.5z"/></g>
+  <line class="arr dash " x1="220" y1="140" x2="253.0" y2="140.0"/><path class="ah " d="M262 140 L253.0 144.5 L253.0 135.5z"/>
+  <text class="sub" x="222" y="128">fast ack</text>
+  <rect class="panel" x="276" y="84" width="252" height="304" rx="10"/>
+  <text class="pt" x="292" y="110">Redis</text>
+  <g class="mvp"><g class="fdp"><rect class="box" x="292" y="122" width="220" height="112" rx="8"/><text class="tealt mono w0_36" x="304" y="144" font-size="14">views:pending</text><text class="warnt mono w36_99" x="304" y="144" font-size="14">views:flushing</text><line class="arr" x1="292" y1="154" x2="512" y2="154" stroke-width="1"/><text class="sm mono w5_99" x="304" y="176">product 42</text><text class="lbl w5_15" x="470" y="176">1</text><text class="lbl w15_25" x="470" y="176">2</text><text class="lbl w25_99" x="470" y="176">3</text><text class="sm mono w10_99" x="304" y="198">product 7</text><text class="lbl w10_20" x="470" y="198">1</text><text class="lbl w20_99" x="470" y="198">2</text><text class="sm mono w30_99" x="304" y="220">product 13</text><text class="lbl w30_99" x="470" y="220">1</text></g></g>
+  <g class="w40_96"><rect class="box" x="292" y="122" width="220" height="112" rx="8"/><text class="tealt mono" x="304" y="144" font-size="14">views:pending</text><line class="arr" x1="292" y1="154" x2="512" y2="154" stroke-width="1"/></g>
+  <g class="w50_96"><text class="sm mono" x="304" y="176">product 42</text><text class="lbl" x="470" y="176">1</text></g>
+  <text class="warnt w35_55" x="300" y="246" font-size="13">RENAME (atomic)</text>
+  <text class="badt w70_90" x="300" y="378" font-size="13">DEL views:flushing</text>
+  <rect class="panel" x="584" y="84" width="196" height="304" rx="10"/>
+  <text class="pt" x="600" y="110">Database</text>
+  <text class="sm mono" x="600" y="136">view_count</text>
+  <text class="sm" x="600" y="264">product 42</text>
+  <text class="okt w60_96" x="700" y="264" font-size="14">views +3</text>
+  <text class="sm" x="600" y="288">product 7</text>
+  <text class="okt w60_96" x="700" y="288" font-size="14">views +2</text>
+  <text class="sm" x="600" y="312">product 13</text>
+  <text class="okt w60_96" x="700" y="312" font-size="14">views +1</text>
+  <text class="sub" x="600" y="160">one batched upsert</text>
+  <text class="sub" x="600" y="178">per flush</text>
+  <g class="w55_72"><line class="arr oks " x1="516" y1="300" x2="569.2" y2="289.7"/><path class="okf " d="M578 288 L570.0 294.1 L568.3 285.3z"/></g>
+  <line class="arr dash " x1="516" y1="300" x2="569.2" y2="289.7"/><path class="ah " d="M578 288 L570.0 294.1 L568.3 285.3z"/>
+  <text class="sub" x="519" y="326">every 5 s</text>
+  <text class="body w0_35" x="28" y="418">1  Each event is an HINCRBY on views:pending, acknowledged at once.</text>
+  <text class="body w35_55" x="28" y="418">2  RENAME pending to flushing. New events start a fresh pending hash.</text>
+  <text class="body w55_70" x="28" y="418">3  HGETALL views:flushing, then one batched upsert to the database.</text>
+  <text class="body w70_96" x="28" y="418">4  DEL views:flushing, only after the database write succeeded.</text>
+  <text class="sub" x="28" y="444">Until step 4, the buffered counts live only in Redis: a crash there loses them.</text>
+</svg>

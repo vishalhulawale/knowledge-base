@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Redis Cluster hash slots</title>
+  <desc id="d">A bar of 16,384 hash slots split into three shards: slots 0 to 5460 on primary 7001 with replica 7005, 5461 to 10922 on 7002 with replica 7004, and 10923 to 16383 on 7003 with replica 7006. user:42 maps to slot 15880 and user:43 to slot 11817, both in shard 3 but in different slots, so MSET of the two fails with CROSSSLOT. {user:42}:cart and {user:42}:profile both hash only the tag user:42, land in slot 15880, and MSET succeeds.</desc>
+  <style>
+    .arr{stroke:#64748b;stroke-width:1.8;fill:none}
+    .ah{fill:#64748b}
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .pt{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .panel{fill:#ffffff;stroke:#e2e8f0}
+    .pri{fill:#4f46e5}.prs{stroke:#4f46e5}
+    .teal{fill:#0ea5a4}.tls{stroke:#0ea5a4}
+    .okf{fill:#16a34a}.oks{stroke:#16a34a}
+    .badf{fill:#dc2626}.bads{stroke:#dc2626}
+    .warnf{fill:#d97706}.warns{stroke:#d97706}
+    .soft-ok{fill:#16a34a;fill-opacity:.14;stroke:#16a34a}
+    .soft-bad{fill:#dc2626;fill-opacity:.12;stroke:#dc2626}
+    .soft-warn{fill:#d97706;fill-opacity:.16;stroke:#d97706}
+    .soft-pri{fill:#4f46e5;fill-opacity:.12;stroke:#4f46e5}
+    .soft-teal{fill:#0ea5a4;fill-opacity:.14;stroke:#0ea5a4}
+    .tl{fill:#ffffff;font-size:13px;font-weight:700}
+    .tlb{fill:#ffffff;font-size:14px;font-weight:700}
+    .prt{fill:#4f46e5;font-weight:700}
+    .tealt{fill:#0f766e;font-weight:700}
+    .okt{fill:#15803d;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}
+    .warnt{fill:#b45309;font-weight:700}
+    .dash{stroke-dasharray:5 4}
+    @media (prefers-color-scheme: dark){
+      .arr{stroke:#94a3b8}.ah{fill:#94a3b8}
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.pt{fill:#f1f5f9}.lbl,.body,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .panel{fill:#171b24;stroke:#334155}
+      .pri{fill:#818cf8}.prs{stroke:#818cf8}
+      .teal{fill:#2dd4bf}.tls{stroke:#2dd4bf}
+      .okf{fill:#4ade80}.oks{stroke:#4ade80}
+      .badf{fill:#f87171}.bads{stroke:#f87171}
+      .warnf{fill:#fbbf24}.warns{stroke:#fbbf24}
+      .soft-ok{fill:#4ade80;stroke:#4ade80}
+      .soft-bad{fill:#f87171;stroke:#f87171}
+      .soft-warn{fill:#fbbf24;stroke:#fbbf24}
+      .soft-pri{fill:#818cf8;stroke:#818cf8}
+      .soft-teal{fill:#2dd4bf;stroke:#2dd4bf}
+      .tl,.tlb{fill:#0f172a}
+      .prt{fill:#a5b4fc}.tealt{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+    }
+
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="428" rx="14"/>
+  <text class="h" x="28" y="40">Redis Cluster: 16,384 hash slots over three shards</text>
+  <text class="sub mono" x="28" y="62">slot = CRC16(key) mod 16384, or CRC16 of the {tag} part if there is one</text>
+  <rect class="soft-pri" x="40.0" y="116" width="240.0" height="40" rx="4"/>
+  <text class="prt" x="50.0" y="141" font-size="14">Shard 1: 0–5460</text>
+  <text class="sub" x="50.0" y="176">primary 7001, replica 7005</text>
+  <rect class="soft-teal" x="280.0" y="116" width="240.0" height="40" rx="4"/>
+  <text class="tealt" x="290.0" y="141" font-size="14">Shard 2: 5461–10922</text>
+  <text class="sub" x="290.0" y="176">primary 7002, replica 7004</text>
+  <rect class="soft-warn" x="520.0" y="116" width="240.0" height="40" rx="4"/>
+  <text class="warnt" x="530.0" y="141" font-size="14">Shard 3: 10923–16383</text>
+  <text class="sub" x="530.0" y="176">primary 7003, replica 7006</text>
+  <line class="arr" x1="559.3" y1="100" x2="559.3" y2="124" stroke-width="2.5"/>
+  <rect class="box" x="533.3" y="78" width="52" height="22" rx="5"/><text class="lbl" x="559.3" y="94" text-anchor="middle" font-size="13">11817</text>
+  <line class="arr" x1="737.9" y1="100" x2="737.9" y2="124" stroke-width="2.5"/>
+  <rect class="box" x="711.9" y="78" width="52" height="22" rx="5"/><text class="lbl" x="737.9" y="94" text-anchor="middle" font-size="13">15880</text>
+  <text class="sm mono" x="40" y="234">user:42</text><text class="sub" x="200" y="234">slot 15880</text>
+  <text class="sm mono" x="40" y="258">user:43</text><text class="sub" x="200" y="258">slot 11817</text>
+  <text class="sm mono" x="40" y="282">{user:42}:cart</text><text class="sub" x="200" y="282">slot 15880 (only "user:42" is hashed)</text>
+  <text class="sm mono" x="40" y="306">{user:42}:profile</text><text class="sub" x="200" y="306">slot 15880</text>
+  <rect class="soft-bad" x="28" y="326" width="360" height="62" rx="8"/>
+  <text class="sm mono" x="40" y="350">MSET user:42 a user:43 b</text>
+  <text class="badt" x="40" y="374" font-size="13">CROSSSLOT: two slots, even on one shard</text>
+  <rect class="soft-ok" x="404" y="326" width="368" height="62" rx="8"/>
+  <text class="sm mono" x="416" y="350">MSET {user:42}:cart a {user:42}:profile b</text>
+  <text class="okt" x="416" y="374" font-size="13">OK: same slot, thanks to the hash tag</text>
+  <text class="sub" x="28" y="414">Slot numbers measured on the page's 6-node test cluster. Multi-key commands need one slot, not just one node.</text>
+</svg>

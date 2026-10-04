@@ -85,6 +85,9 @@ sequenceDiagram
 ```
 *Notice the last note. Replication is asynchronous, so a client's write is acknowledged before any replica has it. That's the source of possible data loss on failover.*
 
+![Animation: on client, primary and replica lanes, the client's SET order:1 is acknowledged by the primary before it reaches the replica, the primary crashes, the replica is promoted, and a later GET order:1 returns nil](images/06-async-replication-loss.svg){ loading=lazy }
+*Watch the order of events: the client already has its OK when the primary dies, and the promoted replica never saw the write.*
+
 - Replicas are read-only by default and can serve reads (eventually consistent, possibly stale).
 - The **replication backlog** (`repl-backlog-size`) lets a briefly disconnected replica resume with a partial sync. Too small, and every blip causes a full resync (a fork, an RDB transfer and load spikes). Size it for write rate × expected disconnect time.
 - **`WAIT numreplicas timeout`** blocks the client until N replicas have acknowledged its writes. It improves durability for specific writes but isn't a transaction: on timeout the write is still applied on the primary.
@@ -139,13 +142,16 @@ Measured on a local 6-node cluster (3 primaries + 3 replicas):
 
 | Action | Result |
 |---|---|
-| `CLUSTER KEYSLOT user:42` / `user:43` | 15880 / 11817 (different shards) |
+| `CLUSTER KEYSLOT user:42` / `user:43` | 15880 / 11817 (different slots, both on shard 3) |
 | `CLUSTER KEYSLOT {user:42}:cart` / `{user:42}:profile` | Both **15880** (hash tag) |
 | `SET user:43 x` on the wrong node (non-cluster client) | `MOVED 11817 127.0.0.1:7003` |
 | Same with `redis-cli -c` (follows redirects) | `OK` |
 | `MSET user:42 a user:43 b` | `CROSSSLOT Keys in request don't hash to the same slot` |
 | `MSET {user:42}:cart a {user:42}:profile b` | `OK` |
 | `kill -9` on the primary for slots 10923–16383 | Replica marked it failing, won the election and became primary about **3 s** later (`cluster-node-timeout 2000`). `cluster_state:ok`, data still readable |
+
+![The 16,384 hash slots split into three shards. user:42 maps to slot 15880 and user:43 to slot 11817, both in shard 3 but in different slots, so MSET of both fails with CROSSSLOT. {user:42}:cart and {user:42}:profile hash only the tag and share slot 15880, so MSET succeeds](images/06-cluster-hash-slots.svg){ loading=lazy }
+*Notice that `CROSSSLOT` is about slots, not nodes: two keys on the same shard still fail if their slots differ.*
 
 - **`MOVED`**: the slot permanently lives elsewhere, so the client updates its slot map. **`ASK`**: the slot is mid-migration, so try the other node for this request only.
 - Nodes gossip over a cluster bus (port + 10000). A primary is marked `FAIL` when a majority of primaries see it unreachable for `cluster-node-timeout`, and then its replicas run an election.
@@ -325,7 +331,7 @@ spring:
     **Common wrong answer:** "The replica always copies everything again."
 
 ??? question "Q8. Why does MSET with two keys fail in Redis Cluster, and how do you fix it?"
-    **Answer:** Multi-key commands require all keys to be in the same hash slot, because a single node must execute them atomically. `user:42` and `user:43` hash to slots 15880 and 11817 on different nodes, so you get `CROSSSLOT`. Fix: give related keys the same hash tag (`{user:42}:cart`, `{user:42}:profile` → both slot 15880, `MSET` OK), or issue separate commands, for example pipelined per node, which clients like Lettuce do for `MGET` across slots, without atomicity. Don't put everything under one tag, or one node becomes hot.
+    **Answer:** Multi-key commands require all keys to be in the same hash slot, because a single node must execute them atomically. `user:42` and `user:43` hash to different slots (15880 and 11817), so you get `CROSSSLOT`, even though both slots happen to live on the same node here. Fix: give related keys the same hash tag (`{user:42}:cart`, `{user:42}:profile` → both slot 15880, `MSET` OK), or issue separate commands, for example pipelined per node, which clients like Lettuce do for `MGET` across slots, without atomicity. Don't put everything under one tag, or one node becomes hot.
 
     **Interviewer listens for:** slot requirement, hash tags, non-atomic alternatives, and hot-slot risk.
 

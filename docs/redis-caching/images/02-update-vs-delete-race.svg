@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 424" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Update vs delete on write</title>
+  <desc id="d">Two panels compare cache writes after two concurrent updates. In both, writer A sets the price to 10 and commits, then writer B sets it to 20 and commits. Left, updating the cache: B sets the cache to 20, then A, delayed by a pause, sets it to 10, so the cache holds 10 while the database holds 20 until the TTL expires. Right, deleting the key: both writers delete the key, the order doesn't matter, and the next read misses and loads 20 from the database.</desc>
+  <style>
+    .arr{stroke:#64748b;stroke-width:1.8;fill:none}
+    .ah{fill:#64748b}
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .pt{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .panel{fill:#ffffff;stroke:#e2e8f0}
+    .pri{fill:#4f46e5}.prs{stroke:#4f46e5}
+    .teal{fill:#0ea5a4}.tls{stroke:#0ea5a4}
+    .okf{fill:#16a34a}.oks{stroke:#16a34a}
+    .badf{fill:#dc2626}.bads{stroke:#dc2626}
+    .warnf{fill:#d97706}.warns{stroke:#d97706}
+    .soft-ok{fill:#16a34a;fill-opacity:.14;stroke:#16a34a}
+    .soft-bad{fill:#dc2626;fill-opacity:.12;stroke:#dc2626}
+    .soft-warn{fill:#d97706;fill-opacity:.16;stroke:#d97706}
+    .soft-pri{fill:#4f46e5;fill-opacity:.12;stroke:#4f46e5}
+    .soft-teal{fill:#0ea5a4;fill-opacity:.14;stroke:#0ea5a4}
+    .tl{fill:#ffffff;font-size:13px;font-weight:700}
+    .tlb{fill:#ffffff;font-size:14px;font-weight:700}
+    .prt{fill:#4f46e5;font-weight:700}
+    .tealt{fill:#0f766e;font-weight:700}
+    .okt{fill:#15803d;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}
+    .warnt{fill:#b45309;font-weight:700}
+    .dash{stroke-dasharray:5 4}
+    @media (prefers-color-scheme: dark){
+      .arr{stroke:#94a3b8}.ah{fill:#94a3b8}
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.pt{fill:#f1f5f9}.lbl,.body,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .panel{fill:#171b24;stroke:#334155}
+      .pri{fill:#818cf8}.prs{stroke:#818cf8}
+      .teal{fill:#2dd4bf}.tls{stroke:#2dd4bf}
+      .okf{fill:#4ade80}.oks{stroke:#4ade80}
+      .badf{fill:#f87171}.bads{stroke:#f87171}
+      .warnf{fill:#fbbf24}.warns{stroke:#fbbf24}
+      .soft-ok{fill:#4ade80;stroke:#4ade80}
+      .soft-bad{fill:#f87171;stroke:#f87171}
+      .soft-warn{fill:#fbbf24;stroke:#fbbf24}
+      .soft-pri{fill:#818cf8;stroke:#818cf8}
+      .soft-teal{fill:#2dd4bf;stroke:#2dd4bf}
+      .tl,.tlb{fill:#0f172a}
+      .prt{fill:#a5b4fc}.tealt{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+    }
+    @keyframes kw5_96{0%,3.5%{opacity:0}5%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w5_96{opacity:0;animation:kw5_96 12s infinite linear}
+    @keyframes kw15_96{0%,13.5%{opacity:0}15%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w15_96{opacity:0;animation:kw15_96 12s infinite linear}
+    @keyframes kw25_96{0%,23.5%{opacity:0}25%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w25_96{opacity:0;animation:kw25_96 12s infinite linear}
+    @keyframes kw35_96{0%,33.5%{opacity:0}35%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w35_96{opacity:0;animation:kw35_96 12s infinite linear}
+    @keyframes kw0_5{0%,3.5%{opacity:1}5%,97.5%{opacity:0}100%{opacity:1}}
+    .w0_5{opacity:0;animation:kw0_5 12s infinite linear}
+    @keyframes kw5_15{0%,3.5%{opacity:0}5%,13.5%{opacity:1}15%,100%{opacity:0}}
+    .w5_15{opacity:0;animation:kw5_15 12s infinite linear}
+    @keyframes kw0_25{0%,23.5%{opacity:1}25%,97.5%{opacity:0}100%{opacity:1}}
+    .w0_25{opacity:0;animation:kw0_25 12s infinite linear}
+    @keyframes kw25_35{0%,23.5%{opacity:0}25%,33.5%{opacity:1}35%,100%{opacity:0}}
+    .w25_35{opacity:0;animation:kw25_35 12s infinite linear}
+    @keyframes kw55_96{0%,53.5%{opacity:0}55%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w55_96{opacity:0;animation:kw55_96 12s infinite linear}
+    @keyframes kw45_96{0%,43.5%{opacity:0}45%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w45_96{opacity:0;animation:kw45_96 12s infinite linear}
+    @keyframes kw0_45{0%,43.5%{opacity:1}45%,97.5%{opacity:0}100%{opacity:1}}
+    .w0_45{opacity:0;animation:kw0_45 12s infinite linear}
+
+    @media (prefers-reduced-motion: reduce){.w15_96,.w25_96,.w35_96,.w45_96,.w55_96,.w5_96{animation:none;opacity:1}.w0_25,.w0_45,.w0_5,.w25_35,.w5_15{animation:none;opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="422" rx="14"/>
+  <text class="h" x="28" y="40">Two writers, caches written in the wrong order</text>
+  <text class="sub" x="28" y="62">The database applies A then B. A's thread pauses (GC or network), so its cache call arrives last.</text>
+  <rect class="panel" x="20" y="80" width="372" height="300" rx="10"/>
+  <text class="badt" x="36" y="106" font-size="16">✗  Update the cache on write</text>
+  <g class="w5_96"><text class="sub" x="36" y="134">1</text><text class="sm" x="54" y="134">A: UPDATE price = 10, commit</text></g>
+  <g class="w15_96"><text class="sub" x="36" y="160">2</text><text class="sm" x="54" y="160">B: UPDATE price = 20, commit</text></g>
+  <g class="w25_96"><text class="sub" x="36" y="186">3</text><text class="sm" x="54" y="186">B: SET cache price = 20</text></g>
+  <g class="w35_96"><text class="sub" x="36" y="212">4</text><text class="sm badt" x="54" y="212">A, after its pause: SET cache price = 10</text></g>
+  <rect class="box" x="36" y="256" width="164" height="70" rx="8"/>
+  <text class="sub" x="118" y="278" text-anchor="middle">Database price</text>
+  <rect class="box" x="212" y="256" width="164" height="70" rx="8"/>
+  <text class="sub" x="294" y="278" text-anchor="middle">Cache price</text>
+  <text class="pt w0_5" x="118" y="310" text-anchor="middle" font-size="22">–</text>
+  <text class="pt w5_15" x="118" y="310" text-anchor="middle" font-size="22">10</text>
+  <text class="pt w15_96" x="118" y="310" text-anchor="middle" font-size="22">20</text>
+  <text class="sub w0_25" x="294" y="310" text-anchor="middle" font-size="22">empty</text>
+  <text class="pt w25_35" x="294" y="310" text-anchor="middle" font-size="22">20</text>
+  <text class="badt w35_96" x="294" y="310" text-anchor="middle" font-size="22">10</text>
+  <text class="badt w55_96" x="36" y="356" font-size="14">Cache 10, DB 20: stale until the TTL expires</text>
+  <rect class="panel" x="408" y="80" width="372" height="300" rx="10"/>
+  <text class="okt" x="424" y="106" font-size="16">✓  Delete the key on write</text>
+  <g class="w5_96"><text class="sub" x="424" y="134">1</text><text class="sm" x="442" y="134">A: UPDATE price = 10, commit</text></g>
+  <g class="w15_96"><text class="sub" x="424" y="160">2</text><text class="sm" x="442" y="160">B: UPDATE price = 20, commit</text></g>
+  <g class="w25_96"><text class="sub" x="424" y="186">3</text><text class="sm" x="442" y="186">B: DEL product key</text></g>
+  <g class="w35_96"><text class="sub" x="424" y="212">4</text><text class="sm" x="442" y="212">A, after its pause: DEL product key</text></g>
+  <g class="w45_96"><text class="sub" x="424" y="238">5</text><text class="sm okt" x="442" y="238">Next read misses, loads 20 from the DB</text></g>
+  <rect class="box" x="424" y="256" width="164" height="70" rx="8"/>
+  <text class="sub" x="506" y="278" text-anchor="middle">Database price</text>
+  <rect class="box" x="600" y="256" width="164" height="70" rx="8"/>
+  <text class="sub" x="682" y="278" text-anchor="middle">Cache price</text>
+  <text class="pt w0_5" x="506" y="310" text-anchor="middle" font-size="22">–</text>
+  <text class="pt w5_15" x="506" y="310" text-anchor="middle" font-size="22">10</text>
+  <text class="pt w15_96" x="506" y="310" text-anchor="middle" font-size="22">20</text>
+  <text class="sub w0_45" x="682" y="310" text-anchor="middle" font-size="22">empty</text>
+  <text class="okt w45_96" x="682" y="310" text-anchor="middle" font-size="22">20</text>
+  <text class="okt w55_96" x="424" y="356" font-size="14">Deletes give the same result in any order</text>
+  <text class="sub" x="28" y="408">Reproduced on this page with the update version: database 20.0, cache 10.0.</text>
+</svg>

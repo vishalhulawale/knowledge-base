@@ -86,6 +86,9 @@ sequenceDiagram
 ```
 *Notice that the database sees one write per flush instead of one per event. Everything in `pending` is at risk until it's flushed, so this suits data you can afford to lose or rebuild.*
 
+![Animation: view events increment counts in the Redis hash views:pending, the flusher renames it to views:flushing while a fresh pending hash takes new events, one batched upsert adds the counts to the database, and the flushing hash is deleted](images/02-write-behind-flush.svg){ loading=lazy }
+*Watch the `RENAME`: new events keep landing in a fresh `pending` hash while the old one is flushed, so nothing is lost during the flush itself.*
+
 Measured with 20,000 view events over 500 products:
 
 | Approach | Time |
@@ -194,6 +197,9 @@ Cache: SET 20 (B)    → SET 10 (A, late)   final cache price 10
 ```
 
 Reproduced locally: **database 20.0, cache 10.0**, stale until the TTL. Deleting instead of setting makes both writers' cache operations identical and idempotent, so ordering no longer matters.
+
+![Animation: two side-by-side panels. Writers A and B commit prices 10 then 20. When each updates the cache, A's delayed SET leaves the cache at 10 while the database holds 20. When each deletes the key, the order doesn't matter and the next read loads 20](images/02-update-vs-delete-race.svg){ loading=lazy }
+*Notice that the two delete steps are identical, so their order can't change the result. The two SETs carry different values, so the late one wins.*
 
 ### The race that delete doesn't fix
 

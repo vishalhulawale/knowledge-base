@@ -55,6 +55,9 @@ flowchart TD
 
 Without protection, all 200 requests queue for the 20 database connections and recompute the same value ten times over. Other endpoints that need the pool starve too. In a real system with several hundred pods and a slow aggregate query, that's an outage.
 
+![Animation: eight requests, standing for 200, find a hot key expired. Without coordination every request queries the database, 200 queries in total. With a lock, one request loads from the database while the others wait and then read the refilled key, so the database sees 1 query](images/04-stampede-lock.svg){ loading=lazy }
+*Watch the database box: the naive version sends it every request, while the lock version sends it one and answers the rest from the refilled cache.*
+
 ### Defence 1: a lock around recomputation
 
 ```mermaid
@@ -114,6 +117,9 @@ Measured: 2,000 requests over about 500 distinct missing ids caused **2,000** da
 | 20,000 random non-existent ids reported "maybe present" | 133 = **0.67%** (theory: 0.65%) |
 
 A Bloom filter has no false negatives, so real data is never blocked, and it filters out 99.3% of bogus lookups. Deleting items requires rebuilding the filter or using a counting/cuckoo filter, and the filter must be updated on every insert. Redis 8 (and Redis Stack) include `BF.ADD`/`BF.EXISTS` natively.
+
+![A 16-bit Bloom filter: inserting id 42 and id 77 sets bits 2, 4, 7, 11 and 13. A lookup for id 99999999 hits bit 3, which is 0, so it's definitely absent. A lookup for id 5150 finds bits 2, 4 and 11 all set by other ids, a false positive that falls through to the cache and database](images/04-bloom-filter.svg){ loading=lazy }
+*Notice that one 0 bit is enough to say "definitely absent". A "maybe" can be wrong, because other ids may have set all of its bits.*
 
 ### Avalanche
 

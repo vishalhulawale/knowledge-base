@@ -46,6 +46,9 @@ sequenceDiagram
 
 `@EnableCaching` registers a `CacheInterceptor` that wraps beans with caching annotations in a proxy (CGLIB subclass by default in Boot). The interceptor evaluates SpEL for keys and conditions, asks the `CacheManager` for the named cache, and calls through to the method only when needed. The abstraction is store-agnostic. The same annotations work with Caffeine, Hazelcast, JCache or Redis.
 
+![Animation: a call from another bean enters the Spring cache proxy and the CacheInterceptor checks Redis before find runs. Then findAll calls this.find inside the target object, skips the interceptor and goes straight to the database](images/05-proxy-self-invocation.svg){ loading=lazy }
+*Watch the second call: it never leaves the target object, so the interceptor never sees it.*
+
 ### The annotations
 
 | Annotation | Method runs? | Effect | Typical use |
@@ -67,6 +70,9 @@ Useful attributes: `key` (SpEL such as `#id`, `#p0`, `#user.id`, `#result.id()` 
 | `find(String a, int b)` | `SimpleKey [a, 7]` |
 
 The cache **name** isn't part of the generated key, and neither is the **method name**. `RedisCacheManager` prefixes the cache name, so the Redis key is `prefix + cacheName + "::" + key`. Measured: `rc:v1:products::1`. If two methods use the same cache name with the same parameters, they read each other's entries. In the test, `countryName("IN")` and `currencyName("IN")` both used the `refdata` cache, and the second returned `"country:IN"` without running.
+
+![The Redis key rc:v1:products::1 split into prefix, cache name, separator and key. Below, countryName("IN") and currencyName("IN") with the same cache name both map to rc:v1:refdata::IN, so the second returns the first's value](images/05-cache-key-anatomy.svg){ loading=lazy }
+*Notice that nothing in the key says which method stored it. Two methods that share a cache name and arguments share entries.*
 
 ### What ends up in Redis
 

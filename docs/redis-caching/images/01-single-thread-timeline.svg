@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">One slow command blocks every client</title>
+  <desc id="d">A timeline of the Redis main thread. Client A's GET and client B's INCR run one after another. An ops script then runs KEYS k:9999* over one million keys, which took 175 ms. Client C's GET and client D's SET arrive during that time and wait in the queue until KEYS finishes, then run in a few microseconds each.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .cover{fill:#f8fafc}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .lane{fill:#ffffff;stroke:#cbd5e1}
+    .lo{fill:none;stroke:#cbd5e1}
+    .run{fill:#4f46e5}
+    .bad{fill:#dc2626}
+    .wait{fill:#d97706;fill-opacity:.22;stroke:#d97706}
+    .wt{fill:#334155;font-size:13px}
+    .tl{fill:#fff;font-size:13px;font-weight:700}
+    .ok{fill:#16a34a;font-size:15px;font-weight:700}
+    .ph{stroke:#0ea5a4;stroke-width:2.5}
+    .pht{fill:#0f766e;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}.cover{fill:#1f2430}
+      .h{fill:#f1f5f9}.lbl,.wt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .lane{fill:#111827;stroke:#475569}.lo{stroke:#475569}
+      .run{fill:#818cf8}.bad{fill:#f87171}.wait{fill:#fbbf24;stroke:#fbbf24}
+      .tl{fill:#0f172a}.ok{fill:#4ade80}.ph{stroke:#2dd4bf}.pht{fill:#5eead4}
+    }
+    /* 10 s loop: "now" moves from x=160 to x=660 between 5% and 80%, holds, resets */
+    @keyframes now{0%,5%{transform:translateX(0)}80%,95%{transform:translateX(500px)}100%{transform:translateX(0)}}
+    .mv{animation:now 10s infinite linear}
+    @media (prefers-reduced-motion: reduce){.mv{animation:none;transform:translateX(500px)}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">One thread runs every command, one at a time</text>
+  <text class="sub" x="28" y="62">A command that arrives while another is running waits in the queue, however cheap it is.</text>
+
+  <!-- row labels -->
+  <text class="lbl" x="28" y="115">Main thread</text>
+  <text class="lbl" x="28" y="165">Client A</text><text class="sub" x="118" y="165">GET</text>
+  <text class="lbl" x="28" y="199">Client B</text><text class="sub" x="118" y="199">INCR</text>
+  <text class="lbl" x="28" y="233">Ops script</text><text class="sub" x="118" y="233">KEYS</text>
+  <text class="lbl" x="28" y="267">Client C</text><text class="sub" x="118" y="267">GET</text>
+  <text class="lbl" x="28" y="301">Client D</text><text class="sub" x="118" y="301">SET</text>
+
+  <!-- lanes -->
+  <rect class="lane" x="160" y="94" width="620" height="32" rx="6"/>
+  <rect class="lane" x="160" y="150" width="620" height="22" rx="5"/>
+  <rect class="lane" x="160" y="184" width="620" height="22" rx="5"/>
+  <rect class="lane" x="160" y="218" width="620" height="22" rx="5"/>
+  <rect class="lane" x="160" y="252" width="620" height="22" rx="5"/>
+  <rect class="lane" x="160" y="286" width="620" height="22" rx="5"/>
+
+  <!-- main thread: serial execution -->
+  <rect class="run" x="164" y="98" width="40" height="24" rx="4"/><text class="tl" x="184" y="115" text-anchor="middle">GET</text>
+  <rect class="run" x="208" y="98" width="40" height="24" rx="4"/><text class="tl" x="228" y="115" text-anchor="middle">INCR</text>
+  <rect class="bad" x="252" y="98" width="308" height="24" rx="4"/><text class="tl" x="406" y="115" text-anchor="middle">KEYS k:9999*  (175 ms)</text>
+  <rect class="run" x="564" y="98" width="40" height="24" rx="4"/><text class="tl" x="584" y="115" text-anchor="middle">GET</text>
+  <rect class="run" x="608" y="98" width="40" height="24" rx="4"/><text class="tl" x="628" y="115" text-anchor="middle">SET</text>
+
+  <!-- client A -->
+  <rect class="run" x="164" y="152" width="40" height="18" rx="3"/><text class="ok" x="210" y="167">✓</text>
+  <!-- client B -->
+  <rect class="wait" x="184" y="186" width="24" height="18" rx="3"/>
+  <rect class="run" x="208" y="186" width="40" height="18" rx="3"/><text class="ok" x="254" y="201">✓</text>
+  <!-- ops script -->
+  <rect class="wait" x="236" y="220" width="16" height="18" rx="3"/>
+  <rect class="bad" x="252" y="220" width="308" height="18" rx="3"/><text class="tl" x="406" y="234" text-anchor="middle">scanning 1M keys</text><text class="ok" x="566" y="235">✓</text>
+  <!-- client C -->
+  <rect class="wait" x="300" y="254" width="264" height="18" rx="3"/><text class="wt" x="432" y="268" text-anchor="middle">waiting for KEYS</text>
+  <rect class="run" x="564" y="254" width="40" height="18" rx="3"/><text class="ok" x="610" y="269">✓</text>
+  <!-- client D -->
+  <rect class="wait" x="420" y="288" width="188" height="18" rx="3"/><text class="wt" x="514" y="302" text-anchor="middle">waiting</text>
+  <rect class="run" x="608" y="288" width="40" height="18" rx="3"/><text class="ok" x="654" y="303">✓</text>
+
+
+  <g class="mv"><rect class="cover" x="157" y="86" width="640" height="226"/></g>
+  <g class="lo">
+    <rect x="160" y="94" width="620" height="32" rx="6"/><rect x="160" y="150" width="620" height="22" rx="5"/><rect x="160" y="184" width="620" height="22" rx="5"/>
+    <rect x="160" y="218" width="620" height="22" rx="5"/><rect x="160" y="252" width="620" height="22" rx="5"/><rect x="160" y="286" width="620" height="22" rx="5"/>
+  </g>
+
+  <!-- the future is hidden behind a cover that slides right with the "now" line -->
+  <g class="mv">
+    <line class="ph" x1="158" y1="86" x2="158" y2="314"/>
+    <text class="pht" x="158" y="82" text-anchor="middle">now</text>
+  </g>
+  <!-- legend -->
+  <rect class="run" x="28" y="330" width="14" height="14" rx="3"/><text class="wt" x="48" y="342">executing</text>
+  <rect class="wait" x="130" y="330" width="14" height="14" rx="3"/><text class="wt" x="150" y="342">queued, waiting</text>
+  <text class="ok" x="272" y="343">✓</text><text class="wt" x="288" y="342">reply sent</text>
+  <text class="sub" x="28" y="366">Not to scale: GET and SET take microseconds. KEYS over 1M keys took 175 ms in this page's test.</text>
+</svg>

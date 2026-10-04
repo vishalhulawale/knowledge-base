@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 404" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Plain DEL releases the wrong lock</title>
+  <desc id="d">Animated timeline of the key lock:job and three workers. Worker A acquires the lock with token tokA and a 300 ms TTL but keeps working after the TTL ends. Worker B then acquires it with tokB. When A finishes it runs a plain DEL, which removes B's lock, so worker C acquires it with tokC while B is still working: B and C both think they hold the lock. With a token-checked Lua release, A's release returns 0 and the lock stays with B.</desc>
+  <style>
+    .arr{stroke:#64748b;stroke-width:1.8;fill:none}
+    .ah{fill:#64748b}
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .pt{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .panel{fill:#ffffff;stroke:#e2e8f0}
+    .pri{fill:#4f46e5}.prs{stroke:#4f46e5}
+    .teal{fill:#0ea5a4}.tls{stroke:#0ea5a4}
+    .okf{fill:#16a34a}.oks{stroke:#16a34a}
+    .badf{fill:#dc2626}.bads{stroke:#dc2626}
+    .warnf{fill:#d97706}.warns{stroke:#d97706}
+    .soft-ok{fill:#16a34a;fill-opacity:.14;stroke:#16a34a}
+    .soft-bad{fill:#dc2626;fill-opacity:.12;stroke:#dc2626}
+    .soft-warn{fill:#d97706;fill-opacity:.16;stroke:#d97706}
+    .soft-pri{fill:#4f46e5;fill-opacity:.12;stroke:#4f46e5}
+    .soft-teal{fill:#0ea5a4;fill-opacity:.14;stroke:#0ea5a4}
+    .tl{fill:#ffffff;font-size:13px;font-weight:700}
+    .tlb{fill:#ffffff;font-size:14px;font-weight:700}
+    .prt{fill:#4f46e5;font-weight:700}
+    .tealt{fill:#0f766e;font-weight:700}
+    .okt{fill:#15803d;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}
+    .warnt{fill:#b45309;font-weight:700}
+    .dash{stroke-dasharray:5 4}
+    @media (prefers-color-scheme: dark){
+      .arr{stroke:#94a3b8}.ah{fill:#94a3b8}
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.pt{fill:#f1f5f9}.lbl,.body,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .panel{fill:#171b24;stroke:#334155}
+      .pri{fill:#818cf8}.prs{stroke:#818cf8}
+      .teal{fill:#2dd4bf}.tls{stroke:#2dd4bf}
+      .okf{fill:#4ade80}.oks{stroke:#4ade80}
+      .badf{fill:#f87171}.bads{stroke:#f87171}
+      .warnf{fill:#fbbf24}.warns{stroke:#fbbf24}
+      .soft-ok{fill:#4ade80;stroke:#4ade80}
+      .soft-bad{fill:#f87171;stroke:#f87171}
+      .soft-warn{fill:#fbbf24;stroke:#fbbf24}
+      .soft-pri{fill:#818cf8;stroke:#818cf8}
+      .soft-teal{fill:#2dd4bf;stroke:#2dd4bf}
+      .tl,.tlb{fill:#0f172a}
+      .prt{fill:#a5b4fc}.tealt{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+    }
+
+    .cover{fill:#f8fafc}.lo{fill:none;stroke:#cbd5e1}.ph{stroke:#0ea5a4;stroke-width:2.5}
+    @media (prefers-color-scheme: dark){.cover{fill:#1f2430}.lo{stroke:#475569}.ph{stroke:#2dd4bf}}
+    @keyframes now{0%,5%{transform:translateX(0)}75%,95%{transform:translateX(625px)}100%{transform:translateX(0)}}
+    .mv{animation:now 12s infinite linear}
+    @keyframes vd{0%,70%{opacity:0}74%,95%{opacity:1}97%,100%{opacity:0}}.vd{opacity:0;animation:vd 12s infinite linear}
+    @media (prefers-reduced-motion: reduce){.mv{animation:none;transform:translateX(625px)}.vd{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="402" rx="14"/>
+  <text class="h" x="28" y="40">Releasing with plain DEL deletes someone else's lock</text>
+  <text class="sub" x="28" y="62">A's lock expires while A is still working. B takes it, then A's DEL removes B's lock.</text>
+  <text class="lbl mono" x="28" y="122.0">lock:job</text>
+  <rect class="box" x="150" y="102" width="626" height="30" rx="5"/>
+  <text class="lbl " x="28" y="177.0">Worker A</text>
+  <rect class="box" x="150" y="160" width="626" height="24" rx="5"/>
+  <text class="lbl " x="28" y="227.0">Worker B</text>
+  <rect class="box" x="150" y="210" width="626" height="24" rx="5"/>
+  <text class="lbl " x="28" y="277.0">Worker C</text>
+  <rect class="box" x="150" y="260" width="626" height="24" rx="5"/>
+  <rect class="pri" x="170" y="105" width="130" height="24" rx="4"/><text class="tl" x="235" y="122" text-anchor="middle">tokA</text>
+  <rect class="teal" x="340" y="105" width="130" height="24" rx="4"/><text class="tl" x="405" y="122" text-anchor="middle">tokB</text>
+  <rect class="warnf" x="520" y="105" width="252" height="24" rx="4"/><text class="tl" x="646" y="122" text-anchor="middle">tokC</text>
+  <text class="sub" x="300" y="96" text-anchor="middle">TTL ends</text>
+  <rect class="soft-pri" x="170" y="163" width="300" height="18" rx="4"/><text class="sm" x="180" y="177">A works (longer than its 300 ms TTL)</text>
+  <rect class="soft-teal" x="340" y="213" width="360" height="18" rx="4"/><text class="sm" x="350" y="227">B works</text>
+  <rect class="soft-warn" x="520" y="263" width="252" height="18" rx="4"/><text class="sm" x="530" y="277">C works</text>
+  <line class="arr bads " x1="470" y1="160" x2="482.9" y2="141.4"/><path class="badf " d="M488 134 L486.6 144.0 L479.2 138.8z"/>
+  <text class="badt" x="494" y="152" font-size="13">DEL</text>
+  <rect class="soft-bad" x="518" y="206" width="186" height="80" rx="6" fill-opacity="0" stroke-dasharray="5 3" stroke-width="2"/>
+  <g class="mv"><rect class="cover" x="153" y="76" width="640" height="240"/></g>
+  <rect class="lo" x="150" y="102" width="626" height="30" rx="5"/>
+  <rect class="lo" x="150" y="160" width="626" height="24" rx="5"/>
+  <rect class="lo" x="150" y="210" width="626" height="24" rx="5"/>
+  <rect class="lo" x="150" y="260" width="626" height="24" rx="5"/>
+  <g class="mv"><line class="ph" x1="154" y1="80" x2="154" y2="292"/></g>
+  <text class="badt vd" x="772" y="306" text-anchor="end" font-size="14">B and C both think they hold the lock</text>
+  <text class="okt" x="28" y="346" font-size="14">Token-checked release: A runs the Lua compare-and-delete, gets 0,</text>
+  <text class="okt" x="28" y="366" font-size="14">and the lock stays with B. C keeps waiting.</text>
+  <text class="sub" x="28" y="390">Reproduced on this page with a 300 ms lock TTL. Times not to scale.</text>
+</svg>

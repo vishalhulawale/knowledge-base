@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 412" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Spring cache proxy and self-invocation</title>
+  <desc id="d">Animation of the Spring cache proxy. Another bean, OrderController, calls find(42); the call enters the proxy, where the CacheInterceptor checks the Redis key products::42 before the method runs. Then the findAll method inside ProductService calls this.find(42) directly. That call stays inside the target object, never passes the interceptor, and goes to the database every time. Measured: two such calls made 2 database calls and left no Redis key.</desc>
+  <style>
+    .arr{stroke:#64748b;stroke-width:1.8;fill:none}
+    .ah{fill:#64748b}
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .pt{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .panel{fill:#ffffff;stroke:#e2e8f0}
+    .pri{fill:#4f46e5}.prs{stroke:#4f46e5}
+    .teal{fill:#0ea5a4}.tls{stroke:#0ea5a4}
+    .okf{fill:#16a34a}.oks{stroke:#16a34a}
+    .badf{fill:#dc2626}.bads{stroke:#dc2626}
+    .warnf{fill:#d97706}.warns{stroke:#d97706}
+    .soft-ok{fill:#16a34a;fill-opacity:.14;stroke:#16a34a}
+    .soft-bad{fill:#dc2626;fill-opacity:.12;stroke:#dc2626}
+    .soft-warn{fill:#d97706;fill-opacity:.16;stroke:#d97706}
+    .soft-pri{fill:#4f46e5;fill-opacity:.12;stroke:#4f46e5}
+    .soft-teal{fill:#0ea5a4;fill-opacity:.14;stroke:#0ea5a4}
+    .tl{fill:#ffffff;font-size:13px;font-weight:700}
+    .tlb{fill:#ffffff;font-size:14px;font-weight:700}
+    .prt{fill:#4f46e5;font-weight:700}
+    .tealt{fill:#0f766e;font-weight:700}
+    .okt{fill:#15803d;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}
+    .warnt{fill:#b45309;font-weight:700}
+    .dash{stroke-dasharray:5 4}
+    @media (prefers-color-scheme: dark){
+      .arr{stroke:#94a3b8}.ah{fill:#94a3b8}
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.pt{fill:#f1f5f9}.lbl,.body,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .panel{fill:#171b24;stroke:#334155}
+      .pri{fill:#818cf8}.prs{stroke:#818cf8}
+      .teal{fill:#2dd4bf}.tls{stroke:#2dd4bf}
+      .okf{fill:#4ade80}.oks{stroke:#4ade80}
+      .badf{fill:#f87171}.bads{stroke:#f87171}
+      .warnf{fill:#fbbf24}.warns{stroke:#fbbf24}
+      .soft-ok{fill:#4ade80;stroke:#4ade80}
+      .soft-bad{fill:#f87171;stroke:#f87171}
+      .soft-warn{fill:#fbbf24;stroke:#fbbf24}
+      .soft-pri{fill:#818cf8;stroke:#818cf8}
+      .soft-teal{fill:#2dd4bf;stroke:#2dd4bf}
+      .tl,.tlb{fill:#0f172a}
+      .prt{fill:#a5b4fc}.tealt{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+    }
+    @keyframes kw0_48{0%,46.5%{opacity:1}48%,97.5%{opacity:0}100%{opacity:1}}
+    .w0_48{opacity:0;animation:kw0_48 12s infinite linear}
+    @keyframes kw48_96{0%,46.5%{opacity:0}48%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w48_96{opacity:0;animation:kw48_96 12s infinite linear}
+
+    @keyframes kA{0%{transform:translate(186px,170px);opacity:1}14%{transform:translate(274px,142px)}26%,32%{transform:translate(612px,142px)}44%,46%{transform:translate(548px,142px);opacity:1}48%,100%{transform:translate(548px,142px);opacity:0}}
+    @keyframes kB{0%,48%{transform:translate(186px,206px);opacity:0}50%{transform:translate(186px,206px);opacity:1}62%{transform:translate(296px,292px)}74%{transform:translate(296px,240px)}86%,94%{transform:translate(612px,268px);opacity:1}96%,100%{opacity:0;transform:translate(612px,268px)}}
+    .mvA{animation:kA 12s infinite linear}.mvB{animation:kB 12s infinite linear}
+    @media (prefers-reduced-motion: reduce){.w48_96{animation:none;opacity:1}.w0_48{animation:none;opacity:0}.mvA,.mvB{animation:none;opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="410" rx="14"/>
+  <text class="h" x="28" y="40">Caching lives in the proxy, not in your method</text>
+  <text class="sub" x="28" y="62">Only calls that enter through the proxy reach the cache interceptor.</text>
+  <rect class="box" x="24" y="150" width="160" height="70" rx="10"/>
+  <text class="lbl" x="40" y="178">Another bean</text><text class="sub" x="40" y="200">OrderController</text>
+  <rect class="soft-pri dash" x="232" y="88" width="340" height="252" rx="14" stroke-width="1.8"/>
+  <text class="prt" x="248" y="112" font-size="14">Spring cache proxy</text>
+  <rect class="box" x="276" y="124" width="270" height="36" rx="8"/><text class="lbl" x="292" y="147">CacheInterceptor</text>
+  <rect class="panel" x="276" y="180" width="270" height="146" rx="10"/>
+  <text class="sub" x="292" y="202">ProductService (target object)</text>
+  <rect class="box" x="292" y="216" width="238" height="34" rx="7"/><text class="sm mono" x="304" y="238">find(id)</text><text class="tealt" x="420" y="238" font-size="13">@Cacheable</text>
+  <rect class="box" x="292" y="276" width="238" height="34" rx="7"/><text class="sm mono" x="304" y="298">findAll(ids)</text>
+  <rect class="box" x="622" y="116" width="154" height="52" rx="10"/><text class="lbl" x="638" y="138">Redis</text><text class="sm mono" x="638" y="158">products::42</text>
+  <rect class="box" x="622" y="250" width="154" height="52" rx="10"/><text class="lbl" x="638" y="272">Database</text><text class="sub" x="638" y="292">repository call</text>
+  <line class="arr oks " x1="186" y1="170" x2="265.4" y2="144.7"/><path class="okf " d="M274 142 L266.8 149.0 L264.1 140.4z"/>
+  <line class="arr oks " x1="548" y1="142" x2="611.0" y2="142.0"/><path class="okf " d="M620 142 L611.0 146.5 L611.0 137.5z"/>
+  <line class="arr bads " x1="186" y1="206" x2="283.0" y2="284.3"/><path class="badf " d="M290 290 L280.2 287.8 L285.8 280.8z"/>
+  <path class="arr bads" d="M300 276 C 262 268, 262 248, 286 238"/>
+  <path class="badf" d="M291 236 l-9 -2 l3 8z"/>
+  <line class="arr bads dash " x1="532" y1="233" x2="611.6" y2="264.7"/><path class="badf " d="M620 268 L610.0 268.9 L613.3 260.5z"/>
+  <text class="badt" x="304" y="268" font-size="13">this.find(42): no interceptor</text>
+  <circle class="okf mvA" cx="0" cy="0" r="7"/>
+  <circle class="badf mvB" cx="0" cy="0" r="7"/>
+  <text class="okt w0_48" x="28" y="370" font-size="15">1  Another bean calls find(42). The interceptor checks Redis first.</text>
+  <text class="badt w48_96" x="28" y="370" font-size="15">2  findAll calls this.find(42) inside the object: no proxy, no cache.</text>
+  <text class="sub" x="28" y="396">Measured: two findViaThis(1) calls made 2 database calls and left no Redis key.</text>
+</svg>

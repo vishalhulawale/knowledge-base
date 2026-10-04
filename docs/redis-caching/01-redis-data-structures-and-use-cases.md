@@ -34,6 +34,9 @@ flowchart LR
 ```
 *Notice that command execution is serial. That gives atomicity for free (an `INCR` can't interleave with another), but one O(N) command on a large key delays every other client.*
 
+![Animation: a timeline of the Redis main thread running GET and INCR, then a 175 ms KEYS command, while a GET and a SET from other clients wait in the queue until KEYS finishes](images/01-single-thread-timeline.svg){ loading=lazy }
+*Watch clients C and D: their commands are cheap, but they can't start until `KEYS` finishes.*
+
 - **In memory:** a lookup is a hash-table probe in RAM, typically well under a millisecond. Network round trips usually dominate, so **pipelining** and batching matter more than server speed.
 - **Single-threaded execution:** no locks inside the data structures. Redis 6 added I/O threads for reading and writing sockets, but commands still execute on one thread. Scale CPU by sharding (Redis Cluster) rather than by bigger cores.
 - **Durability is optional:** RDB snapshots and the AOF log are covered in [persistence and replication](06-persistence-replication-sentinel-and-cluster.md). Treat a cache as losable unless you configure otherwise.
@@ -54,6 +57,9 @@ flowchart LR
 | **Pub/Sub** | Fire-and-forget channels | `PUBLISH`, `SUBSCRIBE` | Cache-invalidation broadcast (no persistence) |
 
 Redis Stack modules (JSON, search and query, time series, Bloom filters) were folded into the core distribution in Redis 8. Redis 7.4 also added per-field expiry on hashes (`HEXPIRE`).
+
+![Six panels showing what one key holds for each type: a single string value, a hash of fields and values, a list in insertion order with LPUSH and RPOP ends, a set of unique unordered tags, a sorted set ordered by score with ranks, and a stream of entries with IDs and a consumer group's last-delivered position](images/01-data-type-shapes.svg){ loading=lazy }
+*Notice what each type keeps track of: order (list), uniqueness (set), score order (sorted set) or delivery position (stream).*
 
 ### Encodings: small is compact
 

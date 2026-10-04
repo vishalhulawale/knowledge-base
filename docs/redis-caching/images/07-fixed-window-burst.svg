@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Fixed window vs sliding log</title>
+  <desc id="d">Two timelines of 40 requests within 90 ms around the 1-second boundary, with a limit of 10 per second. Fixed window: the first 10 requests before the boundary are allowed, the next 10 rejected, then the counter resets at 1.000 s and 10 more are allowed, so 20 get through in 90 ms. Sliding log: only the first 10 are allowed because every later request is within one second of them. A token bucket with capacity 10 also allowed 10.</desc>
+  <style>
+    .arr{stroke:#64748b;stroke-width:1.8;fill:none}
+    .ah{fill:#64748b}
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .pt{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .panel{fill:#ffffff;stroke:#e2e8f0}
+    .pri{fill:#4f46e5}.prs{stroke:#4f46e5}
+    .teal{fill:#0ea5a4}.tls{stroke:#0ea5a4}
+    .okf{fill:#16a34a}.oks{stroke:#16a34a}
+    .badf{fill:#dc2626}.bads{stroke:#dc2626}
+    .warnf{fill:#d97706}.warns{stroke:#d97706}
+    .soft-ok{fill:#16a34a;fill-opacity:.14;stroke:#16a34a}
+    .soft-bad{fill:#dc2626;fill-opacity:.12;stroke:#dc2626}
+    .soft-warn{fill:#d97706;fill-opacity:.16;stroke:#d97706}
+    .soft-pri{fill:#4f46e5;fill-opacity:.12;stroke:#4f46e5}
+    .soft-teal{fill:#0ea5a4;fill-opacity:.14;stroke:#0ea5a4}
+    .tl{fill:#ffffff;font-size:13px;font-weight:700}
+    .tlb{fill:#ffffff;font-size:14px;font-weight:700}
+    .prt{fill:#4f46e5;font-weight:700}
+    .tealt{fill:#0f766e;font-weight:700}
+    .okt{fill:#15803d;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}
+    .warnt{fill:#b45309;font-weight:700}
+    .dash{stroke-dasharray:5 4}
+    @media (prefers-color-scheme: dark){
+      .arr{stroke:#94a3b8}.ah{fill:#94a3b8}
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.pt{fill:#f1f5f9}.lbl,.body,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .panel{fill:#171b24;stroke:#334155}
+      .pri{fill:#818cf8}.prs{stroke:#818cf8}
+      .teal{fill:#2dd4bf}.tls{stroke:#2dd4bf}
+      .okf{fill:#4ade80}.oks{stroke:#4ade80}
+      .badf{fill:#f87171}.bads{stroke:#f87171}
+      .warnf{fill:#fbbf24}.warns{stroke:#fbbf24}
+      .soft-ok{fill:#4ade80;stroke:#4ade80}
+      .soft-bad{fill:#f87171;stroke:#f87171}
+      .soft-warn{fill:#fbbf24;stroke:#fbbf24}
+      .soft-pri{fill:#818cf8;stroke:#818cf8}
+      .soft-teal{fill:#2dd4bf;stroke:#2dd4bf}
+      .tl,.tlb{fill:#0f172a}
+      .prt{fill:#a5b4fc}.tealt{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+    }
+
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Fixed window lets a burst through at the boundary</text>
+  <text class="sub" x="28" y="62">Limit 10 per second. 40 requests arrive within 90 ms: 20 just before the 1 s boundary, 20 just after.</text>
+  <line class="arr dash" x1="460.0" y1="84" x2="460.0" y2="330" stroke-width="1.5"/>
+  <text class="sub" x="460.0" y="346" text-anchor="middle">t = 1.000 s: fixed-window boundary</text>
+  <text class="lbl" x="28" y="135">Fixed window</text>
+  <line class="arr" x1="150" y1="130" x2="770" y2="130" stroke-width="1"/>
+  <circle class="okf" cx="181.0" cy="130" r="6"/>
+  <circle class="okf" cx="195.4" cy="130" r="6"/>
+  <circle class="okf" cx="209.7" cy="130" r="6"/>
+  <circle class="okf" cx="224.1" cy="130" r="6"/>
+  <circle class="okf" cx="238.4" cy="130" r="6"/>
+  <circle class="okf" cx="252.8" cy="130" r="6"/>
+  <circle class="okf" cx="267.1" cy="130" r="6"/>
+  <circle class="okf" cx="281.5" cy="130" r="6"/>
+  <circle class="okf" cx="295.9" cy="130" r="6"/>
+  <circle class="okf" cx="310.2" cy="130" r="6"/>
+  <circle class="box" cx="324.6" cy="130" r="6"/>
+  <circle class="box" cx="338.9" cy="130" r="6"/>
+  <circle class="box" cx="353.3" cy="130" r="6"/>
+  <circle class="box" cx="367.7" cy="130" r="6"/>
+  <circle class="box" cx="382.0" cy="130" r="6"/>
+  <circle class="box" cx="396.4" cy="130" r="6"/>
+  <circle class="box" cx="410.7" cy="130" r="6"/>
+  <circle class="box" cx="425.1" cy="130" r="6"/>
+  <circle class="box" cx="439.4" cy="130" r="6"/>
+  <circle class="box" cx="453.8" cy="130" r="6"/>
+  <circle class="okf" cx="466.2" cy="130" r="6"/>
+  <circle class="okf" cx="480.6" cy="130" r="6"/>
+  <circle class="okf" cx="494.9" cy="130" r="6"/>
+  <circle class="okf" cx="509.3" cy="130" r="6"/>
+  <circle class="okf" cx="523.6" cy="130" r="6"/>
+  <circle class="okf" cx="538.0" cy="130" r="6"/>
+  <circle class="okf" cx="552.3" cy="130" r="6"/>
+  <circle class="okf" cx="566.7" cy="130" r="6"/>
+  <circle class="okf" cx="581.1" cy="130" r="6"/>
+  <circle class="okf" cx="595.4" cy="130" r="6"/>
+  <circle class="box" cx="609.8" cy="130" r="6"/>
+  <circle class="box" cx="624.1" cy="130" r="6"/>
+  <circle class="box" cx="638.5" cy="130" r="6"/>
+  <circle class="box" cx="652.9" cy="130" r="6"/>
+  <circle class="box" cx="667.2" cy="130" r="6"/>
+  <circle class="box" cx="681.6" cy="130" r="6"/>
+  <circle class="box" cx="695.9" cy="130" r="6"/>
+  <circle class="box" cx="710.3" cy="130" r="6"/>
+  <circle class="box" cx="724.6" cy="130" r="6"/>
+  <circle class="box" cx="739.0" cy="130" r="6"/>
+  <text class="badt" x="150" y="170" font-size="14">20 allowed in 90 ms</text>
+  <text class="lbl" x="28" y="255">Sliding log</text>
+  <line class="arr" x1="150" y1="250" x2="770" y2="250" stroke-width="1"/>
+  <circle class="okf" cx="181.0" cy="250" r="6"/>
+  <circle class="okf" cx="195.4" cy="250" r="6"/>
+  <circle class="okf" cx="209.7" cy="250" r="6"/>
+  <circle class="okf" cx="224.1" cy="250" r="6"/>
+  <circle class="okf" cx="238.4" cy="250" r="6"/>
+  <circle class="okf" cx="252.8" cy="250" r="6"/>
+  <circle class="okf" cx="267.1" cy="250" r="6"/>
+  <circle class="okf" cx="281.5" cy="250" r="6"/>
+  <circle class="okf" cx="295.9" cy="250" r="6"/>
+  <circle class="okf" cx="310.2" cy="250" r="6"/>
+  <circle class="box" cx="324.6" cy="250" r="6"/>
+  <circle class="box" cx="338.9" cy="250" r="6"/>
+  <circle class="box" cx="353.3" cy="250" r="6"/>
+  <circle class="box" cx="367.7" cy="250" r="6"/>
+  <circle class="box" cx="382.0" cy="250" r="6"/>
+  <circle class="box" cx="396.4" cy="250" r="6"/>
+  <circle class="box" cx="410.7" cy="250" r="6"/>
+  <circle class="box" cx="425.1" cy="250" r="6"/>
+  <circle class="box" cx="439.4" cy="250" r="6"/>
+  <circle class="box" cx="453.8" cy="250" r="6"/>
+  <circle class="box" cx="466.2" cy="250" r="6"/>
+  <circle class="box" cx="480.6" cy="250" r="6"/>
+  <circle class="box" cx="494.9" cy="250" r="6"/>
+  <circle class="box" cx="509.3" cy="250" r="6"/>
+  <circle class="box" cx="523.6" cy="250" r="6"/>
+  <circle class="box" cx="538.0" cy="250" r="6"/>
+  <circle class="box" cx="552.3" cy="250" r="6"/>
+  <circle class="box" cx="566.7" cy="250" r="6"/>
+  <circle class="box" cx="581.1" cy="250" r="6"/>
+  <circle class="box" cx="595.4" cy="250" r="6"/>
+  <circle class="box" cx="609.8" cy="250" r="6"/>
+  <circle class="box" cx="624.1" cy="250" r="6"/>
+  <circle class="box" cx="638.5" cy="250" r="6"/>
+  <circle class="box" cx="652.9" cy="250" r="6"/>
+  <circle class="box" cx="667.2" cy="250" r="6"/>
+  <circle class="box" cx="681.6" cy="250" r="6"/>
+  <circle class="box" cx="695.9" cy="250" r="6"/>
+  <circle class="box" cx="710.3" cy="250" r="6"/>
+  <circle class="box" cx="724.6" cy="250" r="6"/>
+  <circle class="box" cx="739.0" cy="250" r="6"/>
+  <text class="okt" x="150" y="290" font-size="14">10 allowed</text>
+  <text class="sub" x="452.0" y="108" text-anchor="end">window 0–1 s: count 10, then rejects</text>
+  <text class="sub" x="468.0" y="108">window 1–2 s: counter starts at 0</text>
+  <text class="sub" x="468.0" y="228">still inside the last second: rejected</text>
+  <circle class="okf" cx="34" cy="378" r="6"/><text class="sm" x="46" y="383">allowed</text>
+  <circle class="box" cx="124" cy="378" r="6"/><text class="sm" x="136" y="383">rejected (429)</text>
+  <text class="sub" x="260" y="383">Measured on this page. A token bucket (capacity 10) also allowed 10.</text>
+</svg>

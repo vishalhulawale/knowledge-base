@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Spring cache key anatomy</title>
+  <desc id="d">A Redis cache key is built from four parts: the prefix rc:v1: (namespace and version), the cache name products, the separator two colons, and the key from SpEL or SimpleKey, here 1, giving rc:v1:products::1. Below, two methods countryName("IN") and currencyName("IN") both use the cache name refdata with default keys, so both map to rc:v1:refdata::IN, and currencyName returned "country:IN" without running. The fix is one cache per method or an explicit key such as 'currency:' + #code.</desc>
+  <style>
+    .arr{stroke:#64748b;stroke-width:1.8;fill:none}
+    .ah{fill:#64748b}
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .pt{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .panel{fill:#ffffff;stroke:#e2e8f0}
+    .pri{fill:#4f46e5}.prs{stroke:#4f46e5}
+    .teal{fill:#0ea5a4}.tls{stroke:#0ea5a4}
+    .okf{fill:#16a34a}.oks{stroke:#16a34a}
+    .badf{fill:#dc2626}.bads{stroke:#dc2626}
+    .warnf{fill:#d97706}.warns{stroke:#d97706}
+    .soft-ok{fill:#16a34a;fill-opacity:.14;stroke:#16a34a}
+    .soft-bad{fill:#dc2626;fill-opacity:.12;stroke:#dc2626}
+    .soft-warn{fill:#d97706;fill-opacity:.16;stroke:#d97706}
+    .soft-pri{fill:#4f46e5;fill-opacity:.12;stroke:#4f46e5}
+    .soft-teal{fill:#0ea5a4;fill-opacity:.14;stroke:#0ea5a4}
+    .tl{fill:#ffffff;font-size:13px;font-weight:700}
+    .tlb{fill:#ffffff;font-size:14px;font-weight:700}
+    .prt{fill:#4f46e5;font-weight:700}
+    .tealt{fill:#0f766e;font-weight:700}
+    .okt{fill:#15803d;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}
+    .warnt{fill:#b45309;font-weight:700}
+    .dash{stroke-dasharray:5 4}
+    @media (prefers-color-scheme: dark){
+      .arr{stroke:#94a3b8}.ah{fill:#94a3b8}
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.pt{fill:#f1f5f9}.lbl,.body,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .panel{fill:#171b24;stroke:#334155}
+      .pri{fill:#818cf8}.prs{stroke:#818cf8}
+      .teal{fill:#2dd4bf}.tls{stroke:#2dd4bf}
+      .okf{fill:#4ade80}.oks{stroke:#4ade80}
+      .badf{fill:#f87171}.bads{stroke:#f87171}
+      .warnf{fill:#fbbf24}.warns{stroke:#fbbf24}
+      .soft-ok{fill:#4ade80;stroke:#4ade80}
+      .soft-bad{fill:#f87171;stroke:#f87171}
+      .soft-warn{fill:#fbbf24;stroke:#fbbf24}
+      .soft-pri{fill:#818cf8;stroke:#818cf8}
+      .soft-teal{fill:#2dd4bf;stroke:#2dd4bf}
+      .tl,.tlb{fill:#0f172a}
+      .prt{fill:#a5b4fc}.tealt{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+    }
+
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">How RedisCacheManager builds a key</text>
+  <text class="sub" x="28" y="62">prefix + cache name + "::" + key. The method name is not part of it.</text>
+  <rect class="soft-teal" x="36" y="86" width="104" height="44" rx="8"/>
+  <text class="tealt mono" x="88.0" y="115" text-anchor="middle" font-size="18">rc:v1:</text>
+  <text class="lbl" x="88.0" y="152" text-anchor="middle">prefix</text>
+  <rect class="soft-pri" x="152" y="86" width="134" height="44" rx="8"/>
+  <text class="prt mono" x="219.0" y="115" text-anchor="middle" font-size="18">products</text>
+  <text class="lbl" x="219.0" y="152" text-anchor="middle">cache name</text>
+  <rect class="box" x="298" y="86" width="54" height="44" rx="8"/>
+  <text class="sub mono" x="325.0" y="115" text-anchor="middle" font-size="18">::</text>
+  <text class="lbl" x="325.0" y="152" text-anchor="middle">separator</text>
+  <rect class="soft-warn" x="372" y="86" width="54" height="44" rx="8"/>
+  <text class="warnt mono" x="399.0" y="115" text-anchor="middle" font-size="18">1</text>
+  <text class="lbl" x="399.0" y="152" text-anchor="middle">key</text>
+  <text class="sm" x="470" y="100">Measured key for find(1):</text>
+  <text class="sm mono" x="470" y="122">rc:v1:products::1</text>
+  <text class="sub" x="470" y="146">The prefix carries a version: bump</text>
+  <text class="sub" x="470" y="164">it when the cached class changes.</text>
+  <rect class="panel" x="20" y="194" width="760" height="208" rx="10"/>
+  <text class="badt" x="36" y="220" font-size="15">✗  Two methods, one cache name, default keys</text>
+  <rect class="box" x="36" y="236" width="270" height="44" rx="8"/><text class="sm mono" x="48" y="256">@Cacheable("refdata")</text><text class="sm mono" x="48" y="273">countryName("IN")</text>
+  <rect class="box" x="36" y="294" width="270" height="44" rx="8"/><text class="sm mono" x="48" y="314">@Cacheable("refdata")</text><text class="sm mono" x="48" y="331">currencyName("IN")</text>
+  <line class="arr bads " x1="308" y1="258" x2="429.1" y2="280.4"/><path class="badf " d="M438 282 L428.3 284.8 L430.0 275.9z"/>
+  <line class="arr bads " x1="308" y1="316" x2="429.1" y2="295.5"/><path class="badf " d="M438 294 L429.9 299.9 L428.4 291.1z"/>
+  <rect class="soft-bad" x="442" y="266" width="196" height="44" rx="8"/><text class="badt mono" x="540" y="294" text-anchor="middle" font-size="15">rc:v1:refdata::IN</text>
+  <text class="sm" x="442" y="332">currencyName("IN") returned</text>
+  <text class="sm" x="442" y="352">"country:IN" without running.</text>
+  <text class="okt" x="36" y="370" font-size="14">Fix: one cache per method, or an explicit key:</text>
+  <text class="sm mono" x="36" y="392">key = "'currency:' + #code"   or   cacheNames = "currencies"</text>
+</svg>

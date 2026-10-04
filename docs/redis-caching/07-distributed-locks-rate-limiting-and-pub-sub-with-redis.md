@@ -60,6 +60,9 @@ Why each part matters (measured):
 
 The last two rows are also a lesson: for a counter, use `INCR`, which is atomic without any lock. Reach for a lock only when the critical section spans several systems.
 
+![Animation: a timeline of lock:job and three workers. A's 300 ms lock expires while A still works, B acquires the lock, A's plain DEL removes B's lock, and C acquires it while B is still working, so B and C both hold it](images/07-naive-del-lock.svg){ loading=lazy }
+*Watch the gap after A's `DEL`: the lock is free again while B is still working, so C walks straight in.*
+
 ### Locks are leases: the pause problem and fencing tokens
 
 ```mermaid
@@ -107,6 +110,9 @@ Measured with a limit of 10 per second and 40 requests bunched into 90 ms around
 | Fixed window | **20** (10 in each window) |
 | Sliding log | 10 |
 | Token bucket (capacity 10, refill 10/s) | 10 |
+
+![Two timelines of 40 requests within 90 ms around a 1-second boundary with a limit of 10 per second. The fixed window allows 10 before the boundary and 10 more after it resets, 20 in total. The sliding log allows only the first 10](images/07-fixed-window-burst.svg){ loading=lazy }
+*Notice that the fixed-window counter resets at the boundary, so 20 requests get through in 90 ms while each window still counts only 10.*
 
 And 200 requests at 40 per second over 5 s through the token bucket: **59 allowed** (the initial 10 plus about 49 refilled tokens).
 

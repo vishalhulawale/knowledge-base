@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 364" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Versioned-key invalidation</title>
+  <desc id="d">Animation. A counter key catalog:version holds 41, and cached pages are stored under keys such as catalog:v41:page:1:en. A catalog import runs INCR catalog:version, which becomes 42. Readers now build v42 keys, miss, and reload fresh pages into catalog:v42 keys. The v41 keys are never read again and are removed when their TTL expires.</desc>
+  <style>
+    .arr{stroke:#64748b;stroke-width:1.8;fill:none}
+    .ah{fill:#64748b}
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .pt{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .panel{fill:#ffffff;stroke:#e2e8f0}
+    .pri{fill:#4f46e5}.prs{stroke:#4f46e5}
+    .teal{fill:#0ea5a4}.tls{stroke:#0ea5a4}
+    .okf{fill:#16a34a}.oks{stroke:#16a34a}
+    .badf{fill:#dc2626}.bads{stroke:#dc2626}
+    .warnf{fill:#d97706}.warns{stroke:#d97706}
+    .soft-ok{fill:#16a34a;fill-opacity:.14;stroke:#16a34a}
+    .soft-bad{fill:#dc2626;fill-opacity:.12;stroke:#dc2626}
+    .soft-warn{fill:#d97706;fill-opacity:.16;stroke:#d97706}
+    .soft-pri{fill:#4f46e5;fill-opacity:.12;stroke:#4f46e5}
+    .soft-teal{fill:#0ea5a4;fill-opacity:.14;stroke:#0ea5a4}
+    .tl{fill:#ffffff;font-size:13px;font-weight:700}
+    .tlb{fill:#ffffff;font-size:14px;font-weight:700}
+    .prt{fill:#4f46e5;font-weight:700}
+    .tealt{fill:#0f766e;font-weight:700}
+    .okt{fill:#15803d;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}
+    .warnt{fill:#b45309;font-weight:700}
+    .dash{stroke-dasharray:5 4}
+    @media (prefers-color-scheme: dark){
+      .arr{stroke:#94a3b8}.ah{fill:#94a3b8}
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.pt{fill:#f1f5f9}.lbl,.body,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .panel{fill:#171b24;stroke:#334155}
+      .pri{fill:#818cf8}.prs{stroke:#818cf8}
+      .teal{fill:#2dd4bf}.tls{stroke:#2dd4bf}
+      .okf{fill:#4ade80}.oks{stroke:#4ade80}
+      .badf{fill:#f87171}.bads{stroke:#f87171}
+      .warnf{fill:#fbbf24}.warns{stroke:#fbbf24}
+      .soft-ok{fill:#4ade80;stroke:#4ade80}
+      .soft-bad{fill:#f87171;stroke:#f87171}
+      .soft-warn{fill:#fbbf24;stroke:#fbbf24}
+      .soft-pri{fill:#818cf8;stroke:#818cf8}
+      .soft-teal{fill:#2dd4bf;stroke:#2dd4bf}
+      .tl,.tlb{fill:#0f172a}
+      .prt{fill:#a5b4fc}.tealt{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+    }
+    @keyframes kw0_40{0%,38.5%{opacity:1}40%,97.5%{opacity:0}100%{opacity:1}}
+    .w0_40{opacity:0;animation:kw0_40 12s infinite linear}
+    @keyframes kw40_96{0%,38.5%{opacity:0}40%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w40_96{opacity:0;animation:kw40_96 12s infinite linear}
+    @keyframes kw38_52{0%,36.5%{opacity:0}38%,50.5%{opacity:1}52%,100%{opacity:0}}
+    .w38_52{opacity:0;animation:kw38_52 12s infinite linear}
+    @keyframes kw40_86{0%,38.5%{opacity:0}40%,84.5%{opacity:1}86%,100%{opacity:0}}
+    .w40_86{opacity:0;animation:kw40_86 12s infinite linear}
+    @keyframes kw52_96{0%,50.5%{opacity:0}52%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w52_96{opacity:0;animation:kw52_96 12s infinite linear}
+    @keyframes kw62_96{0%,60.5%{opacity:0}62%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w62_96{opacity:0;animation:kw62_96 12s infinite linear}
+    @keyframes kw72_96{0%,70.5%{opacity:0}72%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w72_96{opacity:0;animation:kw72_96 12s infinite linear}
+    @keyframes kw0_38{0%,36.5%{opacity:1}38%,97.5%{opacity:0}100%{opacity:1}}
+    .w0_38{opacity:0;animation:kw0_38 12s infinite linear}
+    @keyframes kw38_50{0%,36.5%{opacity:0}38%,48.5%{opacity:1}50%,100%{opacity:0}}
+    .w38_50{opacity:0;animation:kw38_50 12s infinite linear}
+    @keyframes kw50_82{0%,48.5%{opacity:0}50%,80.5%{opacity:1}82%,100%{opacity:0}}
+    .w50_82{opacity:0;animation:kw50_82 12s infinite linear}
+    @keyframes kw82_96{0%,80.5%{opacity:0}82%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w82_96{opacity:0;animation:kw82_96 12s infinite linear}
+
+    @media (prefers-reduced-motion: reduce){.w40_86,.w40_96,.w52_96,.w62_96,.w72_96,.w82_96{animation:none;opacity:1}.w0_38,.w0_40,.w38_50,.w38_52,.w50_82{animation:none;opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="362" rx="14"/>
+  <text class="h" x="28" y="40">Versioned keys: invalidate a whole group with one INCR</text>
+  <text class="sub" x="28" y="62">Every cached catalog page has the current version in its key. Bumping the version orphans them all.</text>
+  <rect class="panel" x="20" y="84" width="252" height="206" rx="10"/>
+  <text class="sm mono" x="36" y="112">catalog:version</text>
+  <rect class="box" x="36" y="124" width="100" height="56" rx="8"/>
+  <text class="pt w0_40" x="86" y="161" text-anchor="middle" font-size="26">41</text>
+  <text class="prt w40_96" x="86" y="161" text-anchor="middle" font-size="26">42</text>
+  <text class="warnt mono w38_52" x="148" y="158" font-size="14">INCR</text>
+  <text class="sm" x="36" y="214">Readers build each key as</text>
+  <text class="sm mono" x="36" y="236">catalog:v{version}:</text>
+  <text class="sm mono" x="36" y="256">page:{n}:{locale}</text>
+  <rect class="panel" x="288" y="84" width="492" height="206" rx="10"/>
+  <text class="pt" x="304" y="110">Redis keys</text>
+  <g class="w0_40"><rect class="soft-pri" x="304" y="126" width="226" height="28" rx="6"/><text class="sm mono" x="314" y="146">catalog:v41:page:1:en</text></g>
+  <g class="w40_86"><rect class="box" x="304" y="126" width="226" height="28" rx="6" stroke-dasharray="4 3"/><text class="sub mono" x="314" y="146">catalog:v41:page:1:en</text></g>
+  <g class="w52_96"><rect class="soft-ok" x="540" y="126" width="226" height="28" rx="6"/><text class="sm mono" x="550" y="146">catalog:v42:page:1:en</text></g>
+  <g class="w0_40"><rect class="soft-pri" x="304" y="158" width="226" height="28" rx="6"/><text class="sm mono" x="314" y="178">catalog:v41:page:2:en</text></g>
+  <g class="w40_86"><rect class="box" x="304" y="158" width="226" height="28" rx="6" stroke-dasharray="4 3"/><text class="sub mono" x="314" y="178">catalog:v41:page:2:en</text></g>
+  <g class="w62_96"><rect class="soft-ok" x="540" y="158" width="226" height="28" rx="6"/><text class="sm mono" x="550" y="178">catalog:v42:page:2:en</text></g>
+  <g class="w0_40"><rect class="soft-pri" x="304" y="190" width="226" height="28" rx="6"/><text class="sm mono" x="314" y="210">catalog:v41:page:1:fr</text></g>
+  <g class="w40_86"><rect class="box" x="304" y="190" width="226" height="28" rx="6" stroke-dasharray="4 3"/><text class="sub mono" x="314" y="210">catalog:v41:page:1:fr</text></g>
+  <g class="w72_96"><rect class="soft-ok" x="540" y="190" width="226" height="28" rx="6"/><text class="sm mono" x="550" y="210">catalog:v42:page:1:fr</text></g>
+  <text class="sub w40_86" x="304" y="260">unreachable, removed by TTL</text>
+  <text class="okt w52_96" x="540" y="260" font-size="13">reloaded on the next miss</text>
+  <text class="body w0_38" x="28" y="320">1  Reads use the current version, so keys are catalog:v41:…</text>
+  <text class="body w38_50" x="28" y="320">2  A catalog import runs INCR catalog:version: now 42.</text>
+  <text class="body w50_82" x="28" y="320">3  Reads build v42 keys, miss, and load fresh pages.</text>
+  <text class="body w82_96" x="28" y="320">4  Nobody asks for v41 keys again. Their TTL deletes them.</text>
+  <text class="sub" x="28" y="344">Cost: old keys use memory until their TTL ends, so every versioned key needs a TTL.</text>
+</svg>

@@ -1,0 +1,176 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Cache stampede with and without a lock</title>
+  <desc id="d">Animation in two panels. In both, 8 requests (standing for 200) find the hot key expired. Left, naive cache-aside: every request goes to the database, which runs 200 queries; median latency was 1,173 ms. Right, with a lock: one request gets the lock and loads from the database while the others wait and re-read the cache; once the key is filled they all get a hit. The database runs 1 query and median latency was 2 ms.</desc>
+  <style>
+    .arr{stroke:#64748b;stroke-width:1.8;fill:none}
+    .ah{fill:#64748b}
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .pt{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .panel{fill:#ffffff;stroke:#e2e8f0}
+    .pri{fill:#4f46e5}.prs{stroke:#4f46e5}
+    .teal{fill:#0ea5a4}.tls{stroke:#0ea5a4}
+    .okf{fill:#16a34a}.oks{stroke:#16a34a}
+    .badf{fill:#dc2626}.bads{stroke:#dc2626}
+    .warnf{fill:#d97706}.warns{stroke:#d97706}
+    .soft-ok{fill:#16a34a;fill-opacity:.14;stroke:#16a34a}
+    .soft-bad{fill:#dc2626;fill-opacity:.12;stroke:#dc2626}
+    .soft-warn{fill:#d97706;fill-opacity:.16;stroke:#d97706}
+    .soft-pri{fill:#4f46e5;fill-opacity:.12;stroke:#4f46e5}
+    .soft-teal{fill:#0ea5a4;fill-opacity:.14;stroke:#0ea5a4}
+    .tl{fill:#ffffff;font-size:13px;font-weight:700}
+    .tlb{fill:#ffffff;font-size:14px;font-weight:700}
+    .prt{fill:#4f46e5;font-weight:700}
+    .tealt{fill:#0f766e;font-weight:700}
+    .okt{fill:#15803d;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}
+    .warnt{fill:#b45309;font-weight:700}
+    .dash{stroke-dasharray:5 4}
+    @media (prefers-color-scheme: dark){
+      .arr{stroke:#94a3b8}.ah{fill:#94a3b8}
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.pt{fill:#f1f5f9}.lbl,.body,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .panel{fill:#171b24;stroke:#334155}
+      .pri{fill:#818cf8}.prs{stroke:#818cf8}
+      .teal{fill:#2dd4bf}.tls{stroke:#2dd4bf}
+      .okf{fill:#4ade80}.oks{stroke:#4ade80}
+      .badf{fill:#f87171}.bads{stroke:#f87171}
+      .warnf{fill:#fbbf24}.warns{stroke:#fbbf24}
+      .soft-ok{fill:#4ade80;stroke:#4ade80}
+      .soft-bad{fill:#f87171;stroke:#f87171}
+      .soft-warn{fill:#fbbf24;stroke:#fbbf24}
+      .soft-pri{fill:#818cf8;stroke:#818cf8}
+      .soft-teal{fill:#2dd4bf;stroke:#2dd4bf}
+      .tl,.tlb{fill:#0f172a}
+      .prt{fill:#a5b4fc}.tealt{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+    }
+    @keyframes kw0_70{0%,68.5%{opacity:1}70%,97.5%{opacity:0}100%{opacity:1}}
+    .w0_70{opacity:0;animation:kw0_70 12s infinite linear}
+    @keyframes kw70_96{0%,68.5%{opacity:0}70%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w70_96{opacity:0;animation:kw70_96 12s infinite linear}
+    @keyframes kw8_22{0%,6.5%{opacity:0}8%,20.5%{opacity:1}22%,100%{opacity:0}}
+    .w8_22{opacity:0;animation:kw8_22 12s infinite linear}
+    @keyframes kw22p0_96{0%,20.5%{opacity:0}22.0%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w22p0_96{opacity:0;animation:kw22p0_96 12s infinite linear}
+    @keyframes kw23p5_96{0%,22.0%{opacity:0}23.5%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w23p5_96{opacity:0;animation:kw23p5_96 12s infinite linear}
+    @keyframes kw25p0_96{0%,23.5%{opacity:0}25.0%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w25p0_96{opacity:0;animation:kw25p0_96 12s infinite linear}
+    @keyframes kw26p5_96{0%,25.0%{opacity:0}26.5%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w26p5_96{opacity:0;animation:kw26p5_96 12s infinite linear}
+    @keyframes kw28p0_96{0%,26.5%{opacity:0}28.0%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w28p0_96{opacity:0;animation:kw28p0_96 12s infinite linear}
+    @keyframes kw29p5_96{0%,28.0%{opacity:0}29.5%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w29p5_96{opacity:0;animation:kw29p5_96 12s infinite linear}
+    @keyframes kw31p0_96{0%,29.5%{opacity:0}31.0%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w31p0_96{opacity:0;animation:kw31p0_96 12s infinite linear}
+    @keyframes kw32p5_96{0%,31.0%{opacity:0}32.5%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w32p5_96{opacity:0;animation:kw32p5_96 12s infinite linear}
+    @keyframes kw22_96{0%,20.5%{opacity:0}22%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w22_96{opacity:0;animation:kw22_96 12s infinite linear}
+    @keyframes kw40_96{0%,38.5%{opacity:0}40%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w40_96{opacity:0;animation:kw40_96 12s infinite linear}
+    @keyframes kw0_55{0%,53.5%{opacity:1}55%,97.5%{opacity:0}100%{opacity:1}}
+    .w0_55{opacity:0;animation:kw0_55 12s infinite linear}
+    @keyframes kw55_96{0%,53.5%{opacity:0}55%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w55_96{opacity:0;animation:kw55_96 12s infinite linear}
+    @keyframes kw22_56{0%,20.5%{opacity:0}22%,54.5%{opacity:1}56%,100%{opacity:0}}
+    .w22_56{opacity:0;animation:kw22_56 12s infinite linear}
+    @keyframes kw24_58{0%,22.5%{opacity:0}24%,56.5%{opacity:1}58%,100%{opacity:0}}
+    .w24_58{opacity:0;animation:kw24_58 12s infinite linear}
+    @keyframes kw58_96{0%,56.5%{opacity:0}58%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w58_96{opacity:0;animation:kw58_96 12s infinite linear}
+    @keyframes kw62_96{0%,60.5%{opacity:0}62%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w62_96{opacity:0;animation:kw62_96 12s infinite linear}
+
+    @media (prefers-reduced-motion: reduce){.w22_96,.w22p0_96,.w23p5_96,.w25p0_96,.w26p5_96,.w28p0_96,.w29p5_96,.w31p0_96,.w32p5_96,.w40_96,.w55_96,.w58_96,.w62_96,.w70_96{animation:none;opacity:1}.w0_55,.w0_70,.w22_56,.w24_58,.w8_22{animation:none;opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Stampede: one expired hot key, many requests</text>
+  <text class="sub" x="28" y="62">Every request misses at once. Without coordination, each one runs the same 200 ms query.</text>
+  <rect class="panel" x="20" y="80" width="372" height="300" rx="10"/>
+  <text class="badt" x="36" y="106" font-size="15">✗  Naive cache-aside</text>
+  <rect class="box" x="190" y="124" width="120" height="48" rx="8"/>
+  <text class="sm mono" x="200" y="144">hot</text>
+  <rect class="box" x="252" y="236" width="124" height="64" rx="8"/>
+  <text class="lbl" x="264" y="260">Database</text>
+  <text class="badt w0_70" x="200" y="164" font-size="13">expired</text>
+  <text class="okt w70_96" x="200" y="164" font-size="13">set 200 times</text>
+  <circle class="pri" cx="50" cy="134" r="9"/>
+  <g class="w8_22"><line class="arr bads dash " x1="62" y1="134" x2="179.1" y2="147.0"/><path class="badf " d="M188 148 L178.6 151.5 L179.6 142.5z"/></g>
+  <g class="w22p0_96"><line class="arr bads " x1="62" y1="134" x2="242.7" y2="262.8"/><path class="badf " d="M250 268 L240.1 266.4 L245.3 259.1z"/></g>
+  <circle class="pri" cx="50" cy="161" r="9"/>
+  <g class="w8_22"><line class="arr bads dash " x1="62" y1="161" x2="179.0" y2="148.9"/><path class="badf " d="M188 148 L179.5 153.4 L178.6 144.4z"/></g>
+  <g class="w23p5_96"><line class="arr bads " x1="62" y1="161" x2="242.2" y2="263.5"/><path class="badf " d="M250 268 L240.0 267.5 L244.4 259.6z"/></g>
+  <circle class="pri" cx="50" cy="188" r="9"/>
+  <g class="w8_22"><line class="arr bads dash " x1="62" y1="188" x2="179.4" y2="150.7"/><path class="badf " d="M188 148 L180.8 155.0 L178.1 146.4z"/></g>
+  <g class="w25p0_96"><line class="arr bads " x1="62" y1="188" x2="241.7" y2="264.5"/><path class="badf " d="M250 268 L240.0 268.6 L243.5 260.3z"/></g>
+  <circle class="pri" cx="50" cy="215" r="9"/>
+  <g class="w8_22"><line class="arr bads dash " x1="62" y1="215" x2="180.1" y2="152.2"/><path class="badf " d="M188 148 L182.2 156.2 L177.9 148.3z"/></g>
+  <g class="w26p5_96"><line class="arr bads " x1="62" y1="215" x2="241.3" y2="265.6"/><path class="badf " d="M250 268 L240.1 269.9 L242.6 261.2z"/></g>
+  <circle class="pri" cx="50" cy="242" r="9"/>
+  <g class="w8_22"><line class="arr bads dash " x1="62" y1="242" x2="180.8" y2="153.4"/><path class="badf " d="M188 148 L183.5 157.0 L178.1 149.8z"/></g>
+  <g class="w28p0_96"><line class="arr bads " x1="62" y1="242" x2="241.1" y2="266.8"/><path class="badf " d="M250 268 L240.5 271.2 L241.7 262.3z"/></g>
+  <circle class="pri" cx="50" cy="269" r="9"/>
+  <g class="w8_22"><line class="arr bads dash " x1="62" y1="269" x2="181.5" y2="154.2"/><path class="badf " d="M188 148 L184.6 157.5 L178.4 151.0z"/></g>
+  <g class="w29p5_96"><line class="arr bads " x1="62" y1="269" x2="241.0" y2="268.0"/><path class="badf " d="M250 268 L241.0 272.5 L241.0 263.5z"/></g>
+  <circle class="pri" cx="50" cy="296" r="9"/>
+  <g class="w8_22"><line class="arr bads dash " x1="62" y1="296" x2="182.2" y2="154.9"/><path class="badf " d="M188 148 L185.6 157.8 L178.7 151.9z"/></g>
+  <g class="w31p0_96"><line class="arr bads " x1="62" y1="296" x2="241.1" y2="269.3"/><path class="badf " d="M250 268 L241.8 273.8 L240.4 264.9z"/></g>
+  <circle class="pri" cx="50" cy="323" r="9"/>
+  <g class="w8_22"><line class="arr bads dash " x1="62" y1="323" x2="182.7" y2="155.3"/><path class="badf " d="M188 148 L186.4 157.9 L179.1 152.7z"/></g>
+  <g class="w32p5_96"><line class="arr bads " x1="62" y1="323" x2="241.4" y2="270.5"/><path class="badf " d="M250 268 L242.6 274.8 L240.1 266.2z"/></g>
+  <text class="badt w22_96" x="264" y="284" font-size="14">200 queries</text>
+  <text class="badt w40_96" x="36" y="364" font-size="14">200 queries, median 1,173 ms</text>
+  <rect class="panel" x="408" y="80" width="372" height="300" rx="10"/>
+  <text class="okt" x="424" y="106" font-size="15">✓  Lock: one loader, others wait</text>
+  <rect class="box" x="578" y="124" width="120" height="48" rx="8"/>
+  <text class="sm mono" x="588" y="144">hot</text>
+  <rect class="box" x="640" y="236" width="124" height="64" rx="8"/>
+  <text class="lbl" x="652" y="260">Database</text>
+  <text class="badt w0_55" x="588" y="164" font-size="13">expired</text>
+  <text class="okt w55_96" x="588" y="164" font-size="13">filled once</text>
+  <circle class="pri" cx="438" cy="134" r="9"/>
+  <g class="w8_22"><line class="arr bads dash " x1="450" y1="134" x2="567.1" y2="147.0"/><path class="badf " d="M576 148 L566.6 151.5 L567.6 142.5z"/></g>
+  <g class="w22_56"><line class="arr oks " x1="450" y1="134" x2="630.7" y2="262.8"/><path class="okf " d="M638 268 L628.1 266.4 L633.3 259.1z"/></g>
+  <text class="okt w22_56" x="640" y="226" font-size="13">lock holder loads</text>
+  <circle class="pri" cx="438" cy="161" r="9"/>
+  <g class="w8_22"><line class="arr bads dash " x1="450" y1="161" x2="567.0" y2="148.9"/><path class="badf " d="M576 148 L567.5 153.4 L566.6 144.4z"/></g>
+  <g class="w24_58"><line class="arr warns dash " x1="450" y1="161" x2="567.0" y2="148.9"/><path class="warnf " d="M576 148 L567.5 153.4 L566.6 144.4z"/></g>
+  <g class="w58_96"><line class="arr oks " x1="576" y1="148" x2="459.0" y2="160.1"/><path class="okf " d="M450 161 L458.5 155.6 L459.4 164.6z"/></g>
+  <circle class="pri" cx="438" cy="188" r="9"/>
+  <g class="w8_22"><line class="arr bads dash " x1="450" y1="188" x2="567.4" y2="150.7"/><path class="badf " d="M576 148 L568.8 155.0 L566.1 146.4z"/></g>
+  <g class="w24_58"><line class="arr warns dash " x1="450" y1="188" x2="567.4" y2="150.7"/><path class="warnf " d="M576 148 L568.8 155.0 L566.1 146.4z"/></g>
+  <g class="w58_96"><line class="arr oks " x1="576" y1="148" x2="458.6" y2="185.3"/><path class="okf " d="M450 188 L457.2 181.0 L459.9 189.6z"/></g>
+  <circle class="pri" cx="438" cy="215" r="9"/>
+  <g class="w8_22"><line class="arr bads dash " x1="450" y1="215" x2="568.1" y2="152.2"/><path class="badf " d="M576 148 L570.2 156.2 L565.9 148.3z"/></g>
+  <g class="w24_58"><line class="arr warns dash " x1="450" y1="215" x2="568.1" y2="152.2"/><path class="warnf " d="M576 148 L570.2 156.2 L565.9 148.3z"/></g>
+  <g class="w58_96"><line class="arr oks " x1="576" y1="148" x2="457.9" y2="210.8"/><path class="okf " d="M450 215 L455.8 206.8 L460.1 214.7z"/></g>
+  <circle class="pri" cx="438" cy="242" r="9"/>
+  <g class="w8_22"><line class="arr bads dash " x1="450" y1="242" x2="568.8" y2="153.4"/><path class="badf " d="M576 148 L571.5 157.0 L566.1 149.8z"/></g>
+  <g class="w24_58"><line class="arr warns dash " x1="450" y1="242" x2="568.8" y2="153.4"/><path class="warnf " d="M576 148 L571.5 157.0 L566.1 149.8z"/></g>
+  <g class="w58_96"><line class="arr oks " x1="576" y1="148" x2="457.2" y2="236.6"/><path class="okf " d="M450 242 L454.5 233.0 L459.9 240.2z"/></g>
+  <circle class="pri" cx="438" cy="269" r="9"/>
+  <g class="w8_22"><line class="arr bads dash " x1="450" y1="269" x2="569.5" y2="154.2"/><path class="badf " d="M576 148 L572.6 157.5 L566.4 151.0z"/></g>
+  <g class="w24_58"><line class="arr warns dash " x1="450" y1="269" x2="569.5" y2="154.2"/><path class="warnf " d="M576 148 L572.6 157.5 L566.4 151.0z"/></g>
+  <g class="w58_96"><line class="arr oks " x1="576" y1="148" x2="456.5" y2="262.8"/><path class="okf " d="M450 269 L453.4 259.5 L459.6 266.0z"/></g>
+  <circle class="pri" cx="438" cy="296" r="9"/>
+  <g class="w8_22"><line class="arr bads dash " x1="450" y1="296" x2="570.2" y2="154.9"/><path class="badf " d="M576 148 L573.6 157.8 L566.7 151.9z"/></g>
+  <g class="w24_58"><line class="arr warns dash " x1="450" y1="296" x2="570.2" y2="154.9"/><path class="warnf " d="M576 148 L573.6 157.8 L566.7 151.9z"/></g>
+  <g class="w58_96"><line class="arr oks " x1="576" y1="148" x2="455.8" y2="289.1"/><path class="okf " d="M450 296 L452.4 286.2 L459.3 292.1z"/></g>
+  <circle class="pri" cx="438" cy="323" r="9"/>
+  <g class="w8_22"><line class="arr bads dash " x1="450" y1="323" x2="570.7" y2="155.3"/><path class="badf " d="M576 148 L574.4 157.9 L567.1 152.7z"/></g>
+  <g class="w24_58"><line class="arr warns dash " x1="450" y1="323" x2="570.7" y2="155.3"/><path class="warnf " d="M576 148 L574.4 157.9 L567.1 152.7z"/></g>
+  <g class="w58_96"><line class="arr oks " x1="576" y1="148" x2="455.3" y2="315.7"/><path class="okf " d="M450 323 L451.6 313.1 L458.9 318.3z"/></g>
+  <text class="okt w22_96" x="652" y="284" font-size="14">1 query</text>
+  <text class="warnt w24_58" x="578" y="192" font-size="13">others wait, re-read</text>
+  <text class="okt w62_96" x="424" y="364" font-size="14">1 query, median 2 ms</text>
+  <text class="sub" x="28" y="404">8 dots stand for the 200 concurrent requests in the test. Pool: 20 connections, load: 200 ms.</text>
+</svg>

@@ -1,0 +1,358 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 412" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Scan pollution: LRU vs LFU</title>
+  <desc id="d">Two grids of 50 squares, each square about 100 hot keys. 40,000 one-off keys are then written into the full cache. With allkeys-lru the one-off keys replace almost every hot square, leaving 162 of 5,000 hot keys. With allkeys-lfu the one-off keys, accessed once, are evicted first and all 5,000 hot keys stay. For comparison, allkeys-random kept 1,178.</desc>
+  <style>
+    .arr{stroke:#64748b;stroke-width:1.8;fill:none}
+    .ah{fill:#64748b}
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .pt{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .panel{fill:#ffffff;stroke:#e2e8f0}
+    .pri{fill:#4f46e5}.prs{stroke:#4f46e5}
+    .teal{fill:#0ea5a4}.tls{stroke:#0ea5a4}
+    .okf{fill:#16a34a}.oks{stroke:#16a34a}
+    .badf{fill:#dc2626}.bads{stroke:#dc2626}
+    .warnf{fill:#d97706}.warns{stroke:#d97706}
+    .soft-ok{fill:#16a34a;fill-opacity:.14;stroke:#16a34a}
+    .soft-bad{fill:#dc2626;fill-opacity:.12;stroke:#dc2626}
+    .soft-warn{fill:#d97706;fill-opacity:.16;stroke:#d97706}
+    .soft-pri{fill:#4f46e5;fill-opacity:.12;stroke:#4f46e5}
+    .soft-teal{fill:#0ea5a4;fill-opacity:.14;stroke:#0ea5a4}
+    .tl{fill:#ffffff;font-size:13px;font-weight:700}
+    .tlb{fill:#ffffff;font-size:14px;font-weight:700}
+    .prt{fill:#4f46e5;font-weight:700}
+    .tealt{fill:#0f766e;font-weight:700}
+    .okt{fill:#15803d;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}
+    .warnt{fill:#b45309;font-weight:700}
+    .dash{stroke-dasharray:5 4}
+    @media (prefers-color-scheme: dark){
+      .arr{stroke:#94a3b8}.ah{fill:#94a3b8}
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.pt{fill:#f1f5f9}.lbl,.body,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .panel{fill:#171b24;stroke:#334155}
+      .pri{fill:#818cf8}.prs{stroke:#818cf8}
+      .teal{fill:#2dd4bf}.tls{stroke:#2dd4bf}
+      .okf{fill:#4ade80}.oks{stroke:#4ade80}
+      .badf{fill:#f87171}.bads{stroke:#f87171}
+      .warnf{fill:#fbbf24}.warns{stroke:#fbbf24}
+      .soft-ok{fill:#4ade80;stroke:#4ade80}
+      .soft-bad{fill:#f87171;stroke:#f87171}
+      .soft-warn{fill:#fbbf24;stroke:#fbbf24}
+      .soft-pri{fill:#818cf8;stroke:#818cf8}
+      .soft-teal{fill:#2dd4bf;stroke:#2dd4bf}
+      .tl,.tlb{fill:#0f172a}
+      .prt{fill:#a5b4fc}.tealt{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+    }
+    @keyframes kw12p0_96{0%,10.5%{opacity:0}12.0%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w12p0_96{opacity:0;animation:kw12p0_96 12s infinite linear}
+    @keyframes kw13p1_96{0%,11.6%{opacity:0}13.1%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w13p1_96{opacity:0;animation:kw13p1_96 12s infinite linear}
+    @keyframes kw14p2_96{0%,12.7%{opacity:0}14.2%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w14p2_96{opacity:0;animation:kw14p2_96 12s infinite linear}
+    @keyframes kw15p4_96{0%,13.9%{opacity:0}15.4%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w15p4_96{opacity:0;animation:kw15p4_96 12s infinite linear}
+    @keyframes kw16p5_96{0%,15.0%{opacity:0}16.5%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w16p5_96{opacity:0;animation:kw16p5_96 12s infinite linear}
+    @keyframes kw17p6_96{0%,16.1%{opacity:0}17.6%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w17p6_96{opacity:0;animation:kw17p6_96 12s infinite linear}
+    @keyframes kw18p8_96{0%,17.3%{opacity:0}18.8%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w18p8_96{opacity:0;animation:kw18p8_96 12s infinite linear}
+    @keyframes kw19p9_96{0%,18.4%{opacity:0}19.9%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w19p9_96{opacity:0;animation:kw19p9_96 12s infinite linear}
+    @keyframes kw21p0_96{0%,19.5%{opacity:0}21.0%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w21p0_96{opacity:0;animation:kw21p0_96 12s infinite linear}
+    @keyframes kw22p1_96{0%,20.6%{opacity:0}22.1%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w22p1_96{opacity:0;animation:kw22p1_96 12s infinite linear}
+    @keyframes kw23p2_96{0%,21.7%{opacity:0}23.2%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w23p2_96{opacity:0;animation:kw23p2_96 12s infinite linear}
+    @keyframes kw24p4_96{0%,22.9%{opacity:0}24.4%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w24p4_96{opacity:0;animation:kw24p4_96 12s infinite linear}
+    @keyframes kw25p5_96{0%,24.0%{opacity:0}25.5%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w25p5_96{opacity:0;animation:kw25p5_96 12s infinite linear}
+    @keyframes kw26p6_96{0%,25.1%{opacity:0}26.6%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w26p6_96{opacity:0;animation:kw26p6_96 12s infinite linear}
+    @keyframes kw27p8_96{0%,26.3%{opacity:0}27.8%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w27p8_96{opacity:0;animation:kw27p8_96 12s infinite linear}
+    @keyframes kw28p9_96{0%,27.4%{opacity:0}28.9%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w28p9_96{opacity:0;animation:kw28p9_96 12s infinite linear}
+    @keyframes kw30p0_96{0%,28.5%{opacity:0}30.0%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w30p0_96{opacity:0;animation:kw30p0_96 12s infinite linear}
+    @keyframes kw31p1_96{0%,29.6%{opacity:0}31.1%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w31p1_96{opacity:0;animation:kw31p1_96 12s infinite linear}
+    @keyframes kw32p2_96{0%,30.700000000000003%{opacity:0}32.2%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w32p2_96{opacity:0;animation:kw32p2_96 12s infinite linear}
+    @keyframes kw33p4_96{0%,31.9%{opacity:0}33.4%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w33p4_96{opacity:0;animation:kw33p4_96 12s infinite linear}
+    @keyframes kw34p5_96{0%,33.0%{opacity:0}34.5%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w34p5_96{opacity:0;animation:kw34p5_96 12s infinite linear}
+    @keyframes kw35p6_96{0%,34.1%{opacity:0}35.6%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w35p6_96{opacity:0;animation:kw35p6_96 12s infinite linear}
+    @keyframes kw36p8_96{0%,35.3%{opacity:0}36.8%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w36p8_96{opacity:0;animation:kw36p8_96 12s infinite linear}
+    @keyframes kw37p9_96{0%,36.4%{opacity:0}37.9%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w37p9_96{opacity:0;animation:kw37p9_96 12s infinite linear}
+    @keyframes kw39p0_96{0%,37.5%{opacity:0}39.0%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w39p0_96{opacity:0;animation:kw39p0_96 12s infinite linear}
+    @keyframes kw40p1_96{0%,38.6%{opacity:0}40.1%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w40p1_96{opacity:0;animation:kw40p1_96 12s infinite linear}
+    @keyframes kw41p2_96{0%,39.7%{opacity:0}41.2%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w41p2_96{opacity:0;animation:kw41p2_96 12s infinite linear}
+    @keyframes kw42p4_96{0%,40.9%{opacity:0}42.4%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w42p4_96{opacity:0;animation:kw42p4_96 12s infinite linear}
+    @keyframes kw43p5_96{0%,42.0%{opacity:0}43.5%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w43p5_96{opacity:0;animation:kw43p5_96 12s infinite linear}
+    @keyframes kw44p6_96{0%,43.1%{opacity:0}44.6%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w44p6_96{opacity:0;animation:kw44p6_96 12s infinite linear}
+    @keyframes kw45p8_96{0%,44.3%{opacity:0}45.8%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w45p8_96{opacity:0;animation:kw45p8_96 12s infinite linear}
+    @keyframes kw46p9_96{0%,45.4%{opacity:0}46.9%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w46p9_96{opacity:0;animation:kw46p9_96 12s infinite linear}
+    @keyframes kw48p0_96{0%,46.5%{opacity:0}48.0%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w48p0_96{opacity:0;animation:kw48p0_96 12s infinite linear}
+    @keyframes kw49p1_96{0%,47.6%{opacity:0}49.1%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w49p1_96{opacity:0;animation:kw49p1_96 12s infinite linear}
+    @keyframes kw50p2_96{0%,48.7%{opacity:0}50.2%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w50p2_96{opacity:0;animation:kw50p2_96 12s infinite linear}
+    @keyframes kw51p4_96{0%,49.9%{opacity:0}51.4%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w51p4_96{opacity:0;animation:kw51p4_96 12s infinite linear}
+    @keyframes kw52p5_96{0%,51.0%{opacity:0}52.5%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w52p5_96{opacity:0;animation:kw52p5_96 12s infinite linear}
+    @keyframes kw53p6_96{0%,52.1%{opacity:0}53.6%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w53p6_96{opacity:0;animation:kw53p6_96 12s infinite linear}
+    @keyframes kw54p8_96{0%,53.3%{opacity:0}54.8%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w54p8_96{opacity:0;animation:kw54p8_96 12s infinite linear}
+    @keyframes kw55p9_96{0%,54.4%{opacity:0}55.9%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w55p9_96{opacity:0;animation:kw55p9_96 12s infinite linear}
+    @keyframes kw57p0_96{0%,55.5%{opacity:0}57.0%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w57p0_96{opacity:0;animation:kw57p0_96 12s infinite linear}
+    @keyframes kw58p1_96{0%,56.6%{opacity:0}58.1%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w58p1_96{opacity:0;animation:kw58p1_96 12s infinite linear}
+    @keyframes kw59p2_96{0%,57.7%{opacity:0}59.2%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w59p2_96{opacity:0;animation:kw59p2_96 12s infinite linear}
+    @keyframes kw60p4_96{0%,58.9%{opacity:0}60.4%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w60p4_96{opacity:0;animation:kw60p4_96 12s infinite linear}
+    @keyframes kw61p5_96{0%,60.0%{opacity:0}61.5%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w61p5_96{opacity:0;animation:kw61p5_96 12s infinite linear}
+    @keyframes kw62p6_96{0%,61.1%{opacity:0}62.6%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w62p6_96{opacity:0;animation:kw62p6_96 12s infinite linear}
+    @keyframes kw63p8_96{0%,62.3%{opacity:0}63.8%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w63p8_96{opacity:0;animation:kw63p8_96 12s infinite linear}
+    @keyframes kw64p9_96{0%,63.400000000000006%{opacity:0}64.9%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w64p9_96{opacity:0;animation:kw64p9_96 12s infinite linear}
+    @keyframes kw70_96{0%,68.5%{opacity:0}70%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w70_96{opacity:0;animation:kw70_96 12s infinite linear}
+    @keyframes kw12p0_16p0{0%,10.5%{opacity:0}12.0%,14.5%{opacity:1}16.0%,100%{opacity:0}}
+    .w12p0_16p0{opacity:0;animation:kw12p0_16p0 12s infinite linear}
+    @keyframes kw17p4_21p4{0%,15.899999999999999%{opacity:0}17.4%,19.9%{opacity:1}21.4%,100%{opacity:0}}
+    .w17p4_21p4{opacity:0;animation:kw17p4_21p4 12s infinite linear}
+    @keyframes kw22p8_26p8{0%,21.3%{opacity:0}22.8%,25.3%{opacity:1}26.8%,100%{opacity:0}}
+    .w22p8_26p8{opacity:0;animation:kw22p8_26p8 12s infinite linear}
+    @keyframes kw28p2_32p2{0%,26.7%{opacity:0}28.2%,30.700000000000003%{opacity:1}32.2%,100%{opacity:0}}
+    .w28p2_32p2{opacity:0;animation:kw28p2_32p2 12s infinite linear}
+    @keyframes kw33p6_37p6{0%,32.1%{opacity:0}33.6%,36.1%{opacity:1}37.6%,100%{opacity:0}}
+    .w33p6_37p6{opacity:0;animation:kw33p6_37p6 12s infinite linear}
+    @keyframes kw39p0_43p0{0%,37.5%{opacity:0}39.0%,41.5%{opacity:1}43.0%,100%{opacity:0}}
+    .w39p0_43p0{opacity:0;animation:kw39p0_43p0 12s infinite linear}
+    @keyframes kw44p4_48p4{0%,42.9%{opacity:0}44.4%,46.9%{opacity:1}48.4%,100%{opacity:0}}
+    .w44p4_48p4{opacity:0;animation:kw44p4_48p4 12s infinite linear}
+    @keyframes kw49p8_53p8{0%,48.3%{opacity:0}49.8%,52.3%{opacity:1}53.8%,100%{opacity:0}}
+    .w49p8_53p8{opacity:0;animation:kw49p8_53p8 12s infinite linear}
+    @keyframes kw55p2_59p2{0%,53.7%{opacity:0}55.2%,57.7%{opacity:1}59.2%,100%{opacity:0}}
+    .w55p2_59p2{opacity:0;animation:kw55p2_59p2 12s infinite linear}
+    @keyframes kw60p6_64p6{0%,59.1%{opacity:0}60.6%,63.099999999999994%{opacity:1}64.6%,100%{opacity:0}}
+    .w60p6_64p6{opacity:0;animation:kw60p6_64p6 12s infinite linear}
+
+    @media (prefers-reduced-motion: reduce){.w12p0_96,.w13p1_96,.w14p2_96,.w15p4_96,.w16p5_96,.w17p6_96,.w18p8_96,.w19p9_96,.w21p0_96,.w22p1_96,.w23p2_96,.w24p4_96,.w25p5_96,.w26p6_96,.w27p8_96,.w28p9_96,.w30p0_96,.w31p1_96,.w32p2_96,.w33p4_96,.w34p5_96,.w35p6_96,.w36p8_96,.w37p9_96,.w39p0_96,.w40p1_96,.w41p2_96,.w42p4_96,.w43p5_96,.w44p6_96,.w45p8_96,.w46p9_96,.w48p0_96,.w49p1_96,.w50p2_96,.w51p4_96,.w52p5_96,.w53p6_96,.w54p8_96,.w55p9_96,.w57p0_96,.w58p1_96,.w59p2_96,.w60p4_96,.w60p6_64p6,.w61p5_96,.w62p6_96,.w63p8_96,.w64p9_96,.w70_96{animation:none;opacity:1}.w12p0_16p0,.w17p4_21p4,.w22p8_26p8,.w28p2_32p2,.w33p6_37p6,.w39p0_43p0,.w44p4_48p4,.w49p8_53p8,.w55p2_59p2{animation:none;opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="410" rx="14"/>
+  <text class="h" x="28" y="40">Scan pollution: LRU vs LFU</text>
+  <text class="sub" x="28" y="62">5,000 hot keys are read 5 times each, then 40,000 one-off keys are written into the full 20 MB cache.</text>
+  <rect class="panel" x="20" y="80" width="372" height="290" rx="10"/>
+  <text class="pt mono" x="36" y="106">allkeys-lru</text>
+  <rect class="pri" x="48" y="124" width="28" height="28" rx="5"/>
+  <rect class="warnf w12p0_96" x="48" y="124" width="28" height="28" rx="5"/>
+  <rect class="pri" x="80" y="124" width="28" height="28" rx="5"/>
+  <rect class="warnf w13p1_96" x="80" y="124" width="28" height="28" rx="5"/>
+  <rect class="pri" x="112" y="124" width="28" height="28" rx="5"/>
+  <rect class="warnf w14p2_96" x="112" y="124" width="28" height="28" rx="5"/>
+  <rect class="pri" x="144" y="124" width="28" height="28" rx="5"/>
+  <rect class="warnf w15p4_96" x="144" y="124" width="28" height="28" rx="5"/>
+  <rect class="pri" x="176" y="124" width="28" height="28" rx="5"/>
+  <rect class="warnf w16p5_96" x="176" y="124" width="28" height="28" rx="5"/>
+  <rect class="pri" x="208" y="124" width="28" height="28" rx="5"/>
+  <rect class="warnf w17p6_96" x="208" y="124" width="28" height="28" rx="5"/>
+  <rect class="pri" x="240" y="124" width="28" height="28" rx="5"/>
+  <rect class="warnf w18p8_96" x="240" y="124" width="28" height="28" rx="5"/>
+  <rect class="pri" x="272" y="124" width="28" height="28" rx="5"/>
+  <rect class="warnf w19p9_96" x="272" y="124" width="28" height="28" rx="5"/>
+  <rect class="pri" x="304" y="124" width="28" height="28" rx="5"/>
+  <rect class="warnf w21p0_96" x="304" y="124" width="28" height="28" rx="5"/>
+  <rect class="pri" x="336" y="124" width="28" height="28" rx="5"/>
+  <rect class="warnf w22p1_96" x="336" y="124" width="28" height="28" rx="5"/>
+  <rect class="pri" x="48" y="156" width="28" height="28" rx="5"/>
+  <rect class="warnf w23p2_96" x="48" y="156" width="28" height="28" rx="5"/>
+  <rect class="pri" x="80" y="156" width="28" height="28" rx="5"/>
+  <rect class="warnf w24p4_96" x="80" y="156" width="28" height="28" rx="5"/>
+  <rect class="pri" x="112" y="156" width="28" height="28" rx="5"/>
+  <rect class="warnf w25p5_96" x="112" y="156" width="28" height="28" rx="5"/>
+  <rect class="pri" x="144" y="156" width="28" height="28" rx="5"/>
+  <rect class="pri" x="176" y="156" width="28" height="28" rx="5"/>
+  <rect class="warnf w26p6_96" x="176" y="156" width="28" height="28" rx="5"/>
+  <rect class="pri" x="208" y="156" width="28" height="28" rx="5"/>
+  <rect class="warnf w27p8_96" x="208" y="156" width="28" height="28" rx="5"/>
+  <rect class="pri" x="240" y="156" width="28" height="28" rx="5"/>
+  <rect class="warnf w28p9_96" x="240" y="156" width="28" height="28" rx="5"/>
+  <rect class="pri" x="272" y="156" width="28" height="28" rx="5"/>
+  <rect class="warnf w30p0_96" x="272" y="156" width="28" height="28" rx="5"/>
+  <rect class="pri" x="304" y="156" width="28" height="28" rx="5"/>
+  <rect class="warnf w31p1_96" x="304" y="156" width="28" height="28" rx="5"/>
+  <rect class="pri" x="336" y="156" width="28" height="28" rx="5"/>
+  <rect class="warnf w32p2_96" x="336" y="156" width="28" height="28" rx="5"/>
+  <rect class="pri" x="48" y="188" width="28" height="28" rx="5"/>
+  <rect class="warnf w33p4_96" x="48" y="188" width="28" height="28" rx="5"/>
+  <rect class="pri" x="80" y="188" width="28" height="28" rx="5"/>
+  <rect class="warnf w34p5_96" x="80" y="188" width="28" height="28" rx="5"/>
+  <rect class="pri" x="112" y="188" width="28" height="28" rx="5"/>
+  <rect class="warnf w35p6_96" x="112" y="188" width="28" height="28" rx="5"/>
+  <rect class="pri" x="144" y="188" width="28" height="28" rx="5"/>
+  <rect class="warnf w36p8_96" x="144" y="188" width="28" height="28" rx="5"/>
+  <rect class="pri" x="176" y="188" width="28" height="28" rx="5"/>
+  <rect class="warnf w37p9_96" x="176" y="188" width="28" height="28" rx="5"/>
+  <rect class="pri" x="208" y="188" width="28" height="28" rx="5"/>
+  <rect class="warnf w39p0_96" x="208" y="188" width="28" height="28" rx="5"/>
+  <rect class="pri" x="240" y="188" width="28" height="28" rx="5"/>
+  <rect class="warnf w40p1_96" x="240" y="188" width="28" height="28" rx="5"/>
+  <rect class="pri" x="272" y="188" width="28" height="28" rx="5"/>
+  <rect class="warnf w41p2_96" x="272" y="188" width="28" height="28" rx="5"/>
+  <rect class="pri" x="304" y="188" width="28" height="28" rx="5"/>
+  <rect class="warnf w42p4_96" x="304" y="188" width="28" height="28" rx="5"/>
+  <rect class="pri" x="336" y="188" width="28" height="28" rx="5"/>
+  <rect class="warnf w43p5_96" x="336" y="188" width="28" height="28" rx="5"/>
+  <rect class="pri" x="48" y="220" width="28" height="28" rx="5"/>
+  <rect class="warnf w44p6_96" x="48" y="220" width="28" height="28" rx="5"/>
+  <rect class="pri" x="80" y="220" width="28" height="28" rx="5"/>
+  <rect class="warnf w45p8_96" x="80" y="220" width="28" height="28" rx="5"/>
+  <rect class="pri" x="112" y="220" width="28" height="28" rx="5"/>
+  <rect class="warnf w46p9_96" x="112" y="220" width="28" height="28" rx="5"/>
+  <rect class="pri" x="144" y="220" width="28" height="28" rx="5"/>
+  <rect class="warnf w48p0_96" x="144" y="220" width="28" height="28" rx="5"/>
+  <rect class="pri" x="176" y="220" width="28" height="28" rx="5"/>
+  <rect class="warnf w49p1_96" x="176" y="220" width="28" height="28" rx="5"/>
+  <rect class="pri" x="208" y="220" width="28" height="28" rx="5"/>
+  <rect class="warnf w50p2_96" x="208" y="220" width="28" height="28" rx="5"/>
+  <rect class="pri" x="240" y="220" width="28" height="28" rx="5"/>
+  <rect class="pri" x="272" y="220" width="28" height="28" rx="5"/>
+  <rect class="warnf w51p4_96" x="272" y="220" width="28" height="28" rx="5"/>
+  <rect class="pri" x="304" y="220" width="28" height="28" rx="5"/>
+  <rect class="warnf w52p5_96" x="304" y="220" width="28" height="28" rx="5"/>
+  <rect class="pri" x="336" y="220" width="28" height="28" rx="5"/>
+  <rect class="warnf w53p6_96" x="336" y="220" width="28" height="28" rx="5"/>
+  <rect class="pri" x="48" y="252" width="28" height="28" rx="5"/>
+  <rect class="warnf w54p8_96" x="48" y="252" width="28" height="28" rx="5"/>
+  <rect class="pri" x="80" y="252" width="28" height="28" rx="5"/>
+  <rect class="warnf w55p9_96" x="80" y="252" width="28" height="28" rx="5"/>
+  <rect class="pri" x="112" y="252" width="28" height="28" rx="5"/>
+  <rect class="warnf w57p0_96" x="112" y="252" width="28" height="28" rx="5"/>
+  <rect class="pri" x="144" y="252" width="28" height="28" rx="5"/>
+  <rect class="warnf w58p1_96" x="144" y="252" width="28" height="28" rx="5"/>
+  <rect class="pri" x="176" y="252" width="28" height="28" rx="5"/>
+  <rect class="warnf w59p2_96" x="176" y="252" width="28" height="28" rx="5"/>
+  <rect class="pri" x="208" y="252" width="28" height="28" rx="5"/>
+  <rect class="warnf w60p4_96" x="208" y="252" width="28" height="28" rx="5"/>
+  <rect class="pri" x="240" y="252" width="28" height="28" rx="5"/>
+  <rect class="warnf w61p5_96" x="240" y="252" width="28" height="28" rx="5"/>
+  <rect class="pri" x="272" y="252" width="28" height="28" rx="5"/>
+  <rect class="warnf w62p6_96" x="272" y="252" width="28" height="28" rx="5"/>
+  <rect class="pri" x="304" y="252" width="28" height="28" rx="5"/>
+  <rect class="warnf w63p8_96" x="304" y="252" width="28" height="28" rx="5"/>
+  <rect class="pri" x="336" y="252" width="28" height="28" rx="5"/>
+  <rect class="warnf w64p9_96" x="336" y="252" width="28" height="28" rx="5"/>
+  <text class="sm" x="48" y="328">Each new key is the most recently used,</text>
+  <text class="sm" x="48" y="348">so it pushes out a hot key.</text>
+  <text class="badt w70_96" x="48" y="304" font-size="15">162 / 5,000 hot keys kept</text>
+  <rect class="panel" x="408" y="80" width="372" height="290" rx="10"/>
+  <text class="pt mono" x="424" y="106">allkeys-lfu</text>
+  <rect class="pri" x="436" y="124" width="28" height="28" rx="5"/>
+  <rect class="pri" x="468" y="124" width="28" height="28" rx="5"/>
+  <rect class="pri" x="500" y="124" width="28" height="28" rx="5"/>
+  <rect class="pri" x="532" y="124" width="28" height="28" rx="5"/>
+  <rect class="pri" x="564" y="124" width="28" height="28" rx="5"/>
+  <rect class="pri" x="596" y="124" width="28" height="28" rx="5"/>
+  <rect class="pri" x="628" y="124" width="28" height="28" rx="5"/>
+  <rect class="pri" x="660" y="124" width="28" height="28" rx="5"/>
+  <rect class="pri" x="692" y="124" width="28" height="28" rx="5"/>
+  <rect class="pri" x="724" y="124" width="28" height="28" rx="5"/>
+  <rect class="pri" x="436" y="156" width="28" height="28" rx="5"/>
+  <rect class="pri" x="468" y="156" width="28" height="28" rx="5"/>
+  <rect class="pri" x="500" y="156" width="28" height="28" rx="5"/>
+  <rect class="pri" x="532" y="156" width="28" height="28" rx="5"/>
+  <rect class="pri" x="564" y="156" width="28" height="28" rx="5"/>
+  <rect class="pri" x="596" y="156" width="28" height="28" rx="5"/>
+  <rect class="pri" x="628" y="156" width="28" height="28" rx="5"/>
+  <rect class="pri" x="660" y="156" width="28" height="28" rx="5"/>
+  <rect class="pri" x="692" y="156" width="28" height="28" rx="5"/>
+  <rect class="pri" x="724" y="156" width="28" height="28" rx="5"/>
+  <rect class="pri" x="436" y="188" width="28" height="28" rx="5"/>
+  <rect class="pri" x="468" y="188" width="28" height="28" rx="5"/>
+  <rect class="pri" x="500" y="188" width="28" height="28" rx="5"/>
+  <rect class="pri" x="532" y="188" width="28" height="28" rx="5"/>
+  <rect class="pri" x="564" y="188" width="28" height="28" rx="5"/>
+  <rect class="pri" x="596" y="188" width="28" height="28" rx="5"/>
+  <rect class="pri" x="628" y="188" width="28" height="28" rx="5"/>
+  <rect class="pri" x="660" y="188" width="28" height="28" rx="5"/>
+  <rect class="pri" x="692" y="188" width="28" height="28" rx="5"/>
+  <rect class="pri" x="724" y="188" width="28" height="28" rx="5"/>
+  <rect class="pri" x="436" y="220" width="28" height="28" rx="5"/>
+  <rect class="pri" x="468" y="220" width="28" height="28" rx="5"/>
+  <rect class="pri" x="500" y="220" width="28" height="28" rx="5"/>
+  <rect class="pri" x="532" y="220" width="28" height="28" rx="5"/>
+  <rect class="pri" x="564" y="220" width="28" height="28" rx="5"/>
+  <rect class="pri" x="596" y="220" width="28" height="28" rx="5"/>
+  <rect class="pri" x="628" y="220" width="28" height="28" rx="5"/>
+  <rect class="pri" x="660" y="220" width="28" height="28" rx="5"/>
+  <rect class="pri" x="692" y="220" width="28" height="28" rx="5"/>
+  <rect class="pri" x="724" y="220" width="28" height="28" rx="5"/>
+  <rect class="pri" x="436" y="252" width="28" height="28" rx="5"/>
+  <rect class="pri" x="468" y="252" width="28" height="28" rx="5"/>
+  <rect class="pri" x="500" y="252" width="28" height="28" rx="5"/>
+  <rect class="pri" x="532" y="252" width="28" height="28" rx="5"/>
+  <rect class="pri" x="564" y="252" width="28" height="28" rx="5"/>
+  <rect class="pri" x="596" y="252" width="28" height="28" rx="5"/>
+  <rect class="pri" x="628" y="252" width="28" height="28" rx="5"/>
+  <rect class="pri" x="660" y="252" width="28" height="28" rx="5"/>
+  <rect class="pri" x="692" y="252" width="28" height="28" rx="5"/>
+  <rect class="pri" x="724" y="252" width="28" height="28" rx="5"/>
+  <text class="sm" x="436" y="326">incoming one-off keys, evicted first:</text>
+  <rect class="warnf w12p0_16p0" x="436" y="334" width="28" height="18" rx="4"/>
+  <rect class="warnf w17p4_21p4" x="468" y="334" width="28" height="18" rx="4"/>
+  <rect class="warnf w22p8_26p8" x="500" y="334" width="28" height="18" rx="4"/>
+  <rect class="warnf w28p2_32p2" x="532" y="334" width="28" height="18" rx="4"/>
+  <rect class="warnf w33p6_37p6" x="564" y="334" width="28" height="18" rx="4"/>
+  <rect class="warnf w39p0_43p0" x="596" y="334" width="28" height="18" rx="4"/>
+  <rect class="warnf w44p4_48p4" x="628" y="334" width="28" height="18" rx="4"/>
+  <rect class="warnf w49p8_53p8" x="660" y="334" width="28" height="18" rx="4"/>
+  <rect class="warnf w55p2_59p2" x="692" y="334" width="28" height="18" rx="4"/>
+  <rect class="warnf w60p6_64p6" x="724" y="334" width="28" height="18" rx="4"/>
+  <rect class="box" x="436" y="334" width="28" height="18" rx="4" fill-opacity="0" />
+  <rect class="box" x="468" y="334" width="28" height="18" rx="4" fill-opacity="0" />
+  <rect class="box" x="500" y="334" width="28" height="18" rx="4" fill-opacity="0" />
+  <rect class="box" x="532" y="334" width="28" height="18" rx="4" fill-opacity="0" />
+  <rect class="box" x="564" y="334" width="28" height="18" rx="4" fill-opacity="0" />
+  <rect class="box" x="596" y="334" width="28" height="18" rx="4" fill-opacity="0" />
+  <rect class="box" x="628" y="334" width="28" height="18" rx="4" fill-opacity="0" />
+  <rect class="box" x="660" y="334" width="28" height="18" rx="4" fill-opacity="0" />
+  <rect class="box" x="692" y="334" width="28" height="18" rx="4" fill-opacity="0" />
+  <rect class="box" x="724" y="334" width="28" height="18" rx="4" fill-opacity="0" />
+  <text class="okt w70_96" x="436" y="304" font-size="15">5,000 / 5,000 hot keys kept</text>
+  <rect class="pri" x="28" y="384" width="14" height="14" rx="3"/><text class="sm" x="48" y="396">hot key</text>
+  <rect class="warnf" x="120" y="384" width="14" height="14" rx="3"/><text class="sm" x="140" y="396">one-off key</text>
+  <text class="sub" x="250" y="396">Each square is about 100 keys. allkeys-random kept 1,178.</text>
+</svg>

@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 412" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">How a Bloom filter answers</title>
+  <desc id="d">A 16-bit Bloom filter. Inserting id 42 sets bits 2, 7 and 13; inserting id 77 sets bits 4, 7 and 11. A lookup for id 99999999 checks bits 3, 7 and 13; bit 3 is 0, so the id is definitely absent and the request can return 404 without touching the cache or database. A lookup for id 5150 checks bits 2, 4 and 11, which are all 1 because other ids set them, so the answer is maybe: a false positive that falls through to the cache and database. Real ids are never reported absent. The page's test used 2 to the 20 bits and 7 hashes and saw 0.67% false positives for 100,000 ids.</desc>
+  <style>
+    .arr{stroke:#64748b;stroke-width:1.8;fill:none}
+    .ah{fill:#64748b}
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .pt{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .panel{fill:#ffffff;stroke:#e2e8f0}
+    .pri{fill:#4f46e5}.prs{stroke:#4f46e5}
+    .teal{fill:#0ea5a4}.tls{stroke:#0ea5a4}
+    .okf{fill:#16a34a}.oks{stroke:#16a34a}
+    .badf{fill:#dc2626}.bads{stroke:#dc2626}
+    .warnf{fill:#d97706}.warns{stroke:#d97706}
+    .soft-ok{fill:#16a34a;fill-opacity:.14;stroke:#16a34a}
+    .soft-bad{fill:#dc2626;fill-opacity:.12;stroke:#dc2626}
+    .soft-warn{fill:#d97706;fill-opacity:.16;stroke:#d97706}
+    .soft-pri{fill:#4f46e5;fill-opacity:.12;stroke:#4f46e5}
+    .soft-teal{fill:#0ea5a4;fill-opacity:.14;stroke:#0ea5a4}
+    .tl{fill:#ffffff;font-size:13px;font-weight:700}
+    .tlb{fill:#ffffff;font-size:14px;font-weight:700}
+    .prt{fill:#4f46e5;font-weight:700}
+    .tealt{fill:#0f766e;font-weight:700}
+    .okt{fill:#15803d;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}
+    .warnt{fill:#b45309;font-weight:700}
+    .dash{stroke-dasharray:5 4}
+    @media (prefers-color-scheme: dark){
+      .arr{stroke:#94a3b8}.ah{fill:#94a3b8}
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.pt{fill:#f1f5f9}.lbl,.body,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .panel{fill:#171b24;stroke:#334155}
+      .pri{fill:#818cf8}.prs{stroke:#818cf8}
+      .teal{fill:#2dd4bf}.tls{stroke:#2dd4bf}
+      .okf{fill:#4ade80}.oks{stroke:#4ade80}
+      .badf{fill:#f87171}.bads{stroke:#f87171}
+      .warnf{fill:#fbbf24}.warns{stroke:#fbbf24}
+      .soft-ok{fill:#4ade80;stroke:#4ade80}
+      .soft-bad{fill:#f87171;stroke:#f87171}
+      .soft-warn{fill:#fbbf24;stroke:#fbbf24}
+      .soft-pri{fill:#818cf8;stroke:#818cf8}
+      .soft-teal{fill:#2dd4bf;stroke:#2dd4bf}
+      .tl,.tlb{fill:#0f172a}
+      .prt{fill:#a5b4fc}.tealt{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+    }
+
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="410" rx="14"/>
+  <text class="h" x="28" y="40">Bloom filter: "definitely not" or "maybe"</text>
+  <text class="sub" x="28" y="62">Each id sets k bits chosen by k hash functions. A lookup checks the same k bits.</text>
+  <text class="lbl" x="28" y="122">Inserts</text>
+  <text class="lbl" x="28" y="212">Bit array</text>
+  <text class="lbl" x="28" y="304">Lookups</text>
+  <rect class="box" x="190" y="96" width="120" height="34" rx="8"/><text class="prt" x="250" y="118" text-anchor="middle" font-size="14">PUT id 42</text>
+  <line class="arr prs " x1="250" y1="130" x2="248.3" y2="177.0"/><path class="pri " d="M248.0 186 L243.8 176.8 L252.8 177.2z"/>
+  <line class="arr prs " x1="250" y1="130" x2="439.3" y2="183.6"/><path class="pri " d="M448.0 186 L438.1 187.9 L440.6 179.2z"/>
+  <line class="arr prs " x1="250" y1="130" x2="679.1" y2="184.9"/><path class="pri " d="M688.0 186 L678.5 189.3 L679.6 180.4z"/>
+  <rect class="box" x="500" y="96" width="120" height="34" rx="8"/><text class="tealt" x="560" y="118" text-anchor="middle" font-size="14">PUT id 77</text>
+  <line class="arr tls " x1="560" y1="130" x2="336.7" y2="183.9"/><path class="teal " d="M328.0 186 L335.7 179.5 L337.8 188.3z"/>
+  <line class="arr tls " x1="560" y1="130" x2="456.0" y2="182.0"/><path class="teal " d="M448.0 186 L454.0 178.0 L458.1 186.0z"/>
+  <line class="arr tls " x1="560" y1="130" x2="602.1" y2="179.2"/><path class="teal " d="M608.0 186 L598.7 182.1 L605.6 176.2z"/>
+  <rect class="box" x="150" y="190" width="36" height="36" rx="5"/>
+  <text class="body" x="168.0" y="213" text-anchor="middle">0</text>
+  <text class="sub" x="168.0" y="244" text-anchor="middle" font-size="13">0</text>
+  <rect class="box" x="190" y="190" width="36" height="36" rx="5"/>
+  <text class="body" x="208.0" y="213" text-anchor="middle">0</text>
+  <text class="sub" x="208.0" y="244" text-anchor="middle" font-size="13">1</text>
+  <rect class="pri" x="230" y="190" width="36" height="36" rx="5"/>
+  <text class="tlb" x="248.0" y="213" text-anchor="middle">1</text>
+  <text class="sub" x="248.0" y="244" text-anchor="middle" font-size="13">2</text>
+  <rect class="box" x="270" y="190" width="36" height="36" rx="5"/>
+  <text class="body" x="288.0" y="213" text-anchor="middle">0</text>
+  <text class="sub" x="288.0" y="244" text-anchor="middle" font-size="13">3</text>
+  <rect class="pri" x="310" y="190" width="36" height="36" rx="5"/>
+  <text class="tlb" x="328.0" y="213" text-anchor="middle">1</text>
+  <text class="sub" x="328.0" y="244" text-anchor="middle" font-size="13">4</text>
+  <rect class="box" x="350" y="190" width="36" height="36" rx="5"/>
+  <text class="body" x="368.0" y="213" text-anchor="middle">0</text>
+  <text class="sub" x="368.0" y="244" text-anchor="middle" font-size="13">5</text>
+  <rect class="box" x="390" y="190" width="36" height="36" rx="5"/>
+  <text class="body" x="408.0" y="213" text-anchor="middle">0</text>
+  <text class="sub" x="408.0" y="244" text-anchor="middle" font-size="13">6</text>
+  <rect class="pri" x="430" y="190" width="36" height="36" rx="5"/>
+  <text class="tlb" x="448.0" y="213" text-anchor="middle">1</text>
+  <text class="sub" x="448.0" y="244" text-anchor="middle" font-size="13">7</text>
+  <rect class="box" x="470" y="190" width="36" height="36" rx="5"/>
+  <text class="body" x="488.0" y="213" text-anchor="middle">0</text>
+  <text class="sub" x="488.0" y="244" text-anchor="middle" font-size="13">8</text>
+  <rect class="box" x="510" y="190" width="36" height="36" rx="5"/>
+  <text class="body" x="528.0" y="213" text-anchor="middle">0</text>
+  <text class="sub" x="528.0" y="244" text-anchor="middle" font-size="13">9</text>
+  <rect class="box" x="550" y="190" width="36" height="36" rx="5"/>
+  <text class="body" x="568.0" y="213" text-anchor="middle">0</text>
+  <text class="sub" x="568.0" y="244" text-anchor="middle" font-size="13">10</text>
+  <rect class="pri" x="590" y="190" width="36" height="36" rx="5"/>
+  <text class="tlb" x="608.0" y="213" text-anchor="middle">1</text>
+  <text class="sub" x="608.0" y="244" text-anchor="middle" font-size="13">11</text>
+  <rect class="box" x="630" y="190" width="36" height="36" rx="5"/>
+  <text class="body" x="648.0" y="213" text-anchor="middle">0</text>
+  <text class="sub" x="648.0" y="244" text-anchor="middle" font-size="13">12</text>
+  <rect class="pri" x="670" y="190" width="36" height="36" rx="5"/>
+  <text class="tlb" x="688.0" y="213" text-anchor="middle">1</text>
+  <text class="sub" x="688.0" y="244" text-anchor="middle" font-size="13">13</text>
+  <rect class="box" x="710" y="190" width="36" height="36" rx="5"/>
+  <text class="body" x="728.0" y="213" text-anchor="middle">0</text>
+  <text class="sub" x="728.0" y="244" text-anchor="middle" font-size="13">14</text>
+  <rect class="box" x="750" y="190" width="36" height="36" rx="5"/>
+  <text class="body" x="768.0" y="213" text-anchor="middle">0</text>
+  <text class="sub" x="768.0" y="244" text-anchor="middle" font-size="13">15</text>
+  <line class="arr bads dash " x1="250" y1="282" x2="280.9" y2="257.6"/><path class="badf " d="M288.0 252 L283.7 261.1 L278.1 254.0z"/>
+  <line class="arr bads dash " x1="250" y1="282" x2="439.1" y2="253.3"/><path class="badf " d="M448.0 252 L439.8 257.8 L438.4 248.9z"/>
+  <line class="arr bads dash " x1="250" y1="282" x2="679.0" y2="252.6"/><path class="badf " d="M688.0 252 L679.3 257.1 L678.7 248.1z"/>
+  <rect class="box" x="178" y="282" width="144" height="34" rx="8"/><text class="badt" x="250" y="304" text-anchor="middle" font-size="14">GET id 99999999</text>
+  <line class="arr warns dash " x1="560" y1="282" x2="257.0" y2="252.9"/><path class="warnf " d="M248.0 252 L257.4 248.4 L256.5 257.3z"/>
+  <line class="arr warns dash " x1="560" y1="282" x2="336.9" y2="253.2"/><path class="warnf " d="M328.0 252 L337.5 248.7 L336.3 257.6z"/>
+  <line class="arr warns dash " x1="560" y1="282" x2="600.4" y2="256.8"/><path class="warnf " d="M608.0 252 L602.8 260.6 L598.0 253.0z"/>
+  <rect class="box" x="488" y="282" width="144" height="34" rx="8"/><text class="warnt" x="560" y="304" text-anchor="middle" font-size="14">GET id 5150</text>
+  <rect class="soft-bad" x="267" y="187" width="42" height="42" rx="7" fill-opacity="0" stroke-width="2.5"/>
+  <text class="badt" x="250" y="342" text-anchor="middle" font-size="14">bit 3 is 0: definitely absent</text>
+  <text class="sm" x="250" y="362" text-anchor="middle">return 404, skip cache and DB</text>
+  <text class="warnt" x="560" y="342" text-anchor="middle" font-size="14">all 1, set by other ids: maybe</text>
+  <text class="sm" x="560" y="362" text-anchor="middle">a false positive: check cache, then DB</text>
+  <text class="sub" x="28" y="396">Simplified to 16 bits and 3 hashes. The test used 2²⁰ bits and 7 hashes: 0.67% false positives for 100,000 ids.</text>
+</svg>

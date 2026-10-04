@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Write lost on failover</title>
+  <desc id="d">Animation on three lanes: client, primary and replica. The client sends SET order:1 to the primary, which replies OK at once, before the write reaches the replica. The primary then crashes, the replica is promoted to primary without that write, and a later GET order:1 returns nil: the acknowledged write was lost on failover. WAIT 1 100 after the SET would block until a replica has it, and min-replicas-to-write limits how much a cut-off primary accepts, but neither makes Redis strongly consistent.</desc>
+  <style>
+    .arr{stroke:#64748b;stroke-width:1.8;fill:none}
+    .ah{fill:#64748b}
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .pt{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .panel{fill:#ffffff;stroke:#e2e8f0}
+    .pri{fill:#4f46e5}.prs{stroke:#4f46e5}
+    .teal{fill:#0ea5a4}.tls{stroke:#0ea5a4}
+    .okf{fill:#16a34a}.oks{stroke:#16a34a}
+    .badf{fill:#dc2626}.bads{stroke:#dc2626}
+    .warnf{fill:#d97706}.warns{stroke:#d97706}
+    .soft-ok{fill:#16a34a;fill-opacity:.14;stroke:#16a34a}
+    .soft-bad{fill:#dc2626;fill-opacity:.12;stroke:#dc2626}
+    .soft-warn{fill:#d97706;fill-opacity:.16;stroke:#d97706}
+    .soft-pri{fill:#4f46e5;fill-opacity:.12;stroke:#4f46e5}
+    .soft-teal{fill:#0ea5a4;fill-opacity:.14;stroke:#0ea5a4}
+    .tl{fill:#ffffff;font-size:13px;font-weight:700}
+    .tlb{fill:#ffffff;font-size:14px;font-weight:700}
+    .prt{fill:#4f46e5;font-weight:700}
+    .tealt{fill:#0f766e;font-weight:700}
+    .okt{fill:#15803d;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}
+    .warnt{fill:#b45309;font-weight:700}
+    .dash{stroke-dasharray:5 4}
+    @media (prefers-color-scheme: dark){
+      .arr{stroke:#94a3b8}.ah{fill:#94a3b8}
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.pt{fill:#f1f5f9}.lbl,.body,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .panel{fill:#171b24;stroke:#334155}
+      .pri{fill:#818cf8}.prs{stroke:#818cf8}
+      .teal{fill:#2dd4bf}.tls{stroke:#2dd4bf}
+      .okf{fill:#4ade80}.oks{stroke:#4ade80}
+      .badf{fill:#f87171}.bads{stroke:#f87171}
+      .warnf{fill:#fbbf24}.warns{stroke:#fbbf24}
+      .soft-ok{fill:#4ade80;stroke:#4ade80}
+      .soft-bad{fill:#f87171;stroke:#f87171}
+      .soft-warn{fill:#fbbf24;stroke:#fbbf24}
+      .soft-pri{fill:#818cf8;stroke:#818cf8}
+      .soft-teal{fill:#2dd4bf;stroke:#2dd4bf}
+      .tl,.tlb{fill:#0f172a}
+      .prt{fill:#a5b4fc}.tealt{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+    }
+    @keyframes kw5_96{0%,3.5%{opacity:0}5%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w5_96{opacity:0;animation:kw5_96 12s infinite linear}
+    @keyframes kw14_96{0%,12.5%{opacity:0}14%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w14_96{opacity:0;animation:kw14_96 12s infinite linear}
+    @keyframes kw24_96{0%,22.5%{opacity:0}24%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w24_96{opacity:0;animation:kw24_96 12s infinite linear}
+    @keyframes kw32_96{0%,30.5%{opacity:0}32%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w32_96{opacity:0;animation:kw32_96 12s infinite linear}
+    @keyframes kw46_96{0%,44.5%{opacity:0}46%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w46_96{opacity:0;animation:kw46_96 12s infinite linear}
+    @keyframes kw60_96{0%,58.5%{opacity:0}60%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w60_96{opacity:0;animation:kw60_96 12s infinite linear}
+    @keyframes kw70_96{0%,68.5%{opacity:0}70%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w70_96{opacity:0;animation:kw70_96 12s infinite linear}
+    @keyframes kw76_96{0%,74.5%{opacity:0}76%,94.5%{opacity:1}96%,100%{opacity:0}}
+    .w76_96{opacity:0;animation:kw76_96 12s infinite linear}
+
+    @media (prefers-reduced-motion: reduce){.w14_96,.w24_96,.w32_96,.w46_96,.w5_96,.w60_96,.w70_96,.w76_96{animation:none;opacity:1}.none{animation:none;opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Asynchronous replication can lose an acknowledged write</text>
+  <text class="sub" x="28" y="62">The primary replies OK before any replica has the write.</text>
+  <text class="lbl" x="28" y="117">Client</text>
+  <line class="arr dash" x1="130" y1="112" x2="776" y2="112" stroke-width="1.2"/>
+  <text class="lbl" x="28" y="203">Primary</text>
+  <line class="arr dash" x1="130" y1="198" x2="776" y2="198" stroke-width="1.2"/>
+  <text class="lbl" x="28" y="289">Replica</text>
+  <line class="arr dash" x1="130" y1="284" x2="776" y2="284" stroke-width="1.2"/>
+  <g class="w5_96"><line class="arr prs " x1="150" y1="112" x2="195.3" y2="186.3"/><path class="pri " d="M200 194 L191.5 188.7 L199.2 184.0z"/><text class="prt" x="166" y="150" text-anchor="end" font-size="13">SET order:1</text></g>
+  <g class="w14_96"><line class="arr oks " x1="226" y1="194" x2="284.4" y2="121.0"/><path class="okf " d="M290 114 L287.9 123.8 L280.9 118.2z"/><text class="okt" x="284" y="162" font-size="13">OK</text><text class="okt" x="300" y="104" font-size="13">client sees success</text></g>
+  <g class="w24_96"><text class="sub" x="288" y="246">not replicated yet</text><line class="arr dash" x1="240" y1="204" x2="300" y2="278"/></g>
+  <g class="w32_96"><g class="bads" stroke-width="4"><line x1="352" y1="186" x2="376" y2="210"/><line x1="376" y1="186" x2="352" y2="210"/></g><text class="badt" x="388" y="203" font-size="14">primary crashes</text></g>
+  <g class="w46_96"><rect class="teal" x="430" y="268" width="196" height="32" rx="8"/><text class="tl" x="528" y="289" text-anchor="middle">promoted to primary</text></g>
+  <g class="w60_96"><line class="arr prs " x1="640" y1="112" x2="677.7" y2="257.3"/><path class="pri " d="M680 266 L673.4 258.4 L682.1 256.2z"/><text class="prt" x="646" y="172" text-anchor="end" font-size="13">GET order:1</text></g>
+  <g class="w70_96"><line class="arr bads " x1="700" y1="266" x2="737.7" y2="124.7"/><path class="badf " d="M740 116 L742.0 125.9 L733.3 123.5z"/><text class="badt" x="726" y="244" font-size="13">(nil)</text></g>
+  <g class="w76_96"><text class="badt" x="28" y="336" font-size="15">The write was acknowledged, then lost on failover.</text></g>
+  <g class="w76_96"><text class="sm" x="28" y="360">WAIT 1 100 after the SET would block until one replica has it. min-replicas-to-write</text><text class="sm" x="28" y="380">caps how much a cut-off primary accepts. Neither makes Redis strongly consistent.</text></g>
+</svg>
