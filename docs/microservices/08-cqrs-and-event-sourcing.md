@@ -73,6 +73,9 @@ sequenceDiagram
 ```
 *Notice the expected-version check: two concurrent commands on the same aggregate can't both succeed. That's optimistic concurrency without locks.*
 
+![Animation: the handler replays stream refill-123 into an empty aggregate, v1 RefillRequested then v2 BenefitChecked, handles ApproveRefill, appends RefillApproved with expected version 2 to become version 3, and a second append that also expected version 2 gets a conflict](images/08-event-replay.svg){ loading=lazy }
+*Watch the state on the right being rebuilt only from the events on the left. Nothing is stored as "current state" except as a fold over that stream.*
+
 ### Event versioning
 
 Events live forever, so schemas evolve:
@@ -85,6 +88,9 @@ Events live forever, so schemas evolve:
 ### Consistency between sides
 
 Read models lag writes (milliseconds to seconds). Handle it in UX: return the new state from the command response, read-your-own-writes by querying the write side for the user who just acted, version numbers in responses, or "processing" states.
+
+![Animation: an ApproveRefill command updates the write model to APPROVED at once, but the event reaches the dashboard projection later, so a first dashboard query reads a stale REQUESTED and a second query, after the upsert, reads APPROVED](images/08-read-model-lag.svg){ loading=lazy }
+*Notice the write side is already correct while the first query still reads the old value. That gap is what the UX techniques above have to hide.*
 
 ### When to use and when not to
 

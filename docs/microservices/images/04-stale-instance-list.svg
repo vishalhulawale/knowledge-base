@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 436" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Stale instance lists during a failure</title>
+  <desc id="d">A registry lists three pharmacy instances that send heartbeats, and the order service balances calls over its own cached copy of that list. Instance 2 crashes and its heartbeats stop. The registry evicts it after missed heartbeats, but the client's cache still lists it, so a call to instance 2 fails and is retried on instance 3. When the cache TTL expires the client refreshes and instance 2 disappears from its list too.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ring{fill:#ffffff;stroke:#d97706;stroke-width:2.5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+      .ring{fill:#111827;stroke:#fbbf24}
+    }
+
+    .tok{animation:14s infinite linear;opacity:0}
+    @keyframes c1{0%{transform:translate(662px,244px);opacity:0}3%{transform:translate(662px,244px);opacity:0}3.5%{transform:translate(662px,244px);opacity:1}11%{transform:translate(240px,310px);opacity:1}12%{transform:translate(240px,310px);opacity:0}100%{transform:translate(240px,310px);opacity:0}}
+@keyframes c2{0%{transform:translate(662px,244px);opacity:0}12%{transform:translate(662px,244px);opacity:0}12.5%{transform:translate(662px,244px);opacity:1}20%{transform:translate(400px,310px);opacity:1}21%{transform:translate(400px,310px);opacity:0}100%{transform:translate(400px,310px);opacity:0}}
+@keyframes c3{0%{transform:translate(662px,244px);opacity:0}26%{transform:translate(662px,244px);opacity:0}26.5%{transform:translate(662px,244px);opacity:1}34%{transform:translate(560px,310px);opacity:1}35%{transform:translate(560px,310px);opacity:0}100%{transform:translate(560px,310px);opacity:0}}
+@keyframes c4{0%{transform:translate(662px,244px);opacity:0}46%{transform:translate(662px,244px);opacity:0}46.5%{transform:translate(662px,244px);opacity:1}54%{transform:translate(240px,310px);opacity:1}55%{transform:translate(240px,310px);opacity:0}100%{transform:translate(240px,310px);opacity:0}}
+@keyframes c5{0%{transform:translate(662px,244px);opacity:0}58%{transform:translate(662px,244px);opacity:0}58.5%{transform:translate(662px,244px);opacity:1}66%{transform:translate(400px,310px);opacity:1}67%{transform:translate(400px,310px);opacity:0}100%{transform:translate(400px,310px);opacity:0}}
+@keyframes c6{0%{transform:translate(662px,244px);opacity:0}68%{transform:translate(662px,244px);opacity:0}68.5%{transform:translate(662px,244px);opacity:1}76%{transform:translate(560px,310px);opacity:1}77%{transform:translate(560px,310px);opacity:0}100%{transform:translate(560px,310px);opacity:0}}
+@keyframes c7{0%{transform:translate(662px,244px);opacity:0}84%{transform:translate(662px,244px);opacity:0}84.5%{transform:translate(662px,244px);opacity:1}92%{transform:translate(240px,310px);opacity:1}93%{transform:translate(240px,310px);opacity:0}100%{transform:translate(240px,310px);opacity:0}}
+
+    .c1{animation-name:c1}.c2{animation-name:c2}.c3{animation-name:c3}.c4{animation-name:c4}.c5{animation-name:c5}.c6{animation-name:c6}.c7{animation-name:c7}
+    .ph{animation:14s infinite steps(1,end)}
+    @keyframes p0{0%,21%{opacity:1}22%,100%{opacity:0}}
+@keyframes p1{0%,21%{opacity:0}22%,39%{opacity:1}40%,100%{opacity:0}}
+@keyframes p2{0%,39%{opacity:0}40%,57%{opacity:1}58%,100%{opacity:0}}
+@keyframes p3{0%,57%{opacity:0}58%,79%{opacity:1}80%,100%{opacity:0}}
+@keyframes p4{0%,79%{opacity:0}80%,97%{opacity:1}100%{opacity:0}}
+
+    .p0{animation-name:p0}.p1{animation-name:p1;opacity:0}.p2{animation-name:p2;opacity:0}.p3{animation-name:p3;opacity:0}.p4{animation-name:p4;opacity:0}
+    .a{opacity:0;animation:14s infinite linear}
+    @keyframes dead{0%,22%{opacity:0}24%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes evict{0%,40%{opacity:0}42%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes stale{0%,40%{opacity:0}42%,80%{opacity:1}82%,100%{opacity:0}}
+@keyframes gone{0%,80%{opacity:0}82%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes fail{0%,66%{opacity:0}68%,78%{opacity:1}80%,100%{opacity:0}}
+
+    @keyframes hb2{0%,20%{opacity:1}22%,97%{opacity:0}100%{opacity:1}}
+    .dead{animation-name:dead}.evict{animation-name:evict}.stale{animation-name:stale}.gone{animation-name:gone}.fail{animation-name:fail}
+    .hb2{animation-name:hb2;opacity:1}
+    .row2{animation:row2 14s infinite linear}@keyframes row2{0%,79%{opacity:1}81%,96%{opacity:0}100%{opacity:1}}
+    @keyframes flow{to{stroke-dashoffset:-22}}
+    .hb{stroke-dasharray:4 7;animation:flow 1s infinite linear}
+    @media (prefers-reduced-motion: reduce){
+      .tok{animation:none;opacity:0}.ph{animation:none}.p0,.p1,.p2,.p4{opacity:0}.p3{opacity:1}
+      .a,.hb,.row2{animation:none}.dead,.evict,.stale,.fail{opacity:1}.gone{opacity:0}.hb2{opacity:0}
+    }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="434" rx="14"/>
+  <text class="h" x="28" y="40">Stale instance lists during a failure</text>
+  <g class="ph p0"><text class="lbl teat" x="28" y="66">All three heartbeat; the client round-robins over its cached list</text></g>
+  <g class="ph p1"><text class="lbl teat" x="28" y="66">#2 crashes: its heartbeats stop</text></g>
+  <g class="ph p2"><text class="lbl teat" x="28" y="66">Registry evicts #2 after missed heartbeats; the client cache still lists it</text></g>
+  <g class="ph p3"><text class="lbl teat" x="28" y="66">A call to stale #2 fails; the retry goes to another instance</text></g>
+  <g class="ph p4"><text class="lbl teat" x="28" y="66">Cache TTL expires and the client refreshes: #2 is gone everywhere</text></g>
+
+  <rect class="bp" x="28" y="90" width="220" height="128" rx="10" stroke-width="1.5"/><text class="sub" x="44" y="108">Registry (Eureka)</text>
+  <text class="tx" x="44" y="128">pharmacy #1</text><text class="sub" x="232" y="128" text-anchor="end">10.0.1.5</text>
+  <text class="tx" x="44" y="160">pharmacy #2</text><text class="sub" x="232" y="160" text-anchor="end">10.0.2.7</text>
+  <text class="tx" x="44" y="192">pharmacy #3</text><text class="sub" x="232" y="192" text-anchor="end">10.0.3.9</text>
+  <g class="a evict"><rect class="badf" x="40" y="146" width="196" height="26" rx="6" opacity="0.18"/><line class="lnb" x1="44" y1="156" x2="232" y2="156"/><text class="sub badt" x="138" y="238" text-anchor="middle">#2 evicted</text></g>
+  <rect class="box" x="552" y="90" width="220" height="154" rx="10" stroke-width="1.5"/><text class="sub" x="568" y="108">Order svc: cached list</text>
+  <text class="tx" x="568" y="128">pharmacy #1</text><text class="sub" x="756" y="128" text-anchor="end">10.0.1.5</text>
+  <g class="row2"><text class="tx" x="568" y="160">pharmacy #2</text><text class="sub" x="756" y="160" text-anchor="end">10.0.2.7</text></g>
+  <text class="tx" x="568" y="192">pharmacy #3</text><text class="sub" x="756" y="192" text-anchor="end">10.0.3.9</text>
+  <g class="a stale"><rect class="wrnf" x="562" y="140" width="200" height="26" rx="6" opacity="0.22"/><text class="sub wrnt" x="662" y="232" text-anchor="middle">#2 is stale here</text></g>
+  <g class="a gone"><text class="sub okt" x="662" y="232" text-anchor="middle">refreshed after TTL</text></g>
+  <text class="sub" x="662" y="214" text-anchor="middle">Spring Cloud LoadBalancer</text>
+  <rect class="bt" x="180" y="310" width="120" height="52" rx="10" stroke-width="1.5"/><text class="tx" x="240" y="334" text-anchor="middle">pharmacy #1</text><text class="sub" x="240" y="352" text-anchor="middle">10.0.1.5</text>
+  <g class=""><path class="lnt hb" d="M210,310 C200,250 200,240 150,218" stroke-width="2"/></g>
+  <rect class="bt" x="340" y="310" width="120" height="52" rx="10" stroke-width="1.5"/><text class="tx" x="400" y="334" text-anchor="middle">pharmacy #2</text><text class="sub" x="400" y="352" text-anchor="middle">10.0.2.7</text>
+  <g class="hb2 a"><path class="lnt hb" d="M370,310 C360,250 200,240 150,218" stroke-width="2"/></g>
+  <rect class="bt" x="500" y="310" width="120" height="52" rx="10" stroke-width="1.5"/><text class="tx" x="560" y="334" text-anchor="middle">pharmacy #3</text><text class="sub" x="560" y="352" text-anchor="middle">10.0.3.9</text>
+  <g class=""><path class="lnt hb" d="M530,310 C520,250 200,240 150,218" stroke-width="2"/></g>
+  <g class="a dead"><rect class="bb" x="340" y="310" width="120" height="52" rx="10" stroke-width="1.5"/><text class="tx" x="400" y="334" text-anchor="middle">pharmacy #2</text><text class="sub badt" x="400" y="352" text-anchor="middle">crashed</text></g>
+  <g class="a fail"><text class="tx badt" x="400" y="382" text-anchor="middle">call fails</text></g>
+  <text class="sub teat" x="64" y="290" text-anchor="middle">heartbeats</text>
+  <circle class="tok c1 pri" r="7"/><circle class="tok c2 pri" r="7"/><circle class="tok c3 pri" r="7"/><circle class="tok c4 pri" r="7"/>
+  <circle class="tok c5 badf" r="7"/><circle class="tok c6 okf" r="7"/><circle class="tok c7 pri" r="7"/>
+  <text class="sub" x="28" y="404">Timings compressed. Mitigate with short cache TTLs, timeouts, and retries on another instance</text><text class="sub" x="28" y="420">for idempotent calls.</text>
+</svg>

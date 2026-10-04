@@ -90,6 +90,9 @@ flowchart LR
 ```
 *Notice the arrow only goes one way, and only when a force appears. Microservices are a response to a scaling problem in the organisation or the system, not a starting point.*
 
+![A chart of productivity against complexity: the monolith line starts high and falls steeply, the microservices line starts lower because of the premium and falls slowly, and they cross at a threshold](images/01-microservice-premium.svg){ loading=lazy }
+*Notice the gap on the left is the premium you pay from day one. Microservices only win to the right of the crossover; the forces listed below are how you tell whether you have passed it.*
+
 ### The costs, concretely
 
 | Cost | What actually hurts |
@@ -118,6 +121,9 @@ Symptoms:
 - One change touches five repositories.
 
 It has every cost of microservices and none of the benefits. The usual cause is splitting by **technical layer** or by **entity** ("CustomerService", "AddressService") instead of by business capability, or splitting before the domain was understood.
+
+![Animation: in a distributed monolith, ready changes wait for a shared release day and Orders, Pharmacy and Billing deploy together in a fixed order; with independently deployable services each team deploys whenever its change is ready](images/01-release-coupling.svg){ loading=lazy }
+*Watch the top row of services: finished changes sit waiting for release day. Independent deployability is the test, and the bottom half is what passing it looks like.*
 
 ### The modular monolith
 

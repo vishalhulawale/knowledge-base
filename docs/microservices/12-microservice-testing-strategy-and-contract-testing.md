@@ -28,6 +28,9 @@ flowchart TB
 ```
 *Notice the shape: confidence comes mainly from the middle layers (component and contract tests), not from a large end-to-end suite at the top.*
 
+![A test pyramid with five layers: a few end-to-end journey tests at the top, then contract tests, component tests, integration tests, and many fast unit tests at the base, with speed and scope described for each layer](images/12-test-pyramid.svg){ loading=lazy }
+*Notice how the width of each layer matches how many tests you should have there, and the cost grows towards the tip.*
+
 ## Core concepts
 
 ### Test types for a microservice
@@ -66,6 +69,9 @@ sequenceDiagram
 - **Pact** (polyglot): consumer-first, broker, `can-i-deploy`, pending/WIP pacts for new contracts.
 - **Spring Cloud Contract** (JVM-centric): contracts written (often by the provider) in Groovy/YAML/Kotlin; the plugin generates provider tests and **stub jars** that consumers use with Stub Runner. Good inside a Spring estate.
 - **Schema-based** checks (OpenAPI diff, Avro/Protobuf compatibility in a schema registry) complement contracts: they catch breaking schema changes but not "this consumer needs this field".
+
+![Animation: graphql-consumer's pact only uses id and name from pharmacy-api; when the provider removes the unused phone field verification passes and can-i-deploy says yes, but when it renames name to displayName verification fails and can-i-deploy says no](images/12-consumer-contract.svg){ loading=lazy }
+*Watch which change gets blocked: removing an unused field ships, renaming a used one doesn't. The contract only protects what consumers actually read.*
 
 ### Component tests with Testcontainers
 

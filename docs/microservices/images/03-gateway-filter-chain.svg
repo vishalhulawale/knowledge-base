@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 372" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">One request through the gateway</title>
+  <desc id="d">A request passes through the gateway's stages in order: TLS termination, JWT validation, route matching with the route's filters, rate limiting per user, and a circuit breaker, before reaching the pharmacy service. Request 1 has a valid token and is under its limit, so it reaches the service and gets 200 OK. Request 2 has a missing or invalid token and is rejected with 401 at JWT validation. Request 3 comes from a user who has used up the burst and is rejected with 429 Too Many Requests at the rate limiter. Notes under each stage give the example values: issuer and audience rx-api, path /api/pharmacy/** with X-User-Id stripped and StripPrefix=1, replenish rate 50 per second with burst capacity 100, and a fallback URI when the breaker is open.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ring{fill:#ffffff;stroke:#d97706;stroke-width:2.5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+      .ring{fill:#111827;stroke:#fbbf24}
+    }
+
+    .tok{animation:12s infinite linear;opacity:0}
+    @keyframes q1{0%{transform:translate(63px,150px);opacity:0}1%{transform:translate(63px,150px);opacity:0}2%{transform:translate(63px,150px);opacity:1}6.2%{transform:translate(168px,150px);opacity:1}10.3%{transform:translate(286px,150px);opacity:1}14.5%{transform:translate(404px,150px);opacity:1}18.7%{transform:translate(522px,150px);opacity:1}22.8%{transform:translate(640px,150px);opacity:1}27%{transform:translate(741px,150px);opacity:1}30%{transform:translate(741px,150px);opacity:1}31%{transform:translate(741px,150px);opacity:0}100%{transform:translate(741px,150px);opacity:0}}
+@keyframes q2{0%{transform:translate(63px,150px);opacity:0}34%{transform:translate(63px,150px);opacity:0}35%{transform:translate(63px,150px);opacity:1}40.3%{transform:translate(168px,150px);opacity:1}45.7%{transform:translate(286px,150px);opacity:1}51%{transform:translate(286px,210px);opacity:1}54%{transform:translate(286px,210px);opacity:1}55%{transform:translate(286px,210px);opacity:0}100%{transform:translate(286px,210px);opacity:0}}
+@keyframes q3{0%{transform:translate(63px,150px);opacity:0}58%{transform:translate(63px,150px);opacity:0}59%{transform:translate(63px,150px);opacity:1}63%{transform:translate(168px,150px);opacity:1}67%{transform:translate(286px,150px);opacity:1}71%{transform:translate(404px,150px);opacity:1}75%{transform:translate(522px,150px);opacity:1}79%{transform:translate(522px,210px);opacity:1}82%{transform:translate(522px,210px);opacity:1}83%{transform:translate(522px,210px);opacity:0}100%{transform:translate(522px,210px);opacity:0}}
+
+    .q1{animation-name:q1}.q2{animation-name:q2}.q3{animation-name:q3}
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes l1{0%,0.5%{opacity:0}2.5%,32%{opacity:1}34%,100%{opacity:0}}
+@keyframes l2{0%,33.5%{opacity:0}35.5%,56%{opacity:1}58%,100%{opacity:0}}
+@keyframes l3{0%,57.5%{opacity:0}59.5%,92%{opacity:1}94%,100%{opacity:0}}
+
+    @keyframes o1{0%,27%{opacity:0}29%,32%{opacity:1}34%,100%{opacity:0}}
+@keyframes o2{0%,51%{opacity:0}53%,56%{opacity:1}58%,100%{opacity:0}}
+@keyframes o3{0%,79%{opacity:0}81%,92%{opacity:1}94%,100%{opacity:0}}
+
+    .l1{animation-name:l1}.l2{animation-name:l2}.l3{animation-name:l3}.o1{animation-name:o1}.o2{animation-name:o2}.o3{animation-name:o3}
+    @media (prefers-reduced-motion: reduce){.tok{animation:none;opacity:0}.a{animation:none;opacity:1}.l1,.l2,.l3{opacity:0}}
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="370" rx="14"/>
+  <text class="h" x="28" y="40">One request through the gateway</text>
+  <g class="a l1"><text class="lbl teat" x="28" y="66">Request 1: valid token, under its limit</text></g>
+  <g class="a l2"><text class="lbl badt" x="28" y="66">Request 2: missing or invalid token</text></g>
+  <g class="a l3"><text class="lbl badt" x="28" y="66">Request 3: same user, burst used up</text></g>
+  <rect class="box" x="28" y="125" width="70" height="50" rx="10" stroke-width="1.5"/><text class="tx" x="63" y="155" text-anchor="middle">Client</text>
+  <line class="ln" x1="98" y1="150" x2="114" y2="150" marker-end="url(#ar)"/>
+  <rect class="bp" x="116" y="120" width="104" height="60" rx="10" stroke-width="1.5"/><text class="tx" x="168" y="146" text-anchor="middle" font-weight="700">TLS</text><text class="sub" x="168" y="165" text-anchor="middle">termination</text>
+  <line class="ln" x1="220" y1="150" x2="232" y2="150" marker-end="url(#ar)"/>
+  <rect class="bp" x="234" y="120" width="104" height="60" rx="10" stroke-width="1.5"/><text class="tx" x="286" y="146" text-anchor="middle" font-weight="700">Validate</text><text class="sub" x="286" y="165" text-anchor="middle">JWT</text>
+  <line class="ln" x1="338" y1="150" x2="350" y2="150" marker-end="url(#ar)"/>
+  <rect class="bp" x="352" y="120" width="104" height="60" rx="10" stroke-width="1.5"/><text class="tx" x="404" y="146" text-anchor="middle" font-weight="700">Match</text><text class="sub" x="404" y="165" text-anchor="middle">route</text>
+  <line class="ln" x1="456" y1="150" x2="468" y2="150" marker-end="url(#ar)"/>
+  <rect class="bp" x="470" y="120" width="104" height="60" rx="10" stroke-width="1.5"/><text class="tx" x="522" y="146" text-anchor="middle" font-weight="700">Rate limit</text><text class="sub" x="522" y="165" text-anchor="middle">per user</text>
+  <line class="ln" x1="574" y1="150" x2="586" y2="150" marker-end="url(#ar)"/>
+  <rect class="bp" x="588" y="120" width="104" height="60" rx="10" stroke-width="1.5"/><text class="tx" x="640" y="146" text-anchor="middle" font-weight="700">Circuit</text><text class="sub" x="640" y="165" text-anchor="middle">breaker</text>
+  <line class="ln" x1="692" y1="150" x2="704" y2="150" marker-end="url(#ar)"/>
+  <rect class="bt" x="706" y="120" width="70" height="60" rx="10" stroke-width="1.5"/><text class="sub" x="741" y="146" text-anchor="middle">Pharmacy</text><text class="sub" x="741" y="163" text-anchor="middle">service</text>
+  <g class="a o1"><text class="tx okt" x="741" y="200" text-anchor="middle">200 OK</text></g>
+  <g class="a o2"><rect class="bb" x="224" y="196" width="124" height="46" rx="8" stroke-width="1.5"/><text class="tx badt" x="286" y="216" text-anchor="middle">401</text><text class="sub" x="286" y="233" text-anchor="middle">Unauthorized</text></g>
+  <g class="a o3"><rect class="bb" x="460" y="196" width="124" height="46" rx="8" stroke-width="1.5"/><text class="tx badt" x="522" y="216" text-anchor="middle">429 Too Many</text><text class="sub" x="522" y="233" text-anchor="middle">Requests</text></g>
+  <line class="ln dash" x1="28" y1="262" x2="776" y2="262" stroke-width="1"/>
+  <text class="sub" x="168" y="290" text-anchor="middle">certificates</text><text class="sub" x="168" y="306" text-anchor="middle">at the edge</text><text class="sub" x="168" y="322" text-anchor="middle"></text>
+  <text class="sub" x="286" y="290" text-anchor="middle">issuer and</text><text class="sub" x="286" y="306" text-anchor="middle">audience rx-api</text><text class="sub" x="286" y="322" text-anchor="middle"></text>
+  <text class="sub" x="404" y="290" text-anchor="middle">/api/pharmacy/**</text><text class="sub" x="404" y="306" text-anchor="middle">strip X-User-Id,</text><text class="sub" x="404" y="322" text-anchor="middle">StripPrefix=1</text>
+  <text class="sub" x="522" y="290" text-anchor="middle">50/s refill,</text><text class="sub" x="522" y="306" text-anchor="middle">burst 100</text><text class="sub" x="522" y="322" text-anchor="middle"></text>
+  <text class="sub" x="640" y="290" text-anchor="middle">open: use</text><text class="sub" x="640" y="306" text-anchor="middle">fallbackUri</text><text class="sub" x="640" y="322" text-anchor="middle"></text>
+  <text class="sub" x="28" y="354">Values from the example route on this page. Rejected requests never reach the service.</text>
+  <circle class="tok q1 okf" r="9"/><circle class="tok q2 badf" r="9"/><circle class="tok q3 wrnf" r="9"/>
+</svg>

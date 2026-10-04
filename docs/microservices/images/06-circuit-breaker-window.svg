@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 374" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Circuit breaker states</title>
+  <desc id="d">A circuit breaker with a sliding window of the last 10 calls. While CLOSED, call outcomes fill the window: 6 of 10 fail, a 60% failure rate, which reaches the 50% threshold, so the breaker trips to OPEN. While OPEN, calls fail fast with CallNotPermittedException and the fallback runs, until waitDurationInOpenState has passed. Then the breaker goes HALF_OPEN and allows 5 trial calls; they succeed, so it returns to CLOSED with the window reset. Simplified numbers; the page's example uses a 30-second time-based window with at least 20 calls, 15 seconds open and 5 trial calls.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ring{fill:#ffffff;stroke:#d97706;stroke-width:2.5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+      .ring{fill:#111827;stroke:#fbbf24}
+    }
+
+    .a{opacity:0;animation:14s infinite linear}
+    .ph{animation:14s infinite steps(1,end)}
+    @keyframes p0{0%,39%{opacity:1}40%,100%{opacity:0}}
+@keyframes p1{0%,39%{opacity:0}40%,61%{opacity:1}62%,100%{opacity:0}}
+@keyframes p2{0%,61%{opacity:0}62%,81%{opacity:1}82%,100%{opacity:0}}
+@keyframes p3{0%,81%{opacity:0}82%,97%{opacity:1}100%{opacity:0}}
+
+    .p0{animation-name:p0}.p1{animation-name:p1;opacity:0}.p2{animation-name:p2;opacity:0}.p3{animation-name:p3;opacity:0}
+    @keyframes w0{0%,2%{opacity:0}3%,80%{opacity:1}82%,100%{opacity:0}}
+@keyframes w1{0%,5.5%{opacity:0}6.5%,80%{opacity:1}82%,100%{opacity:0}}
+@keyframes w2{0%,9%{opacity:0}10%,80%{opacity:1}82%,100%{opacity:0}}
+@keyframes w3{0%,12.5%{opacity:0}13.5%,80%{opacity:1}82%,100%{opacity:0}}
+@keyframes w4{0%,16%{opacity:0}17%,80%{opacity:1}82%,100%{opacity:0}}
+@keyframes w5{0%,19.5%{opacity:0}20.5%,80%{opacity:1}82%,100%{opacity:0}}
+@keyframes w6{0%,23%{opacity:0}24%,80%{opacity:1}82%,100%{opacity:0}}
+@keyframes w7{0%,26.5%{opacity:0}27.5%,80%{opacity:1}82%,100%{opacity:0}}
+@keyframes w8{0%,30%{opacity:0}31%,80%{opacity:1}82%,100%{opacity:0}}
+@keyframes w9{0%,33.5%{opacity:0}34.5%,80%{opacity:1}82%,100%{opacity:0}}
+@keyframes h0{0%,64%{opacity:0}65%,80%{opacity:1}82%,100%{opacity:0}}
+@keyframes h1{0%,67%{opacity:0}68%,80%{opacity:1}82%,100%{opacity:0}}
+@keyframes h2{0%,70%{opacity:0}71%,80%{opacity:1}82%,100%{opacity:0}}
+@keyframes h3{0%,73%{opacity:0}74%,80%{opacity:1}82%,100%{opacity:0}}
+@keyframes h4{0%,76%{opacity:0}77%,80%{opacity:1}82%,100%{opacity:0}}
+
+    @keyframes rate{0%,37%{opacity:0}39%,80%{opacity:1}82%,100%{opacity:0}}
+@keyframes timer{0%,40%{opacity:0}42%,61%{opacity:1}63%,100%{opacity:0}}
+@keyframes ff{0%,42%{opacity:0}44%,61%{opacity:1}63%,100%{opacity:0}}
+
+    .rate{animation-name:rate}.ff{animation-name:ff}
+    @keyframes tm{0%,40%{transform:scaleX(0)}61%,100%{transform:scaleX(1)}}
+    .tm{transform-box:fill-box;transform-origin:0 50%;animation:tm 14s infinite linear}
+    .timer{animation-name:timer}
+    @media (prefers-reduced-motion: reduce){
+      .a,.ph,.tm{animation:none}.a{opacity:1}.p0,.p2,.p3{opacity:0}.p1{opacity:1}.tm{transform:none}
+      .hcell{opacity:0}
+    }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="372" rx="14"/>
+  <text class="h" x="28" y="40">Circuit breaker: from CLOSED to OPEN and back</text>
+  <text class="sub" x="28" y="62">Simplified: a count-based window of 10 calls, failureRateThreshold 50%, 5 trial calls in HALF_OPEN.</text>
+  <rect class="box" x="28" y="80" width="130" height="34" rx="17" stroke-width="1.5"/><text class="tx" x="93.0" y="102" text-anchor="middle" font-weight="700">CLOSED</text>
+  <rect class="box" x="172" y="80" width="110" height="34" rx="17" stroke-width="1.5"/><text class="tx" x="227.0" y="102" text-anchor="middle" font-weight="700">OPEN</text>
+  <rect class="box" x="296" y="80" width="140" height="34" rx="17" stroke-width="1.5"/><text class="tx" x="366.0" y="102" text-anchor="middle" font-weight="700">HALF_OPEN</text>
+  <g class="ph p0"><rect class="okf" x="28" y="80" width="130" height="34" rx="17"/><text class="on" x="93.0" y="102" text-anchor="middle">CLOSED</text></g>
+  <g class="ph p1"><rect class="badf" x="172" y="80" width="110" height="34" rx="17"/><text class="on" x="227.0" y="102" text-anchor="middle">OPEN</text></g>
+  <g class="ph p2"><rect class="wrnf" x="296" y="80" width="140" height="34" rx="17"/><text class="on" x="366.0" y="102" text-anchor="middle">HALF_OPEN</text></g>
+  <g class="ph p3"><rect class="okf" x="28" y="80" width="130" height="34" rx="17"/><text class="on" x="93.0" y="102" text-anchor="middle">CLOSED</text></g>
+  <text class="sub" x="28" y="166">Sliding window: last 10 calls</text>
+  <text class="sub" x="28" y="240">Trial calls in HALF_OPEN</text>
+  <rect class="box" x="28" y="176" width="26" height="26" rx="5"/><rect class="box" x="59" y="176" width="26" height="26" rx="5"/><rect class="box" x="90" y="176" width="26" height="26" rx="5"/><rect class="box" x="121" y="176" width="26" height="26" rx="5"/><rect class="box" x="152" y="176" width="26" height="26" rx="5"/><rect class="box" x="183" y="176" width="26" height="26" rx="5"/><rect class="box" x="214" y="176" width="26" height="26" rx="5"/><rect class="box" x="245" y="176" width="26" height="26" rx="5"/><rect class="box" x="276" y="176" width="26" height="26" rx="5"/><rect class="box" x="307" y="176" width="26" height="26" rx="5"/><rect class="box" x="28" y="250" width="26" height="26" rx="5"/><rect class="box" x="59" y="250" width="26" height="26" rx="5"/><rect class="box" x="90" y="250" width="26" height="26" rx="5"/><rect class="box" x="121" y="250" width="26" height="26" rx="5"/><rect class="box" x="152" y="250" width="26" height="26" rx="5"/>
+  <rect class="okf a" style="animation-name:w0" x="28" y="176" width="26" height="26" rx="5"/>
+  <rect class="okf a" style="animation-name:w1" x="59" y="176" width="26" height="26" rx="5"/>
+  <rect class="badf a" style="animation-name:w2" x="90" y="176" width="26" height="26" rx="5"/>
+  <rect class="okf a" style="animation-name:w3" x="121" y="176" width="26" height="26" rx="5"/>
+  <rect class="badf a" style="animation-name:w4" x="152" y="176" width="26" height="26" rx="5"/>
+  <rect class="badf a" style="animation-name:w5" x="183" y="176" width="26" height="26" rx="5"/>
+  <rect class="okf a" style="animation-name:w6" x="214" y="176" width="26" height="26" rx="5"/>
+  <rect class="badf a" style="animation-name:w7" x="245" y="176" width="26" height="26" rx="5"/>
+  <rect class="badf a" style="animation-name:w8" x="276" y="176" width="26" height="26" rx="5"/>
+  <rect class="badf a" style="animation-name:w9" x="307" y="176" width="26" height="26" rx="5"/>
+  <rect class="okf a hcell" style="animation-name:h0" x="28" y="250" width="26" height="26" rx="5"/>
+  <rect class="okf a hcell" style="animation-name:h1" x="59" y="250" width="26" height="26" rx="5"/>
+  <rect class="okf a hcell" style="animation-name:h2" x="90" y="250" width="26" height="26" rx="5"/>
+  <rect class="okf a hcell" style="animation-name:h3" x="121" y="250" width="26" height="26" rx="5"/>
+  <rect class="okf a hcell" style="animation-name:h4" x="152" y="250" width="26" height="26" rx="5"/>
+  <g class="a rate"><text class="tx badt" x="350" y="194">6 of 10 failed = 60%</text><text class="sub" x="350" y="212">≥ 50% threshold: trip to OPEN</text></g>
+  <g class="a ff"><text class="sub" x="350" y="260">Rejected calls never reach the dependency;</text><text class="sub" x="350" y="276">the fallback answers instead.</text></g>
+  <g class="a timer"><rect class="box" x="472" y="94" width="300" height="12" rx="6"/><rect class="badf tm" x="472" y="94" width="300" height="12" rx="6"/><text class="sub" x="472" y="84">waitDurationInOpenState</text></g>
+  <g class="ph p0"><text class="lbl" x="28" y="326">Calls pass; outcomes fill the sliding window</text></g>
+  <g class="ph p1"><text class="lbl" x="28" y="326">OPEN: calls fail fast with CallNotPermittedException; fallback runs</text></g>
+  <g class="ph p2"><text class="lbl" x="28" y="326">HALF_OPEN: a few trial calls probe the dependency</text></g>
+  <g class="ph p3"><text class="lbl" x="28" y="326">Trial calls succeeded: CLOSED again, window reset</text></g>
+  <text class="sub" x="28" y="356">In the page's example config: minimum 20 calls in a 30 s time window, 15 s open, 5 trial calls.</text>
+</svg>

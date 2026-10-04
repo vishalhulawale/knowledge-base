@@ -42,6 +42,9 @@ Step types (Chris Richardson's terms):
 
 Design rule: put steps that are likely to fail **before** the pivot, and steps that can't be undone (send email, call external partner) **after** it.
 
+![Animation: a refill saga creates the order and reserves the benefit, payment fails at the pivot so sending to the pharmacy never runs, and compensations run in reverse order, releasing the benefit and then rejecting the order](images/07-saga-compensation.svg){ loading=lazy }
+*Watch the compensations run right to left, undoing only the steps that committed. The step after the pivot never starts, which is why irreversible work belongs there.*
+
 ### Choreography
 
 ```mermaid
@@ -106,6 +109,9 @@ flowchart LR
     K --> C1["Consumers (idempotent)"]
 ```
 *Notice the event becomes durable in the same commit as the business change. If the commit fails there's no event; if it succeeds the relay will publish it eventually, possibly more than once.*
+
+![Animation: the same crash right after the database commit in two designs; with a dual write the order row is saved but no event is ever sent, while with an outbox the order and outbox rows commit together and a CDC relay publishes the event afterwards, with the consumer deduplicating on event id](images/07-dual-write-vs-outbox.svg){ loading=lazy }
+*Notice the crash happens at the same moment on both sides. Only the outbox still delivers the event, because the event was saved in the same commit.*
 
 - **Outbox table** columns (Debezium convention): `id`, `aggregatetype` (routes to topic), `aggregateid` (message key → ordering per aggregate), `type`, `payload`.
 - **Relay options:** polling publisher (simple, adds DB load and latency), or **CDC** from the transaction log (Debezium Outbox Event Router; low latency, no polling).

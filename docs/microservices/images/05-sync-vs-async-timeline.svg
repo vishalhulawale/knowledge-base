@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 452" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Synchronous chain versus event-driven, during an outage</title>
+  <desc id="d">Two timelines. In the synchronous chain the client calls Order, which calls Payment, which calls Fraud, which calls Ledger, and each one waits for the next. Ledger is down, so it times out and the error travels back up, and the client gets an error after waiting on all four. In the event-driven design, Order commits, answers the client quickly and publishes OrderPlaced to Kafka. Payment and Notification consume it in their own time. Analytics is down, so the event waits in Kafka and Analytics catches up when it returns; the client was never affected.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ring{fill:#ffffff;stroke:#d97706;stroke-width:2.5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+      .ring{fill:#111827;stroke:#fbbf24}
+    }
+
+    .g{transform-box:fill-box;transform-origin:0 50%;animation:11s infinite linear;transform:scaleX(0)}
+    .a{opacity:0;animation:11s infinite linear}
+    @keyframes b1{0%,1.2%{transform:scaleX(0);opacity:1}50.0%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+@keyframes b2{0%,2.5%{transform:scaleX(0);opacity:1}49.0%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+@keyframes b3{0%,3.8%{transform:scaleX(0);opacity:1}48.0%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+@keyframes b4{0%,5.0%{transform:scaleX(0);opacity:1}47.0%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+@keyframes b5{0%,6.2%{transform:scaleX(0);opacity:1}46.0%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+@keyframes b6{0%,46%{opacity:0}48%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes b7{0%,50%{opacity:0}52%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes b8{0%,1.2%{transform:scaleX(0);opacity:1}9.5%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+@keyframes b9{0%,9.5%{opacity:0}11.5%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes b10{0%,2.2%{transform:scaleX(0);opacity:1}8.5%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+@keyframes b11{0%,9.5%{transform:scaleX(0);opacity:1}10.8%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+@keyframes b12{0%,10.8%{opacity:0}12.8%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes b13{0%,12.8%{transform:scaleX(0);opacity:1}27.5%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+@keyframes b14{0%,17.5%{transform:scaleX(0);opacity:1}25.0%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+@keyframes b15{0%,10.8%{opacity:0}12.8%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes b16{0%,50.8%{transform:scaleX(0);opacity:1}60.0%,92%{transform:scaleX(1);opacity:1}96%,100%{transform:scaleX(1);opacity:0}}
+@keyframes b17{0%,60%{opacity:0}62%,92%{opacity:1}96%,100%{opacity:0}}
+
+    @media (prefers-reduced-motion: reduce){.g{animation:none;transform:none}.a{animation:none;opacity:1}}
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="450" rx="14"/>
+  <text class="h" x="28" y="40">The same outage, two designs</text>
+  <text class="h2" x="28" y="80">Synchronous chain: the client waits for every hop</text>
+  <text class="h2" x="28" y="258">Event-driven: Order commits, answers, and publishes</text>
+  <text class="tx" x="40" y="109">Client</text><line class="ln" x1="160" y1="104" x2="760" y2="104" stroke-width="1" opacity="0.35"/>
+  <text class="tx" x="40" y="133">Order</text><line class="ln" x1="160" y1="128" x2="760" y2="128" stroke-width="1" opacity="0.35"/>
+  <text class="tx" x="40" y="157">Payment</text><line class="ln" x1="160" y1="152" x2="760" y2="152" stroke-width="1" opacity="0.35"/>
+  <text class="tx" x="40" y="181">Fraud</text><line class="ln" x1="160" y1="176" x2="760" y2="176" stroke-width="1" opacity="0.35"/>
+  <text class="tx" x="40" y="205">Ledger</text><line class="ln" x1="160" y1="200" x2="760" y2="200" stroke-width="1" opacity="0.35"/>
+  <text class="tx" x="40" y="287">Client</text><line class="ln" x1="160" y1="282" x2="760" y2="282" stroke-width="1" opacity="0.35"/>
+  <text class="tx" x="40" y="311">Order</text><line class="ln" x1="160" y1="306" x2="760" y2="306" stroke-width="1" opacity="0.35"/>
+  <text class="tx" x="40" y="335">Kafka</text><line class="ln" x1="160" y1="330" x2="760" y2="330" stroke-width="1" opacity="0.35"/>
+  <text class="tx" x="40" y="359">Payment</text><line class="ln" x1="160" y1="354" x2="760" y2="354" stroke-width="1" opacity="0.35"/>
+  <text class="tx" x="40" y="383">Notification</text><line class="ln" x1="160" y1="378" x2="760" y2="378" stroke-width="1" opacity="0.35"/>
+  <text class="tx" x="40" y="407">Analytics</text><line class="ln" x1="160" y1="402" x2="760" y2="402" stroke-width="1" opacity="0.35"/>
+  <rect class="pri g" style="animation-name:b1" x="170" y="96" width="390" height="16" rx="4"/>
+  <rect class="pri g" style="animation-name:b2" x="180" y="120" width="372" height="16" rx="4"/>
+  <rect class="pri g" style="animation-name:b3" x="190" y="144" width="354" height="16" rx="4"/>
+  <rect class="pri g" style="animation-name:b4" x="200" y="168" width="336" height="16" rx="4"/>
+  <rect class="badf g" style="animation-name:b5" x="210" y="192" width="318" height="16" rx="4"/>
+  <g class="a" style="animation-name:b6"><text class="sub badt" x="536" y="205">Ledger down: timeout</text></g>
+  <g class="a" style="animation-name:b7"><text class="tx badt" x="566" y="109">request fails</text></g>
+  <rect class="pri g" style="animation-name:b8" x="170" y="274" width="66" height="16" rx="4"/>
+  <g class="a" style="animation-name:b9"><text class="sub okt" x="244" y="287">answered</text></g>
+  <rect class="pri g" style="animation-name:b10" x="178" y="298" width="50" height="16" rx="4"/>
+  <rect class="tea g" style="animation-name:b11" x="236" y="322" width="10" height="16" rx="4"/>
+  <g class="a" style="animation-name:b12"><text class="sub teat" x="254" y="335">OrderPlaced</text></g>
+  <rect class="tea g" style="animation-name:b13" x="262" y="346" width="118" height="16" rx="4"/>
+  <rect class="tea g" style="animation-name:b14" x="300" y="370" width="60" height="16" rx="4"/>
+  <g class="a" style="animation-name:b15"><rect class="badf" x="246" y="394" width="314" height="16" rx="4"/><text class="on13" x="256" y="407">down: the event waits in Kafka</text></g>
+  <rect class="tea g" style="animation-name:b16" x="566" y="394" width="74" height="16" rx="4"/>
+  <g class="a" style="animation-name:b17"><text class="sub teat" x="648" y="407">catches up</text></g>
+  <text class="sub" x="28" y="436">Time runs left to right; bar lengths are illustrative.</text>
+</svg>

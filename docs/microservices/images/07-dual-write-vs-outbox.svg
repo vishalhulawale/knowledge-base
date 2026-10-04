@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 404" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Dual write versus transactional outbox</title>
+  <desc id="d">Two panels with the same crash right after the database commit. Left, dual write: the order service commits the order row, then crashes before sending to Kafka, so no event is sent and the order exists but nobody hears about it. Right, outbox: the order row and an outbox row are written in one commit. After the crash, a relay using change data capture reads the outbox row and publishes the event to Kafka, and the consumer dedupes on event id in case it is delivered more than once.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ring{fill:#ffffff;stroke:#d97706;stroke-width:2.5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+      .ring{fill:#111827;stroke:#fbbf24}
+    }
+
+    .a{opacity:0;animation:13s infinite linear}
+    .tok{opacity:0;animation:13s infinite linear}
+    @keyframes d1{0%{transform:translate(210px,140px);opacity:0}3%{transform:translate(210px,140px);opacity:0}4%{transform:translate(210px,140px);opacity:1}14%{transform:translate(100px,266px);opacity:1}15%{transform:translate(100px,266px);opacity:0}100%{transform:translate(100px,266px);opacity:0}}
+@keyframes d2{0%{transform:translate(590px,140px);opacity:0}3%{transform:translate(590px,140px);opacity:0}4%{transform:translate(590px,140px);opacity:1}14%{transform:translate(480px,266px);opacity:1}15%{transform:translate(480px,266px);opacity:0}100%{transform:translate(480px,266px);opacity:0}}
+@keyframes d3{0%{transform:translate(480px,266px);opacity:0}34%{transform:translate(480px,266px);opacity:0}35%{transform:translate(480px,266px);opacity:1}44%{transform:translate(590px,330px);opacity:1}54%{transform:translate(700px,266px);opacity:1}55%{transform:translate(700px,266px);opacity:0}100%{transform:translate(700px,266px);opacity:0}}
+@keyframes d4{0%{transform:translate(700px,266px);opacity:0}58%{transform:translate(700px,266px);opacity:0}59%{transform:translate(700px,266px);opacity:1}68%{transform:translate(700px,352px);opacity:1}69%{transform:translate(700px,352px);opacity:0}100%{transform:translate(700px,352px);opacity:0}}
+@keyframes o1{0%,15%{opacity:0}17%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes o2{0%,15%{opacity:0}17%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes o3{0%,22%{opacity:0}24%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes o4{0%,22%{opacity:0}24%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes o5{0%,28%{opacity:0}30%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes o6{0%,36%{opacity:0}38%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes o7{0%,55%{opacity:0}57%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes o8{0%,68%{opacity:0}70%,92%{opacity:1}96%,100%{opacity:0}}
+
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.tok{animation:none;opacity:0}}
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="402" rx="14"/>
+  <text class="h" x="28" y="40">Dual write versus transactional outbox</text>
+  <text class="sub" x="28" y="62">Same crash in both: right after the database commit.</text>
+  <rect class="bb" x="20" y="76" width="380" height="314" rx="12" stroke-width="1.5"/><rect class="bo" x="400" y="76" width="380" height="314" rx="12" stroke-width="1.5"/>
+  <text class="lbl badt" x="36" y="100">❌ Dual write</text><text class="lbl okt" x="416" y="100">✅ Outbox</text>
+  <rect class="bp" x="150" y="124" width="120" height="40" rx="10" stroke-width="1.5"/><text class="tx" x="210" y="149" text-anchor="middle">Order service</text>
+  <path class="box" stroke-width="1.5" d="M55,218 a45.0,8 0 0 1 90,0 v92 a45.0,8 0 0 1 -90,0 z"/><path class="box" style="fill:none" stroke-width="1.5" d="M55,218 a45.0,8 0 0 0 90,0"/><text class="sub" x="100" y="240" text-anchor="middle">orders DB</text>
+  <path class="box" stroke-width="1.5" d="M275,218 a45.0,8 0 0 1 90,0 v92 a45.0,8 0 0 1 -90,0 z"/><path class="box" style="fill:none" stroke-width="1.5" d="M275,218 a45.0,8 0 0 0 90,0"/><text class="sub" x="320" y="240" text-anchor="middle">Kafka</text>
+  <line class="ln" x1="190" y1="164" x2="120" y2="206" marker-end="url(#ar)"/><text class="sub" x="110" y="184" text-anchor="end">1 commit</text>
+  <line class="ln dash" x1="230" y1="164" x2="300" y2="206" marker-end="url(#ar)"/><text class="sub" x="310" y="184">2 send</text>
+  <rect class="bp" x="530" y="124" width="120" height="40" rx="10" stroke-width="1.5"/><text class="tx" x="590" y="149" text-anchor="middle">Order service</text>
+  <path class="box" stroke-width="1.5" d="M415,218 a85.0,8 0 0 1 170,0 v92 a85.0,8 0 0 1 -170,0 z"/><path class="box" style="fill:none" stroke-width="1.5" d="M415,218 a85.0,8 0 0 0 170,0"/><text class="sub" x="500" y="240" text-anchor="middle">orders + outbox tables</text>
+  <path class="box" stroke-width="1.5" d="M655,218 a45.0,8 0 0 1 90,0 v92 a45.0,8 0 0 1 -90,0 z"/><path class="box" style="fill:none" stroke-width="1.5" d="M655,218 a45.0,8 0 0 0 90,0"/><text class="sub" x="700" y="240" text-anchor="middle">Kafka</text>
+  <line class="ln" x1="570" y1="164" x2="510" y2="206" marker-end="url(#ar)"/><text class="sub" x="560" y="196" text-anchor="end">one commit</text>
+  <rect class="bt" x="545" y="330" width="90" height="30" rx="6" stroke-width="1.5"/><text class="sub" x="590" y="350" text-anchor="middle">relay (CDC)</text>
+  <rect class="box" x="668" y="340" width="64" height="24" rx="6" stroke-width="1.5"/><text class="sub" x="700" y="357" text-anchor="middle">consumer</text>
+  <circle class="tok pri" style="animation-name:d1" r="7"/>
+  <circle class="tok pri" style="animation-name:d2" r="7"/>
+  <circle class="tok tea" style="animation-name:d3" r="7"/>
+  <circle class="tok tea" style="animation-name:d4" r="7"/>
+  <g class="a" style="animation-name:o1"><rect class="pri" x="58" y="290" width="84" height="20" rx="4" stroke-width="1.5"/><text class="on13" x="100" y="304" text-anchor="middle">order row</text></g>
+  <g class="a" style="animation-name:o2"><rect class="pri" x="424" y="290" width="70" height="20" rx="4" stroke-width="1.5"/><text class="on13" x="459" y="304" text-anchor="middle">order</text><rect class="tea" x="500" y="290" width="70" height="20" rx="4" stroke-width="1.5"/><text class="on13" x="535" y="304" text-anchor="middle">outbox</text></g>
+  <g class="a" style="animation-name:o3"><rect class="bb" x="271" y="131" width="126" height="26" rx="6" stroke-width="1.5"/><text class="sub badt" x="334" y="149" text-anchor="middle">process crashes</text></g>
+  <g class="a" style="animation-name:o4"><rect class="bb" x="650" y="131" width="126" height="26" rx="6" stroke-width="1.5"/><text class="sub badt" x="713" y="149" text-anchor="middle">process crashes</text></g>
+  <g class="a" style="animation-name:o5"><text class="tx badt" x="320" y="330" text-anchor="middle">no event sent</text><text class="sub badt" x="210" y="370" text-anchor="middle">The order exists but nobody hears about it.</text></g>
+  <g class="a" style="animation-name:o6"><text class="sub" x="416" y="380">relay publishes after the crash</text></g>
+  <g class="a" style="animation-name:o7"><rect class="tea" x="668" y="290" width="64" height="20" rx="4" stroke-width="1.5"/><text class="on13" x="700" y="304" text-anchor="middle">event</text></g>
+  <g class="a" style="animation-name:o8"><text class="sub okt" x="766" y="380" text-anchor="end">dedupe on event id</text></g>
+</svg>

@@ -77,6 +77,9 @@ stateDiagram-v2
 | waitDurationInOpenState | 60 000 ms | Shorter (5–30 s) for quick recovery probes |
 | permittedNumberOfCallsInHalfOpenState | 10 | Small number of trial calls |
 
+![Animation: a circuit breaker's sliding window of 10 calls fills with 6 failures, a 60% failure rate that passes the 50% threshold, so it trips to OPEN and fails calls fast; after the wait it goes HALF_OPEN, 5 trial calls succeed and it closes again with the window reset](images/06-circuit-breaker-window.svg){ loading=lazy }
+*Watch the breaker judge only once the window is full, then stop calling the dependency entirely while OPEN. Recovery is probed with a handful of trial calls, not the full load.*
+
 ### Bulkhead
 
 Named after ship compartments: a leak floods one compartment, not the ship.
@@ -84,6 +87,9 @@ Named after ship compartments: a leak floods one compartment, not the ship.
 - **Semaphore bulkhead:** limits concurrent calls (default `maxConcurrentCalls` 25, `maxWaitDuration` 0). Works with any threading model, including virtual threads.
 - **Thread-pool bulkhead:** runs calls on a dedicated bounded pool and queue (defaults: max pool = CPUs, core = CPUs − 1, queue 100).
 - With **virtual threads**, the request pool no longer protects downstreams, so semaphore bulkheads per dependency become essential.
+
+![Animation: with no bulkhead, calls waiting on a slow pharmacy fill all 200 request threads and a member-only request is rejected; with a bulkhead of 20, pharmacy holds only a few threads, the 21st pharmacy call is rejected at once, and member requests are still served](images/06-bulkhead-threads.svg){ loading=lazy }
+*Notice the bulkhead doesn't make pharmacy any faster. It only stops pharmacy from taking the threads that healthy requests need.*
 
 ### Rate limiter
 
@@ -103,6 +109,9 @@ Default Spring Boot aspect order: **Retry ( CircuitBreaker ( RateLimiter ( TimeL
 - Retry outermost: each attempt passes through the breaker, so an open breaker stops retries quickly.
 - Bulkhead innermost: limits concurrent actual calls.
 - Change order with `resilience4j.<module>.<module>AspectOrder` properties (higher = runs first), or use functional decoration for explicit control.
+
+![Nested boxes showing the default Resilience4j aspect order in Spring Boot from outside in: Retry, CircuitBreaker, RateLimiter, TimeLimiter, Bulkhead, then the remote call](images/06-decorator-order.svg){ loading=lazy }
+*Read it from the outside in: each retry attempt has to get past the breaker, and only calls that pass every layer take a bulkhead slot.*
 
 ### Load shedding and back-pressure
 

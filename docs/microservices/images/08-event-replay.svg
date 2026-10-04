@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 398" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Event sourcing: rebuild, decide, append</title>
+  <desc id="d">The command handler loads stream refill-123 from the event store and replays it into an empty Refill aggregate: v1 RefillRequested sets status REQUESTED, v2 BenefitChecked marks the benefit checked, version 2. The ApproveRefill command is handled against that state and produces RefillApproved, which is appended with expected version 2 and becomes version 3; status is APPROVED. A concurrent command that also expected version 2 gets a conflict. A footnote says long streams load a snapshot and replay only later events.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ring{fill:#ffffff;stroke:#d97706;stroke-width:2.5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+      .ring{fill:#111827;stroke:#fbbf24}
+    }
+
+    .ph{animation:14s infinite steps(1,end)}
+    @keyframes p0{0%,13%{opacity:1}14%,100%{opacity:0}}
+@keyframes p1{0%,13%{opacity:0}14%,27%{opacity:1}28%,100%{opacity:0}}
+@keyframes p2{0%,27%{opacity:0}28%,41%{opacity:1}42%,100%{opacity:0}}
+@keyframes p3{0%,41%{opacity:0}42%,57%{opacity:1}58%,100%{opacity:0}}
+@keyframes p4{0%,57%{opacity:0}58%,77%{opacity:1}78%,100%{opacity:0}}
+@keyframes p5{0%,77%{opacity:0}78%,97%{opacity:1}100%{opacity:0}}
+
+    .p0{animation-name:p0}.p1{animation-name:p1;opacity:0}.p2{animation-name:p2;opacity:0}.p3{animation-name:p3;opacity:0}.p4{animation-name:p4;opacity:0}.p5{animation-name:p5;opacity:0}
+    .a{opacity:0;animation:14s infinite linear}
+    @keyframes cmd{0%,42%{opacity:0}44%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes ok{0%,58%{opacity:0}60%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes cf{0%,78%{opacity:0}80%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes ev3{0%,58%{opacity:0}60%,92%{opacity:1}96%,100%{opacity:0}}
+
+    .cmd{animation-name:cmd}.ok{animation-name:ok}.cf{animation-name:cf}
+    .ev3{opacity:0;animation:ev3 14s infinite linear}
+    @keyframes ptr{0%,13%{transform:translateY(-200px);opacity:0}14%,27%{transform:translateY(0);opacity:1}28%,57%{transform:translateY(50px);opacity:1}58%,100%{transform:translateY(100px);opacity:1}}
+    .ptr{animation:ptr 14s infinite steps(1,end)}
+    @media (prefers-reduced-motion: reduce){
+      .ph,.a,.ev3,.ptr{animation:none}.a,.ev3{opacity:1}.ptr{transform:translateY(100px)}
+      .p0,.p1,.p2,.p3,.p5{opacity:0}.p4{opacity:1}
+    }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="396" rx="14"/>
+  <text class="h" x="28" y="40">Event sourcing: rebuild, decide, append</text>
+  <g class="ph p0"><text class="lbl teat" x="28" y="68">Load stream refill-123 and start from an empty aggregate</text></g>
+  <g class="ph p1"><text class="lbl teat" x="28" y="68">Apply v1 RefillRequested</text></g>
+  <g class="ph p2"><text class="lbl teat" x="28" y="68">Apply v2 BenefitChecked: state rebuilt (a fold over the events)</text></g>
+  <g class="ph p3"><text class="lbl teat" x="28" y="68">Handle ApproveRefill: rules pass, the aggregate emits RefillApproved</text></g>
+  <g class="ph p4"><text class="lbl teat" x="28" y="68">Append RefillApproved expecting version 2: ok, now version 3</text></g>
+  <g class="ph p5"><text class="lbl teat" x="28" y="68">A concurrent command that also expected version 2 gets a conflict</text></g>
+  <rect class="box" x="28" y="88" width="300" height="200" rx="10" stroke-width="1.5"/><text class="sub" x="44" y="112">Event store: stream refill-123</text>
+  <rect class="bp" x="64" y="126" width="248" height="38" rx="8" stroke-width="1.5"/><text class="tx" x="80" y="150" font-weight="700">v1</text><text class="tx" x="116" y="150">RefillRequested</text>
+  <rect class="bp" x="64" y="176" width="248" height="38" rx="8" stroke-width="1.5"/><text class="tx" x="80" y="200" font-weight="700">v2</text><text class="tx" x="116" y="200">BenefitChecked</text>
+  <rect class="box" x="64" y="226" width="248" height="38" rx="8" style="stroke-dasharray:5 4"/>
+  <g class="ev3"><rect class="bp" x="64" y="226" width="248" height="38" rx="8" stroke-width="1.5"/><text class="tx" x="80" y="250" font-weight="700">v3</text><text class="tx" x="116" y="250">RefillApproved</text></g>
+  <g class="ptr"><path class="tea" d="M40,0 l14,9 l-14,9 z" transform="translate(0 136)"/></g>
+  <rect class="bt" x="456" y="88" width="316" height="150" rx="10" stroke-width="1.5"/><text class="sub" x="472" y="112">Refill aggregate (in memory)</text>
+  <g class="ph p0"><text class="sub" x="472" y="146">status</text><text class="lbl" x="570" y="146">NONE</text><text class="sub" x="472" y="176">benefit</text><text class="tx" x="570" y="176">not checked</text><text class="sub" x="472" y="206">version</text><text class="lbl" x="570" y="206">0</text></g>
+  <g class="ph p1"><text class="sub" x="472" y="146">status</text><text class="lbl" x="570" y="146">REQUESTED</text><text class="sub" x="472" y="176">benefit</text><text class="tx" x="570" y="176">not checked</text><text class="sub" x="472" y="206">version</text><text class="lbl" x="570" y="206">1</text></g>
+  <g class="ph p2"><text class="sub" x="472" y="146">status</text><text class="lbl" x="570" y="146">REQUESTED</text><text class="sub" x="472" y="176">benefit</text><text class="tx" x="570" y="176">checked</text><text class="sub" x="472" y="206">version</text><text class="lbl" x="570" y="206">2</text></g>
+  <g class="ph p3"><text class="sub" x="472" y="146">status</text><text class="lbl" x="570" y="146">REQUESTED</text><text class="sub" x="472" y="176">benefit</text><text class="tx" x="570" y="176">checked</text><text class="sub" x="472" y="206">version</text><text class="lbl" x="570" y="206">2</text></g>
+  <g class="ph p4"><text class="sub" x="472" y="146">status</text><text class="lbl" x="570" y="146">APPROVED</text><text class="sub" x="472" y="176">benefit</text><text class="tx" x="570" y="176">checked</text><text class="sub" x="472" y="206">version</text><text class="lbl" x="570" y="206">3</text></g>
+  <g class="ph p5"><text class="sub" x="472" y="146">status</text><text class="lbl" x="570" y="146">APPROVED</text><text class="sub" x="472" y="176">benefit</text><text class="tx" x="570" y="176">checked</text><text class="sub" x="472" y="206">version</text><text class="lbl" x="570" y="206">3</text></g>
+  <line class="ln" x1="330" y1="160" x2="452" y2="160" marker-end="url(#ar)"/><text class="sub" x="390" y="152" text-anchor="middle">apply()</text>
+  <g class="a cmd"><rect class="bp" x="456" y="262" width="316" height="44" rx="10" stroke-width="1.5"/><text class="tx" x="472" y="289" font-weight="700">ApproveRefill</text><text class="sub" x="756" y="289" text-anchor="end">→ RefillApproved</text></g>
+  <g class="a ok"><text class="tx okt" x="456" y="330">append, expected version 2 → ok, version 3</text></g>
+  <g class="a cf"><rect class="bb" x="28" y="312" width="400" height="44" rx="10" stroke-width="1.5"/><text class="tx badt" x="44" y="339">2nd append, expected version 2 → conflict</text></g>
+  <text class="sub" x="28" y="380">With thousands of events, load a snapshot at version N and replay only the later events.</text>
+</svg>

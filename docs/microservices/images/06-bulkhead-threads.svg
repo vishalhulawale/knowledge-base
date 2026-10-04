@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 424" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Bulkhead: cap the threads one dependency can hold</title>
+  <desc id="d">Two grids of 40 squares, each standing for 5 of a service's 200 request threads, while the pharmacy dependency takes 10 seconds per call. Without a bulkhead, pharmacy calls take every thread and a member-only request finds no free thread and is rejected or times out. With a bulkhead of 20 concurrent pharmacy calls, pharmacy holds only 4 squares; the 21st pharmacy call is rejected at once with BulkheadFullException and falls back, while member requests keep getting threads and are served.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ring{fill:#ffffff;stroke:#d97706;stroke-width:2.5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+      .ring{fill:#111827;stroke:#fbbf24}
+    }
+
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes t1{0%,1%{opacity:0}3%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t2{0%,2.4%{opacity:0}4.4%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t3{0%,3.8%{opacity:0}5.8%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t4{0%,5.2%{opacity:0}7.2%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t5{0%,6.6%{opacity:0}8.6%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t6{0%,8%{opacity:0}10%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t7{0%,9.4%{opacity:0}11.4%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t8{0%,10.8%{opacity:0}12.8%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t9{0%,12.2%{opacity:0}14.2%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t10{0%,13.6%{opacity:0}15.6%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t11{0%,15%{opacity:0}17%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t12{0%,16.4%{opacity:0}18.4%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t13{0%,17.8%{opacity:0}19.8%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t14{0%,19.2%{opacity:0}21.2%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t15{0%,20.6%{opacity:0}22.6%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t16{0%,22%{opacity:0}24%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t17{0%,23.4%{opacity:0}25.4%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t18{0%,24.8%{opacity:0}26.8%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t19{0%,26.2%{opacity:0}28.2%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t20{0%,27.6%{opacity:0}29.6%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t21{0%,29%{opacity:0}31%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t22{0%,30.4%{opacity:0}32.4%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t23{0%,31.8%{opacity:0}33.8%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t24{0%,33.2%{opacity:0}35.2%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t25{0%,34.6%{opacity:0}36.6%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t26{0%,36%{opacity:0}38%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t27{0%,37.4%{opacity:0}39.4%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t28{0%,38.8%{opacity:0}40.8%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t29{0%,40.2%{opacity:0}42.2%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t30{0%,41.6%{opacity:0}43.6%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t31{0%,43%{opacity:0}45%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t32{0%,44.4%{opacity:0}46.4%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t33{0%,45.8%{opacity:0}47.8%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t34{0%,47.2%{opacity:0}49.2%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t35{0%,48.6%{opacity:0}50.6%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t36{0%,50%{opacity:0}52%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t37{0%,51.4%{opacity:0}53.4%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t38{0%,52.8%{opacity:0}54.8%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t39{0%,54.2%{opacity:0}56.2%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t40{0%,55.6%{opacity:0}57.6%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t41{0%,1%{opacity:0}3%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t42{0%,2.4%{opacity:0}4.4%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t43{0%,3.8%{opacity:0}5.8%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t44{0%,5.2%{opacity:0}7.2%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes t45{0%,10%{opacity:0}12%,22%{opacity:1}24%,100%{opacity:0}}
+@keyframes t46{0%,18%{opacity:0}20%,30%{opacity:1}32%,100%{opacity:0}}
+@keyframes t47{0%,30%{opacity:0}32%,42%{opacity:1}44%,100%{opacity:0}}
+@keyframes t48{0%,40%{opacity:0}42%,52%{opacity:1}54%,100%{opacity:0}}
+@keyframes t49{0%,50%{opacity:0}52%,62%{opacity:1}64%,100%{opacity:0}}
+@keyframes t50{0%,66%{opacity:0}68%,90%{opacity:1}92%,100%{opacity:0}}
+
+    @keyframes rejL{0%,64%{opacity:0}66%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes full{0%,10%{opacity:0}12%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes srvR{0%,66%{opacity:0}68%,92%{opacity:1}96%,100%{opacity:0}}
+
+    .rejL{animation-name:rejL}.full{animation-name:full}.srvR{animation-name:srvR}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="422" rx="14"/>
+  <text class="h" x="28" y="40">Bulkhead: cap the threads one dependency can hold</text>
+  <text class="sub" x="28" y="62">200 request threads, drawn as 40 squares of 5. Pharmacy has slowed to 10 s per call.</text>
+  <rect class="box" x="28" y="76" width="364" height="330" rx="10" stroke-width="1.5"/><text class="lbl" x="44" y="104">No bulkhead</text>
+  <rect class="box" x="408" y="76" width="364" height="330" rx="10" stroke-width="1.5"/><text class="lbl" x="424" y="104">Bulkhead: max 20 pharmacy calls</text>
+  <rect class="box" x="66" y="128" width="30" height="30" rx="5"/><rect class="box" x="102" y="128" width="30" height="30" rx="5"/><rect class="box" x="138" y="128" width="30" height="30" rx="5"/><rect class="box" x="174" y="128" width="30" height="30" rx="5"/><rect class="box" x="210" y="128" width="30" height="30" rx="5"/><rect class="box" x="246" y="128" width="30" height="30" rx="5"/><rect class="box" x="282" y="128" width="30" height="30" rx="5"/><rect class="box" x="318" y="128" width="30" height="30" rx="5"/><rect class="box" x="66" y="164" width="30" height="30" rx="5"/><rect class="box" x="102" y="164" width="30" height="30" rx="5"/><rect class="box" x="138" y="164" width="30" height="30" rx="5"/><rect class="box" x="174" y="164" width="30" height="30" rx="5"/><rect class="box" x="210" y="164" width="30" height="30" rx="5"/><rect class="box" x="246" y="164" width="30" height="30" rx="5"/><rect class="box" x="282" y="164" width="30" height="30" rx="5"/><rect class="box" x="318" y="164" width="30" height="30" rx="5"/><rect class="box" x="66" y="200" width="30" height="30" rx="5"/><rect class="box" x="102" y="200" width="30" height="30" rx="5"/><rect class="box" x="138" y="200" width="30" height="30" rx="5"/><rect class="box" x="174" y="200" width="30" height="30" rx="5"/><rect class="box" x="210" y="200" width="30" height="30" rx="5"/><rect class="box" x="246" y="200" width="30" height="30" rx="5"/><rect class="box" x="282" y="200" width="30" height="30" rx="5"/><rect class="box" x="318" y="200" width="30" height="30" rx="5"/><rect class="box" x="66" y="236" width="30" height="30" rx="5"/><rect class="box" x="102" y="236" width="30" height="30" rx="5"/><rect class="box" x="138" y="236" width="30" height="30" rx="5"/><rect class="box" x="174" y="236" width="30" height="30" rx="5"/><rect class="box" x="210" y="236" width="30" height="30" rx="5"/><rect class="box" x="246" y="236" width="30" height="30" rx="5"/><rect class="box" x="282" y="236" width="30" height="30" rx="5"/><rect class="box" x="318" y="236" width="30" height="30" rx="5"/><rect class="box" x="66" y="272" width="30" height="30" rx="5"/><rect class="box" x="102" y="272" width="30" height="30" rx="5"/><rect class="box" x="138" y="272" width="30" height="30" rx="5"/><rect class="box" x="174" y="272" width="30" height="30" rx="5"/><rect class="box" x="210" y="272" width="30" height="30" rx="5"/><rect class="box" x="246" y="272" width="30" height="30" rx="5"/><rect class="box" x="282" y="272" width="30" height="30" rx="5"/><rect class="box" x="318" y="272" width="30" height="30" rx="5"/><rect class="box" x="446" y="128" width="30" height="30" rx="5"/><rect class="box" x="482" y="128" width="30" height="30" rx="5"/><rect class="box" x="518" y="128" width="30" height="30" rx="5"/><rect class="box" x="554" y="128" width="30" height="30" rx="5"/><rect class="box" x="590" y="128" width="30" height="30" rx="5"/><rect class="box" x="626" y="128" width="30" height="30" rx="5"/><rect class="box" x="662" y="128" width="30" height="30" rx="5"/><rect class="box" x="698" y="128" width="30" height="30" rx="5"/><rect class="box" x="446" y="164" width="30" height="30" rx="5"/><rect class="box" x="482" y="164" width="30" height="30" rx="5"/><rect class="box" x="518" y="164" width="30" height="30" rx="5"/><rect class="box" x="554" y="164" width="30" height="30" rx="5"/><rect class="box" x="590" y="164" width="30" height="30" rx="5"/><rect class="box" x="626" y="164" width="30" height="30" rx="5"/><rect class="box" x="662" y="164" width="30" height="30" rx="5"/><rect class="box" x="698" y="164" width="30" height="30" rx="5"/><rect class="box" x="446" y="200" width="30" height="30" rx="5"/><rect class="box" x="482" y="200" width="30" height="30" rx="5"/><rect class="box" x="518" y="200" width="30" height="30" rx="5"/><rect class="box" x="554" y="200" width="30" height="30" rx="5"/><rect class="box" x="590" y="200" width="30" height="30" rx="5"/><rect class="box" x="626" y="200" width="30" height="30" rx="5"/><rect class="box" x="662" y="200" width="30" height="30" rx="5"/><rect class="box" x="698" y="200" width="30" height="30" rx="5"/><rect class="box" x="446" y="236" width="30" height="30" rx="5"/><rect class="box" x="482" y="236" width="30" height="30" rx="5"/><rect class="box" x="518" y="236" width="30" height="30" rx="5"/><rect class="box" x="554" y="236" width="30" height="30" rx="5"/><rect class="box" x="590" y="236" width="30" height="30" rx="5"/><rect class="box" x="626" y="236" width="30" height="30" rx="5"/><rect class="box" x="662" y="236" width="30" height="30" rx="5"/><rect class="box" x="698" y="236" width="30" height="30" rx="5"/><rect class="box" x="446" y="272" width="30" height="30" rx="5"/><rect class="box" x="482" y="272" width="30" height="30" rx="5"/><rect class="box" x="518" y="272" width="30" height="30" rx="5"/><rect class="box" x="554" y="272" width="30" height="30" rx="5"/><rect class="box" x="590" y="272" width="30" height="30" rx="5"/><rect class="box" x="626" y="272" width="30" height="30" rx="5"/><rect class="box" x="662" y="272" width="30" height="30" rx="5"/><rect class="box" x="698" y="272" width="30" height="30" rx="5"/>
+  <rect class="wrnf a" style="animation-name:t1" x="66" y="128" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t2" x="102" y="128" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t3" x="138" y="128" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t4" x="174" y="128" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t5" x="210" y="128" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t6" x="246" y="128" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t7" x="282" y="128" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t8" x="318" y="128" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t9" x="66" y="164" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t10" x="102" y="164" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t11" x="138" y="164" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t12" x="174" y="164" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t13" x="210" y="164" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t14" x="246" y="164" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t15" x="282" y="164" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t16" x="318" y="164" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t17" x="66" y="200" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t18" x="102" y="200" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t19" x="138" y="200" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t20" x="174" y="200" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t21" x="210" y="200" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t22" x="246" y="200" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t23" x="282" y="200" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t24" x="318" y="200" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t25" x="66" y="236" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t26" x="102" y="236" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t27" x="138" y="236" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t28" x="174" y="236" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t29" x="210" y="236" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t30" x="246" y="236" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t31" x="282" y="236" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t32" x="318" y="236" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t33" x="66" y="272" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t34" x="102" y="272" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t35" x="138" y="272" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t36" x="174" y="272" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t37" x="210" y="272" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t38" x="246" y="272" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t39" x="282" y="272" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t40" x="318" y="272" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t41" x="446" y="128" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t42" x="482" y="128" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t43" x="518" y="128" width="30" height="30" rx="5"/><rect class="wrnf a" style="animation-name:t44" x="554" y="128" width="30" height="30" rx="5"/><rect class="okf a" style="animation-name:t45" x="482" y="164" width="30" height="30" rx="5"/><rect class="okf a" style="animation-name:t46" x="662" y="164" width="30" height="30" rx="5"/><rect class="okf a" style="animation-name:t47" x="590" y="200" width="30" height="30" rx="5"/><rect class="okf a" style="animation-name:t48" x="554" y="164" width="30" height="30" rx="5"/><rect class="okf a" style="animation-name:t49" x="518" y="236" width="30" height="30" rx="5"/><rect class="okf a" style="animation-name:t50" x="590" y="164" width="30" height="30" rx="5"/>
+  <g class="a rejL"><text class="tx badt" x="44" y="340">Member-only request: no free thread,</text><text class="tx badt" x="44" y="358">rejected or times out</text></g>
+  <g class="a full"><text class="sub" x="424" y="322">Call 21 to pharmacy is rejected at once</text><text class="sub" x="424" y="338">(BulkheadFullException) → fallback</text></g>
+  <g class="a srvR"><text class="tx okt" x="424" y="364">Member-only request: served</text></g>
+  <rect class="wrnf" x="44" y="380" width="14" height="14" rx="3"/><text class="sub" x="64" y="392">waiting on pharmacy</text>
+  <rect class="okf" x="424" y="380" width="14" height="14" rx="3"/><text class="sub" x="444" y="392">member request in progress</text>
+</svg>

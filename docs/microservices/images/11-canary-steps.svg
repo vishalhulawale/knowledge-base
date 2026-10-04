@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 370" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Canary rollout step by step</title>
+  <desc id="d">A traffic bar split between stable v1 and canary v2, next to the Argo Rollouts steps from the page: setWeight 5, analysis, setWeight 25, pause 10 minutes, analysis, setWeight 50, pause 10 minutes, then the end of the steps promotes the canary to 100%. The canary share grows 5%, 25%, 50%, 100% as each analysis passes. A note says any failed analysis aborts the rollout and sends all traffic back to stable v1.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ring{fill:#ffffff;stroke:#d97706;stroke-width:2.5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+      .ring{fill:#111827;stroke:#fbbf24}
+    }
+
+    .ph{animation:14s infinite steps(1,end)}
+    @keyframes p0{0%,14%{opacity:1}15%,100%{opacity:0}}
+@keyframes p1{0%,14%{opacity:0}15%,29%{opacity:1}30%,100%{opacity:0}}
+@keyframes p2{0%,29%{opacity:0}30%,46%{opacity:1}47%,100%{opacity:0}}
+@keyframes p3{0%,46%{opacity:0}47%,61%{opacity:1}62%,100%{opacity:0}}
+@keyframes p4{0%,61%{opacity:0}62%,79%{opacity:1}80%,100%{opacity:0}}
+@keyframes p5{0%,79%{opacity:0}80%,97%{opacity:1}100%{opacity:0}}
+
+    .p0{animation-name:p0}.p1{animation-name:p1;opacity:0}.p2{animation-name:p2;opacity:0}.p3{animation-name:p3;opacity:0}.p4{animation-name:p4;opacity:0}.p5{animation-name:p5;opacity:0}
+    @media (prefers-reduced-motion: reduce){.ph{animation:none}.p0,.p1,.p2,.p3,.p5{opacity:0}.p4{opacity:1}}
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="368" rx="14"/>
+  <text class="h" x="28" y="40">Canary rollout, step by step (Argo Rollouts)</text>
+  <text class="sub" x="28" y="62">Traffic split at the mesh, driven by the steps on the right.</text>
+  <text class="sub" x="28" y="106">requests</text>
+  <text class="tx" x="522" y="114" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="13">setWeight: 5</text><text class="tx" x="522" y="144" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="13">analysis</text><text class="tx" x="522" y="174" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="13">setWeight: 25</text><text class="tx" x="522" y="204" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="13">pause: 10m</text><text class="tx" x="522" y="234" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="13">analysis</text><text class="tx" x="522" y="264" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="13">setWeight: 50</text><text class="tx" x="522" y="294" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="13">pause: 10m</text><text class="tx" x="522" y="324" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="13">end of steps: promote</text>
+  <g class="ph p0"><rect class="pri" x="28" y="118" width="440" height="44" rx="8"/><rect class="tea" x="446" y="118" width="22" height="44" rx="8"/><text class="on" x="44" y="145">stable v1 95%</text><text class="lbl teat" x="458" y="186" text-anchor="end">canary v2 5%</text><rect class="bt" x="508" y="96" width="264" height="26" rx="6" stroke-width="2" style="fill:none"/></g>
+  <g class="ph p1"><rect class="pri" x="28" y="118" width="440" height="44" rx="8"/><rect class="tea" x="446" y="118" width="22" height="44" rx="8"/><text class="on" x="44" y="145">stable v1 95%</text><text class="lbl teat" x="458" y="186" text-anchor="end">canary v2 5%</text><rect class="bt" x="508" y="126" width="264" height="26" rx="6" stroke-width="2" style="fill:none"/><text class="tx okt" x="28" y="222">Analysis: canary 5xx rate &lt; 1% → pass</text></g>
+  <g class="ph p2"><rect class="pri" x="28" y="118" width="440" height="44" rx="8"/><rect class="tea" x="358" y="118" width="110" height="44" rx="8"/><text class="on" x="44" y="145">stable v1 75%</text><text class="lbl teat" x="458" y="186" text-anchor="end">canary v2 25%</text><rect class="bt" x="508" y="156" width="264" height="26" rx="6" stroke-width="2" style="fill:none"/><rect class="bt" x="508" y="186" width="264" height="26" rx="6" stroke-width="2" style="fill:none"/></g>
+  <g class="ph p3"><rect class="pri" x="28" y="118" width="440" height="44" rx="8"/><rect class="tea" x="358" y="118" width="110" height="44" rx="8"/><text class="on" x="44" y="145">stable v1 75%</text><text class="lbl teat" x="458" y="186" text-anchor="end">canary v2 25%</text><rect class="bt" x="508" y="216" width="264" height="26" rx="6" stroke-width="2" style="fill:none"/><text class="tx okt" x="28" y="222">Analysis: canary 5xx rate &lt; 1% → pass</text></g>
+  <g class="ph p4"><rect class="pri" x="28" y="118" width="440" height="44" rx="8"/><rect class="tea" x="248" y="118" width="220" height="44" rx="8"/><text class="on" x="44" y="145">stable v1 50%</text><text class="lbl teat" x="458" y="186" text-anchor="end">canary v2 50%</text><rect class="bt" x="508" y="246" width="264" height="26" rx="6" stroke-width="2" style="fill:none"/><rect class="bt" x="508" y="276" width="264" height="26" rx="6" stroke-width="2" style="fill:none"/></g>
+  <g class="ph p5"><rect class="pri" x="28" y="118" width="440" height="44" rx="8"/><rect class="tea" x="28" y="118" width="440" height="44" rx="8"/><text class="lbl teat" x="458" y="186" text-anchor="end">canary v2 100%</text><rect class="bt" x="508" y="306" width="264" height="26" rx="6" stroke-width="2" style="fill:none"/></g>
+  <rect class="bb" x="28" y="250" width="440" height="54" rx="10" stroke-width="1.5"/><text class="tx badt" x="44" y="272">Any failed analysis aborts the rollout:</text><text class="sub" x="44" y="292">weight goes back to 0% and stable v1 takes all traffic.</text>
+  <text class="sub" x="28" y="352">Steps from the Rollout example on this page; pause lengths are compressed here.</text>
+</svg>

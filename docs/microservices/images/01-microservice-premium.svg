@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">The microservice premium</title>
+  <desc id="d">A line chart of productivity against base complexity. The monolith line starts high and falls steeply as complexity grows. The microservices line starts lower, because of a fixed premium for distribution, and falls slowly. Left of the crossover point the monolith is more productive; right of it microservices are. Shape only, not measured data, after Martin Fowler's Microservice Premium.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ring{fill:#ffffff;stroke:#d97706;stroke-width:2.5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+      .ring{fill:#111827;stroke:#fbbf24}
+    }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">The microservice premium</text>
+  <text class="sub" x="28" y="62">Microservices carry a fixed cost. It only pays back once the system and organisation are complex enough.</text>
+  <line class="ln" x1="100" y1="330" x2="100" y2="88" marker-end="url(#ar)"/>
+  <line class="ln" x1="100" y1="330" x2="520" y2="330" marker-end="url(#ar)"/>
+  <text class="sub" x="0" y="0" transform="translate(84 260) rotate(-90)">Productivity</text>
+  <text class="sub" x="100" y="352">Base complexity (domain size, number of teams)</text>
+  <rect class="bt" x="100" y="88" width="310" height="242" opacity="0.35" stroke="none"/>
+  <path class="lnp" d="M100,112 Q310,122 500,318" stroke-width="3.5"/>
+  <path class="lnt" d="M100,200 Q310,206 500,258" stroke-width="3.5"/>
+  <text class="lbl prit" x="118" y="104">Monolith</text>
+  <text class="lbl teat" x="118" y="228">Microservices</text>
+  <line class="ln" x1="250" y1="150" x2="250" y2="204" marker-start="url(#ar)" marker-end="url(#ar)"/>
+  <text class="tx" x="264" y="160" font-weight="700">premium</text>
+  <circle class="pri" cx="410" cy="236" r="7"/>
+  <line class="ln dash" x1="410" y1="246" x2="410" y2="330"/>
+  <text class="sub" x="410" y="300" text-anchor="middle">crossover</text>
+  <text class="sub" x="400" y="120" text-anchor="end">monolith better</text>
+  <text class="sub" x="420" y="120">microservices</text>
+  <text class="sub" x="420" y="136">better</text>
+  <text class="lbl" x="548" y="112">Left of the crossover</text>
+  <text class="tx" x="548" y="136">The fixed cost of distribution</text>
+  <text class="tx" x="548" y="154">(automation, monitoring,</text>
+  <text class="tx" x="548" y="172">tracing, consistency) dominates.</text>
+  <text class="tx" x="548" y="190">A modular monolith wins.</text>
+  <text class="lbl" x="548" y="226">Right of it</text>
+  <text class="tx" x="548" y="250">Many teams and a large domain</text>
+  <text class="tx" x="548" y="268">slow the monolith down faster</text>
+  <text class="tx" x="548" y="286">than the premium costs.</text>
+  <text class="sub" x="28" y="382">Shape only, not measured data. After Martin Fowler, “Microservice Premium” (2015).</text>
+</svg>

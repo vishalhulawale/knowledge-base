@@ -103,6 +103,9 @@ Rules of thumb:
 - Foreign keys across the boundary become IDs plus API calls or replicated data.
 - Reports that joined everything need a reporting store fed by events/CDC.
 
+![Three stages of moving data: the monolith keeps the data and the service calls its API, then the schema is split inside one database, then the service owns its own database and the monolith calls the service; below, dual writes are marked wrong and one writer plus CDC is marked right](images/02-data-migration-steps.svg){ loading=lazy }
+*Notice the middle stage: splitting the schema inside the same database is where you find and remove the joins that would otherwise block the move.*
+
 ### Choosing the first service
 
 Good first candidates: **valuable** (a pain point or a frequently changed area), **loosely coupled** (few inbound calls, little shared data), and **small enough** to finish in weeks. A leaf capability (notifications, document generation) is low risk but low value; a core capability is high value but high risk. Many teams pick something in between and treat the first extraction as building the platform (pipeline, observability, auth between services).
@@ -145,6 +148,9 @@ spring:
 
 !!! note
     Property prefixes changed across Spring Cloud Gateway versions (`spring.cloud.gateway.routes` in older releases, `spring.cloud.gateway.server.webflux.routes` from the 2025 release train). Check the version you're on.
+
+![Animation: a gateway sends everything else to the legacy monolith while the member profile path moves to member-profile-service in weighted steps of 10%, 50% and 100%, after which the legacy profile code is deleted](images/02-strangler-traffic-shift.svg){ loading=lazy }
+*Watch only one path move while everything else still reaches the monolith. The last step, deleting the legacy code, is the one teams forget.*
 
 ### Branch by abstraction and parallel run
 
@@ -191,6 +197,9 @@ spring:
     // When the mismatch rate is ~0 for long enough, switch the bean to RemoteEligibilityChecker,
     // then delete the legacy code.
     ```
+
+![Animation: the refill flow calls the parallel-run checker, which returns the legacy result while a bounded shadow executor calls the new service, compares the results and counts a match or logs a mismatch without PHI](images/02-parallel-run.svg){ loading=lazy }
+*Notice the user only ever waits on the legacy path. The new service's answer goes to a counter and a log line, never to the member.*
 
 ### Change data capture to feed the new service
 

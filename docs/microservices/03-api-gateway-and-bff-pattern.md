@@ -51,6 +51,9 @@ flowchart LR
 | Observability | Access logs, metrics per route, trace context creation/propagation |
 | Caching | Response caching for public/reference data |
 
+![Animation: requests pass through the gateway stages of TLS termination, JWT validation, route matching, per-user rate limiting and a circuit breaker; a valid request reaches the pharmacy service, one with a bad token is rejected with 401, and one over its burst is rejected with 429](images/03-gateway-filter-chain.svg){ loading=lazy }
+*Watch where each request stops. Cheap checks come first, so bad or excess traffic is rejected at the edge before it costs a backend anything.*
+
 ### Gateway vs load balancer vs service mesh
 
 | | Load balancer (L4/L7) | API gateway | Service mesh |
@@ -61,6 +64,9 @@ flowchart LR
 | Examples | AWS ALB/NLB, NGINX | Spring Cloud Gateway, Kong, AWS API Gateway, Apigee | Istio, Linkerd |
 
 They are complementary: an ALB in front of a gateway, a mesh between services.
+
+![Clients reach services through a load balancer and then an API gateway (north-south traffic), while service-to-service calls go between sidecar proxies of a service mesh (east-west traffic)](images/03-north-south-east-west.svg){ loading=lazy }
+*Notice the two directions: the gateway owns the vertical path from clients in, the mesh owns the horizontal calls between services.*
 
 ### The BFF pattern
 

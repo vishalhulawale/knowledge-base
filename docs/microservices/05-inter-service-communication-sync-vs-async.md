@@ -31,6 +31,9 @@ flowchart LR
 ```
 *On the left the client waits for four services and fails if any one fails. On the right, Order commits and responds; other services react in their own time, and a slow Analytics service affects nobody.*
 
+![Animation: timelines of the same outage in two designs; in the synchronous chain Ledger is down, every caller waits and the client's request fails, while in the event-driven design Order answers quickly, publishes OrderPlaced, and the event waits in Kafka until the down Analytics service catches up](images/05-sync-vs-async-timeline.svg){ loading=lazy }
+*Watch how long the client's bar is in each half. In the event-driven design the outage only delays Analytics; nobody's request waits for it.*
+
 ## Core concepts
 
 ### Coupling types
@@ -75,6 +78,9 @@ Message brokers differ: **Kafka** is a durable, partitioned, replayable log (con
 - Serial sync calls add latency; parallel calls cost the slowest one.
 - Availability of a serial chain ≈ product of each: 0.999⁵ ≈ 0.995 (about 3.6 hours down per month instead of 43 minutes).
 - Tail latency amplifies with fan-out: if one call in 100 is slow and a request fans out to 100 calls, most requests see at least one slow call.
+
+![Five services in series at 99.9% each give about 99.5% for the whole request, and a request that fans out to 100 calls with a 1% chance of a slow call each waits for at least one slow call about 63% of the time](images/05-chain-maths.svg){ loading=lazy }
+*Notice that both numbers get worse as the system grows: every extra hop multiplies availability down, and every extra parallel call raises the chance of hitting the slow tail.*
 
 ### Choosing per interaction
 

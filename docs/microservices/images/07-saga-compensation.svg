@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 364" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Saga compensation</title>
+  <desc id="d">Four saga steps run left to right: create order with status PENDING, reserve benefit, authorize payment (the pivot), and send to pharmacy. The first two succeed. Payment fails at the pivot, so send to pharmacy never runs. Compensations then run in reverse order: release the benefit, then reject the order. The saga ends REJECTED with every committed step semantically undone.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ring{fill:#ffffff;stroke:#d97706;stroke-width:2.5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+      .ring{fill:#111827;stroke:#fbbf24}
+    }
+
+    .a{opacity:0;animation:13s infinite linear}
+    @keyframes s1{0%,4%{opacity:0}6%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes s2{0%,16%{opacity:0}18%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes s3{0%,28%{opacity:0}30%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes s4{0%,30%{opacity:0}32%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes s5{0%,42%{opacity:0}44%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes s6{0%,56%{opacity:0}58%,92%{opacity:1}96%,100%{opacity:0}}
+
+    .ph{animation:13s infinite steps(1,end)}
+    @keyframes p0{0%,27%{opacity:1}28%,100%{opacity:0}}
+@keyframes p1{0%,27%{opacity:0}28%,41%{opacity:1}42%,100%{opacity:0}}
+@keyframes p2{0%,41%{opacity:0}42%,67%{opacity:1}68%,100%{opacity:0}}
+@keyframes p3{0%,67%{opacity:0}68%,97%{opacity:1}100%{opacity:0}}
+
+    .p0{animation-name:p0}.p1{animation-name:p1;opacity:0}.p2{animation-name:p2;opacity:0}.p3{animation-name:p3;opacity:0}
+    @media (prefers-reduced-motion: reduce){.a,.ph{animation:none}.a{opacity:1}.p0,.p1,.p2{opacity:0}.p3{opacity:1}}
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="362" rx="14"/>
+  <text class="h" x="28" y="40">Saga: compensating a failed refill order</text>
+  <g class="ph p0"><text class="lbl teat" x="28" y="70">Forward: each step is a local transaction</text></g>
+  <g class="ph p1"><text class="lbl teat" x="28" y="70">Payment fails at the pivot, so the saga can't go forward</text></g>
+  <g class="ph p2"><text class="lbl teat" x="28" y="70">Compensations run in reverse order</text></g>
+  <g class="ph p3"><text class="lbl teat" x="28" y="70">Saga ends REJECTED: every committed step was semantically undone</text></g>
+  <rect class="box" x="28" y="104" width="174" height="74" rx="10" stroke-width="1.5"/><text class="tx" x="42" y="130" font-weight="700">Create order</text><text class="sub" x="42" y="150">status PENDING</text><text class="sub" x="42" y="168" font-weight="700">compensatable</text>
+  <line class="ln" x1="202" y1="141" x2="216" y2="141" marker-end="url(#ar)"/>
+  <rect class="box" x="218" y="104" width="174" height="74" rx="10" stroke-width="1.5"/><text class="tx" x="232" y="130" font-weight="700">Reserve benefit</text><text class="sub" x="232" y="150">Benefits svc</text><text class="sub" x="232" y="168" font-weight="700">compensatable</text>
+  <line class="ln" x1="392" y1="141" x2="406" y2="141" marker-end="url(#ar)"/>
+  <rect class="bw" x="408" y="104" width="174" height="74" rx="10" stroke-width="1.5"/><text class="tx" x="422" y="130" font-weight="700">Authorize payment</text><text class="sub" x="422" y="150">Payment svc</text><text class="sub" x="422" y="168" font-weight="700">pivot: go / no-go</text>
+  <line class="ln" x1="582" y1="141" x2="596" y2="141" marker-end="url(#ar)"/>
+  <rect class="box" x="598" y="104" width="174" height="74" rx="10" stroke-width="1.5"/><text class="tx" x="612" y="130" font-weight="700">Send to pharmacy</text><text class="sub" x="612" y="150">Pharmacy svc</text><text class="sub" x="612" y="168" font-weight="700">retriable</text>
+  <g class="a" style="animation-name:s1"><circle class="okf" cx="188" cy="104" r="13"/><text class="on" x="188" y="109" text-anchor="middle">✓</text></g>
+  <g class="a" style="animation-name:s2"><circle class="okf" cx="378" cy="104" r="13"/><text class="on" x="378" y="109" text-anchor="middle">✓</text></g>
+  <g class="a" style="animation-name:s3"><circle class="badf" cx="568" cy="104" r="13"/><text class="on" x="568" y="109" text-anchor="middle">✕</text><text class="tx badt" x="495" y="200" text-anchor="middle">PaymentFailed</text></g>
+  <g class="a" style="animation-name:s4"><rect class="mutf" x="598" y="104" width="174" height="74" rx="10" opacity="0.35"/><text class="sub" x="685" y="200" text-anchor="middle">never runs</text></g>
+  <g class="a" style="animation-name:s5"><path class="lnw" d="M448,212 C428,250 418,262 396,262" marker-end="url(#ar)"/><rect class="bw" x="218" y="236" width="174" height="52" rx="10" stroke-width="1.5"/><text class="lbl" x="232" y="258">Release benefit</text><text class="sub" x="232" y="277">BenefitReleased</text></g>
+  <g class="a" style="animation-name:s6"><line class="lnw" x1="218" y1="262" x2="206" y2="262" marker-end="url(#ar)"/><rect class="bw" x="28" y="236" width="174" height="52" rx="10" stroke-width="1.5"/><text class="lbl" x="42" y="258">Reject order</text><text class="sub" x="42" y="277">status REJECTED</text></g>
+
+  <text class="sub" x="448" y="258">Compensations are business</text><text class="sub" x="448" y="274">actions (release, reject),</text>
+  <text class="sub" x="448" y="290">not database rollbacks.</text>
+  <text class="sub" x="28" y="328">Steps that can fail go before the pivot; steps that can't be undone (notify pharmacy) go after it</text>
+  <text class="sub" x="28" y="346">and are retried until they succeed.</text>
+</svg>

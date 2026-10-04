@@ -86,6 +86,9 @@ sequenceDiagram
 - **Thread hops:** context is thread-local; `@Async`, executors and reactive code need context propagation (`ContextPropagatingTaskDecorator`, Reactor `Hooks.enableAutomaticContextPropagation()`).
 - **Gateway/mesh:** should preserve incoming headers and start a root span if none exists. Don't trust client-provided sampling decisions blindly at public edges.
 
+![With a plain executor the worker thread has an empty MDC, logs empty trace ids and calls the pharmacy without a traceparent header; with ContextPropagatingTaskDecorator the worker thread gets the same trace id and the trace continues downstream](images/10-context-thread-hop.svg){ loading=lazy }
+*Notice the request itself is identical on both sides. Only the executor decides whether the worker thread's logs and outgoing calls stay in the trace.*
+
 ### OpenTelemetry architecture
 
 - **API** (stable interfaces), **SDK** (sampling, processing, exporting), **instrumentation** (Java agent auto-instruments 100+ libraries, or library instrumentation), **OTLP** (wire protocol), **Collector** (receive, process, sample, export to any backend).
@@ -107,6 +110,9 @@ sequenceDiagram
 | Parent-based | Follow the parent's decision | Whole traces kept or dropped together | Depends on upstream |
 | Rate-limited | N traces/second | Predictable cost | Uneven coverage |
 | Tail-based (Collector) | Decide after trace completes: keep errors, slow, specific routes | Keeps the interesting traces | Collector must buffer all spans; more infra |
+
+![Animation: ten traces arrive, one with an error and one taking 1.4 seconds; head sampling at 0.1 decides at the root and keeps one random normal trace, while tail sampling buffers each trace and keeps the error, the slow trace and a small random baseline](images/10-head-vs-tail-sampling.svg){ loading=lazy }
+*Notice that head sampling has to decide before it knows how the trace ends, so the traces you most want are the ones it usually drops.*
 
 ### Correlation ids without full tracing
 

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Rolling update with maxSurge and maxUnavailable</title>
+  <desc id="d">Four v1 pods are replaced by v2 one at a time. With 4 replicas, maxSurge 25% and maxUnavailable 25% both round to one pod, so at each step one v1 pod is terminating and one v2 pod is starting in the surge slot, and at least 3 pods stay ready. Each new pod gets traffic only after its readiness probe passes. At the end four v2 pods are ready.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ring{fill:#ffffff;stroke:#d97706;stroke-width:2.5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+      .ring{fill:#111827;stroke:#fbbf24}
+    }
+
+    .ph{animation:12s infinite steps(1,end)}
+    @keyframes p0{0%,14%{opacity:1}15%,100%{opacity:0}}
+@keyframes p1{0%,14%{opacity:0}15%,31%{opacity:1}32%,100%{opacity:0}}
+@keyframes p2{0%,31%{opacity:0}32%,48%{opacity:1}49%,100%{opacity:0}}
+@keyframes p3{0%,48%{opacity:0}49%,65%{opacity:1}66%,100%{opacity:0}}
+@keyframes p4{0%,65%{opacity:0}66%,82%{opacity:1}83%,100%{opacity:0}}
+@keyframes p5{0%,82%{opacity:0}83%,97%{opacity:1}100%{opacity:0}}
+
+    .p0{animation-name:p0}.p1{animation-name:p1;opacity:0}.p2{animation-name:p2;opacity:0}.p3{animation-name:p3;opacity:0}.p4{animation-name:p4;opacity:0}.p5{animation-name:p5;opacity:0}
+    @media (prefers-reduced-motion: reduce){.ph{animation:none}.p0,.p1,.p3,.p4,.p5{opacity:0}.p2{opacity:1}}
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="298" rx="14"/>
+  <text class="h" x="28" y="40">Rolling update: replicas 4, maxSurge 25%, maxUnavailable 25%</text>
+  <text class="sub" x="28" y="62">25% of 4 = 1: at most one extra pod, at most one pod not ready. Old and new run side by side.</text>
+  <text class="sub" x="28" y="94">pods</text>
+  <g class="ph p0"><rect class="pri" x="28" y="110" width="134" height="80" rx="10" stroke-width="1.5"/><text class="on" x="95" y="146" text-anchor="middle">v1</text><text class="on13" x="95" y="168" text-anchor="middle">ready</text><rect class="pri" x="178" y="110" width="134" height="80" rx="10" stroke-width="1.5"/><text class="on" x="245" y="146" text-anchor="middle">v1</text><text class="on13" x="245" y="168" text-anchor="middle">ready</text><rect class="pri" x="328" y="110" width="134" height="80" rx="10" stroke-width="1.5"/><text class="on" x="395" y="146" text-anchor="middle">v1</text><text class="on13" x="395" y="168" text-anchor="middle">ready</text><rect class="pri" x="478" y="110" width="134" height="80" rx="10" stroke-width="1.5"/><text class="on" x="545" y="146" text-anchor="middle">v1</text><text class="on13" x="545" y="168" text-anchor="middle">ready</text><rect class="box" x="628" y="110" width="134" height="80" rx="10" style="stroke-dasharray:6 5"/><text class="sub" x="695" y="156" text-anchor="middle">surge slot</text><text class="lbl okt" x="28" y="222">Ready pods: 4 of 4</text><text class="lbl" x="772" y="222" text-anchor="end">Before: 4 × v1</text></g>
+  <g class="ph p1"><rect class="pri" x="28" y="110" width="134" height="80" rx="10" stroke-width="1.5"/><text class="on" x="95" y="146" text-anchor="middle">v1</text><text class="on13" x="95" y="168" text-anchor="middle">ready</text><rect class="pri" x="178" y="110" width="134" height="80" rx="10" stroke-width="1.5"/><text class="on" x="245" y="146" text-anchor="middle">v1</text><text class="on13" x="245" y="168" text-anchor="middle">ready</text><rect class="pri" x="328" y="110" width="134" height="80" rx="10" stroke-width="1.5"/><text class="on" x="395" y="146" text-anchor="middle">v1</text><text class="on13" x="395" y="168" text-anchor="middle">ready</text><rect class="pri" x="478" y="110" width="134" height="80" rx="10" opacity="0.3"/><text class="tx" x="545" y="146" text-anchor="middle" font-weight="700">v1</text><text class="sub" x="545" y="168" text-anchor="middle">terminating</text><rect class="bt" x="628" y="110" width="134" height="80" rx="10" stroke-width="2" style="stroke-dasharray:6 4"/><text class="tx" x="695" y="146" text-anchor="middle" font-weight="700">v2</text><text class="sub" x="695" y="168" text-anchor="middle">starting, not ready</text><text class="lbl wrnt" x="28" y="222">Ready pods: 3 of 4</text><text class="lbl" x="772" y="222" text-anchor="end">Step 1</text></g>
+  <g class="ph p2"><rect class="pri" x="28" y="110" width="134" height="80" rx="10" stroke-width="1.5"/><text class="on" x="95" y="146" text-anchor="middle">v1</text><text class="on13" x="95" y="168" text-anchor="middle">ready</text><rect class="pri" x="178" y="110" width="134" height="80" rx="10" stroke-width="1.5"/><text class="on" x="245" y="146" text-anchor="middle">v1</text><text class="on13" x="245" y="168" text-anchor="middle">ready</text><rect class="pri" x="328" y="110" width="134" height="80" rx="10" opacity="0.3"/><text class="tx" x="395" y="146" text-anchor="middle" font-weight="700">v1</text><text class="sub" x="395" y="168" text-anchor="middle">terminating</text><rect class="tea" x="478" y="110" width="134" height="80" rx="10" stroke-width="1.5"/><text class="on" x="545" y="146" text-anchor="middle">v2</text><text class="on13" x="545" y="168" text-anchor="middle">ready</text><rect class="bt" x="628" y="110" width="134" height="80" rx="10" stroke-width="2" style="stroke-dasharray:6 4"/><text class="tx" x="695" y="146" text-anchor="middle" font-weight="700">v2</text><text class="sub" x="695" y="168" text-anchor="middle">starting, not ready</text><text class="lbl wrnt" x="28" y="222">Ready pods: 3 of 4</text><text class="lbl" x="772" y="222" text-anchor="end">Step 2</text></g>
+  <g class="ph p3"><rect class="pri" x="28" y="110" width="134" height="80" rx="10" stroke-width="1.5"/><text class="on" x="95" y="146" text-anchor="middle">v1</text><text class="on13" x="95" y="168" text-anchor="middle">ready</text><rect class="pri" x="178" y="110" width="134" height="80" rx="10" opacity="0.3"/><text class="tx" x="245" y="146" text-anchor="middle" font-weight="700">v1</text><text class="sub" x="245" y="168" text-anchor="middle">terminating</text><rect class="tea" x="328" y="110" width="134" height="80" rx="10" stroke-width="1.5"/><text class="on" x="395" y="146" text-anchor="middle">v2</text><text class="on13" x="395" y="168" text-anchor="middle">ready</text><rect class="tea" x="478" y="110" width="134" height="80" rx="10" stroke-width="1.5"/><text class="on" x="545" y="146" text-anchor="middle">v2</text><text class="on13" x="545" y="168" text-anchor="middle">ready</text><rect class="bt" x="628" y="110" width="134" height="80" rx="10" stroke-width="2" style="stroke-dasharray:6 4"/><text class="tx" x="695" y="146" text-anchor="middle" font-weight="700">v2</text><text class="sub" x="695" y="168" text-anchor="middle">starting, not ready</text><text class="lbl wrnt" x="28" y="222">Ready pods: 3 of 4</text><text class="lbl" x="772" y="222" text-anchor="end">Step 3</text></g>
+  <g class="ph p4"><rect class="pri" x="28" y="110" width="134" height="80" rx="10" opacity="0.3"/><text class="tx" x="95" y="146" text-anchor="middle" font-weight="700">v1</text><text class="sub" x="95" y="168" text-anchor="middle">terminating</text><rect class="tea" x="178" y="110" width="134" height="80" rx="10" stroke-width="1.5"/><text class="on" x="245" y="146" text-anchor="middle">v2</text><text class="on13" x="245" y="168" text-anchor="middle">ready</text><rect class="tea" x="328" y="110" width="134" height="80" rx="10" stroke-width="1.5"/><text class="on" x="395" y="146" text-anchor="middle">v2</text><text class="on13" x="395" y="168" text-anchor="middle">ready</text><rect class="tea" x="478" y="110" width="134" height="80" rx="10" stroke-width="1.5"/><text class="on" x="545" y="146" text-anchor="middle">v2</text><text class="on13" x="545" y="168" text-anchor="middle">ready</text><rect class="bt" x="628" y="110" width="134" height="80" rx="10" stroke-width="2" style="stroke-dasharray:6 4"/><text class="tx" x="695" y="146" text-anchor="middle" font-weight="700">v2</text><text class="sub" x="695" y="168" text-anchor="middle">starting, not ready</text><text class="lbl wrnt" x="28" y="222">Ready pods: 3 of 4</text><text class="lbl" x="772" y="222" text-anchor="end">Step 4</text></g>
+  <g class="ph p5"><rect class="tea" x="28" y="110" width="134" height="80" rx="10" stroke-width="1.5"/><text class="on" x="95" y="146" text-anchor="middle">v2</text><text class="on13" x="95" y="168" text-anchor="middle">ready</text><rect class="tea" x="178" y="110" width="134" height="80" rx="10" stroke-width="1.5"/><text class="on" x="245" y="146" text-anchor="middle">v2</text><text class="on13" x="245" y="168" text-anchor="middle">ready</text><rect class="tea" x="328" y="110" width="134" height="80" rx="10" stroke-width="1.5"/><text class="on" x="395" y="146" text-anchor="middle">v2</text><text class="on13" x="395" y="168" text-anchor="middle">ready</text><rect class="tea" x="478" y="110" width="134" height="80" rx="10" stroke-width="1.5"/><text class="on" x="545" y="146" text-anchor="middle">v2</text><text class="on13" x="545" y="168" text-anchor="middle">ready</text><rect class="box" x="628" y="110" width="134" height="80" rx="10" style="stroke-dasharray:6 5"/><text class="sub" x="695" y="156" text-anchor="middle">surge slot</text><text class="lbl okt" x="28" y="222">Ready pods: 4 of 4</text><text class="lbl" x="772" y="222" text-anchor="end">Done: 4 × v2</text></g>
+  <text class="tx" x="28" y="258">A new pod receives traffic only once its readiness probe passes; then the next old pod is replaced.</text>
+  <text class="sub" x="28" y="282">Simplified: Kubernetes may overlap these steps, but never exceeds the surge or unavailable limits.</text>
+</svg>

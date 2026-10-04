@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Trace context is thread-local</title>
+  <desc id="d">Two panels. In both, the request thread has traceId 4bf92f35 and a span id in its logging MDC and submits work to an executor. With a plain executor the worker thread has an empty MDC and no current span, so its log line shows empty trace and span ids and the call to the pharmacy service carries no traceparent header: the trace breaks. With ContextPropagatingTaskDecorator the trace context and MDC are copied to the worker thread, the log line shows the same trace id, and the downstream call continues the same trace.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ring{fill:#ffffff;stroke:#d97706;stroke-width:2.5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+      .ring{fill:#111827;stroke:#fbbf24}
+    }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="448" rx="14"/>
+  <text class="h" x="28" y="40">Trace context is thread-local</text>
+  <text class="sub" x="28" y="62">Handing work to another thread loses the trace and the log correlation unless something copies it.</text>
+  <rect class="bb" x="20" y="76" width="364" height="330" rx="12" stroke-width="1.5"/><text class="lbl badt" x="36" y="100">❌ Plain executor</text>
+  <rect class="box" x="36" y="116" width="332" height="72" rx="10" stroke-width="1.5"/><text class="tx" x="50" y="138" font-weight="700">request thread (http-nio-exec-1)</text><text class="sub" x="50" y="160">MDC traceId = 4bf92f35…</text><text class="sub" x="50" y="178">MDC spanId  = 00f067aa…</text>
+  <line class="ln" x1="202" y1="188" x2="202" y2="218" marker-end="url(#ar)"/><text class="sub" x="212" y="208">executor.submit(…)</text>
+  <rect class="box" x="36" y="222" width="332" height="72" rx="10" stroke-width="1.5"/><text class="tx" x="50" y="244" font-weight="700">worker thread (upstream-1)</text><text class="sub badt" x="50" y="266">MDC traceId = (empty)</text><text class="sub" x="50" y="284">no current span</text>
+  <text class="sub" x="36" y="320">log line</text>
+  <rect class="box" x="36" y="328" width="332" height="28" rx="6" stroke-width="1.5"/><text class="tx" x="46" y="347" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="13">[graphql-consumer,,]</text>
+  <text class="sub badt" x="36" y="384">call to pharmacy has no traceparent:</text><text class="sub" x="36" y="400">the trace breaks here</text>
+  <rect class="bo" x="416" y="76" width="364" height="330" rx="12" stroke-width="1.5"/><text class="lbl okt" x="432" y="100">✅ ContextPropagatingTaskDecorator</text>
+  <rect class="box" x="432" y="116" width="332" height="72" rx="10" stroke-width="1.5"/><text class="tx" x="446" y="138" font-weight="700">request thread (http-nio-exec-1)</text><text class="sub" x="446" y="160">MDC traceId = 4bf92f35…</text><text class="sub" x="446" y="178">MDC spanId  = 00f067aa…</text>
+  <line class="ln" x1="598" y1="188" x2="598" y2="218" marker-end="url(#ar)"/><text class="sub" x="608" y="208">executor.submit(…)</text>
+  <rect class="box" x="432" y="222" width="332" height="72" rx="10" stroke-width="1.5"/><text class="tx" x="446" y="244" font-weight="700">worker thread (upstream-1)</text><text class="sub okt" x="446" y="266">MDC traceId = 4bf92f35…  (copied)</text><text class="sub" x="446" y="284">trace context copied too</text>
+  <text class="sub" x="432" y="320">log line</text>
+  <rect class="box" x="432" y="328" width="332" height="28" rx="6" stroke-width="1.5"/><text class="tx" x="442" y="347" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="13">[graphql-consumer,4bf92f35…,00f067aa…]</text>
+  <text class="sub okt" x="432" y="384">call to pharmacy carries traceparent</text><text class="sub" x="432" y="400">same trace continues downstream</text>
+  <text class="sub" x="28" y="432">Log pattern: [${spring.application.name:},%X{traceId:-},%X{spanId:-}]. Ids shortened.</text>
+</svg>

@@ -69,6 +69,9 @@ flowchart LR
 - **PKI engine:** issue short-lived TLS certificates.
 - **Spring Cloud Vault** authenticates (e.g. Kubernetes auth), reads secrets as property sources and can renew leases and rotate database credentials.
 
+![Animation: Vault's database secrets engine gives each of three pods its own short-lived Postgres user with a lease; pods 1 and 2 keep renewing, pod 3 is deleted, its lease runs out and Vault revokes its database user](images/09-vault-dynamic-leases.svg){ loading=lazy }
+*Watch pod 3's lease bar after the pod is gone: nobody renews it, so the credential dies on its own. No one has to remember to rotate it.*
+
 ### Cloud secret managers
 
 - **AWS Secrets Manager:** versioned secrets, **managed rotation** via a Lambda (built-in templates for RDS), KMS encryption, IAM policies, CloudTrail audit. **SSM Parameter Store** for cheaper config/simple secrets.
@@ -91,6 +94,9 @@ sequenceDiagram
     App->>DB: connect with new password
 ```
 *Notice there's an overlap period where both old and new credentials work. Rotation is safe only if apps pick up the new value before the old one is disabled.*
+
+![Timeline of the createSecret, setSecret, testSecret and finishSecret rotation steps: the old password moves from AWSCURRENT to AWSPREVIOUS and is disabled later, the new password goes from AWSPENDING to AWSCURRENT, and app pods switch inside the overlap](images/09-rotation-overlap.svg){ loading=lazy }
+*Notice where the apps switch: after finishSecret and before the old password is disabled. A pod that only reads secrets at startup needs a restart inside that window.*
 
 Ways apps pick up new secrets: periodic re-fetch with cache TTL, mounted-file watch, Vault lease renewal, or a rolling restart triggered by the change (Reloader-style controllers). Connection pools must re-authenticate (HikariCP picks up new credentials for new connections; long-lived connections keep working until recycled).
 

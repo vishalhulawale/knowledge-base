@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 404" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Parallel run</title>
+  <desc id="d">A refill flow calls a ParallelRunEligibilityChecker. The checker calls the legacy implementation and returns its result to the caller. At the same time it hands the same input to a bounded shadow executor, which calls the remote implementation backed by the new service, compares the two results and records a metric. The first request matches; the second does not and is logged as a mismatch without PHI.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ring{fill:#ffffff;stroke:#d97706;stroke-width:2.5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+      .ring{fill:#111827;stroke:#fbbf24}
+    }
+
+    .tok{animation:12s infinite linear;opacity:0}
+    @keyframes r1{0%{transform:translate(98px,175px);opacity:0}2%{transform:translate(98px,175px);opacity:0}3%{transform:translate(98px,175px);opacity:1}9%{transform:translate(310px,175px);opacity:1}15%{transform:translate(585px,105px);opacity:1}21%{transform:translate(310px,175px);opacity:1}27%{transform:translate(98px,175px);opacity:1}30%{transform:translate(98px,175px);opacity:0}100%{transform:translate(98px,175px);opacity:0}}
+@keyframes s1{0%{transform:translate(310px,175px);opacity:0}9%{transform:translate(310px,175px);opacity:0}10%{transform:translate(310px,175px);opacity:1}18%{transform:translate(585px,245px);opacity:1}28%{transform:translate(310px,312px);opacity:1}30%{transform:translate(310px,312px);opacity:0}100%{transform:translate(310px,312px);opacity:0}}
+@keyframes r2{0%{transform:translate(98px,175px);opacity:0}47%{transform:translate(98px,175px);opacity:0}48%{transform:translate(98px,175px);opacity:1}54%{transform:translate(310px,175px);opacity:1}60%{transform:translate(585px,105px);opacity:1}66%{transform:translate(310px,175px);opacity:1}72%{transform:translate(98px,175px);opacity:1}75%{transform:translate(98px,175px);opacity:0}100%{transform:translate(98px,175px);opacity:0}}
+@keyframes s2{0%{transform:translate(310px,175px);opacity:0}54%{transform:translate(310px,175px);opacity:0}55%{transform:translate(310px,175px);opacity:1}63%{transform:translate(585px,245px);opacity:1}73%{transform:translate(310px,312px);opacity:1}75%{transform:translate(310px,312px);opacity:0}100%{transform:translate(310px,312px);opacity:0}}
+
+    .r1{animation-name:r1}.s1{animation-name:s1}.r2{animation-name:r2}.s2{animation-name:s2}
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes ok1{0%,27%{opacity:0}29%,44%{opacity:1}46%,100%{opacity:0}}
+@keyframes bad2{0%,72%{opacity:0}74%,92%{opacity:1}94%,100%{opacity:0}}
+@keyframes srv1{0%,26%{opacity:0}28%,40%{opacity:1}42%,100%{opacity:0}}
+@keyframes srv2{0%,71%{opacity:0}73%,85%{opacity:1}87%,100%{opacity:0}}
+
+    @keyframes c0{0%,28%{opacity:1}29%,100%{opacity:0}}
+@keyframes c1{0%,28%{opacity:0}29%,73%{opacity:1}74%,100%{opacity:0}}
+@keyframes c2{0%,73%{opacity:0}74%,97%{opacity:1}100%{opacity:0}}
+
+    .ok1{animation-name:ok1}.bad2{animation-name:bad2}.srv1{animation-name:srv1}.srv2{animation-name:srv2}
+    .cnt{animation:12s infinite steps(1,end)}.c0{animation-name:c0}.c1{animation-name:c1;opacity:0}.c2{animation-name:c2;opacity:0}
+    .still{opacity:0}
+    @media (prefers-reduced-motion: reduce){.tok,.a{animation:none;opacity:0}.cnt{animation:none}.c0,.c1{opacity:0}.c2{opacity:1}.still{opacity:1}}
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="402" rx="14"/>
+  <text class="h" x="28" y="40">Parallel run: serve the old result, compare the new one</text>
+  <rect class="box" x="28" y="150" width="140" height="50" rx="10" stroke-width="1.5"/><text class="lbl" x="98" y="180" text-anchor="middle">Refill flow</text>
+  <rect class="bp" x="210" y="140" width="200" height="70" rx="10" stroke-width="1.5"/><text class="lbl" x="310" y="170" text-anchor="middle">ParallelRun</text><text class="lbl" x="310" y="190" text-anchor="middle">EligibilityChecker</text>
+  <rect class="bo" x="470" y="80" width="230" height="52" rx="10" stroke-width="1.5"/><text class="tx" x="585" y="103" text-anchor="middle">LegacyEligibilityChecker</text><text class="sub" x="585" y="122" text-anchor="middle">still the source of truth</text>
+  <rect class="bt" x="470" y="220" width="230" height="52" rx="10" stroke-width="1.5"/><text class="tx" x="585" y="243" text-anchor="middle">RemoteEligibilityChecker</text><text class="sub" x="585" y="262" text-anchor="middle">calls the new service</text>
+  <rect class="box" x="210" y="282" width="200" height="80" rx="10" stroke-width="1.5"/><text class="lbl" x="222" y="304">compare + metrics</text>
+  <line class="ln" x1="168" y1="175" x2="206" y2="175" marker-end="url(#ar)"/>
+  <path class="lno" d="M410,160 C440,160 440,106 466,106" marker-end="url(#aro)"/>
+  <path class="lnt dash" d="M410,195 C440,195 440,246 466,246" marker-end="url(#art)"/>
+  <text class="sub" x="222" y="236">shadow call via a bounded</text><text class="sub" x="222" y="252">shadowExecutor</text>
+  <path class="lnt dash" d="M520,272 C520,312 470,320 414,320" marker-end="url(#art)"/>
+  <g class="a srv1"><text class="sub okt" x="98" y="228" text-anchor="middle">legacy result</text><text class="sub okt" x="98" y="244" text-anchor="middle">returned</text></g>
+  <g class="a srv2"><text class="sub okt" x="98" y="228" text-anchor="middle">legacy result</text><text class="sub okt" x="98" y="244" text-anchor="middle">returned</text></g>
+  <g class="a ok1"><text class="tx okt" x="520" y="330">results equal: count a match</text></g>
+  <g class="a bad2"><text class="tx badt" x="520" y="330">mismatch: log a warning</text><text class="sub" x="520" y="348">with a diff, no PHI</text></g>
+  <g class="cnt c0"><text class="tx" x="222" y="336">match=true: 0</text><text class="tx" x="222" y="354">match=false: 0</text></g>
+  <g class="cnt c1"><text class="tx" x="222" y="336">match=true: 1</text><text class="tx" x="222" y="354">match=false: 0</text></g>
+  <g class="cnt c2"><text class="tx" x="222" y="336">match=true: 1</text><text class="tx" x="222" y="354">match=false: 1</text></g>
+  <g class="still"><text class="tx okt" x="520" y="330">equal: count a match</text><text class="sub" x="520" y="348">different: log the diff, no PHI</text></g>
+  <circle class="tok r1 okf" r="8"/><circle class="tok r2 okf" r="8"/>
+  <circle class="tok s1 tea" r="7"/><circle class="tok s2 tea" r="7"/>
+  <text class="sub" x="28" y="388">Green: the request path the user waits on. Teal, dashed: the shadow call, run off the request thread.</text>
+</svg>

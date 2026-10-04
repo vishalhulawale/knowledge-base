@@ -52,6 +52,9 @@ flowchart LR
 - **Health:** only healthy/ready instances should be returned. Readiness probes on Kubernetes decide membership in a Service's endpoints.
 - **Consistency trade-off:** Eureka is AP: during network partitions it prefers serving possibly stale data over refusing (self-preservation mode stops evictions when many heartbeats fail at once). Consul uses Raft for its catalog (CP for writes) with eventually consistent reads options.
 
+![Animation: a registry and a client's cached list both show three pharmacy instances; instance 2 crashes and stops heartbeating, the registry evicts it, but the client's cache still lists it, so a call to it fails and is retried on instance 3 until the cache refreshes](images/04-stale-instance-list.svg){ loading=lazy }
+*Watch the gap between the registry and the client: the registry already knows #2 is gone, but the client only finds out when its cache refreshes. Retries on another instance cover that window.*
+
 ### Kubernetes service discovery
 
 - A **Service** selects pods by label and gets a stable **ClusterIP** and DNS name: `pharmacy-service.rx.svc.cluster.local` (or just `pharmacy-service` inside the namespace).
@@ -76,6 +79,9 @@ sequenceDiagram
     KP-->>C: routed to one of the ready pods
 ```
 *Notice that discovery on Kubernetes is driven by readiness: the platform registers and deregisters instances for you, so the application needs no registry client.*
+
+![Animation: on the left, kube-proxy pins one long-lived HTTP/2 connection to pharmacy pod 1 so all six requests go there and the other pods are idle; on the right, per-request balancing spreads the six requests across all three pods](images/04-connection-vs-request-balancing.svg){ loading=lazy }
+*Notice the pods and the traffic are the same on both sides. The difference is whether the choice is made once per connection or once per request.*
 
 ### Load-balancing algorithms
 

@@ -52,6 +52,9 @@ flowchart LR
 - Readiness probes gate traffic to new pods; `minReadySeconds` waits before counting a pod available; `progressDeadlineSeconds` (default 600) marks a stuck rollout as failed; `kubectl rollout undo` goes back (history `revisionHistoryLimit` default 10).
 - Graceful termination matters: preStop hook, `terminationGracePeriodSeconds`, Spring Boot graceful shutdown.
 
+![Animation: four v1 pods are replaced by v2 one at a time; at each step one v1 pod terminates and one v2 pod starts in the surge slot, so at least three pods stay ready until four v2 pods are running](images/11-rolling-update.svg){ loading=lazy }
+*Watch the ready count: it never drops below three, and v1 and v2 serve traffic together for most of the rollout. That overlap is why every change must be backward compatible.*
+
 ### Blue-green
 
 - Two complete environments; a router (load balancer target group, Kubernetes Service selector, DNS, gateway) points to one.
@@ -77,6 +80,9 @@ sequenceDiagram
 ```
 *Notice the promotion decision is automated and based on metrics, not on someone watching dashboards. That's what makes canaries safe to run many times a day.*
 
+![Animation: the canary's share of traffic grows from 5% to 25%, 50% and 100% as the Argo Rollouts steps run, with an analysis passing between weight changes; a failed analysis would send all traffic back to stable v1](images/11-canary-steps.svg){ loading=lazy }
+*Watch the highlighted step on the right: the weight only moves after an analysis passes, so a bad version is caught while it serves a small share of requests.*
+
 - Traffic splitting needs request-level routing: a service mesh (Istio, Linkerd), ingress controllers (NGINX canary annotations), gateways, or AWS ALB weighted target groups. Replica-count ratios only approximate it.
 - Choose **analysis metrics**: error rate, latency percentiles, saturation, and business KPIs (orders/min). Compare against the **baseline**, not absolute thresholds only.
 - **Sticky canaries:** route a user consistently to one version to avoid flip-flopping UIs.
@@ -98,6 +104,9 @@ Because old and new code run together (rolling, canary, blue-green), schema chan
 3. **Contract:** stop writing the old structure; in a later release drop it.
 
 Never rename or drop a column in the same release that stops using it. Tools: Liquibase, Flyway. Same idea applies to **APIs** (add fields, version breaking changes) and **events** (schema compatibility).
+
+![Four releases moving the pharmacy table to an npi column: expand by adding npi and writing both, migrate by backfilling and reading npi, contract by writing only npi, and drop the old column in a later release, with a one-release rollback safe at every step](images/11-expand-contract.svg){ loading=lazy }
+*Notice the old column outlives the code that writes it by one release, so a rollback always finds the columns it expects.*
 
 ### Rollback vs roll forward
 
@@ -190,8 +199,9 @@ databaseChangeLog:
             tableName: pharmacy
             columns:
               - column: { name: npi, type: varchar(10) }
-# Release N+1: backfill, read from npi
-# Release N+2 (contract): drop the old column in its own changeSet
+# Release N+1: backfill, read from npi (still writing both)
+# Release N+2 (contract): stop writing the old column
+# Release N+3: drop the old column in its own changeSet
 ```
 
 ## Real-world usage
