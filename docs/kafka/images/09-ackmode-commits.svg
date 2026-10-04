@@ -1,0 +1,267 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">AckMode: when offsets are committed, and what a crash replays</title>
+  <desc id="d">One poll returns records r1 to r5 and the listener processes them in turn, but the pod crashes while processing r4. With AckMode BATCH, the default, nothing from this poll was committed yet, so after a restart r1 to r3 are processed again along with r4. With RECORD, each record was committed as soon as it finished, so only r4 is redone. With COUNT and ackCount 2, the commit after r2 survived, so r3 and r4 are redone. Smaller replay windows cost more commit requests.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:14s infinite linear}
+    @keyframes d00{0%{opacity:0}11%{opacity:0}12%,62%{opacity:1}63%{opacity:0}100%{opacity:0}}
+    .d00{animation-name:d00}
+    @keyframes d01{0%{opacity:0}23%{opacity:0}24%,62%{opacity:1}63%{opacity:0}100%{opacity:0}}
+    .d01{animation-name:d01}
+    @keyframes d02{0%{opacity:0}35%{opacity:0}36%,62%{opacity:1}63%{opacity:0}100%{opacity:0}}
+    .d02{animation-name:d02}
+    @keyframes w0{0%{opacity:0}37%{opacity:0}38%,44%{opacity:1}45%{opacity:0}100%{opacity:0}}
+    .w0{animation-name:w0}
+    @keyframes x0{0%{opacity:0}44%{opacity:0}45%,62%{opacity:1}63%{opacity:0}100%{opacity:0}}
+    .x0{animation-name:x0}
+    @keyframes r00{0%{opacity:0}63%{opacity:0}64%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r00{animation-name:r00}
+    @keyframes r01{0%{opacity:0}63%{opacity:0}64%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r01{animation-name:r01}
+    @keyframes r02{0%{opacity:0}63%{opacity:0}64%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r02{animation-name:r02}
+    @keyframes r03{0%{opacity:0}63%{opacity:0}64%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r03{animation-name:r03}
+    @keyframes d10{0%{opacity:0}11%{opacity:0}12%,62%{opacity:1}63%{opacity:0}100%{opacity:0}}
+    .d10{animation-name:d10}
+    @keyframes d11{0%{opacity:0}23%{opacity:0}24%,62%{opacity:1}63%{opacity:0}100%{opacity:0}}
+    .d11{animation-name:d11}
+    @keyframes d12{0%{opacity:0}35%{opacity:0}36%,62%{opacity:1}63%{opacity:0}100%{opacity:0}}
+    .d12{animation-name:d12}
+    @keyframes w1{0%{opacity:0}37%{opacity:0}38%,44%{opacity:1}45%{opacity:0}100%{opacity:0}}
+    .w1{animation-name:w1}
+    @keyframes x1{0%{opacity:0}44%{opacity:0}45%,62%{opacity:1}63%{opacity:0}100%{opacity:0}}
+    .x1{animation-name:x1}
+    @keyframes c10{0%{opacity:0}12%{opacity:0}13%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .c10{animation-name:c10}
+    @keyframes c11{0%{opacity:0}24%{opacity:0}25%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .c11{animation-name:c11}
+    @keyframes c12{0%{opacity:0}36%{opacity:0}37%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .c12{animation-name:c12}
+    @keyframes r13{0%{opacity:0}63%{opacity:0}64%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r13{animation-name:r13}
+    @keyframes k10{0%{opacity:0}63%{opacity:0}64%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .k10{animation-name:k10}
+    @keyframes k11{0%{opacity:0}63%{opacity:0}64%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .k11{animation-name:k11}
+    @keyframes k12{0%{opacity:0}63%{opacity:0}64%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .k12{animation-name:k12}
+    @keyframes d20{0%{opacity:0}11%{opacity:0}12%,62%{opacity:1}63%{opacity:0}100%{opacity:0}}
+    .d20{animation-name:d20}
+    @keyframes d21{0%{opacity:0}23%{opacity:0}24%,62%{opacity:1}63%{opacity:0}100%{opacity:0}}
+    .d21{animation-name:d21}
+    @keyframes d22{0%{opacity:0}35%{opacity:0}36%,62%{opacity:1}63%{opacity:0}100%{opacity:0}}
+    .d22{animation-name:d22}
+    @keyframes w2{0%{opacity:0}37%{opacity:0}38%,44%{opacity:1}45%{opacity:0}100%{opacity:0}}
+    .w2{animation-name:w2}
+    @keyframes x2{0%{opacity:0}44%{opacity:0}45%,62%{opacity:1}63%{opacity:0}100%{opacity:0}}
+    .x2{animation-name:x2}
+    @keyframes c21{0%{opacity:0}24%{opacity:0}25%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .c21{animation-name:c21}
+    @keyframes r22{0%{opacity:0}63%{opacity:0}64%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r22{animation-name:r22}
+    @keyframes r23{0%{opacity:0}63%{opacity:0}64%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r23{animation-name:r23}
+    @keyframes k20{0%{opacity:0}63%{opacity:0}64%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .k20{animation-name:k20}
+    @keyframes k21{0%{opacity:0}63%{opacity:0}64%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .k21{animation-name:k21}
+    @keyframes ph1{0%,62%{opacity:1}63%{opacity:0}100%{opacity:0}}
+    .ph1{animation-name:ph1}
+    @keyframes ph2{0%{opacity:0}63%{opacity:0}64%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .ph2{animation-name:ph2}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      .ph1{opacity:0!important}.d00,.w0,.x0.d01,.w0,.x0.d02,.w0,.x0.d10,.w1,.x1.d11,.w1,.x1.d12,.w1,.x1.d20,.w2,.x2.d21,.w2,.x2.d22,.w2,.x2{opacity:0!important}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">One poll, five records, crash during r4</text>
+  <text class="sub" x="28" y="62">The listener processes r1…r5 from one poll(); the pod dies while handling r4.</text>
+  <text class="lbl" x="28" y="106">AckMode</text>
+  <text class="lbl" x="240" y="106" text-anchor="middle">r1</text>
+  <text class="lbl" x="344" y="106" text-anchor="middle">r2</text>
+  <text class="lbl" x="448" y="106" text-anchor="middle">r3</text>
+  <text class="lbl" x="552" y="106" text-anchor="middle">r4</text>
+  <text class="lbl" x="656" y="106" text-anchor="middle">r5</text>
+  <text class="tx" x="28" y="150" font-weight="700">BATCH (default)</text>
+  <rect class="box" x="200" y="130" width="80" height="32" rx="6"/>
+  <rect class="box" x="304" y="130" width="80" height="32" rx="6"/>
+  <rect class="box" x="408" y="130" width="80" height="32" rx="6"/>
+  <rect class="box" x="512" y="130" width="80" height="32" rx="6"/>
+  <rect class="box" x="616" y="130" width="80" height="32" rx="6"/>
+  <g class="a d00">
+  <rect class="okf" x="200" y="130" width="80" height="32" rx="6"/>
+  <text class="on13" x="240" y="150.5" text-anchor="middle">done</text>
+  </g>
+  <g class="a d01">
+  <rect class="okf" x="304" y="130" width="80" height="32" rx="6"/>
+  <text class="on13" x="344" y="150.5" text-anchor="middle">done</text>
+  </g>
+  <g class="a d02">
+  <rect class="okf" x="408" y="130" width="80" height="32" rx="6"/>
+  <text class="on13" x="448" y="150.5" text-anchor="middle">done</text>
+  </g>
+  <g class="a w0">
+  <rect class="pri" x="512" y="130" width="80" height="32" rx="6"/>
+  <text class="on13" x="552" y="150.5" text-anchor="middle">working</text>
+  </g>
+  <g class="a x0">
+  <rect class="badf" x="512" y="130" width="80" height="32" rx="6"/>
+  <text class="on13" x="552" y="150.5" text-anchor="middle">✕ crash</text>
+  </g>
+  <g class="a r00">
+  <rect class="wrnf" x="200" y="130" width="80" height="32" rx="6"/>
+  <text class="on13" x="240" y="150.5" text-anchor="middle">again</text>
+  </g>
+  <g class="a r01">
+  <rect class="wrnf" x="304" y="130" width="80" height="32" rx="6"/>
+  <text class="on13" x="344" y="150.5" text-anchor="middle">again</text>
+  </g>
+  <g class="a r02">
+  <rect class="wrnf" x="408" y="130" width="80" height="32" rx="6"/>
+  <text class="on13" x="448" y="150.5" text-anchor="middle">again</text>
+  </g>
+  <g class="a r03">
+  <rect class="wrnf" x="512" y="130" width="80" height="32" rx="6"/>
+  <text class="on13" x="552" y="150.5" text-anchor="middle">again</text>
+  </g>
+  <text class="tx" x="28" y="220" font-weight="700">RECORD</text>
+  <rect class="box" x="200" y="200" width="80" height="32" rx="6"/>
+  <rect class="box" x="304" y="200" width="80" height="32" rx="6"/>
+  <rect class="box" x="408" y="200" width="80" height="32" rx="6"/>
+  <rect class="box" x="512" y="200" width="80" height="32" rx="6"/>
+  <rect class="box" x="616" y="200" width="80" height="32" rx="6"/>
+  <g class="a d10">
+  <rect class="okf" x="200" y="200" width="80" height="32" rx="6"/>
+  <text class="on13" x="240" y="220.5" text-anchor="middle">done</text>
+  </g>
+  <g class="a d11">
+  <rect class="okf" x="304" y="200" width="80" height="32" rx="6"/>
+  <text class="on13" x="344" y="220.5" text-anchor="middle">done</text>
+  </g>
+  <g class="a d12">
+  <rect class="okf" x="408" y="200" width="80" height="32" rx="6"/>
+  <text class="on13" x="448" y="220.5" text-anchor="middle">done</text>
+  </g>
+  <g class="a w1">
+  <rect class="pri" x="512" y="200" width="80" height="32" rx="6"/>
+  <text class="on13" x="552" y="220.5" text-anchor="middle">working</text>
+  </g>
+  <g class="a x1">
+  <rect class="badf" x="512" y="200" width="80" height="32" rx="6"/>
+  <text class="on13" x="552" y="220.5" text-anchor="middle">✕ crash</text>
+  </g>
+  <g class="a c10">
+  <rect class="tea" x="282" y="206" width="20" height="20" rx="6"/>
+  <text class="on13" x="292" y="220.5" text-anchor="middle">✓</text>
+  </g>
+  <g class="a c11">
+  <rect class="tea" x="386" y="206" width="20" height="20" rx="6"/>
+  <text class="on13" x="396" y="220.5" text-anchor="middle">✓</text>
+  </g>
+  <g class="a c12">
+  <rect class="tea" x="490" y="206" width="20" height="20" rx="6"/>
+  <text class="on13" x="500" y="220.5" text-anchor="middle">✓</text>
+  </g>
+  <g class="a r13">
+  <rect class="wrnf" x="512" y="200" width="80" height="32" rx="6"/>
+  <text class="on13" x="552" y="220.5" text-anchor="middle">again</text>
+  </g>
+  <g class="a k10">
+  <rect class="mutf" x="200" y="200" width="80" height="32" rx="6"/>
+  <text class="on13" x="240" y="220.5" text-anchor="middle">kept</text>
+  </g>
+  <g class="a k11">
+  <rect class="mutf" x="304" y="200" width="80" height="32" rx="6"/>
+  <text class="on13" x="344" y="220.5" text-anchor="middle">kept</text>
+  </g>
+  <g class="a k12">
+  <rect class="mutf" x="408" y="200" width="80" height="32" rx="6"/>
+  <text class="on13" x="448" y="220.5" text-anchor="middle">kept</text>
+  </g>
+  <text class="tx" x="28" y="290" font-weight="700">COUNT, ackCount=2</text>
+  <rect class="box" x="200" y="270" width="80" height="32" rx="6"/>
+  <rect class="box" x="304" y="270" width="80" height="32" rx="6"/>
+  <rect class="box" x="408" y="270" width="80" height="32" rx="6"/>
+  <rect class="box" x="512" y="270" width="80" height="32" rx="6"/>
+  <rect class="box" x="616" y="270" width="80" height="32" rx="6"/>
+  <g class="a d20">
+  <rect class="okf" x="200" y="270" width="80" height="32" rx="6"/>
+  <text class="on13" x="240" y="290.5" text-anchor="middle">done</text>
+  </g>
+  <g class="a d21">
+  <rect class="okf" x="304" y="270" width="80" height="32" rx="6"/>
+  <text class="on13" x="344" y="290.5" text-anchor="middle">done</text>
+  </g>
+  <g class="a d22">
+  <rect class="okf" x="408" y="270" width="80" height="32" rx="6"/>
+  <text class="on13" x="448" y="290.5" text-anchor="middle">done</text>
+  </g>
+  <g class="a w2">
+  <rect class="pri" x="512" y="270" width="80" height="32" rx="6"/>
+  <text class="on13" x="552" y="290.5" text-anchor="middle">working</text>
+  </g>
+  <g class="a x2">
+  <rect class="badf" x="512" y="270" width="80" height="32" rx="6"/>
+  <text class="on13" x="552" y="290.5" text-anchor="middle">✕ crash</text>
+  </g>
+  <g class="a c21">
+  <rect class="tea" x="386" y="276" width="20" height="20" rx="6"/>
+  <text class="on13" x="396" y="290.5" text-anchor="middle">✓</text>
+  </g>
+  <g class="a r22">
+  <rect class="wrnf" x="408" y="270" width="80" height="32" rx="6"/>
+  <text class="on13" x="448" y="290.5" text-anchor="middle">again</text>
+  </g>
+  <g class="a r23">
+  <rect class="wrnf" x="512" y="270" width="80" height="32" rx="6"/>
+  <text class="on13" x="552" y="290.5" text-anchor="middle">again</text>
+  </g>
+  <g class="a k20">
+  <rect class="mutf" x="200" y="270" width="80" height="32" rx="6"/>
+  <text class="on13" x="240" y="290.5" text-anchor="middle">kept</text>
+  </g>
+  <g class="a k21">
+  <rect class="mutf" x="304" y="270" width="80" height="32" rx="6"/>
+  <text class="on13" x="344" y="290.5" text-anchor="middle">kept</text>
+  </g>
+  <text class="lbl a ph1" x="28" y="344">Processing… teal ✓ = offset committed</text>
+  <text class="lbl wrnt a ph2" x="28" y="344">After restart: amber = processed again</text>
+  <text class="sub" x="28" y="372">BATCH redoes r1–r4, COUNT(2) redoes r3–r4, RECORD redoes only r4, at the price of a commit per record.</text>
+</svg>

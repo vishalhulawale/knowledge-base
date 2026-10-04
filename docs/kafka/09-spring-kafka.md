@@ -38,6 +38,9 @@ flowchart LR
 ```
 *Notice that each child container owns one `KafkaConsumer` on one thread. Your listener runs on that thread, so slow listener code directly delays polling.*
 
+![Three set-ups for a 6-partition topic: one pod with concurrency 3 gives three threads with two partitions each; two pods with concurrency 3 give six threads with one partition each; two pods with concurrency 4 give eight threads, two of them idle](images/09-concurrency-vs-partitions.svg){ loading=lazy }
+*Notice the last row: `concurrency` is per pod, so scaling pods and raising concurrency multiply. Past the partition count the extra threads just sit idle.*
+
 ### AckMode (when offsets are committed)
 
 | AckMode | Commits | Use |
@@ -47,6 +50,9 @@ flowchart LR
 | `TIME` / `COUNT` / `COUNT_TIME` | Periodically | Tuning throughput |
 | `MANUAL` | When you call `ack.acknowledge()` (queued, committed at batch end) | Explicit control |
 | `MANUAL_IMMEDIATE` | Immediately on `acknowledge()` | Explicit + immediate |
+
+![Animation: a listener processes r1 to r3 from one poll and crashes during r4; with BATCH nothing was committed so r1 to r4 are processed again, with RECORD each record was committed so only r4 is redone, with COUNT and ackCount 2 the commit after r2 survives so r3 and r4 are redone](images/09-ackmode-commits.svg){ loading=lazy }
+*Watch the teal ticks: each one is a commit request to the broker. Fewer ticks mean higher throughput and a bigger replay window after a crash.*
 
 ### Listener signatures
 

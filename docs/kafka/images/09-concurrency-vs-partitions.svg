@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Listener concurrency across pods vs partitions</title>
+  <desc id="d">A topic with six partitions consumed by one group. With one pod and concurrency 3, three consumer threads each own two partitions. With two pods and concurrency 3 there are six threads, one partition each: the maximum parallelism. With two pods and concurrency 4 there are eight threads; six get one partition and two sit idle, because a partition can only have one owner in the group. Total threads are pods times concurrency, and only up to the partition count do work.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Threads = pods × concurrency, capped by partitions</text>
+  <text class="sub" x="28" y="62">Topic with 6 partitions, one consumer group.</text>
+  <text class="lbl" x="28" y="106">1 pod × concurrency 3</text>
+  <text class="sm " x="28" y="124">each thread owns 2 partitions</text>
+  <rect class="bm" x="240" y="86" width="200" height="74" rx="10" stroke-width="1"/>
+  <text class="sm" x="248" y="100">pod 1</text>
+  <rect class="bp" x="248" y="106" width="58" height="46" rx="8" stroke-width="1.5"/>
+  <text class="sm" x="277" y="122" text-anchor="middle">t1</text>
+  <text class="on13 prit" x="277" y="142" text-anchor="middle">P0 P1</text>
+  <rect class="bp" x="312" y="106" width="58" height="46" rx="8" stroke-width="1.5"/>
+  <text class="sm" x="341" y="122" text-anchor="middle">t2</text>
+  <text class="on13 prit" x="341" y="142" text-anchor="middle">P2 P3</text>
+  <rect class="bp" x="376" y="106" width="58" height="46" rx="8" stroke-width="1.5"/>
+  <text class="sm" x="405" y="122" text-anchor="middle">t3</text>
+  <text class="on13 prit" x="405" y="142" text-anchor="middle">P4 P5</text>
+  <text class="lbl" x="28" y="202">2 pods × concurrency 3</text>
+  <text class="sm okt" x="28" y="220">1 partition each: max</text>
+  <rect class="bm" x="240" y="182" width="200" height="74" rx="10" stroke-width="1"/>
+  <text class="sm" x="248" y="196">pod 1</text>
+  <rect class="bp" x="248" y="202" width="58" height="46" rx="8" stroke-width="1.5"/>
+  <text class="sm" x="277" y="218" text-anchor="middle">t1</text>
+  <text class="on13 prit" x="277" y="238" text-anchor="middle">P0</text>
+  <rect class="bp" x="312" y="202" width="58" height="46" rx="8" stroke-width="1.5"/>
+  <text class="sm" x="341" y="218" text-anchor="middle">t2</text>
+  <text class="on13 prit" x="341" y="238" text-anchor="middle">P1</text>
+  <rect class="bp" x="376" y="202" width="58" height="46" rx="8" stroke-width="1.5"/>
+  <text class="sm" x="405" y="218" text-anchor="middle">t3</text>
+  <text class="on13 prit" x="405" y="238" text-anchor="middle">P2</text>
+  <rect class="bm" x="452" y="182" width="200" height="74" rx="10" stroke-width="1"/>
+  <text class="sm" x="460" y="196">pod 2</text>
+  <rect class="bp" x="460" y="202" width="58" height="46" rx="8" stroke-width="1.5"/>
+  <text class="sm" x="489" y="218" text-anchor="middle">t4</text>
+  <text class="on13 prit" x="489" y="238" text-anchor="middle">P3</text>
+  <rect class="bp" x="524" y="202" width="58" height="46" rx="8" stroke-width="1.5"/>
+  <text class="sm" x="553" y="218" text-anchor="middle">t5</text>
+  <text class="on13 prit" x="553" y="238" text-anchor="middle">P4</text>
+  <rect class="bp" x="588" y="202" width="58" height="46" rx="8" stroke-width="1.5"/>
+  <text class="sm" x="617" y="218" text-anchor="middle">t6</text>
+  <text class="on13 prit" x="617" y="238" text-anchor="middle">P5</text>
+  <text class="lbl" x="28" y="298">2 pods × concurrency 4</text>
+  <text class="sm badt" x="28" y="316">2 threads idle</text>
+  <rect class="bm" x="240" y="278" width="264" height="74" rx="10" stroke-width="1"/>
+  <text class="sm" x="248" y="292">pod 1</text>
+  <rect class="bp" x="248" y="298" width="58" height="46" rx="8" stroke-width="1.5"/>
+  <text class="sm" x="277" y="314" text-anchor="middle">t1</text>
+  <text class="on13 prit" x="277" y="334" text-anchor="middle">P0</text>
+  <rect class="bp" x="312" y="298" width="58" height="46" rx="8" stroke-width="1.5"/>
+  <text class="sm" x="341" y="314" text-anchor="middle">t2</text>
+  <text class="on13 prit" x="341" y="334" text-anchor="middle">P1</text>
+  <rect class="bp" x="376" y="298" width="58" height="46" rx="8" stroke-width="1.5"/>
+  <text class="sm" x="405" y="314" text-anchor="middle">t3</text>
+  <text class="on13 prit" x="405" y="334" text-anchor="middle">P2</text>
+  <rect class="bp" x="440" y="298" width="58" height="46" rx="8" stroke-width="1.5"/>
+  <text class="sm" x="469" y="314" text-anchor="middle">t4</text>
+  <text class="on13 prit" x="469" y="334" text-anchor="middle">P3</text>
+  <rect class="bm" x="516" y="278" width="264" height="74" rx="10" stroke-width="1"/>
+  <text class="sm" x="524" y="292">pod 2</text>
+  <rect class="bp" x="524" y="298" width="58" height="46" rx="8" stroke-width="1.5"/>
+  <text class="sm" x="553" y="314" text-anchor="middle">t5</text>
+  <text class="on13 prit" x="553" y="334" text-anchor="middle">P4</text>
+  <rect class="bp" x="588" y="298" width="58" height="46" rx="8" stroke-width="1.5"/>
+  <text class="sm" x="617" y="314" text-anchor="middle">t6</text>
+  <text class="on13 prit" x="617" y="334" text-anchor="middle">P5</text>
+  <rect class="box" x="652" y="298" width="58" height="46" rx="8" stroke-width="1.5"/>
+  <text class="sm" x="681" y="314" text-anchor="middle">t7</text>
+  <text class="sm badt" x="681" y="334" text-anchor="middle">idle</text>
+  <rect class="box" x="716" y="298" width="58" height="46" rx="8" stroke-width="1.5"/>
+  <text class="sm" x="745" y="314" text-anchor="middle">t8</text>
+  <text class="sm badt" x="745" y="334" text-anchor="middle">idle</text>
+  <text class="sub" x="28" y="384">Each thread is one KafkaMessageListenerContainer with its own KafkaConsumer; the listener runs on it.</text>
+</svg>
