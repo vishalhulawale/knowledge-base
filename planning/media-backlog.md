@@ -37,7 +37,7 @@ Suggested pictures per page; ⏵ marks an animation.
 - [x] 04 Behavioural: ⏵ chain of responsibility handing a request along; state machine transitions
 - [x] 05 UML: the six relationships' arrow notation; aggregation vs composition lifetimes
 - [x] 06 LLD approach: the 7-step process with time budget for a 45-minute round
-- [ ] 07 Case studies: ⏵ LRU cache map + doubly linked list on get/put; ⏵ elevator SCAN scheduling
+- [x] 07 Case studies: ⏵ elevator LOOK scheduling; Splitwise debt simplification (LRU is already drawn on the Core Java and JS pages)
 
 ### MongoDB (P0)
 - [ ] 01 Document model: embed vs reference; unbounded array growing to the 16 MB limit

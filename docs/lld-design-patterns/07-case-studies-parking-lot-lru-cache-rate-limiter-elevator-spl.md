@@ -124,6 +124,9 @@ stateDiagram-v2
 ```
 *Notice the **LOOK** behaviour: an elevator keeps moving in its direction while there are stops ahead, then reverses. It's the elevator version of the disk-scheduling SCAN/LOOK algorithms, which avoid starvation and zig-zagging.*
 
+![Animation: an elevator at floor 3 going up with up-stops 5 and 8 and down-stops 6 and 2 stops at 5 and 8, reverses because nothing is left above, then stops at 6 and 2 and goes idle, removing each stop from its sorted set](images/07-elevator-look.svg){ loading=lazy }
+*Watch the car pass floor 6 on the way up without stopping: 6 is a down-stop, so it waits for the downward sweep. That's what prevents zig-zagging.*
+
 **Design points:**
 
 - **Per elevator:** a `TreeSet<Integer>` of up-stops and down-stops. The next stop is `upStops.ceiling(current)` while going up, and `downStops.floor(current)` while going down.
@@ -148,6 +151,9 @@ stateDiagram-v2
 - Use integer **minor units** (paise or cents) and distribute rounding remainders deterministically.
 
 **Simplification:** compute the net balance per user, then repeatedly match the largest creditor with the largest debtor and settle `min(credit, debt)`. This gives at most N−1 transactions. Finding the true minimum is NP-hard (subset-sum-like), so the greedy heuristic is the accepted answer.
+
+![Four friends with six separate debts reduce to net balances of A plus 50, B zero, C minus 30 and D minus 20, which settle in two payments: C pays A 30 and D pays A 20](images/07-splitwise-simplify.svg){ loading=lazy }
+*Notice that B drops out completely: B's debts and credits cancel, so once you work with net balances B never needs to pay or be paid.*
 
 ### 6. Library management
 
