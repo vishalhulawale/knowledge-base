@@ -28,7 +28,7 @@ Suggested pictures per page; ⏵ marks an animation.
 - [x] 09 Spring Kafka: listener container threads per partition; AckMode commit points on a timeline
 - [x] 10 Schema registry: schema id in the wire format; compatibility modes as which side can upgrade first
 - [x] 11 Streams and Connect: ⏵ co-partitioned join vs mismatched partitions; Debezium outbox relay path
-- [ ] 12 Performance and lag: ⏵ lag growing when consume rate < produce rate; where producer latency goes
+- [x] 12 Performance and lag: ⏵ lag growing when consume rate < produce rate; where producer latency goes
 
 ### LLD & Design Patterns (P0)
 - [ ] 01 SOLID: LSP violation (Square/Rectangle); composition vs inheritance change ripple

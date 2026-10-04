@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Four consumer-lag shapes and what they usually mean</title>
+  <desc id="d">Four small charts of lag per partition over time, three partitions each. One: all partitions rise together, which means consumers are under-provisioned or the downstream is slow. Two: one partition climbs while the others stay flat, pointing at a stuck record or a hot key. Three: short spikes on every partition at each deploy, caused by rebalances. Four: lag rises in a straight line at exactly the produce rate while committed offsets don&#x27;t move, meaning the consumer group has stopped or crashed.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .s1{stroke:#4f46e5;stroke-width:2;fill:none}.s2{stroke:#0ea5a4;stroke-width:2;fill:none;stroke-dasharray:7 4}.s3{stroke:#dc2626;stroke-width:2;fill:none}.ctx{stroke:#cbd5e1;stroke-width:2;fill:none}.ar3{fill:#dc2626;opacity:.12}.grid{stroke:#e2e8f0;stroke-width:1}.axis{stroke:#94a3b8;stroke-width:1}@media (prefers-color-scheme: dark){.s1{stroke:#6366f1}.s2{stroke:#0d9488}.s3{stroke:#f87171}.ctx{stroke:#475569}.ar3{fill:#f87171}.grid{stroke:#334155}.axis{stroke:#64748b}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="428" rx="14"/>
+  <text class="h" x="28" y="40">Read the shape before you scale</text>
+  <text class="sub" x="28" y="62">Lag per partition over time. Highlighted line = the one that tells the story.</text>
+  <text class="lbl" x="28" y="96">All rising</text>
+  <text class="sm" x="28" y="114">under-provisioned or slow downstream</text>
+  <line class="axis" x1="38" x2="368" y1="214" y2="214"/>
+  <polyline class="s3" points="38.0,209.7 54.5,208.7 71.0,204.7 87.5,203.3 104.0,199.7 120.5,197.2 137.0,197.8 153.5,195.7 170.0,189.0 186.5,189.7 203.0,187.4 219.5,181.1 236.0,181.5 252.5,177.2 269.0,176.7 285.5,173.5 302.0,173.7 318.5,168.8 335.0,165.2 351.5,164.6 368.0,162.4"/>
+  <polyline class="s3" points="38.0,211.4 54.5,208.1 71.0,206.3 87.5,207.3 104.0,201.7 120.5,200.4 137.0,199.8 153.5,199.1 170.0,192.7 186.5,192.6 203.0,189.2 219.5,186.3 236.0,185.0 252.5,181.9 269.0,182.5 285.5,178.3 302.0,178.0 318.5,173.4 335.0,171.5 351.5,173.5 368.0,169.3"/>
+  <polyline class="s3" points="38.0,208.0 54.5,207.3 71.0,204.4 87.5,198.0 104.0,198.2 120.5,194.6 137.0,193.8 153.5,190.2 170.0,188.3 186.5,185.9 203.0,182.2 219.5,179.6 236.0,175.5 252.5,174.1 269.0,170.2 285.5,168.1 302.0,164.9 318.5,164.0 335.0,164.1 351.5,157.9 368.0,157.2"/>
+  <text class="lbl" x="408" y="96">One partition rising</text>
+  <text class="sm" x="408" y="114">stuck record or hot key</text>
+  <line class="axis" x1="418" x2="748" y1="214" y2="214"/>
+  <polyline class="ctx" points="418.0,209.7 434.5,207.2 451.0,207.4 467.5,209.1 484.0,208.3 500.5,210.8 517.0,207.5 533.5,208.7 550.0,210.1 566.5,211.2 583.0,207.0 599.5,206.2 616.0,210.8 632.5,207.0 649.0,209.0 665.5,210.2 682.0,209.4 698.5,206.9 715.0,206.2 731.5,210.4 748.0,208.0"/>
+  <polyline class="s3" points="418.0,210.6 517.0,209.7 748.0,145.2"/>
+  <polyline class="ctx" points="418.0,208.8 434.5,208.2 451.0,211.0 467.5,207.5 484.0,209.4 500.5,206.4 517.0,205.8 533.5,208.2 550.0,205.6 566.5,209.0 583.0,210.2 599.5,207.4 616.0,210.2 632.5,209.3 649.0,208.1 665.5,207.0 682.0,209.2 698.5,209.7 715.0,205.4 731.5,208.2 748.0,207.1"/>
+  <text class="lbl" x="28" y="256">Spikes at each deploy</text>
+  <text class="sm" x="28" y="274">rebalances</text>
+  <line class="axis" x1="38" x2="368" y1="374" y2="374"/>
+  <polyline class="s1" points="38.0,369.7 120.5,369.7 137.0,335.3 156.8,368.8 269.0,368.8 285.5,339.6 305.3,369.7 368.0,369.7"/>
+  <polyline class="s1" points="38.0,368.0 120.5,368.0 137.0,331.0 156.8,368.0 269.0,368.0 285.5,332.7 305.3,368.0 368.0,368.0"/>
+  <polyline class="s1" points="38.0,370.6 120.5,370.6 137.0,341.3 156.8,370.6 269.0,370.6 285.5,343.9 305.3,370.6 368.0,370.6"/>
+  <text class="sm" x="137" y="390" text-anchor="middle">deploy</text>
+  <text class="sm" x="285.5" y="390" text-anchor="middle">deploy</text>
+  <text class="lbl" x="408" y="256">Straight line, commits frozen</text>
+  <text class="sm" x="408" y="274">group stopped or crashed</text>
+  <line class="axis" x1="418" x2="748" y1="374" y2="374"/>
+  <polyline class="s3" points="418.0,369.7 484.0,369.7 748.0,298.3"/>
+  <polyline class="s3" points="418.0,370.6 484.0,370.6 748.0,302.6"/>
+  <polyline class="s3" points="418.0,368.8 484.0,368.8 748.0,294.9"/>
+  <text class="sm" x="484" y="390" text-anchor="middle">consumer stops</text>
+  <text class="sub" x="28" y="418">Three partitions per chart; grey = partitions behaving normally. Illustrative shapes.</text>
+</svg>

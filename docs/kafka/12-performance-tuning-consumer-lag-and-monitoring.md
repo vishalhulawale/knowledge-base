@@ -54,6 +54,9 @@ flowchart LR
 ```
 *Notice that a record count means little without rate. 800 records at 10K/s is 80 ms behind, while 800 at 1/s is 13 minutes. Alert on time lag or a sustained upward trend.*
 
+![Animation: two charts over 12 minutes; producers write 1,000 records per second while consumers manage 800, so lag climbs to 72,000 records by minute 6; consumers then scale out to 1,300 per second and the lag drains to zero by minute 10](images/12-lag-growth.svg){ loading=lazy }
+*Notice that lag is just the accumulated gap between the two lines above it. Scaling out has to beat the produce rate, not just match it, or the backlog never drains.*
+
 Two ways lag is measured, and they can disagree:
 
 - **Broker-side (group lag):** log end offset − **committed** offset. This is what `kafka-consumer-groups.sh`, Burrow, kminion and MSK report. It still works when the consumer is dead.
@@ -69,6 +72,9 @@ Lag patterns and what they mean:
 | Lag flat but high | Consumer keeps pace with input but has no spare capacity to catch up a backlog |
 | Lag rising at exactly the produce rate, committed offset frozen | Consumer group stopped, crashed or stuck (no commits) |
 | Lag on retry topics | Downstream dependency degraded |
+
+![Four small charts of lag per partition: all partitions rising together, one partition rising alone, short spikes on every partition at each deploy, and a straight steep rise on all partitions after the consumer stops](images/12-lag-shapes.svg){ loading=lazy }
+*Notice that only the first shape is fixed by adding consumers. A single climbing partition needs the stuck record found, and deploy spikes need a better rebalance protocol.*
 
 ### What to monitor
 
