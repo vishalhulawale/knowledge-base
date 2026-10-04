@@ -56,6 +56,9 @@ A subtype must work anywhere the base type is expected, without surprises:
 
 Java's own `List.of(...)` throwing on `add` is a known compromise: the `List` contract marks mutators as *optional*.
 
+![Animation: resize code calls setWidth(5) then setHeight(4) and expects area 20; a Rectangle goes from 2 by 2 to 5 by 2 to 5 by 4, area 20, while a Square passed as a Rectangle goes to 5 by 5 then 4 by 4, area 16, and the assertion fails](images/01-square-rectangle-lsp.svg){ loading=lazy }
+*Watch step 2 on the right: the Square is mathematically correct, yet the caller's reasonable expectation about Rectangle breaks. LSP is about behaviour callers rely on, not about "is-a" in the real world.*
+
 ### I: Interface Segregation
 
 A fat `PharmacyService` interface with `dispense`, `reportInventory`, `processRefund`, `exportAudit` forces every implementer and every client to depend on everything. Split it into role interfaces (`Dispenser`, `InventoryReporter`, ...). In Spring, smaller interfaces also mean narrower mocks and clearer dependencies.
@@ -88,6 +91,9 @@ classDiagram
     InstrumentedSet o-- Set : wraps (forwarding)
 ```
 *Notice that the wrapper **has-a** `Set` and forwards calls to it. It doesn't depend on how `HashSet.addAll` is implemented internally, which is exactly what broke the inheritance version (Effective Java, Item 18).*
+
+![addAll of three elements counted two ways: a subclass of HashSet adds 3, then HashSet's addAll calls the overridden add three more times, giving 6; a forwarding wrapper adds 3 and its delegate's internal adds never reach the wrapper, giving 3](images/01-fragile-base-class.svg){ loading=lazy }
+*Notice the red box on the left: the bug comes from an implementation detail of `HashSet` that no documentation promised, which is the fragile base class problem in one picture.*
 
 **Why inheritance is risky:**
 

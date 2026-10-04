@@ -31,7 +31,7 @@ Suggested pictures per page; ⏵ marks an animation.
 - [x] 12 Performance and lag: ⏵ lag growing when consume rate < produce rate; where producer latency goes
 
 ### LLD & Design Patterns (P0)
-- [ ] 01 SOLID: LSP violation (Square/Rectangle); composition vs inheritance change ripple
+- [x] 01 SOLID: LSP violation (Square/Rectangle); composition vs inheritance change ripple
 - [ ] 02 Creational: double-checked locking race without `volatile`; builder vs telescoping constructor
 - [ ] 03 Structural: ⏵ decorator wrapping order; adapter vs decorator vs proxy wrappers compared
 - [ ] 04 Behavioural: ⏵ chain of responsibility handing a request along; state machine transitions
