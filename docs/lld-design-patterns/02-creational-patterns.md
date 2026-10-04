@@ -52,6 +52,9 @@ Thread-safe options:
 - Reflection can call private constructors (an enum prevents this).
 - Mutable singletons are shared state, so they need thread safety.
 
+![Animation: thread A allocates a Config object and, reordered, publishes its reference before the constructor runs; thread B skips the lock, sees a non-null instance and hits a NullPointerException on the unset url field; with volatile the constructor runs before the reference is published and B sees a fully built object](images/02-dcl-without-volatile.svg){ loading=lazy }
+*Watch step 2: nothing in the source code is out of order. The reordering is allowed by the Java Memory Model, and only `volatile` (a happens-before edge) forbids it.*
+
 ### Factories
 
 | Variant | What it is | Example |
@@ -105,6 +108,9 @@ The Builder pattern:
 - Required parameters go in the builder's constructor or as mandatory steps.
 - Optional parameters are fluent setters.
 - **`build()` validates invariants** and creates an **immutable** object.
+
+![A constructor call with eight positional arguments, including three nulls and two booleans, where nothing shows which is which, next to a builder chain where each value is named and optional ones are left out](images/02-telescoping-vs-builder.svg){ loading=lazy }
+*Notice the amber arguments: nulls and booleans are where positional calls go wrong, and the compiler can't help when two parameters share a type.*
 
 Variants:
 
