@@ -40,7 +40,7 @@ Suggested pictures per page; ⏵ marks an animation.
 - [x] 07 Case studies: ⏵ elevator LOOK scheduling; Splitwise debt simplification (LRU is already drawn on the Core Java and JS pages)
 
 ### MongoDB (P0)
-- [ ] 01 Document model: embed vs reference; unbounded array growing to the 16 MB limit
+- [x] 01 Document model: embed vs reference; unbounded array growing to the 16 MB limit
 - [ ] 02 CRUD and aggregation: ⏵ documents flowing through `$match` → `$group` → `$sort`; array query semantics trap
 - [ ] 03 Indexing: ESR rule on a compound index; COLLSCAN vs IXSCAN docs examined
 - [ ] 04 Replica sets: ⏵ election and rollback of unreplicated `w:1` writes; write concern `majority` acknowledgment

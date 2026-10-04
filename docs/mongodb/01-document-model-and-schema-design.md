@@ -100,6 +100,9 @@ A user's activity feed stored as an array inside the user document, measured by 
 
 Every update rewrites a bigger document in the storage engine, reads load the whole array into the cache, multikey indexes on the array get one entry per element, and the 16 MB ceiling eventually breaks writes. (Replication is smarter: since MongoDB 5.0 the oplog records deltas, and the oplog entry for that `$push` was only 394 bytes.) Fix: events in their own collection keyed by `userId`, a bucket per user per day, or keep only the latest N embedded (`$push` with `$slice: -50`) as a **subset**.
 
+![Two line charts from the page's measurements: as an embedded activity array grows from 100 to 20,000 elements, the latency of one $push rises from 2.0 ms to 14.3 ms and the document grows from 7 KB to 1.5 MB](images/01-unbounded-array.svg){ loading=lazy }
+*Notice both lines keep climbing with no plateau: an array that grows with user activity has no natural ceiling below 16 MB.*
+
 ### Design patterns
 
 | Pattern | Problem | Solution | Example |
@@ -123,6 +126,9 @@ Every update rewrites a bigger document in the storage engine, reads load the wh
 | Native time-series collection (`metaField: sensor`) | 200,000 visible / 2,000 internal buckets | **2.7 MB** | (clustered) |
 
 Native time-series collections (MongoDB 5.0+) apply the bucket pattern automatically, with columnar compression, while still letting you query individual measurements. Prefer them for metrics and IoT data.
+
+![Animation: twelve sensor readings arrive over two hours; one document per reading creates twelve documents and twelve index entries, while the bucket pattern fills one document per hour, ending with two documents and two index entries](images/01-bucket-pattern.svg){ loading=lazy }
+*Watch the index rows at the bottom: index size tracks document count, which is why buckets cut it from 7.5 MB to 0.1 MB in the measured run.*
 
 ## In practice: code & configuration
 

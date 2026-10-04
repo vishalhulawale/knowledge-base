@@ -1,0 +1,235 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Bucket pattern vs one document per reading</title>
+  <desc id="d">Sensor S1 sends a reading every 10 minutes for two hours, twelve readings. Left, one document per reading: twelve documents and twelve index entries appear. Right, the bucket pattern: one document per sensor per hour holds the readings in an array, so the first six readings fill the 10:00 bucket and the next six the 11:00 bucket: two documents and two index entries. On the page&#x27;s measured data set of 200,000 readings the index shrank from 7.5 MB to 0.1 MB, and a native time-series collection did the same automatically with 2.7 MB of data.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:14s infinite linear}
+    @keyframes b0{0%{opacity:0}3%{opacity:0}4%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .b0{animation-name:b0}
+    @keyframes b1{0%{opacity:0}42%{opacity:0}43%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .b1{animation-name:b1}
+    @keyframes r0{0%{opacity:0}3%{opacity:0}4%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r0{animation-name:r0}
+    @keyframes r1{0%{opacity:0}9.5%{opacity:0}10.5%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r1{animation-name:r1}
+    @keyframes r2{0%{opacity:0}16%{opacity:0}17%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r2{animation-name:r2}
+    @keyframes r3{0%{opacity:0}22.5%{opacity:0}23.5%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r3{animation-name:r3}
+    @keyframes r4{0%{opacity:0}29%{opacity:0}30%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r4{animation-name:r4}
+    @keyframes r5{0%{opacity:0}35.5%{opacity:0}36.5%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r5{animation-name:r5}
+    @keyframes r6{0%{opacity:0}42%{opacity:0}43%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r6{animation-name:r6}
+    @keyframes r7{0%{opacity:0}48.5%{opacity:0}49.5%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r7{animation-name:r7}
+    @keyframes r8{0%{opacity:0}55%{opacity:0}56%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r8{animation-name:r8}
+    @keyframes r9{0%{opacity:0}61.5%{opacity:0}62.5%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r9{animation-name:r9}
+    @keyframes r10{0%{opacity:0}68%{opacity:0}69%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r10{animation-name:r10}
+    @keyframes r11{0%{opacity:0}74.5%{opacity:0}75.5%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r11{animation-name:r11}
+    @keyframes fin{0%{opacity:0}83%{opacity:0}84%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .fin{animation-name:fin}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">12 readings, two models</text>
+  <text class="sub" x="28" y="62">Sensor S1, one reading every 10 minutes for two hours.</text>
+  <line class="ln dash" x1="400" y1="84" x2="400" y2="330"/>
+  <text class="h2" x="28" y="102">One document per reading</text>
+  <text class="h2" x="420" y="102">One bucket per sensor per hour</text>
+  <g class="a b0">
+  <rect class="bt" x="420" y="120" width="172" height="80" rx="8" stroke-width="1.5"/>
+  <text class="sm" x="432" y="144" font-weight="700">S1 · 10:00</text>
+  </g>
+  <g class="a b0">
+  <rect class="tea" x="420" y="262" width="26" height="14" rx="3"/>
+  </g>
+  <g class="a b1">
+  <rect class="bt" x="600" y="120" width="172" height="80" rx="8" stroke-width="1.5"/>
+  <text class="sm" x="612" y="144" font-weight="700">S1 · 11:00</text>
+  </g>
+  <g class="a b1">
+  <rect class="tea" x="450" y="262" width="26" height="14" rx="3"/>
+  </g>
+  <g class="a r0">
+  <rect class="bp" x="28" y="120" width="54" height="44" rx="6" stroke-width="1.2"/>
+  <text class="sm" x="55" y="138" text-anchor="middle">10:00</text>
+  <text class="sm prit" x="55" y="154" text-anchor="middle">20.0°</text>
+  </g>
+  <g class="a r0">
+  <rect class="pri" x="28" y="262" width="26" height="14" rx="3"/>
+  </g>
+  <g class="a r0">
+  <rect class="tea" x="432" y="156" width="22" height="30" rx="3"/>
+  </g>
+  <g class="a r1">
+  <rect class="bp" x="88" y="120" width="54" height="44" rx="6" stroke-width="1.2"/>
+  <text class="sm" x="115" y="138" text-anchor="middle">10:10</text>
+  <text class="sm prit" x="115" y="154" text-anchor="middle">27.1°</text>
+  </g>
+  <g class="a r1">
+  <rect class="pri" x="58" y="262" width="26" height="14" rx="3"/>
+  </g>
+  <g class="a r1">
+  <rect class="tea" x="458" y="156" width="22" height="30" rx="3"/>
+  </g>
+  <g class="a r2">
+  <rect class="bp" x="148" y="120" width="54" height="44" rx="6" stroke-width="1.2"/>
+  <text class="sm" x="175" y="138" text-anchor="middle">10:20</text>
+  <text class="sm prit" x="175" y="154" text-anchor="middle">25.2°</text>
+  </g>
+  <g class="a r2">
+  <rect class="pri" x="88" y="262" width="26" height="14" rx="3"/>
+  </g>
+  <g class="a r2">
+  <rect class="tea" x="484" y="156" width="22" height="30" rx="3"/>
+  </g>
+  <g class="a r3">
+  <rect class="bp" x="208" y="120" width="54" height="44" rx="6" stroke-width="1.2"/>
+  <text class="sm" x="235" y="138" text-anchor="middle">10:30</text>
+  <text class="sm prit" x="235" y="154" text-anchor="middle">23.3°</text>
+  </g>
+  <g class="a r3">
+  <rect class="pri" x="118" y="262" width="26" height="14" rx="3"/>
+  </g>
+  <g class="a r3">
+  <rect class="tea" x="510" y="156" width="22" height="30" rx="3"/>
+  </g>
+  <g class="a r4">
+  <rect class="bp" x="268" y="120" width="54" height="44" rx="6" stroke-width="1.2"/>
+  <text class="sm" x="295" y="138" text-anchor="middle">10:40</text>
+  <text class="sm prit" x="295" y="154" text-anchor="middle">21.4°</text>
+  </g>
+  <g class="a r4">
+  <rect class="pri" x="148" y="262" width="26" height="14" rx="3"/>
+  </g>
+  <g class="a r4">
+  <rect class="tea" x="536" y="156" width="22" height="30" rx="3"/>
+  </g>
+  <g class="a r5">
+  <rect class="bp" x="328" y="120" width="54" height="44" rx="6" stroke-width="1.2"/>
+  <text class="sm" x="355" y="138" text-anchor="middle">10:50</text>
+  <text class="sm prit" x="355" y="154" text-anchor="middle">28.5°</text>
+  </g>
+  <g class="a r5">
+  <rect class="pri" x="178" y="262" width="26" height="14" rx="3"/>
+  </g>
+  <g class="a r5">
+  <rect class="tea" x="562" y="156" width="22" height="30" rx="3"/>
+  </g>
+  <g class="a r6">
+  <rect class="bp" x="28" y="174" width="54" height="44" rx="6" stroke-width="1.2"/>
+  <text class="sm" x="55" y="192" text-anchor="middle">11:00</text>
+  <text class="sm prit" x="55" y="208" text-anchor="middle">26.6°</text>
+  </g>
+  <g class="a r6">
+  <rect class="pri" x="208" y="262" width="26" height="14" rx="3"/>
+  </g>
+  <g class="a r6">
+  <rect class="tea" x="612" y="156" width="22" height="30" rx="3"/>
+  </g>
+  <g class="a r7">
+  <rect class="bp" x="88" y="174" width="54" height="44" rx="6" stroke-width="1.2"/>
+  <text class="sm" x="115" y="192" text-anchor="middle">11:10</text>
+  <text class="sm prit" x="115" y="208" text-anchor="middle">24.7°</text>
+  </g>
+  <g class="a r7">
+  <rect class="pri" x="238" y="262" width="26" height="14" rx="3"/>
+  </g>
+  <g class="a r7">
+  <rect class="tea" x="638" y="156" width="22" height="30" rx="3"/>
+  </g>
+  <g class="a r8">
+  <rect class="bp" x="148" y="174" width="54" height="44" rx="6" stroke-width="1.2"/>
+  <text class="sm" x="175" y="192" text-anchor="middle">11:20</text>
+  <text class="sm prit" x="175" y="208" text-anchor="middle">22.8°</text>
+  </g>
+  <g class="a r8">
+  <rect class="pri" x="268" y="262" width="26" height="14" rx="3"/>
+  </g>
+  <g class="a r8">
+  <rect class="tea" x="664" y="156" width="22" height="30" rx="3"/>
+  </g>
+  <g class="a r9">
+  <rect class="bp" x="208" y="174" width="54" height="44" rx="6" stroke-width="1.2"/>
+  <text class="sm" x="235" y="192" text-anchor="middle">11:30</text>
+  <text class="sm prit" x="235" y="208" text-anchor="middle">20.9°</text>
+  </g>
+  <g class="a r9">
+  <rect class="pri" x="298" y="262" width="26" height="14" rx="3"/>
+  </g>
+  <g class="a r9">
+  <rect class="tea" x="690" y="156" width="22" height="30" rx="3"/>
+  </g>
+  <g class="a r10">
+  <rect class="bp" x="268" y="174" width="54" height="44" rx="6" stroke-width="1.2"/>
+  <text class="sm" x="295" y="192" text-anchor="middle">11:40</text>
+  <text class="sm prit" x="295" y="208" text-anchor="middle">27.0°</text>
+  </g>
+  <g class="a r10">
+  <rect class="pri" x="328" y="262" width="26" height="14" rx="3"/>
+  </g>
+  <g class="a r10">
+  <rect class="tea" x="716" y="156" width="22" height="30" rx="3"/>
+  </g>
+  <g class="a r11">
+  <rect class="bp" x="328" y="174" width="54" height="44" rx="6" stroke-width="1.2"/>
+  <text class="sm" x="355" y="192" text-anchor="middle">11:50</text>
+  <text class="sm prit" x="355" y="208" text-anchor="middle">25.1°</text>
+  </g>
+  <g class="a r11">
+  <rect class="pri" x="358" y="262" width="26" height="14" rx="3"/>
+  </g>
+  <g class="a r11">
+  <rect class="tea" x="742" y="156" width="22" height="30" rx="3"/>
+  </g>
+  <text class="sm" x="28" y="252">index {sensor, ts}</text>
+  <text class="sm" x="420" y="252">index {sensor, hour}</text>
+  <text class="tx badt a fin" x="28" y="304">12 documents, 12 index entries</text>
+  <text class="tx okt a fin" x="420" y="304">2 documents, 2 index entries</text>
+  <text class="tx" x="28" y="356">Measured on 200,000 readings: index 7.5 MB → 0.1 MB with buckets; data 11.4 MB → 6.5 MB.</text>
+  <text class="sub" x="28" y="378">Native time-series collections (5.0+) bucket for you and compress further: 2.7 MB.</text>
+</svg>
