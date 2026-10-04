@@ -17,7 +17,7 @@ Tick a page off once its SVGs are in `docs/<topic>/images/` and embedded.
 Suggested pictures per page; ⏵ marks an animation.
 
 ### Kafka (P0)
-- [ ] 01 Event-driven fundamentals: ⏵ choreography vs orchestration message flow; pub/sub vs queue fan-out
+- [x] 01 Event-driven fundamentals: ⏵ choreography vs orchestration message flow; pub/sub vs queue fan-out
 - [ ] 02 Architecture: ⏵ ISR and high watermark already there; add partition leaders spread across brokers, and log segments with the active segment
 - [ ] 03 Producers: ⏵ batching by `linger.ms` / `batch.size`; ⏵ retry without idempotence duplicates vs sequence numbers deduplicate
 - [ ] 04 Consumers: ⏵ eager vs cooperative rebalance (stop-the-world vs incremental); offsets: committed vs position vs log-end (lag)

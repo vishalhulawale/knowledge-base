@@ -34,6 +34,9 @@ flowchart LR
 ```
 *Notice that adding Analytics on the right needs zero changes to the producer. On the left, every new consumer is a code change and a new failure point for Order Svc.*
 
+![Animation: with synchronous REST, Inventory going down makes the whole order fail with 503; with a Kafka topic, Order keeps appending events, Payment keeps reading, Inventory's lag grows to 2 while it's down and drops back to 0 when it returns](images/01-inventory-outage.svg){ loading=lazy }
+*Watch the right-hand side during the outage: the producer never notices, and the missed events simply wait in the log until Inventory comes back. That is decoupling in time.*
+
 ## Core concepts
 
 ### Events, commands and queries
@@ -56,6 +59,9 @@ flowchart LR
 - **Queue (point-to-point):** each message is processed by one consumer, then removed (RabbitMQ, SQS).
 - **Pub/sub log (Kafka):** messages persist for the retention period. Each **consumer group** gets its own copy and its own offset, and within a group partitions are split for parallelism. Kafka gives you **both** semantics: one group behaves like a queue (competing consumers), many groups behave like pub/sub.
 - **Caveat on "queue semantics":** in a classic consumer group, parallelism is capped by the partition count (one partition is owned by one consumer in the group), progress is tracked as an offset per partition rather than an ack per message, and one slow or poison record blocks its partition. **Share groups** (KIP-932, "Queues for Kafka": early access in Kafka 4.0, production-ready in 4.2) add true queue behaviour: many consumers on the same partition, per-record acknowledge/release/reject and delivery-attempt limits, at the price of giving up ordering.
+
+![One topic with three partitions read by two consumer groups: in the payment group each partition goes to one of four consumers and the fourth sits idle; the analytics group's single consumer reads all three partitions with its own, older offsets](images/01-consumer-groups.svg){ loading=lazy }
+*Notice payment-4: adding consumers beyond the partition count buys nothing. And analytics being behind doesn't slow payment down, because each group tracks its own offsets.*
 
 ### Choreography vs orchestration
 
