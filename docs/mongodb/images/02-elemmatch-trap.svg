@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Dot notation vs $elemMatch on arrays</title>
+  <desc id="d">One claim with two lines: line 0 is NDC N7 with quantity 5, line 1 is NDC N18 with quantity 90. The question is: does it have a line for N7 with quantity at least 80? With dot notation, lines.ndc equals N7 is satisfied by line 0 and lines.qty at least 80 is satisfied by line 1, so the claim matches even though no single line meets both. With $elemMatch, both conditions must hold on the same element; neither line does, so the claim correctly doesn&#x27;t match. On the page&#x27;s measured data the two queries returned 319 and 125 claims.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Does this claim have an N7 line with qty ≥ 80?</text>
+  <text class="sub" x="28" y="62">claim { lines: [ {ndc: N7, qty: 5}, {ndc: N18, qty: 90} ] }</text>
+  <text class="h2" x="28" y="102">Dot notation</text>
+  <text class="sm prit" x="28" y="122">{&#x27;lines.ndc&#x27;: &#x27;N7&#x27;, &#x27;lines.qty&#x27;: {$gte: 80}}</text>
+  <rect class="box" x="28" y="136" width="352" height="130" rx="10" stroke-width="1.5"/>
+  <text class="sm" x="42" y="158">lines</text>
+  <rect class="bm" x="42" y="168" width="324" height="38" rx="6"/>
+  <text class="sm" x="54" y="192">[0]</text>
+  <rect class="okf" x="88" y="174" width="110" height="26" rx="5"/>
+  <text class="on13" x="143" y="191.5" text-anchor="middle">ndc: N7</text>
+  <rect class="mutf" x="208" y="174" width="110" height="26" rx="5"/>
+  <text class="on13" x="263" y="191.5" text-anchor="middle">qty: 5</text>
+  <rect class="bm" x="42" y="214" width="324" height="38" rx="6"/>
+  <text class="sm" x="54" y="238">[1]</text>
+  <rect class="mutf" x="88" y="220" width="110" height="26" rx="5"/>
+  <text class="on13" x="143" y="237.5" text-anchor="middle">ndc: N18</text>
+  <rect class="okf" x="208" y="220" width="110" height="26" rx="5"/>
+  <text class="on13" x="263" y="237.5" text-anchor="middle">qty: 90</text>
+  <text class="sm" x="28" y="290">ndc matched by [0], qty matched by [1]</text>
+  <text class="tx badt" x="28" y="312">→ MATCHES (wrong for this question)</text>
+  <text class="sm" x="28" y="334">measured: 319 claims</text>
+  <text class="h2" x="420" y="102">$elemMatch</text>
+  <text class="sm prit" x="420" y="122">{lines: {$elemMatch: {ndc: &#x27;N7&#x27;, qty: {$gte: 80}}}}</text>
+  <rect class="box" x="420" y="136" width="352" height="130" rx="10" stroke-width="1.5"/>
+  <text class="sm" x="434" y="158">lines</text>
+  <rect class="bm" x="434" y="168" width="324" height="38" rx="6"/>
+  <text class="sm" x="446" y="192">[0]</text>
+  <rect class="okf" x="480" y="174" width="110" height="26" rx="5"/>
+  <text class="on13" x="535" y="191.5" text-anchor="middle">ndc: N7</text>
+  <rect class="mutf" x="600" y="174" width="110" height="26" rx="5"/>
+  <text class="on13" x="655" y="191.5" text-anchor="middle">qty: 5</text>
+  <text class="lbl badt" x="720" y="192">✕</text>
+  <rect class="bm" x="434" y="214" width="324" height="38" rx="6"/>
+  <text class="sm" x="446" y="238">[1]</text>
+  <rect class="mutf" x="480" y="220" width="110" height="26" rx="5"/>
+  <text class="on13" x="535" y="237.5" text-anchor="middle">ndc: N18</text>
+  <rect class="okf" x="600" y="220" width="110" height="26" rx="5"/>
+  <text class="on13" x="655" y="237.5" text-anchor="middle">qty: 90</text>
+  <text class="lbl badt" x="720" y="238">✕</text>
+  <text class="sm" x="420" y="290">no single element satisfies both</text>
+  <text class="tx okt" x="420" y="312">→ no match (correct)</text>
+  <text class="sm" x="420" y="334">measured: 125 claims</text>
+  <line class="ln dash" x1="400" y1="92" x2="400" y2="340"/>
+  <text class="sub" x="28" y="380">Green = condition satisfied by that element. Dot notation lets each condition pick its own element.</text>
+</svg>

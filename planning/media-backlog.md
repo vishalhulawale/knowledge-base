@@ -41,7 +41,7 @@ Suggested pictures per page; ⏵ marks an animation.
 
 ### MongoDB (P0)
 - [x] 01 Document model: embed vs reference; unbounded array growing to the 16 MB limit
-- [ ] 02 CRUD and aggregation: ⏵ documents flowing through `$match` → `$group` → `$sort`; array query semantics trap
+- [x] 02 CRUD and aggregation: ⏵ documents flowing through `$match` → `$group` → `$sort`; array query semantics trap
 - [ ] 03 Indexing: ESR rule on a compound index; COLLSCAN vs IXSCAN docs examined
 - [ ] 04 Replica sets: ⏵ election and rollback of unreplicated `w:1` writes; write concern `majority` acknowledgment
 - [ ] 05 Sharding: ⏵ monotonic shard key hot-spotting the last chunk vs hashed; targeted vs scatter-gather via mongos

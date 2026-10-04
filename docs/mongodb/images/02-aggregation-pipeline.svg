@@ -1,0 +1,199 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Aggregation pipeline: documents shrink stage by stage</title>
+  <desc id="d">Twelve March claims enter the pipeline, each with a pharmacy (CVS, OPT or WAG), a status (PAID or DENIED) and an amount. The $match stage keeps the nine PAID claims and drops the three DENIED ones. $group by pharmacy turns the nine claims into three documents with a count and a total: CVS 3 claims 260, OPT 3 claims 250, WAG 3 claims 140. $sort by total descending orders them CVS, OPT, WAG. Each stage only sees what the previous one emitted, so filtering first shrinks all later work.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:16s infinite linear}
+    @keyframes p0{0%,24%{opacity:1}25%{opacity:0}100%{opacity:0}}
+    .p0{animation-name:p0}
+    @keyframes p1{0%{opacity:0}24%{opacity:0}25%,49%{opacity:1}50%{opacity:0}100%{opacity:0}}
+    .p1{animation-name:p1}
+    @keyframes p2{0%{opacity:0}49%{opacity:0}50%,74%{opacity:1}75%{opacity:0}100%{opacity:0}}
+    .p2{animation-name:p2}
+    @keyframes p3{0%{opacity:0}74%{opacity:0}75%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .p3{animation-name:p3}
+    @keyframes hl0{0%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .hl0{animation-name:hl0}
+    @keyframes hl1{0%{opacity:0}24%{opacity:0}25%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .hl1{animation-name:hl1}
+    @keyframes hl2{0%{opacity:0}49%{opacity:0}50%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .hl2{animation-name:hl2}
+    @keyframes hl3{0%{opacity:0}74%{opacity:0}75%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .hl3{animation-name:hl3}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      .p0,.p1,.p2,.hl1,.hl2{opacity:0!important}
+    }
+  </style>
+  <defs><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="438" rx="14"/>
+  <text class="h" x="28" y="40">claims.aggregate([$match, $group, $sort])</text>
+  <text class="sub" x="28" y="62">Illustrative: 12 March claims. P = PAID, D = DENIED; amounts in dollars.</text>
+  <rect class="bm" x="28" y="90" width="176" height="34" rx="8" stroke-width="1.5"/>
+  <text class="sm" x="116" y="112" text-anchor="middle" font-weight="700">input</text>
+  <line class="lnp" x1="204" y1="107" x2="216" y2="107" marker-end="url(#arp)"/>
+  <rect class="a hl0" x="28" y="90" width="176" height="34" rx="8" fill="none" style="stroke:#d97706;stroke-width:3"/>
+  <rect class="bp" x="218" y="90" width="176" height="34" rx="8" stroke-width="1.5"/>
+  <text class="sm" x="306" y="112" text-anchor="middle" font-weight="700">$match {status: PAID}</text>
+  <line class="lnp" x1="394" y1="107" x2="406" y2="107" marker-end="url(#arp)"/>
+  <rect class="a hl1" x="218" y="90" width="176" height="34" rx="8" fill="none" style="stroke:#d97706;stroke-width:3"/>
+  <rect class="bp" x="408" y="90" width="176" height="34" rx="8" stroke-width="1.5"/>
+  <text class="sm" x="496" y="112" text-anchor="middle" font-weight="700">$group by pharmacy</text>
+  <line class="lnp" x1="584" y1="107" x2="596" y2="107" marker-end="url(#arp)"/>
+  <rect class="a hl2" x="408" y="90" width="176" height="34" rx="8" fill="none" style="stroke:#d97706;stroke-width:3"/>
+  <rect class="bp" x="598" y="90" width="176" height="34" rx="8" stroke-width="1.5"/>
+  <text class="sm" x="686" y="112" text-anchor="middle" font-weight="700">$sort {total: -1}</text>
+  <rect class="a hl3" x="598" y="90" width="176" height="34" rx="8" fill="none" style="stroke:#d97706;stroke-width:3"/>
+  <g class="a p0">
+  <rect class="pri" x="28" y="136" width="84" height="22" rx="5"/>
+  <text class="on13" x="70" y="151.5" text-anchor="middle">CVS P 120</text>
+  </g>
+  <g class="a p0">
+  <rect class="tea" x="118" y="136" width="84" height="22" rx="5"/>
+  <text class="on13" x="160" y="151.5" text-anchor="middle">OPT P 80</text>
+  </g>
+  <g class="a p0">
+  <rect class="badf" x="28" y="164" width="84" height="22" rx="5"/>
+  <text class="on13" x="70" y="179.5" text-anchor="middle">CVS D 60</text>
+  </g>
+  <g class="a p0">
+  <rect class="wrnf" x="118" y="164" width="84" height="22" rx="5"/>
+  <text class="on13" x="160" y="179.5" text-anchor="middle">WAG P 40</text>
+  </g>
+  <g class="a p0">
+  <rect class="pri" x="28" y="192" width="84" height="22" rx="5"/>
+  <text class="on13" x="70" y="207.5" text-anchor="middle">CVS P 90</text>
+  </g>
+  <g class="a p0">
+  <rect class="badf" x="118" y="192" width="84" height="22" rx="5"/>
+  <text class="on13" x="160" y="207.5" text-anchor="middle">OPT D 30</text>
+  </g>
+  <g class="a p0">
+  <rect class="wrnf" x="28" y="220" width="84" height="22" rx="5"/>
+  <text class="on13" x="70" y="235.5" text-anchor="middle">WAG P 70</text>
+  </g>
+  <g class="a p0">
+  <rect class="tea" x="118" y="220" width="84" height="22" rx="5"/>
+  <text class="on13" x="160" y="235.5" text-anchor="middle">OPT P 110</text>
+  </g>
+  <g class="a p0">
+  <rect class="pri" x="28" y="248" width="84" height="22" rx="5"/>
+  <text class="on13" x="70" y="263.5" text-anchor="middle">CVS P 50</text>
+  </g>
+  <g class="a p0">
+  <rect class="badf" x="118" y="248" width="84" height="22" rx="5"/>
+  <text class="on13" x="160" y="263.5" text-anchor="middle">WAG D 20</text>
+  </g>
+  <g class="a p0">
+  <rect class="tea" x="28" y="276" width="84" height="22" rx="5"/>
+  <text class="on13" x="70" y="291.5" text-anchor="middle">OPT P 60</text>
+  </g>
+  <g class="a p0">
+  <rect class="wrnf" x="118" y="276" width="84" height="22" rx="5"/>
+  <text class="on13" x="160" y="291.5" text-anchor="middle">WAG P 30</text>
+  </g>
+  <g class="a p1">
+  <rect class="pri" x="218" y="136" width="84" height="22" rx="5"/>
+  <text class="on13" x="260" y="151.5" text-anchor="middle">CVS P 120</text>
+  </g>
+  <g class="a p1">
+  <rect class="tea" x="308" y="136" width="84" height="22" rx="5"/>
+  <text class="on13" x="350" y="151.5" text-anchor="middle">OPT P 80</text>
+  </g>
+  <g class="a p1">
+  <rect class="wrnf" x="218" y="164" width="84" height="22" rx="5"/>
+  <text class="on13" x="260" y="179.5" text-anchor="middle">WAG P 40</text>
+  </g>
+  <g class="a p1">
+  <rect class="pri" x="308" y="164" width="84" height="22" rx="5"/>
+  <text class="on13" x="350" y="179.5" text-anchor="middle">CVS P 90</text>
+  </g>
+  <g class="a p1">
+  <rect class="wrnf" x="218" y="192" width="84" height="22" rx="5"/>
+  <text class="on13" x="260" y="207.5" text-anchor="middle">WAG P 70</text>
+  </g>
+  <g class="a p1">
+  <rect class="tea" x="308" y="192" width="84" height="22" rx="5"/>
+  <text class="on13" x="350" y="207.5" text-anchor="middle">OPT P 110</text>
+  </g>
+  <g class="a p1">
+  <rect class="pri" x="218" y="220" width="84" height="22" rx="5"/>
+  <text class="on13" x="260" y="235.5" text-anchor="middle">CVS P 50</text>
+  </g>
+  <g class="a p1">
+  <rect class="tea" x="308" y="220" width="84" height="22" rx="5"/>
+  <text class="on13" x="350" y="235.5" text-anchor="middle">OPT P 60</text>
+  </g>
+  <g class="a p1">
+  <rect class="wrnf" x="218" y="248" width="84" height="22" rx="5"/>
+  <text class="on13" x="260" y="263.5" text-anchor="middle">WAG P 30</text>
+  </g>
+  <text class="sm a p1" x="218" y="300">9 of 12 pass; 3 DENIED dropped</text>
+  <g class="a p2">
+  <rect class="wrnf" x="408" y="136" width="176" height="32" rx="6"/>
+  <text class="on13" x="496" y="156.5" text-anchor="middle">WAG: 3 claims, 140</text>
+  </g>
+  <g class="a p2">
+  <rect class="pri" x="408" y="176" width="176" height="32" rx="6"/>
+  <text class="on13" x="496" y="196.5" text-anchor="middle">CVS: 3 claims, 260</text>
+  </g>
+  <g class="a p2">
+  <rect class="tea" x="408" y="216" width="176" height="32" rx="6"/>
+  <text class="on13" x="496" y="236.5" text-anchor="middle">OPT: 3 claims, 250</text>
+  </g>
+  <text class="sm a p2" x="408" y="270">9 → 3 documents</text>
+  <text class="sm a p2" x="408" y="288">(group output order is arbitrary)</text>
+  <g class="a p3">
+  <rect class="pri" x="598" y="136" width="176" height="32" rx="6"/>
+  <text class="on13" x="686" y="156.5" text-anchor="middle">CVS: total 260</text>
+  </g>
+  <g class="a p3">
+  <rect class="tea" x="598" y="176" width="176" height="32" rx="6"/>
+  <text class="on13" x="686" y="196.5" text-anchor="middle">OPT: total 250</text>
+  </g>
+  <g class="a p3">
+  <rect class="wrnf" x="598" y="216" width="176" height="32" rx="6"/>
+  <text class="on13" x="686" y="236.5" text-anchor="middle">WAG: total 140</text>
+  </g>
+  <text class="sm a p3" x="598" y="270">sorted by total, descending</text>
+  <text class="lbl a p0" x="28" y="352">1  Input: every claim in the collection (or index range)</text>
+  <text class="lbl a p1" x="28" y="352">2  $match first: if it&#x27;s on an indexed field it becomes an index scan</text>
+  <text class="lbl a p2" x="28" y="352">3  $group: blocking; may use 100 MB RAM before spilling to disk</text>
+  <text class="lbl a p3" x="28" y="352">4  $sort on 3 small documents is cheap because filtering came first</text>
+  <text class="sub" x="28" y="384">Every output document, including a $group result, must still fit in 16 MB.</text>
+</svg>

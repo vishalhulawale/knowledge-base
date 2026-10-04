@@ -56,6 +56,9 @@ flowchart TD
 ```
 *Notice that the dot-notation version matches a claim with one line for N7 (qty 5) and another line with qty 90. That's usually not what the question meant.*
 
+![A claim with line 0 for N7 with quantity 5 and line 1 for N18 with quantity 90: dot notation matches because each condition is met by a different line, while $elemMatch requires one line to meet both and correctly doesn't match](images/02-elemmatch-trap.svg){ loading=lazy }
+*Notice the green cells on the left sit in different rows. Dot notation asks "does any element match each condition?", not "does one element match all of them?".*
+
 Measured semantics on tiny collections:
 
 | Query | Matches |
@@ -100,6 +103,9 @@ flowchart LR
     P --> O["results"]
 ```
 *Notice that documents flow through stages like a Unix pipe. Every stage sees only what the previous one emitted, so filtering first shrinks all later work.*
+
+![Animation: twelve claims enter the pipeline; $match keeps the nine PAID ones, $group by pharmacy turns them into three totals for CVS, OPT and WAG, and $sort orders them by total](images/02-aggregation-pipeline.svg){ loading=lazy }
+*Watch the document count fall from 12 to 9 to 3. The expensive stages run on the smallest possible input because `$match` came first.*
 
 | Stage | Does | SQL analogue |
 |---|---|---|
