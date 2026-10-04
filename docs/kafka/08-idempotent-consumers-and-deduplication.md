@@ -45,6 +45,9 @@ flowchart TD
 
 **1. Natural idempotency.** "Set status = SHIPPED" is idempotent; "increment count" isn't. Prefer state-based events (`balance=120`) over delta events (`+20`) when consumers only need current state.
 
+![A delta event of plus 20 delivered twice takes a balance of 100 to 140 instead of 120; a state event setting the balance to 120 delivered twice still leaves 120](images/08-delta-vs-state.svg){ loading=lazy }
+*Notice that the state event needs no dedupe at all: applying it again changes nothing.*
+
 **2. Version / sequence checks.** Reject stale or duplicate updates with a conditional write. This also protects against reordering.
 
 **3. Dedupe store.**
@@ -77,6 +80,9 @@ sequenceDiagram
     C1->>R: SET evt-9
 ```
 *Notice that check-then-act across a separate store isn't atomic. Use a DB unique constraint in the same transaction, or an atomic `SET key value NX EX <ttl>` that claims the event before acting, plus a recovery path if processing then fails (otherwise a crash after the claim turns a duplicate into a **lost** event). The two attempts overlap in practice when a consumer stalls past `max.poll.interval.ms`, its partition is reassigned, and the "zombie" finishes its in-flight record anyway.*
+
+![Animation: two attempts process evt-9 at once; with a separate Redis EXISTS check both see no and both debit, so the balance drops twice; with a processed_events insert in the same transaction the second insert blocks on the unique index, then fails with a duplicate key and skips, so the balance drops once](images/08-dedupe-race.svg){ loading=lazy }
+*Watch attempt 2 in the bottom half: it isn't refused up front, it waits on the unique index. The database turns the race into a queue.*
 
 ## In practice: code & configuration
 
