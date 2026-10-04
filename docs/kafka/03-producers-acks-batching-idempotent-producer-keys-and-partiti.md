@@ -72,6 +72,9 @@ sequenceDiagram
 ```
 *Notice that the broker tracks the last sequence per (producer ID, partition). Duplicates are discarded, and a gap in sequence numbers is rejected, which preserves order.*
 
+![Animation: a leader appends offset 42 but the ack is lost; with idempotence off the retry is appended again as a duplicate, while the idempotent producer's retry carries PID 7 and sequence 5, which the leader recognises and drops](images/03-idempotent-retry.svg){ loading=lazy }
+*Watch step 3: the producer behaves the same on both sides. The difference is that only the sequence number lets the broker tell a retry from new data.*
+
 The idempotent producer requires `acks=all`, `retries > 0` and `max.in.flight.requests.per.connection ≤ 5`. These are all defaults since Kafka 3.0 (`retries` defaults to `Integer.MAX_VALUE`; the real bound is `delivery.timeout.ms`).
 
 - If you **explicitly** set a conflicting value (e.g. `acks=1`) without explicitly setting `enable.idempotence`, the client silently **disables** idempotence. If you explicitly set `enable.idempotence=true` with a conflicting value, it throws a `ConfigException` at startup. Kafka 4.0 removed the remaining silent fallback for `max.in.flight.requests.per.connection > 5`.
@@ -84,6 +87,9 @@ The idempotent producer requires `acks=all`, `retries > 0` and `max.in.flight.re
 - `batch.size` (16 KB default): max bytes per partition batch.
 - `linger.ms`: how long to wait for more records before sending. **Kafka 4.0 changed the default from 0 to 5 ms** because larger batches usually give similar or *lower* latency overall.
 - `compression.type`: `none` (default), `gzip`, `snappy`, `lz4`, `zstd`. Batches are compressed as a unit, so bigger batches compress better. `lz4`/`zstd` are the common production choices.
+
+![Animation: records for P0 arrive quickly and fill its batch, which is sent at once; P1 gets only two records, and its batch leaves when the linger.ms timer runs out](images/03-batching-linger.svg){ loading=lazy }
+*Notice the two triggers: a busy partition is limited by `batch.size`, a quiet one by `linger.ms`. Neither waits for the other.*
 
 ## In practice: code & configuration
 

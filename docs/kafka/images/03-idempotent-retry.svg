@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Retry after a lost ack: duplicate vs idempotent producer</title>
+  <desc id="d">Two producers send the same batch to a partition leader. The leader appends it, but the acknowledgement is lost on the network, so both producers retry. On the left, idempotence is off: the leader can&#x27;t tell the retry from a new batch and appends the record a second time, a duplicate. On the right, the idempotent producer stamps the batch with producer ID 7 and sequence 5. The leader has already seen sequence 5 from producer 7, so it drops the retry, acknowledges it, and the log holds the record once.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes p0{0%,30%{opacity:1}31%{opacity:0}100%{opacity:0}}
+    .p0{animation-name:p0}
+    @keyframes p1{0%{opacity:0}30%{opacity:0}31%,58%{opacity:1}59%{opacity:0}100%{opacity:0}}
+    .p1{animation-name:p1}
+    @keyframes p2{0%{opacity:0}58%{opacity:0}59%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .p2{animation-name:p2}
+    @keyframes p12{0%{opacity:0}30%{opacity:0}31%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .p12{animation-name:p12}
+    @keyframes rec{0%{opacity:0}7%{opacity:0}8%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .rec{animation-name:rec}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      .p0,.p1{opacity:0!important}
+    }
+  </style>
+  <defs><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">A lost ack, then a retry</text>
+  <text class="sub" x="28" y="62">Same failure, with enable.idempotence=false and with the default enable.idempotence=true.</text>
+  <line class="ln dash" x1="400" y1="84" x2="400" y2="300"/>
+  <text class="h2" x="28" y="100">idempotence off</text>
+  <rect class="box" x="28" y="120" width="110" height="40" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="83" y="145" text-anchor="middle" font-weight="700">Producer</text>
+  <rect class="box" x="258" y="120" width="122" height="40" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="319" y="145" text-anchor="middle" font-weight="700">Leader</text>
+  <text class="sm" x="258" y="196">partition log</text>
+  <rect class="box" x="258" y="204" width="38" height="34" rx="6"/>
+  <rect class="box" x="300" y="204" width="38" height="34" rx="6"/>
+  <rect class="box" x="342" y="204" width="38" height="34" rx="6"/>
+  <g class="a rec">
+  <rect class="pri" x="258" y="204" width="38" height="34" rx="6"/>
+  <text class="on13" x="277" y="225.5" text-anchor="middle">42</text>
+  </g>
+  <line class="lnp a p0" x1="140" y1="132" x2="254" y2="132" marker-end="url(#arp)"/>
+  <text class="sm a p0" x="196" y="124" text-anchor="middle">send</text>
+  <line class="lnb a p1" x1="254" y1="150" x2="198" y2="150" marker-end="url(#arb)"/>
+  <text class="tx badt a p1" style="font-size:16px" x="186" y="156">✕</text>
+  <text class="sm badt a p1" x="198" y="178" text-anchor="middle">ack lost: retry</text>
+  <line class="lnw a p2" x1="140" y1="132" x2="254" y2="132" marker-end="url(#arw)"/>
+  <text class="sm wrnt a p2" x="196" y="124" text-anchor="middle">retry</text>
+  <text class="h2" x="420" y="100">idempotent producer (PID 7)</text>
+  <rect class="box" x="420" y="120" width="110" height="40" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="475" y="145" text-anchor="middle" font-weight="700">Producer</text>
+  <rect class="box" x="650" y="120" width="122" height="40" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="711" y="145" text-anchor="middle" font-weight="700">Leader</text>
+  <text class="sm" x="650" y="196">partition log</text>
+  <rect class="box" x="650" y="204" width="38" height="34" rx="6"/>
+  <rect class="box" x="692" y="204" width="38" height="34" rx="6"/>
+  <rect class="box" x="734" y="204" width="38" height="34" rx="6"/>
+  <g class="a rec">
+  <rect class="pri" x="650" y="204" width="38" height="34" rx="6"/>
+  <text class="on13" x="669" y="225.5" text-anchor="middle">42</text>
+  </g>
+  <line class="lnp a p0" x1="532" y1="132" x2="646" y2="132" marker-end="url(#arp)"/>
+  <text class="sm a p0" x="588" y="124" text-anchor="middle">send seq 5</text>
+  <line class="lnb a p1" x1="646" y1="150" x2="590" y2="150" marker-end="url(#arb)"/>
+  <text class="tx badt a p1" style="font-size:16px" x="578" y="156">✕</text>
+  <text class="sm badt a p1" x="590" y="178" text-anchor="middle">ack lost: retry</text>
+  <line class="lnw a p2" x1="532" y1="132" x2="646" y2="132" marker-end="url(#arw)"/>
+  <text class="sm wrnt a p2" x="588" y="124" text-anchor="middle">retry seq 5</text>
+  <g class="a p2">
+  <rect class="badf" x="300" y="204" width="38" height="34" rx="6"/>
+  <text class="on13" x="319" y="225.5" text-anchor="middle">42</text>
+  </g>
+  <text class="tx badt a p2" x="28" y="270">Appended again: 42 is now in the log twice.</text>
+  <text class="sub a p2" x="28" y="290">Every consumer sees a duplicate.</text>
+  <text class="tx okt a p2" x="420" y="270">Leader: PID 7 seq 5 already written →</text>
+  <text class="tx okt a p2" x="420" y="290">drop it, ack OK. Log holds 42 once.</text>
+  <text class="lbl a p0" x="28" y="334">1  Send: the leader appends offset 42</text>
+  <text class="lbl badt a p1" x="28" y="334">2  The ack is lost on the network, so the producer can&#x27;t know it worked</text>
+  <text class="lbl a p2" x="28" y="334">3  Retry: only sequence numbers let the broker spot the duplicate</text>
+  <text class="sub" x="28" y="366">Sequence numbers are tracked per (producer ID, partition). A gap is rejected too, which keeps</text>
+  <text class="sub" x="28" y="384">order with up to 5 requests in flight. A restarted producer gets a new PID: use transactions for that.</text>
+</svg>

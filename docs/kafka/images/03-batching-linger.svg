@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Producer batching: batch.size or linger.ms, whichever comes first</title>
+  <desc id="d">The producer&#x27;s record accumulator keeps one batch per partition. Records for partition 0 arrive quickly and fill its batch to batch.size, so it is sent straight away without waiting. Partition 1 gets only two records; its batch waits until linger.ms has passed and is then sent partly full. The sender thread ships each ready batch to the partition leader in a produce request. Simplified: six records fill a batch.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:14s infinite linear}
+    @keyframes r00{0%{opacity:0}3.5%{opacity:0}4%,30%{opacity:1}30.5%{opacity:0}100%{opacity:0}}
+    .r00{animation-name:r00}
+    @keyframes r01{0%{opacity:0}7.5%{opacity:0}8%,30%{opacity:1}30.5%{opacity:0}100%{opacity:0}}
+    .r01{animation-name:r01}
+    @keyframes r02{0%{opacity:0}11.5%{opacity:0}12%,30%{opacity:1}30.5%{opacity:0}100%{opacity:0}}
+    .r02{animation-name:r02}
+    @keyframes r03{0%{opacity:0}15.5%{opacity:0}16%,30%{opacity:1}30.5%{opacity:0}100%{opacity:0}}
+    .r03{animation-name:r03}
+    @keyframes r04{0%{opacity:0}19.5%{opacity:0}20%,30%{opacity:1}30.5%{opacity:0}100%{opacity:0}}
+    .r04{animation-name:r04}
+    @keyframes r05{0%{opacity:0}23.5%{opacity:0}24%,30%{opacity:1}30.5%{opacity:0}100%{opacity:0}}
+    .r05{animation-name:r05}
+    @keyframes r10{0%{opacity:0}9.5%{opacity:0}10%,66%{opacity:1}66.5%{opacity:0}100%{opacity:0}}
+    .r10{animation-name:r10}
+    @keyframes r11{0%{opacity:0}21.5%{opacity:0}22%,66%{opacity:1}66.5%{opacity:0}100%{opacity:0}}
+    .r11{animation-name:r11}
+    @keyframes fl0{0%,30%{transform:translate(0,0);opacity:0}30.5%{opacity:1}39%{transform:translate(70px,0);opacity:1}40%,100%{transform:translate(70px,0);opacity:0}}.fl0{animation:fl0 14s infinite linear}
+    @keyframes fl1{0%,66%{transform:translate(0,0);opacity:0}66.5%{opacity:1}75%{transform:translate(70px,0);opacity:1}76%,100%{transform:translate(70px,0);opacity:0}}.fl1{animation:fl1 14s infinite linear}
+    @keyframes lg{0%,10%{transform:scaleX(0)}66%{transform:scaleX(1)}67%,100%{transform:scaleX(0)}}.lg{transform-box:fill-box;transform-origin:0 50%;animation:lg 14s infinite linear}
+    @keyframes s0{0%{opacity:0}25%{opacity:0}26%,46%{opacity:1}47%{opacity:0}100%{opacity:0}}
+    .s0{animation-name:s0}
+    @keyframes s1{0%{opacity:0}63%{opacity:0}64%,84%{opacity:1}85%{opacity:0}100%{opacity:0}}
+    .s1{animation-name:s1}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      .fl0,.fl1{opacity:0}.lg{transform:scaleX(.6)}
+    }
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">Batching: a batch leaves when it is full or when linger.ms runs out</text>
+  <text class="sub" x="28" y="62">RecordAccumulator, one batch per partition. Simplified: 6 records fill batch.size.</text>
+  <text class="lbl" x="28" y="106">send() calls</text>
+  <text class="lbl" x="150" y="106">RecordAccumulator</text>
+  <text class="lbl" x="600" y="106">Sender → leader</text>
+  <text class="tx" x="28" y="156">key → P0</text>
+  <rect class="box" x="150" y="130" width="288" height="42" rx="10" stroke-width="1.5"/>
+  <rect class="bm" x="156" y="136" width="40" height="30" rx="6"/>
+  <rect class="bm" x="202" y="136" width="40" height="30" rx="6"/>
+  <rect class="bm" x="248" y="136" width="40" height="30" rx="6"/>
+  <rect class="bm" x="294" y="136" width="40" height="30" rx="6"/>
+  <rect class="bm" x="340" y="136" width="40" height="30" rx="6"/>
+  <rect class="bm" x="386" y="136" width="40" height="30" rx="6"/>
+  <rect class="box" x="600" y="130" width="172" height="42" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="686" y="156" text-anchor="middle">leader of P0</text>
+  <line class="ln" x1="450" y1="151" x2="594" y2="151" marker-end="url(#ar)"/>
+  <text class="tx" x="28" y="256">key → P1</text>
+  <rect class="box" x="150" y="230" width="288" height="42" rx="10" stroke-width="1.5"/>
+  <rect class="bm" x="156" y="236" width="40" height="30" rx="6"/>
+  <rect class="bm" x="202" y="236" width="40" height="30" rx="6"/>
+  <rect class="bm" x="248" y="236" width="40" height="30" rx="6"/>
+  <rect class="bm" x="294" y="236" width="40" height="30" rx="6"/>
+  <rect class="bm" x="340" y="236" width="40" height="30" rx="6"/>
+  <rect class="bm" x="386" y="236" width="40" height="30" rx="6"/>
+  <rect class="box" x="600" y="230" width="172" height="42" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="686" y="256" text-anchor="middle">leader of P1</text>
+  <line class="ln" x1="450" y1="251" x2="594" y2="251" marker-end="url(#ar)"/>
+  <g class="a r00">
+  <rect class="pri" x="156" y="136" width="40" height="30" rx="6"/>
+  <text class="on13" x="176" y="155.5" text-anchor="middle">r1</text>
+  </g>
+  <g class="a r01">
+  <rect class="pri" x="202" y="136" width="40" height="30" rx="6"/>
+  <text class="on13" x="222" y="155.5" text-anchor="middle">r2</text>
+  </g>
+  <g class="a r02">
+  <rect class="pri" x="248" y="136" width="40" height="30" rx="6"/>
+  <text class="on13" x="268" y="155.5" text-anchor="middle">r3</text>
+  </g>
+  <g class="a r03">
+  <rect class="pri" x="294" y="136" width="40" height="30" rx="6"/>
+  <text class="on13" x="314" y="155.5" text-anchor="middle">r4</text>
+  </g>
+  <g class="a r04">
+  <rect class="pri" x="340" y="136" width="40" height="30" rx="6"/>
+  <text class="on13" x="360" y="155.5" text-anchor="middle">r5</text>
+  </g>
+  <g class="a r05">
+  <rect class="pri" x="386" y="136" width="40" height="30" rx="6"/>
+  <text class="on13" x="406" y="155.5" text-anchor="middle">r6</text>
+  </g>
+  <g class="a r10">
+  <rect class="tea" x="156" y="236" width="40" height="30" rx="6"/>
+  <text class="on13" x="176" y="255.5" text-anchor="middle">r1</text>
+  </g>
+  <g class="a r11">
+  <rect class="tea" x="202" y="236" width="40" height="30" rx="6"/>
+  <text class="on13" x="222" y="255.5" text-anchor="middle">r2</text>
+  </g>
+  <g class="fl0">
+  <rect class="pri" x="462" y="138" width="62" height="26" rx="6"/>
+  <text class="on13" x="493" y="155.5" text-anchor="middle">6 recs</text>
+  </g>
+  <g class="fl1">
+  <rect class="tea" x="462" y="238" width="62" height="26" rx="6"/>
+  <text class="on13" x="493" y="255.5" text-anchor="middle">2 recs</text>
+  </g>
+  <text class="sm" x="150" y="300">linger.ms timer for P1</text>
+  <rect class="bm" x="150" y="308" width="288" height="10" rx="5"/>
+  <rect class="wrnf lg" x="150" y="308" width="288" height="10" rx="5"/>
+  <text class="sm prit a s0" x="600" y="196">full: sent at once</text>
+  <text class="sm teat a s1" x="600" y="296">linger.ms up: sent</text>
+  <text class="sm teat a s1" x="600" y="314">with only 2 records</text>
+  <text class="sub" x="28" y="350">Bigger batches mean fewer requests and better compression. Kafka 4.0 raised the linger.ms</text>
+  <text class="sub" x="28" y="368">default from 0 to 5 ms because a few ms of waiting usually lowers total latency under load.</text>
+</svg>
