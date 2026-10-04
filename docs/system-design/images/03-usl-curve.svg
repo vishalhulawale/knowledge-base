@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Linear, Amdahl and Universal Scalability Law curves</title>
+  <desc id="d">A chart of relative throughput against number of nodes from 1 to 64. The ideal linear line leaves the chart at 12 nodes. The Amdahl curve with 10 percent serial work rises towards a ceiling of 10 times and reaches about 8.8 at 64 nodes. The Universal Scalability Law curve with the same contention plus a small coherency cost peaks at about 5.5 times near 21 nodes and then falls to about 4.2 at 64 nodes.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .tx{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .ax{stroke:#94a3b8;stroke-width:1.5}
+    .grid{stroke:#e2e8f0}
+    .lin{stroke:#64748b;stroke-width:2;stroke-dasharray:6 5;fill:none}
+    .amd{stroke:#4f46e5;stroke-width:3;fill:none}
+    .usl{stroke:#dc2626;stroke-width:3;fill:none}
+    .cap{stroke:#4f46e5;stroke-width:1.5;stroke-dasharray:3 4}
+    .amdt{fill:#4f46e5;font-size:14px;font-weight:700}
+    .uslt{fill:#dc2626;font-size:14px;font-weight:700}
+    .lint{fill:#64748b;font-size:14px;font-weight:700}
+    .pk{fill:#dc2626}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .ax{stroke:#64748b}.grid{stroke:#334155}
+      .lin{stroke:#94a3b8}.lint{fill:#94a3b8}
+      .amd,.cap{stroke:#818cf8}.amdt{fill:#818cf8}
+      .usl{stroke:#f87171}.uslt,.pk{fill:#f87171}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Why adding nodes stops helping</text>
+  <text class="sub" x="28" y="62">Relative throughput as nodes are added (same work, same serial fraction).</text>
+
+  <!-- grid and axes: x = 90 + n*470/64, y = 330 - v*230/12 -->
+  <g>
+    <line class="grid" x1="90" y1="234.2" x2="560" y2="234.2"/>
+    <line class="grid" x1="90" y1="138.3" x2="560" y2="138.3"/>
+    <line class="ax" x1="90" y1="100" x2="90" y2="330"/>
+    <line class="ax" x1="90" y1="330" x2="560" y2="330"/>
+    <text class="sub" x="80" y="334" text-anchor="end">0</text>
+    <text class="sub" x="80" y="238" text-anchor="end">5×</text>
+    <text class="sub" x="80" y="142" text-anchor="end">10×</text>
+    <text class="sub" x="90" y="350" text-anchor="middle">0</text>
+    <text class="sub" x="207.5" y="350" text-anchor="middle">16</text>
+    <text class="sub" x="325" y="350" text-anchor="middle">32</text>
+    <text class="sub" x="442.5" y="350" text-anchor="middle">48</text>
+    <text class="sub" x="560" y="350" text-anchor="middle">64</text>
+    <text class="tx" x="325" y="372" text-anchor="middle">Number of nodes</text>
+    <text class="tx" x="28" y="92">Throughput</text>
+  </g>
+
+  <!-- curves -->
+  <line class="cap" x1="90" y1="138.3" x2="560" y2="138.3"/>
+  <line class="lin" x1="97.3" y1="310.8" x2="178.1" y2="100"/>
+  <path class="amd" d="M97.3,310.8 L104.7,295.2 L112.0,282.1 L119.4,271.0 L134.1,253.3 L148.8,239.8 L163.4,229.1 L178.1,220.5 L192.8,213.3 L207.5,207.3 L222.2,202.2 L236.9,197.8 L251.6,194.0 L266.2,190.6 L280.9,187.6 L295.6,185.0 L325.0,180.4 L354.4,176.7 L383.8,173.5 L413.1,170.9 L442.5,168.6 L471.9,166.6 L501.2,164.9 L530.6,163.3 L560.0,162.0"/>
+  <path class="usl" d="M97.3,310.8 L104.7,295.3 L112.0,282.6 L119.4,272.1 L134.1,256.3 L148.8,245.4 L163.4,237.9 L178.1,232.7 L192.8,229.3 L207.5,227.1 L222.2,225.8 L236.9,225.3 L251.6,225.2 L266.2,225.5 L280.9,226.2 L295.6,227.0 L325.0,229.2 L354.4,231.7 L383.8,234.4 L413.1,237.2 L442.5,239.9 L471.9,242.6 L501.2,245.2 L530.6,247.7 L560.0,250.2"/>
+  <circle class="pk" cx="245.8" cy="225.2" r="5"/>
+  <text class="uslt" x="236" y="262">peak ≈ 5.5× at ~21 nodes</text>
+
+  <!-- legend -->
+  <text class="lint" x="590" y="110">Linear (ideal)</text>
+  <text class="tx" x="590" y="128">Every node adds the same.</text>
+  <text class="tx" x="590" y="146">Leaves the chart at 12.</text>
+
+  <text class="amdt" x="590" y="182">Amdahl, 10% serial</text>
+  <text class="tx" x="590" y="200">Contention only. Climbs</text>
+  <text class="tx" x="590" y="218">towards 10× and never</text>
+  <text class="tx" x="590" y="236">passes it (8.8× at 64).</text>
+
+  <text class="uslt" x="590" y="272">USL, + coherency</text>
+  <text class="tx" x="590" y="290">Cross-node coordination</text>
+  <text class="tx" x="590" y="308">grows with N², so more</text>
+  <text class="tx" x="590" y="326">nodes means LESS output.</text>
+
+  <text class="sub" x="28" y="400">X(N) = N / (1 + α(N−1) + βN(N−1)), α = 0.1 for both, β = 0.002 for USL. Illustrative values.</text>
+</svg>

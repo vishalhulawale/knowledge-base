@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Quorum overlap with N equals 3</title>
+  <desc id="d">Two panels with three replicas each. Left, W equals 2 and R equals 2: the new version v2 is written to replicas 1 and 2, and a read from replicas 2 and 3 overlaps the write at replica 2, so it sees v2 and returns the newest version. Right, W equals 1 and R equals 1: v2 is written only to replica 1, and a read from replica 3 returns the stale v1.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .panel{fill:none;stroke:#e2e8f0;stroke-width:1.5}
+    .box{fill:#ffffff;stroke:#cbd5e1;stroke-width:1.5}
+    .newb{fill:#ffffff;stroke:#4f46e5;stroke-width:2.5}
+    .vnew{fill:#4f46e5;font-size:20px;font-weight:700}
+    .vold{fill:#64748b;font-size:20px;font-weight:700}
+    .wb{fill:none;stroke:#4f46e5;stroke-width:2.5}
+    .wt{fill:#4f46e5;font-size:14px;font-weight:700}
+    .rb{fill:none;stroke:#0ea5a4;stroke-width:2.5}
+    .rt{fill:#0f766e;font-size:14px;font-weight:700}
+    .good{fill:#16a34a;font-size:15px;font-weight:700}
+    .bad{fill:#dc2626;font-size:15px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.tx{fill:#e2e8f0}.sub,.vold{fill:#94a3b8}
+      .panel{stroke:#334155}.box{fill:#111827;stroke:#475569}.newb{fill:#111827;stroke:#818cf8}
+      .vnew,.wt{fill:#818cf8}.wb{stroke:#818cf8}.rb{stroke:#2dd4bf}.rt{fill:#5eead4}
+      .good{fill:#4ade80}.bad{fill:#f87171}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Quorums: why W + R &gt; N matters (N = 3)</text>
+  <text class="sub" x="28" y="62">v2 is the latest write; v1 is the older value still on some replicas.</text>
+  <rect class="panel" x="28" y="78" width="360" height="270" rx="12"/>
+  <text class="good" x="44" y="104">W = 2, R = 2  (4 &gt; 3)</text>
+  <path class="wb" d="M48,156 V146 H256 V156"/><text class="wt" x="152.0" y="138" text-anchor="middle">write W=2</text>
+  <rect class="newb" x="48" y="162" width="96" height="58" rx="10"/>
+  <text class="sub" x="96" y="182" text-anchor="middle">Replica 1</text>
+  <text class="vnew" x="96" y="208" text-anchor="middle">v2</text>
+  <rect class="newb" x="160" y="162" width="96" height="58" rx="10"/>
+  <text class="sub" x="208" y="182" text-anchor="middle">Replica 2</text>
+  <text class="vnew" x="208" y="208" text-anchor="middle">v2</text>
+  <rect class="box" x="272" y="162" width="96" height="58" rx="10"/>
+  <text class="sub" x="320" y="182" text-anchor="middle">Replica 3</text>
+  <text class="vold" x="320" y="208" text-anchor="middle">v1</text>
+  <path class="rb" d="M160,226 V236 H368 V226"/><text class="rt" x="264.0" y="256" text-anchor="middle">read R=2</text>
+  <text class="good" x="44" y="296">Overlap at replica 2 → read sees v2</text>
+  <text class="tx" x="44" y="320">The client keeps the newest version it got.</text>
+  <rect class="panel" x="412" y="78" width="360" height="270" rx="12"/>
+  <text class="bad" x="428" y="104">W = 1, R = 1  (2 ≤ 3)</text>
+  <path class="wb" d="M432,156 V146 H528 V156"/><text class="wt" x="480.0" y="138" text-anchor="middle">write W=1</text>
+  <rect class="newb" x="432" y="162" width="96" height="58" rx="10"/>
+  <text class="sub" x="480" y="182" text-anchor="middle">Replica 1</text>
+  <text class="vnew" x="480" y="208" text-anchor="middle">v2</text>
+  <rect class="box" x="544" y="162" width="96" height="58" rx="10"/>
+  <text class="sub" x="592" y="182" text-anchor="middle">Replica 2</text>
+  <text class="vold" x="592" y="208" text-anchor="middle">v1</text>
+  <rect class="box" x="656" y="162" width="96" height="58" rx="10"/>
+  <text class="sub" x="704" y="182" text-anchor="middle">Replica 3</text>
+  <text class="vold" x="704" y="208" text-anchor="middle">v1</text>
+  <path class="rb" d="M656,226 V236 H752 V226"/><text class="rt" x="704.0" y="256" text-anchor="middle">read R=1</text>
+  <text class="bad" x="428" y="296">No overlap → read returns stale v1</text>
+  <text class="tx" x="428" y="320">Fast, but the read can miss the write.</text>
+  <text class="sub" x="28" y="376">Overlap gives a fresh read normally. Sloppy quorums and concurrent writes still need conflict handling.</text>
+</svg>

@@ -86,6 +86,9 @@ flowchart TB
 | Consistent hashing | Key → target on a ring | Cache affinity, sticky partitions | Hot keys, rebalancing on change |
 | Latency-aware (EWMA) | Prefer faster targets | Heterogeneous latency | Can overload a fast-but-recovering node |
 
+![Animation: a load balancer and six servers with different numbers of outstanding requests; for each new request it picks two servers at random and sends the request to the one with fewer outstanding requests](images/03-power-of-two.svg){ loading=lazy }
+*Watch each request compare only two random servers. It never needs the global "least loaded" answer, yet it avoids the busiest servers most of the time.*
+
 **Health checks:**
 
 - **Readiness:** remove a target from rotation if it can't serve (warming up, dependency down for *its* functionality).
@@ -115,6 +118,9 @@ flowchart LR
 *Notice the **Universal Scalability Law**: throughput(N) = N / (1 + α(N−1) + βN(N−1)). α is contention and β is coherency (crosstalk). With any β > 0, adding nodes eventually **reduces** throughput. That's why you remove shared bottlenecks (partition data, avoid global locks, reduce chatty coordination) instead of just adding nodes.*
 
 **Amdahl's law:** if 10% of the work is serial, the maximum speed-up is 10×, no matter how many nodes you add.
+
+![Chart of throughput against nodes: the linear ideal leaves the chart, the Amdahl curve with 10% serial work flattens below 10 times, and the Universal Scalability Law curve peaks at about 5.5 times near 21 nodes and then falls](images/03-usl-curve.svg){ loading=lazy }
+*Notice that Amdahl only flattens, while USL turns down. Past the peak, every node you add makes the system slower.*
 
 ### The scaling journey
 

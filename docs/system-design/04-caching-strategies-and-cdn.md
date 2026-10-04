@@ -115,6 +115,9 @@ flowchart TB
 | **Hot keys** | **L1 local cache** in front of Redis, replicate the hot key (`key#1..N`, read a random copy), Redis client-side caching (tracking), read from replicas |
 | **Big keys** | Split values, compress, avoid multi-MB values (they block Redis's single thread) |
 
+![Animation: six concurrent requests miss on an expired hot key; without coalescing all six query the database at once, while with single-flight one request loads the value, five wait, and all six are served from one query](images/04-stampede.svg){ loading=lazy }
+*Watch the database in each panel: six identical queries on the left, one on the right. Coalescing turns a burst of misses into a single load.*
+
 ### Cache consistency
 
 Cache-aside has unavoidable race windows. A classic one:
@@ -122,6 +125,9 @@ Cache-aside has unavoidable race windows. A classic one:
 1. Reader A misses and loads the old value from the DB.
 2. Writer B updates the DB and deletes the key.
 3. A writes the **old** value into the cache, which is now stale until the TTL expires.
+
+![Animation: reader A misses and reads price 10 from the database, writer B updates the price to 12 and deletes the empty cache key, then reader A writes the old price 10 into the cache, leaving it stale](images/04-aside-race.svg){ loading=lazy }
+*Notice that the writer's delete happens before the reader's set, so it deletes nothing. The TTL is what finally ends the stale period.*
 
 Mitigations:
 

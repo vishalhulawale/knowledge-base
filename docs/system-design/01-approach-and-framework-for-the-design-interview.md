@@ -38,6 +38,9 @@ flowchart LR
 ```
 *Notice that **deep dives get the most time**. That's where senior signal comes from. The early steps should be quick and deliberate, not skipped.*
 
+![A to-scale timeline of the six steps: requirements about 5 minutes, estimation 3 to 5, API and data model 5, high-level design 10, deep dives 15 to 20 and wrap-up 5, with the deep-dive bar clearly the longest](images/01-time-budget.svg){ loading=lazy }
+*Drawn to scale, the deep dives take nearly as long as steps 1 to 4 together. If you are still estimating at minute 15, you are eating into them.*
+
 ### Step 1: Requirements
 
 **Functional:** what users can do. Pick **3–5 core use cases** and explicitly park the rest ("out of scope: admin dashboard, analytics").
@@ -181,6 +184,9 @@ constraints:     {cloud: ?, team_size: ?, existing_systems: ?}
 | Depth-first on the interviewer's hint | Matches their interest | May miss end-to-end flow | When they steer you |
 | Start monolith/simple, then evolve | Demonstrates judgement | Must clearly show the evolution | Almost always |
 | Start "web-scale" | Sounds impressive | Signals poor judgement | Never as an opening |
+
+![Animation: an example design grows in three steps, from one service and one relational database, to a load balancer with stateless instances, a cache and read replicas at 10 times the load, to a queue with workers and a sharded database at 100 times](images/01-evolve-design.svg){ loading=lazy }
+*Watch each step add only what the new scale forces. In the interview, say which requirement or estimate triggers each change.*
 
 !!! warning "Gotchas"
     - **Don't spend 15 minutes on estimation.** Round, use powers of 10, move on.

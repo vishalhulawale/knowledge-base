@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Base62-encoding a unique ID into a short code</title>
+  <desc id="d">The unique ID 2,009,215,674,938 is divided by 62 repeatedly. The remainders are 30, 12, 13, 14, 9, 23 and 35, which map to the characters u, c, d, e, 9, n and z in the alphabet 0 to 9, a to z, A to Z. Read from last to first they give the 7-character code zn9edcu. Seven base62 characters give about 3.5 trillion codes.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .mono{fill:#334155;font-size:14px;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .sub{fill:#64748b;font-size:13px}
+    .rem{fill:#4f46e5;font-size:14px;font-weight:700}
+    .chip{fill:#0ea5a4}
+    .ct{fill:#fff;font-size:18px;font-weight:700;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .ln{fill:none;stroke:#94a3b8;stroke-width:1.5;stroke-dasharray:4 4}
+    .big{fill:#0f766e;font-size:16px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .rem{fill:#818cf8}.chip{fill:#2dd4bf}.ct{fill:#0f172a}.ln{stroke:#64748b}.big{fill:#5eead4}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Short code = base62(unique ID)</text>
+  <text class="sub" x="28" y="62">Alphabet: 0–9 → 0–9, a–z → 10–35, A–Z → 36–61. Divide by 62, keep the remainders.</text>
+
+  <text class="lbl" x="28" y="96">value ÷ 62</text><text class="lbl" x="300" y="96">quotient</text><text class="lbl" x="460" y="96">remainder → char</text>
+  <text class="mono" x="28" y="124">2,009,215,674,938</text><text class="mono" x="300" y="124">32,406,704,434</text><text class="rem" x="460" y="124">30 → u</text>
+  <text class="mono" x="28" y="150">32,406,704,434</text><text class="mono" x="300" y="150">522,688,781</text><text class="rem" x="460" y="150">12 → c</text>
+  <text class="mono" x="28" y="176">522,688,781</text><text class="mono" x="300" y="176">8,430,464</text><text class="rem" x="460" y="176">13 → d</text>
+  <text class="mono" x="28" y="202">8,430,464</text><text class="mono" x="300" y="202">135,975</text><text class="rem" x="460" y="202">14 → e</text>
+  <text class="mono" x="28" y="228">135,975</text><text class="mono" x="300" y="228">2,193</text><text class="rem" x="460" y="228">9 → 9</text>
+  <text class="mono" x="28" y="254">2,193</text><text class="mono" x="300" y="254">35</text><text class="rem" x="460" y="254">23 → n</text>
+  <text class="mono" x="28" y="280">35</text><text class="mono" x="300" y="280">0 (stop)</text><text class="rem" x="460" y="280">35 → z</text>
+
+  <path class="ln" d="M640,120 V284"/>
+  <text class="sub" x="652" y="206">read</text>
+  <text class="sub" x="652" y="224">bottom-up</text>
+
+  <g>
+    <rect class="chip" x="28" y="310" width="40" height="44" rx="8"/><text class="ct" x="48" y="339" text-anchor="middle">z</text>
+    <rect class="chip" x="74" y="310" width="40" height="44" rx="8"/><text class="ct" x="94" y="339" text-anchor="middle">n</text>
+    <rect class="chip" x="120" y="310" width="40" height="44" rx="8"/><text class="ct" x="140" y="339" text-anchor="middle">9</text>
+    <rect class="chip" x="166" y="310" width="40" height="44" rx="8"/><text class="ct" x="186" y="339" text-anchor="middle">e</text>
+    <rect class="chip" x="212" y="310" width="40" height="44" rx="8"/><text class="ct" x="232" y="339" text-anchor="middle">d</text>
+    <rect class="chip" x="258" y="310" width="40" height="44" rx="8"/><text class="ct" x="278" y="339" text-anchor="middle">c</text>
+    <rect class="chip" x="304" y="310" width="40" height="44" rx="8"/><text class="ct" x="324" y="339" text-anchor="middle">u</text>
+  </g>
+  <text class="big" x="368" y="330">GET /zn9edcu</text>
+  <text class="tx" x="368" y="350">7 chars: 62⁷ ≈ 3.5 × 10¹² codes</text>
+  <text class="sub" x="28" y="396">IDs come from per-server ranges or Snowflake, so codes never collide. Sequential IDs give guessable codes.</text>
+</svg>

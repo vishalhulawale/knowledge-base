@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 410" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">The latency ladder on a log scale</title>
+  <desc id="d">Bars on a logarithmic axis from 10 nanoseconds to 1 second. A memory reference is about 100 nanoseconds, an SSD random read about 0.1 milliseconds, a same-datacentre round trip about 0.5 milliseconds, a disk seek about 10 milliseconds and a cross-continent round trip about 100 to 150 milliseconds. Scaled so that a memory reference takes 1 second, the others would take about 17 minutes, 1.4 hours, 1.2 days and 12 days.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .grid{stroke:#e2e8f0}
+    .bar{fill:#4f46e5}
+    .rng{fill:#4f46e5;opacity:.4}
+    .hum{fill:#0f766e;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .grid{stroke:#334155}.bar,.rng{fill:#818cf8}.hum{fill:#5eead4}
+    }
+    /* 10 s loop: bars grow one after another, then hold */
+    .g{transform-box:fill-box;transform-origin:left center;animation:10s infinite ease-out}
+    .f{animation:10s infinite linear}
+    @keyframes g1{0%,2%{transform:scaleX(0)}10%,94%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+    @keyframes g2{0%,12%{transform:scaleX(0)}20%,94%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+    @keyframes g3{0%,22%{transform:scaleX(0)}30%,94%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+    @keyframes g4{0%,32%{transform:scaleX(0)}40%,94%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+    @keyframes g5{0%,42%{transform:scaleX(0)}50%,94%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+    @keyframes f1{0%,10%{opacity:0}12%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes f2{0%,20%{opacity:0}22%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes f3{0%,30%{opacity:0}32%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes f4{0%,40%{opacity:0}42%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes f5{0%,50%{opacity:0}52%,94%{opacity:1}98%,100%{opacity:0}}
+    .g1{animation-name:g1}.g2{animation-name:g2}.g3{animation-name:g3}.g4{animation-name:g4}.g5{animation-name:g5}
+    .f1{animation-name:f1}.f2{animation-name:f2}.f3{animation-name:f3}.f4{animation-name:f4}.f5{animation-name:f5}
+    @media (prefers-reduced-motion: reduce){.g,.f{animation:none}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="408" rx="14"/>
+  <text class="h" x="28" y="40">The latency ladder (log scale)</text>
+  <text class="sub" x="28" y="62">Each grid line is 10× the previous one.</text>
+  <text class="hum" x="772" y="62" text-anchor="end">If a memory reference took 1 s…</text>
+
+  <!-- grid: x = 200 + 70 per decade, from 10 ns -->
+  <g>
+    <line class="grid" x1="200" y1="78" x2="200" y2="326"/><line class="grid" x1="270" y1="78" x2="270" y2="326"/>
+    <line class="grid" x1="340" y1="78" x2="340" y2="326"/><line class="grid" x1="410" y1="78" x2="410" y2="326"/>
+    <line class="grid" x1="480" y1="78" x2="480" y2="326"/><line class="grid" x1="550" y1="78" x2="550" y2="326"/>
+    <line class="grid" x1="620" y1="78" x2="620" y2="326"/><line class="grid" x1="690" y1="78" x2="690" y2="326"/>
+    <line class="grid" x1="760" y1="78" x2="760" y2="326"/>
+    <text class="sub" x="200" y="346" text-anchor="middle">10 ns</text><text class="sub" x="270" y="346" text-anchor="middle">100 ns</text>
+    <text class="sub" x="340" y="346" text-anchor="middle">1 µs</text><text class="sub" x="410" y="346" text-anchor="middle">10 µs</text>
+    <text class="sub" x="480" y="346" text-anchor="middle">100 µs</text><text class="sub" x="550" y="346" text-anchor="middle">1 ms</text>
+    <text class="sub" x="620" y="346" text-anchor="middle">10 ms</text><text class="sub" x="690" y="346" text-anchor="middle">100 ms</text>
+    <text class="sub" x="760" y="346" text-anchor="middle">1 s</text>
+  </g>
+
+  <text class="lbl" x="28" y="100">Memory reference</text><text class="sub" x="28" y="117">~100 ns</text>
+  <rect class="bar g g1" x="200" y="92" width="70" height="22" rx="4"/>
+  <text class="hum f f1" x="280" y="108">1 s</text>
+
+  <text class="lbl" x="28" y="148">SSD random read</text><text class="sub" x="28" y="165">~0.1 ms</text>
+  <rect class="bar g g2" x="200" y="140" width="280" height="22" rx="4"/>
+  <text class="hum f f2" x="490" y="156">17 min</text>
+
+  <text class="lbl" x="28" y="196">Same-DC round trip</text><text class="sub" x="28" y="213">~0.5 ms</text>
+  <rect class="bar g g3" x="200" y="188" width="329" height="22" rx="4"/>
+  <text class="hum f f3" x="539" y="204">1.4 hours</text>
+
+  <text class="lbl" x="28" y="244">Disk seek</text><text class="sub" x="28" y="261">~10 ms</text>
+  <rect class="bar g g4" x="200" y="236" width="420" height="22" rx="4"/>
+  <text class="hum f f4" x="630" y="252">1.2 days</text>
+
+  <text class="lbl" x="28" y="292">Cross-continent RTT</text><text class="sub" x="28" y="309">~100–150 ms</text>
+  <g class="g g5"><rect class="bar" x="200" y="284" width="490" height="22" rx="4"/><rect class="rng" x="690" y="284" width="12" height="22" rx="3"/></g>
+  <text class="hum f f5" x="712" y="300">12 days</text>
+
+  <text class="sub" x="28" y="374">Memory ≫ SSD ≫ network ≫ disk seek. Rough orders of magnitude; modern hardware varies.</text>
+  <text class="sub" x="28" y="394">Right-hand times multiply each latency by 10 million (100 ns becomes 1 s).</text>
+</svg>

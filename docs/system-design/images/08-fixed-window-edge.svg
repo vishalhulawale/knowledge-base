@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">The fixed-window boundary burst</title>
+  <desc id="d">A two-minute timeline split into two fixed one-minute windows with a limit of 100 requests per minute. A client sends 100 requests at 00:59 and another 100 at 01:00. Each window counts only 100, so all 200 are allowed even though they arrive within about 2 seconds. A sliding window counter at 01:00:01 would weight the previous window's 100 by 59/60, giving about 98, so only about 1 more request would fit.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .w1{fill:#4f46e5;fill-opacity:.08;stroke:#4f46e5;stroke-opacity:.5}
+    .w2{fill:#0ea5a4;fill-opacity:.08;stroke:#0ea5a4;stroke-opacity:.5}
+    .w1t{fill:#4f46e5;font-size:14px;font-weight:700}
+    .w2t{fill:#0f766e;font-size:14px;font-weight:700}
+    .bar{fill:#dc2626}
+    .br{fill:none;stroke:#dc2626;stroke-width:2}
+    .bad{fill:#dc2626;font-size:15px;font-weight:700}
+    .good{fill:#16a34a;font-size:14px;font-weight:700}
+    .ax{stroke:#94a3b8;stroke-width:1.5}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .w1{fill:#818cf8;stroke:#818cf8;fill-opacity:.1}.w2{fill:#2dd4bf;stroke:#2dd4bf;fill-opacity:.1}
+      .w1t{fill:#818cf8}.w2t{fill:#5eead4}
+      .bar{fill:#f87171}.br{stroke:#f87171}.bad{fill:#f87171}.good{fill:#4ade80}
+      .ax{stroke:#64748b}.box{fill:#111827;stroke:#475569}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Fixed window: 200 requests in 2 seconds</text>
+  <text class="sub" x="28" y="62">Limit 100 per minute. The timeline is drawn to scale.</text>
+
+  <!-- windows -->
+  <rect class="w1" x="60" y="78" width="340" height="150" rx="6"/>
+  <rect class="w2" x="400" y="78" width="340" height="150" rx="6"/>
+  <text class="w1t" x="76" y="102">Window 1: 00:00–01:00</text>
+  <text class="tx" x="76" y="124">count = 100 / 100</text><text class="good" x="76" y="146">✓ all allowed</text>
+  <text class="w2t" x="540" y="102">Window 2: 01:00–02:00</text>
+  <text class="tx" x="540" y="124">count resets to 0,</text><text class="tx" x="540" y="146">then 100 / 100</text><text class="good" x="540" y="168">✓ all allowed</text>
+
+  <!-- the two bursts: 00:59 and 01:00 -->
+  <rect class="bar" x="391" y="148" width="6" height="80"/>
+  <rect class="bar" x="401" y="148" width="6" height="80"/>
+  <path class="br" d="M386,140 V132 H412 V140"/>
+  <text class="bad" x="399" y="124" text-anchor="middle">200 in ~2 s</text>
+  <text class="sub" x="380" y="190" text-anchor="end">100 at 00:59</text>
+  <text class="sub" x="418" y="190">100 at 01:00</text>
+
+  <line class="ax" x1="60" y1="228" x2="740" y2="228"/>
+  <text class="sub" x="60" y="248" text-anchor="middle">00:00</text>
+  <text class="sub" x="400" y="248" text-anchor="middle">01:00</text>
+  <text class="sub" x="740" y="248" text-anchor="middle">02:00</text>
+
+  <!-- sliding window comparison -->
+  <rect class="box" x="28" y="270" width="744" height="88" rx="10"/>
+  <text class="lbl" x="44" y="296">Sliding window counter at 01:00:01</text>
+  <text class="tx" x="44" y="320">count = curr + prev × (1 − elapsed / window) = 0 + 100 × (1 − 1/60) ≈ 98</text>
+  <text class="good" x="44" y="344">→ only about 1 more request fits, so the second burst gets 429s</text>
+  <text class="sub" x="28" y="384">A token bucket with b = 100 also stops it: the first burst empties the bucket.</text>
+</svg>

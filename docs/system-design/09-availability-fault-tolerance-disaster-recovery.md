@@ -38,6 +38,9 @@ Every design interview ends with "what happens when X fails?", and every senior 
 - **MTBF/MTTR:** availability ≈ MTBF / (MTBF + MTTR). Cutting **MTTR** (detect and recover faster) is often cheaper than raising MTBF.
 - **SLO + error budget:** 99.9% monthly = ~43 min of budget. When the budget is spent, prioritise reliability over features.
 
+![Two panels: three 99.9% dependencies in series give about 99.7%, while two independent 99% replicas in parallel give 99.99%](images/09-serial-parallel.svg){ loading=lazy }
+*Notice the direction: every serial dependency lowers availability, while redundancy raises it only if the replicas fail independently.*
+
 ### Failure detection
 
 ```mermaid
@@ -90,6 +93,9 @@ sequenceDiagram
 ```
 *Notice that the caller **never waits forever** and never piles up threads on a dead dependency. The breaker turns a slow failure into a **fast, handled** one, and the fallback decides what the user sees.*
 
+![Animation: a circuit breaker moves from closed to open when 50% of the last 50 calls fail, to half-open after 10 seconds, and back to closed when 5 trial calls are healthy, with a path back to open if the trials fail](images/09-circuit-breaker.svg){ loading=lazy }
+*Watch what callers get in each state: real calls when closed, an instant fallback when open, and a handful of trial calls when half-open.*
+
 | Pattern | Prevents | Key settings |
 |---|---|---|
 | **Timeout** | Threads and connections stuck forever | Per call, below the caller's own deadline. Propagate deadlines |
@@ -105,6 +111,9 @@ sequenceDiagram
 
 - **Cell-based architecture:** independent full-stack copies, each serving a subset of customers. A bad deploy or poison request affects one cell.
 - **Shuffle sharding:** each customer is assigned a random *combination* of k workers out of n. Two customers rarely share all workers, so one bad customer can't take everyone down (AWS Route 53 uses this).
+
+![Two panels with eight workers and four customers: with plain sharding a poison customer takes down its shard and the other customer on it; with shuffle sharding each customer has a random pair of workers, so the neighbour that shares one worker stays up on its other worker](images/09-shuffle-sharding.svg){ loading=lazy }
+*Notice customer B on the right: it shares one worker with A, not both, so it stays up while A's workers are down.*
 - **Zonal isolation:** keep traffic within an AZ where possible, and evacuate an impaired AZ (zonal shift).
 - **Dependency hygiene:** distinguish **hard** dependencies (can't function without) from **soft** ones (degrade without). Minimise hard dependencies, especially cross-Region and control-plane ones.
 

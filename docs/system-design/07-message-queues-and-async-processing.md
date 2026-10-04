@@ -105,6 +105,9 @@ flowchart LR
 - **Natural idempotency:** "set status = SHIPPED" is idempotent; "add 1" is not. Use versions or event IDs for increments.
 - **Idempotency keys** passed to external APIs (Stripe-style), so retries don't double-charge.
 
+![Animation: the queue delivers event 42, the consumer reserves stock and records event 42 in one transaction, crashes before acking, receives event 42 again, finds it already recorded and acks without reserving stock twice](images/07-idempotent-consumer.svg){ loading=lazy }
+*Watch the redelivery in step 4. The broker did its job (at-least-once); the dedup row written in the same transaction is what keeps the reservation at 1.*
+
 ### Ordering
 
 - Global ordering kills parallelism. Usually you need **per-entity ordering**: partition by `orderId`/`patientId` (Kafka key, SQS FIFO message group).
@@ -130,12 +133,18 @@ flowchart LR
 - **Retry budgets** limit the total retry rate so retries can't amplify an outage.
 - **Circuit breakers** on consumers stop hammering a dead downstream. Pause consumption, and the queue buffers in the meantime.
 
+![Five clients retrying four times: without jitter all retries land together at 1, 3, 7 and 15 seconds; with full jitter the same retries are spread out at random times](images/07-backoff-jitter.svg){ loading=lazy }
+*Notice the stacked red columns: plain backoff still sends every client back at the same instant. Jitter keeps the same number of retries but removes the spikes.*
+
 ### Back-pressure and load levelling
 
 - A queue **absorbs bursts** so the consumer processes at a sustainable rate. The trade-off is **latency** (queue age) instead of failure.
 - **Monitor age, not just depth:** `ApproximateAgeOfOldestMessage` (SQS) and **consumer lag** (Kafka) translate directly into user-visible delay.
 - **Autoscale consumers on backlog per worker or lag** (KEDA, Lambda ESM), and **cap** them at what the downstream can take.
 - If the backlog keeps growing: shed or deprioritise non-critical work, use bounded queues with rejection at the producer (back-pressure all the way to the client: 429/503), and use priority queues for critical messages.
+
+![Animation: two charts over 60 seconds; arrivals burst to 200 and 150 messages per second while processing stays at 100 per second, and the queue backlog rises to 1,000 messages and then drains back to zero](images/07-load-levelling.svg){ loading=lazy }
+*Watch the backlog fill during each burst and drain afterwards. The consumer rate never changes, so the downstream is protected and users see delay instead of errors.*
 
 ### Async request-reply and workflows
 

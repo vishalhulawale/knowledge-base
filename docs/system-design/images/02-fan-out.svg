@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Fan-out multiplies internal load</title>
+  <desc id="d">One client request reaches a GraphQL aggregation service, which then makes one call to each of five upstream systems. With example numbers, 1,000 external requests per second become 5,000 internal calls per second, so the upstreams must be sized for the multiplied load.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1;stroke-width:1.5}
+    .ln{stroke:#cbd5e1;stroke-width:2}
+    .dot{fill:#4f46e5}
+    .dot2{fill:#0ea5a4}
+    .hl{fill:none;stroke:#0ea5a4;stroke-width:2.5}
+    .big{fill:#4f46e5;font-size:26px;font-weight:700}
+    .big2{fill:#0f766e;font-size:26px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.ln{stroke:#475569}
+      .dot,.big{fill:#818cf8}.dot2{fill:#2dd4bf}.hl{stroke:#2dd4bf}.big2{fill:#5eead4}
+    }
+    /* 6 s loop: request travels in (0-18%), fans out (24-48%), upstreams light up, hold, reset */
+    .m{animation:6s infinite ease-in-out}
+    @keyframes in{0%{transform:translate(0,0);opacity:1}18%{transform:translate(102px,0);opacity:1}22%,100%{transform:translate(102px,0);opacity:0}}
+    @keyframes o1{0%,22%{transform:translate(0,0);opacity:0}24%{opacity:1}48%{transform:translate(120px,-100px);opacity:1}54%,100%{transform:translate(120px,-100px);opacity:0}}
+    @keyframes o2{0%,22%{transform:translate(0,0);opacity:0}24%{opacity:1}48%{transform:translate(120px,-50px);opacity:1}54%,100%{transform:translate(120px,-50px);opacity:0}}
+    @keyframes o3{0%,22%{transform:translate(0,0);opacity:0}24%{opacity:1}48%{transform:translate(120px,0);opacity:1}54%,100%{transform:translate(120px,0);opacity:0}}
+    @keyframes o4{0%,22%{transform:translate(0,0);opacity:0}24%{opacity:1}48%{transform:translate(120px,50px);opacity:1}54%,100%{transform:translate(120px,50px);opacity:0}}
+    @keyframes o5{0%,22%{transform:translate(0,0);opacity:0}24%{opacity:1}48%{transform:translate(120px,100px);opacity:1}54%,100%{transform:translate(120px,100px);opacity:0}}
+    @keyframes lit{0%,46%{opacity:0}50%,92%{opacity:1}98%,100%{opacity:0}}
+    .in{animation-name:in}.o1{animation-name:o1}.o2{animation-name:o2}.o3{animation-name:o3}.o4{animation-name:o4}.o5{animation-name:o5}
+    .lit{animation:6s infinite linear;animation-name:lit}
+    @media (prefers-reduced-motion: reduce){.m{animation:none;opacity:0}.lit{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Fan-out: one request, many internal calls</text>
+  <text class="sub" x="28" y="62">Downstream systems see external QPS × fan-out, not external QPS.</text>
+
+  <!-- links -->
+  <line class="ln" x1="128" y1="200" x2="230" y2="200"/>
+  <line class="ln" x1="380" y1="200" x2="500" y2="100"/>
+  <line class="ln" x1="380" y1="200" x2="500" y2="150"/>
+  <line class="ln" x1="380" y1="200" x2="500" y2="200"/>
+  <line class="ln" x1="380" y1="200" x2="500" y2="250"/>
+  <line class="ln" x1="380" y1="200" x2="500" y2="300"/>
+
+  <rect class="box" x="28" y="175" width="100" height="50" rx="10"/>
+  <text class="lbl" x="78" y="205" text-anchor="middle">Client</text>
+  <rect class="box" x="230" y="170" width="150" height="60" rx="10"/>
+  <text class="lbl" x="305" y="196" text-anchor="middle">GraphQL</text>
+  <text class="lbl" x="305" y="214" text-anchor="middle">service</text>
+
+  <g>
+    <rect class="box" x="500" y="82" width="140" height="36" rx="8"/><text class="tx" x="570" y="105" text-anchor="middle">Upstream 1</text>
+    <rect class="box" x="500" y="132" width="140" height="36" rx="8"/><text class="tx" x="570" y="155" text-anchor="middle">Upstream 2</text>
+    <rect class="box" x="500" y="182" width="140" height="36" rx="8"/><text class="tx" x="570" y="205" text-anchor="middle">Upstream 3</text>
+    <rect class="box" x="500" y="232" width="140" height="36" rx="8"/><text class="tx" x="570" y="255" text-anchor="middle">Upstream 4</text>
+    <rect class="box" x="500" y="282" width="140" height="36" rx="8"/><text class="tx" x="570" y="305" text-anchor="middle">Upstream 5</text>
+  </g>
+  <g class="lit">
+    <rect class="hl" x="500" y="82" width="140" height="36" rx="8"/><rect class="hl" x="500" y="132" width="140" height="36" rx="8"/>
+    <rect class="hl" x="500" y="182" width="140" height="36" rx="8"/><rect class="hl" x="500" y="232" width="140" height="36" rx="8"/>
+    <rect class="hl" x="500" y="282" width="140" height="36" rx="8"/>
+    <text class="lbl" x="706" y="196" text-anchor="middle">× 5 calls</text>
+    <text class="sub" x="706" y="214" text-anchor="middle">per request</text>
+  </g>
+
+  <!-- moving requests -->
+  <circle class="dot m in" cx="128" cy="200" r="7"/>
+  <circle class="dot2 m o1" cx="380" cy="200" r="6"/>
+  <circle class="dot2 m o2" cx="380" cy="200" r="6"/>
+  <circle class="dot2 m o3" cx="380" cy="200" r="6"/>
+  <circle class="dot2 m o4" cx="380" cy="200" r="6"/>
+  <circle class="dot2 m o5" cx="380" cy="200" r="6"/>
+
+  <!-- counters -->
+  <text class="sub" x="28" y="352">External (users)</text>
+  <text class="big" x="28" y="384">1,000 req/s</text>
+  <text class="sub" x="330" y="352">Internal (upstreams)</text>
+  <text class="big2" x="330" y="384">5,000 calls/s</text>
+  <text class="sub" x="28" y="408">Example numbers. A post fanned out to 500 followers' feeds multiplies writes the same way.</text>
+</svg>

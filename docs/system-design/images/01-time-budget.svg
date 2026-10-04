@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Time budget for a 45 to 60 minute design interview</title>
+  <desc id="d">A timeline drawn to scale. Requirements take about 5 minutes, estimation 3 to 5, API and data model 5, high-level design 10, deep dives 15 to 20 and wrap-up 5, about 47 minutes in total. The deep-dive bar is the longest, about twice the high-level design.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .bar{fill:#4f46e5}
+    .hot{fill:#0ea5a4}
+    .hott{fill:#0f766e;font-size:14px;font-weight:700}
+    .range{fill:#4f46e5;opacity:.3}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .grid{stroke:#334155}
+      .bar{fill:#818cf8}.hot{fill:#2dd4bf}.hott{fill:#5eead4}.range{fill:#818cf8}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Where the minutes go</text>
+  <text class="sub" x="28" y="62">Drawn to scale with the step timings from this page (about 47 minutes of a 45–60 minute slot).</text>
+
+  <!-- grid: x = 240 + 10.4 * minutes -->
+  <g>
+    <line class="grid" x1="240" y1="84" x2="240" y2="330"/>
+    <line class="grid" x1="344" y1="84" x2="344" y2="330"/>
+    <line class="grid" x1="448" y1="84" x2="448" y2="330"/>
+    <line class="grid" x1="552" y1="84" x2="552" y2="330"/>
+    <line class="grid" x1="656" y1="84" x2="656" y2="330"/>
+    <line class="grid" x1="760" y1="84" x2="760" y2="330"/>
+    <text class="sub" x="240" y="350" text-anchor="middle">0</text>
+    <text class="sub" x="344" y="350" text-anchor="middle">10</text>
+    <text class="sub" x="448" y="350" text-anchor="middle">20</text>
+    <text class="sub" x="552" y="350" text-anchor="middle">30</text>
+    <text class="sub" x="656" y="350" text-anchor="middle">40</text>
+    <text class="sub" x="760" y="350" text-anchor="middle">50 min</text>
+  </g>
+
+  <!-- rows -->
+  <text class="lbl" x="28" y="111">1  Requirements</text><text class="sub" x="228" y="111" text-anchor="end">~5</text>
+  <rect class="bar" x="240" y="94" width="52" height="24" rx="5"/>
+
+  <text class="lbl" x="28" y="151">2  Estimation</text><text class="sub" x="228" y="151" text-anchor="end">~3–5</text>
+  <rect class="bar" x="292" y="134" width="31" height="24" rx="5"/>
+  <rect class="range" x="323" y="134" width="21" height="24" rx="5"/>
+
+  <text class="lbl" x="28" y="191">3  API + data model</text><text class="sub" x="228" y="191" text-anchor="end">~5</text>
+  <rect class="bar" x="333" y="174" width="52" height="24" rx="5"/>
+
+  <text class="lbl" x="28" y="231">4  High-level design</text><text class="sub" x="228" y="231" text-anchor="end">~10</text>
+  <rect class="bar" x="385" y="214" width="104" height="24" rx="5"/>
+
+  <text class="hott" x="28" y="271">5  Deep dives</text><text class="sub" x="228" y="271" text-anchor="end">~15–20</text>
+  <rect class="hot" x="489" y="254" width="156" height="24" rx="5"/>
+  <rect class="range" x="645" y="254" width="52" height="24" rx="5"/>
+
+  <text class="lbl" x="28" y="311">6  Wrap-up</text><text class="sub" x="228" y="311" text-anchor="end">~5</text>
+  <rect class="bar" x="677" y="294" width="52" height="24" rx="5"/>
+
+  <text class="sub" x="28" y="380">Light segments show the upper end of a range. The interviewer may pull you back into deep dives at any point.</text>
+</svg>

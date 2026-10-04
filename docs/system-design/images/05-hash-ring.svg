@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Consistent hashing: adding a node to the ring</title>
+  <desc id="d">A hash ring with three nodes, A, B and C, each placed at two points (virtual nodes). Twelve keys sit on the ring, and each belongs to the next node point clockwise. Node D is then added at two new points. Only the two keys in the arcs just before D's points move to D; the other ten keys keep their node.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .ring{fill:none;stroke:#cbd5e1;stroke-width:10}
+    .arc{fill:none;stroke:#16a34a;stroke-width:10;stroke-linecap:round;opacity:.35}
+    .A{fill:#4f46e5}.B{fill:#0ea5a4}.C{fill:#d97706}.D{fill:#16a34a}
+    .At{fill:#4f46e5;font-weight:700;font-size:15px}.Bt{fill:#0f766e;font-weight:700;font-size:15px}.Ct{fill:#b45309;font-weight:700;font-size:15px}.Dt{fill:#16a34a;font-weight:700;font-size:15px}
+    .np{stroke:#ffffff;stroke-width:2}
+    .nt{fill:#ffffff;font-size:13px;font-weight:700}
+    .key{stroke:#ffffff;stroke-width:1.5}
+    .arrow{fill:none;stroke:#64748b;stroke-width:1.5}
+    .good{fill:#16a34a;font-size:15px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .ring{stroke:#475569}.arc{stroke:#4ade80}
+      .A{fill:#818cf8}.B{fill:#2dd4bf}.C{fill:#fbbf24}.D{fill:#4ade80}
+      .At{fill:#818cf8}.Bt{fill:#5eead4}.Ct{fill:#fbbf24}.Dt,.good{fill:#4ade80}
+      .np,.key{stroke:#1f2430}.nt{fill:#0f172a}.arrow{stroke:#94a3b8}
+    }
+    /* 10 s loop: three nodes (0-36%), D appears (38%), moved keys change owner (50-56%), hold to 94% */
+    .a{animation:10s infinite linear}
+    @keyframes dIn{0%,36%{opacity:0;transform:scale(.3)}40%,94%{opacity:1;transform:scale(1)}98%,100%{opacity:0;transform:scale(.3)}}
+    @keyframes mv{0%,50%{opacity:0}56%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes t1{0%,36%{opacity:1}38%,96%{opacity:0}98%,100%{opacity:1}}
+    @keyframes t2{0%,36%{opacity:0}38%,94%{opacity:1}98%,100%{opacity:0}}
+    .dIn{animation-name:dIn;transform-box:fill-box;transform-origin:center}.mv{animation-name:mv}.t1{animation-name:t1}.t2{animation-name:t2}
+    @media (prefers-reduced-motion: reduce){.a{animation:none}.t1{opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="438" rx="14"/>
+  <text class="h" x="28" y="40">Consistent hashing: add a node, move few keys</text>
+  <text class="sub" x="28" y="62">Each key belongs to the next node point clockwise. Each node has 2 points (virtual nodes).</text>
+  <circle class="ring" cx="230" cy="235" r="130"/>
+  <path class="arc a mv" d="M345.8,176.0 A130,130 0 0 1 359.8,228.2"/>
+  <path class="arc a mv" d="M114.2,294.0 A130,130 0 0 1 100.2,241.8"/>
+  <path class="arrow" d="M138.2,103.9 A160,160 0 0 1 202.2,77.4"/>
+  <path class="arrow" d="M195.2,72.4 L202.2,77.4 L196.2,83.4"/>
+  <text class="sub" x="105.2" y="122.6" text-anchor="middle">clockwise</text>
+  <circle class="key B" cx="263.6" cy="109.4" r="7"/>
+  <circle class="key B" cx="321.9" cy="143.1" r="7"/>
+  <circle class="key C" cx="355.6" cy="201.4" r="7"/>
+  <circle class="key D a mv" cx="355.6" cy="201.4" r="7"/>
+  <circle class="key C" cx="355.6" cy="268.6" r="7"/>
+  <circle class="key A" cx="321.9" cy="326.9" r="7"/>
+  <circle class="key A" cx="263.6" cy="360.6" r="7"/>
+  <circle class="key B" cx="196.4" cy="360.6" r="7"/>
+  <circle class="key B" cx="138.1" cy="326.9" r="7"/>
+  <circle class="key C" cx="104.4" cy="268.6" r="7"/>
+  <circle class="key D a mv" cx="104.4" cy="268.6" r="7"/>
+  <circle class="key C" cx="104.4" cy="201.4" r="7"/>
+  <circle class="key A" cx="138.1" cy="143.1" r="7"/>
+  <circle class="key A" cx="196.4" cy="109.4" r="7"/>
+  <circle class="np A" cx="230.0" cy="105.0" r="15"/><text class="nt" x="230.0" y="110.0" text-anchor="middle">A</text>
+  <circle class="np B" cx="342.6" cy="170.0" r="15"/><text class="nt" x="342.6" y="175.0" text-anchor="middle">B</text>
+  <circle class="np C" cx="342.6" cy="300.0" r="15"/><text class="nt" x="342.6" y="305.0" text-anchor="middle">C</text>
+  <circle class="np A" cx="230.0" cy="365.0" r="15"/><text class="nt" x="230.0" y="370.0" text-anchor="middle">A</text>
+  <circle class="np B" cx="117.4" cy="300.0" r="15"/><text class="nt" x="117.4" y="305.0" text-anchor="middle">B</text>
+  <circle class="np C" cx="117.4" cy="170.0" r="15"/><text class="nt" x="117.4" y="175.0" text-anchor="middle">C</text>
+  <g class="a dIn"><circle class="np D" cx="360.0" cy="235.0" r="15"/><text class="nt" x="360.0" y="240.0" text-anchor="middle">D</text></g>
+  <g class="a dIn"><circle class="np D" cx="100.0" cy="235.0" r="15"/><text class="nt" x="100.0" y="240.0" text-anchor="middle">D</text></g>
+  <text class="sub" x="230" y="229" text-anchor="middle">hash space</text>
+  <text class="sub" x="230" y="247" text-anchor="middle">0 … 2³²</text>
+
+  <!-- explanation -->
+  <g class="a t1">
+    <text class="lbl" x="440" y="118">3 nodes, 12 keys</text>
+    <text class="tx" x="440" y="146">Small dots are keys, coloured by</text>
+    <text class="tx" x="440" y="166">the node that owns them.</text>
+  </g>
+  <g class="a t2">
+    <text class="lbl" x="440" y="118">Add node D</text>
+    <text class="tx" x="440" y="146">D takes only the arcs just before</text>
+    <text class="tx" x="440" y="166">its two points (shaded green).</text>
+  </g>
+  <g class="a mv">
+    <text class="good" x="440" y="214">2 of 12 keys move, all to D.</text>
+    <text class="tx" x="440" y="240">The other 10 stay where they are.</text>
+    <text class="tx" x="440" y="276">With hash(key) mod N, going from</text>
+    <text class="tx" x="440" y="296">3 to 4 nodes would move most keys.</text>
+  </g>
+  <text class="At" x="440" y="352">A</text><text class="Bt" x="480" y="352">B</text><text class="Ct" x="520" y="352">C</text><text class="Dt" x="560" y="352">D (new)</text>
+  <text class="sub" x="28" y="420">Real systems use 100–200 virtual nodes per node, so the moved share is close to 1/N and spread evenly.</text>
+</svg>

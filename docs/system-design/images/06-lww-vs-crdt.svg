@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 410" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Last-writer-wins versus a G-counter CRDT</title>
+  <desc id="d">Two replicas of a like counter both start at 5 and each receive one increment at the same time. With a last-writer-wins register each replica stores 6 with its own timestamp, and the merge keeps the later one, so the result is 6 and one increment is lost. With a G-counter each replica keeps one slot per replica, A 3 and B 2; replica A increments its slot to 4 and replica B increments its slot to 3. Merging takes the maximum per slot, A 4 and B 3, so the total is 7 and both increments are kept.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .panel{fill:none;stroke:#e2e8f0;stroke-width:1.5}
+    .box{fill:#ffffff;stroke:#cbd5e1;stroke-width:1.5}
+    .bx2{fill:#ffffff;stroke:#4f46e5;stroke-width:2}
+    .badb{fill:#ffffff;stroke:#dc2626;stroke-width:2.5}
+    .goodb{fill:#ffffff;stroke:#16a34a;stroke-width:2.5}
+    .v{fill:#0f172a;font-size:16px;font-weight:700}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    .good{fill:#16a34a;font-size:14px;font-weight:700}
+    .t{fill:#0f172a;font-size:16px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.v,.t{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .panel{stroke:#334155}.box{fill:#111827;stroke:#475569}.bx2{fill:#111827;stroke:#818cf8}
+      .badb{fill:#111827;stroke:#f87171}.goodb{fill:#111827;stroke:#4ade80}
+      .bad{fill:#f87171}.good{fill:#4ade80}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="408" rx="14"/>
+  <text class="h" x="28" y="40">Two replicas, two concurrent likes</text>
+  <text class="sub" x="28" y="62">Both replicas start at 5 likes. Each one receives +1 at the same moment.</text>
+
+  <!-- LWW panel -->
+  <rect class="panel" x="28" y="76" width="360" height="296" rx="12"/>
+  <text class="t" x="44" y="102">Last-writer-wins register</text>
+  <text class="sub" x="44" y="128">start</text>
+  <rect class="box" x="44" y="136" width="156" height="40" rx="8"/><text class="tx" x="56" y="161">A: 5</text>
+  <rect class="box" x="216" y="136" width="156" height="40" rx="8"/><text class="tx" x="228" y="161">B: 5</text>
+  <text class="sub" x="44" y="198">after +1 on each</text>
+  <rect class="bx2" x="44" y="206" width="156" height="40" rx="8"/><text class="v" x="56" y="232">A: 6</text><text class="sub" x="190" y="231" text-anchor="end">at t1</text>
+  <rect class="bx2" x="216" y="206" width="156" height="40" rx="8"/><text class="v" x="228" y="232">B: 6</text><text class="sub" x="362" y="231" text-anchor="end">at t2 &gt; t1</text>
+  <text class="sub" x="44" y="268">merge: keep the later timestamp</text>
+  <rect class="badb" x="44" y="276" width="328" height="44" rx="8"/><text class="v" x="208" y="304" text-anchor="middle">6</text>
+  <text class="bad" x="44" y="350">One like silently lost (should be 7)</text>
+
+  <!-- G-counter panel -->
+  <rect class="panel" x="412" y="76" width="360" height="296" rx="12"/>
+  <text class="t" x="428" y="102">G-counter (CRDT)</text>
+  <text class="sub" x="428" y="128">start: one slot per replica</text>
+  <rect class="box" x="428" y="136" width="156" height="40" rx="8"/><text class="tx" x="440" y="161">A:3  B:2 = 5</text>
+  <rect class="box" x="600" y="136" width="156" height="40" rx="8"/><text class="tx" x="612" y="161">A:3  B:2 = 5</text>
+  <text class="sub" x="428" y="198">each replica bumps its own slot</text>
+  <rect class="bx2" x="428" y="206" width="156" height="40" rx="8"/><text class="v" x="440" y="232">A:4  B:2 = 6</text>
+  <rect class="bx2" x="600" y="206" width="156" height="40" rx="8"/><text class="v" x="612" y="232">A:3  B:3 = 6</text>
+  <text class="sub" x="428" y="268">merge: take the max of each slot</text>
+  <rect class="goodb" x="428" y="276" width="328" height="44" rx="8"/><text class="v" x="592" y="304" text-anchor="middle">A:4  B:3 = 7</text>
+  <text class="good" x="428" y="350">Both likes kept, on every replica</text>
+
+  <text class="sub" x="28" y="396">CRDT merges give the same result in any order. LWW also relies on clocks.</text>
+</svg>

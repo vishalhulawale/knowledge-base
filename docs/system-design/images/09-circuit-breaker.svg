@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Circuit breaker states</title>
+  <desc id="d">Three states: closed, open and half-open, using the Resilience4j settings on this page. While closed, calls to the pricing service go through and failures are counted over a window of the last 50 calls (at least 20 calls). When the failure rate reaches 50 percent the breaker opens and calls fail fast to a fallback such as a cached price. After 10 seconds it moves to half-open and lets 5 trial calls through. If they are healthy it closes again; if they fail it opens again.</desc>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0 L10,5 L0,10 z"/></marker>
+  </defs>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .tx{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .st{fill:#ffffff;stroke:#cbd5e1;stroke-width:2}
+    .stt{fill:#334155;font-size:15px;font-weight:700}
+    .ln{fill:none;stroke:#94a3b8;stroke-width:2}
+    .ahp{fill:#94a3b8}
+    .onC{fill:#16a34a}.onO{fill:#dc2626}.onH{fill:#d97706}
+    .ont{fill:#fff;font-size:15px;font-weight:700}
+    .step{fill:#0f172a;font-size:15px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.step{fill:#f1f5f9}.lbl,.tx,.stt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .st{fill:#111827;stroke:#475569}.ln{stroke:#64748b}.ahp{fill:#64748b}
+      .onC{fill:#4ade80}.onO{fill:#f87171}.onH{fill:#fbbf24}.ont{fill:#0f172a}
+    }
+    /* 12 s loop: CLOSED 0-25%, OPEN 27-55%, HALF_OPEN 57-75%, CLOSED 77-95% */
+    .a{animation:12s infinite linear}
+    @keyframes c1{0%,25%{opacity:1}27%,75%{opacity:0}77%,100%{opacity:1}}
+    @keyframes o1{0%,25%{opacity:0}27%,55%{opacity:1}57%,100%{opacity:0}}
+    @keyframes h1{0%,55%{opacity:0}57%,75%{opacity:1}77%,100%{opacity:0}}
+    @keyframes t1{0%,25%{opacity:1}27%,100%{opacity:0}}
+    @keyframes t4{0%,75%{opacity:0}77%,100%{opacity:1}}
+    .c1{animation-name:c1}.o1{animation-name:o1}.h1{animation-name:h1}.t1{animation-name:t1}.t4{animation-name:t4}
+    @media (prefers-reduced-motion: reduce){.a{animation:none}.o1,.h1,.t1{opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="428" rx="14"/>
+  <text class="h" x="28" y="40">Circuit breaker around the pricing service</text>
+  <text class="sub" x="28" y="62">Settings from the Resilience4j example on this page.</text>
+
+  <!-- transitions -->
+  <path class="ln" d="M210,190 H338" marker-end="url(#ah)"/>
+  <text class="tx" x="274" y="160" text-anchor="middle">failures ≥ 50%</text>
+  <text class="sub" x="274" y="178" text-anchor="middle">of last 50 calls</text>
+  <path class="ln" d="M460,190 H588" marker-end="url(#ah)"/>
+  <text class="tx" x="524" y="178" text-anchor="middle">after 10 s</text>
+  <path class="ln" d="M620,240 C560,330 240,330 180,240" marker-end="url(#ah)"/>
+  <text class="tx" x="400" y="338" text-anchor="middle">5 trial calls healthy</text>
+  <path class="ln" d="M620,140 C580,92 460,92 430,134" marker-end="url(#ah)"/>
+  <text class="tx" x="525" y="96" text-anchor="middle">trials fail</text>
+
+  <!-- states -->
+  <circle class="st" cx="150" cy="190" r="58"/><text class="stt" x="150" y="195" text-anchor="middle">CLOSED</text>
+  <circle class="st" cx="400" cy="190" r="58"/><text class="stt" x="400" y="195" text-anchor="middle">OPEN</text>
+  <circle class="st" cx="650" cy="190" r="58"/><text class="stt" x="650" y="195" text-anchor="middle">HALF_OPEN</text>
+  <g class="a c1"><circle class="onC" cx="150" cy="190" r="58"/><text class="ont" x="150" y="195" text-anchor="middle">CLOSED</text></g>
+  <g class="a o1"><circle class="onO" cx="400" cy="190" r="58"/><text class="ont" x="400" y="195" text-anchor="middle">OPEN</text></g>
+  <g class="a h1"><circle class="onH" cx="650" cy="190" r="58"/><text class="ont" x="650" y="195" text-anchor="middle">HALF_OPEN</text></g>
+
+  <!-- what callers see -->
+  <text class="step a t1" x="28" y="378">Closed: calls go through, failures and slow calls (&gt; 500 ms) are counted.</text>
+  <text class="step a o1" x="28" y="378">Open: calls fail fast to the fallback (cached price). Pricing gets no traffic.</text>
+  <text class="step a h1" x="28" y="378">Half-open: only 5 trial calls are let through to test recovery.</text>
+  <text class="step a t4" x="28" y="378">Trials were healthy: closed again, normal traffic resumes.</text>
+  <text class="sub" x="28" y="410">Slow calls count too: a slow-call rate ≥ 50% also opens the breaker.</text>
+</svg>

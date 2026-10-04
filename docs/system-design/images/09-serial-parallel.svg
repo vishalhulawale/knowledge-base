@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 330" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Serial dependencies versus parallel redundancy</title>
+  <desc id="d">Left: a request needs three dependencies in series, each 99.9 percent available, so the whole path is 0.999 cubed, about 99.7 percent. Right: two independent replicas at 99 percent each in parallel; the service fails only if both fail, so availability is 1 minus 0.01 squared, which is 99.99 percent, assuming independent failures and instant failover.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .panel{fill:none;stroke:#e2e8f0;stroke-width:1.5}
+    .box{fill:#ffffff;stroke:#cbd5e1;stroke-width:1.5}
+    .ln{stroke:#94a3b8;stroke-width:2}
+    .bad{fill:#dc2626;font-size:20px;font-weight:700}
+    .good{fill:#16a34a;font-size:20px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .panel{stroke:#334155}.box{fill:#111827;stroke:#475569}.ln{stroke:#64748b}
+      .bad{fill:#f87171}.good{fill:#4ade80}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="328" rx="14"/>
+  <text class="h" x="28" y="40">Serial multiplies down, parallel multiplies up</text>
+
+  <rect class="panel" x="28" y="60" width="360" height="226" rx="12"/>
+  <text class="lbl" x="44" y="86">In series (all must work)</text>
+  <line class="ln" x1="44" y1="150" x2="372" y2="150"/>
+  <rect class="box" x="56" y="124" width="88" height="52" rx="8"/><text class="tx" x="100" y="155" text-anchor="middle">99.9%</text>
+  <rect class="box" x="164" y="124" width="88" height="52" rx="8"/><text class="tx" x="208" y="155" text-anchor="middle">99.9%</text>
+  <rect class="box" x="272" y="124" width="88" height="52" rx="8"/><text class="tx" x="316" y="155" text-anchor="middle">99.9%</text>
+  <text class="tx" x="44" y="214">0.999 × 0.999 × 0.999</text>
+  <text class="bad" x="44" y="250">≈ 99.7%</text>
+  <text class="sub" x="44" y="274">lower than any one part</text>
+
+  <rect class="panel" x="412" y="60" width="360" height="226" rx="12"/>
+  <text class="lbl" x="428" y="86">In parallel (one is enough)</text>
+  <line class="ln" x1="428" y1="150" x2="470" y2="150"/><line class="ln" x1="470" y1="122" x2="470" y2="178"/>
+  <line class="ln" x1="470" y1="122" x2="520" y2="122"/><line class="ln" x1="470" y1="178" x2="520" y2="178"/>
+  <line class="ln" x1="608" y1="122" x2="658" y2="122"/><line class="ln" x1="608" y1="178" x2="658" y2="178"/>
+  <line class="ln" x1="658" y1="122" x2="658" y2="178"/><line class="ln" x1="658" y1="150" x2="700" y2="150"/>
+  <rect class="box" x="520" y="102" width="88" height="40" rx="8"/><text class="tx" x="564" y="127" text-anchor="middle">99%</text>
+  <rect class="box" x="520" y="158" width="88" height="40" rx="8"/><text class="tx" x="564" y="183" text-anchor="middle">99%</text>
+  <text class="tx" x="428" y="214">1 − (1 − 0.99)²</text>
+  <text class="good" x="428" y="250">= 99.99%</text>
+  <text class="sub" x="428" y="274">if failures are independent and failover works</text>
+
+  <text class="sub" x="28" y="312">Same deploy, config or AZ makes failures correlated, and the parallel gain mostly disappears.</text>
+</svg>

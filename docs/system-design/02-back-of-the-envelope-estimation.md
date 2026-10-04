@@ -72,6 +72,9 @@ flowchart LR
 ```
 *Notice the implications: **cache in memory** for hot reads, **avoid sequential cross-service calls** (each hop adds ~1 ms or more), and **geography dominates** for global users. No optimisation beats the speed of light, so you replicate data closer instead.*
 
+![Animation: bars on a log scale from 10 nanoseconds to 1 second for a memory reference, an SSD random read, a same-datacentre round trip, a disk seek and a cross-continent round trip, each labelled with how long it would take if a memory reference took 1 second](images/02-latency-ladder.svg){ loading=lazy }
+*On a log scale each grid line is 10×. Scaled up so memory takes 1 second, a cross-continent round trip takes about 12 days.*
+
 ### Availability nines
 
 | SLO | Downtime / year | Downtime / month | Downtime / day |
@@ -193,6 +196,9 @@ record Estimate(long dau, double readsPerUser, double writesPerUser, int recordB
 
 !!! warning "Gotcha: fan-out and amplification"
     One user action can trigger many internal operations. A post fans out to 500 followers' feeds, and one GraphQL query fans out to 5 upstream calls. Estimate **internal** QPS, not just external, or you'll under-size the downstream systems.
+
+![Animation: one client request reaches a GraphQL service, which calls five upstream systems, so 1,000 external requests per second become 5,000 internal calls per second](images/02-fan-out.svg){ loading=lazy }
+*Watch one request become five. Size each upstream for the internal number, not the external one.*
 
 ## How this connects to my experience
 

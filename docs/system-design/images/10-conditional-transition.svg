@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Conditional state transition stops a double fill</title>
+  <desc id="d">Two pharmacists both load prescription 123, which is in state VERIFIED at version 7. Both send the same conditional update to move it to FILLING only if the state is still VERIFIED and the version is still 7. Pharmacist 1's update arrives first and changes one row, so the prescription becomes FILLING at version 8. Pharmacist 2's update then matches zero rows, so it gets a conflict and refreshes instead of filling the script a second time.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .tx{fill:#334155;font-size:13px}
+    .mono{fill:#334155;font-size:12.5px;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1;stroke-width:1.5}
+    .code{fill:#eef2ff;stroke:#c7d2fe}
+    .ln{stroke:#cbd5e1;stroke-width:2}
+    .d1{fill:#4f46e5}.d2{fill:#0ea5a4}
+    .val{fill:#0f172a;font-size:16px;font-weight:700}
+    .new{fill:#16a34a;font-size:16px;font-weight:700}
+    .good{fill:#16a34a;font-size:14px;font-weight:700}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.val{fill:#f1f5f9}.lbl,.tx,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.code{fill:#272b45;stroke:#3f4675}.ln{stroke:#475569}
+      .d1{fill:#818cf8}.d2{fill:#2dd4bf}.new,.good{fill:#4ade80}.bad{fill:#f87171}
+    }
+    /* 10 s loop: both read (0-25%), P1 update lands (28-40%), P2 update lands (50-62%), hold to 95% */
+    .a{animation:10s infinite ease-in-out}
+    .f{animation:10s infinite linear}
+    @keyframes m1{0%,28%{transform:translate(0,0);opacity:0}29%{opacity:1}39%{transform:translate(300px,60px);opacity:1}41%,100%{transform:translate(300px,60px);opacity:0}}
+    @keyframes m2{0%,50%{transform:translate(0,0);opacity:0}51%{opacity:1}61%{transform:translate(300px,-60px);opacity:1}63%,100%{transform:translate(300px,-60px);opacity:0}}
+    @keyframes old{0%,40%{opacity:1}41%,97%{opacity:0}98%,100%{opacity:1}}
+    @keyframes nw{0%,40%{opacity:0}41%,95%{opacity:1}98%,100%{opacity:0}}
+    @keyframes r2{0%,62%{opacity:0}63%,95%{opacity:1}98%,100%{opacity:0}}
+    @keyframes rd{0%,2%{opacity:0}4%,95%{opacity:1}98%,100%{opacity:0}}
+    .m1{animation-name:m1}.m2{animation-name:m2}.old{animation-name:old}.nw{animation-name:nw}.r2{animation-name:r2}.rd{animation-name:rd}
+    @media (prefers-reduced-motion: reduce){.a,.f{animation:none}.a,.old{opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Two pharmacists, one prescription</text>
+  <text class="sub" x="28" y="62">Both screens show Rx 123 as VERIFIED (version 7) and both click "Fill".</text>
+
+  <line class="ln" x1="208" y1="125" x2="508" y2="185"/>
+  <line class="ln" x1="208" y1="305" x2="508" y2="245"/>
+
+  <rect class="box" x="28" y="100" width="180" height="50" rx="10"/>
+  <text class="lbl" x="44" y="122">Pharmacist 1</text><text class="sub f rd" x="44" y="140">read: VERIFIED, v7</text>
+  <rect class="box" x="28" y="280" width="180" height="50" rx="10"/>
+  <text class="lbl" x="44" y="302">Pharmacist 2</text><text class="sub f rd" x="44" y="320">read: VERIFIED, v7</text>
+
+  <rect class="code" x="226" y="190" width="276" height="50" rx="8"/>
+  <text class="mono" x="236" y="210">UPDATE rx SET state='FILLING', v=8</text>
+  <text class="mono" x="236" y="229">WHERE state='VERIFIED' AND v=7</text>
+
+  <rect class="box" x="508" y="150" width="264" height="130" rx="12"/>
+  <text class="lbl" x="524" y="176">System of record: Rx 123</text>
+  <text class="sub" x="524" y="204">state</text><text class="sub" x="680" y="204">version</text>
+  <text class="val f old" x="524" y="230">VERIFIED</text><text class="val f old" x="680" y="230">7</text>
+  <text class="new f nw" x="524" y="230">FILLING</text><text class="new f nw" x="680" y="230">8</text>
+
+  <text class="good f nw" x="28" y="172">1 row updated ✓ fills the script</text>
+  <text class="bad f r2" x="28" y="352">0 rows updated → conflict, refresh screen</text>
+
+  <circle class="d1 a m1" cx="208" cy="125" r="8"/>
+  <circle class="d2 a m2" cx="208" cy="305" r="8"/>
+
+  <text class="sub" x="28" y="400">The database applies one update at a time, so only one can still see state VERIFIED and v = 7.</text>
+</svg>

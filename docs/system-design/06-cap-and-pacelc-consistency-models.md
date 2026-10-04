@@ -108,6 +108,9 @@ MongoDB **causally consistent sessions** provide these when used with `majority`
 | Application merge | Domain logic (merge carts = union) | Flexible, but custom code per type |
 | Avoid conflicts | Route each key's writes to one home Region/leader | Simplest. Writes depend on the home Region's availability |
 
+![Two panels: replicas of a like counter both start at 5 and each get one increment; a last-writer-wins register merges to 6 and loses one like, while a G-counter with one slot per replica merges to 7](images/06-lww-vs-crdt.svg){ loading=lazy }
+*Notice why the G-counter wins: each replica only bumps its own slot, so taking the maximum per slot can never drop an increment.*
+
 ### How strong consistency is achieved
 
 - A **single leader** (all reads and writes through the leader) is linearisable if failover is fenced correctly.
@@ -180,6 +183,9 @@ SELECT * FROM rx_by_patient WHERE patient_id = ? LIMIT 20;
     - **Clocks lie.** LWW with skewed clocks drops the "newer" write. Use logical or hybrid clocks, or server-assigned versions.
     - **Distributed locks without fencing tokens are unsafe.** A paused process (GC) can wake up after its lease expired and still write.
     - **Snapshot isolation ≠ serialisable.** Write skew is possible. Use `SERIALIZABLE` or explicit locks/constraints for invariants that span rows.
+
+![Animation: client 1 gets a lease with token 33 and stalls in a GC pause; the lease expires, client 2 gets token 34 and writes; when client 1 wakes and writes with token 33, storage rejects it because 33 is lower than 34](images/06-fencing-token.svg){ loading=lazy }
+*Watch client 1's late write: the lock can't stop it, because client 1 doesn't know its lease expired. The storage check on the token is what rejects it.*
 
 ## How this connects to my experience
 

@@ -69,6 +69,9 @@ flowchart LR
 - **Scale:** cache hot codes (heavily skewed popularity), serve redirects from the edge, and partition the KV store by code hash.
 - **Abuse:** malware URL scanning, rate limits per user, expiry cleanup.
 
+![A worked example that divides the ID 2,009,215,674,938 by 62 repeatedly; the remainders map to characters and, read bottom-up, give the 7-character code zn9edcu](images/10-base62.svg){ loading=lazy }
+*Notice that the code is just the ID written in base 62. A unique ID gives a unique code, so no collision check is needed.*
+
 ### 2. Rate limiter
 
 See [Rate limiting & API gateway design](08-rate-limiting-and-api-gateway-design.md).
@@ -131,6 +134,9 @@ flowchart TB
     F --> HY["Hydrate posts + authors (cache)"]
 ```
 *Notice the **hybrid**: fan-out on **write** for normal users (fast reads) and fan-out on **read** for celebrities (merged at request time). That avoids writing 50M timeline entries per celebrity post.*
+
+![Animation: a normal author's post is pushed into each follower's timeline cache, a celebrity's post is only recorded in a celebrity posts index, and a follower's feed is built by merging the two at read time](images/10-hybrid-fanout.svg){ loading=lazy }
+*Watch the two posts take different paths: one is written to every timeline, the other is written once and pulled in when someone reads.*
 
 **Deep dives:**
 
@@ -286,6 +292,9 @@ flowchart TB
 - **Notifications:** refill reminders scheduled by due date, idempotent per `(rx, dueDate, channel)`, no drug names in SMS, opt-out honoured.
 - **Availability:** multi-AZ, a warm-standby DR Region for core flows, degraded modes (read-only, cached formulary), and an offline-capable pharmacy client for WAN outages.
 - **Evolution:** strangler-fig migration from legacy pharmacy systems, consumer-driven contracts for upstreams, micro-frontends for independent UI delivery.
+
+![Animation: two pharmacists both see prescription 123 as VERIFIED at version 7 and send the same conditional update; the first changes one row to FILLING at version 8, and the second matches zero rows and gets a conflict](images/10-conditional-transition.svg){ loading=lazy }
+*Watch the second update: it isn't blocked by a lock, it simply no longer matches the WHERE clause. That is how the state machine prevents a double fill.*
 
 ## In practice: code & configuration
 

@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Cache stampede with and without single-flight</title>
+  <desc id="d">Two panels. In both, a hot cache key has expired and six concurrent requests miss. Without coalescing, all six requests go to the database at once, which is overloaded with six identical queries. With single-flight, one request loads the value from the database while the other five wait; the loader puts the value back in the cache and all six requests are served from that one query.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .panel{fill:none;stroke:#e2e8f0;stroke-width:1.5}
+    .box{fill:#ffffff;stroke:#cbd5e1;stroke-width:1.5}
+    .dot{fill:#4f46e5}
+    .okd{fill:#16a34a}
+    .badbox{fill:none;stroke:#dc2626;stroke-width:3}
+    .goodbox{fill:none;stroke:#16a34a;stroke-width:3}
+    .bad{fill:#dc2626;font-size:15px;font-weight:700}
+    .good{fill:#16a34a;font-size:15px;font-weight:700}
+    .warn{fill:#b45309;font-size:14px;font-weight:600}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .panel{stroke:#334155}.box{fill:#111827;stroke:#475569}
+      .dot{fill:#818cf8}.okd{fill:#4ade80}
+      .badbox{stroke:#f87171}.goodbox{stroke:#4ade80}
+      .bad{fill:#f87171}.good{fill:#4ade80}.warn{fill:#fbbf24}
+    }
+    /* 10 s loop: misses (4-18%), loads (22-40%), single-flight returns (48-58%), hold, reset */
+    .a{animation:10s infinite ease-in-out}
+    @keyframes l0{0%,4%{transform:translate(0,0);opacity:1}18%,22%{transform:translate(0,38px)}40%,92%{transform:translate(70px,166px);opacity:1}96%{opacity:0}100%{transform:translate(0,0);opacity:0}}
+    @keyframes l1{0%,4%{transform:translate(0,0);opacity:1}18%,22%{transform:translate(0,38px)}40%,92%{transform:translate(42px,166px);opacity:1}96%{opacity:0}100%{transform:translate(0,0);opacity:0}}
+    @keyframes l2{0%,4%{transform:translate(0,0);opacity:1}18%,22%{transform:translate(0,38px)}40%,92%{transform:translate(14px,166px);opacity:1}96%{opacity:0}100%{transform:translate(0,0);opacity:0}}
+    @keyframes l3{0%,4%{transform:translate(0,0);opacity:1}18%,22%{transform:translate(0,38px)}40%,92%{transform:translate(-14px,166px);opacity:1}96%{opacity:0}100%{transform:translate(0,0);opacity:0}}
+    @keyframes l4{0%,4%{transform:translate(0,0);opacity:1}18%,22%{transform:translate(0,38px)}40%,92%{transform:translate(-42px,166px);opacity:1}96%{opacity:0}100%{transform:translate(0,0);opacity:0}}
+    @keyframes l5{0%,4%{transform:translate(0,0);opacity:1}18%,22%{transform:translate(0,38px)}40%,92%{transform:translate(-70px,166px);opacity:1}96%{opacity:0}100%{transform:translate(0,0);opacity:0}}
+    @keyframes rl{0%,4%{transform:translate(0,0);opacity:1}18%,22%{transform:translate(0,38px)}38%,48%{transform:translate(140px,166px)}58%,92%{transform:translate(0,38px);opacity:1}96%{opacity:0}100%{transform:translate(0,0);opacity:0}}
+    @keyframes rw{0%,4%{transform:translate(0,0);opacity:1}18%,92%{transform:translate(0,38px);opacity:1}96%{opacity:0}100%{transform:translate(0,0);opacity:0}}
+    @keyframes on40{0%,38%{opacity:0}40%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes wait{0%,20%{opacity:0}22%,56%{opacity:1}58%,100%{opacity:0}}
+    @keyframes on60{0%,58%{opacity:0}60%,92%{opacity:1}96%,100%{opacity:0}}
+    .l0{animation-name:l0}.l1{animation-name:l1}.l2{animation-name:l2}.l3{animation-name:l3}.l4{animation-name:l4}.l5{animation-name:l5}
+    .rl{animation-name:rl}.rw{animation-name:rw}
+    .on40{animation:10s infinite linear;animation-name:on40}.wait{animation:10s infinite linear;animation-name:wait}.on60{animation:10s infinite linear;animation-name:on60}
+    @media (prefers-reduced-motion: reduce){
+      .l0{animation:none;transform:translate(70px,166px)}.l1{animation:none;transform:translate(42px,166px)}.l2{animation:none;transform:translate(14px,166px)}
+      .l3{animation:none;transform:translate(-14px,166px)}.l4{animation:none;transform:translate(-42px,166px)}.l5{animation:none;transform:translate(-70px,166px)}
+      .rl,.rw{animation:none;transform:translate(0,38px)}
+      .on40,.on60{animation:none;opacity:1}.wait{animation:none;opacity:0}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Cache stampede: a hot key expires</text>
+  <text class="sub" x="28" y="62">Six concurrent requests for the same key all miss at the same moment.</text>
+
+  <!-- left panel -->
+  <rect class="panel" x="28" y="76" width="360" height="300" rx="12"/>
+  <text class="bad" x="44" y="102">Without coalescing</text>
+  <rect class="box" x="48" y="172" width="320" height="40" rx="8"/>
+  <text class="tx" x="208" y="197" text-anchor="middle">Cache: product:42 expired → miss</text>
+  <rect class="box" x="128" y="270" width="160" height="70" rx="10"/>
+  <text class="lbl" x="208" y="330" text-anchor="middle">Database</text>
+  <rect class="badbox on40" x="128" y="270" width="160" height="70" rx="10"/>
+  <text class="bad on40" x="208" y="364" text-anchor="middle">6 identical queries at once</text>
+  <circle class="dot a l0" cx="68" cy="124" r="7"/><circle class="dot a l1" cx="124" cy="124" r="7"/><circle class="dot a l2" cx="180" cy="124" r="7"/>
+  <circle class="dot a l3" cx="236" cy="124" r="7"/><circle class="dot a l4" cx="292" cy="124" r="7"/><circle class="dot a l5" cx="348" cy="124" r="7"/>
+
+  <!-- right panel -->
+  <rect class="panel" x="412" y="76" width="360" height="300" rx="12"/>
+  <text class="good" x="428" y="102">With single-flight</text>
+  <rect class="box" x="432" y="172" width="320" height="40" rx="8"/>
+  <text class="tx" x="592" y="197" text-anchor="middle">Cache: product:42 expired → miss</text>
+  <rect class="box" x="512" y="270" width="160" height="70" rx="10"/>
+  <text class="lbl" x="592" y="330" text-anchor="middle">Database</text>
+  <rect class="goodbox on40" x="512" y="270" width="160" height="70" rx="10"/>
+  <text class="good on40" x="592" y="364" text-anchor="middle">1 query</text>
+  <text class="warn wait" x="592" y="245" text-anchor="middle">5 wait for the one loader</text>
+  <text class="good on60" x="592" y="245" text-anchor="middle">All 6 get the loaded value</text>
+  <circle class="dot a rl" cx="452" cy="124" r="7"/><circle class="dot a rw" cx="508" cy="124" r="7"/><circle class="dot a rw" cx="564" cy="124" r="7"/>
+  <circle class="dot a rw" cx="620" cy="124" r="7"/><circle class="dot a rw" cx="676" cy="124" r="7"/><circle class="dot a rw" cx="732" cy="124" r="7"/>
+  <g class="on60">
+    <circle class="okd" cx="452" cy="162" r="7"/><circle class="okd" cx="508" cy="162" r="7"/><circle class="okd" cx="564" cy="162" r="7"/>
+    <circle class="okd" cx="620" cy="162" r="7"/><circle class="okd" cx="676" cy="162" r="7"/><circle class="okd" cx="732" cy="162" r="7"/>
+  </g>
+
+  <text class="sub" x="28" y="402">Each dot is one request. A Caffeine LoadingCache gives the right-hand behaviour per key (one load at a time).</text>
+</svg>

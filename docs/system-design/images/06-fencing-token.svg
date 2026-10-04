@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Fencing tokens make an expired lock harmless</title>
+  <desc id="d">A timeline with four lanes: client 1, the lock service, client 2 and storage. Client 1 gets a lease with token 33 and then stalls in a long GC pause. The lease expires and client 2 gets a lease with token 34, writes with token 34, and storage accepts it and remembers 34. When client 1 wakes up it still believes it holds the lock and writes with token 33, which storage rejects because 33 is lower than 34.</desc>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0 L10,5 L0,10 z"/></marker>
+  </defs>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .tx{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .lane{stroke:#cbd5e1;stroke-width:2}
+    .ev{stroke:#4f46e5;stroke-width:2}
+    .ahp{fill:#4f46e5}
+    .evt{fill:#4f46e5;font-size:13px;font-weight:700}
+    .pause{fill:#fef3c7;stroke:#d97706;stroke-width:1.5}
+    .pt{fill:#b45309;font-size:13px;font-weight:600}
+    .xp{stroke:#dc2626;stroke-width:3}
+    .good{fill:#16a34a;font-size:13px;font-weight:700}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    .cur{stroke:#94a3b8;stroke-width:1;stroke-dasharray:4 4}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .lane{stroke:#475569}.ev{stroke:#818cf8}.ahp,.evt{fill:#818cf8}
+      .pause{fill:#3b2f12;stroke:#fbbf24}.pt{fill:#fbbf24}
+      .xp{stroke:#f87171}.good{fill:#4ade80}.bad{fill:#f87171}.cur{stroke:#64748b}
+    }
+    /* 12 s loop; events appear left to right, end state held 80-95% */
+    .a{animation:12s infinite linear}
+    @keyframes e1{0%,4%{opacity:0}6%,95%{opacity:1}98%,100%{opacity:0}}
+    @keyframes e2{0%,10%{opacity:0}12%,95%{opacity:1}98%,100%{opacity:0}}
+    @keyframes e3{0%,26%{opacity:0}28%,95%{opacity:1}98%,100%{opacity:0}}
+    @keyframes e4{0%,36%{opacity:0}38%,95%{opacity:1}98%,100%{opacity:0}}
+    @keyframes e5{0%,48%{opacity:0}50%,95%{opacity:1}98%,100%{opacity:0}}
+    @keyframes e6{0%,68%{opacity:0}70%,95%{opacity:1}98%,100%{opacity:0}}
+    @keyframes e7{0%,74%{opacity:0}76%,95%{opacity:1}98%,100%{opacity:0}}
+    @keyframes gp{0%,10%{transform:scaleX(0);opacity:1}64%,95%{transform:scaleX(1);opacity:1}98%,100%{transform:scaleX(1);opacity:0}}
+    @keyframes cur{0%{transform:translateX(0)}78%,100%{transform:translateX(560px)}}
+    .e1{animation-name:e1}.e2{animation-name:e2}.e3{animation-name:e3}.e4{animation-name:e4}.e5{animation-name:e5}.e6{animation-name:e6}.e7{animation-name:e7}
+    .gp{animation-name:gp;transform-box:fill-box;transform-origin:left center}
+    .cu{animation:12s infinite linear;animation-name:cur}
+    @media (prefers-reduced-motion: reduce){.a{animation:none}.cu{animation:none;opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Fencing tokens: a stale lock holder can't write</text>
+  <text class="sub" x="28" y="62">Time runs left to right. The lock service hands out a higher token with every lease.</text>
+
+  <!-- lanes -->
+  <text class="lbl" x="28" y="125">Client 1</text><line class="lane" x1="150" y1="120" x2="770" y2="120"/>
+  <text class="lbl" x="28" y="195">Lock service</text><line class="lane" x1="150" y1="190" x2="770" y2="190"/>
+  <text class="lbl" x="28" y="265">Client 2</text><line class="lane" x1="150" y1="260" x2="770" y2="260"/>
+  <text class="lbl" x="28" y="335">Storage</text><line class="lane" x1="150" y1="330" x2="770" y2="330"/>
+
+  <line class="cur cu" x1="150" y1="84" x2="150" y2="344"/>
+
+  <!-- 1: client 1 gets token 33 -->
+  <g class="a e1"><line class="ev" x1="180" y1="188" x2="180" y2="126" marker-end="url(#ah)"/><text class="evt" x="188" y="162">token 33</text></g>
+  <!-- 2: GC pause -->
+  <g class="a gp"><rect class="pause" x="220" y="107" width="380" height="26" rx="6"/></g>
+  <text class="pt a e2" x="220" y="98">GC pause: client 1 still thinks it holds the lock</text>
+  <!-- 3: lease expires -->
+  <g class="a e3"><line class="xp" x1="324" y1="182" x2="340" y2="198"/><line class="xp" x1="340" y1="182" x2="324" y2="198"/><text class="sub" x="332" y="216" text-anchor="middle">lease expires</text></g>
+  <!-- 4: client 2 gets token 34 -->
+  <g class="a e4"><line class="ev" x1="400" y1="192" x2="400" y2="254" marker-end="url(#ah)"/><text class="evt" x="408" y="236">token 34</text></g>
+  <!-- 5: client 2 writes with 34 -->
+  <g class="a e5"><line class="ev" x1="470" y1="262" x2="470" y2="324" marker-end="url(#ah)"/><text class="good" x="478" y="302">write (34) ✓</text>
+    <text class="tx" x="440" y="356">remembers 34 as the max</text></g>
+  <!-- 6: client 1 wakes and writes with 33 -->
+  <g class="a e6"><line class="ev" x1="640" y1="122" x2="640" y2="324" marker-end="url(#ah)"/><text class="evt" x="648" y="232">write (33)</text></g>
+  <text class="bad a e7" x="622" y="356">✗ rejected: 33 &lt; 34</text>
+
+  <text class="sub" x="28" y="400">Without the token check, client 1's late write would overwrite client 2's work.</text>
+</svg>

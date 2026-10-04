@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Plain sharding versus shuffle sharding</title>
+  <desc id="d">Eight workers serve four customers, A to D, with two workers each. Customer A sends poison requests that crash its workers. With plain sharding, A and B share shard 1, workers 1 and 2, so B is fully down too. With shuffle sharding, each customer gets its own random pair: A has workers 1 and 4, B has 1 and 6, C has 2 and 7, D has 3 and 8. When workers 1 and 4 crash, B still has worker 6 and C and D are untouched.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .panel{fill:none;stroke:#e2e8f0;stroke-width:1.5}
+    .w{fill:#ffffff;stroke:#cbd5e1;stroke-width:1.5}
+    .dead{fill:#fee2e2;stroke:#dc2626;stroke-width:2}
+    .wt{fill:#334155;font-size:14px;font-weight:600}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    .warn{fill:#b45309;font-size:14px;font-weight:700}
+    .good{fill:#16a34a;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx,.wt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .panel{stroke:#334155}.w{fill:#111827;stroke:#475569}.dead{fill:#450a0a;stroke:#f87171}
+      .bad{fill:#f87171}.warn{fill:#fbbf24}.good{fill:#4ade80}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Shuffle sharding shrinks the blast radius</text>
+  <text class="sub" x="28" y="62">8 workers, 4 customers, 2 workers each. Customer A's poison requests crash its workers.</text>
+
+  <!-- plain -->
+  <rect class="panel" x="28" y="76" width="360" height="280" rx="12"/>
+  <text class="lbl" x="44" y="102">Plain sharding</text>
+  <g>
+    <rect class="dead" x="44" y="118" width="34" height="34" rx="6"/><text class="wt" x="61" y="140" text-anchor="middle">1</text>
+    <rect class="dead" x="86" y="118" width="34" height="34" rx="6"/><text class="wt" x="103" y="140" text-anchor="middle">2</text>
+    <rect class="w" x="130" y="118" width="34" height="34" rx="6"/><text class="wt" x="147" y="140" text-anchor="middle">3</text>
+    <rect class="w" x="172" y="118" width="34" height="34" rx="6"/><text class="wt" x="189" y="140" text-anchor="middle">4</text>
+    <rect class="w" x="216" y="118" width="34" height="34" rx="6"/><text class="wt" x="233" y="140" text-anchor="middle">5</text>
+    <rect class="w" x="258" y="118" width="34" height="34" rx="6"/><text class="wt" x="275" y="140" text-anchor="middle">6</text>
+    <rect class="w" x="302" y="118" width="34" height="34" rx="6"/><text class="wt" x="319" y="140" text-anchor="middle">7</text>
+    <rect class="w" x="344" y="118" width="34" height="34" rx="6"/><text class="wt" x="361" y="140" text-anchor="middle">8</text>
+    <text class="sub" x="82" y="170" text-anchor="middle">shard 1</text><text class="sub" x="168" y="170" text-anchor="middle">shard 2</text>
+    <text class="sub" x="254" y="170" text-anchor="middle">shard 3</text><text class="sub" x="340" y="170" text-anchor="middle">shard 4</text>
+  </g>
+  <text class="tx" x="44" y="206">A → shard 1 (1, 2)</text><text class="bad" x="250" y="206">down</text>
+  <text class="tx" x="44" y="232">B → shard 1 (1, 2)</text><text class="bad" x="250" y="232">down</text>
+  <text class="tx" x="44" y="258">C → shard 2 (3, 4)</text><text class="good" x="250" y="258">fine</text>
+  <text class="tx" x="44" y="284">D → shard 3 (5, 6)</text><text class="good" x="250" y="284">fine</text>
+  <text class="bad" x="44" y="330">B shares A's fate completely.</text>
+
+  <!-- shuffle -->
+  <rect class="panel" x="412" y="76" width="360" height="280" rx="12"/>
+  <text class="lbl" x="428" y="102">Shuffle sharding</text>
+  <g>
+    <rect class="dead" x="428" y="118" width="34" height="34" rx="6"/><text class="wt" x="445" y="140" text-anchor="middle">1</text>
+    <rect class="w" x="470" y="118" width="34" height="34" rx="6"/><text class="wt" x="487" y="140" text-anchor="middle">2</text>
+    <rect class="w" x="514" y="118" width="34" height="34" rx="6"/><text class="wt" x="531" y="140" text-anchor="middle">3</text>
+    <rect class="dead" x="556" y="118" width="34" height="34" rx="6"/><text class="wt" x="573" y="140" text-anchor="middle">4</text>
+    <rect class="w" x="600" y="118" width="34" height="34" rx="6"/><text class="wt" x="617" y="140" text-anchor="middle">5</text>
+    <rect class="w" x="642" y="118" width="34" height="34" rx="6"/><text class="wt" x="659" y="140" text-anchor="middle">6</text>
+    <rect class="w" x="686" y="118" width="34" height="34" rx="6"/><text class="wt" x="703" y="140" text-anchor="middle">7</text>
+    <rect class="w" x="728" y="118" width="34" height="34" rx="6"/><text class="wt" x="745" y="140" text-anchor="middle">8</text>
+    <text class="sub" x="595" y="170" text-anchor="middle">each customer gets a random pair</text>
+  </g>
+  <text class="tx" x="428" y="206">A → 1, 4</text><text class="bad" x="634" y="206">down</text>
+  <text class="tx" x="428" y="232">B → 1, 6</text><text class="warn" x="634" y="232">up on 6</text>
+  <text class="tx" x="428" y="258">C → 2, 7</text><text class="good" x="634" y="258">fine</text>
+  <text class="tx" x="428" y="284">D → 3, 8</text><text class="good" x="634" y="284">fine</text>
+  <text class="good" x="428" y="330">Only A loses all of its workers.</text>
+
+  <text class="sub" x="28" y="384">With 8 workers there are 28 possible pairs, so another customer has A's exact pair with odds of 1 in 28.</text>
+</svg>

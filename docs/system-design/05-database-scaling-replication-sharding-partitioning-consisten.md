@@ -63,6 +63,9 @@ flowchart TB
 
 **Quorums (leaderless):** N replicas, write to W, read from R. With **W + R > N**, the read set overlaps the latest write set (for example N=3, W=2, R=2). It's still not linearisable in every edge case (sloppy quorums, concurrent writes).
 
+![Two panels with three replicas: with W=2 and R=2 the read set overlaps the write set at replica 2 and sees the new version; with W=1 and R=1 the read hits a replica that never got the write and returns the old version](images/05-quorum.svg){ loading=lazy }
+*Notice that W + R > N doesn't make every replica fresh. It only guarantees that every read touches at least one replica that has the latest write.*
+
 ### Replication lag anomalies
 
 | Anomaly | Example | Fix |
@@ -103,6 +106,9 @@ flowchart LR
 
 **Why not `hash(key) mod N`?** When N changes, almost **every** key moves to a different node: a massive data migration plus a cache miss storm.
 
+![A grid of 20 keys showing their shard under hash mod 4 and hash mod 5; only keys 0 to 3 keep their shard and the other 16 move](images/05-mod-n.svg){ loading=lazy }
+*Notice the red row: going from 4 to 5 shards moves 16 of 20 keys, matching the ~80% in the code comment below.*
+
 ```mermaid
 flowchart LR
     subgraph RING["Hash ring 0 … 2^32"]
@@ -112,6 +118,9 @@ flowchart LR
     D["Add Node D (v1, v2)"] -.->|"takes over only the arcs<br/>just before its points (~1/N of keys)"| RING
 ```
 *Notice that a key belongs to the **next node clockwise**. Adding node D only steals the keys in the arcs before D's positions, about 1/N of all keys. **Virtual nodes** (many points per physical node) even out arc sizes and let a bigger machine take more points.*
+
+![Animation: a hash ring with nodes A, B and C at two points each and twelve keys; node D joins at two new points and only the two keys in the arcs just before D's points move to D](images/05-hash-ring.svg){ loading=lazy }
+*Watch which keys change colour when D joins: only the two in the shaded arcs, and they all go to D. No key moves between the old nodes.*
 
 | Rebalancing approach | How | Examples |
 |---|---|---|

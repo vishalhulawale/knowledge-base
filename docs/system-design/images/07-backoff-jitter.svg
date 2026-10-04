@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Exponential backoff with and without jitter</title>
+  <desc id="d">Five clients fail at the same moment and retry four times each. Without jitter the delays are exactly 1, 2, 4 and 8 seconds, so all five clients retry together at 1, 3, 7 and 15 seconds, producing synchronised spikes. With full jitter each delay is a random value between zero and that cap, so the retries spread out over time and the dependency sees a trickle instead of spikes.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .lane{stroke:#e2e8f0;stroke-width:1.5}
+    .ax{stroke:#94a3b8;stroke-width:1.5}
+    .grid{stroke:#e2e8f0;stroke-dasharray:3 4}
+    .bad{fill:#dc2626}
+    .good{fill:#16a34a}
+    .badt{fill:#dc2626;font-size:15px;font-weight:700}
+    .goodt{fill:#16a34a;font-size:15px;font-weight:700}
+    .spike{fill:#dc2626;fill-opacity:.12}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .lane{stroke:#334155}.ax{stroke:#64748b}.grid{stroke:#334155}
+      .bad,.badt{fill:#f87171}.good,.goodt{fill:#4ade80}.spike{fill:#f87171;fill-opacity:.15}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Retries: backoff alone vs backoff + full jitter</text>
+  <text class="sub" x="28" y="62">Five clients fail at t = 0 and retry 4 times. Base 1 s, doubling. Each dot is one retry.</text>
+  <text class="badt" x="28" y="96">No jitter: every client retries at 1, 3, 7 and 15 s</text>
+  <rect class="spike" x="177.5" y="106" width="20" height="104" rx="6"/>
+  <rect class="spike" x="252.5" y="106" width="20" height="104" rx="6"/>
+  <rect class="spike" x="402.5" y="106" width="20" height="104" rx="6"/>
+  <rect class="spike" x="702.5" y="106" width="20" height="104" rx="6"/>
+  <text class="sub" x="28" y="122">client 1</text><line class="lane" x1="150" y1="118" x2="760" y2="118"/>
+  <circle class="bad" cx="187.5" cy="118" r="6"/>
+  <circle class="bad" cx="262.5" cy="118" r="6"/>
+  <circle class="bad" cx="412.5" cy="118" r="6"/>
+  <circle class="bad" cx="712.5" cy="118" r="6"/>
+  <text class="sub" x="28" y="142">client 2</text><line class="lane" x1="150" y1="138" x2="760" y2="138"/>
+  <circle class="bad" cx="187.5" cy="138" r="6"/>
+  <circle class="bad" cx="262.5" cy="138" r="6"/>
+  <circle class="bad" cx="412.5" cy="138" r="6"/>
+  <circle class="bad" cx="712.5" cy="138" r="6"/>
+  <text class="sub" x="28" y="162">client 3</text><line class="lane" x1="150" y1="158" x2="760" y2="158"/>
+  <circle class="bad" cx="187.5" cy="158" r="6"/>
+  <circle class="bad" cx="262.5" cy="158" r="6"/>
+  <circle class="bad" cx="412.5" cy="158" r="6"/>
+  <circle class="bad" cx="712.5" cy="158" r="6"/>
+  <text class="sub" x="28" y="182">client 4</text><line class="lane" x1="150" y1="178" x2="760" y2="178"/>
+  <circle class="bad" cx="187.5" cy="178" r="6"/>
+  <circle class="bad" cx="262.5" cy="178" r="6"/>
+  <circle class="bad" cx="412.5" cy="178" r="6"/>
+  <circle class="bad" cx="712.5" cy="178" r="6"/>
+  <text class="sub" x="28" y="202">client 5</text><line class="lane" x1="150" y1="198" x2="760" y2="198"/>
+  <circle class="bad" cx="187.5" cy="198" r="6"/>
+  <circle class="bad" cx="262.5" cy="198" r="6"/>
+  <circle class="bad" cx="412.5" cy="198" r="6"/>
+  <circle class="bad" cx="712.5" cy="198" r="6"/>
+  <text class="goodt" x="28" y="236">Full jitter: delay = random(0, cap), retries spread out</text>
+  <text class="sub" x="28" y="262">client 1</text><line class="lane" x1="150" y1="258" x2="760" y2="258"/>
+  <circle class="good" cx="162.0" cy="258" r="6"/>
+  <circle class="good" cx="173.6" cy="258" r="6"/>
+  <circle class="good" cx="271.1" cy="258" r="6"/>
+  <circle class="good" cx="292.9" cy="258" r="6"/>
+  <text class="sub" x="28" y="282">client 2</text><line class="lane" x1="150" y1="278" x2="760" y2="278"/>
+  <circle class="good" cx="170.2" cy="278" r="6"/>
+  <circle class="good" cx="197.6" cy="278" r="6"/>
+  <circle class="good" cx="206.2" cy="278" r="6"/>
+  <circle class="good" cx="358.5" cy="278" r="6"/>
+  <text class="sub" x="28" y="302">client 3</text><line class="lane" x1="150" y1="298" x2="760" y2="298"/>
+  <circle class="good" cx="151.5" cy="298" r="6"/>
+  <circle class="good" cx="183.8" cy="298" r="6"/>
+  <circle class="good" cx="194.2" cy="298" r="6"/>
+  <circle class="good" cx="221.6" cy="298" r="6"/>
+  <text class="sub" x="28" y="322">client 4</text><line class="lane" x1="150" y1="318" x2="760" y2="318"/>
+  <circle class="good" cx="165.8" cy="318" r="6"/>
+  <circle class="good" cx="228.0" cy="318" r="6"/>
+  <circle class="good" cx="246.4" cy="318" r="6"/>
+  <circle class="good" cx="313.5" cy="318" r="6"/>
+  <text class="sub" x="28" y="342">client 5</text><line class="lane" x1="150" y1="338" x2="760" y2="338"/>
+  <circle class="good" cx="173.6" cy="338" r="6"/>
+  <circle class="good" cx="244.5" cy="338" r="6"/>
+  <circle class="good" cx="331.1" cy="338" r="6"/>
+  <circle class="good" cx="450.0" cy="338" r="6"/>
+  <line class="ax" x1="150" y1="352" x2="760" y2="352"/><line class="ax" x1="150.0" y1="352" x2="150.0" y2="358"/><text class="sub" x="150.0" y="374" text-anchor="middle">0</text><line class="ax" x1="225.0" y1="352" x2="225.0" y2="358"/><text class="sub" x="225.0" y="374" text-anchor="middle">2</text><line class="ax" x1="300.0" y1="352" x2="300.0" y2="358"/><text class="sub" x="300.0" y="374" text-anchor="middle">4</text><line class="ax" x1="375.0" y1="352" x2="375.0" y2="358"/><text class="sub" x="375.0" y="374" text-anchor="middle">6</text><line class="ax" x1="450.0" y1="352" x2="450.0" y2="358"/><text class="sub" x="450.0" y="374" text-anchor="middle">8</text><line class="ax" x1="525.0" y1="352" x2="525.0" y2="358"/><text class="sub" x="525.0" y="374" text-anchor="middle">10</text><line class="ax" x1="600.0" y1="352" x2="600.0" y2="358"/><text class="sub" x="600.0" y="374" text-anchor="middle">12</text><line class="ax" x1="675.0" y1="352" x2="675.0" y2="358"/><text class="sub" x="675.0" y="374" text-anchor="middle">14</text><line class="ax" x1="750.0" y1="352" x2="750.0" y2="358"/><text class="sub" x="750.0" y="374" text-anchor="middle">16 s</text>
+  <text class="sub" x="28" y="404">delay = random(0, min(cap, base × 2^attempt)). The total retry count is the same; only the timing changes.</text>
+</svg>

@@ -58,6 +58,9 @@ flowchart TB
 ```
 *Notice that the token bucket separates the **average rate** (r) from the **burst** (b). That matches how real clients behave (bursty but bounded), which is why AWS API Gateway, Stripe and Envoy use token-bucket variants.*
 
+![Animation: a token bucket with capacity 5 and refill 1 token per second starts full; a burst of 6 requests takes all 5 tokens and the sixth gets 429; the bucket then refills one token per second until it is full again](images/08-token-bucket.svg){ loading=lazy }
+*Watch the burst empty the bucket at once, then the tokens come back one per second. b sets the burst size, r sets the long-run rate.*
+
 | Algorithm | State per key | Bursts | Accuracy | Notes |
 |---|---|---|---|---|
 | **Token bucket** | tokens + last refill time | Up to capacity b | Good | Default for APIs. Lazy refill on each request (no timer needed) |
@@ -68,6 +71,9 @@ flowchart TB
 | Concurrency limiter | in-flight count | n/a | Exact | Limits **simultaneous** requests (bulkhead). Adaptive variants (Netflix concurrency-limits) |
 
 **Fixed-window boundary problem:** with a limit of 100/min, a client can send 100 at 00:59 and 100 at 01:00, which is 200 in 2 seconds. A sliding window or a token bucket fixes this.
+
+![A two-minute timeline split into two one-minute windows with a limit of 100: 100 requests at 00:59 and 100 at 01:00 are all allowed, 200 within about 2 seconds, while a sliding window counter at 01:00:01 would already count about 98](images/08-fixed-window-edge.svg){ loading=lazy }
+*Notice that each window's counter is within the limit, yet the client got twice the limit in two seconds. The sliding window counter still remembers the previous window.*
 
 ### Distributed rate limiting
 

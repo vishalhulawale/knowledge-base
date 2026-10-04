@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">The cache-aside race that leaves a stale value</title>
+  <desc id="d">Five steps interleave a reader and a writer. Reader A misses in the cache and reads price 10 from the database. Writer B then updates the database to price 12 and deletes the cache key, which is already empty. Finally reader A writes the old price 10 into the cache, so the cache serves 10 while the database holds 12 until the TTL expires.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1;stroke-width:1.5}
+    .na{fill:#4f46e5}.nb{fill:#0ea5a4}
+    .nt{fill:#fff;font-size:13px;font-weight:700}
+    .at{fill:#4f46e5;font-weight:700}.bt{fill:#0f766e;font-weight:700}
+    .val{fill:#0f172a;font-size:22px;font-weight:700}
+    .stale{fill:#dc2626;font-size:22px;font-weight:700}
+    .badbox{fill:none;stroke:#dc2626;stroke-width:3}
+    .bad{fill:#dc2626;font-size:15px;font-weight:700}
+    .muted{fill:#64748b;font-size:22px;font-weight:600}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.val{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}.muted{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .na{fill:#818cf8}.nb{fill:#2dd4bf}.nt{fill:#0f172a}
+      .at{fill:#818cf8}.bt{fill:#5eead4}
+      .stale,.bad{fill:#f87171}.badbox{stroke:#f87171}
+    }
+    /* 10 s loop: steps appear at 8, 22, 36, 50, 64%; result at 70%; hold to 94% */
+    .a{animation:10s infinite linear}
+    @keyframes s1{0%,6%{opacity:0}8%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes s2{0%,20%{opacity:0}22%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes s3{0%,34%{opacity:0}36%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes s4{0%,48%{opacity:0}50%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes s5{0%,62%{opacity:0}64%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes s6{0%,68%{opacity:0}70%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes old3{0%,35%{opacity:1}36%,97%{opacity:0}98%,100%{opacity:1}}
+    @keyframes old5{0%,63%{opacity:1}64%,97%{opacity:0}98%,100%{opacity:1}}
+    .s1{animation-name:s1}.s2{animation-name:s2}.s3{animation-name:s3}.s4{animation-name:s4}.s5{animation-name:s5}.s6{animation-name:s6}
+    .o3{animation-name:old3}.o5{animation-name:old5}
+    @media (prefers-reduced-motion: reduce){.a{animation:none}.o3,.o5{opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Cache-aside race: the old value wins</text>
+  <text class="sub" x="28" y="62">A reader and a writer interleave. Every step is correct on its own.</text>
+
+  <!-- steps -->
+  <g class="a s1"><circle class="na" cx="42" cy="104" r="13"/><text class="nt" x="42" y="109" text-anchor="middle">1</text>
+    <text class="tx" x="66" y="109"><tspan class="at">Reader A:</tspan> GET product:42 → miss</text></g>
+  <g class="a s2"><circle class="na" cx="42" cy="150" r="13"/><text class="nt" x="42" y="155" text-anchor="middle">2</text>
+    <text class="tx" x="66" y="155"><tspan class="at">Reader A:</tspan> SELECT … → price 10</text></g>
+  <g class="a s3"><circle class="nb" cx="42" cy="196" r="13"/><text class="nt" x="42" y="201" text-anchor="middle">3</text>
+    <text class="tx" x="66" y="201"><tspan class="bt">Writer B:</tspan> UPDATE price = 12</text></g>
+  <g class="a s4"><circle class="nb" cx="42" cy="242" r="13"/><text class="nt" x="42" y="247" text-anchor="middle">4</text>
+    <text class="tx" x="66" y="247"><tspan class="bt">Writer B:</tspan> DEL product:42 (already empty)</text></g>
+  <g class="a s5"><circle class="na" cx="42" cy="288" r="13"/><text class="nt" x="42" y="293" text-anchor="middle">5</text>
+    <text class="tx" x="66" y="293"><tspan class="at">Reader A:</tspan> SET product:42 = 10</text></g>
+
+  <!-- stores -->
+  <rect class="box" x="500" y="88" width="272" height="100" rx="12"/>
+  <text class="lbl" x="520" y="116">Cache</text>
+  <text class="muted a o5" x="520" y="160">(empty)</text>
+  <text class="stale a s5" x="520" y="160">price = 10</text>
+  <rect class="badbox a s6" x="500" y="88" width="272" height="100" rx="12"/>
+
+  <rect class="box" x="500" y="208" width="272" height="100" rx="12"/>
+  <text class="lbl" x="520" y="236">Database</text>
+  <text class="val a o3" x="520" y="280">price = 10</text>
+  <text class="val a s3" x="520" y="280">price = 12</text>
+
+  <text class="bad a s6" x="28" y="348">The cache serves 10 while the database holds 12, until the TTL expires.</text>
+  <text class="sub" x="28" y="396">Mitigations from this page: short TTLs, delayed double delete, versioned sets, CDC-driven invalidation.</text>
+</svg>
