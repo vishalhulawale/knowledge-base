@@ -77,10 +77,16 @@ classDiagram
 | Realisation | `A ..\|> B` (dashed + hollow triangle) | A implements interface B | `class A implements B` | n/a |
 | Generalisation | `A --\|> B` (solid + hollow triangle) | A is a subtype of B | `class A extends B` | n/a |
 
+![The six UML relationships drawn from A to B with their exact line style and end marker, next to the Java code each one maps to: a parameter for dependency, a field for association, passed-in parts for aggregation, owned parts for composition, implements for realisation and extends for generalisation](images/05-uml-relationships.svg){ loading=lazy }
+*Notice where the shapes sit: diamonds on the whole, triangles on the supertype. That's the detail interviewers check when you sketch quickly.*
+
 **Aggregation vs composition in code:**
 
 - **Composition:** `Order` creates its `OrderLine`s and exposes no setter to share them. Deleting the order deletes the lines. In JPA: `@OneToMany(mappedBy="order", cascade=ALL, orphanRemoval=true)`.
 - **Aggregation:** a `Department` references `Doctor`s that exist independently (a doctor can move departments). No cascade delete.
+
+![Animation: deleting Order 42 deletes its three OrderLines with it, while deleting the Cardiology department leaves its three doctors in place to be reassigned](images/05-aggregation-vs-composition.svg){ loading=lazy }
+*Watch step 3: the test for composition is what happens to the parts when the whole goes away.*
 
 Many interviewers accept a plain association instead of aggregation. **Composition is the one worth getting right**, because it implies ownership, cascade and encapsulation.
 

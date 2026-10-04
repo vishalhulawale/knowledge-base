@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">UML relationships cheat card</title>
+  <desc id="d">Six UML relationships from weakest to strongest coupling, each with its line style, its end marker and the Java shape it maps to. Dependency: dashed line with an open arrow; B is a parameter or local variable. Association: solid line with an open arrow; A has a field of type B. Aggregation: solid line with a hollow diamond at the whole; parts are passed in and can live alone. Composition: solid line with a filled diamond at the whole; the whole creates and owns its parts, which die with it. Realisation: dashed line with a hollow triangle; A implements interface B. Generalisation: solid line with a hollow triangle; A extends B.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="468" rx="14"/>
+  <text class="h" x="28" y="40">The six relationships, weakest to strongest</text>
+  <text class="sub" x="28" y="62">Read each line from A (left) to B (right). Diamonds sit on the whole; triangles point at the supertype.</text>
+  <defs><marker id="open" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="11" markerHeight="11" orient="auto"><path d="M1,1 L11,6 L1,11" fill="none" class="ln" style="stroke-width:1.6"/></marker><marker id="tri" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M1,1 L13,7 L1,13 z" class="box" style="stroke:#64748b;stroke-width:1.6"/></marker><marker id="dia" viewBox="0 0 20 12" refX="1" refY="6" markerWidth="20" markerHeight="12" orient="auto"><path d="M1,6 L10,1 L19,6 L10,11 z" class="box" style="stroke:#64748b;stroke-width:1.6"/></marker><marker id="diaf" viewBox="0 0 20 12" refX="1" refY="6" markerWidth="20" markerHeight="12" orient="auto"><path d="M1,6 L10,1 L19,6 L10,11 z" class="mutf" style="stroke:#64748b;stroke-width:1.6"/></marker></defs>
+  <text class="sm" x="28" y="100">Relationship</text>
+  <text class="sm" x="196" y="100">Notation (A → B)</text>
+  <text class="sm" x="430" y="100">Java shape</text>
+  <text class="lbl" x="28" y="134">Dependency</text>
+  <text class="sm" x="28" y="152">uses briefly</text>
+  <rect class="box" x="196" y="116" width="34" height="28" rx="5" stroke-width="1.2"/>
+  <text class="tx" x="213" y="134" text-anchor="middle" font-weight="700">A</text>
+  <rect class="box" x="370" y="116" width="34" height="28" rx="5" stroke-width="1.2"/>
+  <text class="tx" x="387" y="134" text-anchor="middle" font-weight="700">B</text>
+  <line class="ln dash" x1="231" y1="130" x2="368" y2="130" marker-end="url(#open)"/>
+  <text class="tx prit" x="430" y="134">void pay(PaymentGateway g)</text>
+  <text class="lbl" x="28" y="186">Association</text>
+  <text class="sm" x="28" y="204">holds a reference</text>
+  <rect class="box" x="196" y="168" width="34" height="28" rx="5" stroke-width="1.2"/>
+  <text class="tx" x="213" y="186" text-anchor="middle" font-weight="700">A</text>
+  <rect class="box" x="370" y="168" width="34" height="28" rx="5" stroke-width="1.2"/>
+  <text class="tx" x="387" y="186" text-anchor="middle" font-weight="700">B</text>
+  <line class="ln" x1="231" y1="182" x2="368" y2="182" marker-end="url(#open)"/>
+  <text class="tx prit" x="430" y="186">private Pharmacy preferred;</text>
+  <text class="lbl" x="28" y="238">Aggregation</text>
+  <text class="sm" x="28" y="256">part can live alone</text>
+  <rect class="box" x="196" y="220" width="34" height="28" rx="5" stroke-width="1.2"/>
+  <text class="tx" x="213" y="238" text-anchor="middle" font-weight="700">A</text>
+  <rect class="box" x="370" y="220" width="34" height="28" rx="5" stroke-width="1.2"/>
+  <text class="tx" x="387" y="238" text-anchor="middle" font-weight="700">B</text>
+  <line class="ln" x1="231" y1="234" x2="368" y2="234" marker-start="url(#dia)"/>
+  <text class="tx prit" x="430" y="238">List&lt;Doctor&gt; doctors  // passed in</text>
+  <text class="lbl" x="28" y="290">Composition</text>
+  <text class="sm" x="28" y="308">part dies with whole</text>
+  <rect class="box" x="196" y="272" width="34" height="28" rx="5" stroke-width="1.2"/>
+  <text class="tx" x="213" y="290" text-anchor="middle" font-weight="700">A</text>
+  <rect class="box" x="370" y="272" width="34" height="28" rx="5" stroke-width="1.2"/>
+  <text class="tx" x="387" y="290" text-anchor="middle" font-weight="700">B</text>
+  <line class="ln" x1="231" y1="286" x2="368" y2="286" marker-start="url(#diaf)"/>
+  <text class="tx prit" x="430" y="290">lines.add(new OrderLine(…))</text>
+  <text class="lbl" x="28" y="342">Realisation</text>
+  <text class="sm" x="28" y="360">implements</text>
+  <rect class="box" x="196" y="324" width="34" height="28" rx="5" stroke-width="1.2"/>
+  <text class="tx" x="213" y="342" text-anchor="middle" font-weight="700">A</text>
+  <rect class="box" x="370" y="324" width="34" height="28" rx="5" stroke-width="1.2"/>
+  <text class="tx" x="387" y="342" text-anchor="middle" font-weight="700">B</text>
+  <line class="ln dash" x1="231" y1="338" x2="368" y2="338" marker-end="url(#tri)"/>
+  <text class="tx prit" x="430" y="342">class Sms implements Notifier</text>
+  <text class="lbl" x="28" y="394">Generalisation</text>
+  <text class="sm" x="28" y="412">is-a subtype</text>
+  <rect class="box" x="196" y="376" width="34" height="28" rx="5" stroke-width="1.2"/>
+  <text class="tx" x="213" y="394" text-anchor="middle" font-weight="700">A</text>
+  <rect class="box" x="370" y="376" width="34" height="28" rx="5" stroke-width="1.2"/>
+  <text class="tx" x="387" y="394" text-anchor="middle" font-weight="700">B</text>
+  <line class="ln" x1="231" y1="390" x2="368" y2="390" marker-end="url(#tri)"/>
+  <text class="tx prit" x="430" y="394">class Car extends Vehicle</text>
+  <text class="sub" x="28" y="448">Coupling grows down the list. Composition is the one to get right: it means ownership and cascade delete.</text>
+</svg>

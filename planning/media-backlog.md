@@ -35,7 +35,7 @@ Suggested pictures per page; ⏵ marks an animation.
 - [x] 02 Creational: double-checked locking race without `volatile`; builder vs telescoping constructor
 - [x] 03 Structural: ⏵ decorator wrapping order; adapter vs decorator vs proxy wrappers compared
 - [x] 04 Behavioural: ⏵ chain of responsibility handing a request along; state machine transitions
-- [ ] 05 UML: the six relationships' arrow notation; aggregation vs composition lifetimes
+- [x] 05 UML: the six relationships' arrow notation; aggregation vs composition lifetimes
 - [ ] 06 LLD approach: the 7-step process with time budget for a 45-minute round
 - [ ] 07 Case studies: ⏵ LRU cache map + doubly linked list on get/put; ⏵ elevator SCAN scheduling
 
