@@ -61,6 +61,9 @@ stateDiagram-v2
 ```
 *Notice the two points where you can lose requests: **draining** (set the target group's deregistration delay longer than your longest request) and **pending** (the health-check grace period and warm-up stop new instances getting traffic, or being killed, before the JVM is ready).*
 
+![Animation: a new instance stays out of rotation until it passes readiness checks, then the old instance is deregistered, drains in-flight requests for 30 seconds and is terminated](images/03-instance-replacement-draining.svg){ loading=lazy }
+*Watch both ends of the swap: traffic reaches v2 only after it's healthy, and v1 stops getting new requests well before it's terminated.*
+
 Scaling policy choice:
 
 - **Target tracking:** "keep `ALBRequestCountPerTarget` at 1,000" or "CPU at 50%". AWS creates the alarms. Best default.
@@ -95,6 +98,9 @@ flowchart LR
 | Use for | Web apps, REST/gRPC microservices | Non-HTTP, extreme throughput, static IPs, PrivateLink | Third-party security appliances |
 
 **Cross-zone load balancing** spreads traffic evenly across all targets in all AZs. It is on by default for ALB (no charge) and off by default for NLB (cross-AZ data charges apply if enabled). With it off, each AZ's node only sends to its own AZ's targets, so uneven target counts per AZ cause hot spots.
+
+![Cross-zone load balancing with 2 targets in AZ A and 8 in AZ B: with it off, AZ A targets get 25% each and AZ B targets 6.25% each; with it on, every target gets 10%](images/03-cross-zone-load-balancing.svg){ loading=lazy }
+*Notice the red targets: with cross-zone off, the AZ with fewer targets takes 4× the load per target.*
 
 **Health checks:** path, interval, healthy/unhealthy thresholds. Point them at a **readiness** endpoint (Spring Boot `/actuator/health/readiness`), not just "process is up". Don't include downstream dependencies in the LB health check, or one DB blip takes every target out of service.
 

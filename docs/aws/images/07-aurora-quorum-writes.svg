@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Aurora quorum writes: 4 of 6 copies, even with an AZ down</title>
+  <desc id="d">The Aurora writer ships a redo log record to six storage copies, two in each of three Availability Zones. The write commits as soon as four copies acknowledge; the last two catch up afterwards. Then AZ c is lost, taking copies 5 and 6 with it. The next write goes to the four remaining copies, all four acknowledge, and the write still commits because the four-of-six write quorum is met.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .az{fill:#ffffff;stroke:#cbd5e1}
+    .wr{fill:#4f46e5}
+    .cp{fill:#94a3b8}
+    .ack{fill:#16a34a}
+    .on{fill:#fff;font-size:14px;font-weight:700}
+    .ln{stroke:#4f46e5;stroke-width:2;stroke-dasharray:6 5}
+    .okt{fill:#16a34a;font-size:15px;font-weight:700}
+    .badline{stroke:#dc2626;stroke-width:4}
+    .badbox{fill:none;stroke:#dc2626;stroke-width:3}
+    .badt{fill:#dc2626;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .az{fill:#111827;stroke:#475569}
+      .wr{fill:#818cf8}.cp{fill:#64748b}.ack{fill:#4ade80}.on{fill:#0f172a}
+      .ln{stroke:#818cf8}.okt{fill:#4ade80}
+      .badline,.badbox{stroke:#f87171}.badt{fill:#f87171}
+    }
+    /* 12 s loop. Write 1: 4-40 %. AZ c fails at 46 %. Write 2: 52-94 %. */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes w1{0%,4%{opacity:0}6%,40%{opacity:1}42%,100%{opacity:0}}
+    @keyframes a1{0%,10%{opacity:0}11%,40%{opacity:1}42%,100%{opacity:0}}
+    @keyframes a3{0%,13%{opacity:0}14%,40%{opacity:1}42%,100%{opacity:0}}
+    @keyframes a2{0%,16%{opacity:0}17%,40%{opacity:1}42%,100%{opacity:0}}
+    @keyframes a5{0%,19%{opacity:0}20%,40%{opacity:1}42%,100%{opacity:0}}
+    @keyframes a4{0%,25%{opacity:0}26%,40%{opacity:1}42%,100%{opacity:0}}
+    @keyframes a6{0%,28%{opacity:0}29%,40%{opacity:1}42%,100%{opacity:0}}
+    @keyframes c1{0%,20%{opacity:0}21%,40%{opacity:1}42%,100%{opacity:0}}
+    @keyframes fz{0%,45%{opacity:0}47%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes w2{0%,52%{opacity:0}54%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes b1{0%,58%{opacity:0}59%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes b3{0%,61%{opacity:0}62%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes b2{0%,64%{opacity:0}65%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes b4{0%,67%{opacity:0}68%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes c2{0%,68%{opacity:0}69%,94%{opacity:1}98%,100%{opacity:0}}
+    .kw1{animation-name:w1}.ka1{animation-name:a1}.ka2{animation-name:a2}.ka3{animation-name:a3}.ka4{animation-name:a4}.ka5{animation-name:a5}.ka6{animation-name:a6}.kc1{animation-name:c1}
+    .kfz{animation-name:fz}.kw2{animation-name:w2}.kb1{animation-name:b1}.kb2{animation-name:b2}.kb3{animation-name:b3}.kb4{animation-name:b4}.kc2{animation-name:c2}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none}
+      .kfz,.kw2,.kb1,.kb2,.kb3,.kb4,.kc2{opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Aurora storage: a write needs 4 of 6 copies</text>
+  <text class="sub" x="28" y="62">Two copies per AZ. Losing a whole AZ still leaves four, so writes keep committing.</text>
+
+  <rect class="wr" x="310" y="80" width="180" height="44" rx="8"/>
+  <text class="on" x="400" y="107" text-anchor="middle">Writer instance</text>
+
+  <!-- AZ groups -->
+  <rect class="az" x="40" y="200" width="230" height="124" rx="10"/><text class="lbl" x="54" y="314">AZ a</text>
+  <rect class="az" x="285" y="200" width="230" height="124" rx="10"/><text class="lbl" x="299" y="314">AZ b</text>
+  <rect class="az" x="530" y="200" width="230" height="124" rx="10"/><text class="lbl" x="544" y="314">AZ c</text>
+
+  <!-- redo shipping lines, write 1 to all six, write 2 to four -->
+  <g class="a kw1">
+    <line class="ln" x1="400" y1="124" x2="105" y2="236"/><line class="ln" x1="400" y1="124" x2="205" y2="236"/>
+    <line class="ln" x1="400" y1="124" x2="350" y2="236"/><line class="ln" x1="400" y1="124" x2="450" y2="236"/>
+    <line class="ln" x1="400" y1="124" x2="595" y2="236"/><line class="ln" x1="400" y1="124" x2="695" y2="236"/>
+    <text class="txt" x="28" y="150">write 1: redo record to all 6</text>
+  </g>
+  <g class="a kw2">
+    <line class="ln" x1="400" y1="124" x2="105" y2="236"/><line class="ln" x1="400" y1="124" x2="205" y2="236"/>
+    <line class="ln" x1="400" y1="124" x2="350" y2="236"/><line class="ln" x1="400" y1="124" x2="450" y2="236"/>
+    <text class="txt" x="28" y="150">write 2: only 4 copies reachable</text>
+  </g>
+
+  <!-- copies (grey) -->
+  <rect class="cp" x="60" y="236" width="90" height="56" rx="8"/><text class="on" x="105" y="269" text-anchor="middle">copy 1</text>
+  <rect class="cp" x="160" y="236" width="90" height="56" rx="8"/><text class="on" x="205" y="269" text-anchor="middle">copy 2</text>
+  <rect class="cp" x="305" y="236" width="90" height="56" rx="8"/><text class="on" x="350" y="269" text-anchor="middle">copy 3</text>
+  <rect class="cp" x="405" y="236" width="90" height="56" rx="8"/><text class="on" x="450" y="269" text-anchor="middle">copy 4</text>
+  <rect class="cp" x="550" y="236" width="90" height="56" rx="8"/><text class="on" x="595" y="269" text-anchor="middle">copy 5</text>
+  <rect class="cp" x="650" y="236" width="90" height="56" rx="8"/><text class="on" x="695" y="269" text-anchor="middle">copy 6</text>
+
+  <!-- acks write 1 -->
+  <g class="a ka1"><rect class="ack" x="60" y="236" width="90" height="56" rx="8"/><text class="on" x="105" y="269" text-anchor="middle">✓ ack</text></g>
+  <g class="a ka2"><rect class="ack" x="160" y="236" width="90" height="56" rx="8"/><text class="on" x="205" y="269" text-anchor="middle">✓ ack</text></g>
+  <g class="a ka3"><rect class="ack" x="305" y="236" width="90" height="56" rx="8"/><text class="on" x="350" y="269" text-anchor="middle">✓ ack</text></g>
+  <g class="a ka4"><rect class="ack" x="405" y="236" width="90" height="56" rx="8"/><text class="on" x="450" y="269" text-anchor="middle">✓ ack</text></g>
+  <g class="a ka5"><rect class="ack" x="550" y="236" width="90" height="56" rx="8"/><text class="on" x="595" y="269" text-anchor="middle">✓ ack</text></g>
+  <g class="a ka6"><rect class="ack" x="650" y="236" width="90" height="56" rx="8"/><text class="on" x="695" y="269" text-anchor="middle">✓ ack</text></g>
+  <text class="okt a kc1" x="28" y="356">✓ Write 1 commits at the 4th ack. Copies 4 and 6 catch up afterwards.</text>
+
+  <!-- AZ c fails -->
+  <g class="a kfz">
+    <rect class="badbox" x="530" y="200" width="230" height="124" rx="10"/>
+    <line class="badline" x1="560" y1="236" x2="730" y2="296"/><line class="badline" x1="730" y1="236" x2="560" y2="296"/>
+    <text class="badt" x="746" y="314" text-anchor="end">AZ lost</text>
+  </g>
+
+  <!-- acks write 2 -->
+  <g class="a kb1"><rect class="ack" x="60" y="236" width="90" height="56" rx="8"/><text class="on" x="105" y="269" text-anchor="middle">✓ ack</text></g>
+  <g class="a kb2"><rect class="ack" x="160" y="236" width="90" height="56" rx="8"/><text class="on" x="205" y="269" text-anchor="middle">✓ ack</text></g>
+  <g class="a kb3"><rect class="ack" x="305" y="236" width="90" height="56" rx="8"/><text class="on" x="350" y="269" text-anchor="middle">✓ ack</text></g>
+  <g class="a kb4"><rect class="ack" x="405" y="236" width="90" height="56" rx="8"/><text class="on" x="450" y="269" text-anchor="middle">✓ ack</text></g>
+  <text class="okt a kc2" x="28" y="356">✓ Write 2 commits too: 4 of 6 is still a quorum with AZ c gone.</text>
+
+  <text class="sub" x="28" y="384">Reads need 3 of 6. Copies are per 10 GiB segment, and real acks take milliseconds.</text>
+</svg>

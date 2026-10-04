@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Static stability: surviving an AZ failure without launching anything</title>
+  <desc id="d">A load balancer spreads traffic over three Availability Zones, each running at 60 percent of its capacity. AZ c then becomes impaired. Its traffic shifts to AZ a and AZ b, which rise to 90 percent. No new instances are launched and no control-plane call is needed, because the spare capacity was already provisioned.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .lb{fill:#4f46e5}
+    .on{fill:#fff;font-size:14px;font-weight:700}
+    .inst{fill:#0ea5a4}
+    .bar{fill:#4f46e5}
+    .extra{fill:#d97706}
+    .flow{stroke:#4f46e5;stroke-width:3;fill:none}
+    .bad{fill:#dc2626}
+    .badline{stroke:#dc2626;stroke-width:4}
+    .badt{fill:#dc2626;font-size:14px;font-weight:700}
+    .pct{fill:#0f172a;font-size:15px;font-weight:700}
+    .badbox{fill:none;stroke:#dc2626;stroke-width:3}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.pct{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .lb,.bar{fill:#818cf8}.on{fill:#0f172a}.inst{fill:#2dd4bf}
+      .extra{fill:#fbbf24}.flow{stroke:#818cf8}
+      .bad{fill:#f87171}.badline,.badbox{stroke:#f87171}.badt{fill:#f87171}
+    }
+    /* 10 s loop: 0-38% normal, 40% AZ c fails, 48% load shifts, hold to 92% */
+    .fail{opacity:0;animation:failk 10s infinite}
+    .shift{opacity:0;animation:shiftk 10s infinite}
+    .before{animation:beforek 10s infinite}
+    .cflow{animation:cflowk 10s infinite}
+    @keyframes failk{0%,38%{opacity:0}41%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes shiftk{0%,46%{opacity:0}50%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes beforek{0%,46%{opacity:1}50%,94%{opacity:0}98%,100%{opacity:1}}
+    @keyframes cflowk{0%,40%{opacity:1}44%,94%{opacity:.12}98%,100%{opacity:1}}
+    @media (prefers-reduced-motion: reduce){
+      .fail,.shift{animation:none;opacity:1}
+      .before{animation:none;opacity:0}
+      .cflow{animation:none;opacity:.12}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Static stability: losing an AZ without launching anything</text>
+  <text class="sub" x="28" y="62">Each AZ runs at about 60%, so the other two can absorb a failed AZ's share.</text>
+
+  <!-- load balancer -->
+  <rect class="lb" x="300" y="80" width="200" height="40" rx="8"/>
+  <text class="on" x="400" y="105" text-anchor="middle">Load balancer</text>
+
+  <!-- flows -->
+  <path class="flow" d="M360 120 L160 160"/>
+  <path class="flow" d="M400 120 L400 160"/>
+  <path class="flow cflow" d="M440 120 L640 160"/>
+
+  <!-- AZ boxes at x=40, 280, 520 width 240 -->
+  <g>
+    <rect class="box" x="40" y="160" width="232" height="160" rx="10"/>
+    <text class="lbl" x="56" y="186">AZ a</text>
+    <rect class="inst" x="56" y="200" width="60" height="34" rx="6"/><rect class="inst" x="126" y="200" width="60" height="34" rx="6"/><rect class="inst" x="196" y="200" width="60" height="34" rx="6"/>
+    <text class="sub" x="56" y="258">utilisation</text>
+    <rect class="box" x="56" y="268" width="200" height="22" rx="4"/>
+    <rect class="bar" x="56" y="268" width="120" height="22" rx="4"/>
+    <rect class="extra shift" x="176" y="268" width="60" height="22"/>
+    <text class="pct before" x="264" y="258" text-anchor="end">60%</text>
+    <text class="pct shift" x="264" y="258" text-anchor="end">90%</text>
+  </g>
+  <g>
+    <rect class="box" x="280" y="160" width="232" height="160" rx="10"/>
+    <text class="lbl" x="296" y="186">AZ b</text>
+    <rect class="inst" x="296" y="200" width="60" height="34" rx="6"/><rect class="inst" x="366" y="200" width="60" height="34" rx="6"/><rect class="inst" x="436" y="200" width="60" height="34" rx="6"/>
+    <text class="sub" x="296" y="258">utilisation</text>
+    <rect class="box" x="296" y="268" width="200" height="22" rx="4"/>
+    <rect class="bar" x="296" y="268" width="120" height="22" rx="4"/>
+    <rect class="extra shift" x="416" y="268" width="60" height="22"/>
+    <text class="pct before" x="504" y="258" text-anchor="end">60%</text>
+    <text class="pct shift" x="504" y="258" text-anchor="end">90%</text>
+  </g>
+  <g>
+    <rect class="box" x="520" y="160" width="232" height="160" rx="10"/>
+    <text class="lbl" x="536" y="186">AZ c</text>
+    <rect class="inst" x="536" y="200" width="60" height="34" rx="6"/><rect class="inst" x="606" y="200" width="60" height="34" rx="6"/><rect class="inst" x="676" y="200" width="60" height="34" rx="6"/>
+    <text class="sub" x="536" y="258">utilisation</text>
+    <rect class="box" x="536" y="268" width="200" height="22" rx="4"/>
+    <rect class="bar before" x="536" y="268" width="120" height="22" rx="4"/>
+    <text class="pct before" x="744" y="258" text-anchor="end">60%</text>
+    <g class="fail">
+      <rect class="badbox" x="520" y="160" width="232" height="160" rx="10"/>
+      <line class="badline" x1="560" y1="196" x2="720" y2="300"/>
+      <line class="badline" x1="720" y1="196" x2="560" y2="300"/>
+      <text class="badt" x="744" y="186" text-anchor="end">impaired</text>
+    </g>
+  </g>
+  <g class="shift">
+    <text class="txt" x="40" y="346">Traffic from AZ c moves to a and b: 3 × 60% = 180% of one AZ, now split over two = 90% each.</text>
+  </g>
+  <text class="sub" x="40" y="380">Without headroom, recovery waits on Auto Scaling launches, which can be slow or throttled.</text>
+</svg>

@@ -71,6 +71,9 @@ flowchart TB
 !!! warning "Control plane vs data plane"
     During large events, *creating* or *changing* resources (control plane) can fail while existing resources keep serving (data plane). AWS's own resilience guidance: **don't make recovery depend on control-plane calls**. Pre-provision standby capacity, and use Route 53 health checks (data plane) rather than API calls to fail over.
 
+![Animation: three AZs each run at 60% utilisation; AZ c fails and AZ a and AZ b rise to 90% without launching any new instances](images/01-static-stability-az-loss.svg){ loading=lazy }
+*Watch the two healthy AZs absorb AZ c's share from capacity that already exists. That's static stability: no launch, no API call, no wait.*
+
 ### Shared responsibility model
 
 ```mermaid
@@ -90,6 +93,9 @@ flowchart LR
     C --- A
 ```
 *Notice that the boundary moves: on EC2 you patch the OS, on RDS AWS patches the engine (you choose the maintenance window), and on Lambda AWS manages the runtime. Data, identity and access are **always** yours.*
+
+![The shared responsibility boundary for EC2, RDS and Lambda: data, IAM, code and security group rules are always yours, while runtime and OS patching move to AWS on RDS and Lambda](images/01-shared-responsibility-shift.svg){ loading=lazy }
+*Notice the dashed line rises as the service gets more managed, so AWS takes over more of the stack. The top four rows stay yours on all three.*
 
 ### The six Well-Architected pillars
 

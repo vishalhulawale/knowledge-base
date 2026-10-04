@@ -37,6 +37,9 @@ flowchart TD
 ```
 *Notice that the decision comes from the **access pattern**, not the size. S3 is not a file system (no partial in-place updates or POSIX locks); EBS can't be shared across AZs.*
 
+![A Region with three AZs: an EBS volume attached to one instance in AZ a only, an EFS file system with a mount target in every AZ shared by all instances, and an S3 bucket stored across at least three AZs and reached over HTTPS](images/06-ebs-efs-s3-scope.svg){ loading=lazy }
+*Notice the scope of each one: EBS stays inside one AZ, EFS reaches every AZ through mount targets, and S3 isn't mounted at all.*
+
 | | **EBS** | **EFS** | **S3** |
 |---|---|---|---|
 | Type | Block | File (NFSv4.1) | Object (HTTP API) |
@@ -110,6 +113,9 @@ flowchart TB
 
     Used for SEC 17a-4, HIPAA retention and ransomware protection.
 - **Access points** give each application or team its own policy and network origin (VPC-only) for shared datasets.
+
+![Animation: the browser asks the API for an upload, gets a pre-signed PUT URL valid for 5 minutes, uploads the file straight to S3, and an ObjectCreated event triggers a processor that validates and moves the file](images/06-presigned-upload-flow.svg){ loading=lazy }
+*Watch the file token: it goes from the browser to S3 and never touches your API. The API only checks who the user is and signs a short-lived URL.*
 
 ## In practice: code & configuration
 

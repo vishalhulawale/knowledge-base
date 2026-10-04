@@ -25,6 +25,9 @@ tags: [aws, P0]
 
 "Design X to survive a Region outage" and "our AWS bill is too high, what do you do?" are the two most common senior AWS scenario questions. They test whether you can turn **business requirements into numbers** (SLO, RTO, RPO, budget) and **choose trade-offs** instead of reaching for active-active everywhere.
 
+![Animation: a timeline with regular recovery points; a disaster strikes after the last one, the gap back to that point is the RPO (data lost) and the gap until service is restored is the RTO (downtime)](images/12-rpo-rto-timeline.svg){ loading=lazy }
+*Notice the two gaps point in opposite directions from the disaster: RPO back to the last recovery point, RTO forward to recovery.*
+
 ## Core concepts
 
 ### Availability building blocks
@@ -102,6 +105,9 @@ flowchart LR
 - **Fail back** is a separate, practised procedure.
 
 **Data corruption and ransomware:** replication copies bad writes too, so DR also needs **point-in-time backups** (PITR, AWS Backup with **vault lock**, S3 versioning + Object Lock) in an **isolated account**.
+
+![Animation: a bad write corrupts the primary database and replicates to the DR replica within seconds; the fix is a restore from a point-in-time backup taken before the bad write, held in a separate account](images/12-replication-not-backup.svg){ loading=lazy }
+*Watch the replica turn red right after the primary. Replication protects against losing a Region, not against bad data; only the backup timeline goes back far enough.*
 
 ### Cost optimisation playbook
 

@@ -49,6 +49,9 @@ sequenceDiagram
 ```
 *Notice that INIT runs **once per environment** and INVOKE runs many times. Put expensive set-up (clients, connection pools, config) in INIT and reuse it. But one environment serves **one request at a time**, so concurrency equals the number of environments.*
 
+![Animation: three Lambda execution environments on a timeline; overlapping requests each get a new environment with an INIT cold start, while later requests reuse free environments warm](images/05-lambda-environments-concurrency.svg){ loading=lazy }
+*Watch r3 and r4: they reuse free environments with no INIT. r5 arrives while both are busy, so it pays a cold start on a third environment.*
+
 Cold start drivers:
 
 - runtime (Java and .NET are slower than Node, Python and Go)
@@ -238,6 +241,9 @@ Resources:
     - **Timeouts must nest:** client > API Gateway (29 s) > Lambda timeout > SDK/HTTP client timeouts > DB query timeout.
     - **Concurrency is shared per Region:** reserve capacity for critical functions and cap noisy ones.
     - **Async retries + non-idempotent handler = duplicate side effects.** Use idempotency keys.
+
+![Timeout bars drawn to scale: client 30 s, API Gateway 29 s, Lambda 10 s, SDK 3 s and DB query 2 s nest correctly, while a 60 s Lambda behind a 29 s API Gateway leaves the client with a 504](images/05-timeouts-nest.svg){ loading=lazy }
+*Notice that every inner bar ends before the one above it. When they don't nest, the caller times out first and the work carries on with nobody waiting for it.*
 
 ## How this connects to my experience
 

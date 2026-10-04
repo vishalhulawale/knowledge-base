@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Direct-to-S3 upload with a pre-signed URL</title>
+  <desc id="d">Four participants: the browser, your API, the S3 bucket and a processor. First the browser asks the API for an upload, sending its JWT. The API authorises the user and signs a PUT URL valid for 5 minutes, without sending any file data. The browser then uploads the file bytes straight to S3 with that URL. S3 emits an ObjectCreated event through EventBridge or SQS, and the processor validates the file type and size, scans it and moves it to a clean prefix. The file bytes never pass through the API.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .actor{fill:#4f46e5}
+    .s3{fill:#0ea5a4}
+    .on{fill:#fff;font-size:14px;font-weight:700}
+    .life{stroke:#cbd5e1;stroke-width:2;stroke-dasharray:4 5}
+    .arr{stroke:#334155;stroke-width:2.5;fill:none}
+    .big{stroke:#0ea5a4;stroke-width:6;fill:none}
+    .head{fill:#334155}
+    .bighead{fill:#0ea5a4}
+    .file{fill:#d97706}
+    .tealt{fill:#0f766e;font-size:14px;font-weight:700}
+    .num{fill:#ffffff;stroke:#4f46e5;stroke-width:2}
+    .numt{fill:#4f46e5;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .actor{fill:#818cf8}.s3{fill:#2dd4bf}.on{fill:#0f172a}
+      .life{stroke:#475569}.arr{stroke:#e2e8f0}.head{fill:#e2e8f0}
+      .big{stroke:#2dd4bf}.bighead{fill:#2dd4bf}.file{fill:#fbbf24}.tealt{fill:#5eead4}
+      .num{fill:#111827;stroke:#818cf8}.numt{fill:#818cf8}
+    }
+    /* 12 s loop: step n appears at 4/18/32/56/72 %, file travels 32-50 % */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes s1{0%,3%{opacity:0}6%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes s2{0%,17%{opacity:0}20%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes s3{0%,31%{opacity:0}34%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes s4{0%,55%{opacity:0}58%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes s5{0%,71%{opacity:0}74%,94%{opacity:1}98%,100%{opacity:0}}
+    .k1{animation-name:s1}.k2{animation-name:s2}.k3{animation-name:s3}.k4{animation-name:s4}.k5{animation-name:s5}
+    .fl{opacity:0;animation:fly 12s infinite linear}
+    @keyframes fly{0%,31%{opacity:0;transform:translateX(0)}33%{opacity:1;transform:translateX(0)}50%{opacity:1;transform:translateX(390px)}52%,100%{opacity:0;transform:translateX(390px)}}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.fl{animation:none;opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Direct-to-S3 upload with a pre-signed URL</text>
+  <text class="sub" x="28" y="62">Your API hands out permission, not bandwidth. The bytes go straight from the browser to S3.</text>
+
+  <!-- actors at x = 110, 300, 500, 690 -->
+  <rect class="actor" x="50" y="80" width="120" height="36" rx="8"/><text class="on" x="110" y="103" text-anchor="middle">Browser</text>
+  <rect class="actor" x="240" y="80" width="120" height="36" rx="8"/><text class="on" x="300" y="103" text-anchor="middle">Your API</text>
+  <rect class="s3" x="440" y="80" width="120" height="36" rx="8"/><text class="on" x="500" y="103" text-anchor="middle">S3 bucket</text>
+  <rect class="actor" x="630" y="80" width="120" height="36" rx="8"/><text class="on" x="690" y="103" text-anchor="middle">Processor</text>
+  <line class="life" x1="110" y1="116" x2="110" y2="340"/>
+  <line class="life" x1="300" y1="116" x2="300" y2="340"/>
+  <line class="life" x1="500" y1="116" x2="500" y2="340"/>
+  <line class="life" x1="690" y1="116" x2="690" y2="340"/>
+
+  <!-- 1 -->
+  <g class="a k1">
+    <path class="arr" d="M110 150 H290"/><path class="head" d="M298 150 l-10 -6 v12z"/>
+    <text class="txt" x="122" y="142">POST /uploads + JWT</text>
+  </g>
+  <!-- 2 -->
+  <g class="a k2">
+    <path class="arr" d="M300 196 H120"/><path class="head" d="M112 196 l10 -6 v12z"/>
+    <text class="txt" x="122" y="188">signed PUT URL, 5 min</text>
+    <text class="sub" x="310" y="200">signed locally,</text>
+    <text class="sub" x="310" y="216">no bytes</text>
+  </g>
+  <!-- 3 -->
+  <g class="a k3">
+    <path class="big" d="M110 250 H484"/><path class="bighead" d="M498 250 l-16 -10 v20z"/>
+    <text class="tealt" x="122" y="238">PUT file bytes (skips your API)</text>
+  </g>
+  <g class="fl"><rect class="file" x="100" y="240" width="22" height="20" rx="3"/></g>
+  <!-- 4 -->
+  <g class="a k4">
+    <path class="arr" d="M500 290 H680"/><path class="head" d="M688 290 l-10 -6 v12z"/>
+    <text class="txt" x="512" y="282">ObjectCreated event</text>
+    <text class="sub" x="512" y="306">via EventBridge / SQS</text>
+  </g>
+  <!-- 5 -->
+  <g class="a k5">
+    <text class="txt" x="760" y="330" text-anchor="end">validate type + size,</text>
+    <text class="txt" x="760" y="348" text-anchor="end">scan, move to clean/</text>
+  </g>
+
+  <text class="sub" x="28" y="384">The URL works only until it expires or the signer's credentials expire, whichever comes first.</text>
+</svg>

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Timeouts must nest from the client down to the database</title>
+  <desc id="d">Horizontal bars drawn to the same scale. The client timeout is a little above 29 seconds, the API Gateway integration timeout is 29 seconds, the Lambda timeout is 10 seconds, the SDK or HTTP client timeout is 3 seconds and the database query timeout is 2 seconds. Each inner layer gives up before the layer that called it, so errors come back cleanly. A second example shows the wrong way: a 60 second Lambda timeout behind a 29 second API Gateway, where the client gets a 504 at 29 seconds while the function keeps running and billing.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .val{fill:#0f172a;font-size:14px;font-weight:700}
+    .b0{fill:#94a3b8}.b1{fill:#4f46e5}.b2{fill:#0ea5a4}.b3{fill:#16a34a}.b4{fill:#d97706}
+    .badb{fill:#dc2626}.badt{fill:#dc2626;font-size:14px;font-weight:700}
+    .cut{stroke:#dc2626;stroke-width:2.5;stroke-dasharray:5 4}
+    .okt{fill:#16a34a;font-size:15px;font-weight:700}
+    .sep{stroke:#e2e8f0}
+    .on6{fill:#fff;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.val{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .b0{fill:#64748b}.b1{fill:#818cf8}.b2{fill:#2dd4bf}.b3{fill:#4ade80}.b4{fill:#fbbf24}
+      .badb{fill:#f87171}.badt{fill:#f87171}.cut{stroke:#f87171}.okt{fill:#4ade80}.sep{stroke:#334155}.on6{fill:#0f172a}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Timeouts nest: each layer gives up before its caller</text>
+  <text class="sub" x="28" y="62">Bars are to scale (seconds). 29 s is API Gateway's default; the rest are example values.</text>
+  <text class="okt" x="28" y="92">✓ Nested</text>
+
+  <text class="txt" x="28" y="125">Client</text>
+  <rect class="b0" x="170" y="106" width="300" height="26" rx="5"/>
+  <text class="val" x="480" y="125">30 s</text>
+  <text class="txt" x="28" y="163">API Gateway</text>
+  <rect class="b1" x="170" y="144" width="290" height="26" rx="5"/>
+  <text class="val" x="470" y="163">29 s</text>
+  <text class="txt" x="28" y="201">Lambda</text>
+  <rect class="b2" x="170" y="182" width="100" height="26" rx="5"/>
+  <text class="val" x="280" y="201">10 s</text>
+  <text class="txt" x="28" y="239">SDK / HTTP client</text>
+  <rect class="b3" x="170" y="220" width="30" height="26" rx="5"/>
+  <text class="val" x="210" y="239">3 s</text>
+  <text class="txt" x="28" y="277">DB query</text>
+  <rect class="b4" x="170" y="258" width="20" height="26" rx="5"/>
+  <text class="val" x="200" y="277">2 s</text>
+  <line class="sep" x1="28" y1="306" x2="772" y2="306"/>
+  <text class="badt" x="28" y="332">✗ Not nested</text>
+  <text class="txt" x="28" y="365">Lambda</text>
+  <rect class="badb" x="170" y="346" width="600" height="26" rx="5"/>
+  <text class="on6" x="760" y="365" text-anchor="end">60 s</text>
+  <line class="cut" x1="460" y1="336" x2="460" y2="382"/>
+  <text class="badt" x="452" y="332" text-anchor="end">client gets 504 at 29 s</text>
+  <text class="sub" x="28" y="400">The function keeps running and billing after the caller has gone. Move long work to an async job.</text>
+</svg>

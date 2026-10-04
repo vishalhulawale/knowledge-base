@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Stateful security group versus stateless NACL on return traffic</title>
+  <desc id="d">Two rows show a client at 203.0.113.9 port 51514 sending a TCP request to port 443. The request passes the subnet NACL inbound rule and the security group, and reaches the target. The security group is stateful, so the response is allowed back automatically. In the first row the NACL outbound rules allow only port 443, so the response to the client's ephemeral port 51514 is dropped and the client times out. In the second row the NACL outbound rules allow ports 1024 to 65535, so the response reaches the client.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .cli{fill:#4f46e5}
+    .tgt{fill:#0ea5a4}
+    .on{fill:#fff;font-size:14px;font-weight:700}
+    .nacl{fill:#d97706;fill-opacity:.18;stroke:#d97706;stroke-width:2}
+    .sg{fill:none;stroke:#16a34a;stroke-width:3;stroke-dasharray:6 4}
+    .naclt{fill:#b45309;font-size:13px;font-weight:700}
+    .sgt{fill:#15803d;font-size:13px;font-weight:700}
+    .track{stroke:#cbd5e1;stroke-width:2}
+    .req{fill:#4f46e5}
+    .res{fill:#0ea5a4}
+    .bad{fill:#dc2626;font-size:15px;font-weight:700}
+    .ok{fill:#16a34a;font-size:15px;font-weight:700}
+    .sep{stroke:#e2e8f0}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .cli,.req{fill:#818cf8}.tgt,.res{fill:#2dd4bf}.on{fill:#0f172a}
+      .nacl{fill:#fbbf24;stroke:#fbbf24}.sg{stroke:#4ade80}
+      .naclt{fill:#fbbf24}.sgt{fill:#4ade80}
+      .track{stroke:#475569}.bad{fill:#f87171}.ok{fill:#4ade80}.sep{stroke:#334155}
+    }
+    /* 10 s loop: request 4-30 %, response 40-70 % (row 2) or stopped at the NACL at 54 % (row 1) */
+    .rq{animation:rq 10s infinite linear}
+    @keyframes rq{0%,4%{transform:translateX(0);opacity:1}30%{transform:translateX(392px);opacity:1}33%,100%{transform:translateX(392px);opacity:0}}
+    .rs2{opacity:0;animation:rs2 10s infinite linear}
+    @keyframes rs2{0%,39%{transform:translateX(0);opacity:0}40%{transform:translateX(0);opacity:1}70%,94%{transform:translateX(-392px);opacity:1}98%,100%{transform:translateX(-392px);opacity:0}}
+    .rs1{opacity:0;animation:rs1 10s infinite linear}
+    @keyframes rs1{0%,39%{transform:translateX(0);opacity:0}40%{transform:translateX(0);opacity:1}54%,94%{transform:translateX(-196px);opacity:1}98%,100%{transform:translateX(-196px);opacity:0}}
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes x1{0%,54%{opacity:0}56%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes x2{0%,70%{opacity:0}72%,94%{opacity:1}98%,100%{opacity:0}}
+    .k1{animation-name:x1}.k2{animation-name:x2}
+    @media (prefers-reduced-motion: reduce){
+      .rq{animation:none;opacity:0}
+      .rs1{animation:none;opacity:1;transform:translateX(-196px)}
+      .rs2{animation:none;opacity:1;transform:translateX(-392px)}
+      .a{animation:none;opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">The response is where NACLs bite</text>
+  <text class="sub" x="28" y="62">Request to 443 from client port 51514. The SG remembers the connection; the NACL doesn't.</text>
+
+  <!-- row template: client x 28-148, NACL band x 330-370, SG ring around target x 520-660 -->
+  <g>
+    <text class="lbl" x="28" y="98">NACL outbound: allow tcp 443 only</text>
+    <line class="track" x1="148" y1="140" x2="540" y2="140"/><line class="track" x1="148" y1="172" x2="540" y2="172"/>
+    <rect class="cli" x="28" y="128" width="120" height="56" rx="8"/><text class="on" x="88" y="152" text-anchor="middle">Client</text><text class="on" x="88" y="170" text-anchor="middle">:51514</text>
+    <rect class="nacl" x="330" y="112" width="40" height="88" rx="6"/>
+    <rect class="sg" x="532" y="116" width="156" height="80" rx="10"/>
+    <rect class="tgt" x="548" y="128" width="124" height="56" rx="8"/><text class="on" x="610" y="161" text-anchor="middle">Target :443</text>
+    <g class="rq"><circle class="req" cx="150" cy="140" r="8"/></g>
+    <g class="rs1"><circle class="res" cx="542" cy="172" r="8"/></g>
+    <text class="bad a k1" x="200" y="210">✗ response to :51514 dropped, client times out</text>
+  </g>
+  <line class="sep" x1="28" y1="226" x2="772" y2="226"/>
+  <g>
+    <text class="lbl" x="28" y="256">NACL outbound: allow tcp 1024–65535</text>
+    <line class="track" x1="148" y1="298" x2="540" y2="298"/><line class="track" x1="148" y1="330" x2="540" y2="330"/>
+    <rect class="cli" x="28" y="286" width="120" height="56" rx="8"/><text class="on" x="88" y="310" text-anchor="middle">Client</text><text class="on" x="88" y="328" text-anchor="middle">:51514</text>
+    <rect class="nacl" x="330" y="270" width="40" height="88" rx="6"/>
+    <rect class="sg" x="532" y="274" width="156" height="80" rx="10"/>
+    <rect class="tgt" x="548" y="286" width="124" height="56" rx="8"/><text class="on" x="610" y="319" text-anchor="middle">Target :443</text>
+    <g class="rq"><circle class="req" cx="150" cy="298" r="8"/></g>
+    <g class="rs2"><circle class="res" cx="542" cy="330" r="8"/></g>
+    <text class="ok a k2" x="160" y="372">✓ response reaches the client</text>
+  </g>
+  <!-- legend -->
+  <text class="naclt" x="300" y="98" dx="160">▮ NACL (subnet, stateless)</text>
+  <text class="sgt" x="540" y="256" dx="0">┅ SG (ENI, stateful)</text>
+  <text class="sub" x="400" y="388">Inbound 443 is allowed by both in each row.</text>
+</svg>

@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">SQS visibility timeout, receive count and dead-letter queue</title>
+  <desc id="d">A message sits in an SQS queue. A consumer receives it, and the message becomes invisible to other consumers for the visibility timeout of 30 seconds. The consumer crashes before calling DeleteMessage, so when the timeout runs out the message becomes visible again with ApproximateReceiveCount 1. Receives 2, 3 and 4 fail the same way. On the fifth failed receive the count reaches maxReceiveCount 5 and the redrive policy moves the message to the dead-letter queue. On success the consumer would delete the message before the timeout ends.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .q{fill:#ffffff;stroke:#4f46e5;stroke-width:2.5}
+    .dlq{fill:#ffffff;stroke:#64748b;stroke-width:2.5}
+    .cons{fill:#ffffff;stroke:#0ea5a4;stroke-width:2.5}
+    .msg{fill:#d97706}
+    .on{fill:#fff;font-size:14px;font-weight:700}
+    .ghost{fill:none;stroke:#d97706;stroke-width:2;stroke-dasharray:5 4}
+    .timer{fill:#d97706}
+    .bad{fill:#dc2626;font-size:22px;font-weight:700}
+    .cnt{fill:#0f172a;font-size:15px;font-weight:700}
+    .warn{fill:#b45309;font-size:13px;font-weight:600}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.cnt{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box,.q,.dlq,.cons{fill:#111827}.q{stroke:#818cf8}.dlq{stroke:#94a3b8}.cons{stroke:#2dd4bf}
+      .msg,.timer{fill:#fbbf24}.ghost{stroke:#fbbf24}.on{fill:#0f172a}
+      .bad{fill:#f87171}.warn{fill:#fbbf24}
+    }
+    /* 12 s loop.
+       0-6 visible in queue | 6-10 received | 10-34 invisible (timer runs), crash at 22 | 34 visible again, count 1
+       40-60 receives 2-4 fail | 62-66 receive 5 | 70 crash | 74-80 moved to DLQ | hold to 94 */
+    .mv{animation:mv 12s infinite ease-in-out}
+    @keyframes mv{
+      0%,6%{transform:translate(0,0);opacity:1}
+      10%,32%{transform:translate(380px,0)}
+      35%,62%{transform:translate(0,0)}
+      66%,72%{transform:translate(380px,0)}
+      78%,94%{transform:translate(0,170px);opacity:1}
+      97%{transform:translate(0,170px);opacity:0}
+      98%,100%{transform:translate(0,0);opacity:0}
+    }
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes gh{0%,9%{opacity:0}10%,33%{opacity:1}34%,65%{opacity:0}66%,73%{opacity:1}74%,100%{opacity:0}}
+    @keyframes tm{0%,10%{transform:scaleX(1)}34%,100%{transform:scaleX(0)}}
+    @keyframes cr1{0%,21%{opacity:0}22%,33%{opacity:1}34%,69%{opacity:0}70%,77%{opacity:1}78%,100%{opacity:0}}
+    @keyframes n0{0%,33%{opacity:1}34%,100%{opacity:0}}
+    @keyframes n1{0%,33%{opacity:0}34%,43%{opacity:1}44%,100%{opacity:0}}
+    @keyframes n2{0%,43%{opacity:0}44%,50%{opacity:1}51%,100%{opacity:0}}
+    @keyframes n3{0%,50%{opacity:0}51%,57%{opacity:1}58%,100%{opacity:0}}
+    @keyframes n4{0%,57%{opacity:0}58%,69%{opacity:1}70%,100%{opacity:0}}
+    @keyframes n5{0%,69%{opacity:0}70%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes ff{0%,39%{opacity:0}41%,60%{opacity:1}62%,100%{opacity:0}}
+    @keyframes dl{0%,77%{opacity:0}79%,94%{opacity:1}98%,100%{opacity:0}}
+    .kgh{animation-name:gh}.kcr{animation-name:cr1}.kff{animation-name:ff}.kdl{animation-name:dl}
+    .tmg{transform-box:fill-box;transform-origin:left center;animation:tm 12s infinite linear}
+    .c0{opacity:1;animation-name:n0}.c1{animation-name:n1}.c2{animation-name:n2}.c3{animation-name:n3}.c4{animation-name:n4}.c5{animation-name:n5}
+    @media (prefers-reduced-motion: reduce){
+      .a,.mv,.tmg{animation:none}
+      .mv{transform:translate(0,170px)}
+      .c0{opacity:0}.c5,.kdl{opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Visibility timeout and redrive to a DLQ</text>
+  <text class="sub" x="28" y="62">SQS never knows you failed. It only sees that the message wasn't deleted in time.</text>
+
+  <!-- queue -->
+  <rect class="q" x="60" y="90" width="260" height="110" rx="10"/>
+  <text class="lbl" x="76" y="114">SQS queue</text>
+  <text class="sub" x="76" y="190">visibility timeout 30 s</text>
+  <!-- consumer -->
+  <rect class="cons" x="440" y="90" width="300" height="110" rx="10"/>
+  <text class="lbl" x="456" y="114">Consumer</text>
+  <text class="sub" x="456" y="190">must DeleteMessage when done</text>
+  <!-- DLQ -->
+  <rect class="dlq" x="60" y="260" width="260" height="110" rx="10"/>
+  <text class="lbl" x="76" y="284">DLQ (redrive policy)</text>
+  <text class="sub" x="76" y="360">maxReceiveCount = 5</text>
+
+  <!-- in-flight ghost and timer in the queue -->
+  <g class="a kgh">
+    <rect class="ghost" x="140" y="126" width="100" height="40" rx="7"/>
+    <text class="warn" x="250" y="151">invisible</text>
+    <rect class="timer tmg" x="140" y="170" width="100" height="5" rx="2"/>
+  </g>
+
+  <!-- crash -->
+  <text class="bad a kcr" x="690" y="156" text-anchor="middle">✗ crash</text>
+
+  <!-- the message -->
+  <g class="mv"><rect class="msg" x="140" y="126" width="100" height="40" rx="7"/><text class="on" x="190" y="151" text-anchor="middle">msg</text></g>
+
+  <!-- receive count -->
+  <text class="txt" x="440" y="240">ApproximateReceiveCount</text>
+  <text class="cnt a c0" x="440" y="264">0</text>
+  <text class="cnt a c1" x="440" y="264">1  (visible again)</text>
+  <text class="cnt a c2" x="440" y="264">2</text>
+  <text class="cnt a c3" x="440" y="264">3</text>
+  <text class="cnt a c4" x="440" y="264">4</text>
+  <text class="cnt a c5" x="440" y="264">5 = maxReceiveCount</text>
+  <text class="sub a kff" x="440" y="290">receives 2 to 4 fail the same way…</text>
+  <text class="txt a kdl" x="440" y="300">Moved to the DLQ: alarm on its depth,</text>
+  <text class="txt a kdl" x="440" y="318">fix the bug, then redrive to the source.</text>
+
+  <text class="sub" x="440" y="356">Success path: DeleteMessage before 30 s</text>
+  <text class="sub" x="440" y="374">and the message is gone for good.</text>
+</svg>

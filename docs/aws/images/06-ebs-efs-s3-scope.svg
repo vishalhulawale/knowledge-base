@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Scope of EBS, EFS and S3 inside a Region</title>
+  <desc id="d">A Region with three Availability Zones, each running one instance. An EBS volume lives in AZ a and attaches to the one instance there; it cannot attach to instances in other AZs. An EFS file system spans the Region with a mount target in each AZ, so instances in all three AZs mount the same files over NFS. An S3 bucket is a Regional service storing objects across at least three AZs, reached over the HTTPS API rather than mounted.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .region{fill:none;stroke:#94a3b8;stroke-width:2;stroke-dasharray:8 5}
+    .az{fill:#ffffff;stroke:#cbd5e1}
+    .inst{fill:#334155}
+    .ebs{fill:#d97706}
+    .efs{fill:#0ea5a4}
+    .s3{fill:#4f46e5}
+    .mt{fill:#ffffff;stroke:#0ea5a4;stroke-width:3}
+    .on{fill:#fff;font-size:14px;font-weight:700}
+    .onl{fill:#fff;font-size:13px}
+    .wire{stroke:#334155;stroke-width:2.5}
+    .wire2{stroke:#0ea5a4;stroke-width:2.5}
+    .no{fill:#dc2626;font-size:13px;font-weight:600}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .region{stroke:#64748b}.az{fill:#111827;stroke:#475569}
+      .inst{fill:#cbd5e1}.ebs{fill:#fbbf24}.efs{fill:#2dd4bf}.s3{fill:#818cf8}
+      .mt{fill:#111827;stroke:#2dd4bf}
+      .on,.onl{fill:#0f172a}
+      .wire{stroke:#cbd5e1}.wire2{stroke:#2dd4bf}.no{fill:#f87171}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="438" rx="14"/>
+  <text class="h" x="28" y="40">Where each storage type lives in a Region</text>
+  <text class="sub" x="28" y="62">EBS is zonal and single-attach, EFS is shared across AZs, S3 is Regional and reached over HTTPS.</text>
+  <rect class="region" x="28" y="78" width="744" height="340" rx="12"/>
+  <text class="sub" x="40" y="96">Region</text>
+
+  <rect class="az" x="40" y="104" width="234" height="200" rx="10"/><text class="lbl" x="52" y="126">AZ a</text>
+  <rect class="inst" x="60" y="138" width="180" height="36" rx="6"/><text class="on" x="150" y="161" text-anchor="middle">Instance</text>
+  <line class="wire2" x1="220" y1="174" x2="220" y2="316"/>
+  <rect class="az" x="286" y="104" width="234" height="200" rx="10"/><text class="lbl" x="298" y="126">AZ b</text>
+  <rect class="inst" x="306" y="138" width="180" height="36" rx="6"/><text class="on" x="396" y="161" text-anchor="middle">Instance</text>
+  <line class="wire2" x1="466" y1="174" x2="466" y2="316"/>
+  <rect class="az" x="532" y="104" width="234" height="200" rx="10"/><text class="lbl" x="544" y="126">AZ c</text>
+  <rect class="inst" x="552" y="138" width="180" height="36" rx="6"/><text class="on" x="642" y="161" text-anchor="middle">Instance</text>
+  <line class="wire2" x1="712" y1="174" x2="712" y2="316"/>
+  <line class="wire" x1="100" y1="174" x2="100" y2="212"/>
+  <rect class="ebs" x="60" y="212" width="96" height="52" rx="6"/><text class="on" x="108" y="235" text-anchor="middle">EBS</text><text class="onl" x="108" y="253" text-anchor="middle">volume</text>
+  <text class="sub" x="60" y="288">attached to one instance</text>
+  <text class="no" x="298" y="230">✗ AZ a's volume</text><text class="no" x="298" y="248">can't attach here</text>
+  <text class="sub" x="298" y="272">snapshot + restore</text><text class="sub" x="298" y="290">to move it</text>
+  <rect class="efs" x="40" y="316" width="726" height="40" rx="8"/>
+  <circle class="mt" cx="220" cy="316" r="8"/>
+  <circle class="mt" cx="466" cy="316" r="8"/>
+  <circle class="mt" cx="712" cy="316" r="8"/>
+  <text class="on" x="56" y="341">EFS file system (NFS): mount target per AZ, same files everywhere</text>
+  <rect class="s3" x="40" y="366" width="726" height="40" rx="8"/>
+  <text class="on" x="56" y="391">S3 bucket: objects over the HTTPS API, stored across ≥ 3 AZs</text>
+</svg>

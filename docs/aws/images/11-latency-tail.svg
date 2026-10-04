@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Average latency hides the slow tail</title>
+  <desc id="d">A histogram of 1,000 request latencies in 100 millisecond buckets. Most requests take under 200 milliseconds, but a small second cluster sits between 700 and 1,200 milliseconds, for example from cold starts, GC pauses or retries. The average is about 130 milliseconds and looks healthy, while the 99th percentile is about 900 milliseconds. The tail bars are magnified ten times so they are visible.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .base{stroke:#94a3b8;stroke-width:1.5}
+    .bar{fill:#4f46e5}
+    .tail{fill:#dc2626}
+    .avg{stroke:#16a34a;stroke-width:3;stroke-dasharray:7 5}
+    .p99{stroke:#dc2626;stroke-width:3;stroke-dasharray:7 5}
+    .avgt{fill:#16a34a;font-size:15px;font-weight:700}
+    .p99t{fill:#dc2626;font-size:15px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .base{stroke:#64748b}.bar{fill:#818cf8}.tail{fill:#f87171}
+      .avg{stroke:#4ade80}.p99{stroke:#f87171}.avgt{fill:#4ade80}.p99t{fill:#f87171}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Average latency lies: look at the tail</text>
+  <text class="sub" x="28" y="62">1,000 requests in 100 ms buckets. The average sits in the healthy hump; p99 sits in the slow one.</text>
+  <line class="avg" x1="136.56" y1="96" x2="136.56" y2="310"/><text class="avgt" x="144.56" y="110">avg ≈ 130 ms "fine"</text>
+  <line class="p99" x1="582" y1="96" x2="582" y2="310"/><text class="p99t" x="574" y="110" text-anchor="end">p99 ≈ 900 ms</text>
+  <rect class="bar" x="60" y="112.4" width="56" height="197.6" rx="3"/>
+  <text class="sub" x="88.0" y="106.4" text-anchor="middle">520</text>
+  <rect class="bar" x="118" y="173.2" width="56" height="136.8" rx="3"/>
+  <text class="sub" x="146.0" y="167.2" text-anchor="middle">360</text>
+  <rect class="bar" x="176" y="287.2" width="56" height="22.8" rx="3"/>
+  <text class="sub" x="204.0" y="281.2" text-anchor="middle">60</text>
+  <rect class="tail" x="234" y="234" width="56" height="76" rx="3"/>
+  <text class="sub" x="262.0" y="228" text-anchor="middle">20</text>
+  <rect class="tail" x="292" y="279.6" width="56" height="30.4" rx="3"/>
+  <text class="sub" x="320.0" y="273.6" text-anchor="middle">8</text>
+  <rect class="tail" x="350" y="291" width="56" height="19" rx="3"/>
+  <text class="sub" x="378.0" y="285" text-anchor="middle">5</text>
+  <rect class="tail" x="408" y="294.8" width="56" height="15.2" rx="3"/>
+  <text class="sub" x="436.0" y="288.8" text-anchor="middle">4</text>
+  <rect class="tail" x="466" y="291" width="56" height="19" rx="3"/>
+  <text class="sub" x="494.0" y="285" text-anchor="middle">5</text>
+  <rect class="tail" x="524" y="279.6" width="56" height="30.4" rx="3"/>
+  <text class="sub" x="552.0" y="273.6" text-anchor="middle">8</text>
+  <rect class="tail" x="582" y="291" width="56" height="19" rx="3"/>
+  <text class="sub" x="610.0" y="285" text-anchor="middle">5</text>
+  <rect class="tail" x="640" y="298.6" width="56" height="11.4" rx="3"/>
+  <text class="sub" x="668.0" y="292.6" text-anchor="middle">3</text>
+  <rect class="tail" x="698" y="302.4" width="56" height="7.6" rx="3"/>
+  <text class="sub" x="726.0" y="296.4" text-anchor="middle">2</text>
+  <text class="sub" x="59" y="330" text-anchor="middle">0</text>
+  <text class="sub" x="175" y="330" text-anchor="middle">200</text>
+  <text class="sub" x="291" y="330" text-anchor="middle">400</text>
+  <text class="sub" x="407" y="330" text-anchor="middle">600</text>
+  <text class="sub" x="523" y="330" text-anchor="middle">800</text>
+  <text class="sub" x="639" y="330" text-anchor="middle">1000</text>
+  <text class="sub" x="755" y="330" text-anchor="middle">1200</text>
+  <text class="sub" x="756" y="348" text-anchor="end">latency (ms)</text>
+  <line class="base" x1="60" y1="310" x2="756" y2="310"/>
+  <text class="sub" x="28" y="372">Red bars are magnified ×10 to be visible. 1 in 100 users waits about 7× the average: alarm on p99, not Average.</text>
+</svg>

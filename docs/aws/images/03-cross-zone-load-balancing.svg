@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Cross-zone load balancing off versus on with uneven targets</title>
+  <desc id="d">Two panels, each with a load balancer node in AZ A and AZ B receiving 50 percent of traffic each. AZ A has 2 targets and AZ B has 8. With cross-zone load balancing off, each node sends only to its own AZ, so the 2 targets in AZ A get 25 percent each and the 8 targets in AZ B get 6.25 percent each. With cross-zone on, each node spreads across all 10 targets, so every target gets 10 percent.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .node{fill:#4f46e5}
+    .on{fill:#fff;font-size:13px;font-weight:700}
+    .hot{fill:#dc2626}.cool{fill:#94a3b8}.even{fill:#16a34a}
+    .hott{fill:#dc2626;font-size:14px;font-weight:700}
+    .event{fill:#16a34a;font-size:14px;font-weight:700}
+    .ln{stroke:#4f46e5;stroke-width:2.5;fill:none}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .node{fill:#818cf8}.on{fill:#0f172a}
+      .hot,.hott{fill:#f87171}.cool{fill:#64748b}.even,.event{fill:#4ade80}
+      .ln{stroke:#818cf8}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Cross-zone load balancing with uneven targets per AZ</text>
+  <text class="sub" x="28" y="62">DNS sends 50% of clients to each load balancer node. AZ A has 2 targets, AZ B has 8.</text>
+
+  <text class="lbl" x="28" y="98">Cross-zone OFF (NLB default)</text>
+  <rect class="node" x="48" y="110" width="150" height="40" rx="8"/><text class="on" x="123" y="128" text-anchor="middle">Node in AZ A</text><text class="on" x="123" y="144" text-anchor="middle">50%</text>
+  <rect class="node" x="224" y="110" width="150" height="40" rx="8"/><text class="on" x="299" y="128" text-anchor="middle">Node in AZ B</text><text class="on" x="299" y="144" text-anchor="middle">50%</text>
+  <rect class="box" x="28" y="190" width="110" height="140" rx="10"/><text class="sub" x="38" y="208">AZ A</text>
+  <rect class="box" x="150" y="190" width="242" height="140" rx="10"/><text class="sub" x="160" y="208">AZ B</text>
+  <rect class="hot" x="59" y="220" width="48" height="40" rx="6"/>
+  <rect class="hot" x="59" y="272" width="48" height="40" rx="6"/>
+  <rect class="cool" x="164" y="220" width="48" height="40" rx="6"/>
+  <rect class="cool" x="220" y="220" width="48" height="40" rx="6"/>
+  <rect class="cool" x="276" y="220" width="48" height="40" rx="6"/>
+  <rect class="cool" x="332" y="220" width="48" height="40" rx="6"/>
+  <rect class="cool" x="164" y="272" width="48" height="40" rx="6"/>
+  <rect class="cool" x="220" y="272" width="48" height="40" rx="6"/>
+  <rect class="cool" x="276" y="272" width="48" height="40" rx="6"/>
+  <rect class="cool" x="332" y="272" width="48" height="40" rx="6"/>
+  <path class="ln" d="M123 150 L83 190"/>
+  <path class="ln" d="M299 150 L271 190"/>
+  <text class="hott" x="83" y="354" text-anchor="middle">25% each</text>
+  <text class="txt" x="271" y="354" text-anchor="middle">6.25% each</text>
+  <text class="lbl" x="408" y="98">Cross-zone ON (ALB default)</text>
+  <rect class="node" x="428" y="110" width="150" height="40" rx="8"/><text class="on" x="503" y="128" text-anchor="middle">Node in AZ A</text><text class="on" x="503" y="144" text-anchor="middle">50%</text>
+  <rect class="node" x="604" y="110" width="150" height="40" rx="8"/><text class="on" x="679" y="128" text-anchor="middle">Node in AZ B</text><text class="on" x="679" y="144" text-anchor="middle">50%</text>
+  <rect class="box" x="408" y="190" width="110" height="140" rx="10"/><text class="sub" x="418" y="208">AZ A</text>
+  <rect class="box" x="530" y="190" width="242" height="140" rx="10"/><text class="sub" x="540" y="208">AZ B</text>
+  <rect class="even" x="439" y="220" width="48" height="40" rx="6"/>
+  <rect class="even" x="439" y="272" width="48" height="40" rx="6"/>
+  <rect class="even" x="544" y="220" width="48" height="40" rx="6"/>
+  <rect class="even" x="600" y="220" width="48" height="40" rx="6"/>
+  <rect class="even" x="656" y="220" width="48" height="40" rx="6"/>
+  <rect class="even" x="712" y="220" width="48" height="40" rx="6"/>
+  <rect class="even" x="544" y="272" width="48" height="40" rx="6"/>
+  <rect class="even" x="600" y="272" width="48" height="40" rx="6"/>
+  <rect class="even" x="656" y="272" width="48" height="40" rx="6"/>
+  <rect class="even" x="712" y="272" width="48" height="40" rx="6"/>
+  <path class="ln" d="M503 150 L463 190"/>
+  <path class="ln" d="M679 150 L651 190"/>
+  <path class="ln" d="M523 150 L608 190"/>
+  <path class="ln" d="M659 150 L488 190"/>
+  <text class="event" x="463" y="354" text-anchor="middle">10% each</text>
+  <text class="event" x="651" y="354" text-anchor="middle">10% each</text>
+  <text class="sub" x="28" y="384">OFF: 50% ÷ 2 vs 50% ÷ 8, a 4× hot spot. ON: 100% ÷ 10. On an NLB, ON adds cross-AZ data charges.</text>
+</svg>

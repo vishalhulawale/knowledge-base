@@ -121,6 +121,9 @@ flowchart TD
 ```
 *Notice the asymmetry: guardrails (SCP, RCP, boundary, session) can only **remove** permissions. Something must still **grant** the action. For **cross-account** access, **both** the identity policy in account A **and** the resource policy in account B must allow.*
 
+![Animation: an identity policy grants an area, an SCP and a permission boundary each cap it, only the overlap of all three is allowed, and an explicit Deny removes part of that overlap](images/02-effective-permissions-overlap.svg){ loading=lazy }
+*Watch the allowed area shrink with each guardrail. Caps never add anything, so the green overlap can only be as big as what the identity policy granted.*
+
 ### Least privilege workflow
 
 1. Start with a **scoped** policy: the specific actions the code calls, on the specific ARNs.
@@ -247,6 +250,9 @@ An SCP guardrail at the organisation level:
     - **Cross-account KMS:** both the key policy and the caller's IAM policy must allow. Many "S3 cross-account 403" bugs are actually KMS.
     - **Explicit deny with `NotAction`/`NotPrincipal`** can lock out admins, including you. Test with the policy simulator first.
     - **IAM is eventually consistent:** a newly created role may not be usable for a few seconds. Add a retry in automation.
+
+![Animation: a request from a Lambda role in account A passes the identity policy, then account B's bucket policy, then account B's KMS key policy, and only then gets 200 OK from the S3 object](images/02-cross-account-both-sides.svg){ loading=lazy }
+*Notice the third gate. For an SSE-KMS object, the bucket policy alone isn't enough: the key policy in account B must also allow the caller to decrypt.*
 
 ## How this connects to my experience
 

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Effective permissions are the overlap of grants and caps, minus explicit denies</title>
+  <desc id="d">Inside a box representing all actions and resources, an identity policy grants an area. A service control policy and a permission boundary each cap a different area. Only the overlap of all three is effectively allowed, shown in green. An explicit Deny then removes a piece of that overlap, because an explicit Deny always wins. Everything outside the overlap is an implicit deny.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .uni{fill:#ffffff;stroke:#cbd5e1}
+    .idp{fill:#4f46e5;fill-opacity:.16;stroke:#4f46e5;stroke-width:2.5}
+    .scp{fill:none;stroke:#d97706;stroke-width:3;stroke-dasharray:9 6}
+    .bnd{fill:none;stroke:#0ea5a4;stroke-width:3;stroke-dasharray:3 5}
+    .eff{fill:#16a34a}
+    .deny{fill:#dc2626}
+    .on{fill:#fff;font-size:14px;font-weight:700}
+    .kidp{fill:#4f46e5}.kscp{fill:#d97706}.kbnd{fill:#0ea5a4}.keff{fill:#16a34a}.kden{fill:#dc2626}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .uni{fill:#111827;stroke:#475569}
+      .idp{fill:#818cf8;stroke:#818cf8}.scp{stroke:#fbbf24}.bnd{stroke:#2dd4bf}
+      .eff,.keff{fill:#4ade80}.deny,.kden{fill:#f87171}.on{fill:#0f172a}
+      .kidp{fill:#818cf8}.kscp{fill:#fbbf24}.kbnd{fill:#2dd4bf}
+    }
+    /* 10 s loop, one layer per step, end state held 74%-94% */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes s1{0%,2%{opacity:0}6%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes s2{0%,16%{opacity:0}20%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes s3{0%,30%{opacity:0}34%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes s4{0%,46%{opacity:0}50%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes s5{0%,62%{opacity:0}66%,94%{opacity:1}98%,100%{opacity:0}}
+    .k1{animation-name:s1}.k2{animation-name:s2}.k3{animation-name:s3}.k4{animation-name:s4}.k5{animation-name:s5}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Grants open, guardrails cap, explicit Deny wins</text>
+  <text class="sub" x="28" y="62">A request is allowed only inside the overlap of every applicable policy.</text>
+
+  <!-- universe -->
+  <rect class="uni" x="28" y="80" width="480" height="290" rx="10"/>
+  <text class="sub" x="40" y="360">Everything else: implicit deny</text>
+
+  <!-- layers -->
+  <rect class="idp a k1" x="60" y="120" width="280" height="200" rx="8"/>
+  <rect class="scp a k2" x="150" y="100" width="330" height="170" rx="8"/>
+  <rect class="bnd a k3" x="110" y="160" width="330" height="180" rx="8"/>
+  <g class="a k4">
+    <rect class="eff" x="152" y="162" width="186" height="106" rx="6"/>
+    <text class="on" x="164" y="208">Effective</text>
+    <text class="on" x="164" y="226">permissions</text>
+  </g>
+  <g class="a k5">
+    <rect class="deny" x="272" y="178" width="56" height="74" rx="6"/>
+    <text class="on" x="300" y="220" text-anchor="middle">Deny</text>
+  </g>
+
+  <!-- step legend -->
+  <g class="a k1"><rect class="kidp" x="536" y="96" width="22" height="22" rx="4"/><text class="lbl" x="568" y="112">1. Identity policy</text><text class="sub" x="568" y="130">grants actions on ARNs</text></g>
+  <g class="a k2"><rect class="kscp" x="536" y="150" width="22" height="22" rx="4"/><text class="lbl" x="568" y="166">2. SCP (account cap)</text><text class="sub" x="568" y="184">can only remove</text></g>
+  <g class="a k3"><rect class="kbnd" x="536" y="204" width="22" height="22" rx="4"/><text class="lbl" x="568" y="220">3. Permission boundary</text><text class="sub" x="568" y="238">caps this role only</text></g>
+  <g class="a k4"><rect class="keff" x="536" y="258" width="22" height="22" rx="4"/><text class="lbl" x="568" y="274">4. Overlap = allowed</text><text class="sub" x="568" y="292">inside all three</text></g>
+  <g class="a k5"><rect class="kden" x="536" y="312" width="22" height="22" rx="4"/><text class="lbl" x="568" y="328">5. Explicit Deny</text><text class="sub" x="568" y="346">beats every Allow</text></g>
+
+  <text class="sub" x="28" y="400">Simplified: one role session granted by its identity policy. RCPs and session policies also only cap.</text>
+</svg>

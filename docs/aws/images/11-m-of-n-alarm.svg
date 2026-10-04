@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">An alarm that needs 3 of 5 datapoints breaching</title>
+  <desc id="d">One-minute datapoints of the 5xx error rate arrive one by one: 0.5, 2.6, 0.8, 3.1, 1.0, 2.9 and 3.4 percent, against a threshold of 2 percent. The alarm evaluates the last 5 minutes. After minute 5, only 2 of the 5 datapoints breach, so the alarm stays OK despite two spikes. After minute 6, 3 of the last 5 breach, so the alarm goes to ALARM. After minute 7 it still has 3 of 5 and stays in ALARM.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .base{stroke:#94a3b8;stroke-width:1.5}
+    .low{fill:#4f46e5}
+    .hi{fill:#dc2626}
+    .thr{stroke:#d97706;stroke-width:2.5;stroke-dasharray:7 5}
+    .thrt{fill:#b45309;font-size:13px;font-weight:700}
+    .val{fill:#0f172a;font-size:13px;font-weight:700}
+    .win{fill:#0ea5a4;fill-opacity:.12;stroke:#0ea5a4;stroke-width:2.5}
+    .okt{fill:#16a34a;font-size:16px;font-weight:700}
+    .badt{fill:#dc2626;font-size:16px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.val{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .base{stroke:#64748b}.low{fill:#818cf8}.hi{fill:#f87171}
+      .thr{stroke:#fbbf24}.thrt{fill:#fbbf24}.win{fill:#2dd4bf;stroke:#2dd4bf}
+      .okt{fill:#4ade80}.badt{fill:#f87171}
+    }
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes m0{0%,3%{opacity:0}4%,94%{opacity:1}98%,100%{opacity:0}}.km0{animation-name:m0}
+    @keyframes m1{0%,12%{opacity:0}13%,94%{opacity:1}98%,100%{opacity:0}}.km1{animation-name:m1}
+    @keyframes m2{0%,21%{opacity:0}22%,94%{opacity:1}98%,100%{opacity:0}}.km2{animation-name:m2}
+    @keyframes m3{0%,30%{opacity:0}31%,94%{opacity:1}98%,100%{opacity:0}}.km3{animation-name:m3}
+    @keyframes m4{0%,39%{opacity:0}40%,94%{opacity:1}98%,100%{opacity:0}}.km4{animation-name:m4}
+    @keyframes m5{0%,51%{opacity:0}52%,94%{opacity:1}98%,100%{opacity:0}}.km5{animation-name:m5}
+    @keyframes m6{0%,63%{opacity:0}64%,94%{opacity:1}98%,100%{opacity:0}}.km6{animation-name:m6}
+    @keyframes w1{0%,39%{opacity:0}40%,51%{opacity:1}52%,100%{opacity:0}}
+    @keyframes w2{0%,51%{opacity:0}52%,63%{opacity:1}64%,100%{opacity:0}}
+    @keyframes w3{0%,63%{opacity:0}64%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes w0{0%,39%{opacity:1}40%,100%{opacity:0}}
+    .kw1{animation-name:w1}.kw2{animation-name:w2}.kw3{animation-name:w3}.kw0{opacity:1;animation-name:w0}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none;opacity:1}
+      .kw0,.kw1,.kw2{opacity:0}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">M-of-N: alarm on 3 of the last 5 minutes, not on one spike</text>
+  <text class="sub" x="28" y="62">5xx rate per minute vs a 2% threshold (datapoints_to_alarm = 3, evaluation_periods = 5).</text>
+  <g class="a km0"><rect class="low" x="110" y="250" width="56" height="20" rx="4"/><text class="val" x="138.0" y="244" text-anchor="middle">0.5%</text></g>
+  <text class="sub" x="138.0" y="290" text-anchor="middle">min 1</text>
+  <g class="a km1"><rect class="hi" x="190" y="166" width="56" height="104" rx="4"/><text class="val" x="218.0" y="160" text-anchor="middle">2.6%</text></g>
+  <text class="sub" x="218.0" y="290" text-anchor="middle">min 2</text>
+  <g class="a km2"><rect class="low" x="270" y="238" width="56" height="32" rx="4"/><text class="val" x="298.0" y="232" text-anchor="middle">0.8%</text></g>
+  <text class="sub" x="298.0" y="290" text-anchor="middle">min 3</text>
+  <g class="a km3"><rect class="hi" x="350" y="146" width="56" height="124" rx="4"/><text class="val" x="378.0" y="140" text-anchor="middle">3.1%</text></g>
+  <text class="sub" x="378.0" y="290" text-anchor="middle">min 4</text>
+  <g class="a km4"><rect class="low" x="430" y="230" width="56" height="40" rx="4"/><text class="val" x="458.0" y="224" text-anchor="middle">1.0%</text></g>
+  <text class="sub" x="458.0" y="290" text-anchor="middle">min 5</text>
+  <g class="a km5"><rect class="hi" x="510" y="154" width="56" height="116" rx="4"/><text class="val" x="538.0" y="148" text-anchor="middle">2.9%</text></g>
+  <text class="sub" x="538.0" y="290" text-anchor="middle">min 6</text>
+  <g class="a km6"><rect class="hi" x="590" y="134" width="56" height="136" rx="4"/><text class="val" x="618.0" y="128" text-anchor="middle">3.4%</text></g>
+  <text class="sub" x="618.0" y="290" text-anchor="middle">min 7</text>
+  <rect class="win a kw1" x="100" y="96" width="396" height="204" rx="10"/>
+  <rect class="win a kw2" x="180" y="96" width="396" height="204" rx="10"/>
+  <rect class="win a kw3" x="260" y="96" width="396" height="204" rx="10"/>
+  <line class="base" x1="90" y1="270" x2="670" y2="270"/>
+  <line class="thr" x1="90" y1="190" x2="670" y2="190"/><text class="thrt" x="86" y="195" text-anchor="end">2%</text>
+  <text class="txt a kw0" x="28" y="340">Waiting for 5 datapoints…</text>
+  <text class="okt a kw1" x="28" y="340">Minutes 1–5: 2 of 5 breach → OK. Two spikes don't page anyone.</text>
+  <text class="badt a kw2" x="28" y="340">Minutes 2–6: 3 of 5 breach → ALARM. Page on-call.</text>
+  <text class="badt a kw3" x="28" y="340">Minutes 3–7: still 3 of 5 → stays in ALARM.</text>
+  <text class="sub" x="28" y="378">TreatMissingData = breaching, so a service that stops sending metrics counts as failing.</text>
+</svg>

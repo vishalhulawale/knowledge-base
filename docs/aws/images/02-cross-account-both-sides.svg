@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Cross-account S3 read with SSE-KMS needs three allows</title>
+  <desc id="d">A Lambda in account A reads an SSE-KMS encrypted S3 object in account B. The request passes three checks in turn: the identity policy of the Lambda role in account A must allow s3:GetObject and kms:Decrypt, the bucket policy in account B must allow account A's role, and the KMS key policy in account B must allow account A's role to decrypt. Only when all three pass does S3 return 200. If any one is missing the result is 403 AccessDenied.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .acct{fill:#ffffff;stroke:#cbd5e1}
+    .fn{fill:#4f46e5}
+    .obj{fill:#0ea5a4}
+    .on{fill:#fff;font-size:14px;font-weight:700}
+    .track{stroke:#cbd5e1;stroke-width:3;stroke-dasharray:6 6}
+    .gate{fill:#94a3b8}
+    .pass{fill:#16a34a}
+    .okt{fill:#16a34a;font-size:15px;font-weight:700}
+    .dot{fill:#4f46e5;stroke:#fff;stroke-width:2}
+    .bad{fill:#dc2626;font-size:14px;font-weight:600}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .acct{fill:#111827;stroke:#475569}
+      .fn{fill:#818cf8}.obj{fill:#2dd4bf}.on{fill:#0f172a}
+      .track{stroke:#475569}.gate{fill:#64748b}
+      .pass{fill:#4ade80}.okt{fill:#4ade80}
+      .dot{fill:#818cf8;stroke:#0f172a}.bad{fill:#f87171}
+    }
+    /* 10 s loop: dot leaves at 4%, gates at 16% / 34% / 52%, object at 64% */
+    .mv{animation:mv 10s infinite linear}
+    @keyframes mv{
+      0%,4%{transform:translateX(0)}
+      16%,20%{transform:translateX(92px)}
+      34%,38%{transform:translateX(272px)}
+      52%,56%{transform:translateX(452px)}
+      64%,94%{transform:translateX(542px)}
+      96%,100%{transform:translateX(0);opacity:0}
+    }
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes g1{0%,15%{opacity:0}17%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes g2{0%,33%{opacity:0}35%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes g3{0%,51%{opacity:0}53%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes g4{0%,64%{opacity:0}68%,94%{opacity:1}98%,100%{opacity:0}}
+    .k1{animation-name:g1}.k2{animation-name:g2}.k3{animation-name:g3}.k4{animation-name:g4}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.mv{animation:none;transform:translateX(542px)}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">Cross-account read of an SSE-KMS object: both sides must allow</text>
+  <text class="sub" x="28" y="62">Lambda in account A calls GetObject on a bucket in account B. Three separate checks must pass.</text>
+
+  <!-- accounts -->
+  <rect class="acct" x="28" y="84" width="280" height="236" rx="10"/>
+  <text class="lbl" x="44" y="108">Account A</text>
+  <rect class="acct" x="324" y="84" width="448" height="236" rx="10"/>
+  <text class="lbl" x="340" y="108">Account B</text>
+
+  <!-- track -->
+  <line class="track" x1="160" y1="170" x2="700" y2="170"/>
+
+  <!-- lambda -->
+  <rect class="fn" x="44" y="146" width="110" height="48" rx="8"/>
+  <text class="on" x="99" y="168" text-anchor="middle">Lambda</text>
+  <text class="on" x="99" y="186" text-anchor="middle">role</text>
+
+  <!-- object -->
+  <rect class="obj" x="700" y="140" width="60" height="60" rx="8"/>
+  <text class="on" x="730" y="166" text-anchor="middle">S3</text>
+  <text class="on" x="730" y="184" text-anchor="middle">obj</text>
+
+  <!-- gates at x=250, 430, 610 -->
+  <rect class="gate" x="246" y="134" width="8" height="72" rx="3"/>
+  <rect class="gate" x="426" y="134" width="8" height="72" rx="3"/>
+  <rect class="gate" x="606" y="134" width="8" height="72" rx="3"/>
+  <rect class="pass a k1" x="246" y="134" width="8" height="72" rx="3"/>
+  <rect class="pass a k2" x="426" y="134" width="8" height="72" rx="3"/>
+  <rect class="pass a k3" x="606" y="134" width="8" height="72" rx="3"/>
+  <text class="okt a k1" x="250" y="126" text-anchor="middle">✓</text>
+  <text class="okt a k2" x="430" y="126" text-anchor="middle">✓</text>
+  <text class="okt a k3" x="610" y="126" text-anchor="middle">✓</text>
+
+  <!-- gate labels -->
+  <text class="txt" x="250" y="232" text-anchor="middle">Identity policy</text>
+  <text class="sub" x="250" y="250" text-anchor="middle">s3:GetObject +</text>
+  <text class="sub" x="250" y="268" text-anchor="middle">kms:Decrypt on</text>
+  <text class="sub" x="250" y="286" text-anchor="middle">B's ARNs</text>
+  <text class="txt" x="430" y="232" text-anchor="middle">Bucket policy</text>
+  <text class="sub" x="430" y="250" text-anchor="middle">allows A's role</text>
+  <text class="sub" x="430" y="268" text-anchor="middle">s3:GetObject</text>
+  <text class="txt" x="610" y="232" text-anchor="middle">KMS key policy</text>
+  <text class="sub" x="610" y="250" text-anchor="middle">allows A's role</text>
+  <text class="sub" x="610" y="268" text-anchor="middle">kms:Decrypt</text>
+
+  <!-- moving request -->
+  <g class="mv"><circle class="dot" cx="158" cy="170" r="9"/></g>
+  <text class="okt a k4" x="730" y="226" text-anchor="middle">200 OK</text>
+
+  <text class="bad" x="28" y="346">Any one of the three missing → 403 AccessDenied.</text>
+  <text class="sub" x="28" y="366">SCPs, RCPs and VPC endpoint policies on either side can still deny. Many "S3 403s" are really the KMS check.</text>
+</svg>

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">RPO and RTO on a timeline</title>
+  <desc id="d">A timeline with recovery points at regular intervals. A disaster strikes some time after the last recovery point. Everything written between the last recovery point and the disaster is lost: that gap is the recovery point objective, RPO, measured as time. From the disaster until service is restored is downtime: that gap is the recovery time objective, RTO.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .axis{stroke:#94a3b8;stroke-width:3}
+    .bk{fill:#0ea5a4}
+    .dis{fill:#dc2626}
+    .rpo{fill:#d97706;fill-opacity:.25;stroke:#d97706;stroke-width:2}
+    .rto{fill:#dc2626;fill-opacity:.18;stroke:#dc2626;stroke-width:2}
+    .rpot{fill:#b45309;font-size:15px;font-weight:700}
+    .rtot{fill:#dc2626;font-size:15px;font-weight:700}
+    .okb{fill:#16a34a}
+    .okt{fill:#16a34a;font-size:14px;font-weight:700}
+    .dist{fill:#dc2626;font-size:14px;font-weight:700}
+    .bkt{fill:#0f766e;font-size:13px}
+    .ph{stroke:#4f46e5;stroke-width:2.5}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .axis{stroke:#64748b}.bk{fill:#2dd4bf}.dis{fill:#f87171}
+      .rpo{fill:#fbbf24;stroke:#fbbf24}.rto{fill:#f87171;stroke:#f87171}
+      .rpot{fill:#fbbf24}.rtot,.dist{fill:#f87171}.okb,.okt{fill:#4ade80}.bkt{fill:#5eead4}.ph{stroke:#818cf8}
+    }
+    .a{opacity:0;animation:12s infinite linear}
+    .phg{animation:ph 12s infinite linear}
+    @keyframes ph{0%,2%{transform:translateX(0);opacity:1}82%,94%{transform:translateX(660px);opacity:1}98%,100%{transform:translateX(660px);opacity:0}}
+    @keyframes b0{0%,9%{opacity:0}10%,94%{opacity:1}98%,100%{opacity:0}}.b0{animation-name:b0}
+    @keyframes b1{0%,25%{opacity:0}26%,94%{opacity:1}98%,100%{opacity:0}}.b1{animation-name:b1}
+    @keyframes b2{0%,41%{opacity:0}42%,94%{opacity:1}98%,100%{opacity:0}}.b2{animation-name:b2}
+    @keyframes kd{0%,51%{opacity:0}52%,94%{opacity:1}98%,100%{opacity:0}}.kd{animation-name:kd}
+    @keyframes kr{0%,73%{opacity:0}74%,94%{opacity:1}98%,100%{opacity:0}}.kr{animation-name:kr}
+    @keyframes kdn{0%,53%{opacity:0}54%,94%{opacity:1}98%,100%{opacity:0}}.kdn{animation-name:kdn}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.phg{animation:none;opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">RPO looks back, RTO looks forward</text>
+  <text class="sub" x="28" y="62">RPO: data written since the last recovery point is lost. RTO: time until service is back.</text>
+  <line class="axis" x1="70" y1="210" x2="730" y2="210"/>
+  <text class="sub" x="730" y="270" text-anchor="end">time →</text>
+  <g class="a b0"><rect class="bk" x="127" y="201" width="18" height="18" rx="3" transform="rotate(45 136 210)"/><text class="bkt" x="136" y="244" text-anchor="middle">recovery point</text></g>
+  <g class="a b1"><rect class="bk" x="259" y="201" width="18" height="18" rx="3" transform="rotate(45 268 210)"/><text class="bkt" x="268" y="244" text-anchor="middle">recovery point</text></g>
+  <g class="a b2"><rect class="bk" x="391" y="201" width="18" height="18" rx="3" transform="rotate(45 400 210)"/><text class="bkt" x="400" y="244" text-anchor="middle">last point</text></g>
+  <g class="a kd"><rect class="rpo" x="400" y="140" width="79.2" height="50" rx="6"/><text class="rpot" x="439.6" y="130" text-anchor="middle">RPO</text><text class="sub" x="439.6" y="170" text-anchor="middle">lost</text>
+  <circle class="dis" cx="479.2" cy="210" r="11"/><text class="dist" x="479.2" y="244" text-anchor="middle">disaster</text></g>
+  <g class="a kdn"><rect class="rto" x="479.2" y="258" width="184.8" height="40" rx="6"/><text class="rtot" x="571.6" y="284" text-anchor="middle">RTO: down</text></g>
+  <g class="a kr"><circle class="okb" cx="664" cy="210" r="11"/><text class="okt" x="664" y="188" text-anchor="middle">restored</text></g>
+  <g class="phg"><line class="ph" x1="70" y1="110" x2="70" y2="230"/></g>
+  <text class="sub" x="28" y="340">Shrink RPO with more frequent backups or live replication; shrink RTO with standby capacity</text>
+  <text class="sub" x="28" y="358">that is already running. Both cost money, so the business sets the numbers per workload.</text>
+</svg>

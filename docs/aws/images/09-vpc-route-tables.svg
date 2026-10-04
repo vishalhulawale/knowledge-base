@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Three-tier VPC layout and the route tables that make it work</title>
+  <desc id="d">A VPC 10.0.0.0/16 spanning AZ a and AZ b, with three subnet tiers in each AZ. Public subnets 10.0.0.0/24 and 10.0.1.0/24 hold ALB nodes and NAT gateways; their route table sends 0.0.0.0/0 to the Internet Gateway. Private app subnets 10.0.10.0/24 and 10.0.11.0/24 hold tasks, pods and Lambda ENIs; their route table sends 0.0.0.0/0 to the NAT gateway in the same AZ and S3 and DynamoDB traffic to the gateway endpoint. Isolated data subnets 10.0.20.0/24 and 10.0.21.0/24 hold the RDS primary and standby; their route table has only the local route. Interface endpoints give private access to services such as Secrets Manager, KMS, ECR, CloudWatch Logs and STS.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .vpc{fill:none;stroke:#4f46e5;stroke-width:2.5}
+    .az{fill:none;stroke:#94a3b8;stroke-width:1.5;stroke-dasharray:6 5}
+    .pub{fill:#16a34a;fill-opacity:.14;stroke:#16a34a;stroke-width:1.5}
+    .app{fill:#4f46e5;fill-opacity:.12;stroke:#4f46e5;stroke-width:1.5}
+    .dat{fill:#d97706;fill-opacity:.14;stroke:#d97706;stroke-width:1.5}
+    .gw{fill:#0ea5a4}
+    .on{fill:#fff;font-size:14px;font-weight:700}
+    .rt{fill:#ffffff;stroke:#cbd5e1}
+    .mono{fill:#334155;font-size:13px;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .pubt{fill:#15803d;font-size:14px;font-weight:700}
+    .appt{fill:#4338ca;font-size:14px;font-weight:700}
+    .datt{fill:#b45309;font-size:14px;font-weight:700}
+    .vpct{fill:#4338ca;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .vpc{stroke:#818cf8}.az{stroke:#64748b}
+      .pub{fill:#4ade80;stroke:#4ade80}.app{fill:#818cf8;stroke:#818cf8}.dat{fill:#fbbf24;stroke:#fbbf24}
+      .gw{fill:#2dd4bf}.on{fill:#0f172a}.rt{fill:#111827;stroke:#475569}
+      .pubt{fill:#4ade80}.appt,.vpct{fill:#a5b4fc}.datt{fill:#fbbf24}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="478" rx="14"/>
+  <text class="h" x="28" y="40">Public, private, isolated: decided by route tables</text>
+  <text class="sub" x="28" y="62">Same VPC, same kind of subnet. Only the 0.0.0.0/0 route differs between tiers.</text>
+  <rect class="gw" x="200" y="76" width="180" height="32" rx="7"/><text class="on" x="290" y="97" text-anchor="middle">Internet Gateway</text>
+  <rect class="vpc" x="28" y="116" width="536" height="350" rx="12"/>
+  <text class="vpct" x="40" y="136">VPC 10.0.0.0/16</text>
+
+  <rect class="az" x="44" y="144" width="244" height="256" rx="10"/><text class="sub" x="54" y="162">AZ a</text>
+  <rect class="pub" x="54" y="170" width="224" height="68" rx="8"/>
+  <text class="pubt" x="66" y="190">Public</text><text class="mono" x="66" y="208">10.0.0.0/24</text>
+  <text class="txt" x="66" y="228">ALB node, NAT GW</text>
+  <rect class="app" x="54" y="246" width="224" height="68" rx="8"/>
+  <text class="appt" x="66" y="266">Private app</text><text class="mono" x="66" y="284">10.0.10.0/24</text>
+  <text class="txt" x="66" y="304">tasks, pods, Lambda ENIs</text>
+  <rect class="dat" x="54" y="322" width="224" height="68" rx="8"/>
+  <text class="datt" x="66" y="342">Isolated data</text><text class="mono" x="66" y="360">10.0.20.0/24</text>
+  <text class="txt" x="66" y="380">RDS primary</text>
+  <rect class="az" x="304" y="144" width="244" height="256" rx="10"/><text class="sub" x="314" y="162">AZ b</text>
+  <rect class="pub" x="314" y="170" width="224" height="68" rx="8"/>
+  <text class="pubt" x="326" y="190">Public</text><text class="mono" x="326" y="208">10.0.1.0/24</text>
+  <text class="txt" x="326" y="228">ALB node, NAT GW</text>
+  <rect class="app" x="314" y="246" width="224" height="68" rx="8"/>
+  <text class="appt" x="326" y="266">Private app</text><text class="mono" x="326" y="284">10.0.11.0/24</text>
+  <text class="txt" x="326" y="304">tasks, pods, Lambda ENIs</text>
+  <rect class="dat" x="314" y="322" width="224" height="68" rx="8"/>
+  <text class="datt" x="326" y="342">Isolated data</text><text class="mono" x="326" y="360">10.0.21.0/24</text>
+  <text class="txt" x="326" y="380">RDS standby</text>
+  <rect class="gw" x="44" y="410" width="236" height="44" rx="7"/><text class="on" x="162" y="429" text-anchor="middle">Gateway endpoints</text><text class="on" x="162" y="446" text-anchor="middle">S3, DynamoDB (free)</text>
+  <rect class="gw" x="304" y="410" width="244" height="44" rx="7"/><text class="on" x="426" y="429" text-anchor="middle">Interface endpoints</text><text class="on" x="426" y="446" text-anchor="middle">Secrets Mgr, KMS, ECR, Logs</text>
+  <rect class="rt" x="572" y="116" width="212" height="70" rx="8"/><text class="pubt" x="584" y="138">Public route table</text>
+  <text class="mono" x="584" y="158">10.0.0.0/16 → local</text>
+  <text class="mono" x="584" y="176">0.0.0.0/0 → IGW</text>
+  <rect class="rt" x="572" y="200" width="212" height="88" rx="8"/><text class="appt" x="584" y="222">App route table (per AZ)</text>
+  <text class="mono" x="584" y="242">10.0.0.0/16 → local</text>
+  <text class="mono" x="584" y="260">0.0.0.0/0 → NAT (same AZ)</text>
+  <text class="mono" x="584" y="278">S3, DynamoDB → endpoint</text>
+  <rect class="rt" x="572" y="302" width="212" height="70" rx="8"/><text class="datt" x="584" y="324">Data route table</text>
+  <text class="mono" x="584" y="344">10.0.0.0/16 → local</text>
+  <text class="mono" x="584" y="362">no 0.0.0.0/0 route</text>
+  <text class="sub" x="572" y="420">Each AZ's app subnets use</text>
+  <text class="sub" x="572" y="438">their own AZ's NAT gateway.</text>
+</svg>

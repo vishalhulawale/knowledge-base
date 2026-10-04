@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Lambda concurrency equals the number of busy execution environments</title>
+  <desc id="d">A timeline with three Lambda execution environments. Request 1 arrives and environment 1 runs INIT, a cold start, then the invoke. Request 2 arrives while environment 1 is busy, so environment 2 is created with its own INIT. Request 3 arrives after environment 1 is free and reuses it warm, with no INIT. Request 4 reuses environment 2 warm. Request 5 arrives while both are busy, so environment 3 is created with a cold start. Each environment handles one request at a time, so peak concurrency is 3.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .lane{fill:#ffffff;stroke:#cbd5e1}
+    .init{fill:#d97706}
+    .inv{fill:#4f46e5}
+    .on{fill:#fff;font-size:14px;font-weight:700}
+    .axis{stroke:#94a3b8;stroke-width:1.5}
+    .ph{stroke:#0ea5a4;stroke-width:3}
+    .pht{fill:#0f766e;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .lane{fill:#111827;stroke:#475569}
+      .init{fill:#fbbf24}.inv{fill:#818cf8}.on{fill:#0f172a}
+      .axis{stroke:#64748b}.ph{stroke:#2dd4bf}.pht{fill:#5eead4}
+    }
+    .a{opacity:0;animation:12s infinite linear}
+    .phg{animation:ph 12s infinite linear}
+    @keyframes ph{0%,2%{transform:translateX(0)}82%,94%{transform:translateX(600px)}98%,100%{transform:translateX(0);opacity:0}}
+
+    @keyframes b0{0%,2%{opacity:0}3%,94%{opacity:1}98%,100%{opacity:0}}
+    .k0{animation-name:b0}
+    @keyframes b1{0%,18%{opacity:0}19%,94%{opacity:1}98%,100%{opacity:0}}
+    .k1{animation-name:b1}
+    @keyframes b2{0%,10%{opacity:0}11%,94%{opacity:1}98%,100%{opacity:0}}
+    .k2{animation-name:b2}
+    @keyframes b3{0%,26%{opacity:0}27%,94%{opacity:1}98%,100%{opacity:0}}
+    .k3{animation-name:b3}
+    @keyframes b4{0%,38%{opacity:0}39%,94%{opacity:1}98%,100%{opacity:0}}
+    .k4{animation-name:b4}
+    @keyframes b5{0%,46%{opacity:0}47%,94%{opacity:1}98%,100%{opacity:0}}
+    .k5{animation-name:b5}
+    @keyframes b6{0%,50%{opacity:0}51%,94%{opacity:1}98%,100%{opacity:0}}
+    .k6{animation-name:b6}
+    @keyframes b7{0%,66%{opacity:0}67%,94%{opacity:1}98%,100%{opacity:0}}
+    .k7{animation-name:b7}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.phg{animation:none;opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">One request per environment: overlap means a new cold start</text>
+  <text class="sub" x="28" y="62">Free environments are reused warm. A request that finds none free gets a new one with INIT.</text>
+
+  <text class="lbl" x="28" y="114">Env 1</text>
+  <rect class="lane" x="150" y="90" width="600" height="38" rx="6"/>
+  <text class="lbl" x="28" y="170">Env 2</text>
+  <rect class="lane" x="150" y="146" width="600" height="38" rx="6"/>
+  <text class="lbl" x="28" y="226">Env 3</text>
+  <rect class="lane" x="150" y="202" width="600" height="38" rx="6"/>
+  <g class="a k0"><rect class="init" x="150" y="93" width="116" height="32" rx="5"/><text class="on" x="208" y="114" text-anchor="middle">INIT</text></g>
+  <g class="a k1"><rect class="inv" x="270" y="93" width="116" height="32" rx="5"/><text class="on" x="328" y="114" text-anchor="middle">r1</text></g>
+  <g class="a k2"><rect class="init" x="210" y="149" width="116" height="32" rx="5"/><text class="on" x="268" y="170" text-anchor="middle">INIT</text></g>
+  <g class="a k3"><rect class="inv" x="330" y="149" width="116" height="32" rx="5"/><text class="on" x="388" y="170" text-anchor="middle">r2</text></g>
+  <g class="a k4"><rect class="inv" x="420" y="93" width="116" height="32" rx="5"/><text class="on" x="478" y="114" text-anchor="middle">r3 warm</text></g>
+  <g class="a k5"><rect class="inv" x="480" y="149" width="116" height="32" rx="5"/><text class="on" x="538" y="170" text-anchor="middle">r4 warm</text></g>
+  <g class="a k6"><rect class="init" x="510" y="205" width="116" height="32" rx="5"/><text class="on" x="568" y="226" text-anchor="middle">INIT</text></g>
+  <g class="a k7"><rect class="inv" x="630" y="205" width="116" height="32" rx="5"/><text class="on" x="688" y="226" text-anchor="middle">r5</text></g>
+  <line class="axis" x1="150" y1="262" x2="750" y2="262"/>
+  <text class="sub" x="750" y="282" text-anchor="end">time →</text>
+  <line class="axis" x1="150" y1="256" x2="150" y2="268"/><text class="sub" x="150" y="298" text-anchor="middle">r1</text>
+  <line class="axis" x1="210" y1="256" x2="210" y2="268"/><text class="sub" x="210" y="298" text-anchor="middle">r2</text>
+  <line class="axis" x1="420" y1="256" x2="420" y2="268"/><text class="sub" x="420" y="298" text-anchor="middle">r3</text>
+  <line class="axis" x1="480" y1="256" x2="480" y2="268"/><text class="sub" x="480" y="298" text-anchor="middle">r4</text>
+  <line class="axis" x1="510" y1="256" x2="510" y2="268"/><text class="sub" x="522" y="298" text-anchor="middle">r5</text>
+  <g class="phg"><line class="ph" x1="150" y1="84" x2="150" y2="268"/></g>
+  <rect class="init" x="28" y="318" width="16" height="16" rx="3"/><text class="txt" x="52" y="331">INIT: cold start, once per environment</text>
+  <rect class="inv" x="380" y="318" width="16" height="16" rx="3"/><text class="txt" x="404" y="331">INVOKE: handles exactly one request</text>
+  <text class="sub" x="28" y="370">Peak concurrency here is 3 (r3, r4 and r5 overlap), so Lambda needed 3 environments. Durations not to scale.</text>
+</svg>

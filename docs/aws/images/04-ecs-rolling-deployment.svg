@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">ECS rolling deployment with minimum healthy 100 percent and maximum 200 percent</title>
+  <desc id="d">An ECS service runs 6 tasks of task definition v11. A deployment of v12 starts. Because maximum percent is 200, ECS starts 6 new v12 tasks alongside the old ones, for up to 12 tasks. The new tasks pass load balancer health checks, so 12 are healthy. Then the 6 old tasks are deregistered, sent SIGTERM and given up to the 30 second stop timeout before SIGKILL. The service ends with 6 v12 tasks and never had fewer than 6 healthy tasks, because minimum healthy percent is 100.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .slot{fill:#ffffff;stroke:#cbd5e1;stroke-dasharray:4 4}
+    .old{fill:#4f46e5}
+    .newp{fill:#d97706}
+    .newh{fill:#16a34a}
+    .drain{fill:#94a3b8}
+    .on{fill:#fff;font-size:14px;font-weight:700}
+    .big{fill:#0f172a;font-size:28px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.big{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .slot{fill:#111827;stroke:#475569}
+      .old{fill:#818cf8}.newp{fill:#fbbf24}.newh{fill:#4ade80}.drain{fill:#64748b}
+      .on{fill:#0f172a}
+    }
+    /* 12 s loop. 0-10 old only | 12-33 new pending | 35-48 12 healthy | 50-66 old draining | 68-94 done */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes oldk{0%,48%{opacity:1}50%,100%{opacity:0}}
+    @keyframes draink{0%,48%{opacity:0}50%,66%{opacity:1}68%,100%{opacity:0}}
+    @keyframes pendk{0%,10%{opacity:0}12%,33%{opacity:1}35%,100%{opacity:0}}
+    @keyframes healk{0%,33%{opacity:0}35%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes p1{0%,10%{opacity:1}12%,100%{opacity:0}}
+    @keyframes p2{0%,10%{opacity:0}12%,33%{opacity:1}35%,100%{opacity:0}}
+    @keyframes p3{0%,33%{opacity:0}35%,48%{opacity:1}50%,100%{opacity:0}}
+    @keyframes p4{0%,48%{opacity:0}50%,66%{opacity:1}68%,100%{opacity:0}}
+    @keyframes p5{0%,66%{opacity:0}68%,98%{opacity:1}100%{opacity:0}}
+    @keyframes c12{0%,33%{opacity:0}35%,48%{opacity:1}50%,100%{opacity:0}}
+    @keyframes c6{0%,33%{opacity:1}35%,48%{opacity:0}50%,100%{opacity:1}}
+    .ko{opacity:1;animation-name:oldk}.kd{animation-name:draink}.kp{animation-name:pendk}.kh{animation-name:healk}
+    .q1{opacity:1;animation-name:p1}.q2{animation-name:p2}.q3{animation-name:p3}.q4{animation-name:p4}.q5{animation-name:p5}
+    .n12{animation-name:c12}.n6{opacity:1;animation-name:c6}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none}
+      .kh,.q5,.n6{opacity:1}.ko,.kd,.kp,.q1,.q2,.q3,.q4,.n12{opacity:0}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">ECS rolling update: desired 6, min healthy 100%, max 200%</text>
+  <text class="sub" x="28" y="62">Max 200% gives room to start all new tasks first. Min 100% forbids stopping old ones early.</text>
+
+  <text class="lbl" x="28" y="128">v11 (old)</text>
+  <text class="lbl" x="28" y="208">v12 (new)</text>
+
+  <!-- empty slots, 6 per row at x=130+80i -->
+  <g>
+    <rect class="slot" x="130" y="102" width="68" height="44" rx="8"/><rect class="slot" x="210" y="102" width="68" height="44" rx="8"/><rect class="slot" x="290" y="102" width="68" height="44" rx="8"/><rect class="slot" x="370" y="102" width="68" height="44" rx="8"/><rect class="slot" x="450" y="102" width="68" height="44" rx="8"/><rect class="slot" x="530" y="102" width="68" height="44" rx="8"/>
+    <rect class="slot" x="130" y="182" width="68" height="44" rx="8"/><rect class="slot" x="210" y="182" width="68" height="44" rx="8"/><rect class="slot" x="290" y="182" width="68" height="44" rx="8"/><rect class="slot" x="370" y="182" width="68" height="44" rx="8"/><rect class="slot" x="450" y="182" width="68" height="44" rx="8"/><rect class="slot" x="530" y="182" width="68" height="44" rx="8"/>
+  </g>
+  <!-- old tasks running -->
+  <g class="a ko">
+    <rect class="old" x="130" y="102" width="68" height="44" rx="8"/><rect class="old" x="210" y="102" width="68" height="44" rx="8"/><rect class="old" x="290" y="102" width="68" height="44" rx="8"/><rect class="old" x="370" y="102" width="68" height="44" rx="8"/><rect class="old" x="450" y="102" width="68" height="44" rx="8"/><rect class="old" x="530" y="102" width="68" height="44" rx="8"/>
+    <text class="on" x="164" y="129" text-anchor="middle">v11</text><text class="on" x="244" y="129" text-anchor="middle">v11</text><text class="on" x="324" y="129" text-anchor="middle">v11</text><text class="on" x="404" y="129" text-anchor="middle">v11</text><text class="on" x="484" y="129" text-anchor="middle">v11</text><text class="on" x="564" y="129" text-anchor="middle">v11</text>
+  </g>
+  <!-- old tasks draining -->
+  <g class="a kd">
+    <rect class="drain" x="130" y="102" width="68" height="44" rx="8"/><rect class="drain" x="210" y="102" width="68" height="44" rx="8"/><rect class="drain" x="290" y="102" width="68" height="44" rx="8"/><rect class="drain" x="370" y="102" width="68" height="44" rx="8"/><rect class="drain" x="450" y="102" width="68" height="44" rx="8"/><rect class="drain" x="530" y="102" width="68" height="44" rx="8"/>
+    <text class="on" x="164" y="129" text-anchor="middle">v11</text><text class="on" x="244" y="129" text-anchor="middle">v11</text><text class="on" x="324" y="129" text-anchor="middle">v11</text><text class="on" x="404" y="129" text-anchor="middle">v11</text><text class="on" x="484" y="129" text-anchor="middle">v11</text><text class="on" x="564" y="129" text-anchor="middle">v11</text>
+  </g>
+  <!-- new tasks pending -->
+  <g class="a kp">
+    <rect class="newp" x="130" y="182" width="68" height="44" rx="8"/><rect class="newp" x="210" y="182" width="68" height="44" rx="8"/><rect class="newp" x="290" y="182" width="68" height="44" rx="8"/><rect class="newp" x="370" y="182" width="68" height="44" rx="8"/><rect class="newp" x="450" y="182" width="68" height="44" rx="8"/><rect class="newp" x="530" y="182" width="68" height="44" rx="8"/>
+    <text class="on" x="164" y="209" text-anchor="middle">v12</text><text class="on" x="244" y="209" text-anchor="middle">v12</text><text class="on" x="324" y="209" text-anchor="middle">v12</text><text class="on" x="404" y="209" text-anchor="middle">v12</text><text class="on" x="484" y="209" text-anchor="middle">v12</text><text class="on" x="564" y="209" text-anchor="middle">v12</text>
+  </g>
+  <!-- new tasks healthy -->
+  <g class="a kh">
+    <rect class="newh" x="130" y="182" width="68" height="44" rx="8"/><rect class="newh" x="210" y="182" width="68" height="44" rx="8"/><rect class="newh" x="290" y="182" width="68" height="44" rx="8"/><rect class="newh" x="370" y="182" width="68" height="44" rx="8"/><rect class="newh" x="450" y="182" width="68" height="44" rx="8"/><rect class="newh" x="530" y="182" width="68" height="44" rx="8"/>
+    <text class="on" x="164" y="209" text-anchor="middle">v12</text><text class="on" x="244" y="209" text-anchor="middle">v12</text><text class="on" x="324" y="209" text-anchor="middle">v12</text><text class="on" x="404" y="209" text-anchor="middle">v12</text><text class="on" x="484" y="209" text-anchor="middle">v12</text><text class="on" x="564" y="209" text-anchor="middle">v12</text>
+  </g>
+
+  <!-- legend -->
+  <rect class="old" x="130" y="238" width="14" height="14" rx="3"/><text class="sub" x="150" y="250">running</text>
+  <rect class="newp" x="222" y="238" width="14" height="14" rx="3"/><text class="sub" x="242" y="250">starting</text>
+  <rect class="newh" x="318" y="238" width="14" height="14" rx="3"/><text class="sub" x="338" y="250">healthy</text>
+  <rect class="drain" x="410" y="238" width="14" height="14" rx="3"/><text class="sub" x="430" y="250">draining</text>
+  <!-- healthy counter -->
+  <text class="sub" x="700" y="128" text-anchor="middle">healthy tasks</text>
+  <text class="big a n6" x="700" y="168" text-anchor="middle">6</text>
+  <text class="big a n12" x="700" y="168" text-anchor="middle">12</text>
+  <text class="sub" x="700" y="196" text-anchor="middle">never below 6</text>
+
+  <!-- phase captions -->
+  <text class="txt a q1" x="28" y="290">1. Service runs 6 tasks of task definition v11.</text>
+  <text class="txt a q2" x="28" y="290">2. Deploy v12: max 200% lets ECS start 6 new tasks next to the old 6.</text>
+  <text class="txt a q3" x="28" y="290">3. New tasks pass the ALB health check: 12 healthy, traffic goes to both.</text>
+  <text class="txt a q4" x="28" y="290">4. Old tasks deregister, get SIGTERM, then SIGKILL after stopTimeout (30 s).</text>
+  <text class="txt a q5" x="28" y="290">5. Done: 6 × v12, and capacity never dipped below desired.</text>
+
+  <text class="sub" x="28" y="330">If new tasks keep failing health checks, the deployment circuit breaker stops the rollout</text>
+  <text class="sub" x="28" y="348">and rolls back to v11. Lower max percent (e.g. 150%) replaces tasks in smaller batches.</text>
+</svg>

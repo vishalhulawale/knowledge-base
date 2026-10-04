@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">How the shared responsibility line moves between EC2, RDS and Lambda</title>
+  <desc id="d">A grid with seven layers as rows and three services as columns. Data, IAM and application code or schema are the customer's on EC2, RDS and Lambda. Security group rules are the customer's on EC2 and RDS, and on Lambda only when the function is attached to a VPC. The runtime or database engine and the guest operating system are patched by the customer on EC2 but by AWS on RDS and Lambda. The hypervisor, hardware and facilities are always AWS's responsibility.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .row{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .you{fill:#4f46e5}
+    .aws{fill:#0ea5a4}
+    .ct{fill:#fff;font-size:14px;font-weight:700}
+    .cn{fill:#fff;font-size:13px}
+    .line{stroke:#d97706;stroke-width:3;stroke-dasharray:7 5;fill:none}
+    .lt{fill:#b45309;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.row{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .you{fill:#818cf8}.aws{fill:#2dd4bf}
+      .ct,.cn{fill:#0f172a}
+      .line{stroke:#fbbf24}.lt{fill:#fbbf24}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="498" rx="14"/>
+  <text class="h" x="28" y="40">Who patches and secures what?</text>
+  <text class="sub" x="28" y="62">The more managed the service, the more of the stack AWS takes over.</text>
+
+  <!-- column headings -->
+  <text class="lbl" x="350" y="100" text-anchor="middle">EC2</text>
+  <text class="lbl" x="530" y="100" text-anchor="middle">RDS</text>
+  <text class="lbl" x="710" y="100" text-anchor="middle">Lambda</text>
+
+  <!-- row labels -->
+  <text class="row" x="28" y="138">Data, classification,</text><text class="row" x="28" y="155">encryption choices</text>
+  <text class="row" x="28" y="190">IAM: who can access</text>
+  <text class="row" x="28" y="234">App code / schema</text><text class="row" x="28" y="251">and queries</text>
+  <text class="row" x="28" y="286">Security group rules</text>
+  <text class="row" x="28" y="330">Runtime / DB engine</text><text class="row" x="28" y="347">patching</text>
+  <text class="row" x="28" y="382">Guest OS patching</text>
+  <text class="row" x="28" y="420">Hypervisor, hardware,</text><text class="row" x="28" y="437">facilities</text>
+
+  <!-- rows: y = 118 + 48*i, height 42; columns x = 272, 452, 632, width 156 -->
+  <g>
+    <rect class="you" x="272" y="118" width="156" height="42" rx="8"/><text class="ct" x="350" y="144" text-anchor="middle">You</text>
+    <rect class="you" x="452" y="118" width="156" height="42" rx="8"/><text class="ct" x="530" y="144" text-anchor="middle">You</text>
+    <rect class="you" x="632" y="118" width="156" height="42" rx="8"/><text class="ct" x="710" y="144" text-anchor="middle">You</text>
+
+    <rect class="you" x="272" y="166" width="156" height="42" rx="8"/><text class="ct" x="350" y="192" text-anchor="middle">You</text>
+    <rect class="you" x="452" y="166" width="156" height="42" rx="8"/><text class="ct" x="530" y="192" text-anchor="middle">You</text>
+    <rect class="you" x="632" y="166" width="156" height="42" rx="8"/><text class="ct" x="710" y="192" text-anchor="middle">You</text>
+
+    <rect class="you" x="272" y="214" width="156" height="42" rx="8"/><text class="ct" x="350" y="240" text-anchor="middle">You</text>
+    <rect class="you" x="452" y="214" width="156" height="42" rx="8"/><text class="ct" x="530" y="240" text-anchor="middle">You</text>
+    <rect class="you" x="632" y="214" width="156" height="42" rx="8"/><text class="ct" x="710" y="240" text-anchor="middle">You</text>
+
+    <rect class="you" x="272" y="262" width="156" height="42" rx="8"/><text class="ct" x="350" y="288" text-anchor="middle">You</text>
+    <rect class="you" x="452" y="262" width="156" height="42" rx="8"/><text class="ct" x="530" y="288" text-anchor="middle">You</text>
+    <rect class="you" x="632" y="262" width="156" height="42" rx="8"/><text class="ct" x="710" y="280" text-anchor="middle">You</text><text class="cn" x="710" y="297" text-anchor="middle">if VPC-attached</text>
+
+    <rect class="you" x="272" y="310" width="156" height="42" rx="8"/><text class="ct" x="350" y="336" text-anchor="middle">You</text>
+    <rect class="aws" x="452" y="310" width="156" height="42" rx="8"/><text class="ct" x="530" y="328" text-anchor="middle">AWS</text><text class="cn" x="530" y="345" text-anchor="middle">you pick window</text>
+    <rect class="aws" x="632" y="310" width="156" height="42" rx="8"/><text class="ct" x="710" y="328" text-anchor="middle">AWS</text><text class="cn" x="710" y="345" text-anchor="middle">managed runtime</text>
+
+    <rect class="you" x="272" y="358" width="156" height="42" rx="8"/><text class="ct" x="350" y="384" text-anchor="middle">You</text>
+    <rect class="aws" x="452" y="358" width="156" height="42" rx="8"/><text class="ct" x="530" y="384" text-anchor="middle">AWS</text>
+    <rect class="aws" x="632" y="358" width="156" height="42" rx="8"/><text class="ct" x="710" y="384" text-anchor="middle">AWS</text>
+
+    <rect class="aws" x="272" y="406" width="156" height="42" rx="8"/><text class="ct" x="350" y="432" text-anchor="middle">AWS</text>
+    <rect class="aws" x="452" y="406" width="156" height="42" rx="8"/><text class="ct" x="530" y="432" text-anchor="middle">AWS</text>
+    <rect class="aws" x="632" y="406" width="156" height="42" rx="8"/><text class="ct" x="710" y="432" text-anchor="middle">AWS</text>
+  </g>
+
+  <!-- the boundary line -->
+  <path class="line" d="M266 403 H434 V307 H794"/>
+  <path class="line" d="M272 472 H312"/>
+  <text class="lt" x="322" y="477">Boundary: below it, AWS patches and secures</text>
+</svg>

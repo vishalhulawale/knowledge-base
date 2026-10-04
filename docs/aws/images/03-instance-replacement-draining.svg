@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Replacing an instance behind an ALB without dropping requests</title>
+  <desc id="d">An ALB sends traffic to an old instance. A new instance launches and stays out of rotation during its health-check grace period until it passes the readiness check twice. The ALB then starts sending it traffic. The old instance is deregistered: it gets no new requests, finishes in-flight ones during the 30 second deregistration delay while the app shuts down gracefully within 25 seconds, and is then terminated.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .alb{fill:#4f46e5}
+    .on{fill:#fff;font-size:14px;font-weight:700}
+    .flow{stroke:#4f46e5;stroke-width:3;fill:none;stroke-dasharray:8 8;animation:march 1s infinite linear}
+    @keyframes march{to{stroke-dashoffset:-16}}
+    .ok{fill:#16a34a;font-size:14px;font-weight:700}
+    .warn{fill:#b45309;font-size:14px;font-weight:700}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    .okb{fill:#16a34a}.warnb{fill:#d97706}.badb{fill:#94a3b8}
+    .step{fill:#334155;font-size:14px}
+    .hl{fill:#4f46e5;fill-opacity:.12}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt,.step{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .alb{fill:#818cf8}.on{fill:#0f172a}.flow{stroke:#818cf8}
+      .ok{fill:#4ade80}.warn{fill:#fbbf24}.bad{fill:#f87171}
+      .okb{fill:#4ade80}.warnb{fill:#fbbf24}.badb{fill:#64748b}
+      .hl{fill:#818cf8;fill-opacity:.16}
+    }
+    /* 12 s loop. Phases: 0-12 old only | 12-34 new pending | 34-50 both serve | 50-72 old draining | 72-94 old terminated */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes newbox{0%,10%{opacity:0}12%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes pend{0%,10%{opacity:0}12%,32%{opacity:1}34%,100%{opacity:0}}
+    @keyframes newin{0%,32%{opacity:0}34%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes oldin{0%,48%{opacity:1}50%,100%{opacity:0}}
+    @keyframes olddrain{0%,48%{opacity:0}50%,70%{opacity:1}72%,100%{opacity:0}}
+    @keyframes oldgone{0%,70%{opacity:0}72%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes oldflow{0%,48%{opacity:1}50%,98%{opacity:0}100%{opacity:1}}
+    @keyframes oldbox{0%,70%{opacity:1}72%,94%{opacity:.35}98%,100%{opacity:1}}
+    @keyframes st1{0%,10%{opacity:1}12%,100%{opacity:0}}
+    @keyframes st2{0%,10%{opacity:0}12%,32%{opacity:1}34%,100%{opacity:0}}
+    @keyframes st3{0%,32%{opacity:0}34%,48%{opacity:1}50%,100%{opacity:0}}
+    @keyframes st4{0%,48%{opacity:0}50%,70%{opacity:1}72%,100%{opacity:0}}
+    @keyframes st5{0%,70%{opacity:0}72%,98%{opacity:1}100%{opacity:0}}
+    .nb{animation-name:newbox}.pe{animation-name:pend}.ni{animation-name:newin}
+    .oi{opacity:1;animation-name:oldin}.od{animation-name:olddrain}.og{animation-name:oldgone}
+    .of{animation:march 1s infinite linear,oldflow 12s infinite linear}
+    .ob{animation:oldbox 12s infinite linear}
+    .s1{opacity:1;animation-name:st1}.s2{animation-name:st2}.s3{animation-name:st3}.s4{animation-name:st4}.s5{animation-name:st5}
+    @media (prefers-reduced-motion: reduce){
+      .a,.flow,.of,.ob{animation:none}
+      .nb,.ni,.og{opacity:1}.pe,.oi,.od,.of{opacity:0}.ob{opacity:.35}
+      .s1,.s2,.s3,.s4{opacity:0}.s5{opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">Replacing an instance without dropping requests</text>
+  <text class="sub" x="28" y="62">Both ends matter: the new instance gets traffic only when ready, the old one drains before it dies.</text>
+
+  <!-- ALB -->
+  <rect class="alb" x="28" y="160" width="120" height="56" rx="8"/>
+  <text class="on" x="88" y="193" text-anchor="middle">ALB</text>
+
+  <!-- flows -->
+  <path class="flow of" d="M148 180 C220 180 230 130 300 130"/>
+  <g class="a ni"><path class="flow" d="M148 196 C220 196 230 250 300 250"/></g>
+
+  <!-- old instance -->
+  <g class="ob">
+    <rect class="box" x="300" y="98" width="250" height="64" rx="10"/>
+    <text class="lbl" x="316" y="124">Old instance (v1)</text>
+  </g>
+  <text class="ok a oi" x="316" y="148">● InService</text>
+  <text class="warn a od" x="316" y="148">● Draining: no new requests</text>
+  <text class="bad a og" x="316" y="148">● Terminated</text>
+
+  <!-- new instance -->
+  <g class="a nb">
+    <rect class="box" x="300" y="218" width="250" height="64" rx="10"/>
+    <text class="lbl" x="316" y="244">New instance (v2)</text>
+  </g>
+  <text class="warn a pe" x="316" y="268">● Pending: warming up</text>
+  <text class="ok a ni" x="316" y="268">● InService</text>
+
+  <!-- step explanation on the right -->
+  <rect class="hl" x="568" y="92" width="210" height="196" rx="10"/>
+  <g class="a s1"><text class="lbl" x="582" y="120">1. Serving</text><text class="step" x="582" y="144">Old instance takes</text><text class="step" x="582" y="162">all the traffic.</text></g>
+  <g class="a s2"><text class="lbl" x="582" y="120">2. Launch</text><text class="step" x="582" y="144">Grace period 120 s.</text><text class="step" x="582" y="162">No traffic until the</text><text class="step" x="582" y="180">readiness check passes</text><text class="step" x="582" y="198">2 times (every 10 s).</text></g>
+  <g class="a s3"><text class="lbl" x="582" y="120">3. Ready</text><text class="step" x="582" y="144">Target group marks it</text><text class="step" x="582" y="162">healthy. ALB adds it</text><text class="step" x="582" y="180">to rotation.</text></g>
+  <g class="a s4"><text class="lbl" x="582" y="120">4. Deregister</text><text class="step" x="582" y="144">Deregistration delay</text><text class="step" x="582" y="162">30 s. In-flight requests</text><text class="step" x="582" y="180">finish. Spring graceful</text><text class="step" x="582" y="198">shutdown: 25 s &lt; 30 s.</text></g>
+  <g class="a s5"><text class="lbl" x="582" y="120">5. Terminate</text><text class="step" x="582" y="144">Only now is the old</text><text class="step" x="582" y="162">instance stopped.</text><text class="step" x="582" y="180">No request was cut off.</text></g>
+
+  <text class="sub" x="28" y="330">Values from this page's Terraform: health_check_grace_period 120, healthy_threshold 2,</text>
+  <text class="sub" x="28" y="348">interval 10, deregistration_delay 30, timeout-per-shutdown-phase 25s.</text>
+</svg>

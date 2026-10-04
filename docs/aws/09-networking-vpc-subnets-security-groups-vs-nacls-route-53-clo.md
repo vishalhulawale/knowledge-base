@@ -54,6 +54,9 @@ flowchart TB
 ```
 *Notice that "public" and "private" are **routing** decisions: only the public subnets route to the IGW. App subnets reach the internet only through NAT (outbound only). Data subnets have **no** internet route at all. AWS services are reached through **endpoints**, not NAT.*
 
+![A VPC across two AZs with public, private app and isolated data subnets, plus the three route tables: public routes 0.0.0.0/0 to the Internet Gateway, app routes it to the NAT gateway in the same AZ and S3/DynamoDB to a gateway endpoint, and data has only the local route](images/09-vpc-route-tables.svg){ loading=lazy }
+*Notice that the subnets differ only in their route tables. Delete the 0.0.0.0/0 line and a public subnet becomes isolated.*
+
 ### Route tables, gateways and NAT
 
 | Component | Purpose | Notes |
@@ -76,6 +79,9 @@ flowchart LR
     NACL_OUT --> C
 ```
 *Notice that the security group remembers the connection, so the response is allowed automatically. The NACL doesn't remember, so its **outbound** rules must allow the client's **ephemeral port** range. Forgetting this is the classic "timeouts but the security group looks fine" bug.*
+
+![Animation: a request to port 443 passes the NACL and security group in both rows; the response to the client's port 51514 is dropped by a NACL that allows only 443 outbound, but passes a NACL that allows 1024 to 65535](images/09-sg-vs-nacl-return-traffic.svg){ loading=lazy }
+*Watch the response in the top row stop at the NACL. The security group let it out because it remembers the connection; the NACL checks the response as a brand-new packet.*
 
 | | Security group | Network ACL |
 |---|---|---|

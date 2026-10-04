@@ -44,6 +44,9 @@ flowchart TB
 ```
 *Notice that ECS vs EKS (how you describe and schedule workloads) and Fargate vs EC2 (who manages the servers) are **two independent decisions**.*
 
+![Grid of operational work for ECS on Fargate, ECS on EC2, EKS with managed nodes or Karpenter, and EKS Auto Mode: who owns the control plane, Kubernetes upgrades, add-ons, node patching and node scaling](images/04-who-operates-what.svg){ loading=lazy }
+*Read across a row to see what each choice takes off your plate. The bottom two rows are the nodes: Fargate and Auto Mode hand them to AWS.*
+
 ### ECS in one diagram
 
 ```mermaid
@@ -67,6 +70,9 @@ ECS features to know:
 - **Service auto scaling** (Application Auto Scaling): target tracking on CPU, memory or ALB requests per target, step scaling on SQS depth.
 - **Secrets:** `secrets` in the task definition pulls from Secrets Manager or Parameter Store at start-up (this uses the **execution role**).
 - **ECS Exec** for a shell into tasks (audited through CloudTrail).
+
+![Animation: an ECS service with 6 v11 tasks starts 6 v12 tasks alongside them, waits until all 12 are healthy, then drains and stops the old 6](images/04-ecs-rolling-deployment.svg){ loading=lazy }
+*Watch the healthy count: it goes from 6 to 12 and back to 6, never below the desired count. That's what `minimumHealthyPercent: 100` with `maximumPercent: 200` buys you.*
 
 ### EKS in one diagram
 
@@ -93,7 +99,7 @@ flowchart TB
     LBC --> P1
     KP --> N1
 ```
-*Notice what you still own on EKS (unless you use Auto Mode or Fargate): the nodes, add-on versions (CNI, CoreDNS, kube-proxy), **Kubernetes version upgrades** (about every 14 months before extended support costs more), and the cluster add-ons ecosystem.*
+*Notice what you still own on EKS: the nodes and add-on versions (CNI, CoreDNS, kube-proxy) unless Auto Mode or Fargate takes them over, **Kubernetes version upgrades** (about every 14 months before extended support costs more; with Auto Mode you still start the upgrade and AWS rolls the nodes), and the cluster add-ons ecosystem.*
 
 EKS essentials:
 

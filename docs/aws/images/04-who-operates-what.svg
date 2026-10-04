@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Operational work you own with ECS and EKS compute choices</title>
+  <desc id="d">A grid comparing ECS on Fargate, ECS on EC2, EKS with managed node groups or Karpenter, and EKS Auto Mode. You always own the container image, task or pod spec and IAM role. AWS always runs the control plane, free for ECS and with a per-cluster fee for EKS. Kubernetes version upgrades exist only on EKS and you start them; in Auto Mode AWS then rolls the nodes. Cluster add-ons such as the VPC CNI, CoreDNS and kube-proxy are yours with managed nodes and AWS's in Auto Mode. Node OS patching and node scaling are AWS's on Fargate and in Auto Mode, and yours on ECS with EC2 and on EKS with managed nodes or Karpenter.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .row{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .you{fill:#4f46e5}.aws{fill:#0ea5a4}.na{fill:#ffffff;stroke:#cbd5e1}
+    .ct{fill:#fff;font-size:14px;font-weight:700}
+    .cn{fill:#fff;font-size:13px}
+    .nat{fill:#64748b;font-size:13px}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.row{fill:#e2e8f0}.sub,.nat{fill:#94a3b8}
+      .you{fill:#818cf8}.aws{fill:#2dd4bf}.na{fill:#111827;stroke:#475569}
+      .ct,.cn{fill:#0f172a}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="458" rx="14"/>
+  <text class="h" x="28" y="40">What you still operate: ECS vs EKS, Fargate vs nodes</text>
+  <text class="sub" x="28" y="62">Same container, four ways to run it. Purple is your team's work, teal is AWS's.</text>
+
+  <text class="lbl" x="292" y="96" text-anchor="middle">ECS +</text><text class="lbl" x="292" y="113" text-anchor="middle">Fargate</text>
+  <text class="lbl" x="436" y="96" text-anchor="middle">ECS +</text><text class="lbl" x="436" y="113" text-anchor="middle">EC2</text>
+  <text class="lbl" x="580" y="96" text-anchor="middle">EKS + managed</text><text class="lbl" x="580" y="113" text-anchor="middle">nodes / Karpenter</text>
+  <text class="lbl" x="724" y="96" text-anchor="middle">EKS</text><text class="lbl" x="724" y="113" text-anchor="middle">Auto Mode</text>
+  <text class="row" x="28" y="145">Image, task/pod spec,</text><text class="row" x="28" y="162">IAM role per app</text>
+  <rect class="you" x="224" y="126" width="136" height="44" rx="8"/>
+  <text class="ct" x="292" y="153" text-anchor="middle">You</text>
+  <rect class="you" x="368" y="126" width="136" height="44" rx="8"/>
+  <text class="ct" x="436" y="153" text-anchor="middle">You</text>
+  <rect class="you" x="512" y="126" width="136" height="44" rx="8"/>
+  <text class="ct" x="580" y="153" text-anchor="middle">You</text>
+  <rect class="you" x="656" y="126" width="136" height="44" rx="8"/>
+  <text class="ct" x="724" y="153" text-anchor="middle">You</text>
+  <text class="row" x="28" y="203">Control plane</text>
+  <rect class="aws" x="224" y="176" width="136" height="44" rx="8"/>
+  <text class="ct" x="292" y="195" text-anchor="middle">AWS</text><text class="cn" x="292" y="212" text-anchor="middle">free</text>
+  <rect class="aws" x="368" y="176" width="136" height="44" rx="8"/>
+  <text class="ct" x="436" y="195" text-anchor="middle">AWS</text><text class="cn" x="436" y="212" text-anchor="middle">free</text>
+  <rect class="aws" x="512" y="176" width="136" height="44" rx="8"/>
+  <text class="ct" x="580" y="195" text-anchor="middle">AWS</text><text class="cn" x="580" y="212" text-anchor="middle">per-cluster fee</text>
+  <rect class="aws" x="656" y="176" width="136" height="44" rx="8"/>
+  <text class="ct" x="724" y="195" text-anchor="middle">AWS</text><text class="cn" x="724" y="212" text-anchor="middle">per-cluster fee</text>
+  <text class="row" x="28" y="245">Kubernetes version</text><text class="row" x="28" y="262">upgrades</text>
+  <rect class="na" x="224" y="226" width="136" height="44" rx="8"/>
+  <text class="nat" x="292" y="253" text-anchor="middle">n/a</text>
+  <rect class="na" x="368" y="226" width="136" height="44" rx="8"/>
+  <text class="nat" x="436" y="253" text-anchor="middle">n/a</text>
+  <rect class="you" x="512" y="226" width="136" height="44" rx="8"/>
+  <text class="ct" x="580" y="253" text-anchor="middle">You</text>
+  <rect class="you" x="656" y="226" width="136" height="44" rx="8"/>
+  <text class="ct" x="724" y="245" text-anchor="middle">You start it</text><text class="cn" x="724" y="262" text-anchor="middle">AWS rolls nodes</text>
+  <text class="row" x="28" y="295">Add-ons: VPC CNI,</text><text class="row" x="28" y="312">CoreDNS, kube-proxy</text>
+  <rect class="na" x="224" y="276" width="136" height="44" rx="8"/>
+  <text class="nat" x="292" y="303" text-anchor="middle">n/a</text>
+  <rect class="na" x="368" y="276" width="136" height="44" rx="8"/>
+  <text class="nat" x="436" y="303" text-anchor="middle">n/a</text>
+  <rect class="you" x="512" y="276" width="136" height="44" rx="8"/>
+  <text class="ct" x="580" y="303" text-anchor="middle">You</text>
+  <rect class="aws" x="656" y="276" width="136" height="44" rx="8"/>
+  <text class="ct" x="724" y="303" text-anchor="middle">AWS</text>
+  <text class="row" x="28" y="345">Node OS patching,</text><text class="row" x="28" y="362">AMIs</text>
+  <rect class="aws" x="224" y="326" width="136" height="44" rx="8"/>
+  <text class="ct" x="292" y="353" text-anchor="middle">AWS</text>
+  <rect class="you" x="368" y="326" width="136" height="44" rx="8"/>
+  <text class="ct" x="436" y="353" text-anchor="middle">You</text>
+  <rect class="you" x="512" y="326" width="136" height="44" rx="8"/>
+  <text class="ct" x="580" y="353" text-anchor="middle">You</text>
+  <rect class="aws" x="656" y="326" width="136" height="44" rx="8"/>
+  <text class="ct" x="724" y="353" text-anchor="middle">AWS</text>
+  <text class="row" x="28" y="395">Node scaling,</text><text class="row" x="28" y="412">bin-packing</text>
+  <rect class="aws" x="224" y="376" width="136" height="44" rx="8"/>
+  <text class="ct" x="292" y="403" text-anchor="middle">AWS</text>
+  <rect class="you" x="368" y="376" width="136" height="44" rx="8"/>
+  <text class="ct" x="436" y="395" text-anchor="middle">You</text><text class="cn" x="436" y="412" text-anchor="middle">capacity provider</text>
+  <rect class="you" x="512" y="376" width="136" height="44" rx="8"/>
+  <text class="ct" x="580" y="395" text-anchor="middle">You</text><text class="cn" x="580" y="412" text-anchor="middle">tune Karpenter</text>
+  <rect class="aws" x="656" y="376" width="136" height="44" rx="8"/>
+  <text class="ct" x="724" y="403" text-anchor="middle">AWS</text>
+  <text class="sub" x="28" y="446">Fargate also removes DaemonSets, privileged containers and node tuning. That is the price of having no nodes.</text>
+</svg>

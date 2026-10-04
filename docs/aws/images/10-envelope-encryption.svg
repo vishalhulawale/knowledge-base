@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Envelope encryption with a KMS key and a data key</title>
+  <desc id="d">The app calls GenerateDataKey. KMS, whose key never leaves its HSMs, returns a plaintext data key and the same data key encrypted under the KMS key. The app encrypts the record locally with the plaintext data key, then wipes the plaintext data key from memory. It stores the ciphertext together with the encrypted data key. To read it later, the app sends only the small encrypted data key to KMS Decrypt, gets the plaintext data key back and decrypts the record locally.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .kms{fill:#4f46e5}
+    .dek{fill:#d97706}
+    .edek{fill:#64748b}
+    .data{fill:#0ea5a4}
+    .ct{fill:#334155}
+    .on{fill:#fff;font-size:14px;font-weight:700}
+    .arr{stroke:#334155;stroke-width:2.5;fill:none}
+    .head{fill:#334155}
+    .warn{fill:#b45309;font-size:14px;font-weight:700}
+    .step{fill:#0f172a;font-size:15px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.step{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .kms{fill:#818cf8}.dek{fill:#fbbf24}.edek{fill:#94a3b8}.data{fill:#2dd4bf}.ct{fill:#cbd5e1}
+      .on{fill:#0f172a}.arr{stroke:#e2e8f0}.head{fill:#e2e8f0}.warn{fill:#fbbf24}
+    }
+    /* 12 s loop: 1 keys 4 % | 2 encrypt 22 % | 3 wipe 40 % | 4 store 54 % | 5 read path 70 % | hold to 94 % */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes s1{0%,3%{opacity:0}6%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes dk{0%,5%{opacity:0}8%,39%{opacity:1}43%,100%{opacity:0}}
+    @keyframes rec{0%,19%{opacity:0}22%,30%{opacity:1}33%,100%{opacity:0}}
+    @keyframes enc{0%,30%{opacity:0}33%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes wp{0%,40%{opacity:0}43%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes st{0%,53%{opacity:0}56%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes rd{0%,69%{opacity:0}72%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes cap1{0%,3%{opacity:0}6%,19%{opacity:1}22%,100%{opacity:0}}
+    @keyframes cap2{0%,19%{opacity:0}22%,39%{opacity:1}42%,100%{opacity:0}}
+    @keyframes cap3{0%,39%{opacity:0}42%,53%{opacity:1}56%,100%{opacity:0}}
+    @keyframes cap4{0%,53%{opacity:0}56%,69%{opacity:1}72%,100%{opacity:0}}
+    @keyframes cap5{0%,69%{opacity:0}72%,94%{opacity:1}98%,100%{opacity:0}}
+    .k1{animation-name:s1}.kdk{animation-name:dk}.krec{animation-name:rec}.kenc{animation-name:enc}.kwp{animation-name:wp}.kst{animation-name:st}.krd{animation-name:rd}
+    .c1{animation-name:cap1}.c2{animation-name:cap2}.c3{animation-name:cap3}.c4{animation-name:cap4}.c5{animation-name:cap5}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none}
+      .k1,.kenc,.kwp,.kst,.krd,.c5{opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Envelope encryption: data never goes to KMS</text>
+  <text class="sub" x="28" y="62">A data key (DEK) encrypts the data. The KMS key only encrypts the small DEK.</text>
+
+  <!-- boxes -->
+  <rect class="box" x="28" y="84" width="200" height="200" rx="10"/>
+  <text class="lbl" x="44" y="108">AWS KMS (HSMs)</text>
+  <rect class="kms" x="48" y="128" width="160" height="44" rx="8"/><text class="on" x="128" y="155" text-anchor="middle">KMS key</text>
+  <text class="sub" x="44" y="196">never leaves KMS</text>
+  <text class="sub" x="44" y="214">in plaintext</text>
+
+  <rect class="box" x="286" y="84" width="250" height="200" rx="10"/>
+  <text class="lbl" x="302" y="108">Your app</text>
+
+  <rect class="box" x="594" y="84" width="178" height="200" rx="10"/>
+  <text class="lbl" x="610" y="108">S3 / DB</text>
+
+  <!-- step 1: GenerateDataKey -->
+  <g class="a k1">
+    <path class="arr" d="M228 150 H276"/><path class="head" d="M284 150 l-10 -6 v12z"/>
+  </g>
+  <g class="a kdk"><rect class="dek" x="302" y="124" width="104" height="36" rx="7"/><text class="on" x="354" y="147" text-anchor="middle">DEK</text></g>
+  <g class="a kwp"><rect class="box" x="302" y="124" width="104" height="36" rx="7" style="stroke-dasharray:4 4"/><text class="warn" x="354" y="147" text-anchor="middle">wiped</text></g>
+  <g class="a k1"><rect class="edek" x="418" y="124" width="104" height="36" rx="7"/><text class="on" x="470" y="147" text-anchor="middle">enc. DEK</text></g>
+
+  <!-- step 2: encrypt locally -->
+  <g class="a krec"><rect class="data" x="302" y="196" width="220" height="40" rx="7"/><text class="on" x="412" y="221" text-anchor="middle">patient record (plain)</text></g>
+  <g class="a kenc"><rect class="ct" x="302" y="196" width="220" height="40" rx="7"/><text class="on" x="412" y="221" text-anchor="middle">ciphertext (AES-GCM)</text></g>
+
+  <!-- step 4: store both -->
+  <g class="a kst">
+    <path class="arr" d="M536 200 H584"/><path class="head" d="M592 200 l-10 -6 v12z"/>
+    <rect class="ct" x="610" y="150" width="146" height="40" rx="7"/><text class="on" x="683" y="175" text-anchor="middle">ciphertext</text>
+    <rect class="edek" x="610" y="200" width="146" height="40" rx="7"/><text class="on" x="683" y="225" text-anchor="middle">enc. DEK</text>
+    <text class="sub" x="610" y="266">stored side by side</text>
+  </g>
+
+  <!-- captions -->
+  <text class="step a c1" x="28" y="318">1. GenerateDataKey: KMS returns the DEK in plaintext and encrypted.</text>
+  <text class="step a c2" x="28" y="318">2. The app encrypts the record locally with the plaintext DEK.</text>
+  <text class="step a c3" x="28" y="318">3. The plaintext DEK is wiped from memory. Only the encrypted copy stays.</text>
+  <text class="step a c4" x="28" y="318">4. Ciphertext and encrypted DEK are stored together.</text>
+  <text class="step a c5" x="28" y="318">5. To read: send only the enc. DEK to KMS Decrypt, then decrypt locally.</text>
+  <text class="sub a krd" x="28" y="344">KMS checks the key policy, grants and encryption context, and logs the Decrypt to CloudTrail.</text>
+
+  <text class="sub" x="28" y="384">Revoke access to the KMS key and every DEK it wrapped, and with it the data,</text>
+  <text class="sub" x="28" y="402">becomes unreadable. Rotating the KMS key doesn't re-encrypt any data.</text>
+</svg>

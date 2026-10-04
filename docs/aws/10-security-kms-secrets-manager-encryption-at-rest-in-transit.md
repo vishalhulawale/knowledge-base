@@ -48,6 +48,9 @@ sequenceDiagram
 ```
 *Notice that bulk data **never goes to KMS**, only the small data key does. That avoids the 4 KB limit, the latency and the request quotas. Revoking access to the **KMS key** cuts off decryption of every data key it protects. That is the power of the hierarchy.*
 
+![Animation: KMS returns a plaintext and an encrypted data key, the app encrypts the record locally, wipes the plaintext key, and stores the ciphertext next to the encrypted data key](images/10-envelope-encryption.svg){ loading=lazy }
+*Watch what reaches storage: ciphertext and an encrypted DEK, never a usable key. Only KMS can turn the encrypted DEK back into one.*
+
 Why envelope encryption?
 
 - **Performance:** encrypt gigabytes locally.
@@ -118,6 +121,9 @@ Key policy roles to separate:
 | Use for | DB credentials, API keys that rotate | Config values, non-rotating secrets |
 
 Rotation flow (four Lambda steps): `createSecret` (generate AWSPENDING) → `setSecret` (apply it in the DB) → `testSecret` → `finishSecret` (move AWSCURRENT). Clients must **re-fetch on authentication failure** or use a caching client with a short TTL, because cached credentials go stale after rotation. RDS can also **manage the master password in Secrets Manager** natively.
+
+![Animation: version 1 holds AWSCURRENT, createSecret adds version 2 as AWSPENDING, setSecret and testSecret apply and check the new password in the database, and finishSecret moves AWSCURRENT to version 2 and marks version 1 AWSPREVIOUS](images/10-secret-rotation-labels.svg){ loading=lazy }
+*Notice that apps keep asking for the same secret name and label. Rotation only moves AWSCURRENT once the new password has been tested.*
 
 ### Encryption in transit
 

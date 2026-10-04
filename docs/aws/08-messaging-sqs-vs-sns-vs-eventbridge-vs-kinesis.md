@@ -91,6 +91,9 @@ sequenceDiagram
 ```
 *Notice that SQS never knows whether you finished. It only knows you didn't **delete** the message before the visibility timeout ran out. So set the timeout above the worst-case processing time (or extend it with `ChangeMessageVisibility`) and make consumers **idempotent**.*
 
+![Animation: a consumer receives an SQS message, which turns invisible for the 30-second visibility timeout; the consumer crashes, the message reappears with a higher receive count, and after the fifth failed receive it moves to the DLQ](images/08-sqs-visibility-dlq.svg){ loading=lazy }
+*Watch the receive count climb each time the timeout runs out without a delete. At `maxReceiveCount` the redrive policy moves the message to the DLQ instead of retrying forever.*
+
 Key settings:
 
 - **Visibility timeout:** default 30 s, max 12 h. For Lambda, ≥ 6× the function timeout.
@@ -103,6 +106,9 @@ Key settings:
     - A failing message **blocks its group** until it succeeds or goes to the DLQ.
 - **Fair queues** (2025) reduce noisy-neighbour effects in multi-tenant standard queues by using a tenant group ID.
 - Large payloads go in **S3**, with a pointer in the message (the claim-check pattern, or the Extended Client Library).
+
+![Animation: three FIFO message groups processed in parallel; groups A and C finish in order while message B2 fails and blocks B3 until B2 goes to the DLQ](images/08-fifo-message-groups.svg){ loading=lazy }
+*Notice that only group B stalls. Ordering and blocking are both per `MessageGroupId`, so a poison message holds up one customer, not the whole queue.*
 
 ### SNS fan-out with filtering
 

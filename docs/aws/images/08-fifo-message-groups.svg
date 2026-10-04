@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">SQS FIFO message groups: ordered per group, parallel across groups</title>
+  <desc id="d">Three message groups A, B and C, each holding three messages in order. Consumers process the head of every group in parallel. Groups A and C finish messages 1, 2 and 3 in order. In group B, message 1 succeeds but message 2 fails and is retried, so message B3 waits behind it while A and C carry on. After reaching maxReceiveCount, B2 moves to the dead-letter queue and B3 is then processed.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .lane{fill:#ffffff;stroke:#cbd5e1}
+    .msg{fill:#4f46e5}
+    .okb{fill:#16a34a}
+    .badb{fill:#dc2626}
+    .dlqb{fill:#64748b}
+    .badt{fill:#dc2626;font-size:14px;font-weight:700}
+    .on{fill:#fff;font-size:14px;font-weight:700}
+    .arr{stroke:#94a3b8;stroke-width:2.5;fill:none}
+    .head{fill:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .lane{fill:#111827;stroke:#475569}
+      .msg{fill:#818cf8}.okb{fill:#4ade80}.badb{fill:#f87171}.dlqb{fill:#94a3b8}.badt{fill:#f87171}
+      .on{fill:#0f172a}.arr{stroke:#64748b}.head{fill:#64748b}
+    }
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes hA1{0%,11%{opacity:1}12%,98%{opacity:0}100%{opacity:1}}
+    .hA1{opacity:1;animation-name:hA1}
+    @keyframes hA2{0%,27%{opacity:1}28%,98%{opacity:0}100%{opacity:1}}
+    .hA2{opacity:1;animation-name:hA2}
+    @keyframes hA3{0%,43%{opacity:1}44%,98%{opacity:0}100%{opacity:1}}
+    .hA3{opacity:1;animation-name:hA3}
+    @keyframes hC1{0%,11%{opacity:1}12%,98%{opacity:0}100%{opacity:1}}
+    .hC1{opacity:1;animation-name:hC1}
+    @keyframes hC2{0%,27%{opacity:1}28%,98%{opacity:0}100%{opacity:1}}
+    .hC2{opacity:1;animation-name:hC2}
+    @keyframes hC3{0%,43%{opacity:1}44%,98%{opacity:0}100%{opacity:1}}
+    .hC3{opacity:1;animation-name:hC3}
+    @keyframes hB1{0%,11%{opacity:1}12%,98%{opacity:0}100%{opacity:1}}
+    .hB1{opacity:1;animation-name:hB1}
+    @keyframes hB2{0%,67%{opacity:1}68%,98%{opacity:0}100%{opacity:1}}
+    .hB2{opacity:1;animation-name:hB2}
+    @keyframes hB3{0%,79%{opacity:1}80%,98%{opacity:0}100%{opacity:1}}
+    .hB3{opacity:1;animation-name:hB3}
+    @keyframes dA0{0%,11%{opacity:0}12%,94%{opacity:1}98%,100%{opacity:0}}
+    .dA0{animation-name:dA0}
+    @keyframes dA1{0%,27%{opacity:0}28%,94%{opacity:1}98%,100%{opacity:0}}
+    .dA1{animation-name:dA1}
+    @keyframes dA2{0%,43%{opacity:0}44%,94%{opacity:1}98%,100%{opacity:0}}
+    .dA2{animation-name:dA2}
+    @keyframes dC0{0%,11%{opacity:0}12%,94%{opacity:1}98%,100%{opacity:0}}
+    .dC0{animation-name:dC0}
+    @keyframes dC1{0%,27%{opacity:0}28%,94%{opacity:1}98%,100%{opacity:0}}
+    .dC1{animation-name:dC1}
+    @keyframes dC2{0%,43%{opacity:0}44%,94%{opacity:1}98%,100%{opacity:0}}
+    .dC2{animation-name:dC2}
+    @keyframes dB0{0%,11%{opacity:0}12%,94%{opacity:1}98%,100%{opacity:0}}
+    .dB0{animation-name:dB0}
+    @keyframes fB2{0%,27%{opacity:0}28%,67%{opacity:1}68%,100%{opacity:0}}
+    .fB2{animation-name:fB2}
+    @keyframes tB{0%,27%{opacity:0}28%,67%{opacity:1}68%,100%{opacity:0}}
+    .tB{animation-name:tB}
+    @keyframes dB1{0%,67%{opacity:0}68%,94%{opacity:1}98%,100%{opacity:0}}
+    .dB1{animation-name:dB1}
+    @keyframes dB2{0%,79%{opacity:0}80%,94%{opacity:1}98%,100%{opacity:0}}
+    .dB2{animation-name:dB2}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none;opacity:0}
+      .dA0,.dA1,.dA2,.dC0,.dC1,.dC2,.dB0,.dB1,.dB2{opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">FIFO queue: in order per group, in parallel across groups</text>
+  <text class="sub" x="28" y="62">MessageGroupId = customerId. A failing message blocks only its own group.</text>
+  <text class="sub" x="118" y="92">waiting (head on the right)</text>
+  <text class="sub" x="404" y="92">processed, in order</text>
+  <text class="lbl" x="28" y="138">Group A</text>
+  <rect class="lane" x="118" y="104" width="236" height="56" rx="8"/>
+  <path class="arr" d="M358 132 H384"/><path class="head" d="M392 132 l-10 -6 v12z"/>
+  <g class="a hA1"><rect class="msg" x="280" y="110" width="64" height="44" rx="7"/><text class="on" x="312" y="137" text-anchor="middle">A1</text></g>
+  <g class="a hA2"><rect class="msg" x="205" y="110" width="64" height="44" rx="7"/><text class="on" x="237" y="137" text-anchor="middle">A2</text></g>
+  <g class="a hA3"><rect class="msg" x="130" y="110" width="64" height="44" rx="7"/><text class="on" x="162" y="137" text-anchor="middle">A3</text></g>
+  <text class="lbl" x="28" y="218">Group B</text>
+  <rect class="lane" x="118" y="184" width="236" height="56" rx="8"/>
+  <path class="arr" d="M358 212 H384"/><path class="head" d="M392 212 l-10 -6 v12z"/>
+  <g class="a hB1"><rect class="msg" x="280" y="190" width="64" height="44" rx="7"/><text class="on" x="312" y="217" text-anchor="middle">B1</text></g>
+  <g class="a hB2"><rect class="msg" x="205" y="190" width="64" height="44" rx="7"/><text class="on" x="237" y="217" text-anchor="middle">B2</text></g>
+  <g class="a hB3"><rect class="msg" x="130" y="190" width="64" height="44" rx="7"/><text class="on" x="162" y="217" text-anchor="middle">B3</text></g>
+  <text class="lbl" x="28" y="298">Group C</text>
+  <rect class="lane" x="118" y="264" width="236" height="56" rx="8"/>
+  <path class="arr" d="M358 292 H384"/><path class="head" d="M392 292 l-10 -6 v12z"/>
+  <g class="a hC1"><rect class="msg" x="280" y="270" width="64" height="44" rx="7"/><text class="on" x="312" y="297" text-anchor="middle">C1</text></g>
+  <g class="a hC2"><rect class="msg" x="205" y="270" width="64" height="44" rx="7"/><text class="on" x="237" y="297" text-anchor="middle">C2</text></g>
+  <g class="a hC3"><rect class="msg" x="130" y="270" width="64" height="44" rx="7"/><text class="on" x="162" y="297" text-anchor="middle">C3</text></g>
+  <g class="a dA0"><rect class="okb" x="404" y="110" width="70" height="44" rx="7"/><text class="on" x="439" y="137" text-anchor="middle">A1 ✓</text></g>
+  <g class="a dA1"><rect class="okb" x="482" y="110" width="70" height="44" rx="7"/><text class="on" x="517" y="137" text-anchor="middle">A2 ✓</text></g>
+  <g class="a dA2"><rect class="okb" x="560" y="110" width="70" height="44" rx="7"/><text class="on" x="595" y="137" text-anchor="middle">A3 ✓</text></g>
+  <g class="a dC0"><rect class="okb" x="404" y="270" width="70" height="44" rx="7"/><text class="on" x="439" y="297" text-anchor="middle">C1 ✓</text></g>
+  <g class="a dC1"><rect class="okb" x="482" y="270" width="70" height="44" rx="7"/><text class="on" x="517" y="297" text-anchor="middle">C2 ✓</text></g>
+  <g class="a dC2"><rect class="okb" x="560" y="270" width="70" height="44" rx="7"/><text class="on" x="595" y="297" text-anchor="middle">C3 ✓</text></g>
+  <g class="a dB0"><rect class="okb" x="404" y="190" width="70" height="44" rx="7"/><text class="on" x="439" y="217" text-anchor="middle">B1 ✓</text></g>
+  <g class="a fB2"><rect class="badb" x="205" y="190" width="64" height="44" rx="7"/><text class="on" x="237" y="217" text-anchor="middle">B2</text></g>
+  <text class="badt a tB" x="404" y="210" dx="84">B2 fails, retried.</text><text class="badt a tB" x="488" y="228">B3 must wait.</text>
+  <g class="a dB1"><rect class="dlqb" x="482" y="190" width="70" height="44" rx="7"/><text class="on" x="517" y="217" text-anchor="middle">B2 DLQ</text></g>
+  <g class="a dB2"><rect class="okb" x="560" y="190" width="70" height="44" rx="7"/><text class="on" x="595" y="217" text-anchor="middle">B3 ✓</text></g>
+  <text class="sub" x="28" y="356">Groups A and C never wait for B. Inside B, order is kept: B3 runs only after B2 succeeds or</text>
+  <text class="sub" x="28" y="374">leaves for the DLQ after maxReceiveCount. That is why a poison message needs a DLQ and an alarm.</text>
+</svg>

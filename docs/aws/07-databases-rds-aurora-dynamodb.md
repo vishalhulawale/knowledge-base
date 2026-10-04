@@ -78,6 +78,9 @@ flowchart TB
 ```
 *Notice that replicas don't replay a full copy of the data. They read the **same storage**, so replica lag is usually in milliseconds and failover only needs to promote a reader. Losing a whole AZ (2 copies) still leaves write quorum.*
 
+![Animation: the Aurora writer sends a redo record to six copies across three AZs and commits after four acknowledge; then AZ c is lost and the next write still commits with the four remaining copies](images/07-aurora-quorum-writes.svg){ loading=lazy }
+*Watch the commit message: it appears at the fourth ack, not the sixth. With AZ c gone, exactly four copies are left, which is still enough.*
+
 Aurora features:
 
 - **Endpoints:** cluster (writer), reader (load-balanced), custom.
@@ -107,6 +110,9 @@ Key design rules:
 3. Use **sort keys for hierarchy and ranges**: `ORDER#2026-10-01#123`, and `begins_with` / `between` queries.
 4. **Adaptive capacity** and split-for-heat help with uneven load, but they can't fix a single key needing more than 1,000 WCU. Use **write sharding** (a suffix `#0..N`) for extreme hot keys.
 5. **Single-table design** puts multiple entity types in one table with generic `PK`/`SK` attributes and overloaded GSIs. It's efficient but harder to read. Multi-table is fine when access patterns are simple.
+
+![Bar charts of the same 2,100 WCU load: keyed by status, the PENDING partition gets 1,800 WCU and 800 are throttled while others sit idle; keyed by orderId, each partition gets 700 WCU and nothing throttles](images/07-hot-partition.svg){ loading=lazy }
+*Notice that both tables carry the same total load. Only the key choice decides whether one partition hits its 1,000 WCU ceiling.*
 
 ### GSI vs LSI
 

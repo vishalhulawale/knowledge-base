@@ -51,6 +51,9 @@ flowchart LR
 - **EMF:** write one JSON log line with `_aws` metadata, and CloudWatch extracts metrics asynchronously. There are no `PutMetricData` API calls in the hot path, and it's ideal for Lambda.
 - **Metric Streams** push near-real-time metrics to Firehose (Datadog, New Relic, S3).
 
+![Latency histogram of 1,000 requests: most finish under 200 ms with an average of about 130 ms, while a slow cluster pushes p99 to about 900 ms](images/11-latency-tail.svg){ loading=lazy }
+*Notice where the two lines fall. The average looks healthy because the slow 1% barely moves it; p99 shows what those users actually wait.*
+
 ### Logs essentials
 
 - Log in **structured JSON** with `timestamp`, `level`, `service`, `traceId`, `spanId`, `requestId`, `tenantId`. Never log PHI, PII or secrets. Back that up with **data protection policies** that detect and mask sensitive data.
@@ -78,6 +81,9 @@ flowchart TD
     M4["CPU > 80%"] -->|"ALARM"| T["Ticket / dashboard only"]
 ```
 *Notice that the page fires on **user-facing symptoms**. Causes like CPU go to tickets. Composite alarms and M-of-N datapoints cut flapping. Set **TreatMissingData** deliberately: missing data from a dead service shouldn't count as "OK".*
+
+![Animation: one-minute 5xx datapoints arrive against a 2% threshold; with two breaches in five minutes the alarm stays OK, and it switches to ALARM when three of the last five breach](images/11-m-of-n-alarm.svg){ loading=lazy }
+*Watch the five-minute window slide. Two isolated spikes don't page; the third breach inside the window does.*
 
 **SLO burn-rate alerting:** for a 99.9% SLO (0.1% error budget), alert when the budget burns fast. For example, a burn rate of 14.4 over 1 h (with 5 min confirmation) spends 2% of a 30-day budget in an hour. **Application Signals** can define SLOs and burn-rate alarms for you.
 
