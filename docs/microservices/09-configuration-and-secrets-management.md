@@ -89,7 +89,7 @@ sequenceDiagram
     SM->>L: rotate (createSecret)
     L->>DB: create new password (setSecret), test it (testSecret)
     L->>SM: mark new version AWSCURRENT (finishSecret)
-    Note over SM,App: old version becomes AWSPREVIOUS, still valid for a while
+    Note over SM,App: old version becomes AWSPREVIOUS (still works only with alternating-users rotation)
     App->>SM: next fetch or restart reads AWSCURRENT
     App->>DB: connect with new password
 ```
