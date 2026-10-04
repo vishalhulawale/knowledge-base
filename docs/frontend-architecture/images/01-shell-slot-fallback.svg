@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 412" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">A failing micro-frontend degrades only its own slot</title>
+  <desc id="d">A page made of a shell (header with login and routing, and a side nav) and three micro-frontend slots: Claims, Pharmacy and Profile. Each slot first shows a Suspense loading spinner. Pharmacy and Profile then render their content. The Claims remote fails to load, so its error boundary shows the fallback text Claims are temporarily unavailable, while the shell and the other two slots keep working.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .txt{fill:#334155;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .shs{fill:#ffffff;stroke:#0ea5a4;stroke-width:2}
+    .slot{fill:#ffffff;stroke:#4f46e5;stroke-width:2}
+    .acc{fill:#0f766e;font-size:14px;font-weight:700}
+    .bar{fill:#cbd5e1}
+    .ok{fill:#16a34a;font-size:14px;font-weight:700}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    .fb{fill:none;stroke:#dc2626;stroke-width:1.5;stroke-dasharray:6 4}
+    .spc{fill:none;stroke:#4f46e5;stroke-width:3;stroke-dasharray:40 30;stroke-linecap:round}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .shs{fill:#111827;stroke:#2dd4bf}.slot{fill:#111827;stroke:#818cf8}
+      .acc{fill:#5eead4}.bar{fill:#475569}
+      .ok{fill:#4ade80}.bad{fill:#f87171}.fb{stroke:#f87171}.spc{stroke:#818cf8}
+    }
+    /* 10 s loop: Pharmacy renders at 20%, Profile at 28%, Claims fails at 40%; hold; restart */
+    .a{animation:10s infinite linear}
+    @keyframes lp{0%,18%{opacity:1}20%,95%{opacity:0}98%,100%{opacity:1}}
+    @keyframes sp{0%,18%{opacity:0}20%,93%{opacity:1}96%,100%{opacity:0}}
+    @keyframes lr{0%,26%{opacity:1}28%,95%{opacity:0}98%,100%{opacity:1}}
+    @keyframes sr{0%,26%{opacity:0}28%,93%{opacity:1}96%,100%{opacity:0}}
+    @keyframes lc{0%,38%{opacity:1}40%,95%{opacity:0}98%,100%{opacity:1}}
+    @keyframes sc{0%,38%{opacity:0}40%,93%{opacity:1}96%,100%{opacity:0}}
+    .lp{animation-name:lp}.sp{animation-name:sp;opacity:0}.lr{animation-name:lr}.sr{animation-name:sr;opacity:0}.lc{animation-name:lc}.sc{animation-name:sc;opacity:0}
+    @keyframes rot{to{transform:rotate(360deg)}}
+    .spin{transform-box:fill-box;transform-origin:center;animation:rot 1s linear infinite}
+    @media (prefers-reduced-motion: reduce){
+      .a,.spin{animation:none}
+      .lp,.lr,.lc{opacity:0}.sp,.sr,.sc{opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="410" rx="14"/>
+  <text class="h" x="28" y="40">One shell, independently failing slots</text>
+  <text class="sub" x="28" y="62">Each remote is wrapped in its own Suspense and error boundary, so a failure stays in its slot.</text>
+
+  <!-- shell -->
+  <rect class="shs" x="28" y="80" width="492" height="38" rx="8"/>
+  <text class="acc" x="44" y="104">Shell header · login · routing</text>
+  <rect class="shs" x="28" y="128" width="108" height="236" rx="8"/>
+  <text class="acc" x="42" y="152">Shell nav</text>
+  <rect class="bar" x="42" y="168" width="78" height="10" rx="5"/>
+  <rect class="bar" x="42" y="190" width="64" height="10" rx="5"/>
+  <rect class="bar" x="42" y="212" width="72" height="10" rx="5"/>
+
+  <!-- slots -->
+  <rect class="slot" x="148" y="128" width="372" height="110" rx="8"/>
+  <rect class="slot" x="148" y="250" width="180" height="114" rx="8"/>
+  <rect class="slot" x="340" y="250" width="180" height="114" rx="8"/>
+
+  <!-- Claims slot: loading, then fallback -->
+  <g class="a lc">
+    <g class="spin"><circle class="spc" cx="182" cy="183" r="12"/></g>
+    <text class="txt" x="206" y="180">Loading claims remote…</text>
+    <text class="sub" x="206" y="198">Suspense fallback</text>
+  </g>
+  <g class="a sc">
+    <rect class="fb" x="158" y="138" width="352" height="90" rx="6"/>
+    <text class="bad" x="174" y="170">Claims are temporarily unavailable.</text>
+    <text class="sub" x="174" y="192">ErrorBoundary fallback:</text>
+    <text class="sub" x="174" y="210">the claims remote failed to load</text>
+  </g>
+
+  <!-- Pharmacy slot -->
+  <g class="a lp">
+    <g class="spin"><circle class="spc" cx="182" cy="307" r="12"/></g>
+    <text class="txt" x="204" y="304">Loading…</text>
+    <text class="sub" x="204" y="322">Suspense</text>
+  </g>
+  <g class="a sp">
+    <text class="lbl" x="162" y="276">Pharmacy MFE</text>
+    <text class="sub" x="162" y="296">Team Pharmacy</text>
+    <rect class="bar" x="162" y="312" width="152" height="10" rx="5"/>
+    <rect class="bar" x="162" y="332" width="110" height="10" rx="5"/>
+  </g>
+
+  <!-- Profile slot -->
+  <g class="a lr">
+    <g class="spin"><circle class="spc" cx="374" cy="307" r="12"/></g>
+    <text class="txt" x="396" y="304">Loading…</text>
+    <text class="sub" x="396" y="322">Suspense</text>
+  </g>
+  <g class="a sr">
+    <text class="lbl" x="354" y="276">Profile MFE</text>
+    <text class="sub" x="354" y="296">Team Profile</text>
+    <rect class="bar" x="354" y="312" width="152" height="10" rx="5"/>
+    <rect class="bar" x="354" y="332" width="96" height="10" rx="5"/>
+  </g>
+
+  <!-- legend -->
+  <text class="acc" x="548" y="100">Shell</text>
+  <text class="txt" x="548" y="120">owns layout, auth, routing</text>
+  <text class="lbl" x="548" y="154">Each slot</text>
+  <text class="txt" x="548" y="174">Suspense shows a spinner</text>
+  <text class="txt" x="548" y="192">while its chunk loads.</text>
+  <text class="txt" x="548" y="212">ErrorBoundary swaps a failed</text>
+  <text class="txt" x="548" y="230">remote for a fallback.</text>
+  <text class="a sp ok" x="548" y="270">✓ Pharmacy rendered</text>
+  <text class="a sr ok" x="548" y="294">✓ Profile rendered</text>
+  <text class="a sc bad" x="548" y="318">✗ Claims failed</text>
+  <text class="a sc txt" x="548" y="338">fallback shown, the rest of</text>
+  <text class="a sc txt" x="548" y="356">the page keeps working</text>
+
+  <text class="sub" x="28" y="394">Which remote fails is illustrative; the same wrapper protects every slot.</text>
+</svg>

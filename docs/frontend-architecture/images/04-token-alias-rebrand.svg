@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 392" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Token aliases make a rebrand a one-line change</title>
+  <desc id="d">Generated CSS keeps the alias chain: the primitive token --color-brand-primary is #0b5fff, the semantic token --color-action-primary-bg is var(--color-brand-primary), and the Button's background reads the semantic token. When the primitive is changed to a new colour at runtime, the semantic token and the Button update with it. The generated JavaScript constant ColorActionPrimaryBg was resolved at build time, so it stays #0b5fff until the next build.</desc>
+  <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ahp" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .txt{fill:#334155;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .mono{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:13px;fill:#334155}
+    .sw{stroke:#cbd5e1}
+    .bt{fill:#ffffff;font-size:15px;font-weight:700}
+    .arr{stroke:#64748b;stroke-width:2;fill:none}.ahp{fill:#64748b}
+    .edit{fill:none;stroke:#d97706;stroke-width:2.5}
+    .warn{fill:#d97706;font-size:13px;font-weight:700}
+    .acc{fill:#0f766e;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.sw{stroke:#475569}
+      .arr{stroke:#94a3b8}.ahp{fill:#94a3b8}
+      .edit{stroke:#fbbf24}.warn{fill:#fbbf24}.acc{fill:#5eead4}
+    }
+    /* 10 s loop: original brand (0-46%), runtime rebrand (50-93%) */
+    .a{animation:10s infinite linear}
+    @keyframes p1{0%,46%{opacity:1}50%,95%{opacity:0}99%,100%{opacity:1}}
+    @keyframes p2{0%,46%{opacity:0}50%,93%{opacity:1}97%,100%{opacity:0}}
+    .p1{animation-name:p1}.p2{animation-name:p2;opacity:0}
+    @media (prefers-reduced-motion: reduce){.a{animation:none}.p1{opacity:0}.p2{opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="390" rx="14"/>
+  <text class="h" x="28" y="40">Token aliases: a rebrand is one line</text>
+  <text class="sub" x="28" y="62">Style Dictionary output with outputReferences: true, as in the demo on this page.</text>
+
+  <!-- primitive -->
+  <rect class="box" x="28" y="84" width="220" height="132" rx="10"/>
+  <text class="sub" x="44" y="108">Primitive token</text>
+  <text class="mono" x="44" y="134">--color-brand-primary</text>
+  <g class="a p1"><rect class="sw" x="44" y="152" width="28" height="28" rx="6" fill="#0b5fff"/><text class="mono" x="82" y="171">#0b5fff</text></g>
+  <g class="a p2"><rect class="sw" x="44" y="152" width="28" height="28" rx="6" fill="#0f766e"/><text class="mono" x="82" y="171">#0f766e</text><rect class="edit" x="36" y="144" width="140" height="44" rx="8"/></g>
+
+  <path class="arr" d="M250,150 L274,150" marker-end="url(#ah)"/>
+
+  <!-- semantic -->
+  <rect class="box" x="276" y="84" width="260" height="132" rx="10"/>
+  <text class="sub" x="292" y="108">Semantic token</text>
+  <text class="mono" x="292" y="134">--color-action-primary-bg</text>
+  <text class="mono" x="292" y="156">var(--color-brand-primary)</text>
+  <g class="a p1"><rect class="sw" x="292" y="170" width="28" height="28" rx="6" fill="#0b5fff"/><text class="sub" x="330" y="189">resolves to #0b5fff</text></g>
+  <g class="a p2"><rect class="sw" x="292" y="170" width="28" height="28" rx="6" fill="#0f766e"/><text class="sub" x="330" y="189">resolves to #0f766e</text></g>
+
+  <path class="arr" d="M538,150 L562,150" marker-end="url(#ah)"/>
+
+  <!-- component -->
+  <rect class="box" x="564" y="84" width="208" height="132" rx="10"/>
+  <text class="sub" x="580" y="108">Component</text>
+  <g class="a p1"><rect x="588" y="124" width="160" height="44" rx="6" fill="#0b5fff"/></g>
+  <g class="a p2"><rect x="588" y="124" width="160" height="44" rx="6" fill="#0f766e"/></g>
+  <text class="bt" x="668" y="151" text-anchor="middle">Submit claim</text>
+  <text class="sub" x="580" y="192">background reads the</text>
+  <text class="sub" x="580" y="208">semantic variable</text>
+
+  <!-- JS output -->
+  <rect class="box" x="28" y="236" width="744" height="72" rx="10"/>
+  <text class="sub" x="44" y="260">build/tokens.js (generated)</text>
+  <text class="mono" x="44" y="286">export const ColorActionPrimaryBg = "#0b5fff";</text>
+  <text class="a p1 sub" x="460" y="286">resolved at build time</text>
+  <text class="a p2 warn" x="460" y="286">still #0b5fff until the next build</text>
+
+  <text class="a p1 acc" x="28" y="340">The CSS keeps the alias chain, so the hex value lives only in the primitive.</text>
+  <text class="a p2 warn" x="28" y="340">One-line runtime change: the semantic token and the Button follow it.</text>
+  <text class="sub" x="28" y="372">The replacement brand colour is illustrative. Dark mode works the same way by remapping semantic tokens.</text>
+</svg>

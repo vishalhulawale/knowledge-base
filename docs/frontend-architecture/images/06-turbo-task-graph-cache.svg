@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Turborepo task graph and cache hits</title>
+  <desc id="d">The demo monorepo's build graph: @org/tokens feeds @org/ui, which feeds the claims and pharmacy apps; profile has no internal dependencies. Three measured runs play in turn. Cold: all 5 tasks build, 5.2 seconds. No changes: all 5 tasks are cache hits, 11 milliseconds, FULL TURBO. After changing packages/ui/src: ui, claims and pharmacy rebuild while tokens and profile come from cache, 3 run and 2 cached, 3.5 seconds.</desc>
+  <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ahp" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .txt{fill:#334155;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .mono{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,'DejaVu Sans Mono',monospace}
+    .nb{fill:#d97706}.ng{fill:#16a34a}
+    .nt{fill:#ffffff;font-size:14px;font-weight:700}.ns{fill:#ffffff;font-size:13px}
+    .arr{stroke:#64748b;stroke-width:2;fill:none}.ahp{fill:#64748b}
+    .big{fill:#0f172a;font-size:18px;font-weight:700}
+    .warn{fill:#d97706;font-size:13px;font-weight:700}.okt{fill:#16a34a;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.big{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .nb{fill:#fbbf24}.ng{fill:#4ade80}.nt,.ns{fill:#0f172a}
+      .arr{stroke:#94a3b8}.ahp{fill:#94a3b8}
+      .warn{fill:#fbbf24}.okt{fill:#4ade80}
+    }
+    /* 12 s loop: cold (0-30%), no changes (33-63%), ui changed (66-96%) */
+    .a{animation:12s infinite linear}
+    @keyframes tb{0%,30%{opacity:1}33%,97%{opacity:0}100%{opacity:1}}
+    @keyframes tg{0%,30%{opacity:0}33%,96%{opacity:1}99%,100%{opacity:0}}
+    @keyframes ub{0%,30%{opacity:1}33%,63%{opacity:0}66%,100%{opacity:1}}
+    @keyframes ug{0%,30%{opacity:0}33%,63%{opacity:1}66%,100%{opacity:0}}
+    @keyframes p1{0%,30%{opacity:1}33%,97%{opacity:0}100%{opacity:1}}
+    @keyframes p2{0%,30%{opacity:0}33%,63%{opacity:1}66%,100%{opacity:0}}
+    @keyframes p3{0%,63%{opacity:0}66%,96%{opacity:1}99%,100%{opacity:0}}
+    .tb{animation-name:tb}.tg{animation-name:tg;opacity:0}.ub{animation-name:ub}.ug{animation-name:ug;opacity:0}
+    .p1{animation-name:p1}.p2{animation-name:p2;opacity:0}.p3{animation-name:p3;opacity:0}
+    @media (prefers-reduced-motion: reduce){.a{animation:none}.tb,.ug,.p1,.p2{opacity:0}.tg,.ub,.p3{opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">Task graph + cache: only what changed rebuilds</text>
+  <text class="sub" x="28" y="62">Three measured Turborepo runs on the demo repo (dependsOn: ["^build"], local cache).</text>
+
+  <!-- edges -->
+  <path class="arr" d="M190,134 L190,166" marker-end="url(#ah)"/>
+  <path class="arr" d="M160,214 L112,250" marker-end="url(#ah)"/>
+  <path class="arr" d="M220,214 L268,250" marker-end="url(#ah)"/>
+
+  <!-- nodes: amber = runs, green = cache hit -->
+  <g><rect class="a tb nb" x="115" y="90" width="150" height="44" rx="10"/><rect class="a tg ng" x="115" y="90" width="150" height="44" rx="10"/>
+    <text class="nt mono" x="190" y="110" text-anchor="middle">@org/tokens</text></g>
+  <g><rect class="a ub nb" x="115" y="170" width="150" height="44" rx="10"/><rect class="a ug ng" x="115" y="170" width="150" height="44" rx="10"/>
+    <text class="nt mono" x="190" y="190" text-anchor="middle">@org/ui</text></g>
+  <g><rect class="a ub nb" x="28" y="254" width="150" height="44" rx="10"/><rect class="a ug ng" x="28" y="254" width="150" height="44" rx="10"/>
+    <text class="nt mono" x="103" y="274" text-anchor="middle">claims</text></g>
+  <g><rect class="a ub nb" x="202" y="254" width="150" height="44" rx="10"/><rect class="a ug ng" x="202" y="254" width="150" height="44" rx="10"/>
+    <text class="nt mono" x="277" y="274" text-anchor="middle">pharmacy</text></g>
+  <g><rect class="a tb nb" x="340" y="90" width="150" height="44" rx="10"/><rect class="a tg ng" x="340" y="90" width="150" height="44" rx="10"/>
+    <text class="nt mono" x="415" y="110" text-anchor="middle">profile</text></g>
+  <text class="sub" x="415" y="154" text-anchor="middle">no internal deps</text>
+
+  <!-- per-node status lines -->
+  <g class="a p1"><text class="ns" x="190" y="127" text-anchor="middle">build</text><text class="ns" x="190" y="207" text-anchor="middle">build</text><text class="ns" x="103" y="291" text-anchor="middle">build</text><text class="ns" x="277" y="291" text-anchor="middle">build</text><text class="ns" x="415" y="127" text-anchor="middle">build</text></g>
+  <g class="a p2"><text class="ns" x="190" y="127" text-anchor="middle">cache hit</text><text class="ns" x="190" y="207" text-anchor="middle">cache hit</text><text class="ns" x="103" y="291" text-anchor="middle">cache hit</text><text class="ns" x="277" y="291" text-anchor="middle">cache hit</text><text class="ns" x="415" y="127" text-anchor="middle">cache hit</text></g>
+  <g class="a p3"><text class="ns" x="190" y="127" text-anchor="middle">cache hit</text><text class="ns" x="190" y="207" text-anchor="middle">rebuild</text><text class="ns" x="103" y="291" text-anchor="middle">rebuild</text><text class="ns" x="277" y="291" text-anchor="middle">rebuild</text><text class="ns" x="415" y="127" text-anchor="middle">cache hit</text>
+    <text class="warn" x="276" y="190">← src changed</text></g>
+
+  <!-- run panel -->
+  <rect class="box" x="520" y="90" width="252" height="208" rx="12"/>
+  <g class="a p1">
+    <text class="sub" x="538" y="116">Run 1</text>
+    <text class="lbl" x="538" y="140">Cold build</text>
+    <text class="big" x="538" y="184">5 run / 0 cached</text>
+    <text class="big" x="538" y="214">5.2 s</text>
+    <text class="txt" x="538" y="246">tokens → ui → claims and</text>
+    <text class="txt" x="538" y="264">pharmacy; profile in parallel</text>
+  </g>
+  <g class="a p2">
+    <text class="sub" x="538" y="116">Run 2</text>
+    <text class="lbl" x="538" y="140">No changes</text>
+    <text class="big" x="538" y="184">0 run / 5 cached</text>
+    <text class="big" x="538" y="214">11 ms</text>
+    <text class="okt mono" x="538" y="248">&gt;&gt;&gt; FULL TURBO</text>
+  </g>
+  <g class="a p3">
+    <text class="sub" x="538" y="116">Run 3</text>
+    <text class="lbl" x="538" y="140">Changed packages/ui/src</text>
+    <text class="big" x="538" y="184">3 run / 2 cached</text>
+    <text class="big" x="538" y="214">3.5 s</text>
+    <text class="txt" x="538" y="246">ui's hash changed, so its</text>
+    <text class="txt" x="538" y="264">dependents' hashes did too</text>
+  </g>
+
+  <text class="sub" x="28" y="332">Amber = task runs, green = outputs restored from cache. Each demo build busy-waits 1.5 s.</text>
+  <text class="sub" x="28" y="354">A remote cache shares these hits across CI runners and developers.</text>
+</svg>

@@ -74,6 +74,9 @@ sequenceDiagram
 
 React's hooks rely on a single dispatcher, so a component from one React copy rendered by another breaks. The same class of problem affects any library with global state or singletons (routers, styled-components themes, Redux stores, i18n instances).
 
+![Animation: the same shell and Claims remote side by side; with React shared as a singleton the widget uses the shell's React copy and renders, without sharing the remote loads a second React copy and fails with "Cannot read properties of null (reading 'useState')"](images/01-shared-react-singleton.svg){ loading=lazy }
+*Notice that the only difference is the share scope: one React copy renders the widget, two copies crash its hooks.*
+
 ### Benefits and costs
 
 | Benefit | Cost / risk |
@@ -84,6 +87,9 @@ React's hooks rely on a single dispatcher, so a component from one React copy re
 | Technology choice per team | Multiple frameworks = multiple runtimes downloaded |
 | Scales with organisation size | Overhead for small teams: more pipelines, infra and versioning |
 | Clear ownership | UX consistency needs a strong design system and governance |
+
+![Animation: a shell with a header and nav hosts three slots; Pharmacy and Profile render after a loading spinner, while the Claims remote fails and its error boundary shows "Claims are temporarily unavailable." without affecting the rest of the page](images/01-shell-slot-fallback.svg){ loading=lazy }
+*Watch the Claims slot: its remote fails, the error boundary shows the fallback, and the shell and other slots keep working.*
 
 ### Decision guide
 

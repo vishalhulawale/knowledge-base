@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Shell owns URL prefixes, each MFE owns its nested routes</title>
+  <desc id="d">The URL portal.example.com/claims/C42/lines is split in two: the prefix /claims is matched by the shell router, which mounts the claims remote with basename /claims, and the rest, C42/lines, is matched by the claims MFE's nested route :claimId/lines. When the user clicks View prescription, the claims MFE calls navigate("/pharmacy/rx/RX9") through the shell. The URL changes, the shell matches the /pharmacy prefix, unmounts claims and mounts the pharmacy MFE with basename /pharmacy, which renders its own nested route rx/RX9.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .txt{fill:#334155;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .mono{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,'DejaVu Sans Mono',monospace}
+    .u{font-size:18px}.host{fill:#64748b}.pre{fill:#0f766e;font-weight:700}.nest{fill:#4f46e5;font-weight:700}
+    .r{fill:#334155;font-size:14px}
+    .tl{stroke:#0ea5a4;stroke-width:3}.il{stroke:#4f46e5;stroke-width:3}
+    .tt{fill:#0f766e;font-size:13px;font-weight:700}.it{fill:#4f46e5;font-size:13px;font-weight:700}
+    .hl{fill:#0ea5a4;fill-opacity:.18}
+    .arr{stroke:#0ea5a4;stroke-width:2.5;fill:none}.ahp{fill:#0ea5a4}
+    .btn{fill:#4f46e5}.bt{fill:#ffffff;font-size:13px;font-weight:700}
+    .warn{fill:#d97706;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt,.r{fill:#e2e8f0}.sub,.host{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pre,.tt{fill:#5eead4}.nest,.it{fill:#818cf8}
+      .tl{stroke:#2dd4bf}.il{stroke:#818cf8}.hl{fill:#2dd4bf}
+      .arr{stroke:#2dd4bf}.ahp{fill:#2dd4bf}
+      .btn{fill:#818cf8}.bt{fill:#0f172a}.warn{fill:#fbbf24}
+    }
+    /* 10 s loop: claims route (0-46%), navigate callout (33-48%), pharmacy route (50-93%) */
+    .a{animation:10s infinite linear}
+    @keyframes pa{0%,46%{opacity:1}50%,95%{opacity:0}99%,100%{opacity:1}}
+    @keyframes pb{0%,46%{opacity:0}50%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes nv{0%,30%{opacity:0}33%,47%{opacity:1}50%,100%{opacity:0}}
+    .pa{animation-name:pa}.pb{animation-name:pb;opacity:0}.nv{animation-name:nv;opacity:0}
+    @media (prefers-reduced-motion: reduce){.a{animation:none}.pa{opacity:1}.pb{opacity:0}.nv{opacity:1}}
+  </style>
+  <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ahp" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">One URL, two owners</text>
+  <text class="sub" x="28" y="62">The shell matches the prefix and mounts the owning MFE; the MFE matches the rest with its nested routes.</text>
+
+  <!-- URL bar -->
+  <rect class="box" x="28" y="80" width="744" height="40" rx="20"/>
+  <text class="mono u host" x="48" y="106">portal.example.com</text>
+  <g class="a pa">
+    <text class="mono u pre" x="242" y="106">/claims</text>
+    <text class="mono u nest" x="318" y="106">/C42/lines</text>
+    <line class="tl" x1="242" y1="128" x2="316" y2="128"/>
+    <line class="il" x1="320" y1="128" x2="426" y2="128"/>
+    <text class="tt" x="316" y="150" text-anchor="end">prefix: matched by the shell</text>
+    <text class="it" x="322" y="150">nested route: matched by the MFE</text>
+  </g>
+  <g class="a pb">
+    <text class="mono u pre" x="242" y="106">/pharmacy</text>
+    <text class="mono u nest" x="339" y="106">/rx/RX9</text>
+    <line class="tl" x1="242" y1="128" x2="337" y2="128"/>
+    <line class="il" x1="341" y1="128" x2="415" y2="128"/>
+    <text class="tt" x="337" y="150" text-anchor="end">prefix: matched by the shell</text>
+    <text class="it" x="343" y="150">nested route: matched by the MFE</text>
+  </g>
+
+  <!-- shell router -->
+  <rect class="box" x="28" y="172" width="344" height="158" rx="10"/>
+  <text class="lbl" x="44" y="198">Shell router (owns /*)</text>
+  <rect class="a pa hl" x="36" y="210" width="328" height="32" rx="6"/>
+  <rect class="a pb hl" x="36" y="246" width="328" height="32" rx="6"/>
+  <text class="mono r" x="48" y="231">/claims/*   → claims remote</text>
+  <text class="mono r" x="48" y="267">/pharmacy/* → pharmacy remote</text>
+  <text class="mono r" x="48" y="303">*           → NotFound (shell)</text>
+  <path class="a pa arr" d="M366,226 L406,226" marker-end="url(#ah)"/>
+  <path class="a pb arr" d="M366,262 L406,262" marker-end="url(#ah)"/>
+
+  <!-- mounted MFE -->
+  <rect class="box" x="412" y="172" width="360" height="158" rx="10"/>
+  <text class="sub" x="428" y="196">Mounted MFE</text>
+  <g class="a pa">
+    <text class="lbl" x="428" y="222">Claims MFE</text>
+    <text class="txt" x="428" y="244">basename "/claims"</text>
+    <text class="txt" x="428" y="264">nested route :claimId/lines</text>
+    <text class="txt" x="428" y="284">renders claim C42, lines</text>
+    <rect class="btn" x="616" y="276" width="140" height="34" rx="8"/>
+    <text class="bt" x="686" y="298" text-anchor="middle">View prescription</text>
+  </g>
+  <g class="a pb">
+    <text class="lbl" x="428" y="222">Pharmacy MFE</text>
+    <text class="txt" x="428" y="244">basename "/pharmacy"</text>
+    <text class="txt" x="428" y="264">its own nested route</text>
+    <text class="txt" x="428" y="284">renders rx/RX9</text>
+    <text class="sub" x="428" y="314">claims MFE was unmounted</text>
+  </g>
+  <text class="a nv warn" x="772" y="352" text-anchor="end">click → navigate("/pharmacy/rx/RX9") through the shell's API</text>
+
+  <text class="sub" x="28" y="382">One history for the whole page, so back, refresh and deep links keep working.</text>
+</svg>

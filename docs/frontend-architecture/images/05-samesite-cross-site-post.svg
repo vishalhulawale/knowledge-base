@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 392" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Which cookies a cross-site form POST carries</title>
+  <desc id="d">An attacker page on 127.0.0.1:8802 auto-submits a form POST to the app on localhost:8801. The browser holds four cookies for the app: sid with SameSite=Lax, a Strict cookie, none with SameSite=None, and nosamesite with no SameSite attribute. Right after login the request carries none=1 and nosamesite=1: the Lax and Strict cookies are not sent, the None cookie is sent, and the cookie with no attribute is sent because it was set less than 2 minutes ago. Repeated 130 seconds after login, only none=1 is sent: the cookie with no attribute has aged out and is treated as Lax.</desc>
+  <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ahp" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .txt{fill:#334155;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .mono{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:13px;fill:#334155}
+    .sent{fill:#16a34a}.not{fill:#dc2626}.ct{fill:#ffffff;font-size:13px;font-weight:700}
+    .arr{stroke:#64748b;stroke-width:2;fill:none}.ahp{fill:#64748b}
+    .pill{fill:#4f46e5}.pt{fill:#ffffff;font-size:13px;font-weight:700}
+    .acc{fill:#0f766e;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .sent{fill:#4ade80}.not{fill:#f87171}.ct{fill:#0f172a}
+      .arr{stroke:#94a3b8}.ahp{fill:#94a3b8}
+      .pill{fill:#818cf8}.pt{fill:#0f172a}.acc{fill:#5eead4}
+    }
+    /* 12 s loop: phase 1 POST right after login (0-46%), phase 2 POST 130 s after login (50-93%) */
+    .a{animation:12s infinite linear}
+    @keyframes p1{0%,46%{opacity:1}50%,95%{opacity:0}99%,100%{opacity:1}}
+    @keyframes p2{0%,46%{opacity:0}50%,93%{opacity:1}97%,100%{opacity:0}}
+    .p1{animation-name:p1}.p2{animation-name:p2;opacity:0}
+    @keyframes r1{0%,23%{opacity:0}25%,46%{opacity:1}50%,100%{opacity:0}}
+    @keyframes r2{0%,69%{opacity:0}71%,93%{opacity:1}97%,100%{opacity:0}}
+    .r1{animation-name:r1;opacity:0}.r2{animation-name:r2;opacity:0}
+    @keyframes m1{0%,6%{opacity:0;transform:translateX(0)}8%{opacity:1;transform:translateX(0)}24%,46%{opacity:1;transform:translateX(360px)}50%,100%{opacity:0;transform:translateX(360px)}}
+    @keyframes m2{0%,52%{opacity:0;transform:translateX(0)}54%{opacity:1;transform:translateX(0)}70%,93%{opacity:1;transform:translateX(360px)}97%,100%{opacity:0;transform:translateX(360px)}}
+    .m1{animation:m1 12s infinite linear;opacity:0}.m2{animation:m2 12s infinite linear;opacity:0}
+    @media (prefers-reduced-motion: reduce){.a,.m1,.m2{animation:none}.p1,.m1,.r1{opacity:1}.p2,.m2,.r2{opacity:0}.m1{transform:translateX(360px)}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="390" rx="14"/>
+  <text class="h" x="28" y="40">SameSite on a cross-site form POST</text>
+  <text class="sub" x="28" y="62">Measured in Chromium on this page (Sec-Fetch-Site: cross-site).</text>
+
+  <rect class="box" x="28" y="84" width="180" height="104" rx="10"/>
+  <text class="lbl" x="44" y="108">Attacker page</text>
+  <text class="mono" x="44" y="130">127.0.0.1:8802</text>
+  <text class="sub" x="44" y="152">auto-submits a</text>
+  <text class="sub" x="44" y="170">form POST to the app</text>
+
+  <rect class="box" x="592" y="84" width="180" height="120" rx="10"/>
+  <text class="lbl" x="608" y="108">App</text>
+  <text class="mono" x="608" y="130">localhost:8801</text>
+  <text class="sub" x="608" y="152">Cookie header:</text>
+  <text class="a r1 mono" x="608" y="174">none=1;</text><text class="a r1 mono" x="608" y="192">nosamesite=1</text>
+  <text class="a r2 mono" x="608" y="174">none=1</text>
+
+  <!-- cookie jar -->
+  <rect class="box" x="228" y="84" width="344" height="196" rx="10"/>
+  <text class="lbl" x="244" y="108">Browser cookies for the app</text>
+  <text class="a p1 acc" x="244" y="128">POST right after login</text>
+  <text class="a p2 acc" x="244" y="128">same POST, 130 s after login</text>
+
+  <text class="mono" x="244" y="160">sid</text><text class="sub" x="290" y="160">SameSite=Lax</text>
+  <text class="mono" x="244" y="192">Strict cookie</text>
+  <text class="mono" x="244" y="224">none</text><text class="sub" x="290" y="224">SameSite=None</text>
+  <text class="mono" x="244" y="256">nosamesite</text><text class="sub" x="336" y="256">no attribute</text>
+
+  <rect class="not" x="460" y="144" width="96" height="24" rx="12"/><text class="ct" x="508" y="161" text-anchor="middle">not sent</text>
+  <rect class="not" x="460" y="176" width="96" height="24" rx="12"/><text class="ct" x="508" y="193" text-anchor="middle">not sent</text>
+  <rect class="sent" x="460" y="208" width="96" height="24" rx="12"/><text class="ct" x="508" y="225" text-anchor="middle">sent</text>
+  <g class="a p1"><rect class="sent" x="460" y="240" width="96" height="24" rx="12"/><text class="ct" x="508" y="257" text-anchor="middle">sent</text></g>
+  <g class="a p2"><rect class="not" x="460" y="240" width="96" height="24" rx="12"/><text class="ct" x="508" y="257" text-anchor="middle">not sent</text></g>
+
+  <!-- request -->
+  <path class="arr" d="M118,190 L118,312 L680,312 L680,208" marker-end="url(#ah)"/>
+  <g class="m1"><rect class="pill" x="140" y="298" width="200" height="28" rx="14"/><text class="pt" x="240" y="317" text-anchor="middle">none=1; nosamesite=1</text></g>
+  <g class="m2"><rect class="pill" x="140" y="298" width="200" height="28" rx="14"/><text class="pt" x="240" y="317" text-anchor="middle">none=1</text></g>
+
+  <text class="a p1 txt" x="28" y="350">The no-attribute cookie was under 2 minutes old: Chromium's "Lax + POST" exception.</text>
+  <text class="a p2 txt" x="28" y="350">After 2 minutes it is treated as plain Lax. The SameSite=None cookie is sent regardless of age.</text>
+  <text class="sub" x="28" y="374">So keep CSRF tokens or Origin / Sec-Fetch-Site checks; SameSite is defence in depth.</text>
+</svg>

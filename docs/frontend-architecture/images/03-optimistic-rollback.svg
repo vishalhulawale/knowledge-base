@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Optimistic update with rollback in TanStack Query</title>
+  <desc id="d">Five steps of an optimistic mutation. 1: the cache entry claims M42 holds a claim with status PENDING. 2: Approve is clicked and onMutate cancels in-flight queries, snapshots the previous data and sets the claim to APPROVED, so the UI updates immediately. 3: the POST to approve fails. 4: onError restores the snapshot, so the claim is PENDING again. 5: onSettled invalidates the query and a refetch resyncs the cache with the server.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .txt{fill:#334155;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .num{fill:#4f46e5}.nt{fill:#ffffff;font-size:14px;font-weight:700}
+    .hl{fill:#4f46e5;fill-opacity:.12;stroke:#4f46e5;stroke-width:1.5}
+    .mono{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,'DejaVu Sans Mono',monospace}
+    .pend{fill:#d97706}.appr{fill:#16a34a}.bt{fill:#ffffff;font-size:13px;font-weight:700}
+    .snap{fill:none;stroke:#0ea5a4;stroke-width:2;stroke-dasharray:6 4}.st{fill:#0f766e;font-size:13px;font-weight:700}
+    .bad{fill:#dc2626;font-size:13px;font-weight:700}.ok{fill:#16a34a;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .num{fill:#818cf8}.nt,.bt{fill:#0f172a}
+      .hl{fill:#818cf8;stroke:#818cf8}
+      .pend{fill:#fbbf24}.appr{fill:#4ade80}
+      .snap{stroke:#2dd4bf}.st{fill:#5eead4}
+      .bad{fill:#f87171}.ok{fill:#4ade80}
+    }
+    /* 10 s loop: step1 0-15%, step2 15-35%, step3 35-55%, step4 55-73%, step5 73-93% */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes h1{0%,14%{opacity:1}16%,96%{opacity:0}99%,100%{opacity:1}}
+    @keyframes h2{0%,14%{opacity:0}16%,34%{opacity:1}36%,100%{opacity:0}}
+    @keyframes h3{0%,34%{opacity:0}36%,54%{opacity:1}56%,100%{opacity:0}}
+    @keyframes h4{0%,54%{opacity:0}56%,72%{opacity:1}74%,100%{opacity:0}}
+    @keyframes h5{0%,72%{opacity:0}74%,93%{opacity:1}96%,100%{opacity:0}}
+    @keyframes bp{0%,16%{opacity:1}18%,56%{opacity:0}58%,100%{opacity:1}}
+    @keyframes ba{0%,16%{opacity:0}18%,56%{opacity:1}58%,100%{opacity:0}}
+    @keyframes s2{0%,16%{opacity:0}18%,93%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s3{0%,36%{opacity:0}38%,93%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s5{0%,74%{opacity:0}76%,93%{opacity:1}96%,100%{opacity:0}}
+    .h1{animation-name:h1;opacity:1}.h2{animation-name:h2}.h3{animation-name:h3}.h4{animation-name:h4}.h5{animation-name:h5}
+    .bp{animation-name:bp;opacity:1}.ba{animation-name:ba}.s2{animation-name:s2}.s3{animation-name:s3}.s5{animation-name:s5}
+    @media (prefers-reduced-motion: reduce){.a{animation:none}.h1,.h2,.h3,.h4,.h5,.ba{opacity:0}.bp,.s2,.s3,.s5{opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Optimistic update, failure and rollback</text>
+  <text class="sub" x="28" y="62">useMutation with onMutate / onError / onSettled, as in the code on this page.</text>
+
+  <!-- step highlights -->
+  <rect class="a h1 hl" x="24" y="80" width="416" height="56" rx="8"/>
+  <rect class="a h2 hl" x="24" y="140" width="416" height="56" rx="8"/>
+  <rect class="a h3 hl" x="24" y="200" width="416" height="56" rx="8"/>
+  <rect class="a h4 hl" x="24" y="260" width="416" height="56" rx="8"/>
+  <rect class="a h5 hl" x="24" y="320" width="416" height="56" rx="8"/>
+  <!-- steps -->
+  <circle class="num" cx="50" cy="108" r="14"/><text class="nt" x="50" y="113" text-anchor="middle">1</text>
+  <text class="lbl" x="76" y="104">Cache holds claim C7: PENDING</text>
+  <text class="sub" x="76" y="124">the UI renders from the cache entry</text>
+  <circle class="num" cx="50" cy="168" r="14"/><text class="nt" x="50" y="173" text-anchor="middle">2</text>
+  <text class="lbl" x="76" y="164">Approve clicked → onMutate</text>
+  <text class="sub" x="76" y="184">cancelQueries, snapshot, setQueryData(APPROVED)</text>
+  <circle class="num" cx="50" cy="228" r="14"/><text class="nt" x="50" y="233" text-anchor="middle">3</text>
+  <text class="lbl" x="76" y="224">POST /claims/C7/approve fails</text>
+  <text class="sub" x="76" y="244">the UI has already shown APPROVED</text>
+  <circle class="num" cx="50" cy="288" r="14"/><text class="nt" x="50" y="293" text-anchor="middle">4</text>
+  <text class="lbl" x="76" y="284">onError → setQueryData(ctx.previous)</text>
+  <text class="sub" x="76" y="304">rolled back to the snapshot: PENDING</text>
+  <circle class="num" cx="50" cy="348" r="14"/><text class="nt" x="50" y="353" text-anchor="middle">5</text>
+  <text class="lbl" x="76" y="344">onSettled → invalidateQueries</text>
+  <text class="sub" x="76" y="364">a refetch resyncs the cache with the server</text>
+
+  <!-- cache / UI -->
+  <rect class="box" x="468" y="80" width="304" height="96" rx="10"/>
+  <text class="mono sub" x="484" y="104">cache ["claims","M42"]</text>
+  <text class="lbl" x="484" y="146">Claim C7</text>
+  <g class="a bp"><rect class="pend" x="636" y="126" width="116" height="30" rx="15"/><text class="bt" x="694" y="146" text-anchor="middle">PENDING</text></g>
+  <g class="a ba"><rect class="appr" x="636" y="126" width="116" height="30" rx="15"/><text class="bt" x="694" y="146" text-anchor="middle">APPROVED</text></g>
+
+  <g class="a s2">
+    <rect class="snap" x="468" y="192" width="304" height="40" rx="10"/>
+    <text class="st" x="484" y="217">snapshot (ctx.previous): PENDING</text>
+  </g>
+
+  <rect class="box" x="468" y="248" width="304" height="128" rx="10"/>
+  <text class="lbl" x="484" y="274">Claims API</text>
+  <g class="a s2"><text class="mono txt" x="484" y="300">POST /claims/C7/approve</text></g>
+  <g class="a s3"><text class="bad" x="484" y="322">✗ request failed</text></g>
+  <g class="a s5"><text class="mono txt" x="484" y="346">GET (refetch)</text><text class="ok" x="600" y="346">✓ PENDING</text></g>
+
+</svg>

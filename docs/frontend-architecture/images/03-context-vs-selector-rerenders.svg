@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 396" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Context versus selector re-renders</title>
+  <desc id="d">Two grids of 50 rows, each row reading one claim. Left: rows read a Context value holding filter and claims. Right: rows use a Redux useSelector for their own claim. When the unrelated filter field changes, all 50 Context rows re-render and 0 selector rows re-render. When one claim changes, all 50 Context rows re-render again and only 1 selector row re-renders.</desc>
+  <defs>
+    <pattern id="gl" x="40" y="146" width="30" height="30" patternUnits="userSpaceOnUse"><rect class="cell" x="0" y="0" width="24" height="24" rx="5"/></pattern>
+    <pattern id="gr" x="430" y="146" width="30" height="30" patternUnits="userSpaceOnUse"><rect class="cell" x="0" y="0" width="24" height="24" rx="5"/></pattern>
+    <pattern id="hl" x="40" y="146" width="30" height="30" patternUnits="userSpaceOnUse"><rect class="hot" x="0" y="0" width="24" height="24" rx="5"/></pattern>
+  </defs>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:13px;fill:#334155}
+    .cell{fill:#ffffff;stroke:#cbd5e1}
+    .hot{fill:#d97706}
+    .ev{fill:#4f46e5}.evt{fill:#ffffff;font-size:14px;font-weight:700}
+    .bad{fill:#dc2626;font-size:18px;font-weight:700}.ok{fill:#16a34a;font-size:18px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .cell{fill:#111827;stroke:#475569}.hot{fill:#fbbf24}
+      .ev{fill:#818cf8}.evt{fill:#0f172a}
+      .bad{fill:#f87171}.ok{fill:#4ade80}
+    }
+    /* 10 s loop: phase 1 filter change (0-46%), phase 2 one claim change (50-93%) */
+    .a{animation:10s infinite linear}
+    @keyframes p1{0%,46%{opacity:1}50%,95%{opacity:0}99%,100%{opacity:1}}
+    @keyframes p2{0%,46%{opacity:0}50%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes fl{0%,7%{opacity:0}10%,44%{opacity:1}48%,53%{opacity:0}56%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes f1{0%,53%{opacity:0}56%,92%{opacity:1}96%,100%{opacity:0}}
+    .p1{animation-name:p1}.p2{animation-name:p2;opacity:0}.fl{animation-name:fl;opacity:0}.f1{animation-name:f1;opacity:0}
+    @media (prefers-reduced-motion: reduce){.a{animation:none}.p1{opacity:0}.p2,.fl,.f1{opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="394" rx="14"/>
+  <text class="h" x="28" y="40">Who re-renders? Context vs selectors</text>
+  <text class="sub" x="28" y="62">50 rows, each reading one claim. Amber rows re-rendered (measured on this page with React 19).</text>
+
+  <g class="a p1">
+    <rect class="ev" x="220" y="76" width="360" height="30" rx="15"/>
+    <text class="evt" x="400" y="96" text-anchor="middle">Update: filter changed (rows don't use it)</text>
+  </g>
+  <g class="a p2">
+    <rect class="ev" x="220" y="76" width="360" height="30" rx="15"/>
+    <text class="evt" x="400" y="96" text-anchor="middle">Update: one claim changed</text>
+  </g>
+
+  <text class="lbl" x="40" y="136">Context value {filter, claims}</text>
+  <rect x="40" y="146" width="294" height="144" fill="url(#gl)"/>
+  <rect class="a fl" x="40" y="146" width="294" height="144" fill="url(#hl)"/>
+
+  <text class="lbl" x="430" y="136">useSelector(s =&gt; s.ui.claims[i])</text>
+  <rect x="430" y="146" width="294" height="144" fill="url(#gr)"/>
+  <rect class="a f1 hot" x="640" y="146" width="24" height="24" rx="5"/>
+
+  <text class="bad" x="40" y="322">50/50 rows re-render</text>
+  <text class="a p1 ok" x="430" y="322">0/50 rows re-render</text>
+  <text class="a p2 ok" x="430" y="322">1/50 rows re-render</text>
+  <text class="sub" x="40" y="344">Every consumer re-renders when the value changes.</text>
+  <text class="sub" x="430" y="344">Each row re-renders only if its own slice changed.</text>
+
+  <text class="sub" x="28" y="378">Context fixes: split contexts, memoise the value, or use a store with selectors (Redux, Zustand).</text>
+</svg>

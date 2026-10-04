@@ -74,6 +74,9 @@ sequenceDiagram
 ```
 *Notice that only the shell decides which MFE owns a URL prefix, and MFEs navigate across boundaries through the shell. That keeps the back button, refresh and deep links working.*
 
+![Animation: the URL portal.example.com/claims/C42/lines is split into the /claims prefix, matched by the shell router which mounts the claims MFE, and C42/lines, matched by the MFE's nested route; after navigate("/pharmacy/rx/RX9") the shell matches /pharmacy and mounts the pharmacy MFE instead](images/02-url-prefix-ownership.svg){ loading=lazy }
+*Notice the split: the shell only reads the prefix, and everything after it belongs to the mounted MFE's nested routes.*
+
 Rules:
 
 - **Prefix ownership:** each MFE gets a route prefix, and the shell maps prefixes to remotes (from a manifest).
@@ -95,6 +98,9 @@ Rules:
 | **Shared global store** (one Redux store for all MFEs) | Rarely justified | Familiar | Couples teams, versioning pain, a distributed monolith |
 
 Demo recap: the claims remote dispatched `CustomEvent("claims:selected", {detail: {claimId: "C42"}})` and the shell, listening on `window`, displayed "last selected: C42", with no shared code beyond the event contract.
+
+![Animation: the Claims MFE dispatches a claims:selected event with claim C42 on window and the listening shell shows "last selected: C42"; the Pharmacy MFE mounts and subscribes afterwards and misses the event](images/02-custom-event-late-subscriber.svg){ loading=lazy }
+*Watch the Pharmacy MFE: it subscribes after the dispatch, so it never sees C42. Durable state belongs in the URL or the backend.*
 
 ### Authentication and shared session
 

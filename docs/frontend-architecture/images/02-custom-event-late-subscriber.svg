@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Custom events are fire-and-forget</title>
+  <desc id="d">The Claims MFE dispatches a claims:selected CustomEvent with claimId C42 on window. The shell, already listening, receives it and shows last selected: C42. Later the Pharmacy MFE mounts and subscribes to claims:selected, but it has missed the event because custom events are not replayed. Durable state such as the selected claim belongs in the URL or the backend.</desc>
+  <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ahp" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .txt{fill:#334155;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .dash{fill:none;stroke:#cbd5e1;stroke-dasharray:6 4}
+    .bus{fill:#0ea5a4;fill-opacity:.14}.busl{stroke:#0ea5a4;stroke-width:1.5;fill:none}
+    .bt{fill:#0f766e;font-size:14px;font-weight:700}
+    .pill{fill:#4f46e5}.pt{fill:#ffffff;font-size:13px;font-weight:700}
+    .arr{stroke:#64748b;stroke-width:2;fill:none}.ahp{fill:#64748b}
+    .ok{fill:#16a34a;font-size:14px;font-weight:700}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    .tip{fill:#0f766e;font-size:13px;font-weight:700}
+    .mono{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,'DejaVu Sans Mono',monospace}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.dash{stroke:#475569}
+      .bus{fill:#2dd4bf}.busl{stroke:#2dd4bf}.bt,.tip{fill:#5eead4}
+      .pill{fill:#818cf8}.pt{fill:#0f172a}
+      .arr{stroke:#94a3b8}.ahp{fill:#94a3b8}
+      .ok{fill:#4ade80}.bad{fill:#f87171}
+    }
+    /* 10 s loop: event travels 12-28%, shell updates 30%, pharmacy mounts 50%, missed 60%, tip 70% */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes s1{0%,29%{opacity:0}31%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s2{0%,49%{opacity:0}51%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s3{0%,59%{opacity:0}61%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s4{0%,69%{opacity:0}71%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s0{0%,49%{opacity:1}51%,95%{opacity:0}99%,100%{opacity:1}}
+    .s1{animation-name:s1}.s2{animation-name:s2}.s3{animation-name:s3}.s4{animation-name:s4}.s0{animation-name:s0;opacity:1}
+    @keyframes mv{0%,10%{opacity:0;transform:translateX(0)}12%{opacity:1;transform:translateX(0)}28%{opacity:1;transform:translateX(500px)}31%,100%{opacity:0;transform:translateX(500px)}}
+    .mv{animation:mv 10s infinite linear;opacity:0}
+    @media (prefers-reduced-motion: reduce){.a,.mv{animation:none}.a{opacity:1}.s0,.mv{opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Custom events are fire-and-forget</text>
+  <text class="sub" x="28" y="62">Only listeners that exist at dispatch time receive the event; nothing is stored or replayed.</text>
+
+  <rect class="box" x="40" y="80" width="250" height="78" rx="10"/>
+  <text class="lbl" x="56" y="106">Claims MFE (emitter)</text>
+  <text class="mono txt" x="56" y="128">emit("claims:selected",</text>
+  <text class="mono txt" x="56" y="146">  {claimId: "C42"})</text>
+
+  <rect class="box" x="510" y="80" width="250" height="78" rx="10"/>
+  <text class="lbl" x="526" y="106">Shell (listener)</text>
+  <text class="sub s0 a" x="526" y="136">last selected: none</text>
+  <text class="ok s1 a" x="526" y="136">last selected: C42</text>
+
+  <path class="arr" d="M165,160 L165,192" marker-end="url(#ah)"/>
+  <path class="arr" d="M635,194 L635,162" marker-end="url(#ah)"/>
+
+  <rect class="bus" x="40" y="196" width="720" height="62" rx="8"/>
+  <rect class="busl" x="40" y="196" width="720" height="62" rx="8"/>
+  <text class="bt" x="400" y="216" text-anchor="middle">window · CustomEvent dispatch</text>
+
+  <g class="mv">
+    <rect class="pill" x="56" y="224" width="190" height="28" rx="14"/>
+    <text class="pt" x="151" y="243" text-anchor="middle">claims:selected · C42</text>
+  </g>
+
+  <!-- pharmacy mounts later -->
+  <rect class="dash s0 a" x="275" y="280" width="250" height="78" rx="10"/>
+  <text class="sub s0 a" x="400" y="324" text-anchor="middle">Pharmacy MFE not mounted yet</text>
+  <g class="a s2">
+    <rect class="box" x="275" y="280" width="250" height="78" rx="10"/>
+    <text class="lbl" x="291" y="306">Pharmacy MFE</text>
+    <text class="mono txt" x="291" y="330">on("claims:selected", …)</text>
+    <text class="sub" x="291" y="348">subscribes now</text>
+    <path class="arr" d="M400,278 L400,262" marker-end="url(#ah)"/>
+  </g>
+  <g class="a s3">
+    <text class="bad" x="545" y="306">Missed C42</text>
+    <text class="txt" x="545" y="326">the event was dispatched</text>
+    <text class="txt" x="545" y="344">before it subscribed</text>
+  </g>
+  <g class="a s4">
+    <text class="tip" x="40" y="306">Fix: keep durable state</text>
+    <text class="txt" x="40" y="326">in the URL (?claim=C42)</text>
+    <text class="txt" x="40" y="344">or the backend</text>
+  </g>
+  <text class="sub" x="28" y="384">Events suit notifications between mounted MFEs; listeners must be removed on unmount.</text>
+</svg>

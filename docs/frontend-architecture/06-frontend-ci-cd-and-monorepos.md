@@ -90,6 +90,9 @@ Measured (5 packages, each build busy-waits 1.5 s, cache local):
 | Changed `packages/ui/src` | 3 / 2 | 3.5 s (`ui`, `claims`, `pharmacy` rebuilt) |
 | `--filter='...[HEAD]'` after changing only `apps/profile` | scope: `profile` only | 1 task |
 
+![Animation: the demo task graph (tokens to ui to claims and pharmacy, plus profile) across three measured runs; cold, all five tasks build in 5.2 s; with no changes all five are cache hits in 11 ms; after changing packages/ui/src, ui, claims and pharmacy rebuild while tokens and profile are cache hits, in 3.5 s](images/06-turbo-task-graph-cache.svg){ loading=lazy }
+*Watch run 3: the change to `ui` turns its dependents amber too, because their hashes include `ui`'s, while `tokens` and `profile` stay green.*
+
 `--filter='...[HEAD]'` means "packages changed since HEAD, **plus their dependents**" (the leading `...`). With the `ui` change it selected `@org/ui`, `claims` and `pharmacy` (and the root workspace). In CI you compare against the merge base, e.g. `--filter='...[origin/main]'` (or `--affected` in Turborepo 2.x, which uses the base branch).
 
 **Cache correctness:** a cache is only as good as its inputs. Declare `env` variables that change the output (`API_URL`, feature flags), the right `outputs`, and `inputs` if tests depend on non-source files. A missed input means **stale cached builds** shipped to production.
@@ -113,6 +116,9 @@ sequenceDiagram
     Note over U: users still on the old tab keep loading old hashed chunks, which remain in the bucket
 ```
 *Notice the order: assets first, HTML last. If the HTML went first, users could get references to files that don't exist yet. Old hashed files stay for a while so open tabs can still lazy-load their chunks.*
+
+![Animation: a bucket holding the previous build; new hashed assets are uploaded first with immutable caching, then index.html is replaced with no-cache and invalidated on the CDN, so new visitors get app.3f9a1c.js while a tab opened earlier still finds its old claims chunk](images/06-cdn-deploy-order.svg){ loading=lazy }
+*Notice that `index.html` switches to the new bundle only after the new files exist, and the old files are never deleted during the deploy.*
 
 - **Hashed filenames** (`app.3f9a1c.js`) change whenever content changes, so they can be cached forever: `Cache-Control: public, max-age=31536000, immutable`.
 - **Entry points** that must update immediately: `index.html`, MFE `remoteEntry.js` (unless versioned in the URL), `manifest.json`, service-worker scripts: `Cache-Control: no-cache` (store, but revalidate every time).

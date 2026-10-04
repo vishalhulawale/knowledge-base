@@ -73,6 +73,9 @@ Measured with `query-core`:
 
 Key concepts: **query keys** (arrays that identify data and its parameters: `["claims", memberId, {status}]`), **staleTime** (how long data is fresh: default 0, so refetch on mount/focus), **gcTime** (how long unused cache entries are kept: default 5 min), **refetchOnWindowFocus**, **mutations** with `onMutate`/`onError`/`onSettled`, **prefetching**, **infinite queries**, and **Suspense** support.
 
+![Animation: five steps of an optimistic mutation; the cached claim flips from PENDING to APPROVED in onMutate after a snapshot is taken, the POST fails, onError restores the snapshot so it shows PENDING again, and onSettled invalidates the query so a refetch resyncs the cache](images/03-optimistic-rollback.svg){ loading=lazy }
+*Watch the status badge: the UI shows APPROVED before the server answers, and the snapshot taken in `onMutate` is what makes the rollback possible. The claim id is illustrative.*
+
 ### Client state with Redux Toolkit
 
 ```mermaid
@@ -102,6 +105,9 @@ Measured Immer behaviour: after `approve(3)`, the root state was a **new object*
 | Redux selector returning a new object `s => ({ f: s.ui.filter })` | re-rendered on an unrelated update + dev warning | — |
 
 Context re-renders every consumer when its value changes. It's a dependency-injection mechanism, not a selective subscription store. Fixes: split contexts, memoise values, or use a store with selectors. In Redux, return primitives or memoised selectors (`createSelector`), or use `shallowEqual`.
+
+![Animation: two grids of 50 rows; when an unrelated filter changes, all 50 Context consumers re-render while 0 selector rows do, and when one claim changes, all 50 Context rows re-render again while only 1 selector row does](images/03-context-vs-selector-rerenders.svg){ loading=lazy }
+*Notice that the Context grid lights up completely for both updates, while selectors re-render only the row whose claim changed.*
 
 ### Comparison
 

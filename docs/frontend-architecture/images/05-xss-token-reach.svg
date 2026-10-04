@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 424" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">What injected script can reach, by token storage</title>
+  <desc id="d">An injected script runs in the SPA's origin and probes where tokens are kept. A token in localStorage is readable and is sent to the attacker's server for reuse. A token in JS memory is not persisted, but the script can still call APIs or hook fetch while the page is open. An HttpOnly session cookie is hidden from document.cookie, so it cannot be exfiltrated. With a BFF the tokens stay on the server and never reach the browser. In every case the script can act as the user while the page is open; storage only decides whether a token can be stolen and reused elsewhere.</desc>
+  <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ahp" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .txt{fill:#334155;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .frame{fill:none;stroke:#cbd5e1;stroke-dasharray:6 4}
+    .evil{fill:#dc2626}.et{fill:#ffffff;font-size:14px;font-weight:700}
+    .mono{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:13px;fill:#334155}
+    .arr{stroke:#dc2626;stroke-width:2;fill:none;stroke-dasharray:5 4}.ahp{fill:#dc2626}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}.ok{fill:#16a34a;font-size:14px;font-weight:700}.mid{fill:#d97706;font-size:14px;font-weight:700}
+    .pill{fill:#dc2626}.pt{fill:#ffffff;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.frame{stroke:#475569}
+      .evil,.pill{fill:#f87171}.et,.pt{fill:#0f172a}
+      .arr{stroke:#f87171}.ahp{fill:#f87171}
+      .bad{fill:#f87171}.ok{fill:#4ade80}.mid{fill:#fbbf24}
+    }
+    /* 12 s loop: probe localStorage 8%, memory 30%, cookie 50%, BFF 68%; hold; restart */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes q1{0%,7%{opacity:0}9%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes q2{0%,29%{opacity:0}31%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes q3{0%,49%{opacity:0}51%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes q4{0%,67%{opacity:0}69%,93%{opacity:1}97%,100%{opacity:0}}
+    .q1{animation-name:q1}.q2{animation-name:q2}.q3{animation-name:q3}.q4{animation-name:q4}
+    @keyframes ex{0%,10%{opacity:0;transform:translate(0,0)}12%{opacity:1;transform:translate(0,0)}24%{opacity:1;transform:translate(540px,-40px)}26%,93%{opacity:1;transform:translate(540px,-40px)}97%,100%{opacity:0;transform:translate(540px,-40px)}}
+    .ex{animation:ex 12s infinite linear;opacity:0}
+    @media (prefers-reduced-motion: reduce){.a,.ex{animation:none;opacity:1}.ex{transform:translate(540px,-40px)}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="422" rx="14"/>
+  <text class="h" x="28" y="40">XSS vs token storage: what can be stolen?</text>
+  <text class="sub" x="28" y="62">Injected script runs as your origin. Storage decides whether it can take a token away and reuse it.</text>
+
+  <!-- browser frame -->
+  <rect class="frame" x="28" y="78" width="540" height="276" rx="12"/>
+  <text class="sub" x="44" y="98">Browser: your SPA (origin A)</text>
+  <rect class="evil" x="44" y="108" width="508" height="36" rx="8"/>
+  <text class="et" x="298" y="131" text-anchor="middle">Injected script (XSS) running in origin A</text>
+
+  <!-- attacker server -->
+  <rect class="box" x="588" y="78" width="184" height="72" rx="10"/>
+  <text class="lbl" x="604" y="102">Attacker's server</text>
+  
+
+  <!-- compartments -->
+  <rect class="box" x="44" y="182" width="160" height="62" rx="10"/>
+  <text class="lbl" x="58" y="206">localStorage</text>
+  <text class="mono" x="58" y="228">token = eyJ…</text>
+  <rect class="box" x="218" y="182" width="160" height="62" rx="10"/>
+  <text class="lbl" x="232" y="206">JS memory</text>
+  <text class="mono" x="232" y="228">token in closure</text>
+  <rect class="box" x="392" y="182" width="160" height="62" rx="10"/>
+  <text class="lbl" x="406" y="206">Session cookie</text>
+  <text class="mono" x="406" y="228">HttpOnly; Secure</text>
+  <rect class="box" x="588" y="182" width="184" height="62" rx="10"/>
+  <text class="lbl" x="604" y="206">BFF (server)</text>
+  <text class="mono" x="604" y="228">access + refresh</text>
+
+  <path class="a q1 arr" d="M124,146 L124,178" marker-end="url(#ah)"/>
+  <path class="a q2 arr" d="M298,146 L298,178" marker-end="url(#ah)"/>
+  <path class="a q3 arr" d="M472,146 L472,178" marker-end="url(#ah)"/>
+
+  <g class="ex">
+    <rect class="pill" x="64" y="154" width="84" height="24" rx="12"/>
+    <text class="pt" x="106" y="171" text-anchor="middle">eyJ…</text>
+  </g>
+
+  <g class="a q1">
+    <text class="bad" x="44" y="272">✗ readable</text>
+    <text class="txt" x="44" y="292">sent to the attacker</text>
+    <text class="txt" x="44" y="310">and reused elsewhere</text>
+    <text class="txt" x="44" y="328">until it expires</text>
+  </g>
+  <g class="a q2">
+    <text class="mid" x="218" y="272">~ not persisted</text>
+    <text class="txt" x="218" y="292">but script can call</text>
+    <text class="txt" x="218" y="310">APIs or hook fetch</text>
+    <text class="txt" x="218" y="328">while the page is open</text>
+  </g>
+  <g class="a q3">
+    <text class="ok" x="392" y="272">✓ not readable</text>
+    <text class="txt" x="392" y="292">hidden from</text>
+    <text class="txt" x="392" y="310">document.cookie, so</text>
+    <text class="txt" x="392" y="328">it can't be exfiltrated</text>
+  </g>
+  <g class="a q4">
+    <text class="ok" x="588" y="272">✓ never in browser</text>
+    <text class="txt" x="588" y="292">browser holds only an</text>
+    <text class="txt" x="588" y="310">HttpOnly session cookie</text>
+    <text class="txt" x="588" y="328">(IETF browser-apps BCP)</text>
+  </g>
+
+  <text class="lbl" x="28" y="384">No storage is safe against XSS: script can act as the user while the page is open.</text>
+  <text class="sub" x="28" y="406">Escaping, sanitising and CSP stay the primary controls. localStorage and HttpOnly results measured on this page.</text>
+</svg>

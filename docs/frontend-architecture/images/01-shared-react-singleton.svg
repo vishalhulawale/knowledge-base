@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 456" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Module Federation: one React copy or two</title>
+  <desc id="d">Two side-by-side runs of the same shell and Claims remote. On the left, React is shared as a singleton: the remote's ClaimsWidget uses the shell's React copy, its own copy is never loaded, the widget renders and the CustomEvent reaches the shell, which shows last selected: C42. On the right, nothing is shared: the remote loads its own second React copy, its hooks read a null dispatcher, and the widget fails with Cannot read properties of null (reading 'useState').</desc>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0 L10,5 L0,10 z"/></marker>
+    <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahpr" d="M0,0 L10,5 L0,10 z"/></marker>
+  </defs>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .txt{fill:#334155;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .chip{fill:#4f46e5}.chipr{fill:#dc2626}
+    .ct{fill:#ffffff;font-size:14px;font-weight:700}
+    .cs{fill:#ffffff;font-size:13px}
+    .ghost{fill:none;stroke:#cbd5e1;stroke-dasharray:5 4}
+    .okh{fill:#16a34a;font-size:15px;font-weight:700}.badh{fill:#dc2626;font-size:15px;font-weight:700}
+    .okb{fill:none;stroke:#16a34a;stroke-width:2}.badb{fill:none;stroke:#dc2626;stroke-width:2}
+    .arr{stroke:#4f46e5;stroke-width:2.5;fill:none}.arrr{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .ahp{fill:#4f46e5}.ahpr{fill:#dc2626}
+    .acc{fill:#0f766e;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.ghost{stroke:#475569}
+      .chip{fill:#818cf8}.chipr{fill:#f87171}.ct,.cs{fill:#0f172a}
+      .okh{fill:#4ade80}.badh{fill:#f87171}.okb{stroke:#4ade80}.badb{stroke:#f87171}
+      .arr{stroke:#818cf8}.arrr{stroke:#f87171}.ahp{fill:#818cf8}.ahpr{fill:#f87171}
+      .acc{fill:#5eead4}
+    }
+    /* 10 s loop: remote loads (15%), share scope negotiated (35%), result (55%), hold, fade */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes k1{0%,13%{opacity:0}17%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes k2{0%,33%{opacity:0}37%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes k3{0%,53%{opacity:0}57%,93%{opacity:1}97%,100%{opacity:0}}
+    .k1{animation-name:k1}.k2{animation-name:k2}.k3{animation-name:k3}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="454" rx="14"/>
+  <text class="h" x="28" y="40">Module Federation: one React copy or two?</text>
+  <text class="sub" x="28" y="62">The same shell and Claims remote with two federation configs, as measured on this page.</text>
+
+  <!-- LEFT: shared singleton -->
+  <text class="okh" x="40" y="92">shared: react singleton</text>
+  <rect class="box" x="40" y="104" width="336" height="72" rx="10"/>
+  <text class="lbl" x="56" y="132">Shell (host)</text>
+  <text class="sub" x="56" y="152">layout, auth, routing</text>
+  <rect class="chip" x="248" y="118" width="128" height="44" rx="8"/>
+  <text class="ct" x="312" y="137" text-anchor="middle">React 19</text>
+  <text class="cs" x="312" y="154" text-anchor="middle">copy 1</text>
+
+  <g class="a k1">
+    <rect class="box" x="40" y="200" width="336" height="96" rx="10"/>
+    <text class="lbl" x="56" y="226">Claims remote</text>
+    <text class="sub" x="192" y="226">via remoteEntry.js</text>
+    <rect class="chip" x="248" y="240" width="128" height="44" rx="8"/>
+    <text class="ct" x="312" y="267" text-anchor="middle">ClaimsWidget</text>
+  </g>
+  <g class="a k2">
+    <rect class="ghost" x="108" y="240" width="112" height="44" rx="8"/>
+    <text class="sub" x="164" y="258" text-anchor="middle">own React</text>
+    <text class="sub" x="164" y="275" text-anchor="middle">not loaded</text>
+    <path class="arr" d="M312,240 L312,168" marker-end="url(#ah)"/>
+    <text class="acc" x="302" y="193" text-anchor="end">uses the shell's copy</text>
+  </g>
+  <g class="a k3">
+    <rect class="okb" x="40" y="310" width="336" height="96" rx="10"/>
+    <text class="okh" x="56" y="334">1 React copy on the page</text>
+    <text class="txt" x="56" y="356">ClaimsWidget rendered</text>
+    <text class="txt" x="56" y="376">CustomEvent reached the shell:</text>
+    <text class="txt" x="56" y="394">"last selected: C42"</text>
+  </g>
+
+  <!-- RIGHT: nothing shared -->
+  <text class="badh" x="424" y="92">no shared config</text>
+  <rect class="box" x="424" y="104" width="336" height="72" rx="10"/>
+  <text class="lbl" x="440" y="132">Shell (host)</text>
+  <text class="sub" x="440" y="152">layout, auth, routing</text>
+  <rect class="chip" x="632" y="118" width="128" height="44" rx="8"/>
+  <text class="ct" x="696" y="137" text-anchor="middle">React 19</text>
+  <text class="cs" x="696" y="154" text-anchor="middle">copy 1</text>
+
+  <g class="a k1">
+    <rect class="box" x="424" y="200" width="336" height="96" rx="10"/>
+    <text class="lbl" x="440" y="226">Claims remote</text>
+    <text class="sub" x="576" y="226">via remoteEntry.js</text>
+    <rect class="chip" x="632" y="240" width="128" height="44" rx="8"/>
+    <text class="ct" x="696" y="267" text-anchor="middle">ClaimsWidget</text>
+  </g>
+  <g class="a k2">
+    <rect class="chipr" x="488" y="240" width="112" height="44" rx="8"/>
+    <text class="ct" x="544" y="259" text-anchor="middle">React 19</text>
+    <text class="cs" x="544" y="276" text-anchor="middle">copy 2</text>
+    <path class="arrr" d="M630,262 L606,262" marker-end="url(#ahr)"/>
+  </g>
+  <g class="a k3">
+    <rect class="badb" x="424" y="310" width="336" height="96" rx="10"/>
+    <text class="badh" x="440" y="334">2 React copies on the page</text>
+    <text class="txt" x="440" y="356">Widget not rendered:</text>
+    <text class="txt" x="440" y="376">Cannot read properties of null</text>
+    <text class="txt" x="440" y="394">(reading 'useState')</text>
+  </g>
+
+  <text class="sub" x="28" y="440">Steps: shell loads, remoteEntry.js is fetched, the share scope is negotiated, the widget renders or crashes.</text>
+</svg>

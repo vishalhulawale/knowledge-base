@@ -120,6 +120,9 @@ Measured in Chromium: `div.innerHTML = '<b>x</b>'` threw a `TypeError`, while `d
 
 Key point for interviews: **no storage is safe against XSS**. If attacker script runs, it can act as the user while the page is open. What storage changes is whether the attacker can **steal a token and keep using it elsewhere**. HttpOnly cookies and a BFF stop token exfiltration, which is why they're preferred, and XSS prevention (escaping, sanitising, CSP) remains the primary control.
 
+![Animation: an injected script in the SPA's origin probes token storage; a localStorage token is read and sent to the attacker's server, a token in JS memory isn't persisted but the script can still call APIs, an HttpOnly session cookie is hidden from document.cookie, and with a BFF the tokens never reach the browser](images/05-xss-token-reach.svg){ loading=lazy }
+*Watch the stolen token: only localStorage lets the script take it away. The other options stop exfiltration, not the script acting as the user while the page is open.*
+
 ### OAuth 2.0 for SPAs and the BFF pattern
 
 ```mermaid
@@ -167,6 +170,9 @@ Measured in Chromium (attacker page on `127.0.0.1:8802`, app on `localhost:8801`
 
 !!! note "Lax + POST, re-measured"
     The cross-site POST was repeated 130 seconds after login. Only `none=1` was sent: the cookie with no SameSite attribute had aged out of the 2-minute window and was treated as plain Lax. The `SameSite=None` cookie is sent regardless of age.
+
+![Animation: an attacker page on 127.0.0.1:8802 auto-submits a form POST to localhost:8801; right after login the request carries none=1 and nosamesite=1 while the Lax and Strict cookies stay behind, and 130 seconds later only none=1 is sent](images/05-samesite-cross-site-post.svg){ loading=lazy }
+*Notice the `nosamesite` cookie: it rides along only while it's under 2 minutes old, then behaves like Lax.*
 
 **Defences for cookie-authenticated, state-changing requests:**
 

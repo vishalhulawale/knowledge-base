@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Deploying a SPA to a CDN: assets first, HTML last</title>
+  <desc id="d">A bucket holds the previous build: index.html pointing to app.a1b2c3.js, plus that bundle and a lazy claims chunk. Step 1 uploads the new hashed assets app.3f9a1c.js and claims.7b8c9d.js with immutable one-year caching; index.html still points to the old build. Step 2 uploads index.html with no-cache, now pointing to app.3f9a1c.js. Step 3 invalidates only /index.html on the CDN. Step 4: a new visitor gets the new build, and a tab opened before the deploy can still lazy-load its old claims chunk because old assets are kept.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .txt{fill:#334155;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .mono{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:13px;fill:#334155}
+    .num{fill:#4f46e5}.nt{fill:#ffffff;font-size:14px;font-weight:700}
+    .hl{fill:#4f46e5;fill-opacity:.12;stroke:#4f46e5;stroke-width:1.5}
+    .imm{fill:#0ea5a4}.noc{fill:#d97706}.ct{fill:#ffffff;font-size:13px;font-weight:700}
+    .new{fill:#16a34a;font-size:13px;font-weight:700}.old{fill:#64748b;font-size:13px}
+    .ok{fill:#16a34a;font-size:13px;font-weight:700}
+    .rowl{stroke:#e2e8f0}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt,.mono{fill:#e2e8f0}.sub,.old{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.rowl{stroke:#334155}
+      .num{fill:#818cf8}.nt,.ct{fill:#0f172a}.hl{fill:#818cf8;stroke:#818cf8}
+      .imm{fill:#2dd4bf}.noc{fill:#fbbf24}
+      .new,.ok{fill:#4ade80}
+    }
+    /* 12 s loop: step1 8-30%, step2 30-50%, step3 50-65%, step4 65-93% */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes h1{0%,7%{opacity:0}9%,29%{opacity:1}31%,100%{opacity:0}}
+    @keyframes h2{0%,29%{opacity:0}31%,49%{opacity:1}51%,100%{opacity:0}}
+    @keyframes h3{0%,49%{opacity:0}51%,64%{opacity:1}66%,100%{opacity:0}}
+    @keyframes h4{0%,64%{opacity:0}66%,93%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s1{0%,9%{opacity:0}12%,93%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s2{0%,31%{opacity:0}34%,93%{opacity:1}96%,100%{opacity:0}}
+    @keyframes o2{0%,31%{opacity:1}34%,95%{opacity:0}99%,100%{opacity:1}}
+    @keyframes s3{0%,51%{opacity:0}54%,93%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s4{0%,66%{opacity:0}69%,93%{opacity:1}96%,100%{opacity:0}}
+    .h1{animation-name:h1}.h2{animation-name:h2}.h3{animation-name:h3}.h4{animation-name:h4}
+    .s1{animation-name:s1}.s2{animation-name:s2}.o2{animation-name:o2;opacity:1}.s3{animation-name:s3}.s4{animation-name:s4}
+    @media (prefers-reduced-motion: reduce){.a{animation:none}.h1,.h2,.h3,.h4,.o2{opacity:0}.s1,.s2,.s3,.s4{opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">SPA deploy order: assets first, HTML last</text>
+  <text class="sub" x="28" y="62">Matches the deploy script on this page. Hashes other than 3f9a1c are illustrative.</text>
+
+  <!-- steps -->
+  <rect class="a h1 hl" x="22" y="80" width="310" height="58" rx="8"/>
+  <rect class="a h2 hl" x="22" y="142" width="310" height="58" rx="8"/>
+  <rect class="a h3 hl" x="22" y="204" width="310" height="58" rx="8"/>
+  <rect class="a h4 hl" x="22" y="266" width="310" height="58" rx="8"/>
+  <circle class="num" cx="48" cy="109" r="14"/><text class="nt" x="48" y="114" text-anchor="middle">1</text>
+  <text class="lbl" x="72" y="105">Upload hashed assets</text>
+  <text class="sub" x="72" y="125">immutable, cached for 1 year</text>
+  <circle class="num" cx="48" cy="171" r="14"/><text class="nt" x="48" y="176" text-anchor="middle">2</text>
+  <text class="lbl" x="72" y="167">Upload index.html</text>
+  <text class="sub" x="72" y="187">no-cache: revalidated every time</text>
+  <circle class="num" cx="48" cy="233" r="14"/><text class="nt" x="48" y="238" text-anchor="middle">3</text>
+  <text class="lbl" x="72" y="229">Invalidate /index.html only</text>
+  <text class="sub" x="72" y="249">hashed files never need it</text>
+  <circle class="num" cx="48" cy="295" r="14"/><text class="nt" x="48" y="300" text-anchor="middle">4</text>
+  <text class="lbl" x="72" y="291">Users pick it up</text>
+  <text class="sub" x="72" y="311">old files stay for open tabs</text>
+
+  <!-- bucket -->
+  <rect class="box" x="352" y="80" width="420" height="244" rx="12"/>
+  <text class="lbl" x="368" y="104">Bucket (CDN origin)</text>
+  <text class="a s3 sub" x="756" y="104" text-anchor="end">CDN: /index.html invalidated</text>
+
+  <text class="mono" x="368" y="136">index.html</text>
+  <rect class="noc" x="462" y="121" width="76" height="22" rx="11"/><text class="ct" x="500" y="137" text-anchor="middle">no-cache</text>
+  <text class="a o2 mono" x="550" y="136">→ app.a1b2c3.js</text>
+  <text class="a s2 mono" x="550" y="136">→ app.3f9a1c.js</text>
+  <text class="a s2 new" x="756" y="136" text-anchor="end">new</text>
+  <line class="rowl" x1="364" y1="150" x2="760" y2="150"/>
+
+  <text class="mono" x="368" y="176">assets/app.a1b2c3.js</text>
+  <rect class="imm" x="586" y="161" width="92" height="22" rx="11"/><text class="ct" x="632" y="177" text-anchor="middle">immutable</text>
+  <text class="old" x="756" y="176" text-anchor="end">old</text>
+  <text class="mono" x="368" y="210">assets/claims.d4e5f6.js</text>
+  <rect class="imm" x="586" y="195" width="92" height="22" rx="11"/><text class="ct" x="632" y="211" text-anchor="middle">immutable</text>
+  <text class="old" x="756" y="210" text-anchor="end">old</text>
+  <g class="a s1">
+    <text class="mono" x="368" y="252">assets/app.3f9a1c.js</text>
+    <rect class="imm" x="586" y="237" width="92" height="22" rx="11"/><text class="ct" x="632" y="253" text-anchor="middle">immutable</text>
+    <text class="new" x="756" y="252" text-anchor="end">new</text>
+    <text class="mono" x="368" y="286">assets/claims.7b8c9d.js</text>
+    <rect class="imm" x="586" y="271" width="92" height="22" rx="11"/><text class="ct" x="632" y="287" text-anchor="middle">immutable</text>
+    <text class="new" x="756" y="286" text-anchor="end">new</text>
+  </g>
+  <line class="rowl" x1="364" y1="226" x2="760" y2="226"/>
+
+  <!-- users -->
+  <g class="a s4">
+    <text class="txt" x="28" y="356"><tspan class="ok">✓ New visitor:</tspan> gets index.html → app.3f9a1c.js (the new build)</text>
+    <text class="txt" x="28" y="380"><tspan class="ok">✓ Tab opened before the deploy:</tspan> lazy-loads claims.d4e5f6.js, still in the bucket</text>
+  </g>
+  <text class="sub" x="28" y="404">HTML first would point users at files not uploaded yet; deleting old assets causes ChunkLoadError.</text>
+</svg>

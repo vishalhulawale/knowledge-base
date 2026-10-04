@@ -75,6 +75,9 @@ export const Space4 = "16px";
 
 **Theming** (light/dark, brands, high contrast) then means swapping the primitive-to-semantic mapping, not touching components: `[data-theme="dark"] { --color-action-primary-bg: var(--color-blue-300); }`.
 
+![Animation: the primitive token --color-brand-primary (#0b5fff) feeds the semantic token --color-action-primary-bg through var(), which colours a Submit claim button; changing the primitive at runtime recolours the semantic token and the button, while the generated JS constant stays #0b5fff until the next build](images/04-token-alias-rebrand.svg){ loading=lazy }
+*Notice that only the primitive changes. The semantic token and the button follow through the alias, but the resolved JS constant needs a rebuild.*
+
 ### Component libraries: build, buy, or wrap
 
 | Approach | Examples | Pros | Cons |
