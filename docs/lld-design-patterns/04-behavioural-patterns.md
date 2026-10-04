@@ -72,6 +72,9 @@ flowchart LR
 ```
 *Notice that each handler can **short-circuit** the chain. That's what makes it Chain of Responsibility rather than a plain pipeline. The order is part of the design (authentication before authorisation).*
 
+![Animation: request A with an expired JWT passes the correlation filter and is answered with 401 by the bearer token filter, so authorisation, rate limiting and the controller are never called; request B with a valid token passes every filter and gets 200 from the controller](images/04-chain-short-circuit.svg){ loading=lazy }
+*Watch request A stop at the second box: the later handlers never run, which is the whole point of putting cheap rejections first.*
+
 - **Variants:** "first handler that can handle it wins" (classic GoF) vs "every handler processes in turn" (filters/middleware/pipelines).
 - **Examples:** servlet `FilterChain`, Spring Security `SecurityFilterChain`, Spring MVC `HandlerInterceptor`, Netty pipelines, Express/Koa middleware, validation rule chains, approval workflows (amount thresholds).
 
@@ -107,6 +110,9 @@ stateDiagram-v2
     CANCELLED --> [*]
 ```
 *Notice that the diagram **is** the specification: any transition not drawn is illegal. Encode it once (transition table or State classes) instead of scattering `if (status == ...)` checks across services.*
+
+![Animation: a prescription moves from RECEIVED to VERIFIED to FILLED; a cancel call is rejected because there is no edge from FILLED to CANCELLED, and the conditional SQL update matches zero rows; then it moves legally to SHIPPED](images/04-state-machine-walk.svg){ loading=lazy }
+*Notice the rejected `cancel()`: the state stays FILLED. The guard lives in one place, the transition table or the `WHERE state = …` clause, not in each caller.*
 
 **Implementation options:**
 
