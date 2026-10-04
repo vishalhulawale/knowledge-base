@@ -81,6 +81,9 @@ Stored document (measured):
 
 **Page vs Slice, measured:** 50 sequential pages of 20 PAID claims took **1,534 ms** with `Page` and **773 ms** with `Slice`. The count runs on every page request. Use `Slice` (or keyset pagination on an indexed field, via `ScrollPosition`/`Window` in Spring Data 3.1+) for infinite scroll, and `Page` only when the UI really shows a total.
 
+![Bar chart: fifty sequential pages of twenty claims took 1,534 ms with Page, which runs a find and a count per request, and 773 ms with Slice, which fetches 21 documents and runs no count](images/07-page-vs-slice.svg){ loading=lazy }
+*Notice the count is half the cost here, and it grows with the matching data, not with the page size.*
+
 ### MongoTemplate: precise and atomic
 
 ```java
@@ -116,6 +119,9 @@ sequenceDiagram
     Note over DB: extraField is gone
 ```
 *Notice that `save()` writes the whole entity as it exists in memory. Any field another writer added, or that your class doesn't map, is lost. `@Version` turns this silent overwrite into an exception.*
+
+![Animation: Service A loads claim C6, Service B adds extraField directly in the database, A sets status to PAID in memory and calls save, which replaces the whole document and wipes extraField](images/07-save-overwrites.svg){ loading=lazy }
+*Watch step 4: save() never looked at what was in the database. A targeted `$set` or `@Version` is what protects the other writer's field.*
 
 Measured: after another writer set `extraField`, `repo.save(claim)` removed it (present? **false**). The same change done with `updateFirst(... new Update().set("notes", …))` kept it (present? **true**). With `@Version`, two copies loaded at version 0: the first save succeeded (version 1), the second threw **`OptimisticLockingFailureException`**.
 

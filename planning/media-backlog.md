@@ -46,7 +46,7 @@ Suggested pictures per page; ⏵ marks an animation.
 - [x] 04 Replica sets: ⏵ election and rollback of unreplicated `w:1` writes; write concern `majority` acknowledgment
 - [x] 05 Sharding: ⏵ monotonic shard key hot-spotting the last chunk vs hashed; targeted vs scatter-gather via mongos
 - [x] 06 Transactions: snapshot isolation write skew; transient error label retry loop
-- [ ] 07 Spring Data MongoDB: `save()` whole-document overwrite lost update vs `$set`; optimistic locking `@Version` conflict
+- [x] 07 Spring Data MongoDB: `save()` whole-document overwrite lost update vs `$set`; optimistic locking `@Version` conflict
 
 ### Docker & Kubernetes (P0)
 - [ ] 01 Containers and images: containers vs VMs stack; layer cache invalidation (copy deps before source)

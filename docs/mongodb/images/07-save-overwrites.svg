@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">save() replaces the whole document</title>
+  <desc id="d">Claim C6 in MongoDB has fields claimNo, status PENDING and amount. Service A loads it into a Java object. Service B then sets a new field, extraField, directly in the database. Service A changes status to PAID and calls save(), which replaces the whole document with A&#x27;s in-memory copy, so extraField disappears. The alternative, updateFirst with $set on status only, changes just that field and keeps extraField. With @Version, A&#x27;s stale save would instead fail with OptimisticLockingFailureException.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:16s infinite linear}
+    @keyframes p0{0%,22%{opacity:1}23%{opacity:0}100%{opacity:0}}
+    .p0{animation-name:p0}
+    @keyframes p1{0%{opacity:0}22%{opacity:0}23%,46%{opacity:1}47%{opacity:0}100%{opacity:0}}
+    .p1{animation-name:p1}
+    @keyframes p2{0%{opacity:0}46%{opacity:0}47%,72%{opacity:1}73%{opacity:0}100%{opacity:0}}
+    .p2{animation-name:p2}
+    @keyframes p3{0%{opacity:0}72%{opacity:0}73%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .p3{animation-name:p3}
+    @keyframes p123{0%{opacity:0}22%{opacity:0}23%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .p123{animation-name:p123}
+    @keyframes p12{0%{opacity:0}22%{opacity:0}23%,72%{opacity:1}73%{opacity:0}100%{opacity:0}}
+    .p12{animation-name:p12}
+    @keyframes st0{0%,72%{opacity:1}73%{opacity:0}100%{opacity:0}}
+    .st0{animation-name:st0}
+    @keyframes st1{0%{opacity:0}72%{opacity:0}73%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .st1{animation-name:st1}
+    @keyframes ex{0%{opacity:0}22%{opacity:0}23%,72%{opacity:1}73%{opacity:0}100%{opacity:0}}
+    .ex{animation-name:ex}
+    @keyframes mem{0%{opacity:0}3%{opacity:0}4%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .mem{animation-name:mem}
+    @keyframes m0{0%,46%{opacity:1}47%{opacity:0}100%{opacity:0}}
+    .m0{animation-name:m0}
+    @keyframes m1{0%{opacity:0}46%{opacity:0}47%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .m1{animation-name:m1}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      .p0,.p1,.p2,.st0,.ex,.m0{opacity:0!important}
+    }
+  </style>
+  <defs><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="448" rx="14"/>
+  <text class="h" x="28" y="40">Service A: findBy → modify → save()</text>
+  <text class="sub" x="28" y="62">save() is replaceOne with your in-memory entity. Measured on the page: extraField present? false.</text>
+  <rect class="bp" x="28" y="96" width="180" height="44" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="118" y="123" text-anchor="middle" font-weight="700">Service A</text>
+  <rect class="bt" x="592" y="96" width="180" height="44" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="682" y="123" text-anchor="middle" font-weight="700">Service B</text>
+  <rect class="box" x="250" y="96" width="300" height="200" rx="12" stroke-width="1.5"/>
+  <text class="lbl" x="264" y="120">MongoDB: claims / C6</text>
+  <rect class="bm" x="264" y="134" width="272" height="28" rx="6"/>
+  <text class="sm" x="276" y="153" font-weight="700">claimNo</text>
+  <text class="sm" x="522" y="153" text-anchor="end">&quot;C6&quot;</text>
+  <rect class="bm" x="264" y="168" width="272" height="28" rx="6"/>
+  <text class="sm" x="276" y="187" font-weight="700">status</text>
+  <rect class="bm" x="264" y="202" width="272" height="28" rx="6"/>
+  <text class="sm" x="276" y="221" font-weight="700">amount</text>
+  <text class="sm" x="522" y="221" text-anchor="end">393.80</text>
+  <text class="sm a st0" x="522" y="187" text-anchor="end">&quot;PENDING&quot;</text>
+  <text class="sm okt a st1" x="522" y="187" text-anchor="end">&quot;PAID&quot;</text>
+  <g class="a ex">
+  <rect class="bt" x="264" y="236" width="272" height="28" rx="6"/>
+  <text class="sm" x="276" y="255" font-weight="700">extraField</text>
+  <text class="sm" x="522" y="255" text-anchor="end">&quot;x&quot;</text>
+  </g>
+  <g class="a p3">
+  <rect class="bb" x="264" y="236" width="272" height="28" rx="6"/>
+  <text class="sm badt" x="276" y="255" font-weight="700">extraField: gone</text>
+  </g>
+  <g class="a mem">
+  <rect class="bp" x="28" y="156" width="180" height="110" rx="10" stroke-width="1.2"/>
+  <text class="sm" x="40" y="176">in memory (Claim)</text>
+  <text class="sm" x="40" y="198">claimNo C6</text>
+  <text class="sm" x="40" y="216">amount 393.80</text>
+  </g>
+  <text class="sm a m0" x="40" y="234">status PENDING</text>
+  <text class="sm okt a m1" x="40" y="234">status PAID</text>
+  <text class="sm badt a mem" x="40" y="254">(no extraField)</text>
+  <line class="lnp a p0" x1="210" y1="118" x2="246" y2="118" marker-end="url(#arp)"/>
+  <text class="sm a p0" x="228" y="110" text-anchor="middle">find</text>
+  <line class="lnt a p1" x1="590" y1="248" x2="540" y2="248" marker-end="url(#art)"/>
+  <text class="sm teat a p1" x="594" y="240">$set extraField</text>
+  <line class="lnb a p3" x1="210" y1="210" x2="246" y2="210" marker-end="url(#arb)"/>
+  <text class="sm badt a p3" x="212" y="200">save()</text>
+  <text class="lbl a p0" x="28" y="336">1  A loads C6 into an entity</text>
+  <text class="lbl a p1" x="28" y="336">2  B adds extraField straight to the database</text>
+  <text class="lbl a p2" x="28" y="336">3  A sets status = PAID in memory; the database still has extraField</text>
+  <text class="lbl badt a p3" x="28" y="336">4  A calls save(): replaceOne with the entity, extraField is wiped</text>
+  <text class="tx okt" x="28" y="372">Fix: updateFirst(query, new Update().set(&quot;status&quot;, &quot;PAID&quot;)) touches only status.</text>
+  <text class="tx" x="28" y="396">Or add @Version: the stale save throws OptimisticLockingFailureException instead of silently overwriting.</text>
+  <text class="sub" x="28" y="426">Saving an entity loaded with a projection is worse: every unprojected field is written back as null.</text>
+</svg>
