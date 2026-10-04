@@ -1,0 +1,191 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Monotonic shard key: ranged vs hashed</title>
+  <desc id="d">Events with increasing createdAt timestamps are inserted into two sharded collections. With a ranged key on createdAt, every new value is larger than the current maximum, so every insert goes to the top range, which lives on shard 2; shard 1 receives nothing. With a hashed key on createdAt, the hash scatters consecutive values, so inserts alternate unpredictably between both shards. On the page&#x27;s measured run of 50,000 inserts the ranged key put 50,001 documents on one shard and 1 on the other, while the hashed key split them 24,979 and 25,021.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:14s infinite linear}
+    @keyframes i00{0%{opacity:0}3%{opacity:0}4%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .i00{animation-name:i00}
+    @keyframes i01{0%{opacity:0}11%{opacity:0}12%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .i01{animation-name:i01}
+    @keyframes i02{0%{opacity:0}19%{opacity:0}20%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .i02{animation-name:i02}
+    @keyframes i03{0%{opacity:0}27%{opacity:0}28%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .i03{animation-name:i03}
+    @keyframes i04{0%{opacity:0}35%{opacity:0}36%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .i04{animation-name:i04}
+    @keyframes i05{0%{opacity:0}43%{opacity:0}44%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .i05{animation-name:i05}
+    @keyframes i06{0%{opacity:0}51%{opacity:0}52%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .i06{animation-name:i06}
+    @keyframes i07{0%{opacity:0}59%{opacity:0}60%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .i07{animation-name:i07}
+    @keyframes i08{0%{opacity:0}67%{opacity:0}68%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .i08{animation-name:i08}
+    @keyframes i09{0%{opacity:0}75%{opacity:0}76%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .i09{animation-name:i09}
+    @keyframes i10{0%{opacity:0}3%{opacity:0}4%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .i10{animation-name:i10}
+    @keyframes i11{0%{opacity:0}11%{opacity:0}12%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .i11{animation-name:i11}
+    @keyframes i12{0%{opacity:0}19%{opacity:0}20%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .i12{animation-name:i12}
+    @keyframes i13{0%{opacity:0}27%{opacity:0}28%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .i13{animation-name:i13}
+    @keyframes i14{0%{opacity:0}35%{opacity:0}36%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .i14{animation-name:i14}
+    @keyframes i15{0%{opacity:0}43%{opacity:0}44%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .i15{animation-name:i15}
+    @keyframes i16{0%{opacity:0}51%{opacity:0}52%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .i16{animation-name:i16}
+    @keyframes i17{0%{opacity:0}59%{opacity:0}60%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .i17{animation-name:i17}
+    @keyframes i18{0%{opacity:0}67%{opacity:0}68%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .i18{animation-name:i18}
+    @keyframes i19{0%{opacity:0}75%{opacity:0}76%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .i19{animation-name:i19}
+    @keyframes fin{0%{opacity:0}83%{opacity:0}84%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .fin{animation-name:fin}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="448" rx="14"/>
+  <text class="h" x="28" y="40">10 inserts with increasing createdAt</text>
+  <text class="sub" x="28" y="62">Two shards. Measured on the page with 50,000 inserts: 50,001 / 1 vs 24,979 / 25,021.</text>
+  <line class="ln dash" x1="400" y1="84" x2="400" y2="360"/>
+  <text class="h2" x="28" y="102">{createdAt: 1}  ranged</text>
+  <rect class="bm" x="28" y="118" width="170" height="232" rx="10" stroke-width="1"/>
+  <text class="lbl" x="40" y="140">Shard 1</text>
+  <text class="sm" x="40" y="158">min … Mar 31</text>
+  <rect class="bm" x="208" y="118" width="170" height="232" rx="10" stroke-width="1"/>
+  <text class="lbl" x="220" y="140">Shard 2</text>
+  <text class="sm" x="220" y="158">Apr 1 … max</text>
+  <g class="a i00">
+  <rect class="pri" x="220" y="170" width="70" height="24" rx="5"/>
+  <text class="on13" x="255" y="186.5" text-anchor="middle">t+1</text>
+  </g>
+  <g class="a i01">
+  <rect class="pri" x="296" y="170" width="70" height="24" rx="5"/>
+  <text class="on13" x="331" y="186.5" text-anchor="middle">t+2</text>
+  </g>
+  <g class="a i02">
+  <rect class="pri" x="220" y="200" width="70" height="24" rx="5"/>
+  <text class="on13" x="255" y="216.5" text-anchor="middle">t+3</text>
+  </g>
+  <g class="a i03">
+  <rect class="pri" x="296" y="200" width="70" height="24" rx="5"/>
+  <text class="on13" x="331" y="216.5" text-anchor="middle">t+4</text>
+  </g>
+  <g class="a i04">
+  <rect class="pri" x="220" y="230" width="70" height="24" rx="5"/>
+  <text class="on13" x="255" y="246.5" text-anchor="middle">t+5</text>
+  </g>
+  <g class="a i05">
+  <rect class="pri" x="296" y="230" width="70" height="24" rx="5"/>
+  <text class="on13" x="331" y="246.5" text-anchor="middle">t+6</text>
+  </g>
+  <g class="a i06">
+  <rect class="pri" x="220" y="260" width="70" height="24" rx="5"/>
+  <text class="on13" x="255" y="276.5" text-anchor="middle">t+7</text>
+  </g>
+  <g class="a i07">
+  <rect class="pri" x="296" y="260" width="70" height="24" rx="5"/>
+  <text class="on13" x="331" y="276.5" text-anchor="middle">t+8</text>
+  </g>
+  <g class="a i08">
+  <rect class="pri" x="220" y="290" width="70" height="24" rx="5"/>
+  <text class="on13" x="255" y="306.5" text-anchor="middle">t+9</text>
+  </g>
+  <g class="a i09">
+  <rect class="pri" x="296" y="290" width="70" height="24" rx="5"/>
+  <text class="on13" x="331" y="306.5" text-anchor="middle">t+10</text>
+  </g>
+  <text class="h2" x="420" y="102">{createdAt: &quot;hashed&quot;}</text>
+  <rect class="bm" x="420" y="118" width="170" height="232" rx="10" stroke-width="1"/>
+  <text class="lbl" x="432" y="140">Shard 1</text>
+  <text class="sm" x="432" y="158">hash range A</text>
+  <rect class="bm" x="600" y="118" width="170" height="232" rx="10" stroke-width="1"/>
+  <text class="lbl" x="612" y="140">Shard 2</text>
+  <text class="sm" x="612" y="158">hash range B</text>
+  <g class="a i10">
+  <rect class="tea" x="612" y="170" width="70" height="24" rx="5"/>
+  <text class="on13" x="647" y="186.5" text-anchor="middle">t+1</text>
+  </g>
+  <g class="a i11">
+  <rect class="tea" x="432" y="170" width="70" height="24" rx="5"/>
+  <text class="on13" x="467" y="186.5" text-anchor="middle">t+2</text>
+  </g>
+  <g class="a i12">
+  <rect class="tea" x="508" y="170" width="70" height="24" rx="5"/>
+  <text class="on13" x="543" y="186.5" text-anchor="middle">t+3</text>
+  </g>
+  <g class="a i13">
+  <rect class="tea" x="688" y="170" width="70" height="24" rx="5"/>
+  <text class="on13" x="723" y="186.5" text-anchor="middle">t+4</text>
+  </g>
+  <g class="a i14">
+  <rect class="tea" x="432" y="200" width="70" height="24" rx="5"/>
+  <text class="on13" x="467" y="216.5" text-anchor="middle">t+5</text>
+  </g>
+  <g class="a i15">
+  <rect class="tea" x="612" y="200" width="70" height="24" rx="5"/>
+  <text class="on13" x="647" y="216.5" text-anchor="middle">t+6</text>
+  </g>
+  <g class="a i16">
+  <rect class="tea" x="688" y="200" width="70" height="24" rx="5"/>
+  <text class="on13" x="723" y="216.5" text-anchor="middle">t+7</text>
+  </g>
+  <g class="a i17">
+  <rect class="tea" x="508" y="200" width="70" height="24" rx="5"/>
+  <text class="on13" x="543" y="216.5" text-anchor="middle">t+8</text>
+  </g>
+  <g class="a i18">
+  <rect class="tea" x="612" y="230" width="70" height="24" rx="5"/>
+  <text class="on13" x="647" y="246.5" text-anchor="middle">t+9</text>
+  </g>
+  <g class="a i19">
+  <rect class="tea" x="432" y="230" width="70" height="24" rx="5"/>
+  <text class="on13" x="467" y="246.5" text-anchor="middle">t+10</text>
+  </g>
+  <text class="tx badt a fin" x="28" y="380">Shard 2 takes every write: a hot shard</text>
+  <text class="tx okt a fin" x="420" y="380">Writes spread across both shards</text>
+  <text class="sub" x="28" y="412">Hashing fixes write distribution but turns range queries on createdAt into scatter-gather.</text>
+  <text class="sub" x="28" y="430">A compound key like {memberId, createdAt} spreads writes and keeps per-member ranges targeted.</text>
+</svg>

@@ -61,6 +61,9 @@ flowchart LR
 
 With a ranged monotonic key, every new value is greater than the current maximum, so every insert lands in the top range on one shard. The balancer can move ranges later, but writes always chase the newest range, so that shard becomes the write bottleneck.
 
+![Animation: ten inserts with increasing createdAt all land on shard 2 under a ranged createdAt key, leaving shard 1 idle, while under a hashed createdAt key they spread across both shards](images/05-monotonic-hot-shard.svg){ loading=lazy }
+*Watch the left pair: shard 1 never receives a write. Adding more shards wouldn't help, because the newest range is always on exactly one of them.*
+
 ### What makes a good shard key
 
 ```mermaid
@@ -89,6 +92,9 @@ flowchart TD
 | `{serviceDate: March 1}` (suffix of the key only) | SHARD_MERGE | s1, s2 | 100,000 | 39 ms |
 
 (The scatter-gather queries also lacked a secondary index here. With an index each shard does less work, but every shard still participates.) Scatter-gather queries scale poorly: adding shards adds work to every such query, and tail latency becomes the slowest shard's latency. Queries on a key *prefix* are targeted, while queries on only a suffix aren't.
+
+![A query on memberId goes from mongos to the single shard that owns that member's range, while a query on status and amount must go to every shard and be merged](images/05-targeted-vs-scatter.svg){ loading=lazy }
+*Notice the fan-out on the right: its latency is the slowest shard's latency, and it grows with every shard you add.*
 
 ### Rules and limits
 
