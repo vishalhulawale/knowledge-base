@@ -45,6 +45,9 @@ flowchart LR
 | **Interactive queries** | Query local state stores via your own REST API; use `application.server` metadata to route to the instance that owns the key |
 | **EOS** | `processing.guarantee=exactly_once_v2` (the default is `at_least_once`; the older `exactly_once` and `exactly_once_beta` values were removed in Kafka 4.0) |
 
+![Animation: claims keyed by claimId sit in different partitions from their providers, so each task's join finds no match and emits nothing; after selectKey to providerId the claims are rewritten through a repartition topic and each claim lands in the same partition as its provider and matches](images/11-co-partitioning.svg){ loading=lazy }
+*Notice that the broken join throws nothing. The only symptom is an output topic that stays empty, which is why co-partitioning is a classic interview probe.*
+
 !!! note "Version notes (Kafka 3.x → 4.x)"
     - Streams never talked to ZooKeeper directly (it only uses the client protocol), so KRaft changes nothing for the application code.
     - Classic Streams apps use the classic consumer group protocol with a client-side assignor. The KIP-848 consumer protocol (`group.protocol=consumer`) is **not** used by Streams. Streams has its own server-side protocol, **KIP-1071** (`group.protocol=streams`), early access in 4.0/4.1 and GA with a limited feature set in 4.2.
@@ -164,6 +167,9 @@ Things to notice in this topology:
 ```
 
 This is trimmed to the interesting parts. A real config also needs `database.port`, `database.user`, `database.password` and usually `plugin.name=pgoutput`. EventRouter defaults: it routes by the `aggregatetype` column (overridden above because this table names it `aggregate_type`), uses `aggregateid` as the Kafka key and `payload` as the value, and writes to the topic `outbox.event.<aggregate type value>` (change with `route.topic.replacement`).
+
+![The order service writes orders and an outbox row in one transaction; Postgres records it in the WAL; a Debezium task on a Connect worker reads the WAL through a replication slot, the EventRouter transform publishes to outbox.event.order keyed by aggregateid, consumers read it, and the last LSN read is stored in the Connect offsets topic](images/11-debezium-outbox.svg){ loading=lazy }
+*Notice there is no "sent" column to update: the WAL position in the offsets topic is the relay's only bookmark.*
 
 ### S3 sink with DLQ
 
