@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 452" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">JDK dynamic proxy vs CGLIB proxy</title>
+  <desc id="d">Left, JDK dynamic proxy: a generated proxy class and OrderServiceImpl both implement the interface OrderService, so they are siblings; the proxy forwards calls to the target. The proxy is not an instance of OrderServiceImpl, so injecting the concrete class fails, but a final class is fine. Right, CGLIB proxy, the Spring Boot default: the generated class OrderServiceImpl$$SpringCGLIB$$0 extends OrderServiceImpl and forwards calls to a separate target instance. It is an instance of OrderServiceImpl and needs no interface, but a final class cannot be proxied and a final method runs on the proxy itself, whose injected fields are null.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .ifc{fill:#ccfbf1;stroke:#0ea5a4}
+    .prx{fill:#4f46e5}
+    .pt{fill:#ffffff;font-size:13px;font-weight:700}
+    .bt{fill:#0f172a;font-size:13px;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:1.8;fill:none}
+    .dash{stroke-dasharray:6 4}
+    .tri{fill:#ffffff;stroke:#64748b;stroke-width:1.8}
+    .ah{fill:#64748b}
+    .good{fill:#16a34a}.bad{fill:#dc2626}
+    .mark{stroke:#ffffff;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+    .div{stroke:#e2e8f0;stroke-width:1.5}
+    .tag{fill:#0f766e;font-size:13px;font-weight:600}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .ifc{fill:#134e4a;stroke:#2dd4bf}
+      .prx{fill:#818cf8}.pt{fill:#0f172a}.bt{fill:#f1f5f9}
+      .ln{stroke:#94a3b8}.tri{fill:#1f2430;stroke:#94a3b8}.ah{fill:#94a3b8}
+      .good{fill:#4ade80}.bad{fill:#f87171}.mark{stroke:#0f172a}
+      .div{stroke:#334155}.tag{fill:#5eead4}
+    }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0 0L10 5L0 10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="450" rx="14"/>
+  <text class="h" x="28" y="40">JDK dynamic proxy vs CGLIB proxy</text>
+  <line class="div" x1="400" y1="62" x2="400" y2="420"/>
+
+  <!-- LEFT: JDK -->
+  <text class="lbl" x="28" y="74">JDK dynamic proxy</text>
+  <text class="tag" x="28" y="92">Framework default when an interface exists</text>
+  <rect class="ifc" x="116" y="108" width="176" height="48" rx="8"/>
+  <text class="sub" x="204" y="126" text-anchor="middle">interface</text>
+  <text class="bt code" x="204" y="145" text-anchor="middle">OrderService</text>
+  <rect class="prx" x="34" y="214" width="146" height="48" rx="8"/>
+  <text class="pt code" x="107" y="235" text-anchor="middle">$Proxy</text>
+  <text class="pt" x="107" y="252" text-anchor="middle">generated</text>
+  <rect class="box" x="230" y="214" width="150" height="48" rx="8"/>
+  <text class="bt code" x="305" y="235" text-anchor="middle">OrderServiceImpl</text>
+  <text class="sub" x="305" y="252" text-anchor="middle">target</text>
+  <path class="ln dash" d="M107 214V185H170V166"/>
+  <path class="ln dash" d="M305 214V185H238V166"/>
+  <path class="tri" d="M170 157l-7 11h14z"/><path class="tri" d="M238 157l-7 11h14z"/>
+  <text class="sub" x="204" y="200" text-anchor="middle">implements</text>
+  <path class="ln" d="M180 238H226" marker-end="url(#ar)"/>
+  <text class="sub" x="204" y="280" text-anchor="middle">forwards</text>
+  <circle class="good" cx="36" cy="313" r="8"/><path class="mark" d="M32 313l3 3 5-6.5"/><text class="tx" x="52" y="318">Implements the bean's interfaces</text>
+  <circle class="bad" cx="36" cy="339" r="8"/><path class="mark" d="M32.8 335.8l6.4 6.4M39.2 335.8l-6.4 6.4"/><text class="tx" x="52" y="344">instanceof OrderServiceImpl: false</text>
+  <circle class="bad" cx="36" cy="365" r="8"/><path class="mark" d="M32.8 361.8l6.4 6.4M39.2 361.8l-6.4 6.4"/><text class="tx" x="52" y="370">Injecting OrderServiceImpl fails</text>
+  <circle class="good" cx="36" cy="391" r="8"/><path class="mark" d="M32 391l3 3 5-6.5"/><text class="tx" x="52" y="396">A final class is fine</text>
+
+  <!-- RIGHT: CGLIB -->
+  <text class="lbl" x="420" y="74">CGLIB proxy</text>
+  <text class="tag" x="420" y="92">Spring Boot default</text>
+  <rect class="box" x="508" y="108" width="176" height="48" rx="8"/>
+  <text class="sub" x="596" y="126" text-anchor="middle">class</text>
+  <text class="bt code" x="596" y="145" text-anchor="middle">OrderServiceImpl</text>
+  <rect class="prx" x="420" y="208" width="188" height="58" rx="8"/>
+  <text class="pt code" x="514" y="230" text-anchor="middle">OrderServiceImpl</text>
+  <text class="pt code" x="514" y="247" text-anchor="middle">$$SpringCGLIB$$0</text>
+  <text class="pt" x="514" y="262" text-anchor="middle" font-size="13">generated subclass</text>
+  <rect class="box" x="650" y="208" width="122" height="58" rx="8"/>
+  <text class="bt" x="711" y="232" text-anchor="middle">separate</text>
+  <text class="bt" x="711" y="250" text-anchor="middle">target object</text>
+  <path class="ln" d="M514 208V185H560V168"/>
+  <path class="tri" d="M560 157l-7 11h14z"/>
+  <text class="sub" x="566" y="200">extends</text>
+  <path class="ln" d="M608 237H646" marker-end="url(#ar)"/>
+  <text class="sub" x="629" y="284" text-anchor="middle">forwards</text>
+  <circle class="good" cx="428" cy="313" r="8"/><path class="mark" d="M424 313l3 3 5-6.5"/><text class="tx" x="444" y="318">Subclass: instanceof is true</text>
+  <circle class="good" cx="428" cy="339" r="8"/><path class="mark" d="M424 339l3 3 5-6.5"/><text class="tx" x="444" y="344">No interface needed</text>
+  <circle class="bad" cx="428" cy="365" r="8"/><path class="mark" d="M424.8 361.8l6.4 6.4M431.2 361.8l-6.4 6.4"/><text class="tx" x="444" y="370">A final class cannot be proxied</text>
+  <circle class="bad" cx="428" cy="391" r="8"/><path class="mark" d="M424.8 387.8l6.4 6.4M431.2 387.8l-6.4 6.4"/><text class="tx" x="444" y="396">A final method runs on the proxy,</text>
+  <text class="tx" x="444" y="414">whose injected fields are null</text>
+
+  <text class="sub" x="28" y="440">Both forward to a real target bean. The CGLIB instance is created without running your constructor.</text>
+</svg>

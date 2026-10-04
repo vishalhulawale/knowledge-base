@@ -67,6 +67,9 @@ Two details worth knowing:
 
 **CGLIB proxy** generates a *subclass* of your class at runtime and overrides every overridable method to call an interceptor. The proxy *is* an instance of your class. Spring ships its own repackaged CGLIB (`org.springframework.cglib`), and proxy class names look like `OrderService$$SpringCGLIB$$0`.
 
+![Side by side: a JDK proxy and OrderServiceImpl both implement the OrderService interface, while a CGLIB proxy is a generated subclass of OrderServiceImpl; both forward calls to a separate target object, with the consequences for instanceof, injection and final classes and methods listed below each](images/04-jdk-vs-cglib.svg){ loading=lazy }
+*Notice that both proxies forward to a separate target object. The CGLIB proxy only looks like your class from the outside.*
+
 | | JDK dynamic proxy | CGLIB proxy |
 |---|---|---|
 | Mechanism | Implements the bean's interfaces | Subclasses the bean's class |
@@ -113,6 +116,9 @@ sequenceDiagram
 This is the single most asked AOP question. Inside the target, `saveAudit()` means `this.saveAudit()`, and `this` is the raw object, not the proxy. So annotations on `saveAudit()` do nothing when it is called from another method of the same class.
 
 Many people expect CGLIB to solve this, since the proxy is a subclass and subclasses override methods. It does not. Spring's CGLIB proxy **delegates to a separate target instance**. It does not call `super.method()` on itself. So once execution is inside the target, `this` is the target, and the overridden methods on the proxy are out of the picture.
+
+![Animation: on the left a call enters the proxy of ClaimService, the TransactionInterceptor begins a transaction, submit() runs and then calls this.saveAudit() inside the same target without advice; on the right submit() calls auditService.saveAudit(), which passes through the proxy of ClaimAuditService and starts a new transaction](images/04-self-invocation.svg){ loading=lazy }
+*Watch the internal call on the left: it never leaves the target object, so it never meets the interceptor. The fix on the right puts the method behind its own proxy.*
 
 Fixes, in the order the Spring documentation recommends them:
 

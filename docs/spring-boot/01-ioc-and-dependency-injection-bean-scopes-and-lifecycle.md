@@ -169,6 +169,9 @@ sequenceDiagram
 
 `@RequestScope` and `@SessionScope` already set `proxyMode = TARGET_CLASS`. For prototypes, `ObjectProvider<T>.getObject()` or a `@Lookup` method is usually clearer than a proxy, because a prototype proxy creates a new instance on **every method call**.
 
+![Animation: three calls reach a singleton ReportService; with the prototype injected once, a single ReportBuilder collects rows from A, B and C, while with ObjectProvider.getObject() each call gets its own builder holding only its own rows](images/01-prototype-in-singleton.svg){ loading=lazy }
+*Notice that the directly injected prototype is created only once, at wiring time. Every later call reuses it and sees the earlier callers' data.*
+
 ### Circular dependencies and the three-level cache
 
 `A` needs `B` and `B` needs `A`.
@@ -177,6 +180,9 @@ sequenceDiagram
 - With **field or setter injection** between singletons, Spring can resolve it by exposing an **early reference** to the half-built `A`. `DefaultSingletonBeanRegistry` uses three maps: `singletonObjects` (finished beans), `earlySingletonObjects` (early references already handed out) and `singletonFactories` (factories that produce the early reference, wrapped in a proxy if the bean needs one).
 
 The third level exists for AOP. If `A` will be proxied, `B` must receive the **proxy**, not the raw `A`. The factory lets Spring create that proxy early, and only if someone actually asks for it.
+
+![Animation: five steps of a field-injection cycle between A and B, showing factories in singletonFactories, the early reference to A moving to earlySingletonObjects, and both beans ending in singletonObjects](images/01-circular-three-level-cache.svg){ loading=lazy }
+*Watch A's factory: it is called only when B asks for A, and what it returns (the raw object or the proxy) is the early reference B keeps.*
 
 Since **Spring Boot 2.6, circular references are prohibited by default**. The application fails at startup with a description of the cycle. `spring.main.allow-circular-references=true` restores the old behaviour, but treat it as a migration aid. A cycle means two classes share one responsibility. Extract the shared part into a third bean, or decouple with an event.
 

@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Virtual threads mounting and unmounting</title>
+  <desc id="d">Two carrier platform threads run four virtual threads. VT 1 runs on carrier 1 and makes a blocking call, so it unmounts and its stack is parked on the heap; VT 3 mounts on carrier 1 straight away. VT 2 blocks in the same way on carrier 2 and VT 4 takes its place. When VT 3 finishes and VT 1's response arrives, VT 1 mounts again on carrier 1. When VT 4 blocks, VT 2's response has arrived and VT 2 mounts again on carrier 2. The carriers are never idle while requests wait.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .lane{fill:#ffffff;stroke:#cbd5e1}
+    .heap{fill:#fffbeb;stroke:#d97706;stroke-dasharray:6 4}
+    .heapt{fill:#b45309;font-size:14px;font-weight:700}
+    .c1{fill:#4f46e5}.c2{fill:#0ea5a4}.c3{fill:#7c3aed}.c4{fill:#0369a1}
+    .ct{fill:#ffffff;font-size:14px;font-weight:700}
+    .arw{stroke:#94a3b8;stroke-width:1.8;fill:none}.ah{fill:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .lane{fill:#111827;stroke:#475569}
+      .heap{fill:#2a2112;stroke:#fbbf24}.heapt{fill:#fbbf24}
+      .c1{fill:#818cf8}.c2{fill:#2dd4bf}.c3{fill:#c4b5fd}.c4{fill:#7dd3fc}
+      .ct{fill:#0f172a}.arw{stroke:#64748b}.ah{fill:#64748b}
+    }
+    /* 12 s loop. VT 1 blocks at 10 %, VT 3 mounts at 18 %; VT 2 blocks at 28 %, VT 4 mounts at 36 %;
+       VT 3 finishes at 46 %, VT 1 remounts at 52 %; VT 4 blocks at 62 %, VT 2 remounts at 68 %; hold to 92 % */
+    .v1{animation:v1 12s infinite linear}@keyframes v1{0%,10%{opacity:1;transform:translate(300px,140px)}16%,52%{opacity:1;transform:translate(676px,150px)}56%,92%{opacity:1;transform:translate(300px,140px)}96%,100%{opacity:0;transform:translate(300px,140px)}}
+    .v2{animation:v2 12s infinite linear}@keyframes v2{0%,28%{opacity:1;transform:translate(300px,200px)}34%,68%{opacity:1;transform:translate(676px,192px)}72%,92%{opacity:1;transform:translate(300px,200px)}96%,100%{opacity:0;transform:translate(300px,200px)}}
+    .v3{animation:v3 12s infinite linear}@keyframes v3{0%,17%{opacity:0;transform:translate(300px,140px)}20%,46%{opacity:1;transform:translate(300px,140px)}50%,100%{opacity:0;transform:translate(300px,140px)}}
+    .v4{animation:v4 12s infinite linear}@keyframes v4{0%,35%{opacity:0;transform:translate(300px,200px)}38%,62%{opacity:1;transform:translate(300px,200px)}68%,92%{opacity:1;transform:translate(676px,234px)}96%,100%{opacity:0;transform:translate(676px,234px)}}
+    
+    @media (prefers-reduced-motion: reduce){
+      .v1,.v2,.v3,.v4{animation:none}
+      .v1{transform:translate(300px,140px)}.v2{transform:translate(300px,200px)}.v3{opacity:0}.v4{transform:translate(676px,234px)}
+    }
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0 0L10 5L0 10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Virtual threads park, carriers keep working</text>
+  <text class="sub" x="28" y="62">Four requests, each on its own virtual thread, share two carrier platform threads.</text>
+
+  <text class="sub" x="190" y="104">Carrier threads (ForkJoinPool)</text>
+  <text class="lbl" x="28" y="145">carrier 1</text>
+  <rect class="lane" x="190" y="118" width="220" height="44" rx="10"/>
+  <text class="lbl" x="28" y="205">carrier 2</text>
+  <rect class="lane" x="190" y="178" width="220" height="44" rx="10"/>
+
+  <rect class="heap" x="560" y="96" width="232" height="168" rx="12"/>
+  <text class="heapt" x="576" y="120">Heap</text><text class="sub" x="620" y="120">parked, waiting for I/O</text>
+  <path class="arw" d="M420 132H548" marker-end="url(#ar)"/><text class="sub" x="484" y="124" text-anchor="middle">blocks: unmount</text>
+  <path class="arw" d="M548 214H420" marker-end="url(#ar)"/><text class="sub" x="484" y="236" text-anchor="middle">I/O done: mount</text>
+
+  <g class="v3"><rect class="c3" x="-52" y="-17" width="104" height="34" rx="17"/><text class="ct" x="0" y="5" text-anchor="middle">VT 3</text></g>
+  <g class="v4"><rect class="c4" x="-52" y="-17" width="104" height="34" rx="17"/><text class="ct" x="0" y="5" text-anchor="middle">VT 4</text></g>
+  <g class="v1"><rect class="c1" x="-52" y="-17" width="104" height="34" rx="17"/><text class="ct" x="0" y="5" text-anchor="middle">VT 1</text></g>
+  <g class="v2"><rect class="c2" x="-52" y="-17" width="104" height="34" rx="17"/><text class="ct" x="0" y="5" text-anchor="middle">VT 2</text></g>
+
+  <text class="tx" x="28" y="296">A blocking call (socket read, sleep, lock) unmounts the virtual thread: its stack is copied</text>
+  <text class="tx" x="28" y="316">to the heap and the carrier runs another one. When the I/O completes it mounts again,</text>
+  <text class="tx" x="28" y="336">possibly on a different carrier.</text>
+  <text class="sub" x="28" y="370">A platform thread would sit idle while waiting. Pinning (blocking inside synchronized on JDK 21,</text>
+  <text class="sub" x="28" y="388">or in native code) stops the unmount and holds the carrier.</text>
+</svg>

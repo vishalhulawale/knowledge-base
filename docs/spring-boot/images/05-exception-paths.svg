@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 448" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Where an exception ends up</title>
+  <desc id="d">Two requests travel through the servlet container. The first passes the filters, enters DispatcherServlet, passes the interceptors and reaches the controller, which throws. DispatcherServlet catches it and the HandlerExceptionResolver chain runs your @ExceptionHandler, producing your ProblemDetail JSON. The second request fails in TenantFilter, before DispatcherServlet. The exception never reaches the exception resolvers; the container does an ERROR dispatch to /error, where BasicErrorController writes a generic body.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .zone{fill:none;stroke:#94a3b8;stroke-width:1.5;stroke-dasharray:6 4}
+    .ds{fill:#eef2ff;stroke:#4f46e5;stroke-width:1.5}
+    .dst{fill:#4f46e5;font-size:15px;font-weight:700}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .chip{fill:#ffffff;stroke:#cbd5e1}
+    .ct{fill:#334155;font-size:13px;font-weight:600}
+    .res{fill:#ccfbf1;stroke:#0ea5a4}
+    .rest{fill:#0f766e;font-size:13px;font-weight:700}
+    .err{fill:#fee2e2;stroke:#dc2626}
+    .errt{fill:#b91c1c;font-size:13px;font-weight:700}
+    .tok{fill:#d97706;stroke:#ffffff;stroke-width:2}
+    .tokr{fill:#dc2626;stroke:#ffffff;stroke-width:2}
+    .badt{fill:#dc2626;font-size:13px;font-weight:700}
+    .goodt{fill:#15803d;font-size:13px;font-weight:700}
+    .ln{stroke:#94a3b8;stroke-width:1.8;fill:none}
+    .ah{fill:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx,.ct{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .zone{stroke:#64748b}
+      .ds{fill:#1e1b4b;stroke:#818cf8}.dst{fill:#a5b4fc}
+      .box,.chip{fill:#111827;stroke:#475569}
+      .res{fill:#134e4a;stroke:#2dd4bf}.rest{fill:#5eead4}
+      .err{fill:#450a0a;stroke:#f87171}.errt{fill:#fca5a5}
+      .tok{fill:#fbbf24;stroke:#1f2430}.tokr{fill:#f87171;stroke:#1f2430}
+      .badt{fill:#f87171}.goodt{fill:#4ade80}
+      .ln{stroke:#64748b}.ah{fill:#64748b}
+    }
+    /* 12 s loop: request A 0-34 %, request B 48-72 %, both end states held to 92 % */
+    .ta{animation:ta 12s infinite linear}
+    @keyframes ta{0%{opacity:0;transform:translate(0,0)}2%{opacity:1;transform:translate(0,0)}8%{transform:translate(0,85px)}14%{transform:translate(229px,80px)}20%,24%{opacity:1;transform:translate(411px,80px)}25%,100%{opacity:0;transform:translate(411px,80px)}}
+    .ra{animation:ra 12s infinite linear}
+    @keyframes ra{0%,24%{opacity:0;transform:translate(411px,80px)}25%,28%{opacity:1;transform:translate(411px,80px)}34%,92%{opacity:1;transform:translate(411px,162px)}96%,100%{opacity:0;transform:translate(411px,162px)}}
+    .tb{animation:tb 12s infinite linear}
+    @keyframes tb{0%,47%{opacity:0;transform:translate(0,0)}49%{opacity:1;transform:translate(0,0)}56%,60%{opacity:1;transform:translate(0,117px)}61%,100%{opacity:0;transform:translate(0,117px)}}
+    .rb{animation:rb 12s infinite linear}
+    @keyframes rb{0%,60%{opacity:0;transform:translate(0,117px)}61%,64%{opacity:1;transform:translate(0,117px)}72%,92%{opacity:1;transform:translate(-81px,250px)}96%,100%{opacity:0;transform:translate(-81px,250px)}}
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes x1{0%,24%{opacity:0}25%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes y1{0%,34%{opacity:0}36%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes x2{0%,60%{opacity:0}61%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes y2{0%,72%{opacity:0}74%,92%{opacity:1}96%,100%{opacity:0}}
+    .x1{animation-name:x1}.y1{animation-name:y1}.x2{animation-name:x2}.y2{animation-name:y2}
+    @media (prefers-reduced-motion: reduce){
+      .ta,.tb,.ra,.rb,.a{animation:none}
+      .ta,.tb{opacity:0}.a{opacity:1}
+      .ra{opacity:1;transform:translate(411px,162px)}.rb{opacity:1;transform:translate(-81px,250px)}
+    }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0 0L10 5L0 10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="446" rx="14"/>
+  <text class="h" x="28" y="40">Where an exception ends up</text>
+  <text class="sub" x="28" y="62">One exception thrown in the controller, one thrown in a filter.</text>
+
+  <rect class="zone" x="28" y="74" width="744" height="320" rx="12"/>
+  <text class="sub" x="44" y="94">Servlet container (Tomcat)</text>
+
+  <!-- filters -->
+  <rect class="box" x="48" y="110" width="202" height="134" rx="10"/>
+  <text class="lbl" x="64" y="130">Filters</text>
+  <rect class="chip" x="60" y="140" width="178" height="26" rx="6"/><text class="ct" x="149" y="158" text-anchor="middle">CorrelationIdFilter</text>
+  <rect class="chip" x="60" y="172" width="178" height="26" rx="6"/><text class="ct" x="149" y="190" text-anchor="middle">Security filter chain</text>
+  <rect class="chip" x="60" y="204" width="178" height="26" rx="6"/><text class="ct" x="149" y="222" text-anchor="middle">TenantFilter</text>
+  <path class="ln" d="M250 180H286" marker-end="url(#ar)"/>
+
+  <!-- DispatcherServlet -->
+  <rect class="ds" x="290" y="104" width="466" height="216" rx="12"/>
+  <text class="dst" x="306" y="128">DispatcherServlet</text>
+  <rect class="chip" x="306" y="152" width="144" height="56" rx="8"/>
+  <text class="ct" x="378" y="175" text-anchor="middle">Interceptors</text>
+  <text class="sub code" x="378" y="195" text-anchor="middle">preHandle</text>
+  <path class="ln" d="M450 180H486" marker-end="url(#ar)"/>
+  <rect class="chip" x="490" y="152" width="144" height="56" rx="8"/>
+  <text class="ct" x="562" y="185" text-anchor="middle">Controller</text>
+  <rect class="res" x="306" y="236" width="434" height="52" rx="8"/>
+  <text class="rest" x="320" y="257">HandlerExceptionResolver</text>
+  <text class="rest" x="320" y="275">chain: @ExceptionHandler</text>
+
+  <!-- error page -->
+  <rect class="err" x="48" y="324" width="244" height="52" rx="8"/>
+  <text class="errt" x="88" y="345">ERROR dispatch to /error</text>
+  <text class="errt" x="88" y="364">BasicErrorController</text>
+
+  <!-- event labels -->
+  <g class="a x1"><rect class="err" x="490" y="152" width="144" height="56" rx="8"/><text class="errt" x="562" y="177" text-anchor="middle">Controller</text><text class="errt" x="562" y="195" text-anchor="middle">throws</text></g>
+  <g class="a y1"><text class="goodt" x="592" y="257">Handled: your</text><text class="goodt" x="592" y="275">ProblemDetail</text></g>
+  <g class="a x2"><rect class="err" x="60" y="204" width="178" height="26" rx="6"/><text class="errt" x="149" y="222" text-anchor="middle">TenantFilter throws</text></g>
+  <g class="a y2"><text class="badt" x="308" y="345">Advice never runs: generic</text><text class="badt" x="308" y="364">/error body, often a 500</text></g>
+
+  <!-- tokens: origin at (149,100) -->
+  <g class="ta"><circle class="tok" cx="149" cy="100" r="9"/></g>
+  <g class="ra"><circle class="tokr" cx="149" cy="100" r="9"/></g>
+  <g class="tb"><circle class="tok" cx="149" cy="100" r="9"/></g>
+  <g class="rb"><circle class="tokr" cx="149" cy="100" r="9"/></g>
+
+  <text class="sub" x="28" y="420">Interceptors, argument resolution and message converters also run inside DispatcherServlet,</text>
+  <text class="sub" x="28" y="437">so their exceptions take the first path.</text>
+</svg>

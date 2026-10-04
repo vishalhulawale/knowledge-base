@@ -119,6 +119,9 @@ Three details that interviewers push on:
 
 **`NESTED` is savepoints.** It works with `DataSourceTransactionManager` over JDBC. Rolling back the nested scope returns to the savepoint, and the outer transaction continues. Unlike `REQUIRES_NEW`, the nested work still commits or rolls back with the outer transaction. With JPA it is usually not usable: `JpaTransactionManager` does not allow nested transactions by default, and Hibernate's persistence context is not rewound to the savepoint.
 
+![Animation: a timeline of outer and inner transactions on database connections; with REQUIRED the inner failure marks the single transaction rollback-only and the outer commit ends in UnexpectedRollbackException, with REQUIRES_NEW the outer is suspended while the inner runs and rolls back on a second connection and the outer commits, and with NESTED the inner rolls back to a savepoint and the outer commits](images/06-propagation-timeline.svg){ loading=lazy }
+*Same code, same exception, three outcomes. Only `REQUIRES_NEW` opens a second connection, and only `REQUIRED` turns the caught exception into a rollback of everything.*
+
 ### Isolation
 
 Isolation controls what concurrent transactions can see of each other. Spring only passes the level to the connection (`Connection.setTransactionIsolation`). The database enforces it.
@@ -146,6 +149,9 @@ The anomaly that hurts in practice is the **lost update**: two transactions read
 2. **Optimistic locking** with `@Version`: the second writer gets `ObjectOptimisticLockingFailureException` and retries.
 3. **Pessimistic locking**: `SELECT ... FOR UPDATE` via `@Lock(LockModeType.PESSIMISTIC_WRITE)`.
 4. A higher isolation level plus retry on serialization failure.
+
+![Animation: T1 and T2 both read a balance of 100, T1 writes 90 and commits, then T2 writes 90 and commits, so the balance ends at 90 instead of 80; a box then explains that with @Version T2's update matches no row, throws ObjectOptimisticLockingFailureException and retries to write 80](images/06-lost-update.svg){ loading=lazy }
+*Notice that every individual statement is legal under READ COMMITTED. The bug is the read-then-write pattern, which is why the fixes change how the write is done.*
 
 Isolation only applies when a transaction is **created**. If a method with `isolation = SERIALIZABLE` joins an existing READ COMMITTED transaction, the setting is ignored unless `validateExistingTransaction` is enabled on the manager, in which case it is rejected.
 

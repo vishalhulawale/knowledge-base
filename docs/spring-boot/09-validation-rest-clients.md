@@ -127,6 +127,9 @@ sequenceDiagram
 ```
 *Notice that there are three separate places to wait: leasing a connection from the pool, opening the connection, and reading the response. Each one needs its own limit, and `retrieve()` turns 4xx/5xx into exceptions by default.*
 
+![Three consecutive waits in one outbound call: leasing a connection from the pool, opening a new connection, and waiting for the response, each with its own timeout setting, and a warning that the defaults of several clients wait forever or for a long time](images/09-three-waits.svg){ loading=lazy }
+*Notice that the connect timeout only covers step 2. A call can still hang in the pool queue or while the upstream works unless steps 1 and 3 have limits too.*
+
 ### Blocking vs non-blocking, and where virtual threads fit
 
 With a blocking client, the calling thread waits for the response. On a platform-thread Tomcat (200 threads by default), 200 slow upstream calls mean the service is full. `WebClient` solves this with an event loop: a few threads handle thousands of in-flight calls, at the price of reactive code (`Mono`, operators, no `ThreadLocal`, harder stack traces).
@@ -135,6 +138,9 @@ Java 21 **virtual threads** change the trade-off. With `spring.threads.virtual.e
 
 !!! warning "Virtual threads remove the thread limit, not the need for limits"
     With platform threads, the Tomcat pool was an accidental bulkhead. With virtual threads nothing stops 50,000 concurrent calls from hitting a slow upstream. Keep a bounded connection pool, timeouts and a bulkhead or rate limiter.
+
+![Animation: with no timeouts a slow upstream fills the 200-thread Tomcat pool row by row until every endpoint queues, while with a 3 second response timeout only a few threads are busy at a time and an open circuit breaker keeps the pool free](images/09-thread-pool-exhaustion.svg){ loading=lazy }
+*Watch the left pool: the threads are not doing work, they are waiting. A timeout and a breaker turn that waiting into fast failures the service can survive.*
 
 ### Declarative clients: HTTP interfaces vs Feign
 

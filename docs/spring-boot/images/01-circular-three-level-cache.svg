@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 468" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Resolving a field-injection cycle with the three-level cache</title>
+  <desc id="d">Singleton A needs B and B needs A, both with field injection. Step 1: A is instantiated and a factory for A is put in singletonFactories. Step 2: while populating A, Spring creates B and registers a factory for B. Step 3: while populating B, Spring needs A, so it calls A's factory; the early reference, or A's proxy if A will be proxied, moves to earlySingletonObjects and the factory is removed. Step 4: B receives the early A, finishes, and moves to singletonObjects. Step 5: A receives the finished B, finishes, and moves to singletonObjects. Since Spring Boot 2.6 circular references are prohibited by default, and constructor cycles can never be resolved.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .num{fill:#4f46e5}
+    .numt{fill:#ffffff;font-size:13px;font-weight:700}
+    .hl{fill:#e0e7ff}
+    .tokA{fill:#4f46e5}.tokB{fill:#0ea5a4}
+    .tokF{fill:#ffffff;stroke-width:2;stroke-dasharray:5 3}
+    .fA{stroke:#4f46e5}.fB{stroke:#0ea5a4}
+    .ftA{fill:#4f46e5;font-size:14px;font-weight:700}.ftB{fill:#0f766e;font-size:14px;font-weight:700}
+    .pt{fill:#ffffff;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .num{fill:#818cf8}.numt{fill:#0f172a}.hl{fill:#312e81}
+      .tokA{fill:#818cf8}.tokB{fill:#2dd4bf}
+      .tokF{fill:#111827}.fA{stroke:#818cf8}.fB{stroke:#2dd4bf}
+      .ftA{fill:#818cf8}.ftB{fill:#5eead4}
+      .pt{fill:#0f172a}
+    }
+    /* 12 s loop. Steps start at 0, 16, 32, 50, 66 %; end state held to 92 % */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes fa{0%,1%{opacity:0}3%,32%{opacity:1}34%,100%{opacity:0}}
+    @keyframes fb{0%,16%{opacity:0}18%,50%{opacity:1}52%,100%{opacity:0}}
+    @keyframes ea{0%,32%{opacity:0}34%,66%{opacity:1}68%,100%{opacity:0}}
+    @keyframes sb{0%,50%{opacity:0}52%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes sa{0%,66%{opacity:0}68%,92%{opacity:1}96%,100%{opacity:0}}
+    .kfa{animation-name:fa}.kfb{animation-name:fb}.kea{animation-name:ea}.ksb{animation-name:sb}.ksa{animation-name:sa}
+    @keyframes mv{0%,15.9%{transform:translateY(0)}16%,31.9%{transform:translateY(64px)}32%,49.9%{transform:translateY(128px)}50%,65.9%{transform:translateY(192px)}66%,100%{transform:translateY(256px)}}
+    .hlg{animation:mv 12s infinite linear}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:0}.ksb,.ksa{opacity:1}.hlg{animation:none;transform:translateY(256px)}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="466" rx="14"/>
+  <text class="h" x="28" y="40">Field-injection cycle: the three-level cache</text>
+  <text class="sub" x="28" y="62">Singleton A has a field of type B, and B has a field of type A.</text>
+
+  <!-- step highlight -->
+  <g class="hlg"><rect class="hl" x="20" y="80" width="376" height="58" rx="8"/></g>
+
+  <!-- steps -->
+  <g>
+    <circle class="num" cx="40" cy="98" r="11"/><text class="numt" x="40" y="103" text-anchor="middle">1</text>
+    <text class="tx" x="60" y="103">Instantiate A. Register a factory</text>
+    <text class="tx" x="60" y="122">for A (A is still half-built).</text>
+
+    <circle class="num" cx="40" cy="162" r="11"/><text class="numt" x="40" y="167" text-anchor="middle">2</text>
+    <text class="tx" x="60" y="167">Populate A: it needs B. Instantiate B</text>
+    <text class="tx" x="60" y="186">and register a factory for B.</text>
+
+    <circle class="num" cx="40" cy="226" r="11"/><text class="numt" x="40" y="231" text-anchor="middle">3</text>
+    <text class="tx" x="60" y="231">Populate B: it needs A. Call A's factory:</text>
+    <text class="tx" x="60" y="250">early A (or A's proxy) moves up a level.</text>
+
+    <circle class="num" cx="40" cy="290" r="11"/><text class="numt" x="40" y="295" text-anchor="middle">4</text>
+    <text class="tx" x="60" y="295">B gets the early A, finishes, and</text>
+    <text class="tx" x="60" y="314">becomes a finished singleton.</text>
+
+    <circle class="num" cx="40" cy="354" r="11"/><text class="numt" x="40" y="359" text-anchor="middle">5</text>
+    <text class="tx" x="60" y="359">A gets the finished B, finishes,</text>
+    <text class="tx" x="60" y="378">and becomes a finished singleton.</text>
+  </g>
+
+  <!-- maps -->
+  <text class="lbl code" x="420" y="96">singletonObjects</text>
+  <text class="sub" x="420" y="114">level 1: finished beans</text>
+  <rect class="box" x="420" y="122" width="352" height="64" rx="8"/>
+
+  <text class="lbl code" x="420" y="214">earlySingletonObjects</text>
+  <text class="sub" x="420" y="232">level 2: early references handed out</text>
+  <rect class="box" x="420" y="240" width="352" height="64" rx="8"/>
+
+  <text class="lbl code" x="420" y="332">singletonFactories</text>
+  <text class="sub" x="420" y="350">level 3: factories for early references</text>
+  <rect class="box" x="420" y="358" width="352" height="64" rx="8"/>
+
+  <!-- level 3 tokens -->
+  <g class="a kfa"><rect class="tokF fA" x="436" y="370" width="150" height="40" rx="8"/><text class="ftA" x="511" y="395" text-anchor="middle">factory for A</text></g>
+  <g class="a kfb"><rect class="tokF fB" x="606" y="370" width="150" height="40" rx="8"/><text class="ftB" x="681" y="395" text-anchor="middle">factory for B</text></g>
+  <!-- level 2 token -->
+  <g class="a kea"><rect class="tokA" x="436" y="252" width="150" height="40" rx="8"/><text class="pt" x="511" y="277" text-anchor="middle">early A</text></g>
+  <!-- level 1 tokens -->
+  <g class="a ksb"><rect class="tokB" x="436" y="134" width="150" height="40" rx="8"/><text class="pt" x="511" y="159" text-anchor="middle">B (done)</text></g>
+  <g class="a ksa"><rect class="tokA" x="606" y="134" width="150" height="40" rx="8"/><text class="pt" x="681" y="159" text-anchor="middle">A (done)</text></g>
+
+  <text class="sub" x="28" y="412">Constructor cycles never work: no</text>
+  <text class="sub" x="28" y="430">instance exists to expose early.</text>
+  <text class="sub" x="28" y="448">Since Boot 2.6 any cycle fails startup by default (spring.main.allow-circular-references=false).</text>
+</svg>

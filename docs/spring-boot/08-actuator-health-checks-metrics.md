@@ -106,6 +106,9 @@ flowchart TD
 
 Why liveness must stay internal: if the liveness group includes `db` and the database has a 60-second failover, **every** pod fails liveness at the same moment. Kubernetes restarts all of them. They all come back together, open connection pools together, and hit a database that has just recovered. A restart cannot fix a remote database, so the restart only adds damage.
 
+![Animation: a shared database fails over; when liveness includes the db indicator all four pods fail liveness together and are restarted, then start and reconnect at the same moment, while with liveness limited to livenessState the pods stay live, degrade, and recover with the database without restarts](images/08-liveness-restart-storm.svg){ loading=lazy }
+*Watch the left side: one remote failure turns into four restarts and a reconnect spike. On the right, nothing restarts because nothing local is broken.*
+
 Readiness with dependencies is a judgement call. Include a dependency only if the instance is truly useless without it **and** the failure is local to that instance. If the dependency is shared, all pods go unready together and the Service has zero endpoints. Clients then get connection errors from the ingress instead of a clean, fast 503 or a degraded response from your own code. For shared dependencies, a circuit breaker and fallback are usually a better tool than readiness.
 
 ```mermaid
@@ -373,6 +376,9 @@ This indicator appears in the full `/actuator/health`. It is **not** in the live
         }
     }
     ```
+
+![Animation: the rx.refill counter tagged with channel and outcome has a fixed set of six series, while the same counter tagged with member and prescription IDs keeps adding a new series for every refill until the grid fills](images/08-tag-cardinality.svg){ loading=lazy }
+*Notice that the left side stops at six series however much traffic arrives. The right side grows with the number of members, which is what exhausts Prometheus memory after a release.*
 
 Annotation style, when you only need timing around a method:
 

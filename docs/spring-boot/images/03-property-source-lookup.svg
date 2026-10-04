@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">First match wins, key by key</title>
+  <desc id="d">The claims-service runs with SPRING_PROFILES_ACTIVE=prod. Three keys under claims.upstream are looked up from the highest-priority source downwards. For url, the command line and environment variables have nothing, so the prod document of application.yml wins with the internal claims URL and the localhost default is shadowed. For timeout, the prod document wins with 800ms, shadowing the 2s default document value and the 2s record default. For max-retries, the environment variable CLAIMS_UPSTREAM_MAXRETRIES=2 wins over the record default of 3. The bound values are the internal URL, 800ms and 2.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .colh{fill:#334155;font-size:14px;font-weight:700}
+    .slot{fill:#ffffff;stroke:#cbd5e1}
+    .val{fill:#334155;font-size:14px;font-weight:600}
+    .scr{fill:none;stroke:#0ea5a4;stroke-width:3}
+    .win{fill:#0ea5a4}
+    .wt{fill:#ffffff;font-size:14px;font-weight:700}
+    .rule{stroke:#cbd5e1;stroke-width:1.5;stroke-dasharray:4 4}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.val,.colh{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .slot{fill:#111827;stroke:#475569}
+      .scr{stroke:#2dd4bf}.win{fill:#2dd4bf}.wt{fill:#0f172a}
+      .rule{stroke:#475569}
+    }
+    /* 12 s loop: url column 2-30 %, timeout 32-60 %, max-retries 62-92 %, hold, fade at 96 % */
+    .scan{opacity:0;animation:12s infinite linear}
+    @keyframes k1{0%,1.9%{opacity:0;transform:translateY(0)}2%,7.9%{opacity:1;transform:translateY(0)}8%,13.9%{opacity:1;transform:translateY(46px)}14%,92%{opacity:1;transform:translateY(92px)}96%,100%{opacity:0;transform:translateY(92px)}}
+    @keyframes k2{0%,31.9%{opacity:0;transform:translateY(0)}32%,37.9%{opacity:1;transform:translateY(0)}38%,43.9%{opacity:1;transform:translateY(46px)}44%,92%{opacity:1;transform:translateY(92px)}96%,100%{opacity:0;transform:translateY(92px)}}
+    @keyframes k3{0%,61.9%{opacity:0;transform:translateY(0)}62%,67.9%{opacity:1;transform:translateY(0)}68%,92%{opacity:1;transform:translateY(46px)}96%,100%{opacity:0;transform:translateY(46px)}}
+    .k1{animation-name:k1}.k2{animation-name:k2}.k3{animation-name:k3}
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes e1{0%,15%{opacity:0}17%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes e2{0%,45%{opacity:0}47%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes e3{0%,69%{opacity:0}71%,92%{opacity:1}96%,100%{opacity:0}}
+    .e1{animation-name:e1}.e2{animation-name:e2}.e3{animation-name:e3}
+    .sh{animation:12s infinite linear}
+    @keyframes s1{0%,15%{opacity:1}17%,92%{opacity:.3}96%,100%{opacity:1}}
+    @keyframes s2{0%,45%{opacity:1}47%,92%{opacity:.3}96%,100%{opacity:1}}
+    @keyframes s3{0%,69%{opacity:1}71%,92%{opacity:.3}96%,100%{opacity:1}}
+    .s1{animation-name:s1}.s2{animation-name:s2}.s3{animation-name:s3}
+    @media (prefers-reduced-motion: reduce){
+      .scan,.a,.sh{animation:none}
+      .scan,.a{opacity:1}.sh{opacity:.3}
+      .k1,.k2{transform:translateY(92px)}.k3{transform:translateY(46px)}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="458" rx="14"/>
+  <text class="h" x="28" y="40">First match wins, key by key</text>
+  <text class="sub" x="28" y="62">SPRING_PROFILES_ACTIVE=prod. Each claims.upstream key is looked up from the top source down.</text>
+  <text class="sub" x="28" y="100">Highest priority first</text>
+
+  <text class="lbl" x="28" y="129">Command-line arguments</text><text class="sub" x="28" y="145">none set</text>
+  <rect class="slot" x="290.0" y="112" width="200" height="38" rx="7"/>
+  <rect class="slot" x="504.0" y="112" width="124" height="38" rx="7"/>
+  <rect class="slot" x="641.0" y="112" width="128" height="38" rx="7"/>
+  <text class="lbl" x="28" y="175">OS environment variables</text><text class="sub" x="28" y="191">CLAIMS_UPSTREAM_MAXRETRIES=2</text>
+  <rect class="slot" x="290.0" y="158" width="200" height="38" rx="7"/>
+  <rect class="slot" x="504.0" y="158" width="124" height="38" rx="7"/>
+  <rect class="slot" x="641.0" y="158" width="128" height="38" rx="7"/>
+  <text class="lbl" x="28" y="221">Prod document</text><text class="sub" x="28" y="237">application.yml, on-profile: prod</text>
+  <rect class="slot" x="290.0" y="204" width="200" height="38" rx="7"/>
+  <rect class="slot" x="504.0" y="204" width="124" height="38" rx="7"/>
+  <rect class="slot" x="641.0" y="204" width="128" height="38" rx="7"/>
+  <text class="lbl" x="28" y="267">Default document</text><text class="sub" x="28" y="283">application.yml, inside the jar</text>
+  <rect class="slot" x="290.0" y="250" width="200" height="38" rx="7"/>
+  <rect class="slot" x="504.0" y="250" width="124" height="38" rx="7"/>
+  <rect class="slot" x="641.0" y="250" width="128" height="38" rx="7"/>
+  <text class="lbl" x="28" y="313">@DefaultValue in the record</text><text class="sub" x="28" y="329">binder fallback only</text>
+  <rect class="slot" x="290.0" y="296" width="200" height="38" rx="7"/>
+  <rect class="slot" x="504.0" y="296" width="124" height="38" rx="7"/>
+  <rect class="slot" x="641.0" y="296" width="128" height="38" rx="7"/>
+  <g><text class="val code" x="390" y="228" text-anchor="middle">claims.internal</text></g>
+  <g class="sh s1"><text class="val code" x="390" y="274" text-anchor="middle">localhost:8089</text></g>
+  <g class="scan k1"><rect class="scr" x="288.0" y="110" width="204" height="42" rx="8"/></g>
+  <rect class="slot" x="290.0" y="360" width="200" height="40" rx="7"/>
+  <g class="a e1"><rect class="win" x="290.0" y="360" width="200" height="40" rx="7"/><text class="wt code" x="390" y="385" text-anchor="middle">claims.internal</text></g>
+  <text class="colh code" x="390" y="100" text-anchor="middle">url</text>
+  <g><text class="val code" x="566" y="228" text-anchor="middle">800ms</text></g>
+  <g class="sh s2"><text class="val code" x="566" y="274" text-anchor="middle">2s</text></g>
+  <g class="sh s2"><text class="val code" x="566" y="320" text-anchor="middle">2s</text></g>
+  <g class="scan k2"><rect class="scr" x="502.0" y="110" width="128" height="42" rx="8"/></g>
+  <rect class="slot" x="504.0" y="360" width="124" height="40" rx="7"/>
+  <g class="a e2"><rect class="win" x="504.0" y="360" width="124" height="40" rx="7"/><text class="wt code" x="566" y="385" text-anchor="middle">800ms</text></g>
+  <text class="colh code" x="566" y="100" text-anchor="middle">timeout</text>
+  <g><text class="val code" x="705" y="182" text-anchor="middle">2</text></g>
+  <g class="sh s3"><text class="val code" x="705" y="320" text-anchor="middle">3</text></g>
+  <g class="scan k3"><rect class="scr" x="639.0" y="110" width="132" height="42" rx="8"/></g>
+  <rect class="slot" x="641.0" y="360" width="128" height="40" rx="7"/>
+  <g class="a e3"><rect class="win" x="641.0" y="360" width="128" height="40" rx="7"/><text class="wt code" x="705" y="385" text-anchor="middle">2</text></g>
+  <text class="colh code" x="705" y="100" text-anchor="middle">max-retries</text>
+  <line class="rule" x1="28" y1="351" x2="772" y2="351"/>
+  <text class="lbl" x="28" y="385">Bound value</text>
+
+  <text class="sub" x="28" y="442">Faded values are shadowed: they exist, but a higher source already had the key. URLs shortened.</text>
+</svg>

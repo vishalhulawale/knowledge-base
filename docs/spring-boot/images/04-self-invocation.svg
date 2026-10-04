@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Self-invocation skips the proxy</title>
+  <desc id="d">Left: a caller invokes submit() on the proxy of ClaimService. The call passes the TransactionInterceptor, which begins a transaction, and reaches submit() on the target. submit() then calls this.saveAudit(), which goes straight to the method on the same target object without passing the proxy, so the REQUIRES_NEW advice on saveAudit() never runs. Right: submit() calls auditService.saveAudit() on a different bean. That call enters the proxy of ClaimAuditService, its TransactionInterceptor starts a new transaction, and then saveAudit() runs on the target.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .shell{fill:none;stroke:#4f46e5;stroke-width:2;stroke-dasharray:7 4}
+    .shellt{fill:#4f46e5;font-size:14px;font-weight:700}
+    .band{fill:#e0e7ff}
+    .bandt{fill:#3730a3;font-size:13px;font-weight:600}
+    .bandon{fill:#4f46e5}
+    .bandont{fill:#ffffff;font-size:13px;font-weight:700}
+    .meth{fill:#f1f5f9;stroke:#cbd5e1}
+    .mt{fill:#0f172a;font-size:14px;font-weight:700}
+    .tok{fill:#d97706;stroke:#ffffff;stroke-width:2}
+    .path{stroke:#94a3b8;stroke-width:2;fill:none;stroke-dasharray:4 4}
+    .badt{fill:#dc2626;font-size:13px;font-weight:700}
+    .goodt{fill:#15803d;font-size:13px;font-weight:700}
+    .bad{fill:#dc2626}.good{fill:#16a34a}
+    .mark{stroke:#ffffff;stroke-width:2.5;fill:none;stroke-linecap:round}
+    .div{stroke:#e2e8f0;stroke-width:1.5}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .shell{stroke:#818cf8}.shellt{fill:#818cf8}
+      .band{fill:#312e81}.bandt{fill:#e0e7ff}
+      .bandon{fill:#818cf8}.bandont{fill:#0f172a}
+      .meth{fill:#1f2937;stroke:#475569}.mt{fill:#f1f5f9}
+      .tok{fill:#fbbf24;stroke:#1f2430}
+      .path{stroke:#64748b}
+      .badt{fill:#f87171}.goodt{fill:#4ade80}.bad{fill:#f87171}.good{fill:#4ade80}
+      .mark{stroke:#0f172a}.div{stroke:#334155}
+    }
+    /* 10 s loop: left call 0-44 %, right call 50-78 %, hold to 92 % */
+    .tl{animation:tl 10s infinite linear}
+    @keyframes tl{0%{opacity:0;transform:translate(0,0)}3%,6%{opacity:1;transform:translate(0,0)}14%,20%{transform:translate(0,84px)}28%,34%{transform:translate(0,160px)}44%,92%{opacity:1;transform:translate(0,228px)}96%,100%{opacity:0;transform:translate(0,228px)}}
+    .tr{animation:tr 10s infinite linear}
+    @keyframes tr{0%,49%{opacity:0;transform:translate(0,0)}52%,56%{opacity:1;transform:translate(0,0)}64%,70%{transform:translate(0,86px)}78%,92%{opacity:1;transform:translate(0,196px)}96%,100%{opacity:0;transform:translate(0,196px)}}
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes b1{0%,13%{opacity:0}15%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes l1{0%,43%{opacity:0}45%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes b2{0%,63%{opacity:0}65%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes l2{0%,77%{opacity:0}79%,92%{opacity:1}96%,100%{opacity:0}}
+    .b1{animation-name:b1}.l1{animation-name:l1}.b2{animation-name:b2}.l2{animation-name:l2}
+    @media (prefers-reduced-motion: reduce){
+      .tl,.tr,.a{animation:none}
+      .a{opacity:1}.tl{opacity:1;transform:translate(0,228px)}.tr{opacity:1;transform:translate(0,196px)}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="458" rx="14"/>
+  <text class="h" x="28" y="40">Self-invocation skips the proxy</text>
+  <text class="sub" x="28" y="62">Advice runs only on calls that enter a bean through its proxy.</text>
+
+  <line class="div" x1="400" y1="80" x2="400" y2="420"/>
+
+  <!-- LEFT -->
+  <circle class="bad" cx="40" cy="96" r="10"/><path class="mark" d="M36 92l8 8M44 92l-8 8"/>
+  <text class="lbl" x="58" y="101"><tspan class="code">this.saveAudit()</tspan></text>
+  <rect class="box" x="28" y="116" width="150" height="34" rx="8"/>
+  <text class="tx" x="103" y="138" text-anchor="middle">Caller</text>
+  <rect class="shell" x="40" y="164" width="340" height="250" rx="12"/>
+  <text class="shellt" x="56" y="186">Proxy of ClaimService</text>
+  <rect class="band" x="52" y="198" width="316" height="32" rx="7"/>
+  <text class="bandt" x="210" y="219" text-anchor="middle">TransactionInterceptor</text>
+  <g class="a b1"><rect class="bandon" x="52" y="198" width="316" height="32" rx="7"/><text class="bandont" x="224" y="219" text-anchor="middle">advice runs: begin transaction</text></g>
+  <rect class="box" x="60" y="244" width="300" height="160" rx="10"/>
+  <text class="sub" x="76" y="266">ClaimService (target)</text>
+  <rect class="meth" x="76" y="278" width="150" height="36" rx="7"/>
+  <text class="mt code" x="162" y="301" text-anchor="middle">submit()</text>
+  <rect class="meth" x="76" y="346" width="150" height="36" rx="7"/>
+  <text class="mt code" x="162" y="369" text-anchor="middle">saveAudit()</text>
+  <path class="path" d="M226 296h20v68h-14"/>
+  <text class="sub code" x="254" y="334">this.</text>
+  <g class="a l1"><text class="badt" x="256" y="362">no advice,</text><text class="badt" x="256" y="378">no new tx</text></g>
+  <g class="tl"><circle class="tok" cx="90" cy="133" r="9"/></g>
+
+  <!-- RIGHT -->
+  <circle class="good" cx="424" cy="96" r="10"/><path class="mark" d="M419 96l4 4 6-8"/>
+  <text class="lbl" x="442" y="101"><tspan class="code">auditService.saveAudit()</tspan></text>
+  <rect class="box" x="412" y="116" width="360" height="40" rx="8"/>
+  <text class="sub" x="590" y="141">ClaimService (target)</text>
+  <rect class="meth" x="424" y="121" width="150" height="30" rx="7"/>
+  <text class="mt code" x="514" y="141" text-anchor="middle">submit()</text>
+  <rect class="shell" x="412" y="172" width="360" height="242" rx="12"/>
+  <text class="shellt" x="428" y="194">Proxy of ClaimAuditService</text>
+  <rect class="band" x="424" y="206" width="336" height="32" rx="7"/>
+  <text class="bandt" x="592" y="227" text-anchor="middle">TransactionInterceptor</text>
+  <g class="a b2"><rect class="bandon" x="424" y="206" width="336" height="32" rx="7"/><text class="bandont" x="604" y="227" text-anchor="middle">advice runs: new transaction</text></g>
+  <rect class="box" x="432" y="252" width="320" height="152" rx="10"/>
+  <text class="sub" x="448" y="274">ClaimAuditService (target)</text>
+  <rect class="meth" x="448" y="314" width="150" height="36" rx="7"/>
+  <text class="mt code" x="536" y="337" text-anchor="middle">saveAudit()</text>
+  <g class="a l2"><text class="goodt" x="612" y="330">commits on</text><text class="goodt" x="612" y="346">its own</text></g>
+  <g class="tr"><circle class="tok" cx="462" cy="136" r="9"/></g>
+
+  <text class="sub" x="28" y="444">Left: REQUIRES_NEW is ignored, so the audit row joins the outer transaction and rolls back with it.</text>
+</svg>

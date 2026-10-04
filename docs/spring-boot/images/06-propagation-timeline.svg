@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 452" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Inner failure under three propagation settings</title>
+  <desc id="d">outer() is @Transactional with REQUIRED and calls inner() on another bean. inner() throws a RuntimeException and outer() catches it and returns normally. With REQUIRED, inner joins the same physical transaction on connection 1 and marks it rollback-only; when outer returns the commit attempt becomes a rollback and UnexpectedRollbackException is thrown. With REQUIRES_NEW, the outer transaction is suspended on connection 1 while inner runs its own transaction on connection 2; inner rolls back alone and outer commits. With NESTED, a savepoint is set on connection 1, inner rolls back to the savepoint and outer continues and commits; this works with JDBC, not with JPA by default.</desc>
+  <defs>
+    <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect class="hbg" width="8" height="8"/><line class="hln" x1="0" y1="0" x2="0" y2="8"/></pattern>
+  </defs>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .cover{fill:#f8fafc}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .outer{fill:#4f46e5}
+    .inner{fill:#0ea5a4}
+    .fail{fill:#dc2626}
+    .bt{fill:#ffffff;font-size:13px;font-weight:700}
+    .hbg{fill:#e2e8f0}.hln{stroke:#94a3b8;stroke-width:3}
+    .sus{fill:url(#hatch)}
+    .st{fill:#334155;font-size:13px;font-weight:600}
+    .badt{fill:#dc2626;font-size:14px;font-weight:700}
+    .goodt{fill:#15803d;font-size:14px;font-weight:700}
+    .note{fill:#dc2626;font-size:13px;font-weight:600}
+    .tick{stroke:#cbd5e1;stroke-width:1;stroke-dasharray:3 4}
+    .sp{fill:#d97706}
+    .ph{stroke:#0f172a;stroke-width:2}
+    .row{stroke:#e2e8f0;stroke-width:1}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}.cover{fill:#1f2430}
+      .h{fill:#f1f5f9}.lbl,.tx,.st{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .outer{fill:#818cf8}.inner{fill:#2dd4bf}.fail{fill:#f87171}.bt{fill:#0f172a}
+      .hbg{fill:#334155}.hln{stroke:#64748b}
+      .badt,.note{fill:#f87171}.goodt{fill:#4ade80}
+      .tick{stroke:#475569}.sp{fill:#fbbf24}.ph{stroke:#f1f5f9}.row{stroke:#334155}
+    }
+    /* 12 s loop: timeline revealed 4-70 %, outcomes at 72 %, hold to 94 % */
+    .cv{transform-origin:566px 0;animation:cv 12s infinite linear}
+    @keyframes cv{0%,4%{transform:scaleX(1)}70%,100%{transform:scaleX(0)}}
+    .ph{animation:ph 12s infinite linear}
+    @keyframes ph{0%{opacity:0;transform:translateX(0)}4%{opacity:1;transform:translateX(0)}70%{opacity:1;transform:translateX(324px)}74%,100%{opacity:0;transform:translateX(324px)}}
+    .a{opacity:0;animation:oc 12s infinite linear}
+    @keyframes oc{0%,71%{opacity:0}74%,94%{opacity:1}98%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){.cv,.ph,.a{animation:none}.cv{transform:scaleX(0)}.ph{opacity:0}.a{opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="450" rx="14"/>
+  <text class="h" x="28" y="40">Inner fails, outer catches: three propagation settings</text>
+  <text class="sub" x="28" y="62">outer() is @Transactional (REQUIRED) and calls inner() on another bean.</text>
+  <text class="sub" x="28" y="80">inner() throws a RuntimeException; outer() catches it and returns normally.</text>
+
+  <!-- time ticks -->
+  <line class="tick" x1="240" y1="100" x2="240" y2="410"/>
+  <line class="tick" x1="330" y1="100" x2="330" y2="410"/>
+  <line class="tick" x1="450" y1="100" x2="450" y2="410"/>
+  <line class="tick" x1="560" y1="100" x2="560" y2="410"/>
+  <text class="sub" x="240" y="112" text-anchor="middle">outer starts</text>
+  <text class="sub" x="390" y="112" text-anchor="middle">inner runs</text>
+  <text class="sub" x="560" y="112" text-anchor="middle">outer ends</text>
+
+  <!-- REQUIRED -->
+  <text class="lbl code" x="28" y="146">REQUIRED</text>
+  <text class="sub" x="28" y="164">joins: one physical tx</text>
+  <text class="st" x="232" y="150" text-anchor="end">conn 1</text>
+  <rect class="outer" x="240" y="132" width="320" height="26" rx="5"/>
+  <rect class="inner" x="330" y="132" width="120" height="26"/>
+  <text class="bt" x="390" y="150" text-anchor="middle">inner</text>
+  <rect class="fail" x="444" y="128" width="6" height="34"/>
+  <text class="note" x="444" y="178" text-anchor="end">marks rollback-only</text>
+  <line class="row" x1="28" y1="196" x2="772" y2="196"/>
+
+  <!-- REQUIRES_NEW -->
+  <text class="lbl code" x="28" y="226">REQUIRES_NEW</text>
+  <text class="sub" x="28" y="244">suspends outer,</text>
+  <text class="sub" x="28" y="260">second connection</text>
+  <text class="st" x="232" y="230" text-anchor="end">conn 1</text>
+  <rect class="outer" x="240" y="212" width="90" height="26" rx="5"/>
+  <rect class="sus" x="330" y="212" width="120" height="26"/>
+  <text class="st" x="390" y="230" text-anchor="middle">suspended</text>
+  <rect class="outer" x="450" y="212" width="110" height="26" rx="5"/>
+  <text class="st" x="232" y="270" text-anchor="end">conn 2</text>
+  <rect class="inner" x="330" y="252" width="120" height="26" rx="5"/>
+  <text class="bt" x="390" y="270" text-anchor="middle">inner tx</text>
+  <rect class="fail" x="444" y="248" width="6" height="34"/>
+  <text class="note" x="456" y="270">ROLLBACK</text>
+  <line class="row" x1="28" y1="296" x2="772" y2="296"/>
+
+  <!-- NESTED -->
+  <text class="lbl code" x="28" y="326">NESTED</text>
+  <text class="sub" x="28" y="344">savepoint on the</text>
+  <text class="sub" x="28" y="360">same connection</text>
+  <text class="st" x="232" y="330" text-anchor="end">conn 1</text>
+  <rect class="outer" x="240" y="312" width="320" height="26" rx="5"/>
+  <rect class="inner" x="330" y="312" width="120" height="26"/>
+  <text class="bt" x="390" y="330" text-anchor="middle">inner</text>
+  <path class="sp" d="M330 302l7 7-7 7-7-7z"/>
+  <text class="sub" x="320" y="309" text-anchor="end">savepoint</text>
+  <rect class="fail" x="444" y="308" width="6" height="34"/>
+  <text class="note" x="444" y="358" text-anchor="end">rolls back to savepoint</text>
+
+  <!-- reveal cover and playhead -->
+  <rect class="cover cv" x="236" y="120" width="330" height="72"/><rect class="cover cv" x="236" y="200" width="330" height="92"/><rect class="cover cv" x="236" y="300" width="330" height="66"/>
+  <line class="ph" x1="240" y1="120" x2="240" y2="366"/>
+
+  <!-- outcomes -->
+  <g class="a">
+    <text class="badt" x="580" y="140">Commit attempted,</text>
+    <text class="badt" x="580" y="158">database rolls back:</text>
+    <text class="badt code" x="580" y="178" font-size="13">UnexpectedRollback-</text>
+    <text class="badt code" x="580" y="194" font-size="13">Exception</text>
+    <text class="goodt" x="580" y="230">inner rolled back</text>
+    <text class="goodt" x="580" y="248">alone; outer</text>
+    <text class="goodt" x="580" y="266">COMMITS</text>
+    <text class="goodt" x="580" y="330">outer continues</text>
+    <text class="goodt" x="580" y="348">and COMMITS</text>
+  </g>
+
+  <text class="sub" x="28" y="398">NESTED needs JDBC savepoints (DataSourceTransactionManager); JpaTransactionManager rejects it by default.</text>
+  <text class="sub" x="28" y="420">REQUIRES_NEW holds two connections at once: with a small pool under load, threads can deadlock waiting.</text>
+</svg>

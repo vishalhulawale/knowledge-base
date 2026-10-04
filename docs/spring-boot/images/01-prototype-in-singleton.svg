@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">A prototype bean injected into a singleton</title>
+  <desc id="d">Three calls, report(A), report(B) and report(C), reach the singleton ReportService one after another. On the left the prototype ReportBuilder was injected once in the constructor, so there is only builder number 1 and it collects rows from A, then A and B, then A, B and C: data from earlier callers leaks into later reports. On the right the service calls ObjectProvider getObject on each call, so builders number 1, 2 and 3 are created and each holds only its own caller's rows.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}
+    .teal{fill:#0ea5a4}
+    .pt{fill:#ffffff;font-size:14px;font-weight:700}
+    .row{fill:#e0e7ff}
+    .rowt{fill:#3730a3;font-size:13px;font-weight:600}
+    .ln{stroke:#94a3b8;stroke-width:2;fill:none}
+    .ah{fill:#94a3b8}
+    .bad{fill:#dc2626}.badt{fill:#dc2626;font-size:14px;font-weight:700}
+    .good{fill:#16a34a}.goodt{fill:#16a34a;font-size:14px;font-weight:700}
+    .mark{stroke:#ffffff;stroke-width:2.5;fill:none;stroke-linecap:round}
+    .chip{fill:#ffffff;stroke:#4f46e5;stroke-width:1.5}
+    .chipt{fill:#4f46e5;font-size:14px;font-weight:700}
+    .div{stroke:#e2e8f0;stroke-width:1.5}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.teal{fill:#2dd4bf}.pt{fill:#0f172a}
+      .row{fill:#312e81}.rowt{fill:#e0e7ff}
+      .ln{stroke:#64748b}.ah{fill:#64748b}
+      .bad{fill:#f87171}.badt{fill:#f87171}.good{fill:#4ade80}.goodt{fill:#4ade80}
+      .mark{stroke:#0f172a}
+      .chip{fill:#111827;stroke:#818cf8}.chipt{fill:#818cf8}
+      .div{stroke:#334155}
+    }
+    /* 10 s loop: call A at 4%, B at 30%, C at 56%, hold to 92% */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes s1{0%,3%{opacity:0}6%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s2{0%,29%{opacity:0}32%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s3{0%,55%{opacity:0}58%,92%{opacity:1}96%,100%{opacity:0}}
+    .k1{animation-name:s1}.k2{animation-name:s2}.k3{animation-name:s3}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0 0L10 5L0 10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">A prototype bean inside a singleton</text>
+  <text class="sub" x="28" y="62">ReportService is a singleton. Three calls arrive one after another.</text>
+
+  <!-- calls -->
+  <text class="lbl" x="28" y="100">Calls</text>
+  <g class="a k1"><rect class="chip" x="96" y="80" width="112" height="30" rx="15"/><text class="chipt code" x="152" y="100" text-anchor="middle">report(A)</text></g>
+  <g class="a k2"><rect class="chip" x="220" y="80" width="112" height="30" rx="15"/><text class="chipt code" x="276" y="100" text-anchor="middle">report(B)</text></g>
+  <g class="a k3"><rect class="chip" x="344" y="80" width="112" height="30" rx="15"/><text class="chipt code" x="400" y="100" text-anchor="middle">report(C)</text></g>
+
+  <line class="div" x1="400" y1="128" x2="400" y2="378"/>
+
+  <!-- LEFT: injected once -->
+  <circle class="bad" cx="40" cy="146" r="10"/><path class="mark" d="M36 142l8 8M44 142l-8 8"/>
+  <text class="lbl" x="58" y="151">Injected once in the constructor</text>
+  <rect class="pri" x="28" y="168" width="344" height="40" rx="8"/>
+  <text class="pt" x="200" y="193" text-anchor="middle">ReportService (singleton)</text>
+  <line class="ln" x1="200" y1="208" x2="200" y2="232" marker-end="url(#ar)"/>
+  <rect class="box" x="28" y="236" width="344" height="136" rx="8"/>
+  <text class="lbl" x="44" y="258">ReportBuilder #1</text>
+  <text class="sub" x="230" y="258">the only one</text>
+  <g class="a k1"><rect class="row" x="44" y="268" width="160" height="26" rx="6"/><text class="rowt" x="56" y="286">rows from A</text></g>
+  <g class="a k2"><rect class="row" x="44" y="300" width="160" height="26" rx="6"/><text class="rowt" x="56" y="318">rows from B</text></g>
+  <g class="a k3"><rect class="row" x="44" y="332" width="160" height="26" rx="6"/><text class="rowt" x="56" y="350">rows from C</text></g>
+  <g class="a k2"><text class="badt" x="218" y="306">B's report also</text><text class="badt" x="218" y="324">contains A's rows</text></g>
+
+  <!-- RIGHT: fresh per call -->
+  <circle class="good" cx="424" cy="146" r="10"/><path class="mark" d="M419 146l4 4 6-8"/>
+  <text class="lbl" x="442" y="151" ><tspan class="code">builders.getObject()</tspan> per call</text>
+  <rect class="pri" x="412" y="168" width="360" height="40" rx="8"/>
+  <text class="pt" x="592" y="193" text-anchor="middle">ReportService (singleton)</text>
+  <g class="a k1">
+    <path class="ln" d="M470 208V262" marker-end="url(#ar)"/>
+    <rect class="box" x="412" y="266" width="112" height="92" rx="8"/>
+    <text class="lbl" x="468" y="288" text-anchor="middle">Builder #1</text>
+    <rect class="row" x="422" y="300" width="92" height="26" rx="6"/><text class="rowt" x="468" y="318" text-anchor="middle">A rows</text>
+  </g>
+  <g class="a k2">
+    <path class="ln" d="M592 208V262" marker-end="url(#ar)"/>
+    <rect class="box" x="536" y="266" width="112" height="92" rx="8"/>
+    <text class="lbl" x="592" y="288" text-anchor="middle">Builder #2</text>
+    <rect class="row" x="546" y="300" width="92" height="26" rx="6"/><text class="rowt" x="592" y="318" text-anchor="middle">B rows</text>
+  </g>
+  <g class="a k3">
+    <path class="ln" d="M716 208V262" marker-end="url(#ar)"/>
+    <rect class="box" x="660" y="266" width="112" height="92" rx="8"/>
+    <text class="lbl" x="716" y="288" text-anchor="middle">Builder #3</text>
+    <rect class="row" x="670" y="300" width="92" height="26" rx="6"/><text class="rowt" x="716" y="318" text-anchor="middle">C rows</text>
+  </g>
+  <g class="a k3"><text class="goodt" x="592" y="378" text-anchor="middle">Each report sees only its own rows</text></g>
+
+  <text class="sub" x="28" y="404">Concurrent calls make the left case worse: one non-thread-safe builder is shared by every request thread.</text>
+</svg>

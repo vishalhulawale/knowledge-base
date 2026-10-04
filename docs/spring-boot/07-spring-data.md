@@ -181,6 +181,9 @@ sequenceDiagram
 ```
 *Notice that the offset request pays for every skipped row plus a count, while the keyset request reads a constant 21 rows no matter how deep the user is.*
 
+![Animation: for page 5,000 of 20 rows, the offset query scans and discards a long run of grey blocks before returning the last 20 rows, then the keyset query jumps through the index straight to the cursor and reads 21 rows](images/07-offset-vs-keyset.svg){ loading=lazy }
+*Watch the scan bar on the offset row: the database does that work on every request for a deep page. The keyset arrow skips it entirely.*
+
 Keyset rules:
 
 - The sort must be **deterministic**: always add a unique tie-breaker (usually the ID).
@@ -280,6 +283,9 @@ public record OrderSummary(Long id, OrderStatus status, BigDecimal total) {}
     ```
 
 To-one associations (`customer`) are safe to `JOIN FETCH` with pagination because they do not multiply rows. The problem is only **to-many** fetches.
+
+![Animation: an SQL log where loading 50 orders with lazy items produces one orders query and then one order_items query per order, 51 in total, compared with batch fetching, which produces the orders query and a single order_items query with an IN list, 2 in total](images/07-n-plus-one.svg){ loading=lazy }
+*Notice that the N+1 log grows by one query per order, while the batched log needs only one extra query per 50 orders.*
 
 ### Dynamic filters with `Specification`
 

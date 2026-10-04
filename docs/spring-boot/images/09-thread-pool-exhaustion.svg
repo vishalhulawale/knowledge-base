@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">A slow upstream and the request thread pool</title>
+  <desc id="d">A Tomcat pool of 200 platform threads drawn as 20 blocks of 10. The pharmacy upstream becomes slow. Left, the client has no timeouts: every request that calls the upstream holds its thread while it waits, the pool fills row by row, and once it is full every endpoint, including unrelated ones, waits too. Right, the client has a 3 second response timeout and a circuit breaker: calls give up after 3 seconds so only a few threads are busy at a time, and when the breaker opens calls fail immediately with a fallback and the pool stays free.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .free{fill:#ffffff;stroke:#cbd5e1}
+    .busy{fill:#d97706}
+    .badt{fill:#dc2626;font-size:14px;font-weight:700}
+    .goodt{fill:#15803d;font-size:14px;font-weight:700}
+    .div{stroke:#e2e8f0;stroke-width:1.5}
+    .brk{fill:#ccfbf1;stroke:#0ea5a4}.brkt{fill:#0f766e;font-size:13px;font-weight:700}
+    .bad{fill:#dc2626}.good{fill:#16a34a}
+    .mark{stroke:#ffffff;stroke-width:2.5;fill:none;stroke-linecap:round}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .free{fill:#111827;stroke:#475569}.busy{fill:#fbbf24}
+      .badt{fill:#f87171}.goodt{fill:#4ade80}.div{stroke:#334155}
+      .brk{fill:#134e4a;stroke:#2dd4bf}.brkt{fill:#5eead4}
+      .bad{fill:#f87171}.good{fill:#4ade80}.mark{stroke:#0f172a}
+    }
+    /* 12 s loop: left rows fill at 6, 19, 32, 45 %; full at 60 %. Right: rows busy and freed by timeout, breaker opens at 60 %. Hold to 92 % */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes l0{0%,6%{opacity:0}8%,92%{opacity:1}96%,100%{opacity:0}}.l0{animation-name:l0}
+    @keyframes l1{0%,19%{opacity:0}21%,92%{opacity:1}96%,100%{opacity:0}}.l1{animation-name:l1}
+    @keyframes l2{0%,32%{opacity:0}34%,92%{opacity:1}96%,100%{opacity:0}}.l2{animation-name:l2}
+    @keyframes l3{0%,45%{opacity:0}47%,92%{opacity:1}96%,100%{opacity:0}}.l3{animation-name:l3}
+    
+    @keyframes q0{0%,6%{opacity:0}8%,28%{opacity:1}30%,36%{opacity:0}38%,58%{opacity:1}60%,100%{opacity:0}}.q0{animation-name:q0}
+    @keyframes q1{0%,20%{opacity:0}22%,42%{opacity:1}44%,100%{opacity:0}}.q1{animation-name:q1}
+    @keyframes f1{0%,59%{opacity:0}61%,92%{opacity:1}96%,100%{opacity:0}}.f1{animation-name:f1}
+    @keyframes f0{0%,9%{opacity:0}11%,92%{opacity:1}96%,100%{opacity:0}}.f0{animation-name:f0}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.q0,.q1{opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">A slow upstream and 200 request threads</text>
+  <text class="sub" x="28" y="62">Platform-thread Tomcat pool, one block = 10 threads. The pharmacy upstream starts answering slowly.</text>
+  <line class="div" x1="400" y1="80" x2="400" y2="390"/>
+
+  <circle class="bad" cx="40" cy="102" r="10"/><path class="mark" d="M36 98l8 8M44 98l-8 8"/>
+  <text class="lbl" x="58" y="107">No timeouts</text>
+  <rect class="free" x="40" y="130" width="56" height="32" rx="6"/><rect class="free" x="104" y="130" width="56" height="32" rx="6"/><rect class="free" x="168" y="130" width="56" height="32" rx="6"/><rect class="free" x="232" y="130" width="56" height="32" rx="6"/><rect class="free" x="296" y="130" width="56" height="32" rx="6"/><rect class="free" x="40" y="170" width="56" height="32" rx="6"/><rect class="free" x="104" y="170" width="56" height="32" rx="6"/><rect class="free" x="168" y="170" width="56" height="32" rx="6"/><rect class="free" x="232" y="170" width="56" height="32" rx="6"/><rect class="free" x="296" y="170" width="56" height="32" rx="6"/><rect class="free" x="40" y="210" width="56" height="32" rx="6"/><rect class="free" x="104" y="210" width="56" height="32" rx="6"/><rect class="free" x="168" y="210" width="56" height="32" rx="6"/><rect class="free" x="232" y="210" width="56" height="32" rx="6"/><rect class="free" x="296" y="210" width="56" height="32" rx="6"/><rect class="free" x="40" y="250" width="56" height="32" rx="6"/><rect class="free" x="104" y="250" width="56" height="32" rx="6"/><rect class="free" x="168" y="250" width="56" height="32" rx="6"/><rect class="free" x="232" y="250" width="56" height="32" rx="6"/><rect class="free" x="296" y="250" width="56" height="32" rx="6"/>
+  <g class="a l0"><rect class="busy" x="40" y="130" width="56" height="32" rx="6"/><rect class="busy" x="104" y="130" width="56" height="32" rx="6"/><rect class="busy" x="168" y="130" width="56" height="32" rx="6"/><rect class="busy" x="232" y="130" width="56" height="32" rx="6"/><rect class="busy" x="296" y="130" width="56" height="32" rx="6"/></g><g class="a l1"><rect class="busy" x="40" y="170" width="56" height="32" rx="6"/><rect class="busy" x="104" y="170" width="56" height="32" rx="6"/><rect class="busy" x="168" y="170" width="56" height="32" rx="6"/><rect class="busy" x="232" y="170" width="56" height="32" rx="6"/><rect class="busy" x="296" y="170" width="56" height="32" rx="6"/></g><g class="a l2"><rect class="busy" x="40" y="210" width="56" height="32" rx="6"/><rect class="busy" x="104" y="210" width="56" height="32" rx="6"/><rect class="busy" x="168" y="210" width="56" height="32" rx="6"/><rect class="busy" x="232" y="210" width="56" height="32" rx="6"/><rect class="busy" x="296" y="210" width="56" height="32" rx="6"/></g><g class="a l3"><rect class="busy" x="40" y="250" width="56" height="32" rx="6"/><rect class="busy" x="104" y="250" width="56" height="32" rx="6"/><rect class="busy" x="168" y="250" width="56" height="32" rx="6"/><rect class="busy" x="232" y="250" width="56" height="32" rx="6"/><rect class="busy" x="296" y="250" width="56" height="32" rx="6"/></g>
+  <g class="a f0"><text class="sub" x="40" y="314">Each call holds its thread while it waits.</text></g>
+  <g class="a f1"><text class="badt" x="40" y="342">Pool full: every endpoint now queues,</text><text class="badt" x="40" y="362">including ones that never call pharmacy.</text></g>
+
+  <circle class="good" cx="424" cy="102" r="10"/><path class="mark" d="M419 102l4 4 6-8"/>
+  <text class="lbl" x="442" y="107">3 s response timeout + circuit breaker</text>
+  <rect class="free" x="424" y="130" width="56" height="32" rx="6"/><rect class="free" x="488" y="130" width="56" height="32" rx="6"/><rect class="free" x="552" y="130" width="56" height="32" rx="6"/><rect class="free" x="616" y="130" width="56" height="32" rx="6"/><rect class="free" x="680" y="130" width="56" height="32" rx="6"/><rect class="free" x="424" y="170" width="56" height="32" rx="6"/><rect class="free" x="488" y="170" width="56" height="32" rx="6"/><rect class="free" x="552" y="170" width="56" height="32" rx="6"/><rect class="free" x="616" y="170" width="56" height="32" rx="6"/><rect class="free" x="680" y="170" width="56" height="32" rx="6"/><rect class="free" x="424" y="210" width="56" height="32" rx="6"/><rect class="free" x="488" y="210" width="56" height="32" rx="6"/><rect class="free" x="552" y="210" width="56" height="32" rx="6"/><rect class="free" x="616" y="210" width="56" height="32" rx="6"/><rect class="free" x="680" y="210" width="56" height="32" rx="6"/><rect class="free" x="424" y="250" width="56" height="32" rx="6"/><rect class="free" x="488" y="250" width="56" height="32" rx="6"/><rect class="free" x="552" y="250" width="56" height="32" rx="6"/><rect class="free" x="616" y="250" width="56" height="32" rx="6"/><rect class="free" x="680" y="250" width="56" height="32" rx="6"/>
+  <g class="a q0"><rect class="busy" x="424" y="130" width="56" height="32" rx="6"/><rect class="busy" x="488" y="130" width="56" height="32" rx="6"/><rect class="busy" x="552" y="130" width="56" height="32" rx="6"/><rect class="busy" x="616" y="130" width="56" height="32" rx="6"/><rect class="busy" x="680" y="130" width="56" height="32" rx="6"/></g><g class="a q1"><rect class="busy" x="424" y="170" width="56" height="32" rx="6"/><rect class="busy" x="488" y="170" width="56" height="32" rx="6"/><rect class="busy" x="552" y="170" width="56" height="32" rx="6"/><rect class="busy" x="616" y="170" width="56" height="32" rx="6"/><rect class="busy" x="680" y="170" width="56" height="32" rx="6"/></g>
+  <g class="a f0"><text class="sub" x="424" y="314">Calls give up after 3 s and free the thread.</text></g>
+  <g class="a f1"><rect class="brk" x="420" y="326" width="352" height="44" rx="8"/><text class="brkt" x="434" y="345">Breaker OPEN: calls fail at once with a</text><text class="brkt" x="434" y="362">fallback, threads stay free for other work</text></g>
+
+  <text class="sub" x="28" y="404">Virtual threads remove the thread limit, not the problem: keep timeouts and a bounded connection pool.</text>
+</svg>

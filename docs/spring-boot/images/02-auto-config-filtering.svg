@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 494" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">How auto-configuration candidates are filtered</title>
+  <desc id="d">An example application has Spring MVC, Jackson and Kafka on the classpath, defines its own ObjectMapper bean, excludes DataSourceAutoConfiguration and sets acme.audit.enabled to false. Eight candidate classes are read from the AutoConfiguration.imports files. Stage 2 removes DataSourceAutoConfiguration because it is excluded. Stage 3, the fast filter using pre-computed metadata, removes MongoAutoConfiguration, RabbitAutoConfiguration and WebFluxAutoConfiguration because their classes are not on the classpath. Stage 4 evaluates the remaining conditions: AuditAutoConfiguration does not match because acme.audit.enabled is false; JacksonAutoConfiguration matches but its ObjectMapper bean method backs off because the user defined one; DispatcherServletAutoConfiguration and KafkaAutoConfiguration match and register their beans.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .nm{fill:#334155;font-size:13px;font-weight:600}
+    .pill{fill:#ffffff;stroke:#cbd5e1}
+    .pillt{fill:#334155;font-size:14px;font-weight:600}
+    .hl{fill:#4f46e5}
+    .strike{stroke:#dc2626;stroke-width:2}
+    .badt{fill:#dc2626;font-size:14px;font-weight:600}
+    .warnt{fill:#b45309;font-size:14px;font-weight:600}
+    .goodt{fill:#15803d;font-size:14px;font-weight:600}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.nm,.pillt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box,.pill{fill:#111827;stroke:#475569}
+      .hl{fill:#818cf8}
+      .strike{stroke:#f87171}.badt{fill:#f87171}.warnt{fill:#fbbf24}.goodt{fill:#4ade80}
+    }
+    /* 12 s loop: stage 2 at 16 %, stage 3 at 36 %, stage 4 at 58 %, hold to 92 % */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes r2{0%,16%{opacity:0}18%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes r3{0%,36%{opacity:0}38%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes r4{0%,58%{opacity:0}60%,92%{opacity:1}96%,100%{opacity:0}}
+    .r2{animation-name:r2}.r3{animation-name:r3}.r4{animation-name:r4}
+    .c{animation:12s infinite linear}
+    @keyframes d2{0%,16%{opacity:1}18%,92%{opacity:.4}96%,100%{opacity:1}}
+    @keyframes d3{0%,36%{opacity:1}38%,92%{opacity:.4}96%,100%{opacity:1}}
+    @keyframes d4{0%,58%{opacity:1}60%,92%{opacity:.4}96%,100%{opacity:1}}
+    .d2{animation-name:d2}.d3{animation-name:d3}.d4{animation-name:d4}
+    @keyframes mv{0%,15.9%{transform:translateX(0)}16%,35.9%{transform:translateX(186px)}36%,57.9%{transform:translateX(372px)}58%,100%{transform:translateX(558px)}}
+    .hlg{animation:mv 12s infinite linear}
+    .on1{animation:o1 12s infinite linear}.on2{animation:o2 12s infinite linear}.on3{animation:o3 12s infinite linear}.on4{animation:o4 12s infinite linear}
+    .off{fill:#334155}
+    @keyframes o1{0%,15.9%{fill:#ffffff}16%,100%{fill:#334155}}
+    @keyframes o2{0%,15.9%,36%,100%{fill:#334155}16%,35.9%{fill:#ffffff}}
+    @keyframes o3{0%,35.9%,58%,100%{fill:#334155}36%,57.9%{fill:#ffffff}}
+    @keyframes o4{0%,57.9%{fill:#334155}58%,100%{fill:#ffffff}}
+    @media (prefers-color-scheme: dark){
+      @keyframes o1{0%,15.9%{fill:#0f172a}16%,100%{fill:#e2e8f0}}
+      @keyframes o2{0%,15.9%,36%,100%{fill:#e2e8f0}16%,35.9%{fill:#0f172a}}
+      @keyframes o3{0%,35.9%,58%,100%{fill:#e2e8f0}36%,57.9%{fill:#0f172a}}
+      @keyframes o4{0%,57.9%{fill:#e2e8f0}58%,100%{fill:#0f172a}}
+    }
+    @media (prefers-reduced-motion: reduce){
+      .a,.c,.hlg,.on1,.on2,.on3,.on4{animation:none}
+      .a{opacity:1}.d2,.d3,.d4{opacity:.4}.hlg{transform:translateX(558px)}
+      .on4{fill:#ffffff}
+    }
+    @media (prefers-reduced-motion: reduce) and (prefers-color-scheme: dark){.on4{fill:#0f172a}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="492" rx="14"/>
+  <text class="h" x="28" y="40">Auto-configuration candidates are filtered, not scanned</text>
+  <text class="sub" x="28" y="62">Example app: MVC, Jackson and Kafka on the classpath, its own ObjectMapper bean,</text>
+  <text class="sub" x="28" y="80">DataSource auto-configuration excluded, acme.audit.enabled=false.</text>
+
+  <rect class="pill" x="28" y="96" width="180" height="32" rx="16"/>
+  <rect class="pill" x="214" y="96" width="180" height="32" rx="16"/>
+  <rect class="pill" x="400" y="96" width="180" height="32" rx="16"/>
+  <rect class="pill" x="586" y="96" width="180" height="32" rx="16"/>
+  <g class="hlg"><rect class="hl" x="28" y="96" width="180" height="32" rx="16"/></g>
+  <text class="pillt on1" x="118" y="117" text-anchor="middle">1 Read imports</text>
+  <text class="pillt on2" x="304" y="117" text-anchor="middle">2 Exclusions</text>
+  <text class="pillt on3" x="490" y="117" text-anchor="middle">3 Fast filter</text>
+  <text class="pillt on4" x="676" y="117" text-anchor="middle">4 Conditions</text>
+
+  <g class="c d2"><rect class="box" x="28" y="146" width="360" height="30" rx="6"/><text class="nm code" x="40" y="166">DataSourceAutoConfiguration</text></g>
+  <g class="a r2"><line class="strike" x1="36" y1="161" x2="257" y2="161"/></g>
+  <g class="a r2"><text class="badt" x="404" y="166">Excluded by spring.autoconfigure.exclude</text></g>
+  <g class="c d3"><rect class="box" x="28" y="184" width="360" height="30" rx="6"/><text class="nm code" x="40" y="204">MongoAutoConfiguration</text></g>
+  <g class="a r3"><line class="strike" x1="36" y1="199" x2="217" y2="199"/></g>
+  <g class="a r3"><text class="badt" x="404" y="204">Fast filter: MongoClient class missing</text></g>
+  <g class="c d3"><rect class="box" x="28" y="222" width="360" height="30" rx="6"/><text class="nm code" x="40" y="242">RabbitAutoConfiguration</text></g>
+  <g class="a r3"><line class="strike" x1="36" y1="237" x2="225" y2="237"/></g>
+  <g class="a r3"><text class="badt" x="404" y="242">Fast filter: RabbitTemplate class missing</text></g>
+  <g class="c d3"><rect class="box" x="28" y="260" width="360" height="30" rx="6"/><text class="nm code" x="40" y="280">WebFluxAutoConfiguration</text></g>
+  <g class="a r3"><line class="strike" x1="36" y1="275" x2="233" y2="275"/></g>
+  <g class="a r3"><text class="badt" x="404" y="280">Fast filter: no WebFlux classes</text></g>
+  <g class="c d4"><rect class="box" x="28" y="298" width="360" height="30" rx="6"/><text class="nm code" x="40" y="318">AuditAutoConfiguration</text></g>
+  <g class="a r4"><line class="strike" x1="36" y1="313" x2="217" y2="313"/></g>
+  <g class="a r4"><text class="badt" x="404" y="318">acme.audit.enabled=false</text></g>
+  <g class="c"><rect class="box" x="28" y="336" width="360" height="30" rx="6"/><text class="nm code" x="40" y="356">JacksonAutoConfiguration</text></g>
+  <g class="a r4"><text class="warnt" x="404" y="356">Matches; ObjectMapper @Bean backs off</text></g>
+  <g class="c"><rect class="box" x="28" y="374" width="360" height="30" rx="6"/><text class="nm code" x="40" y="394">DispatcherServletAutoConfiguration</text></g>
+  <g class="a r4"><text class="goodt" x="404" y="394">Matches: beans registered</text></g>
+  <g class="c"><rect class="box" x="28" y="412" width="360" height="30" rx="6"/><text class="nm code" x="40" y="432">KafkaAutoConfiguration</text></g>
+  <g class="a r4"><text class="goodt" x="404" y="432">Matches: beans registered</text></g>
+
+  <text class="sub" x="28" y="462">Simplified: Boot 3.x reads well over a hundred candidates. The fast filter rejects most of them</text>
+  <text class="sub" x="28" y="480">from pre-computed metadata, without loading the classes.</text>
+</svg>

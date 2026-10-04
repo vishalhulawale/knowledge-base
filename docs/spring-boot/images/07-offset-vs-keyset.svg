@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Offset paging vs keyset paging at depth</title>
+  <desc id="d">Fetching page 5,000 with 20 rows per page. Rows are drawn as blocks in sort order. With OFFSET 100000 LIMIT 20 the database walks through every earlier block, reading and discarding 100,000 rows before returning the last 20, and a Page also runs a count query. With keyset paging, WHERE (created_at, id) is before the cursor with LIMIT 21, an index seek jumps straight to the right position and reads only 21 rows, so the cost does not grow with depth.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .slot{fill:#ffffff;stroke:#cbd5e1}
+    .skip{fill:#cbd5e1}
+    .ret{fill:#16a34a}
+    .cover{fill:#f8fafc}
+    .arc{fill:none;stroke:#0ea5a4;stroke-width:3;stroke-dasharray:820;stroke-dashoffset:820}
+    .ah{fill:#0ea5a4}
+    .idx{fill:#ccfbf1;stroke:#0ea5a4}
+    .idxt{fill:#0f766e;font-size:13px;font-weight:700}
+    .badt{fill:#dc2626;font-size:14px;font-weight:700}
+    .goodt{fill:#15803d;font-size:14px;font-weight:700}
+    .scan{fill:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}.cover{fill:#1f2430}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .slot{fill:#111827;stroke:#475569}.skip{fill:#475569}.ret{fill:#4ade80}
+      .arc{stroke:#2dd4bf}.ah{fill:#2dd4bf}
+      .idx{fill:#134e4a;stroke:#2dd4bf}.idxt{fill:#5eead4}
+      .badt{fill:#f87171}.goodt{fill:#4ade80}.scan{fill:#fbbf24}
+    }
+    /* 12 s loop: offset scan 3-48 %, result 50 %; keyset arc 58-68 %, result 70 %; hold to 92 % */
+    .cv{transform-origin:747px 0;animation:cv 12s infinite linear}
+    @keyframes cv{0%,3%{transform:scaleX(1)}48%,100%{transform:scaleX(0)}}
+    .sc{animation:sc 12s infinite linear}
+    @keyframes sc{0%{opacity:0;transform:translateX(0)}3%{opacity:1;transform:translateX(0)}48%{opacity:1;transform:translateX(720px)}50%,100%{opacity:0;transform:translateX(720px)}}
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes r1{0%,49%{opacity:0}51%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes r2{0%,69%{opacity:0}71%,92%{opacity:1}96%,100%{opacity:0}}
+    .r1{animation-name:r1}.r2{animation-name:r2}
+    .arc{animation:arc 12s infinite linear}
+    @keyframes arc{0%,57%{stroke-dashoffset:820;opacity:1}68%,92%{stroke-dashoffset:0;opacity:1}96%,100%{stroke-dashoffset:0;opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .cv,.sc,.a,.arc{animation:none}
+      .cv,.sc{opacity:0}.a{opacity:1}.arc{stroke-dashoffset:0}
+    }
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="ah" d="M0 0L10 5L0 10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Page 5,000 at 20 rows per page</text>
+  <text class="sub" x="28" y="62">Rows in sort order (created_at DESC, id DESC), drawn as blocks.</text>
+
+  <text class="lbl" x="28" y="98">Offset</text>
+  <text class="sub code" x="96" y="98">ORDER BY ... LIMIT 20 OFFSET 100000</text>
+  <rect class="slot" x="27" y="128" width="26" height="36" rx="4"/><rect class="slot" x="57" y="128" width="26" height="36" rx="4"/><rect class="slot" x="87" y="128" width="26" height="36" rx="4"/><rect class="slot" x="117" y="128" width="26" height="36" rx="4"/><rect class="slot" x="147" y="128" width="26" height="36" rx="4"/><rect class="slot" x="177" y="128" width="26" height="36" rx="4"/><rect class="slot" x="207" y="128" width="26" height="36" rx="4"/><rect class="slot" x="237" y="128" width="26" height="36" rx="4"/><rect class="slot" x="267" y="128" width="26" height="36" rx="4"/><rect class="slot" x="297" y="128" width="26" height="36" rx="4"/><rect class="slot" x="327" y="128" width="26" height="36" rx="4"/><rect class="slot" x="357" y="128" width="26" height="36" rx="4"/><rect class="slot" x="387" y="128" width="26" height="36" rx="4"/><rect class="slot" x="417" y="128" width="26" height="36" rx="4"/><rect class="slot" x="447" y="128" width="26" height="36" rx="4"/><rect class="slot" x="477" y="128" width="26" height="36" rx="4"/><rect class="slot" x="507" y="128" width="26" height="36" rx="4"/><rect class="slot" x="537" y="128" width="26" height="36" rx="4"/><rect class="slot" x="567" y="128" width="26" height="36" rx="4"/><rect class="slot" x="597" y="128" width="26" height="36" rx="4"/><rect class="slot" x="627" y="128" width="26" height="36" rx="4"/><rect class="slot" x="657" y="128" width="26" height="36" rx="4"/><rect class="slot" x="687" y="128" width="26" height="36" rx="4"/><rect class="slot" x="717" y="128" width="26" height="36" rx="4"/><rect class="slot" x="747" y="128" width="26" height="36" rx="4"/>
+  <rect class="skip" x="27" y="128" width="26" height="36" rx="4"/><rect class="skip" x="57" y="128" width="26" height="36" rx="4"/><rect class="skip" x="87" y="128" width="26" height="36" rx="4"/><rect class="skip" x="117" y="128" width="26" height="36" rx="4"/><rect class="skip" x="147" y="128" width="26" height="36" rx="4"/><rect class="skip" x="177" y="128" width="26" height="36" rx="4"/><rect class="skip" x="207" y="128" width="26" height="36" rx="4"/><rect class="skip" x="237" y="128" width="26" height="36" rx="4"/><rect class="skip" x="267" y="128" width="26" height="36" rx="4"/><rect class="skip" x="297" y="128" width="26" height="36" rx="4"/><rect class="skip" x="327" y="128" width="26" height="36" rx="4"/><rect class="skip" x="357" y="128" width="26" height="36" rx="4"/><rect class="skip" x="387" y="128" width="26" height="36" rx="4"/><rect class="skip" x="417" y="128" width="26" height="36" rx="4"/><rect class="skip" x="447" y="128" width="26" height="36" rx="4"/><rect class="skip" x="477" y="128" width="26" height="36" rx="4"/><rect class="skip" x="507" y="128" width="26" height="36" rx="4"/><rect class="skip" x="537" y="128" width="26" height="36" rx="4"/><rect class="skip" x="567" y="128" width="26" height="36" rx="4"/><rect class="skip" x="597" y="128" width="26" height="36" rx="4"/><rect class="skip" x="627" y="128" width="26" height="36" rx="4"/><rect class="skip" x="657" y="128" width="26" height="36" rx="4"/><rect class="skip" x="687" y="128" width="26" height="36" rx="4"/><rect class="skip" x="717" y="128" width="26" height="36" rx="4"/>
+  <rect class="cover cv" x="25" y="124" width="722" height="44"/>
+  <g class="a r1"><rect class="ret" x="747" y="128" width="26" height="36" rx="4"/></g>
+  <g class="sc"><rect class="scan" x="27" y="168" width="26" height="5" rx="2"/></g>
+  <g class="a r1">
+    <text class="badt" x="28" y="196">Reads 100,020 rows, throws away 100,000, returns 20.</text>
+    <text class="sub" x="28" y="216">A Page then runs a second query: SELECT count(*) over the whole filter.</text>
+  </g>
+
+  <text class="lbl" x="28" y="252">Keyset</text>
+  <text class="sub code" x="96" y="252">WHERE (created_at, id) before cursor LIMIT 21</text>
+  <rect class="idx" x="28" y="266" width="96" height="18" rx="4"/>
+  <text class="idxt" x="76" y="280" text-anchor="middle">index</text>
+  <rect class="slot" x="27" y="296" width="26" height="36" rx="4"/><rect class="slot" x="57" y="296" width="26" height="36" rx="4"/><rect class="slot" x="87" y="296" width="26" height="36" rx="4"/><rect class="slot" x="117" y="296" width="26" height="36" rx="4"/><rect class="slot" x="147" y="296" width="26" height="36" rx="4"/><rect class="slot" x="177" y="296" width="26" height="36" rx="4"/><rect class="slot" x="207" y="296" width="26" height="36" rx="4"/><rect class="slot" x="237" y="296" width="26" height="36" rx="4"/><rect class="slot" x="267" y="296" width="26" height="36" rx="4"/><rect class="slot" x="297" y="296" width="26" height="36" rx="4"/><rect class="slot" x="327" y="296" width="26" height="36" rx="4"/><rect class="slot" x="357" y="296" width="26" height="36" rx="4"/><rect class="slot" x="387" y="296" width="26" height="36" rx="4"/><rect class="slot" x="417" y="296" width="26" height="36" rx="4"/><rect class="slot" x="447" y="296" width="26" height="36" rx="4"/><rect class="slot" x="477" y="296" width="26" height="36" rx="4"/><rect class="slot" x="507" y="296" width="26" height="36" rx="4"/><rect class="slot" x="537" y="296" width="26" height="36" rx="4"/><rect class="slot" x="567" y="296" width="26" height="36" rx="4"/><rect class="slot" x="597" y="296" width="26" height="36" rx="4"/><rect class="slot" x="627" y="296" width="26" height="36" rx="4"/><rect class="slot" x="657" y="296" width="26" height="36" rx="4"/><rect class="slot" x="687" y="296" width="26" height="36" rx="4"/><rect class="slot" x="717" y="296" width="26" height="36" rx="4"/><rect class="slot" x="747" y="296" width="26" height="36" rx="4"/>
+  <path class="arc" d="M124 275C400 266 660 264 752 286"/>
+  <g class="a r2"><path class="ah" d="M748 279l14 10-16 4z"/></g>
+  <g class="a r2"><rect class="ret" x="747" y="296" width="26" height="36" rx="4"/></g>
+  <g class="a r2">
+    <text class="goodt" x="28" y="360">Index seek to the cursor, reads 21 rows (20 plus one to know if there is a next page).</text>
+    <text class="sub" x="28" y="380">Page 5,000 costs the same as page 1. No count query, no jumping to an arbitrary page.</text>
+  </g>
+  <text class="sub" x="28" y="408">Each grey block stands for about 4,000 skipped rows. Not to scale.</text>
+</svg>

@@ -138,6 +138,9 @@ When the controller, an argument resolver, a message converter or an interceptor
 
 If **no resolver** handles it, the exception leaves `DispatcherServlet`, the container marks the request as failed and does an **`ERROR` dispatch** to the error page. Spring Boot registers `/error`, served by **`BasicErrorController`**, which produces the familiar `{timestamp, status, error, path}` JSON (or the "Whitelabel" HTML page for browsers). The same path is used for `response.sendError(...)` and for exceptions thrown in filters.
 
+![Animation: one request reaches the controller, which throws, and the exception goes to the HandlerExceptionResolver chain inside DispatcherServlet, producing your ProblemDetail; a second request fails in TenantFilter, never reaches DispatcherServlet, and ends in an ERROR dispatch to /error and BasicErrorController](images/05-exception-paths.svg){ loading=lazy }
+*Notice that the filter's exception never enters the `DispatcherServlet` box, so no `@ExceptionHandler` can see it.*
+
 **`ProblemDetail` (RFC 9457, which replaced RFC 7807).** Since Spring Framework 6, the standard error body is `application/problem+json` with `type`, `title`, `status`, `detail`, `instance` plus custom properties. Extend **`ResponseEntityExceptionHandler`** in your advice to get this format for all built-in MVC exceptions, or set `spring.mvc.problemdetails.enabled=true` in Boot to register one for you. Spring's own exceptions implement `ErrorResponse`, so they know their status and problem body.
 
 Validation failures to know by name:

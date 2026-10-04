@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">A database failover and the liveness probe</title>
+  <desc id="d">A shared database goes down for a failover and comes back. Left, the liveness group includes the db indicator: all four pods fail liveness at the same moment and Kubernetes restarts every one of them; when the database returns, all pods start and open connection pools together, putting a load spike on the database that has just recovered. Right, liveness checks only the internal liveness state: the pods stay live, requests that need the database fail fast or degrade, no pod restarts, and service returns to normal as soon as the database does.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .up{fill:#16a34a}.dn{fill:#dc2626}.wa{fill:#d97706}
+    .pt{fill:#ffffff;font-size:14px;font-weight:700}
+    .ps{fill:#ffffff;font-size:13px}
+    .pta{fill:#0f172a}
+    .badt{fill:#dc2626;font-size:14px;font-weight:600}
+    .goodt{fill:#15803d;font-size:14px;font-weight:600}
+    .div{stroke:#e2e8f0;stroke-width:1.5}
+    .bad{fill:#dc2626}.good{fill:#16a34a}
+    .mark{stroke:#ffffff;stroke-width:2.5;fill:none;stroke-linecap:round}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .up{fill:#4ade80}.dn{fill:#f87171}.wa{fill:#fbbf24}
+      .pt,.ps{fill:#0f172a}
+      .badt{fill:#f87171}.goodt{fill:#4ade80}.div{stroke:#334155}
+      .bad{fill:#f87171}.good{fill:#4ade80}.mark{stroke:#0f172a}
+    }
+    /* 12 s loop: DB down 15-50 %, pods react at 22 %, DB back at 50 %, left pods restart until 70 %; labels held to 92 % */
+    .a{opacity:0;animation:12s infinite linear}
+    .dbd{animation-name:dbd}
+    @keyframes dbd{0%,14%{opacity:0}16%,50%{opacity:1}52%,100%{opacity:0}}
+    .red{animation-name:red}
+    @keyframes red{0%,21%{opacity:0}23%,50%{opacity:1}52%,100%{opacity:0}}
+    .amb{animation-name:amb}
+    @keyframes amb{0%,50%{opacity:0}52%,70%{opacity:1}72%,100%{opacity:0}}
+    .deg{animation-name:deg}
+    @keyframes deg{0%,21%{opacity:0}23%,50%{opacity:1}52%,100%{opacity:0}}
+    .t1{animation-name:t1}
+    @keyframes t1{0%,21%{opacity:0}23%,92%{opacity:1}96%,100%{opacity:0}}
+    .t2{animation-name:t2}
+    @keyframes t2{0%,51%{opacity:0}53%,92%{opacity:1}96%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none}
+      .dbd,.red,.deg,.t1,.t2{opacity:1}.amb{opacity:0}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">A 60-second database failover, two liveness setups</text>
+  <text class="sub" x="28" y="62">Four pods share one database. Kubernetes restarts a pod when its liveness probe returns 503.</text>
+
+  <rect class="up" x="300" y="80" width="200" height="48" rx="10"/>
+  <text class="pt" x="400" y="110" text-anchor="middle">Database: UP</text>
+  <g class="a dbd"><rect class="dn" x="300" y="80" width="200" height="48" rx="10"/><text class="pt" x="400" y="110" text-anchor="middle">Database: failing over</text></g>
+
+  <line class="div" x1="400" y1="144" x2="400" y2="380"/>
+
+  <circle class="bad" cx="40" cy="166" r="10"/><path class="mark" d="M36 162l8 8M44 162l-8 8"/>
+  <text class="lbl" x="58" y="171">liveness includes db</text>
+  <rect class="up" x="34" y="196" width="74" height="56" rx="8"/><text class="pt" x="71" y="220" text-anchor="middle">pod 1</text><text class="ps" x="71" y="240" text-anchor="middle">live</text>
+  <g class="a red"><rect class="dn" x="34" y="196" width="74" height="56" rx="8"/><text class="pt" x="71" y="220" text-anchor="middle">pod 1</text><text class="ps" x="71" y="240" text-anchor="middle">restart</text></g>
+  <g class="a amb"><rect class="wa" x="34" y="196" width="74" height="56" rx="8"/><text class="pt pta" x="71" y="220" text-anchor="middle">pod 1</text><text class="ps pta" x="71" y="240" text-anchor="middle">starting</text></g>
+  <rect class="up" x="118" y="196" width="74" height="56" rx="8"/><text class="pt" x="155" y="220" text-anchor="middle">pod 2</text><text class="ps" x="155" y="240" text-anchor="middle">live</text>
+  <g class="a red"><rect class="dn" x="118" y="196" width="74" height="56" rx="8"/><text class="pt" x="155" y="220" text-anchor="middle">pod 2</text><text class="ps" x="155" y="240" text-anchor="middle">restart</text></g>
+  <g class="a amb"><rect class="wa" x="118" y="196" width="74" height="56" rx="8"/><text class="pt pta" x="155" y="220" text-anchor="middle">pod 2</text><text class="ps pta" x="155" y="240" text-anchor="middle">starting</text></g>
+  <rect class="up" x="202" y="196" width="74" height="56" rx="8"/><text class="pt" x="239" y="220" text-anchor="middle">pod 3</text><text class="ps" x="239" y="240" text-anchor="middle">live</text>
+  <g class="a red"><rect class="dn" x="202" y="196" width="74" height="56" rx="8"/><text class="pt" x="239" y="220" text-anchor="middle">pod 3</text><text class="ps" x="239" y="240" text-anchor="middle">restart</text></g>
+  <g class="a amb"><rect class="wa" x="202" y="196" width="74" height="56" rx="8"/><text class="pt pta" x="239" y="220" text-anchor="middle">pod 3</text><text class="ps pta" x="239" y="240" text-anchor="middle">starting</text></g>
+  <rect class="up" x="286" y="196" width="74" height="56" rx="8"/><text class="pt" x="323" y="220" text-anchor="middle">pod 4</text><text class="ps" x="323" y="240" text-anchor="middle">live</text>
+  <g class="a red"><rect class="dn" x="286" y="196" width="74" height="56" rx="8"/><text class="pt" x="323" y="220" text-anchor="middle">pod 4</text><text class="ps" x="323" y="240" text-anchor="middle">restart</text></g>
+  <g class="a amb"><rect class="wa" x="286" y="196" width="74" height="56" rx="8"/><text class="pt pta" x="323" y="220" text-anchor="middle">pod 4</text><text class="ps pta" x="323" y="240" text-anchor="middle">starting</text></g>
+  <g class="a t1"><text class="badt" x="28" y="286">Every pod fails liveness at once:</text><text class="badt" x="28" y="306">Kubernetes restarts all four.</text></g>
+  <g class="a t2"><text class="badt" x="28" y="336">They start and open connection pools</text><text class="badt" x="28" y="356">together, hitting a database that has</text><text class="badt" x="28" y="376">just recovered.</text></g>
+
+  <circle class="good" cx="424" cy="166" r="10"/><path class="mark" d="M419 166l4 4 6-8"/>
+  <text class="lbl" x="442" y="171">liveness = livenessState only</text>
+  <rect class="up" x="418" y="196" width="74" height="56" rx="8"/><text class="pt" x="455" y="220" text-anchor="middle">pod 1</text><text class="ps" x="455" y="240" text-anchor="middle">live</text>
+  <g class="a deg"><rect class="wa" x="418" y="196" width="74" height="56" rx="8"/><text class="pt pta" x="455" y="220" text-anchor="middle">pod 1</text><text class="ps pta" x="455" y="240" text-anchor="middle">degraded</text></g>
+  <rect class="up" x="502" y="196" width="74" height="56" rx="8"/><text class="pt" x="539" y="220" text-anchor="middle">pod 2</text><text class="ps" x="539" y="240" text-anchor="middle">live</text>
+  <g class="a deg"><rect class="wa" x="502" y="196" width="74" height="56" rx="8"/><text class="pt pta" x="539" y="220" text-anchor="middle">pod 2</text><text class="ps pta" x="539" y="240" text-anchor="middle">degraded</text></g>
+  <rect class="up" x="586" y="196" width="74" height="56" rx="8"/><text class="pt" x="623" y="220" text-anchor="middle">pod 3</text><text class="ps" x="623" y="240" text-anchor="middle">live</text>
+  <g class="a deg"><rect class="wa" x="586" y="196" width="74" height="56" rx="8"/><text class="pt pta" x="623" y="220" text-anchor="middle">pod 3</text><text class="ps pta" x="623" y="240" text-anchor="middle">degraded</text></g>
+  <rect class="up" x="670" y="196" width="74" height="56" rx="8"/><text class="pt" x="707" y="220" text-anchor="middle">pod 4</text><text class="ps" x="707" y="240" text-anchor="middle">live</text>
+  <g class="a deg"><rect class="wa" x="670" y="196" width="74" height="56" rx="8"/><text class="pt pta" x="707" y="220" text-anchor="middle">pod 4</text><text class="ps pta" x="707" y="240" text-anchor="middle">degraded</text></g>
+  <g class="a t1"><text class="goodt" x="412" y="286">Pods stay live. Calls that need the</text><text class="goodt" x="412" y="306">database fail fast or degrade.</text></g>
+  <g class="a t2"><text class="goodt" x="412" y="336">No restarts: service is back as soon</text><text class="goodt" x="412" y="356">as the database is.</text></g>
+
+  <text class="sub" x="28" y="404">A restart cannot fix a remote database. Shared dependencies belong in circuit breakers, not in liveness.</text>
+</svg>

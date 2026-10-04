@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Tag cardinality and time series</title>
+  <desc id="d">Each unique combination of tag values is a separate time series. Left: the counter rx.refill tagged with channel and outcome, both small enums, gives a fixed set of series, for example three channels times two outcomes is six. Right: the same counter tagged with member ID and prescription ID creates a new series for every member and prescription that refills, so the number of series keeps growing as traffic arrives, using memory in the application and in Prometheus.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}.cover{fill:#f8fafc}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .ser{fill:#ccfbf1;stroke:#0ea5a4}
+    .st{fill:#0f766e;font-size:13px;font-weight:600}
+    .bad{fill:#fca5a5;stroke:#dc2626}
+    .goodt{fill:#15803d;font-size:14px;font-weight:700}
+    .badt{fill:#dc2626;font-size:14px;font-weight:700}
+    .div{stroke:#e2e8f0;stroke-width:1.5}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}.cover{fill:#1f2430}
+      .h{fill:#f1f5f9}.lbl{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .ser{fill:#134e4a;stroke:#2dd4bf}.st{fill:#5eead4}
+      .bad{fill:#7f1d1d;stroke:#f87171}
+      .goodt{fill:#4ade80}.badt{fill:#f87171}.div{stroke:#334155}
+    }
+    /* 12 s loop: right grid fills row by row from 4 % to 76 %, held to 94 % */
+    .cv0{transform-origin:772px 0;animation:cv0 12s infinite linear}@keyframes cv0{0%,4%{transform:scaleX(1)}16%,94%{transform:scaleX(0)}96%,100%{transform:scaleX(1)}}
+    .cv1{transform-origin:772px 0;animation:cv1 12s infinite linear}@keyframes cv1{0%,16%{transform:scaleX(1)}28%,94%{transform:scaleX(0)}96%,100%{transform:scaleX(1)}}
+    .cv2{transform-origin:772px 0;animation:cv2 12s infinite linear}@keyframes cv2{0%,28%{transform:scaleX(1)}40%,94%{transform:scaleX(0)}96%,100%{transform:scaleX(1)}}
+    .cv3{transform-origin:772px 0;animation:cv3 12s infinite linear}@keyframes cv3{0%,40%{transform:scaleX(1)}52%,94%{transform:scaleX(0)}96%,100%{transform:scaleX(1)}}
+    .cv4{transform-origin:772px 0;animation:cv4 12s infinite linear}@keyframes cv4{0%,52%{transform:scaleX(1)}64%,94%{transform:scaleX(0)}96%,100%{transform:scaleX(1)}}
+    .cv5{transform-origin:772px 0;animation:cv5 12s infinite linear}@keyframes cv5{0%,64%{transform:scaleX(1)}76%,94%{transform:scaleX(0)}96%,100%{transform:scaleX(1)}}
+    
+    @media (prefers-reduced-motion: reduce){.cv0,.cv1,.cv2,.cv3,.cv4,.cv5{animation:none;transform:scaleX(0)}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Every tag combination is a new time series</text>
+  <text class="sub" x="28" y="62">The same counter, rx.refill, with two different tag choices.</text>
+  <line class="div" x1="398" y1="80" x2="398" y2="350"/>
+
+  <text class="lbl" x="28" y="98">Tags: channel, outcome</text>
+  <text class="sub" x="28" y="116">Small enums, e.g. 3 channels x 2 outcomes</text>
+  <rect class="ser" x="28" y="128" width="160" height="32" rx="6"/><text class="st code" x="38" y="149">WEB, success</text><rect class="ser" x="198" y="128" width="160" height="32" rx="6"/><text class="st code" x="208" y="149">WEB, failure</text><rect class="ser" x="28" y="168" width="160" height="32" rx="6"/><text class="st code" x="38" y="189">MOBILE, success</text><rect class="ser" x="198" y="168" width="160" height="32" rx="6"/><text class="st code" x="208" y="189">MOBILE, failure</text><rect class="ser" x="28" y="208" width="160" height="32" rx="6"/><text class="st code" x="38" y="229">IVR, success</text><rect class="ser" x="198" y="208" width="160" height="32" rx="6"/><text class="st code" x="208" y="229">IVR, failure</text>
+  <text class="goodt" x="28" y="268">6 series, whatever the traffic</text>
+
+  <text class="lbl" x="412" y="98">Tags: member, rx</text>
+  <text class="sub" x="412" y="116">One new series per member per prescription</text>
+  <rect class="bad" x="412" y="128" width="26" height="22" rx="4"/><rect class="bad" x="442" y="128" width="26" height="22" rx="4"/><rect class="bad" x="472" y="128" width="26" height="22" rx="4"/><rect class="bad" x="502" y="128" width="26" height="22" rx="4"/><rect class="bad" x="532" y="128" width="26" height="22" rx="4"/><rect class="bad" x="562" y="128" width="26" height="22" rx="4"/><rect class="bad" x="592" y="128" width="26" height="22" rx="4"/><rect class="bad" x="622" y="128" width="26" height="22" rx="4"/><rect class="bad" x="652" y="128" width="26" height="22" rx="4"/><rect class="bad" x="682" y="128" width="26" height="22" rx="4"/><rect class="bad" x="712" y="128" width="26" height="22" rx="4"/><rect class="bad" x="742" y="128" width="26" height="22" rx="4"/><rect class="bad" x="412" y="156" width="26" height="22" rx="4"/><rect class="bad" x="442" y="156" width="26" height="22" rx="4"/><rect class="bad" x="472" y="156" width="26" height="22" rx="4"/><rect class="bad" x="502" y="156" width="26" height="22" rx="4"/><rect class="bad" x="532" y="156" width="26" height="22" rx="4"/><rect class="bad" x="562" y="156" width="26" height="22" rx="4"/><rect class="bad" x="592" y="156" width="26" height="22" rx="4"/><rect class="bad" x="622" y="156" width="26" height="22" rx="4"/><rect class="bad" x="652" y="156" width="26" height="22" rx="4"/><rect class="bad" x="682" y="156" width="26" height="22" rx="4"/><rect class="bad" x="712" y="156" width="26" height="22" rx="4"/><rect class="bad" x="742" y="156" width="26" height="22" rx="4"/><rect class="bad" x="412" y="184" width="26" height="22" rx="4"/><rect class="bad" x="442" y="184" width="26" height="22" rx="4"/><rect class="bad" x="472" y="184" width="26" height="22" rx="4"/><rect class="bad" x="502" y="184" width="26" height="22" rx="4"/><rect class="bad" x="532" y="184" width="26" height="22" rx="4"/><rect class="bad" x="562" y="184" width="26" height="22" rx="4"/><rect class="bad" x="592" y="184" width="26" height="22" rx="4"/><rect class="bad" x="622" y="184" width="26" height="22" rx="4"/><rect class="bad" x="652" y="184" width="26" height="22" rx="4"/><rect class="bad" x="682" y="184" width="26" height="22" rx="4"/><rect class="bad" x="712" y="184" width="26" height="22" rx="4"/><rect class="bad" x="742" y="184" width="26" height="22" rx="4"/><rect class="bad" x="412" y="212" width="26" height="22" rx="4"/><rect class="bad" x="442" y="212" width="26" height="22" rx="4"/><rect class="bad" x="472" y="212" width="26" height="22" rx="4"/><rect class="bad" x="502" y="212" width="26" height="22" rx="4"/><rect class="bad" x="532" y="212" width="26" height="22" rx="4"/><rect class="bad" x="562" y="212" width="26" height="22" rx="4"/><rect class="bad" x="592" y="212" width="26" height="22" rx="4"/><rect class="bad" x="622" y="212" width="26" height="22" rx="4"/><rect class="bad" x="652" y="212" width="26" height="22" rx="4"/><rect class="bad" x="682" y="212" width="26" height="22" rx="4"/><rect class="bad" x="712" y="212" width="26" height="22" rx="4"/><rect class="bad" x="742" y="212" width="26" height="22" rx="4"/><rect class="bad" x="412" y="240" width="26" height="22" rx="4"/><rect class="bad" x="442" y="240" width="26" height="22" rx="4"/><rect class="bad" x="472" y="240" width="26" height="22" rx="4"/><rect class="bad" x="502" y="240" width="26" height="22" rx="4"/><rect class="bad" x="532" y="240" width="26" height="22" rx="4"/><rect class="bad" x="562" y="240" width="26" height="22" rx="4"/><rect class="bad" x="592" y="240" width="26" height="22" rx="4"/><rect class="bad" x="622" y="240" width="26" height="22" rx="4"/><rect class="bad" x="652" y="240" width="26" height="22" rx="4"/><rect class="bad" x="682" y="240" width="26" height="22" rx="4"/><rect class="bad" x="712" y="240" width="26" height="22" rx="4"/><rect class="bad" x="742" y="240" width="26" height="22" rx="4"/><rect class="bad" x="412" y="268" width="26" height="22" rx="4"/><rect class="bad" x="442" y="268" width="26" height="22" rx="4"/><rect class="bad" x="472" y="268" width="26" height="22" rx="4"/><rect class="bad" x="502" y="268" width="26" height="22" rx="4"/><rect class="bad" x="532" y="268" width="26" height="22" rx="4"/><rect class="bad" x="562" y="268" width="26" height="22" rx="4"/><rect class="bad" x="592" y="268" width="26" height="22" rx="4"/><rect class="bad" x="622" y="268" width="26" height="22" rx="4"/><rect class="bad" x="652" y="268" width="26" height="22" rx="4"/><rect class="bad" x="682" y="268" width="26" height="22" rx="4"/><rect class="bad" x="712" y="268" width="26" height="22" rx="4"/><rect class="bad" x="742" y="268" width="26" height="22" rx="4"/>
+  <rect class="cover cv0" x="410" y="126" width="362" height="26"/><rect class="cover cv1" x="410" y="154" width="362" height="26"/><rect class="cover cv2" x="410" y="182" width="362" height="26"/><rect class="cover cv3" x="410" y="210" width="362" height="26"/><rect class="cover cv4" x="410" y="238" width="362" height="26"/><rect class="cover cv5" x="410" y="266" width="362" height="26"/>
+  <text class="badt" x="412" y="310">Keeps growing with traffic: memory in</text>
+  <text class="badt" x="412" y="330">the app and in Prometheus, no upper bound</text>
+
+  <text class="sub" x="28" y="380">Identifiers belong in traces and logs. MeterFilter.maximumAllowableTags can cap a tag as a safety net.</text>
+</svg>

@@ -81,6 +81,9 @@ Step by step:
 5. **Condition evaluation.** The remaining configuration classes are parsed. Class-level conditions decide whether the class is used. Method-level conditions decide each `@Bean`.
 6. **Recording.** Every decision is written into the `ConditionEvaluationReport`, which is what `--debug` prints.
 
+![Animation: eight auto-configuration candidates pass through four stages; DataSource is excluded, Mongo, Rabbit and WebFlux are dropped by the fast filter, the audit auto-configuration fails its property condition, Jackson matches but its ObjectMapper bean backs off, and DispatcherServlet and Kafka register their beans](images/02-auto-config-filtering.svg){ loading=lazy }
+*Notice how many candidates disappear before any condition is fully evaluated. Only the survivors are parsed, and the back-off happens per `@Bean` method, not per class.*
+
 ### Why `DeferredImportSelector` is the key
 
 A normal `ImportSelector` is processed as soon as the importing class is parsed. A `DeferredImportSelector` is held back until **all other `@Configuration` classes have been processed**. So when `JacksonAutoConfiguration` asks "is there already an `ObjectMapper`?", your `@Bean ObjectMapper` definition is already registered and the answer is correct.

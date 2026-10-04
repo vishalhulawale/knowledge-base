@@ -123,6 +123,9 @@ sequenceDiagram
 ```
 *Notice that the carrier thread is never idle while the request waits. The waiting costs a few KB of heap, not an OS thread.*
 
+![Animation: four virtual threads share two carrier threads; when a virtual thread makes a blocking call it moves to a parked area on the heap and another virtual thread mounts on the free carrier, and when its I/O completes it mounts again](images/10-virtual-thread-mounting.svg){ loading=lazy }
+*Watch the carriers: a slot is never left empty while some virtual thread is ready to run. Only the parked stacks on the heap grow with the number of waiting requests.*
+
 With `spring.threads.virtual.enabled=true` (Boot 3.2+, Java 21+), Boot switches:
 
 - Tomcat and Jetty request handling to a virtual-thread-per-task executor

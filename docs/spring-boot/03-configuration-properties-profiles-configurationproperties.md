@@ -77,6 +77,9 @@ flowchart TD
 
 The design idea: **the closer a source is to the running process, the higher its priority.** Developers ship defaults in the jar. Operators override them at deploy time without rebuilding.
 
+![Animation: with the prod profile active, three claims.upstream keys are looked up from the command line down to the record defaults; url and timeout come from the prod document of application.yml, max-retries comes from the CLAIMS_UPSTREAM_MAXRETRIES environment variable, and the lower values are shadowed](images/03-property-source-lookup.svg){ loading=lazy }
+*Watch each column separately: the winner is decided per key, so one bound object can mix values from an env var, a profile document and a default.*
+
 ### Where Boot looks for config files
 
 By default Boot searches these locations, and later ones override earlier ones:
@@ -206,6 +209,9 @@ Instead of spreading `@Value` strings across classes, bind one prefix to one obj
 The documented environment variable rule: replace `.` with `_`, **remove** `-`, upper-case everything. List elements use numbers: `claims.hosts[0]` becomes `CLAIMS_HOSTS_0`. The `prefix` in the annotation itself must be kebab-case.
 
 The binder's `SystemEnvironmentPropertyMapper` also tries a **legacy form where `-` becomes `_`**. That is why `SPRING_DATASOURCE_DRIVER_CLASS_NAME` works for `spring.datasource.driver-class-name`. It works because the binder starts from the known property name `api-key` and generates both candidate env var names. It cannot work the other way round: an underscore that has no matching dash in the property name (`TIME_OUT` for a field `timeout`) is read as a new path segment, and map keys containing dashes cannot be recovered from an env var. Prefer the canonical form in your own manifests.
+
+![The property claims.upstream.api-key mapped to the canonical environment variable CLAIMS_UPSTREAM_APIKEY and the legacy form CLAIMS_UPSTREAM_API_KEY, the trap CLAIMS_UPSTREAM_TIME_OUT that is read as time.out, and a list element CLAIMS_HOSTS_0](images/03-env-var-binding.svg){ loading=lazy }
+*Notice that an underscore normally starts a new segment. An extra underscore works only where the property name really has a dash.*
 
 **Conversion.** `Duration` (`500ms`, `2s`, `PT2S`), `DataSize` (`10MB`), `Period`, enums (case-insensitive), collections and maps work out of the box. A bare number for a `Duration` means milliseconds unless you add `@DurationUnit`.
 

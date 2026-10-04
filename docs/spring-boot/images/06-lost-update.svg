@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">The lost update under READ COMMITTED</title>
+  <desc id="d">Two transactions withdraw 10 from an account with balance 100. Step 1: T1 reads 100. Step 2: T2 reads 100. Step 3: T1 writes 90 and commits, so the balance is 90. Step 4: T2 also writes 90 and commits, so the balance stays 90 instead of 80 and T1's update is lost. With @Version, T2's update carries the version it read, matches no row, and throws ObjectOptimisticLockingFailureException; T2 retries, reads 90 and writes 80.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .lane{fill:#ffffff;stroke:#e2e8f0}
+    .ev{fill:#4f46e5}.ev2{fill:#0ea5a4}
+    .et{fill:#ffffff;font-size:13px;font-weight:700}
+    .db{fill:#ffffff;stroke:#cbd5e1}
+    .dbt{fill:#0f172a;font-size:18px;font-weight:700}
+    .bad{fill:#dc2626}
+    .badt{fill:#dc2626;font-size:14px;font-weight:700}
+    .fix{fill:#f0fdf4;stroke:#16a34a}
+    .fixh{fill:#15803d;font-size:14px;font-weight:700}
+    .num{fill:#64748b;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.num{fill:#94a3b8}
+      .lane{fill:#111827;stroke:#334155}
+      .ev{fill:#818cf8}.ev2{fill:#2dd4bf}.et{fill:#0f172a}
+      .db{fill:#111827;stroke:#475569}.dbt{fill:#f1f5f9}
+      .bad{fill:#f87171}.badt{fill:#f87171}
+      .fix{fill:#052e16;stroke:#4ade80}.fixh{fill:#4ade80}
+    }
+    /* 10 s loop: steps at 6, 22, 38, 56 %, fix at 72 %, hold to 92 % */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes s1{0%,5%{opacity:0}7%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s2{0%,21%{opacity:0}23%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s3{0%,37%{opacity:0}39%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s4{0%,55%{opacity:0}57%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s5{0%,71%{opacity:0}73%,92%{opacity:1}96%,100%{opacity:0}}
+    .k1{animation-name:s1}.k2{animation-name:s2}.k3{animation-name:s3}.k4{animation-name:s4}.k5{animation-name:s5}
+    /* balance cell: 100 until step 3, then 90 */
+    .b100{animation:b100 10s infinite linear}
+    @keyframes b100{0%,37%{opacity:1}39%,96%{opacity:0}100%{opacity:1}}
+    .b90{opacity:0;animation:b90 10s infinite linear}
+    @keyframes b90{0%,37%{opacity:0}39%,92%{opacity:1}96%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){.a,.b100,.b90{animation:none}.a,.b90{opacity:1}.b100{opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">The lost update under READ COMMITTED</text>
+  <text class="sub" x="28" y="62">Two requests each withdraw 10 from the same account at the same time.</text>
+
+  <text class="num" x="250" y="96" text-anchor="middle">1</text>
+  <text class="num" x="390" y="96" text-anchor="middle">2</text>
+  <text class="num" x="530" y="96" text-anchor="middle">3</text>
+  <text class="num" x="670" y="96" text-anchor="middle">4</text>
+
+  <rect class="lane" x="28" y="106" width="744" height="46" rx="8"/>
+  <text class="lbl" x="44" y="134">T1</text>
+  <rect class="lane" x="28" y="160" width="744" height="46" rx="8"/>
+  <text class="lbl" x="44" y="188">T2</text>
+
+  <g class="a k1"><rect class="ev" x="190" y="113" width="120" height="32" rx="6"/><text class="et code" x="250" y="134" text-anchor="middle">read 100</text></g>
+  <g class="a k2"><rect class="ev2" x="330" y="167" width="120" height="32" rx="6"/><text class="et code" x="390" y="188" text-anchor="middle">read 100</text></g>
+  <g class="a k3"><rect class="ev" x="460" y="113" width="140" height="32" rx="6"/><text class="et code" x="530" y="134" text-anchor="middle">write 90, commit</text></g>
+  <g class="a k4"><rect class="ev2" x="600" y="167" width="140" height="32" rx="6"/><text class="et code" x="670" y="188" text-anchor="middle">write 90, commit</text></g>
+
+  <!-- balance -->
+  <text class="lbl" x="44" y="246">Balance</text>
+  <rect class="db" x="190" y="222" width="110" height="40" rx="8"/>
+  <g class="b100"><text class="dbt code" x="245" y="249" text-anchor="middle">100</text></g>
+  <g class="b90"><text class="dbt code" x="245" y="249" text-anchor="middle">90</text></g>
+  <g class="a k4"><text class="badt" x="320" y="240">Expected 80. T1's withdrawal is lost,</text><text class="badt" x="320" y="258">and READ COMMITTED does not stop it.</text></g>
+
+  <!-- fix -->
+  <g class="a k5">
+    <rect class="fix" x="28" y="282" width="744" height="84" rx="10"/>
+    <text class="fixh" x="44" y="306">Fix with @Version (optimistic locking)</text>
+    <text class="tx" x="44" y="328">T2's UPDATE includes the version it read, so it matches 0 rows and throws</text>
+    <text class="tx" x="44" y="348"><tspan class="code">ObjectOptimisticLockingFailureException</tspan>. T2 retries: reads 90, writes 80.</text>
+  </g>
+  <text class="sub" x="28" y="388">An atomic UPDATE ... SET balance = balance - 10 avoids the read-then-write altogether.</text>
+</svg>

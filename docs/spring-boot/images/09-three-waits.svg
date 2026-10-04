@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 330" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Three places an outbound call waits</title>
+  <desc id="d">An outbound HTTP call can wait in three places, each needing its own limit. First, leasing a connection from the pool, limited by the pool's acquire timeout, for example pendingAcquireTimeout of 2 seconds in Reactor Netty. Second, opening a new connection, limited by the connect timeout, for example 1 second; this step is skipped when a pooled connection is reused. Third, waiting for the response, limited by the response or read timeout, for example 3 seconds. Defaults are risky: the JDK HttpClient and the simple factory have no timeouts, and Reactor Netty has a 30 second connect timeout but no response timeout.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .s1{fill:#4f46e5}.s2{fill:#0ea5a4}.s3{fill:#d97706}
+    .st{fill:#ffffff;font-size:14px;font-weight:700}
+    .st3{fill:#0f172a;font-size:14px;font-weight:700}
+    .num{fill:#ffffff;font-size:13px;font-weight:700}
+    .lim{fill:#334155;font-size:13px;font-weight:600}
+    .warn{fill:#fef2f2;stroke:#fca5a5}
+    .badt{fill:#b91c1c;font-size:14px;font-weight:700}
+    .bt{fill:#7f1d1d;font-size:13px}
+    .skip{fill:none;stroke:#94a3b8;stroke-width:1.5;stroke-dasharray:4 4}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx,.lim{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .s1{fill:#818cf8}.s2{fill:#2dd4bf}.s3{fill:#fbbf24}
+      .st,.st3,.num{fill:#0f172a}
+      .warn{fill:#450a0a;stroke:#7f1d1d}.badt{fill:#fca5a5}.bt{fill:#fecaca}
+      .skip{stroke:#64748b}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="328" rx="14"/>
+  <text class="h" x="28" y="40">Three places an outbound call waits</text>
+  <text class="sub" x="28" y="62">One HTTP call, left to right in time. Each wait needs its own limit.</text>
+
+  <rect class="s1" x="28" y="82" width="226" height="48" rx="8"/>
+  <text class="st" x="141" y="104" text-anchor="middle">1  Lease a connection</text>
+  <text class="st" x="141" y="122" text-anchor="middle" style="font-weight:400;font-size:13px">from the pool</text>
+  <rect class="s2" x="262" y="82" width="226" height="48" rx="8"/>
+  <text class="st" x="375" y="104" text-anchor="middle">2  Open a connection</text>
+  <text class="st" x="375" y="122" text-anchor="middle" style="font-weight:400;font-size:13px">TCP and TLS handshake</text>
+  <rect class="s3" x="496" y="82" width="276" height="48" rx="8"/>
+  <text class="st3" x="634" y="104" text-anchor="middle">3  Wait for the response</text>
+  <text class="st3" x="634" y="122" text-anchor="middle" style="font-weight:400;font-size:13px">upstream does its work</text>
+
+  <text class="lim" x="28" y="156">Pool acquire timeout</text>
+  <text class="sub code" x="28" y="176">pendingAcquireTimeout(2s)</text>
+  <text class="lim" x="262" y="156">Connect timeout</text>
+  <text class="sub code" x="262" y="176">CONNECT_TIMEOUT_MILLIS 1000</text>
+  <text class="sub" x="262" y="196">Skipped when a pooled</text>
+  <text class="sub" x="262" y="212">connection is reused</text>
+  <text class="lim" x="496" y="156">Response / read timeout</text>
+  <text class="sub code" x="496" y="176">responseTimeout(3s)</text>
+  <text class="sub code" x="496" y="196">setReadTimeout(...)</text>
+
+  <rect class="warn" x="28" y="232" width="744" height="76" rx="10"/>
+  <text class="badt" x="44" y="256">Defaults often mean "wait forever"</text>
+  <text class="bt" x="44" y="278">JDK HttpClient and the simple factory: no timeouts. Reactor Netty: 30 s connect, no response</text>
+  <text class="bt" x="44" y="296">timeout. Feign: 10 s connect, 60 s read. Example values above are from this page's config.</text>
+</svg>
