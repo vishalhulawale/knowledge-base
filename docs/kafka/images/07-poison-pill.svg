@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Poison pill with and without ErrorHandlingDeserializer</title>
+  <desc id="d">Top: a record with corrupt bytes reaches the consumer. The value deserializer throws inside poll(), before any listener code runs, so no error handler sees it. The consumer seeks back and polls the same bytes again, forever, and the partition is stuck. Bottom: ErrorHandlingDeserializer wraps the real deserializer and catches the failure. Spring receives a DeserializationException, which is not retryable, so the DefaultErrorHandler sends the raw bytes straight to orders-dlt with diagnostic headers, the offset is committed and the next record is processed.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+  </style>
+  <defs><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">A record that can&#x27;t be deserialized</text>
+  <text class="sub" x="28" y="62">Corrupt bytes, the wrong serializer, or an incompatible schema version.</text>
+  <text class="h2 badt" x="28" y="104">Without ErrorHandlingDeserializer</text>
+  <rect class="box" x="28" y="120" width="132" height="46" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="94" y="140" text-anchor="middle" font-weight="700">offset 512</text>
+  <text class="sm" x="94" y="157" text-anchor="middle">corrupt bytes</text>
+  <rect class="box" x="200" y="120" width="170" height="46" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="285" y="140" text-anchor="middle" font-weight="700">JsonDeserializer</text>
+  <text class="sm" x="285" y="157" text-anchor="middle">throws in poll()</text>
+  <rect class="bm" x="400" y="120" width="188" height="46" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="494" y="140" text-anchor="middle" font-weight="700">your @KafkaListener</text>
+  <text class="sm" x="494" y="157" text-anchor="middle">never called</text>
+  <line class="ln" x1="160" y1="143" x2="196" y2="143" marker-end="url(#ar)"/>
+  <line class="ln dash" x1="370" y1="143" x2="398" y2="143"/>
+  <path class="lnb" d="M 285 166 C 285 214, 94 214, 94 170" marker-end="url(#arb)"/>
+  <text class="sm badt" x="190" y="226" text-anchor="middle">seek back, poll the same bytes again… forever</text>
+  <text class="tx badt" x="604" y="140">Partition stuck,</text>
+  <text class="tx badt" x="604" y="158">lag climbs</text>
+  <text class="h2 okt" x="28" y="268">With ErrorHandlingDeserializer</text>
+  <rect class="box" x="28" y="284" width="132" height="46" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="94" y="304" text-anchor="middle" font-weight="700">offset 512</text>
+  <text class="sm" x="94" y="321" text-anchor="middle">corrupt bytes</text>
+  <rect class="box" x="196" y="284" width="174" height="46" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="283" y="304" text-anchor="middle" font-weight="700">ErrorHandlingDeser.</text>
+  <text class="sm" x="283" y="321" text-anchor="middle">catches, wraps</text>
+  <rect class="box" x="400" y="284" width="188" height="46" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="494" y="304" text-anchor="middle" font-weight="700">DefaultErrorHandler</text>
+  <text class="sm" x="494" y="321" text-anchor="middle">not retryable</text>
+  <rect class="bw" x="610" y="284" width="162" height="46" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="691" y="304" text-anchor="middle" font-weight="700">orders-dlt</text>
+  <text class="sm" x="691" y="321" text-anchor="middle">bytes + headers</text>
+  <line class="ln" x1="160" y1="307" x2="196" y2="307" marker-end="url(#ar)"/>
+  <line class="ln" x1="370" y1="307" x2="396" y2="307" marker-end="url(#ar)"/>
+  <line class="lnw" x1="588" y1="307" x2="606" y2="307" marker-end="url(#arw)"/>
+  <text class="tx okt" x="28" y="358">Offset committed, 513 processed next. Fix the producer, then replay from the DLT.</text>
+</svg>

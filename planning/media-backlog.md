@@ -23,7 +23,7 @@ Suggested pictures per page; ⏵ marks an animation.
 - [x] 04 Consumers: ⏵ eager vs cooperative rebalance (stop-the-world vs incremental); offsets: committed vs position vs log-end (lag)
 - [x] 05 Delivery semantics: ⏵ commit-before vs commit-after processing on crash (lost vs duplicated); transaction markers and `read_committed`
 - [x] 06 Ordering and keys: hot key skewing one partition; ⏵ retry reordering with `max.in.flight > 1` and no idempotence
-- [ ] 07 Error handling: ⏵ non-blocking retry topics with back-off and DLT; poison pill blocking a partition
+- [x] 07 Error handling: ⏵ non-blocking retry topics with back-off and DLT; poison pill blocking a partition
 - [ ] 08 Idempotent consumers: ⏵ check-then-insert race vs unique-constraint insert
 - [ ] 09 Spring Kafka: listener container threads per partition; AckMode commit points on a timeline
 - [ ] 10 Schema registry: schema id in the wire format; compatibility modes as which side can upgrade first

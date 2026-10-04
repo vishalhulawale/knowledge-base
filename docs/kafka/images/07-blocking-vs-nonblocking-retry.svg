@@ -1,0 +1,230 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Blocking vs non-blocking retries</title>
+  <desc id="d">Records 100 to 105 on one partition; 100 hits a transient error. On the left, blocking retries: the consumer retries 100 in place with back-off while 101 to 105 wait, so the partition&#x27;s throughput drops to zero; when 100 finally succeeds the rest follow in order: 100, 101, 102, 103, 104, 105. On the right, non-blocking retries: 100 is republished to the orders-retry-1000 topic and the consumer moves straight on to 101 to 105. 100 is processed later from the retry topic, so the processing order is 101, 102, 103, 104, 105, 100: no stall, but ordering is lost.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:15s infinite linear}
+    @keyframes lf{0%{opacity:0}5%{opacity:0}6%,58%{opacity:1}59%{opacity:0}100%{opacity:0}}
+    .lf{animation-name:lf}
+    @keyframes lr1{0%{opacity:0}9%{opacity:0}10%,26%{opacity:1}27%{opacity:0}100%{opacity:0}}
+    .lr1{animation-name:lr1}
+    @keyframes lr2{0%{opacity:0}27%{opacity:0}28%,44%{opacity:1}45%{opacity:0}100%{opacity:0}}
+    .lr2{animation-name:lr2}
+    @keyframes lr3{0%{opacity:0}45%{opacity:0}46%,58%{opacity:1}59%{opacity:0}100%{opacity:0}}
+    .lr3{animation-name:lr3}
+    @keyframes l0{0%{opacity:0}59%{opacity:0}60%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .l0{animation-name:l0}
+    @keyframes l1{0%{opacity:0}64%{opacity:0}65%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .l1{animation-name:l1}
+    @keyframes l2{0%{opacity:0}67%{opacity:0}68%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .l2{animation-name:l2}
+    @keyframes l3{0%{opacity:0}70%{opacity:0}71%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .l3{animation-name:l3}
+    @keyframes l4{0%{opacity:0}73%{opacity:0}74%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .l4{animation-name:l4}
+    @keyframes l5{0%{opacity:0}76%{opacity:0}77%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .l5{animation-name:l5}
+    @keyframes lo0{0%{opacity:0}59%{opacity:0}60%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .lo0{animation-name:lo0}
+    @keyframes lo1{0%{opacity:0}64%{opacity:0}65%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .lo1{animation-name:lo1}
+    @keyframes lo2{0%{opacity:0}67%{opacity:0}68%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .lo2{animation-name:lo2}
+    @keyframes lo3{0%{opacity:0}70%{opacity:0}71%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .lo3{animation-name:lo3}
+    @keyframes lo4{0%{opacity:0}73%{opacity:0}74%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .lo4{animation-name:lo4}
+    @keyframes lo5{0%{opacity:0}76%{opacity:0}77%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .lo5{animation-name:lo5}
+    @keyframes rf{0%{opacity:0}5%{opacity:0}6%,14%{opacity:1}15%{opacity:0}100%{opacity:0}}
+    .rf{animation-name:rf}
+    @keyframes rm{0%{opacity:0}14%{opacity:0}15%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .rm{animation-name:rm}
+    @keyframes r1{0%{opacity:0}18%{opacity:0}19%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r1{animation-name:r1}
+    @keyframes r2{0%{opacity:0}21%{opacity:0}22%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r2{animation-name:r2}
+    @keyframes r3{0%{opacity:0}24%{opacity:0}25%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r3{animation-name:r3}
+    @keyframes r4{0%{opacity:0}27%{opacity:0}28%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r4{animation-name:r4}
+    @keyframes r5{0%{opacity:0}30%{opacity:0}31%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .r5{animation-name:r5}
+    @keyframes rq{0%{opacity:0}14%{opacity:0}15%,69%{opacity:1}70%{opacity:0}100%{opacity:0}}
+    .rq{animation-name:rq}
+    @keyframes rq2{0%{opacity:0}69%{opacity:0}70%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .rq2{animation-name:rq2}
+    @keyframes ro0{0%{opacity:0}18%{opacity:0}19%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .ro0{animation-name:ro0}
+    @keyframes ro1{0%{opacity:0}21%{opacity:0}22%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .ro1{animation-name:ro1}
+    @keyframes ro2{0%{opacity:0}24%{opacity:0}25%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .ro2{animation-name:ro2}
+    @keyframes ro3{0%{opacity:0}27%{opacity:0}28%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .ro3{animation-name:ro3}
+    @keyframes ro4{0%{opacity:0}30%{opacity:0}31%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .ro4{animation-name:ro4}
+    @keyframes ro5{0%{opacity:0}69%{opacity:0}70%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .ro5{animation-name:ro5}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      .lr1,.lr2,.lr3,.lf,.rf,.rq{opacity:0!important}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Record 100 fails with a timeout</text>
+  <text class="sub" x="28" y="62">Same partition, same failure. Blocking retries in place vs a retry topic.</text>
+  <line class="ln dash" x1="400" y1="84" x2="400" y2="330"/>
+  <text class="h2" x="28" y="100">Blocking (DefaultErrorHandler)</text>
+  <text class="sm" x="28" y="120">orders, partition 3</text>
+  <rect class="box" x="28" y="130" width="52" height="34" rx="6"/>
+  <text class="tx" x="54" y="152" text-anchor="middle">100</text>
+  <rect class="box" x="86" y="130" width="52" height="34" rx="6"/>
+  <text class="tx" x="112" y="152" text-anchor="middle">101</text>
+  <rect class="box" x="144" y="130" width="52" height="34" rx="6"/>
+  <text class="tx" x="170" y="152" text-anchor="middle">102</text>
+  <rect class="box" x="202" y="130" width="52" height="34" rx="6"/>
+  <text class="tx" x="228" y="152" text-anchor="middle">103</text>
+  <rect class="box" x="260" y="130" width="52" height="34" rx="6"/>
+  <text class="tx" x="286" y="152" text-anchor="middle">104</text>
+  <rect class="box" x="318" y="130" width="52" height="34" rx="6"/>
+  <text class="tx" x="344" y="152" text-anchor="middle">105</text>
+  <g class="a lf">
+  <rect class="badf" x="28" y="130" width="52" height="34" rx="6"/>
+  <text class="on13" x="54" y="151.5" text-anchor="middle">100</text>
+  </g>
+  <text class="sm badt a lr1" x="28" y="190">retry 1 after 1 s: timeout</text>
+  <text class="sm badt a lr2" x="28" y="190">retry 2 after 2 s: timeout</text>
+  <text class="sm wrnt a lr3" x="28" y="190">retry 3 after 4 s: …</text>
+  <text class="sm a lf" x="86" y="210">101–105 wait; partition stalled</text>
+  <g class="a l0">
+  <rect class="okf" x="28" y="130" width="52" height="34" rx="6"/>
+  <text class="on13" x="54" y="151.5" text-anchor="middle">100</text>
+  </g>
+  <g class="a l1">
+  <rect class="okf" x="86" y="130" width="52" height="34" rx="6"/>
+  <text class="on13" x="112" y="151.5" text-anchor="middle">101</text>
+  </g>
+  <g class="a l2">
+  <rect class="okf" x="144" y="130" width="52" height="34" rx="6"/>
+  <text class="on13" x="170" y="151.5" text-anchor="middle">102</text>
+  </g>
+  <g class="a l3">
+  <rect class="okf" x="202" y="130" width="52" height="34" rx="6"/>
+  <text class="on13" x="228" y="151.5" text-anchor="middle">103</text>
+  </g>
+  <g class="a l4">
+  <rect class="okf" x="260" y="130" width="52" height="34" rx="6"/>
+  <text class="on13" x="286" y="151.5" text-anchor="middle">104</text>
+  </g>
+  <g class="a l5">
+  <rect class="okf" x="318" y="130" width="52" height="34" rx="6"/>
+  <text class="on13" x="344" y="151.5" text-anchor="middle">105</text>
+  </g>
+  <text class="sm okt a l0" x="28" y="190">succeeded on retry 3</text>
+  <text class="sm" x="28" y="256">processed in order:</text>
+  <text class="tx okt a lo0" x="28" y="280">100</text>
+  <text class="tx okt a lo1" x="68" y="280">101</text>
+  <text class="tx okt a lo2" x="108" y="280">102</text>
+  <text class="tx okt a lo3" x="148" y="280">103</text>
+  <text class="tx okt a lo4" x="188" y="280">104</text>
+  <text class="tx okt a lo5" x="228" y="280">105</text>
+  <text class="h2" x="420" y="100">Non-blocking (@RetryableTopic)</text>
+  <text class="sm" x="420" y="120">orders, partition 3</text>
+  <rect class="box" x="420" y="130" width="52" height="34" rx="6"/>
+  <text class="tx" x="446" y="152" text-anchor="middle">100</text>
+  <rect class="box" x="478" y="130" width="52" height="34" rx="6"/>
+  <text class="tx" x="504" y="152" text-anchor="middle">101</text>
+  <rect class="box" x="536" y="130" width="52" height="34" rx="6"/>
+  <text class="tx" x="562" y="152" text-anchor="middle">102</text>
+  <rect class="box" x="594" y="130" width="52" height="34" rx="6"/>
+  <text class="tx" x="620" y="152" text-anchor="middle">103</text>
+  <rect class="box" x="652" y="130" width="52" height="34" rx="6"/>
+  <text class="tx" x="678" y="152" text-anchor="middle">104</text>
+  <rect class="box" x="710" y="130" width="52" height="34" rx="6"/>
+  <text class="tx" x="736" y="152" text-anchor="middle">105</text>
+  <g class="a rf">
+  <rect class="badf" x="420" y="130" width="52" height="34" rx="6"/>
+  <text class="on13" x="446" y="151.5" text-anchor="middle">100</text>
+  </g>
+  <rect class="bm a rm" x="420" y="130" width="52" height="34" rx="6"/>
+  <text class="sm a rm" x="446" y="152" text-anchor="middle">moved</text>
+  <g class="a r1">
+  <rect class="okf" x="478" y="130" width="52" height="34" rx="6"/>
+  <text class="on13" x="504" y="151.5" text-anchor="middle">101</text>
+  </g>
+  <g class="a r2">
+  <rect class="okf" x="536" y="130" width="52" height="34" rx="6"/>
+  <text class="on13" x="562" y="151.5" text-anchor="middle">102</text>
+  </g>
+  <g class="a r3">
+  <rect class="okf" x="594" y="130" width="52" height="34" rx="6"/>
+  <text class="on13" x="620" y="151.5" text-anchor="middle">103</text>
+  </g>
+  <g class="a r4">
+  <rect class="okf" x="652" y="130" width="52" height="34" rx="6"/>
+  <text class="on13" x="678" y="151.5" text-anchor="middle">104</text>
+  </g>
+  <g class="a r5">
+  <rect class="okf" x="710" y="130" width="52" height="34" rx="6"/>
+  <text class="on13" x="736" y="151.5" text-anchor="middle">105</text>
+  </g>
+  <text class="sm" x="420" y="196">orders-retry-1000</text>
+  <rect class="box" x="420" y="204" width="52" height="34" rx="6"/>
+  <g class="a rq">
+  <rect class="wrnf" x="420" y="204" width="52" height="34" rx="6"/>
+  <text class="on13" x="446" y="225.5" text-anchor="middle">100</text>
+  </g>
+  <g class="a rq2">
+  <rect class="okf" x="420" y="204" width="52" height="34" rx="6"/>
+  <text class="on13" x="446" y="225.5" text-anchor="middle">100</text>
+  </g>
+  <text class="sm a rq" x="482" y="226">waits ≥ 1 s, then retried</text>
+  <text class="sm wrnt a rq2" x="482" y="226">succeeded, but last</text>
+  <text class="sm" x="420" y="256">processing order:</text>
+  <text class="tx okt a ro0" x="420" y="280">101</text>
+  <text class="tx okt a ro1" x="460" y="280">102</text>
+  <text class="tx okt a ro2" x="500" y="280">103</text>
+  <text class="tx okt a ro3" x="540" y="280">104</text>
+  <text class="tx okt a ro4" x="580" y="280">105</text>
+  <text class="tx wrnt a ro5" x="620" y="280">100</text>
+  <text class="tx badt" x="28" y="312">Ordering kept, throughput 0 while retrying</text>
+  <text class="tx wrnt" x="420" y="312">No stall, but 100 now lands after 105</text>
+  <text class="sub" x="28" y="360">Long blocking back-offs also risk max.poll.interval.ms (5 min) and a rebalance.</text>
+  <text class="sub" x="28" y="380">Common hybrid: a few fast blocking retries for blips, then retry topics, then the DLT.</text>
+</svg>

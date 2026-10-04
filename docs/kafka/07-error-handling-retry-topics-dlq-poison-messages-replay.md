@@ -116,6 +116,9 @@ With Spring's `@RetryableTopic`, exponential backoff of 1000 ms × 2 with 4 atte
 | Extra topics/infra | None | Retry topics + DLT per main topic |
 | Best for | Short transient errors, strict ordering | Slow/flaky downstreams, independent events |
 
+![Animation: record 100 fails with a timeout; with blocking retries 101 to 105 wait until 100 succeeds on its third retry and everything is processed in order, while with a retry topic 100 is moved aside, 101 to 105 are processed at once and 100 is processed last](images/07-blocking-vs-nonblocking-retry.svg){ loading=lazy }
+*Compare the two "processing order" lines at the end: blocking pays in throughput, non-blocking pays in ordering.*
+
 !!! tip "Hybrid (common in production)"
     Do a few **fast blocking retries** for blips (e.g. 3 × 200 ms), then hand off to **non-blocking retry topics** for longer waits, then the DLT. In Spring Kafka you enable this by extending `RetryTopicConfigurationSupport` and overriding `configureBlockingRetries(...)` to name the exceptions and back-off that should be retried in place first.
 
@@ -130,6 +133,9 @@ If events for the same key must stay in order (e.g. `PRESCRIPTION_CREATED → AP
 ### 6. Poison pills and deserialization
 
 If deserialization fails *inside the Kafka client*, your listener never runs, so your error handling never fires. The consumer re-polls the same bytes forever. The fix is `ErrorHandlingDeserializer`. It wraps the real deserializer, catches the failure and hands Spring a `DeserializationException`, which the error handler routes straight to the DLT without retries.
+
+![Without ErrorHandlingDeserializer, corrupt bytes make the deserializer throw inside poll() so the listener never runs and the consumer re-polls the same record forever; with it, the failure is wrapped as a non-retryable DeserializationException and the record goes to orders-dlt](images/07-poison-pill.svg){ loading=lazy }
+*Notice where the failure happens in the top row: before your listener, so no amount of listener-level try/catch helps.*
 
 ### 7. The dead-letter topic (DLT/DLQ)
 
