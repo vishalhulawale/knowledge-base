@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Log segments: append, roll, delete</title>
+  <desc id="d">A partition&#x27;s directory holds segment files named after their first offset. Records are only ever appended to the active segment, here 00002000.log, which fills up. When it reaches segment.bytes it is closed and a new active segment, 00003000.log, is created. Later the oldest closed segment, 00000000.log, is past retention.ms, so the whole file is deleted at once. Retention never deletes single records, and it never touches the active segment.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:14s infinite linear}
+    @keyframes q0{0%,34%{opacity:1}35%{opacity:0}100%{opacity:0}}
+    .q0{animation-name:q0}
+    @keyframes q1{0%{opacity:0}34%{opacity:0}35%,62%{opacity:1}63%{opacity:0}100%{opacity:0}}
+    .q1{animation-name:q1}
+    @keyframes q2{0%{opacity:0}62%{opacity:0}63%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .q2{animation-name:q2}
+    @keyframes q01{0%,62%{opacity:1}63%{opacity:0}100%{opacity:0}}
+    .q01{animation-name:q01}
+    @keyframes q12{0%{opacity:0}34%{opacity:0}35%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .q12{animation-name:q12}
+    @keyframes fill{0%{transform:scaleX(.15)}34%,100%{transform:scaleX(1)}}.fill{transform-box:fill-box;transform-origin:0 50%;animation:fill 14s infinite linear}
+    @keyframes fill2{0%,35%{transform:scaleX(0)}36%{transform:scaleX(.05)}100%{transform:scaleX(.45)}}.fill2{transform-box:fill-box;transform-origin:0 50%;animation:fill2 14s infinite linear}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      .q0,.q1,.q01{opacity:0!important}.fill2{transform:scaleX(.3)}
+    }
+  </style>
+  <defs><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">Inside one partition: segments roll, retention deletes whole files</text>
+  <text class="sub" x="28" y="62">Partition orders-0 on disk. Simplified: 1,000 records per segment.</text>
+  <g class="a q01">
+  <rect class="box" x="28" y="96" width="176" height="120" rx="10" stroke-width="1.5"/>
+  <text class="lbl" x="42" y="122">00000000.log</text>
+  <text class="sm" x="42" y="142">offsets 0–999</text>
+  <rect class="bm" x="42" y="160" width="148" height="20" rx="4"/>
+  <rect class="pri" x="42" y="160" width="148" height="20" rx="4"/>
+  </g>
+  <rect class="box" x="216" y="96" width="176" height="120" rx="10" stroke-width="1.5"/>
+  <text class="lbl" x="230" y="122">00001000.log</text>
+  <text class="sm" x="230" y="142">offsets 1000–1999</text>
+  <rect class="bm" x="230" y="160" width="148" height="20" rx="4"/>
+  <rect class="pri" x="230" y="160" width="148" height="20" rx="4"/>
+  <rect class="box" x="404" y="96" width="176" height="120" rx="10" stroke-width="1.5"/>
+  <text class="lbl" x="418" y="122">00002000.log</text>
+  <text class="sm" x="418" y="142">offsets 2000–2999</text>
+  <rect class="bm" x="418" y="160" width="148" height="20" rx="4"/>
+  <g class="a q12">
+  <rect class="box" x="592" y="96" width="176" height="120" rx="10" stroke-width="1.5"/>
+  <text class="lbl" x="606" y="122">00003000.log</text>
+  <text class="sm" x="606" y="142">offsets 3000–3999</text>
+  <rect class="bm" x="606" y="160" width="148" height="20" rx="4"/>
+  </g>
+  <rect class="pri fill" x="418" y="160" width="148" height="20" rx="4"/>
+  <rect class="pri fill2" x="606" y="160" width="148" height="20" rx="4"/>
+  <text class="sm" x="42" y="204">closed, read-only</text>
+  <text class="sm" x="230" y="204">closed, read-only</text>
+  <text class="sm prit a q0" x="418" y="204">ACTIVE: appends here</text>
+  <text class="sm a q12" x="418" y="204">closed (rolled)</text>
+  <text class="sm prit a q12" x="606" y="204">ACTIVE: appends here</text>
+  <g class="a q2">
+  <rect class="bb" x="28" y="96" width="176" height="120" rx="10" stroke-width="2"/>
+  <text class="tx badt" x="116" y="150" text-anchor="middle">older than</text>
+  <text class="tx badt" x="116" y="170" text-anchor="middle">retention.ms</text>
+  <text class="sm" x="116" y="196" text-anchor="middle">file deleted</text>
+  </g>
+  <line class="lnp" x1="140" y1="250" x2="640" y2="250" marker-end="url(#arp)"/>
+  <text class="sm" x="28" y="255">oldest</text>
+  <text class="sm" x="660" y="255">newest</text>
+  <text class="lbl a q0" x="28" y="296">1  Producer writes go only to the end of the active segment (sequential I/O)</text>
+  <text class="lbl a q1" x="28" y="296">2  Active segment hit segment.bytes (1 GB) or segment.ms (7 d): it rolls</text>
+  <text class="lbl badt a q2" x="28" y="296">3  Retention deletes the oldest closed segment as a whole file</text>
+  <text class="sub" x="28" y="324">Retention only ever removes closed segments. On a quiet topic the active segment can hold</text>
+  <text class="sub" x="28" y="342">data older than retention.ms until it rolls.</text>
+</svg>

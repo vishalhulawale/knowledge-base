@@ -39,6 +39,9 @@ flowchart TB
 ```
 *Notice that leadership is spread across brokers, so load is balanced. Controllers manage metadata (who leads which partition) but don't serve data.*
 
+![Animation: three brokers each lead one of three partitions and follow the other two; broker 2 stops heartbeating, the controller fences it, and broker 3, an in-sync follower, becomes the new leader of P1](images/02-leader-failover.svg){ loading=lazy }
+*Watch who picks the new leader: the controller, and only from the ISR. Each partition is left with two in-sync replicas, so `min.insync.replicas=2` still accepts `acks=all` writes.*
+
 | Term | Meaning |
 |---|---|
 | **Broker** | A server storing partitions and serving reads and writes |
@@ -65,6 +68,9 @@ flowchart LR
     S1 -.-> I1[".index / .timeindex"]
 ```
 *Notice that writes only append to the active segment. Each file is named after the base offset of its first record (zero-padded to 20 digits, shortened here). Retention deletes whole closed segments and compaction rewrites closed segments only; the active segment is never touched, which keeps disk I/O sequential and fast.*
+
+![Animation: records are appended to the active segment 00002000.log until it fills and rolls; a new active segment 00003000.log starts, and later the oldest segment 00000000.log passes retention.ms and is deleted as a whole file](images/02-log-segments.svg){ loading=lazy }
+*Notice the unit of deletion: a whole closed segment, never single records and never the active segment.*
 
 - Sequential appends + OS page cache + **zero-copy** (`sendfile`) to consumers explain Kafka's throughput.
 - A segment rolls when it reaches `segment.bytes` (default 1 GB) or `segment.ms` (default 7 days). Because only closed segments are eligible for deletion, a low-traffic topic can keep data well past `retention.ms`.
