@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Gaps and islands with ROW_NUMBER</title>
+  <desc id="d">User 1 logged in on May 1, 2, 3, 5 and 6. ROW_NUMBER over login_on gives 1 to 5. Subtracting the row number from the date gives April 30 for the first three days and May 1 for the last two: within a run of consecutive dates both values rise by one, so the difference stays constant, and the gap on May 4 changes it. Grouping by that difference gives island 1 of 3 days and island 2 of 2 days.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .b{fill:#0f172a;font-size:14px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#4f46e5;font-weight:600}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.ok{fill:#16a34a}.bad{fill:#dc2626}.warn{fill:#d97706}.mut{fill:#94a3b8}
+    .pris{stroke:#4f46e5}.teas{stroke:#0ea5a4}.oks{stroke:#16a34a}.bads{stroke:#dc2626}.warns{stroke:#d97706}.muts{stroke:#94a3b8}
+    .prit{fill:#4f46e5}.teat{fill:#0f766e}.okt{fill:#16a34a}.badt{fill:#dc2626}.warnt{fill:#b45309}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .onm{fill:#ffffff;font-size:13px}
+    .okbg{fill:#16a34a;fill-opacity:.10;stroke:#16a34a;stroke-width:1.5}
+    .badbg{fill:#dc2626;fill-opacity:.08;stroke:#dc2626;stroke-width:1.5}
+    .pribg{fill:#4f46e5;fill-opacity:.10;stroke:#4f46e5;stroke-width:1.5}
+    .teabg{fill:#0ea5a4;fill-opacity:.12;stroke:#0ea5a4;stroke-width:1.5}
+    .line{stroke:#94a3b8;stroke-width:2;fill:none}
+    .ah{fill:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.b{fill:#f1f5f9}.lbl,.t,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .code{fill:#818cf8}.box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.ok{fill:#4ade80}.bad{fill:#f87171}.warn{fill:#fbbf24}.mut{fill:#64748b}
+      .pris{stroke:#818cf8}.teas{stroke:#2dd4bf}.oks{stroke:#4ade80}.bads{stroke:#f87171}.warns{stroke:#fbbf24}.muts{stroke:#64748b}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+      .on,.onm{fill:#0f172a}
+      .okbg{fill:#4ade80;stroke:#4ade80;fill-opacity:.12}.badbg{fill:#f87171;stroke:#f87171;fill-opacity:.10}
+      .pribg{fill:#818cf8;stroke:#818cf8;fill-opacity:.14}.teabg{fill:#2dd4bf;stroke:#2dd4bf;fill-opacity:.14}
+      .line{stroke:#64748b}.ah{fill:#64748b}
+    }
+    .a{opacity:0;animation:10s infinite steps(1,end)}
+    @keyframes r0{0%,6%{opacity:0}8%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes d0{0%,30%{opacity:0}32%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes r1{0%,10%{opacity:0}12%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes d1{0%,34%{opacity:0}36%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes r2{0%,14%{opacity:0}16%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes d2{0%,38%{opacity:0}40%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes r3{0%,18%{opacity:0}20%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes d3{0%,42%{opacity:0}44%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes r4{0%,22%{opacity:0}24%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes d4{0%,46%{opacity:0}48%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes g{0%,56%{opacity:0}58%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes res{0%,64%{opacity:0}66%,94%{opacity:1}97%,100%{opacity:0}}
+.r0{animation-name:r0}.d0{animation-name:d0}.r1{animation-name:r1}.d1{animation-name:d1}.r2{animation-name:r2}.d2{animation-name:d2}.r3{animation-name:r3}.d3{animation-name:d3}.r4{animation-name:r4}.d4{animation-name:d4}.g{animation-name:g}.res{animation-name:res}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Gaps and islands: date minus row number</text>
+  <text class="sub" x="28" y="62">User 1's logins. A constant difference marks one run of consecutive days.</text>
+  <rect class="box" x="24" y="80" width="480" height="236" rx="10"/>
+  <g class="sub" font-weight="700"><text x="44" y="108">login_on</text><text x="164" y="108">row_number</text><text x="294" y="108">login_on − rn</text></g>
+  <g class="a g">
+    <rect class="pribg" x="34" y="120" width="460" height="108" rx="8"/>
+    <rect class="teabg" x="34" y="236" width="460" height="72" rx="8"/>
+  </g>
+  <text class="t" x="44" y="146">May 1</text>
+  <g class="a r0"><text class="b" x="194" y="146">1</text></g>
+  <g class="a d0"><text class="prit" x="294" y="146" font-size="14" font-weight="700">Apr 30</text></g>
+  <text class="t" x="44" y="182">May 2</text>
+  <g class="a r1"><text class="b" x="194" y="182">2</text></g>
+  <g class="a d1"><text class="prit" x="294" y="182" font-size="14" font-weight="700">Apr 30</text></g>
+  <text class="t" x="44" y="218">May 3</text>
+  <g class="a r2"><text class="b" x="194" y="218">3</text></g>
+  <g class="a d2"><text class="prit" x="294" y="218" font-size="14" font-weight="700">Apr 30</text></g>
+  <text class="t" x="44" y="262">May 5</text>
+  <g class="a r3"><text class="b" x="194" y="262">4</text></g>
+  <g class="a d3"><text class="teat" x="294" y="262" font-size="14" font-weight="700">May 1</text></g>
+  <text class="t" x="44" y="298">May 6</text>
+  <g class="a r4"><text class="b" x="194" y="298">5</text></g>
+  <g class="a d4"><text class="teat" x="294" y="298" font-size="14" font-weight="700">May 1</text></g>
+  <g class="a g"><text class="badt" x="380" y="262" font-size="13" font-weight="700">after the</text><text class="badt" x="380" y="280" font-size="13" font-weight="700">May 4 gap</text></g>
+  <g class="a res">
+    <rect class="pri" x="528" y="120" width="248" height="56" rx="10"/>
+    <text class="on" x="544" y="143">island 1 (key Apr 30)</text>
+    <text class="onm" x="544" y="164">May 1 – May 3: 3 days</text>
+    <rect class="tea" x="528" y="236" width="248" height="56" rx="10"/>
+    <text class="on" x="544" y="259">island 2 (key May 1)</text>
+    <text class="onm" x="544" y="280">May 5 – May 6: 2 days</text>
+  </g>
+  <text class="code" x="28" y="350">GROUP BY user_id, login_on - row_number() OVER (… ORDER BY login_on)</text>
+  <text class="sub" x="28" y="376">HAVING count(*) &gt;= 3 then keeps only streaks of three or more days.</text>
+</svg>

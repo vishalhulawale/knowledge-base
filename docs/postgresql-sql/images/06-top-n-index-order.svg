@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 370" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Top-N with and without an index</title>
+  <desc id="d">ORDER BY amount DESC LIMIT 10 on 1 million claims. Without a suitable index, PostgreSQL reads all 1 million rows with a sequential scan and keeps the 10 largest in a top-N heapsort: 308 ms. With an index on amount DESC, the index already returns rows in the requested order, so the scan reads the first 10 entries and the Limit node stops: 0.085 ms.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .b{fill:#0f172a;font-size:14px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#4f46e5;font-weight:600}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.ok{fill:#16a34a}.bad{fill:#dc2626}.warn{fill:#d97706}.mut{fill:#94a3b8}
+    .pris{stroke:#4f46e5}.teas{stroke:#0ea5a4}.oks{stroke:#16a34a}.bads{stroke:#dc2626}.warns{stroke:#d97706}.muts{stroke:#94a3b8}
+    .prit{fill:#4f46e5}.teat{fill:#0f766e}.okt{fill:#16a34a}.badt{fill:#dc2626}.warnt{fill:#b45309}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .onm{fill:#ffffff;font-size:13px}
+    .okbg{fill:#16a34a;fill-opacity:.10;stroke:#16a34a;stroke-width:1.5}
+    .badbg{fill:#dc2626;fill-opacity:.08;stroke:#dc2626;stroke-width:1.5}
+    .pribg{fill:#4f46e5;fill-opacity:.10;stroke:#4f46e5;stroke-width:1.5}
+    .teabg{fill:#0ea5a4;fill-opacity:.12;stroke:#0ea5a4;stroke-width:1.5}
+    .line{stroke:#94a3b8;stroke-width:2;fill:none}
+    .ah{fill:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.b{fill:#f1f5f9}.lbl,.t,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .code{fill:#818cf8}.box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.ok{fill:#4ade80}.bad{fill:#f87171}.warn{fill:#fbbf24}.mut{fill:#64748b}
+      .pris{stroke:#818cf8}.teas{stroke:#2dd4bf}.oks{stroke:#4ade80}.bads{stroke:#f87171}.warns{stroke:#fbbf24}.muts{stroke:#64748b}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+      .on,.onm{fill:#0f172a}
+      .okbg{fill:#4ade80;stroke:#4ade80;fill-opacity:.12}.badbg{fill:#f87171;stroke:#f87171;fill-opacity:.10}
+      .pribg{fill:#818cf8;stroke:#818cf8;fill-opacity:.14}.teabg{fill:#2dd4bf;stroke:#2dd4bf;fill-opacity:.14}
+      .line{stroke:#64748b}.ah{fill:#64748b}
+    }
+    .a{opacity:0;animation:10s infinite steps(1,end)}
+    @keyframes e0{0%,4%{opacity:0}6%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes e1{0%,5%{opacity:0}7%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes e2{0%,6%{opacity:0}8%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes e3{0%,7%{opacity:0}9%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes e4{0%,8%{opacity:0}10%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes e5{0%,9%{opacity:0}11%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes e6{0%,10%{opacity:0}12%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes e7{0%,11%{opacity:0}13%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes e8{0%,12%{opacity:0}14%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes e9{0%,13%{opacity:0}15%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes st{0%,15%{opacity:0}17%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes rl{0%,82%{opacity:0}84%,94%{opacity:1}97%,100%{opacity:0}}
+.e0{animation-name:e0}.e1{animation-name:e1}.e2{animation-name:e2}.e3{animation-name:e3}.e4{animation-name:e4}.e5{animation-name:e5}.e6{animation-name:e6}.e7{animation-name:e7}.e8{animation-name:e8}.e9{animation-name:e9}.st{animation-name:st}.rl{animation-name:rl}
+    @keyframes sc{0%,4%{transform:scaleX(0)}80%,94%{transform:scaleX(1)}97%,100%{transform:scaleX(0)}}
+    .scan{transform-origin:40px 0;transform:scaleX(0);animation:sc 10s infinite linear}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.scan{animation:none;transform:scaleX(1)}}
+
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="368" rx="14"/>
+  <text class="h" x="28" y="40">ORDER BY amount DESC LIMIT 10 on 1 M rows</text>
+  <text class="sub" x="28" y="62">Same query, same data. The difference is whether something already provides the order.</text>
+  <rect class="box" x="24" y="80" width="752" height="116" rx="10"/>
+  <text class="lbl" x="40" y="104">No usable index</text>
+  <rect class="box" x="40" y="118" width="560" height="22" rx="4"/>
+  <g class="scan"><rect class="tea" x="40" y="118" width="560" height="22" rx="4"/></g>
+  <text class="sub" x="40" y="160">Seq Scan reads every row: 1,000,000</text>
+  <text class="lbl" x="620" y="114">top-N heap</text>
+  <g><rect class="box" x="620" y="122" width="11" height="16" rx="2"/><rect class="box" x="634" y="122" width="11" height="16" rx="2"/><rect class="box" x="648" y="122" width="11" height="16" rx="2"/><rect class="box" x="662" y="122" width="11" height="16" rx="2"/><rect class="box" x="676" y="122" width="11" height="16" rx="2"/><rect class="box" x="690" y="122" width="11" height="16" rx="2"/><rect class="box" x="704" y="122" width="11" height="16" rx="2"/><rect class="box" x="718" y="122" width="11" height="16" rx="2"/><rect class="box" x="732" y="122" width="11" height="16" rx="2"/><rect class="box" x="746" y="122" width="11" height="16" rx="2"/><rect class="tea a e0" x="620" y="122" width="11" height="16" rx="2"/><rect class="tea a e1" x="634" y="122" width="11" height="16" rx="2"/><rect class="tea a e2" x="648" y="122" width="11" height="16" rx="2"/><rect class="tea a e3" x="662" y="122" width="11" height="16" rx="2"/><rect class="tea a e4" x="676" y="122" width="11" height="16" rx="2"/><rect class="tea a e5" x="690" y="122" width="11" height="16" rx="2"/><rect class="tea a e6" x="704" y="122" width="11" height="16" rx="2"/><rect class="tea a e7" x="718" y="122" width="11" height="16" rx="2"/><rect class="tea a e8" x="732" y="122" width="11" height="16" rx="2"/><rect class="tea a e9" x="746" y="122" width="11" height="16" rx="2"/></g>
+  <g class="a rl"><text class="badt" x="40" y="184" font-size="14" font-weight="700">Seq Scan + top-N heapsort: 308 ms</text></g>
+  <rect class="box" x="24" y="212" width="752" height="116" rx="10"/>
+  <text class="lbl" x="40" y="236">Index on (amount DESC)</text>
+  <g><rect class="box" x="40" y="250" width="16" height="22" rx="3"/><rect class="box" x="60" y="250" width="16" height="22" rx="3"/><rect class="box" x="80" y="250" width="16" height="22" rx="3"/><rect class="box" x="100" y="250" width="16" height="22" rx="3"/><rect class="box" x="120" y="250" width="16" height="22" rx="3"/><rect class="box" x="140" y="250" width="16" height="22" rx="3"/><rect class="box" x="160" y="250" width="16" height="22" rx="3"/><rect class="box" x="180" y="250" width="16" height="22" rx="3"/><rect class="box" x="200" y="250" width="16" height="22" rx="3"/><rect class="box" x="220" y="250" width="16" height="22" rx="3"/><rect class="box" x="240" y="250" width="16" height="22" rx="3"/><rect class="box" x="260" y="250" width="16" height="22" rx="3"/><rect class="box" x="280" y="250" width="16" height="22" rx="3"/><rect class="box" x="300" y="250" width="16" height="22" rx="3"/><rect class="box" x="320" y="250" width="16" height="22" rx="3"/><rect class="box" x="340" y="250" width="16" height="22" rx="3"/><rect class="box" x="360" y="250" width="16" height="22" rx="3"/><rect class="box" x="380" y="250" width="16" height="22" rx="3"/><rect class="box" x="400" y="250" width="16" height="22" rx="3"/><rect class="box" x="420" y="250" width="16" height="22" rx="3"/><rect class="box" x="440" y="250" width="16" height="22" rx="3"/><rect class="box" x="460" y="250" width="16" height="22" rx="3"/><rect class="box" x="480" y="250" width="16" height="22" rx="3"/><rect class="box" x="500" y="250" width="16" height="22" rx="3"/><rect class="box" x="520" y="250" width="16" height="22" rx="3"/><rect class="box" x="540" y="250" width="16" height="22" rx="3"/><rect class="box" x="560" y="250" width="16" height="22" rx="3"/><rect class="box" x="580" y="250" width="16" height="22" rx="3"/></g>
+  <rect class="pri a e0" x="40" y="250" width="16" height="22" rx="3"/>
+  <rect class="pri a e1" x="60" y="250" width="16" height="22" rx="3"/>
+  <rect class="pri a e2" x="80" y="250" width="16" height="22" rx="3"/>
+  <rect class="pri a e3" x="100" y="250" width="16" height="22" rx="3"/>
+  <rect class="pri a e4" x="120" y="250" width="16" height="22" rx="3"/>
+  <rect class="pri a e5" x="140" y="250" width="16" height="22" rx="3"/>
+  <rect class="pri a e6" x="160" y="250" width="16" height="22" rx="3"/>
+  <rect class="pri a e7" x="180" y="250" width="16" height="22" rx="3"/>
+  <rect class="pri a e8" x="200" y="250" width="16" height="22" rx="3"/>
+  <rect class="pri a e9" x="220" y="250" width="16" height="22" rx="3"/>
+  <text class="sub" x="40" y="292">entries already sorted by amount, largest first</text>
+  <g class="a st">
+    <path class="line" d="M244 244 V278" stroke-width="3"/>
+    <text class="okt" x="300" y="236" font-size="14" font-weight="700">Limit 10 stops at the line</text>
+    <text class="okt" x="40" y="316" font-size="14" font-weight="700">Index Scan, no sort, 10 entries read: 0.085 ms</text>
+  </g>
+  <text class="sub" x="28" y="352">Measured on PostgreSQL 16. The top-N heap only saves memory; every row still has to be read.</text>
+</svg>

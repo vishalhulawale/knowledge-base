@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">MVCC: an UPDATE writes a new row version</title>
+  <desc id="d">A heap page holds version 1 of a row at ctid (0,1): refills 3, xmin 1317, xmax 0. Transaction 1318 updates it: version 1 gets xmax 1318 and a new version 2 is written at ctid (0,142) with refills 2 and xmin 1318. Transaction T1, whose older snapshot was taken before 1318, still reads version 1 and sees refills 3, without waiting. After 1318 commits, new snapshots read version 2 and see refills 2, and version 1 is a dead tuple. VACUUM later removes it and the space becomes reusable.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .b{fill:#0f172a;font-size:14px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#4f46e5;font-weight:600}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.ok{fill:#16a34a}.bad{fill:#dc2626}.warn{fill:#d97706}.mut{fill:#94a3b8}
+    .pris{stroke:#4f46e5}.teas{stroke:#0ea5a4}.oks{stroke:#16a34a}.bads{stroke:#dc2626}.warns{stroke:#d97706}.muts{stroke:#94a3b8}
+    .prit{fill:#4f46e5}.teat{fill:#0f766e}.okt{fill:#16a34a}.badt{fill:#dc2626}.warnt{fill:#b45309}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .onm{fill:#ffffff;font-size:13px}
+    .okbg{fill:#16a34a;fill-opacity:.10;stroke:#16a34a;stroke-width:1.5}
+    .badbg{fill:#dc2626;fill-opacity:.08;stroke:#dc2626;stroke-width:1.5}
+    .pribg{fill:#4f46e5;fill-opacity:.10;stroke:#4f46e5;stroke-width:1.5}
+    .teabg{fill:#0ea5a4;fill-opacity:.12;stroke:#0ea5a4;stroke-width:1.5}
+    .line{stroke:#94a3b8;stroke-width:2;fill:none}
+    .ah{fill:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.b{fill:#f1f5f9}.lbl,.t,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .code{fill:#818cf8}.box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.ok{fill:#4ade80}.bad{fill:#f87171}.warn{fill:#fbbf24}.mut{fill:#64748b}
+      .pris{stroke:#818cf8}.teas{stroke:#2dd4bf}.oks{stroke:#4ade80}.bads{stroke:#f87171}.warns{stroke:#fbbf24}.muts{stroke:#64748b}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+      .on,.onm{fill:#0f172a}
+      .okbg{fill:#4ade80;stroke:#4ade80;fill-opacity:.12}.badbg{fill:#f87171;stroke:#f87171;fill-opacity:.10}
+      .pribg{fill:#818cf8;stroke:#818cf8;fill-opacity:.14}.teabg{fill:#2dd4bf;stroke:#2dd4bf;fill-opacity:.14}
+      .line{stroke:#64748b}.ah{fill:#64748b}
+    }
+    .a{opacity:0;animation:12s infinite steps(1,end)}
+    @keyframes u1{0%,8%{opacity:0}10%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes u0{0%,8%{opacity:1}10%,100%{opacity:0}}
+    @keyframes r1{0%,24%{opacity:0}26%,66%{opacity:1}68%,100%{opacity:0}}
+    @keyframes unc{0%,8%{opacity:0}10%,42%{opacity:1}44%,100%{opacity:0}}
+    @keyframes cm{0%,42%{opacity:0}44%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes v1live{0%,42%{opacity:1}44%,100%{opacity:0}}
+    @keyframes r2{0%,54%{opacity:0}56%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes v1row{0%,70%{opacity:1}72%,100%{opacity:0}}
+    @keyframes vac{0%,70%{opacity:0}72%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes t2a{0%,8%{opacity:0}10%,42%{opacity:1}44%,100%{opacity:0}}
+    .u1{animation-name:u1}.u0{animation-name:u0;opacity:1}.r1{animation-name:r1}.unc{animation-name:unc}.cm{animation-name:cm}
+    .v1live{animation-name:v1live;opacity:1}.r2{animation-name:r2}.v1row{animation-name:v1row;opacity:1}.vac{animation-name:vac}.t2a{animation-name:t2a}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.u0,.v1live,.unc,.t2a{opacity:0}.v1row{opacity:.35}.vac{opacity:0}}
+
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">MVCC: an UPDATE writes a new row version</text>
+  <text class="sub" x="28" y="62">Readers pick the version their snapshot can see. Nobody waits for anybody.</text>
+  <!-- left: actors -->
+  <rect class="box" x="28" y="88" width="236" height="58" rx="10"/>
+  <text class="lbl" x="44" y="112">T2 (xid 1318)</text>
+  <g class="a t2a"><text class="mono" x="44" y="134">UPDATE refills = 2</text></g>
+  <g class="a cm"><text class="okt" x="44" y="134" font-size="14" font-weight="700">COMMIT</text></g>
+  <g class="a r1">
+    <rect class="box" x="28" y="166" width="236" height="58" rx="10"/>
+    <text class="lbl" x="44" y="190">T1: older snapshot</text>
+    <text class="t" x="44" y="212">sees refills = 3</text>
+    <path class="line" d="M264 195 H306"/><path class="ah" d="M304 189 L314 195 L304 201 Z"/>
+  </g>
+  <g class="a r2">
+    <rect class="box" x="28" y="244" width="236" height="58" rx="10"/>
+    <text class="lbl" x="44" y="268">New snapshot</text>
+    <text class="t" x="44" y="290">sees refills = 2</text>
+    <path class="line" d="M264 273 H306"/><path class="ah" d="M304 267 L314 273 L304 279 Z"/>
+  </g>
+  <!-- heap page -->
+  <rect class="box" x="320" y="88" width="456" height="236" rx="10"/>
+  <text class="lbl" x="336" y="112">Heap page 0</text>
+  <g class="sub"><text x="336" y="146">ctid</text><text x="420" y="146">refills</text><text x="500" y="146">xmin</text><text x="580" y="146">xmax</text><text x="664" y="146">state</text></g>
+  <!-- v1 row -->
+  <g class="a v1row">
+    <rect class="teabg" x="330" y="172" width="436" height="44" rx="6"/>
+    <g class="t"><text x="336" y="200">(0,1)</text><text x="420" y="200">3</text><text x="500" y="200">1317</text></g>
+    <g class="a u0"><text class="t" x="580" y="200">0</text></g>
+    <g class="a u1"><text class="b" x="580" y="200">1318</text></g>
+    <g class="a v1live"><text class="teat" x="664" y="200" font-weight="700" font-size="14">live</text></g>
+    <g class="a cm"><text class="badt" x="664" y="200" font-weight="700" font-size="14">dead</text></g>
+  </g>
+  <g class="a vac">
+    <rect class="box" x="330" y="172" width="436" height="44" rx="6" stroke-dasharray="5 4"/>
+    <text class="sub" x="346" y="200">free space after VACUUM: reusable, file doesn't shrink</text>
+  </g>
+  <!-- v2 row -->
+  <g class="a u1">
+    <rect class="box" x="330" y="250" width="436" height="44" rx="6"/>
+    <g class="t"><text x="336" y="278">(0,142)</text><text x="420" y="278">2</text><text x="500" y="278">1318</text><text x="580" y="278">0</text></g>
+  </g>
+  <g class="a unc"><text class="warnt" x="664" y="278" font-weight="700" font-size="14">in progress</text></g>
+  <g class="a cm"><text class="okt" x="664" y="278" font-weight="700" font-size="14">live</text></g>
+  <text class="sub" x="28" y="356">A tuple is visible to a snapshot if its xmin committed before the snapshot and its xmax didn't.</text>
+  <text class="sub" x="28" y="376">Updating all 100,000 rows left 100,000 dead tuples and grew the table from 5.6 MB to 10 MB.</text>
+  <text class="sub" x="28" y="396">Demonstrated on PostgreSQL 16 (transactions 1317 and 1318).</text>
+</svg>

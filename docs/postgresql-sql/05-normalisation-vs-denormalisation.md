@@ -34,6 +34,9 @@ Schema design decisions are expensive to undo. A schema that duplicates facts le
 | **Delete** | Deleting prescription 503 loses everything we knew about Oak Ave Pharmacy |
 | **Repeating group** | `fills` holds a list in one column: can't query or constrain individual fills |
 
+![Animation: in one wide table, changing Main St Pharmacy's phone updates row 501 but misses row 502, and deleting prescription 503 loses Oak Ave Pharmacy; in the normalised tables the phone changes in one PHARMACY row and pharmacy PH9 survives the delete](images/05-update-delete-anomaly.svg){ loading=lazy }
+*Watch the wide table drift: one missed row leaves two phone numbers for PH7, and deleting a prescription deletes a pharmacy. In the normalised schema both operations touch exactly one fact.*
+
 ### The normal forms, applied
 
 ```mermaid

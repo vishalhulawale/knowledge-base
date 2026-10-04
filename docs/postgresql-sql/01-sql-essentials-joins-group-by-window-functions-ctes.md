@@ -73,6 +73,9 @@ GROUP BY m.name;                    -- 5 rows: ... Dev 0 ...
 
 For Dev, `c.status` is NULL, and `NULL = 'PAID'` is not true, so the `WHERE` version filters Dev out.
 
+![Animation: the nine rows of member LEFT JOIN claim shown twice; with the status test in WHERE the non-PAID rows and Dev's NULL row are struck out, leaving four members, while with the test in ON only the non-PAID claims drop and Dev is kept with a count of 0](images/01-left-join-filter.svg){ loading=lazy }
+*Watch Dev's row: the `WHERE` filter removes it because `NULL = 'PAID'` isn't true, while the `ON` version keeps it as a NULL-extended row.*
+
 **Joins multiply rows.** Joining members to claims *and* prescriptions produces claims × prescriptions rows per member, so `SUM(claim.amount)` over that join is inflated. Aggregate each child table separately (in subqueries or CTEs), then join the aggregates.
 
 ### Aggregation: GROUP BY, HAVING, FILTER
@@ -166,6 +169,9 @@ FROM claim WHERE member_id = 1;
 | 102 | 2026-01-20 | 80.00 | 200.00 | -40.00 |
 | 103 | 2026-02-11 | 200.00 | 400.00 | 120.00 |
 
+![Animation: on the left GROUP BY collapses Asha's three claims into one row with sum 400; on the right a window frame grows from the first row to the current row and fills in running totals of 120, 200 and 400 while keeping all three rows](images/01-window-running-total.svg){ loading=lazy }
+*Notice that the window keeps every row and recomputes the sum over a frame that ends at the current row, while `GROUP BY` returns one row per member.*
+
 - With `ORDER BY` and no explicit frame, the default frame is `RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW`, which treats rows with equal ordering values as peers (they get the same running total). Use `ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW` when you need strictly row-by-row behaviour, and for moving averages: `ROWS BETWEEN 6 PRECEDING AND CURRENT ROW`.
 - Other useful functions: `LEAD`, `FIRST_VALUE`, `LAST_VALUE` (watch the frame), `NTILE(4)` for quartiles, `PERCENT_RANK`, aggregates like `avg() OVER (PARTITION BY plan)` to compare each row with its group.
 - **Filtering on a window result** needs a subquery or CTE because windows are computed after `WHERE`.
@@ -218,6 +224,9 @@ WITH RECURSIVE chain AS (
 SELECT * FROM chain ORDER BY depth, id;
 -- Asha 0; Ben 1; Chen 1; Dev 2; Eva 2
 ```
+
+![Animation: the anchor selects Asha, pass 1 adds Ben and Chen, pass 2 adds Dev and Eva under Ben, and pass 3 returns no rows so the recursion stops](images/01-recursive-cte.svg){ loading=lazy }
+*Watch the working table: each pass only looks for reports of the rows found in the previous pass, and the query ends when a pass finds nobody.*
 
 Guard against cycles in real data (track a path array and stop when an id repeats, or use PostgreSQL 14's `CYCLE` clause) and against runaway depth.
 

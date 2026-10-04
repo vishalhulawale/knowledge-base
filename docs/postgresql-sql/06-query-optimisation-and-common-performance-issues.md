@@ -72,6 +72,9 @@ Also useful: `auto_explain` (logs plans of slow statements with `log_min_duratio
 
 Note the `work_mem` row: spilling to disk wasn't slower than the in-memory sort in this run. `work_mem` matters when many sorts or hashes spill under load, but the bigger win is almost always avoiding the large sort entirely.
 
+![Animation: without an index a sequential scan bar fills across all 1,000,000 rows while a ten-slot top-N heap fills, taking 308 ms; with an index on amount descending the first ten index entries light up and a Limit marker stops the scan after 0.085 ms](images/06-top-n-index-order.svg){ loading=lazy }
+*Notice that the top-N heapsort still reads every row. The index wins because it already returns rows in `amount DESC` order, so the Limit node can stop after ten.*
+
 ### The usual culprits
 
 **1. Missing or unusable indexes.** Sequential scans with `Rows Removed by Filter` in the hundreds of thousands. Causes and fixes are on the [indexes page](02-indexes-and-explain-analyze.md): composite order, functions or casts on columns, type mismatches from ORMs, leading wildcards.
@@ -91,6 +94,9 @@ Note the `work_mem` row: spilling to disk wasn't slower than the in-memory sort 
 
 - Correlated subqueries executed once per outer row (`SubPlan … loops=20000`). The planner can't always flatten them; rewrite as joins or pre-aggregate in a CTE.
 - Application loops issuing one query per item (N+1): batch with `IN (…)`/`ANY(:ids)`, join, or ORM fetch strategies (see [N+1](../jpa-hibernate/03-n-plus-1-problem-and-solutions.md)).
+
+![Comparison: a correlated subquery probes the claim table once per member, 20,000 SubPlan loops in 862 ms, while the rewrite reads claim in one ordered pass and merge-joins it with member in 554 ms](images/06-correlated-subquery.svg){ loading=lazy }
+*Notice the shape of the work: one probe per outer row on the left, one set-based pass on the right. `SubPlan` with a large `loops` count in `EXPLAIN` is the signal.*
 
 **5. Predicates the planner can't use well.**
 

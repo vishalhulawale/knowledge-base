@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Replication lag and read-your-writes</title>
+  <desc id="d">The primary appends WAL records and acknowledges each commit straight away. An asynchronous standby receives and replays the same records a little later, so its replay position trails the primary. The application commits its write as record 7 on the primary and immediately reads it from the standby: the standby hasn't replayed record 7 yet, so the row isn't found. Moments later the standby replays it and the same read would succeed. Measured: 198 of 200 immediate reads missed on a local replica, and a bulk insert put it 30 MB or 360 ms behind.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .b{fill:#0f172a;font-size:14px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#4f46e5;font-weight:600}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.ok{fill:#16a34a}.bad{fill:#dc2626}.warn{fill:#d97706}.mut{fill:#94a3b8}
+    .pris{stroke:#4f46e5}.teas{stroke:#0ea5a4}.oks{stroke:#16a34a}.bads{stroke:#dc2626}.warns{stroke:#d97706}.muts{stroke:#94a3b8}
+    .prit{fill:#4f46e5}.teat{fill:#0f766e}.okt{fill:#16a34a}.badt{fill:#dc2626}.warnt{fill:#b45309}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .onm{fill:#ffffff;font-size:13px}
+    .okbg{fill:#16a34a;fill-opacity:.10;stroke:#16a34a;stroke-width:1.5}
+    .badbg{fill:#dc2626;fill-opacity:.08;stroke:#dc2626;stroke-width:1.5}
+    .pribg{fill:#4f46e5;fill-opacity:.10;stroke:#4f46e5;stroke-width:1.5}
+    .teabg{fill:#0ea5a4;fill-opacity:.12;stroke:#0ea5a4;stroke-width:1.5}
+    .line{stroke:#94a3b8;stroke-width:2;fill:none}
+    .ah{fill:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.b{fill:#f1f5f9}.lbl,.t,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .code{fill:#818cf8}.box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.ok{fill:#4ade80}.bad{fill:#f87171}.warn{fill:#fbbf24}.mut{fill:#64748b}
+      .pris{stroke:#818cf8}.teas{stroke:#2dd4bf}.oks{stroke:#4ade80}.bads{stroke:#f87171}.warns{stroke:#fbbf24}.muts{stroke:#64748b}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+      .on,.onm{fill:#0f172a}
+      .okbg{fill:#4ade80;stroke:#4ade80;fill-opacity:.12}.badbg{fill:#f87171;stroke:#f87171;fill-opacity:.10}
+      .pribg{fill:#818cf8;stroke:#818cf8;fill-opacity:.14}.teabg{fill:#2dd4bf;stroke:#2dd4bf;fill-opacity:.14}
+      .line{stroke:#64748b}.ah{fill:#64748b}
+    }
+    .a{opacity:0;animation:10s infinite steps(1,end)}
+    @keyframes p0{0%,3%{opacity:0}5%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s0{0%,15%{opacity:0}17%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes p1{0%,8%{opacity:0}10%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s1{0%,20%{opacity:0}22%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes p2{0%,13%{opacity:0}15%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s2{0%,25%{opacity:0}27%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes p3{0%,18%{opacity:0}20%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s3{0%,30%{opacity:0}32%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes p4{0%,23%{opacity:0}25%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s4{0%,35%{opacity:0}37%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes p5{0%,28%{opacity:0}30%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s5{0%,40%{opacity:0}42%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes p6{0%,33%{opacity:0}35%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s6{0%,45%{opacity:0}47%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes p7{0%,38%{opacity:0}40%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s7{0%,50%{opacity:0}52%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes p8{0%,43%{opacity:0}45%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s8{0%,55%{opacity:0}57%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes p9{0%,48%{opacity:0}50%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s9{0%,60%{opacity:0}62%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes rd{0%,36%{opacity:0}38%,48%{opacity:1}50%,100%{opacity:0}}
+    @keyframes ok{0%,48%{opacity:0}50%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes mk{0%,33%{opacity:0}35%,94%{opacity:1}97%,100%{opacity:0}}
+.p0{animation-name:p0}.s0{animation-name:s0}.p1{animation-name:p1}.s1{animation-name:s1}.p2{animation-name:p2}.s2{animation-name:s2}.p3{animation-name:p3}.s3{animation-name:s3}.p4{animation-name:p4}.s4{animation-name:s4}.p5{animation-name:p5}.s5{animation-name:s5}.p6{animation-name:p6}.s6{animation-name:s6}.p7{animation-name:p7}.s7{animation-name:s7}.p8{animation-name:p8}.s8{animation-name:s8}.p9{animation-name:p9}.s9{animation-name:s9}.rd{animation-name:rd}.ok{animation-name:ok}.mk{animation-name:mk}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.ok{opacity:1}.rd{opacity:0}}
+
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Async replica: the commit is acknowledged first</text>
+  <text class="sub" x="28" y="62">Each square is a committed transaction's WAL. The standby replays the same stream, later.</text>
+  <text class="lbl" x="28" y="122">Primary</text><text class="sub" x="28" y="140">commit → OK</text>
+  <text class="lbl" x="28" y="222">Standby</text><text class="sub" x="28" y="240">read-only, replays</text>
+  <rect class="box" x="150" y="104" width="46" height="40" rx="6"/><rect class="box" x="150" y="204" width="46" height="40" rx="6"/>
+  <rect class="box" x="202" y="104" width="46" height="40" rx="6"/><rect class="box" x="202" y="204" width="46" height="40" rx="6"/>
+  <rect class="box" x="254" y="104" width="46" height="40" rx="6"/><rect class="box" x="254" y="204" width="46" height="40" rx="6"/>
+  <rect class="box" x="306" y="104" width="46" height="40" rx="6"/><rect class="box" x="306" y="204" width="46" height="40" rx="6"/>
+  <rect class="box" x="358" y="104" width="46" height="40" rx="6"/><rect class="box" x="358" y="204" width="46" height="40" rx="6"/>
+  <rect class="box" x="410" y="104" width="46" height="40" rx="6"/><rect class="box" x="410" y="204" width="46" height="40" rx="6"/>
+  <rect class="box" x="462" y="104" width="46" height="40" rx="6"/><rect class="box" x="462" y="204" width="46" height="40" rx="6"/>
+  <rect class="box" x="514" y="104" width="46" height="40" rx="6"/><rect class="box" x="514" y="204" width="46" height="40" rx="6"/>
+  <rect class="box" x="566" y="104" width="46" height="40" rx="6"/><rect class="box" x="566" y="204" width="46" height="40" rx="6"/>
+  <rect class="box" x="618" y="104" width="46" height="40" rx="6"/><rect class="box" x="618" y="204" width="46" height="40" rx="6"/>
+  <g class="a p0"><rect class="pri" x="150" y="104" width="46" height="40" rx="6"/><text class="on" x="173" y="129" text-anchor="middle">1</text></g>
+  <g class="a s0"><rect class="pri" x="150" y="204" width="46" height="40" rx="6"/><text class="on" x="173" y="229" text-anchor="middle">1</text></g>
+  <g class="a p1"><rect class="pri" x="202" y="104" width="46" height="40" rx="6"/><text class="on" x="225" y="129" text-anchor="middle">2</text></g>
+  <g class="a s1"><rect class="pri" x="202" y="204" width="46" height="40" rx="6"/><text class="on" x="225" y="229" text-anchor="middle">2</text></g>
+  <g class="a p2"><rect class="pri" x="254" y="104" width="46" height="40" rx="6"/><text class="on" x="277" y="129" text-anchor="middle">3</text></g>
+  <g class="a s2"><rect class="pri" x="254" y="204" width="46" height="40" rx="6"/><text class="on" x="277" y="229" text-anchor="middle">3</text></g>
+  <g class="a p3"><rect class="pri" x="306" y="104" width="46" height="40" rx="6"/><text class="on" x="329" y="129" text-anchor="middle">4</text></g>
+  <g class="a s3"><rect class="pri" x="306" y="204" width="46" height="40" rx="6"/><text class="on" x="329" y="229" text-anchor="middle">4</text></g>
+  <g class="a p4"><rect class="pri" x="358" y="104" width="46" height="40" rx="6"/><text class="on" x="381" y="129" text-anchor="middle">5</text></g>
+  <g class="a s4"><rect class="pri" x="358" y="204" width="46" height="40" rx="6"/><text class="on" x="381" y="229" text-anchor="middle">5</text></g>
+  <g class="a p5"><rect class="pri" x="410" y="104" width="46" height="40" rx="6"/><text class="on" x="433" y="129" text-anchor="middle">6</text></g>
+  <g class="a s5"><rect class="pri" x="410" y="204" width="46" height="40" rx="6"/><text class="on" x="433" y="229" text-anchor="middle">6</text></g>
+  <g class="a p6"><rect class="tea" x="462" y="104" width="46" height="40" rx="6"/><text class="on" x="485" y="129" text-anchor="middle">7</text></g>
+  <g class="a s6"><rect class="tea" x="462" y="204" width="46" height="40" rx="6"/><text class="on" x="485" y="229" text-anchor="middle">7</text></g>
+  <g class="a p7"><rect class="pri" x="514" y="104" width="46" height="40" rx="6"/><text class="on" x="537" y="129" text-anchor="middle">8</text></g>
+  <g class="a s7"><rect class="pri" x="514" y="204" width="46" height="40" rx="6"/><text class="on" x="537" y="229" text-anchor="middle">8</text></g>
+  <g class="a p8"><rect class="pri" x="566" y="104" width="46" height="40" rx="6"/><text class="on" x="589" y="129" text-anchor="middle">9</text></g>
+  <g class="a s8"><rect class="pri" x="566" y="204" width="46" height="40" rx="6"/><text class="on" x="589" y="229" text-anchor="middle">9</text></g>
+  <g class="a p9"><rect class="pri" x="618" y="104" width="46" height="40" rx="6"/><text class="on" x="641" y="129" text-anchor="middle">10</text></g>
+  <g class="a s9"><rect class="pri" x="618" y="204" width="46" height="40" rx="6"/><text class="on" x="641" y="229" text-anchor="middle">10</text></g>
+  <path class="line" d="M485 150 V196" stroke-dasharray="4 4"/>
+  <text class="sub" x="496" y="178">WAL stream (replay_lag)</text>
+  <g class="a mk"><text class="teat" x="402" y="94" font-size="14" font-weight="700">your write, acknowledged</text></g>
+  <g class="a rd">
+    <rect class="badbg" x="458" y="200" width="54" height="48" rx="8" stroke-width="3"/>
+    <text class="badt" x="150" y="290" font-size="14" font-weight="700">SELECT on the standby right after the commit: row not found</text>
+  </g>
+  <g class="a ok">
+    <rect class="okbg" x="458" y="200" width="54" height="48" rx="8" stroke-width="3"/>
+    <text class="okt" x="150" y="290" font-size="14" font-weight="700">Replayed: the same SELECT now finds it</text>
+  </g>
+  <text class="t" x="150" y="318">Route read-your-writes to the primary, or wait until the replica passes the write's LSN.</text>
+  <text class="sub" x="28" y="356">Measured on a local streaming replica: 198 of 200 immediate reads missed;</text>
+  <text class="sub" x="28" y="376">a bulk insert of 400,000 wide rows put it 30 MB / 360 ms behind. Lag here is drawn as two records.</text>
+</svg>

@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Update and delete anomalies</title>
+  <desc id="d">Left: one wide prescription table repeats the pharmacy name and phone on every row. When Main St Pharmacy's phone changes to 555-0123, row 501 is updated but row 502 is missed, so PH7 now has two different phone numbers. Deleting prescription 503 then also deletes the only record of Oak Ave Pharmacy. Right: in the normalised schema the phone lives once in the PHARMACY table, so the change is a one-row update, and deleting prescription 503 leaves pharmacy PH9 intact.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .b{fill:#0f172a;font-size:14px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#4f46e5;font-weight:600}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.ok{fill:#16a34a}.bad{fill:#dc2626}.warn{fill:#d97706}.mut{fill:#94a3b8}
+    .pris{stroke:#4f46e5}.teas{stroke:#0ea5a4}.oks{stroke:#16a34a}.bads{stroke:#dc2626}.warns{stroke:#d97706}.muts{stroke:#94a3b8}
+    .prit{fill:#4f46e5}.teat{fill:#0f766e}.okt{fill:#16a34a}.badt{fill:#dc2626}.warnt{fill:#b45309}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .onm{fill:#ffffff;font-size:13px}
+    .okbg{fill:#16a34a;fill-opacity:.10;stroke:#16a34a;stroke-width:1.5}
+    .badbg{fill:#dc2626;fill-opacity:.08;stroke:#dc2626;stroke-width:1.5}
+    .pribg{fill:#4f46e5;fill-opacity:.10;stroke:#4f46e5;stroke-width:1.5}
+    .teabg{fill:#0ea5a4;fill-opacity:.12;stroke:#0ea5a4;stroke-width:1.5}
+    .line{stroke:#94a3b8;stroke-width:2;fill:none}
+    .ah{fill:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.b{fill:#f1f5f9}.lbl,.t,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .code{fill:#818cf8}.box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.ok{fill:#4ade80}.bad{fill:#f87171}.warn{fill:#fbbf24}.mut{fill:#64748b}
+      .pris{stroke:#818cf8}.teas{stroke:#2dd4bf}.oks{stroke:#4ade80}.bads{stroke:#f87171}.warns{stroke:#fbbf24}.muts{stroke:#64748b}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+      .on,.onm{fill:#0f172a}
+      .okbg{fill:#4ade80;stroke:#4ade80;fill-opacity:.12}.badbg{fill:#f87171;stroke:#f87171;fill-opacity:.10}
+      .pribg{fill:#818cf8;stroke:#818cf8;fill-opacity:.14}.teabg{fill:#2dd4bf;stroke:#2dd4bf;fill-opacity:.14}
+      .line{stroke:#64748b}.ah{fill:#64748b}
+    }
+    .a{opacity:0;animation:12s infinite steps(1,end)}
+    @keyframes b1{0%,4%{opacity:0}6%,48%{opacity:1}50%,100%{opacity:0}}
+    @keyframes b2{0%,50%{opacity:0}52%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes p1{0%,14%{opacity:0}16%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes p0{0%,14%{opacity:1}16%,100%{opacity:0}}
+    @keyframes m1{0%,24%{opacity:0}26%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes d1{0%,58%{opacity:0}60%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes d2{0%,66%{opacity:0}68%,94%{opacity:1}97%,100%{opacity:0}}
+    .b1{animation-name:b1}.b2{animation-name:b2}.p1{animation-name:p1}.p0{animation-name:p0;opacity:1}.m1{animation-name:m1}.d1{animation-name:d1}.d2{animation-name:d2}
+    .strike{stroke:#dc2626;stroke-width:2}
+    @media (prefers-color-scheme: dark){.strike{stroke:#f87171}}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.p0,.b1,.b2{opacity:0}}
+
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="448" rx="14"/>
+  <text class="h" x="28" y="40">Why normalise: update and delete anomalies</text>
+  <g class="a b1"><text class="b" x="28" y="64">Step 1: Main St Pharmacy (PH7) changes its phone to 555-0123.</text></g>
+  <g class="a b2"><text class="b" x="28" y="64">Step 2: delete prescription 503.</text></g>
+
+  <!-- left -->
+  <rect class="box" x="24" y="80" width="372" height="290" rx="10"/>
+  <text class="lbl" x="40" y="104">One wide table</text>
+  <g class="sub"><text x="40" y="132">rx_id</text><text x="100" y="132">pharmacy</text><text x="236" y="132">phone</text></g>
+  <g class="t">
+    <text x="40" y="162">501</text><text x="100" y="162">PH7 Main St</text>
+    <text x="40" y="198">502</text><text x="100" y="198">PH7 Main St</text><text x="236" y="198">555-0101</text>
+    <text x="40" y="234">503</text><text x="100" y="234">PH9 Oak Ave</text><text x="236" y="234">555-0199</text>
+  </g>
+  <g class="a p0"><text class="t" x="236" y="162">555-0101</text></g>
+  <g class="a p1"><text class="okt" x="236" y="162" font-weight="700" font-size="14">555-0123</text></g>
+  <g class="a m1">
+    <rect class="badbg" x="32" y="180" width="356" height="26" rx="5"/>
+    <text class="badt" x="314" y="198" font-weight="700" font-size="14">missed</text>
+    <text class="badt" x="40" y="268" font-weight="700" font-size="14">PH7 now has two phone numbers.</text>
+  </g>
+  <g class="a d1">
+    <line class="strike" x1="36" y1="229" x2="384" y2="229"/>
+  </g>
+  <g class="a d2">
+    <text class="badt" x="40" y="300" font-weight="700" font-size="14">Oak Ave Pharmacy is gone with it:</text>
+    <text class="t" x="40" y="320">its only row was a prescription.</text>
+  </g>
+
+  <!-- right -->
+  <rect class="box" x="412" y="80" width="364" height="290" rx="10"/>
+  <text class="lbl" x="428" y="104">Normalised (each fact once)</text>
+  <text class="code" x="428" y="132">PHARMACY</text>
+  <g class="t">
+    <text x="428" y="158">PH7</text><text x="476" y="158">Main St</text>
+    <text x="428" y="182">PH9</text><text x="476" y="182">Oak Ave</text><text x="580" y="182">555-0199</text>
+  </g>
+  <g class="a p0"><text class="t" x="580" y="158">555-0101</text></g>
+  <g class="a p1"><text class="okt" x="580" y="158" font-weight="700" font-size="14">555-0123</text></g>
+  <g class="a m1"><text class="okt" x="676" y="158" font-size="13">1 row</text></g>
+  <text class="code" x="428" y="220">PRESCRIPTION</text>
+  <g class="t">
+    <text x="428" y="246">501</text><text x="476" y="246">→ PH7</text>
+    <text x="428" y="270">502</text><text x="476" y="270">→ PH7</text>
+    <text x="428" y="294">503</text><text x="476" y="294">→ PH9</text>
+  </g>
+  <g class="a d1"><line class="strike" x1="424" y1="289" x2="530" y2="289"/></g>
+  <g class="a d2">
+    <rect class="okbg" x="420" y="166" width="348" height="24" rx="5"/>
+    <text class="okt" x="428" y="336" font-weight="700" font-size="14">PH9 is still known.</text>
+  </g>
+
+  <text class="sub" x="28" y="400">Update anomaly: a change must touch every copy. Delete anomaly: removing one fact removes another.</text>
+  <text class="sub" x="28" y="420">The new phone number is an example value; the rows match the page's table.</text>
+</svg>

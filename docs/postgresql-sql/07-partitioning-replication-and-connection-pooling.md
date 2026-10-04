@@ -47,6 +47,9 @@ flowchart TD
 | A row for 2027 with no matching partition | Landed in the `DEFAULT` partition |
 | Retire January: `DETACH PARTITION` + `DROP TABLE` | **~1 ms + 9 ms**, versus a `DELETE` of 200,000 rows that would bloat the table and need vacuuming |
 
+![Animation: a query for ten days of February scans only the February partition while the others are pruned, a query on member_id alone lights up all four partitions, and January is then detached and dropped in about 10 ms](images/07-partition-pruning-retention.svg){ loading=lazy }
+*Watch which partitions light up: the partition key in the `WHERE` clause prunes the rest, a query without it fans out to all of them, and retention is a metadata operation.*
+
 **Rules of thumb:**
 
 - Partition when a table is very large (hundreds of millions of rows or more) **and** most queries or maintenance align with the partition key. Partitioning a 5-million-row table usually just adds planning overhead.
@@ -82,6 +85,9 @@ sequenceDiagram
 - **Replication slots** stop the primary from removing WAL a standby still needs, but an abandoned slot fills the primary's disk.
 
 **Demonstrated:** writing to the standby failed with `25006 cannot execute INSERT in a read-only transaction`; inserting 200 rows on the primary and immediately reading each one on the standby missed **198/200** (even on the same machine); after a bulk insert of 400,000 wide rows the standby was **30 MB / 360 ms** behind.
+
+![Animation: the primary appends committed WAL records 1 to 10 while the standby replays them two records behind; a read of record 7 on the standby right after its commit misses, and succeeds once the standby has replayed it](images/07-replica-lag.svg){ loading=lazy }
+*Notice the gap between the two rows: the commit is acknowledged as soon as the primary has it, so a read on the standby inside that gap misses the write.*
 
 ### Using replicas from an application
 
@@ -124,6 +130,9 @@ flowchart LR
 - **Total connections = pods × pool size.** With autoscaling, 50 pods × 10 = 500 connections can exceed `max_connections` during a scale-out. Size per pod accordingly or add a proxy.
 - **PgBouncer** modes: **session** (one server connection per client connection, little benefit), **transaction** (server connection held only during a transaction, the common choice), **statement** (per statement, no multi-statement transactions). Transaction mode breaks anything that relies on session state between transactions: session-level advisory locks, `SET` without `LOCAL`, `LISTEN/NOTIFY`, temporary tables across transactions, and server-side prepared statements on PgBouncer < 1.21 (1.21+ supports them with `max_prepared_statements`; older setups use `prepareThreshold=0` in pgJDBC).
 - **RDS Proxy** (AWS) is a managed pooler with IAM auth and faster failover; it "pins" sessions that use session state, reducing multiplexing.
+
+![Animation: six pod connections into PgBouncer in transaction mode, which lends its two PostgreSQL server connections to whichever pod is running a transaction and takes them back at commit](images/07-pgbouncer-multiplexing.svg){ loading=lazy }
+*Watch the server connections change hands: each one serves a different pod for each transaction, which is also why session state set outside a transaction doesn't survive in this mode.*
 
 ## In practice: code & configuration
 

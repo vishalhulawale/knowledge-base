@@ -1,0 +1,174 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Why selectivity decides index versus sequential scan</title>
+  <desc id="d">Two rows of heap pages for the 1-million-row claim table. For status = 'PENDING', about 1 percent of rows, the index on status leads to a few scattered heap pages, so an Index Scan reads only those: 40 ms. For status = 'PAID', 90 percent of rows, matching rows sit on almost every page, so following the index would mean random reads of nearly the whole table; the planner instead reads every page once in physical order with a Seq Scan: 156 ms. Page counts are illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#4f46e5;font-weight:600}
+    .pg{fill:#ffffff;stroke:#cbd5e1}
+    .ix{fill:#4f46e5}
+    .on{fill:#fff;font-size:14px;font-weight:700}
+    .hit{fill:#4f46e5}
+    .jl{fill:none;stroke:#4f46e5;stroke-width:2}
+    .pd{fill:#0ea5a4;fill-opacity:.55}
+    .sweep{fill:#0ea5a4}
+    .res{fill:#0f172a;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.res{fill:#f1f5f9}.lbl,.t{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .code{fill:#818cf8}.pg{fill:#111827;stroke:#475569}
+      .ix,.hit{fill:#818cf8}.on{fill:#0f172a}.jl{stroke:#818cf8}
+      .pd{fill:#2dd4bf}.sweep{fill:#2dd4bf}
+    }
+    /* 10 s loop: 4 index jumps 6-30%, result 34%; sequential sweep 42-84%, result 86%; reset 95% */
+    .a{opacity:0;animation:10s infinite}
+    @keyframes j0{0%,5%{opacity:0}7%,95%{opacity:1}98%,100%{opacity:0}}
+    @keyframes j1{0%,13%{opacity:0}15%,95%{opacity:1}98%,100%{opacity:0}}
+    @keyframes j2{0%,21%{opacity:0}23%,95%{opacity:1}98%,100%{opacity:0}}
+    @keyframes j3{0%,29%{opacity:0}31%,95%{opacity:1}98%,100%{opacity:0}}
+    @keyframes ra{0%,33%{opacity:0}36%,95%{opacity:1}98%,100%{opacity:0}}
+    @keyframes rb{0%,84%{opacity:0}87%,95%{opacity:1}98%,100%{opacity:0}}
+    @keyframes sw{0%,41%{transform:scaleX(0)}84%,95%{transform:scaleX(1)}98%,100%{transform:scaleX(0)}}
+    .j0{animation-name:j0}.j1{animation-name:j1}.j2{animation-name:j2}.j3{animation-name:j3}
+    .ra{animation-name:ra}.rb{animation-name:rb}
+    .sweepg{transform-origin:178px 0;transform:scaleX(0);animation:sw 10s infinite linear}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.sweepg{animation:none;transform:scaleX(1)}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">Selectivity decides: index or sequential scan</text>
+  <text class="sub" x="28" y="62">Each square is a heap page of the claim table; same index on status in both cases.</text>
+
+  <text class="code" x="28" y="96">status = 'PENDING'</text>
+  <text class="sub" x="184" y="96">1 % of rows match</text>
+  <rect class="ix" x="40" y="118" width="110" height="32" rx="8"/><text class="on" x="95" y="139" text-anchor="middle">index</text>
+  <g>
+    <rect class="pg" x="180" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="196" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="212" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="228" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="244" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="260" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="276" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="292" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="308" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="324" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="340" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="356" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="372" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="388" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="404" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="420" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="436" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="452" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="468" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="484" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="500" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="516" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="532" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="548" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="564" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="580" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="596" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="612" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="628" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="644" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="660" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="676" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="692" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="708" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="724" y="118" width="12" height="30" rx="2"/>
+    <rect class="pg" x="740" y="118" width="12" height="30" rx="2"/>
+  </g>
+  
+  <path class="jl a j0" d="M150 134 C 183.6 96, 214.0 96, 234.0 116"/>
+  <rect class="hit a j0" x="228" y="118" width="12" height="30" rx="2"/>
+  <path class="jl a j1" d="M150 134 C 254.0 96, 390.0 96, 410.0 116"/>
+  <rect class="hit a j1" x="404" y="118" width="12" height="30" rx="2"/>
+  <path class="jl a j2" d="M150 134 C 311.6 96, 534.0 96, 554.0 116"/>
+  <rect class="hit a j2" x="548" y="118" width="12" height="30" rx="2"/>
+  <path class="jl a j3" d="M150 134 C 362.8 96, 662.0 96, 682.0 116"/>
+  <rect class="hit a j3" x="676" y="118" width="12" height="30" rx="2"/>
+  <g class="a ra"><text class="res" x="180" y="176">Index Scan: a few random page reads, 40 ms</text></g>
+
+  <text class="code" x="28" y="232">status = 'PAID'</text>
+  <text class="sub" x="184" y="232">90 % of rows match; shaded pages hold matching rows</text>
+  <g>
+    <rect class="pg" x="180" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="196" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="212" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="228" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="244" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="260" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="276" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="292" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="308" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="324" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="340" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="356" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="372" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="388" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="404" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="420" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="436" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="452" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="468" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="484" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="500" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="516" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="532" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="548" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="564" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="580" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="596" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="612" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="628" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="644" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="660" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="676" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="692" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="708" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="724" y="254" width="12" height="30" rx="2"/>
+    <rect class="pg" x="740" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="180" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="196" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="212" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="228" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="244" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="260" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="276" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="292" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="324" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="340" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="356" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="372" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="388" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="404" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="420" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="436" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="452" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="468" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="500" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="516" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="532" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="548" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="564" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="580" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="596" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="628" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="644" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="660" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="676" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="692" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="708" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="724" y="254" width="12" height="30" rx="2"/>
+    <rect class="pd" x="740" y="254" width="12" height="30" rx="2"/>
+  </g>
+  <g class="sweepg"><rect class="sweep" x="178" y="290" width="576" height="5" rx="2"/></g>
+  <text class="sub" x="40" y="275">read in order</text>
+  <g class="a rb"><text class="res" x="180" y="318">Seq Scan: every page once, in order, 156 ms</text></g>
+
+  <text class="sub" x="28" y="356">Matches on nearly every page make random index-driven reads cost more than one sequential pass.</text>
+</svg>

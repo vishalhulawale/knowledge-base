@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 456" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">LEFT JOIN filter: WHERE versus ON</title>
+  <desc id="d">Two copies of the nine rows produced by member LEFT JOIN claim. On the left the status test is in WHERE: every row that is not PAID is removed, including Dev's NULL-extended row, so the result has four members: Asha 2, Ben 1, Chen 1, Eva 1. On the right the test is in the ON clause: the DENIED and PENDING claims fail to match, but Dev keeps his NULL-extended row, so the result has five members including Dev with 0.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#4f46e5;font-weight:600}
+    .panel{fill:#ffffff;stroke:#cbd5e1}
+    .badt{fill:#dc2626;font-size:14px;font-weight:700}
+    .okt{fill:#16a34a;font-size:14px;font-weight:700}
+    .strike{stroke:#dc2626;stroke-width:2}
+    .keepbg{fill:#16a34a;opacity:.14}
+    .keepr{fill:none;stroke:#16a34a;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .code{fill:#818cf8}
+      .panel{fill:#111827;stroke:#475569}
+      .badt{fill:#f87171}.okt{fill:#4ade80}
+      .strike{stroke:#f87171}.keepbg{fill:#4ade80;opacity:.16}.keepr{stroke:#4ade80}
+    }
+    /* 10 s loop: 0-25% all 9 rows, 30% filters apply, 56% results appear */
+    .fd{animation:fd 10s infinite}
+    .st{opacity:0;animation:st 10s infinite}
+    .kp{opacity:0;animation:st 10s infinite}
+    .res{opacity:0;animation:res 10s infinite}
+    @keyframes fd{0%,25%{opacity:1}32%,92%{opacity:.28}97%,100%{opacity:1}}
+    @keyframes st{0%,25%{opacity:0}30%,92%{opacity:1}97%,100%{opacity:0}}
+    @keyframes res{0%,50%{opacity:0}56%,92%{opacity:1}97%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){.fd{animation:none;opacity:.28}.st,.kp,.res{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="454" rx="14"/>
+  <text class="h" x="28" y="40">LEFT JOIN: put the right-table filter in ON, not WHERE</text>
+  <text class="sub" x="28" y="62">member LEFT JOIN claim gives 9 rows. Dev has no claims, so his row has NULL claim columns.</text>
+
+  <!-- left panel -->
+  <rect class="panel" x="24" y="80" width="368" height="318" rx="10"/>
+  <text class="code" x="40" y="104">WHERE c.status = 'PAID'</text>
+  <text class="sub" x="40" y="124">filters the joined rows afterwards</text>
+  <!-- right panel -->
+  <rect class="panel" x="408" y="80" width="368" height="318" rx="10"/>
+  <text class="code" x="424" y="104">ON … AND c.status = 'PAID'</text>
+  <text class="sub" x="424" y="124">decides which claims match</text>
+
+  <!-- rows: y baseline 152 + 24i -->
+  <g class="t">
+    <!-- LEFT -->
+    <text x="40" y="152">Asha</text><text x="130" y="152">101</text><text x="200" y="152">PAID</text>
+    <g class="fd"><text x="40" y="176">Asha</text><text x="130" y="176">102</text><text x="200" y="176">DENIED</text></g>
+    <text x="40" y="200">Asha</text><text x="130" y="200">103</text><text x="200" y="200">PAID</text>
+    <text x="40" y="224">Ben</text><text x="130" y="224">104</text><text x="200" y="224">PAID</text>
+    <g class="fd"><text x="40" y="248">Ben</text><text x="130" y="248">105</text><text x="200" y="248">PENDING</text></g>
+    <text x="40" y="272">Chen</text><text x="130" y="272">106</text><text x="200" y="272">PAID</text>
+    <g class="fd"><text x="40" y="296">Chen</text><text x="130" y="296">107</text><text x="200" y="296">PENDING</text></g>
+    <g class="fd"><text x="40" y="320">Dev</text><text x="130" y="320" class="sub">NULL</text><text x="200" y="320" class="sub">NULL</text></g>
+    <text x="40" y="344">Eva</text><text x="130" y="344">108</text><text x="200" y="344">PAID</text>
+    <!-- RIGHT -->
+    <text x="424" y="152">Asha</text><text x="514" y="152">101</text><text x="584" y="152">PAID</text>
+    <g class="fd"><text x="424" y="176">Asha</text><text x="514" y="176">102</text><text x="584" y="176">DENIED</text></g>
+    <text x="424" y="200">Asha</text><text x="514" y="200">103</text><text x="584" y="200">PAID</text>
+    <text x="424" y="224">Ben</text><text x="514" y="224">104</text><text x="584" y="224">PAID</text>
+    <g class="fd"><text x="424" y="248">Ben</text><text x="514" y="248">105</text><text x="584" y="248">PENDING</text></g>
+    <text x="424" y="272">Chen</text><text x="514" y="272">106</text><text x="584" y="272">PAID</text>
+    <g class="fd"><text x="424" y="296">Chen</text><text x="514" y="296">107</text><text x="584" y="296">PENDING</text></g>
+    <text x="424" y="320">Dev</text><text x="514" y="320" class="sub">NULL</text><text x="584" y="320" class="sub">NULL</text>
+    <text x="424" y="344">Eva</text><text x="514" y="344">108</text><text x="584" y="344">PAID</text>
+  </g>
+  <!-- strikes on removed rows -->
+  <g class="st">
+    <line class="strike" x1="36" y1="171" x2="270" y2="171"/>
+    <line class="strike" x1="36" y1="243" x2="270" y2="243"/>
+    <line class="strike" x1="36" y1="291" x2="270" y2="291"/>
+    <line class="strike" x1="36" y1="315" x2="270" y2="315"/>
+    <text class="badt" x="282" y="320">removed</text>
+    <line class="strike" x1="420" y1="171" x2="654" y2="171"/>
+    <line class="strike" x1="420" y1="243" x2="654" y2="243"/>
+    <line class="strike" x1="420" y1="291" x2="654" y2="291"/>
+  </g>
+  <g class="kp">
+    <rect class="keepbg" x="416" y="305" width="352" height="22" rx="5"/>
+    <rect class="keepr" x="416" y="305" width="352" height="22" rx="5"/>
+    <text class="okt" x="666" y="320">kept</text>
+  </g>
+
+  <!-- results -->
+  <g class="res">
+    <text class="badt" x="40" y="370">4 rows, Dev is gone:</text><text class="t" x="40" y="390">Asha 2, Ben 1, Chen 1, Eva 1</text>
+    <text class="okt" x="424" y="370">5 rows, Dev survives:</text><text class="t" x="424" y="390">Asha 2, Ben 1, Chen 1, Dev 0, Eva 1</text>
+  </g>
+  <text class="sub" x="28" y="424">For Dev, c.status is NULL and NULL = 'PAID' is not true, so WHERE drops him.</text>
+  <text class="sub" x="28" y="442">count(c.id) skips the NULL claim id, which is why Dev's count is 0 on the right.</text>
+</svg>

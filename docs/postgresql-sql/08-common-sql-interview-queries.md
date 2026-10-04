@@ -91,6 +91,9 @@ FROM employee WINDOW w AS (ORDER BY salary DESC) LIMIT 5;
 
 `ROW_NUMBER` breaks the Ben/Chen tie arbitrarily unless you add a tie-breaker column. `RANK` skips 4. `DENSE_RANK` doesn't skip, so "Nth highest distinct value" is `DENSE_RANK = N`.
 
+![Comparison: for Asha, Dev, Ben, Chen and Eva ordered by salary, ROW_NUMBER gives 1 to 5, RANK gives 1, 2, 3, 3, 5 and DENSE_RANK gives 1, 2, 3, 3, 4, with the Ben and Chen tie highlighted](images/08-ranking-ties.svg){ loading=lazy }
+*Notice what happens to Eva after the tie: `RANK` jumps to 5, `DENSE_RANK` continues with 4.*
+
 ## In practice: the classic queries
 
 ### 1. Second (or Nth) highest salary
@@ -294,6 +297,9 @@ flowchart LR
     C --> D["GROUP BY that value:<br/>island 1 = 3 days, island 2 = 2 days"]
 ```
 *Notice that within a run of consecutive dates both the date and the row number go up by 1, so their difference stays constant. A gap changes it. That constant is the island's id.*
+
+![Animation: user 1's login dates May 1, 2, 3, 5 and 6 get row numbers 1 to 5, the date minus row number gives April 30 for the first three and May 1 for the last two, and those values group the rows into a 3-day island and a 2-day island](images/08-gaps-and-islands.svg){ loading=lazy }
+*Watch the third column: it stays at April 30 for the first run and jumps to May 1 after the missing May 4, so grouping by it separates the streaks.*
 
 The same trick finds consecutive IDs, seats or statuses. For "the same status N times in a row", compute `row_number() OVER (ORDER BY ts) - row_number() OVER (PARTITION BY status ORDER BY ts)`.
 

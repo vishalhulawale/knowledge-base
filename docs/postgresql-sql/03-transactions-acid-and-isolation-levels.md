@@ -71,6 +71,9 @@ flowchart LR
 
 The atomic-update row is the important practical lesson: at READ COMMITTED, an `UPDATE` that blocks on a locked row re-evaluates its `WHERE` and uses the **latest committed** row version, so single-statement updates like `balance = balance - 10` are safe. The lost update only happens when the application reads, computes in Java, and writes back.
 
+![Animation: sessions A and B both read a balance of 100; A writes 90 and commits, then B writes 90 from its stale read; under READ COMMITTED the final balance is 90, under REPEATABLE READ B fails with 40001 and a retry writes 80](images/03-lost-update.svg){ loading=lazy }
+*Watch session B's write: it's computed from a value that changed after B read it. READ COMMITTED lets it overwrite A's debit, while REPEATABLE READ rejects it and forces a retry.*
+
 ### How READ COMMITTED updates behave
 
 When an `UPDATE` or `DELETE` under READ COMMITTED finds a row that a concurrent transaction is modifying, it waits for that transaction. If it commits, PostgreSQL re-checks the `WHERE` clause against the **new** row version and applies the update to it (the "EvalPlanQual" recheck). That's why conditional updates such as `UPDATE refill SET status = 'APPROVED' WHERE id = ? AND status = 'REQUESTED'` work correctly at the default level: the second approver re-checks, finds `status = 'APPROVED'`, and updates 0 rows.
@@ -81,6 +84,9 @@ When an `UPDATE` or `DELETE` under READ COMMITTED finds a row that a concurrent 
 - **First-updater-wins:** if it tries to update or delete a row changed by a transaction that committed after the snapshot, it gets SQLSTATE `40001` *could not serialize access due to concurrent update*, and must be retried.
 - **Write skew is still possible**, because the two transactions update *different* rows. Fix by locking the rows you read (`SELECT … FOR UPDATE`), materialising the conflict (a row both must update), using a constraint, or SERIALIZABLE.
 - Note the naming confusion: **MySQL InnoDB's default is REPEATABLE READ**, with different semantics (gap/next-key locking, and its plain SELECTs don't error on concurrent updates). Don't assume portability.
+
+![Animation: two sessions each count two doctors on call, then take Alice and Bob off call respectively; under REPEATABLE READ both commit and nobody is on call, under SERIALIZABLE the second session fails with 40001 and Bob stays on call](images/03-write-skew.svg){ loading=lazy }
+*Notice that the two sessions never touch the same row, so first-updater-wins has nothing to catch. Only SERIALIZABLE (or locking the rows that were read) sees that the combined result breaks the rule.*
 
 ### SERIALIZABLE = serializable snapshot isolation (SSI)
 

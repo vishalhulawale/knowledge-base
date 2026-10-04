@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Lock queue behind a waiting ALTER TABLE</title>
+  <desc id="d">A long transaction holds a lock on table rx2 from SELECT FOR UPDATE. A migration's ALTER TABLE requests ACCESS EXCLUSIVE and has to wait. New SELECTs request ACCESS SHARE, which conflicts with the queued exclusive request, so they wait behind the ALTER even though the long transaction alone wouldn't block them. When the ALTER's lock_timeout of 3 seconds expires it is cancelled with SQLSTATE 55P03 and the queued SELECTs are granted.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .b{fill:#0f172a;font-size:14px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#4f46e5;font-weight:600}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.ok{fill:#16a34a}.bad{fill:#dc2626}.warn{fill:#d97706}.mut{fill:#94a3b8}
+    .pris{stroke:#4f46e5}.teas{stroke:#0ea5a4}.oks{stroke:#16a34a}.bads{stroke:#dc2626}.warns{stroke:#d97706}.muts{stroke:#94a3b8}
+    .prit{fill:#4f46e5}.teat{fill:#0f766e}.okt{fill:#16a34a}.badt{fill:#dc2626}.warnt{fill:#b45309}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .onm{fill:#ffffff;font-size:13px}
+    .okbg{fill:#16a34a;fill-opacity:.10;stroke:#16a34a;stroke-width:1.5}
+    .badbg{fill:#dc2626;fill-opacity:.08;stroke:#dc2626;stroke-width:1.5}
+    .pribg{fill:#4f46e5;fill-opacity:.10;stroke:#4f46e5;stroke-width:1.5}
+    .teabg{fill:#0ea5a4;fill-opacity:.12;stroke:#0ea5a4;stroke-width:1.5}
+    .line{stroke:#94a3b8;stroke-width:2;fill:none}
+    .ah{fill:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.b{fill:#f1f5f9}.lbl,.t,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .code{fill:#818cf8}.box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.ok{fill:#4ade80}.bad{fill:#f87171}.warn{fill:#fbbf24}.mut{fill:#64748b}
+      .pris{stroke:#818cf8}.teas{stroke:#2dd4bf}.oks{stroke:#4ade80}.bads{stroke:#f87171}.warns{stroke:#fbbf24}.muts{stroke:#64748b}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+      .on,.onm{fill:#0f172a}
+      .okbg{fill:#4ade80;stroke:#4ade80;fill-opacity:.12}.badbg{fill:#f87171;stroke:#f87171;fill-opacity:.10}
+      .pribg{fill:#818cf8;stroke:#818cf8;fill-opacity:.14}.teabg{fill:#2dd4bf;stroke:#2dd4bf;fill-opacity:.14}
+      .line{stroke:#64748b}.ah{fill:#64748b}
+    }
+    .a{opacity:0;animation:12s infinite}
+    @keyframes h0{0%,3%{opacity:0}5%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes q1{0%,14%{opacity:0}16%,62%{opacity:1}64%,100%{opacity:0}}
+    @keyframes x1{0%,62%{opacity:0}64%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes q2{0%,26%{opacity:0}28%,68%{opacity:1}70%,100%{opacity:0}}
+    @keyframes q3{0%,36%{opacity:0}38%,68%{opacity:1}70%,100%{opacity:0}}
+    @keyframes g2{0%,68%{opacity:0}70%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes n1{0%,26%{opacity:0}28%,68%{opacity:1}70%,100%{opacity:0}}
+    .h0{animation-name:h0}.q1{animation-name:q1}.x1{animation-name:x1}.q2{animation-name:q2}.q3{animation-name:q3}.g2{animation-name:g2}.n1{animation-name:n1}
+    @keyframes tm{0%,14%{transform:scaleX(0)}62%,94%{transform:scaleX(1)}97%,100%{transform:scaleX(0)}}
+    .tmr{transform-origin:286px 0;transform:scaleX(0);animation:tm 12s infinite linear}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.q1,.q2,.q3,.n1{opacity:0}.tmr{animation:none;transform:scaleX(1)}}
+
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Why a waiting ALTER TABLE blocks plain SELECTs</text>
+  <text class="sub" x="28" y="62">Lock requests on table rx2 queue in order. A new request must not conflict with anything ahead of it.</text>
+  <rect class="box" x="28" y="84" width="232" height="236" rx="10"/>
+  <text class="lbl" x="44" y="108">Granted</text>
+  <rect class="box" x="276" y="84" width="500" height="236" rx="10"/>
+  <text class="lbl" x="292" y="108">Waiting (queue order →)</text>
+  <g class="a h0">
+    <rect class="pri" x="40" y="122" width="208" height="54" rx="8"/>
+    <text class="on" x="52" y="144">Long transaction</text>
+    <text class="onm" x="52" y="164">FOR UPDATE: ROW SHARE</text>
+  </g>
+  <g class="a q1">
+    <rect class="warn" x="286" y="122" width="150" height="54" rx="8"/>
+    <text class="on" x="298" y="144">ALTER TABLE</text>
+    <text class="onm" x="298" y="164">ACCESS EXCLUSIVE</text>
+  </g>
+  <g class="a x1">
+    <rect class="badbg" x="286" y="122" width="150" height="54" rx="8"/>
+    <text class="badt" x="298" y="144" font-weight="700" font-size="14">ALTER cancelled</text>
+    <text class="badt" x="298" y="164" font-size="13">55P03 lock timeout</text>
+  </g>
+  <rect class="box" x="286" y="186" width="150" height="10" rx="4"/>
+  <g class="tmr"><rect class="warn" x="286" y="186" width="150" height="10" rx="4"/></g>
+  <text class="sub" x="286" y="214">lock_timeout = 3s</text>
+  <g class="a q2">
+    <rect class="box" x="450" y="122" width="150" height="54" rx="8"/>
+    <text class="b" x="462" y="144">SELECT count(*)</text>
+    <text class="mono" x="462" y="164">ACCESS SHARE</text>
+  </g>
+  <g class="a q3">
+    <rect class="box" x="614" y="122" width="150" height="54" rx="8"/>
+    <text class="b" x="626" y="144">SELECT …</text>
+    <text class="mono" x="626" y="164">ACCESS SHARE</text>
+  </g>
+  <g class="a n1">
+    <text class="t" x="450" y="236">Each SELECT conflicts with the</text>
+    <text class="t" x="450" y="256">queued ACCESS EXCLUSIVE, so it</text>
+    <text class="t" x="450" y="276">waits behind the ALTER.</text>
+  </g>
+  <g class="a g2">
+    <rect class="ok" x="40" y="190" width="208" height="54" rx="8"/>
+    <text class="on" x="52" y="212">SELECT count(*)</text>
+    <text class="onm" x="52" y="232">granted after 2.5 s wait</text>
+    <rect class="ok" x="40" y="254" width="208" height="54" rx="8"/>
+    <text class="on" x="52" y="276">SELECT …</text>
+    <text class="onm" x="52" y="296">granted</text>
+  </g>
+  <text class="sub" x="28" y="350">Until the ALTER gives up, the table is effectively offline for new queries.</text>
+  <text class="sub" x="28" y="370">Start every migration with SET lock_timeout and retry it, rather than waiting indefinitely.</text>
+</svg>

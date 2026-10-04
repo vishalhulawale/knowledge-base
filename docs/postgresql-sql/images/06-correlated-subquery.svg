@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Correlated subquery versus a set-based join</title>
+  <desc id="d">Left: a correlated subquery counts claims once per member row, so the SubPlan runs 20,000 times for 20,000 members: 862 ms. Right: the rewrite as LEFT JOIN with GROUP BY reads claim in one ordered pass, merge-joins it with member and aggregates the groups: 554 ms.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .b{fill:#0f172a;font-size:14px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#4f46e5;font-weight:600}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.ok{fill:#16a34a}.bad{fill:#dc2626}.warn{fill:#d97706}.mut{fill:#94a3b8}
+    .pris{stroke:#4f46e5}.teas{stroke:#0ea5a4}.oks{stroke:#16a34a}.bads{stroke:#dc2626}.warns{stroke:#d97706}.muts{stroke:#94a3b8}
+    .prit{fill:#4f46e5}.teat{fill:#0f766e}.okt{fill:#16a34a}.badt{fill:#dc2626}.warnt{fill:#b45309}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .onm{fill:#ffffff;font-size:13px}
+    .okbg{fill:#16a34a;fill-opacity:.10;stroke:#16a34a;stroke-width:1.5}
+    .badbg{fill:#dc2626;fill-opacity:.08;stroke:#dc2626;stroke-width:1.5}
+    .pribg{fill:#4f46e5;fill-opacity:.10;stroke:#4f46e5;stroke-width:1.5}
+    .teabg{fill:#0ea5a4;fill-opacity:.12;stroke:#0ea5a4;stroke-width:1.5}
+    .line{stroke:#94a3b8;stroke-width:2;fill:none}
+    .ah{fill:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.b{fill:#f1f5f9}.lbl,.t,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .code{fill:#818cf8}.box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.ok{fill:#4ade80}.bad{fill:#f87171}.warn{fill:#fbbf24}.mut{fill:#64748b}
+      .pris{stroke:#818cf8}.teas{stroke:#2dd4bf}.oks{stroke:#4ade80}.bads{stroke:#f87171}.warns{stroke:#fbbf24}.muts{stroke:#64748b}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+      .on,.onm{fill:#0f172a}
+      .okbg{fill:#4ade80;stroke:#4ade80;fill-opacity:.12}.badbg{fill:#f87171;stroke:#f87171;fill-opacity:.10}
+      .pribg{fill:#818cf8;stroke:#818cf8;fill-opacity:.14}.teabg{fill:#2dd4bf;stroke:#2dd4bf;fill-opacity:.14}
+      .line{stroke:#64748b}.ah{fill:#64748b}
+    }
+
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="358" rx="14"/>
+  <text class="h" x="28" y="40">Per-row subquery vs one set-based join</text>
+  <text class="sub" x="28" y="62">Claim count for 20,000 members on the 1 M-row claim table.</text>
+  <rect class="badbg" x="24" y="80" width="368" height="210" rx="10"/>
+  <text class="badt" x="40" y="104" font-size="15" font-weight="700">Correlated subquery</text>
+  <text class="mono" x="40" y="126">(SELECT count(*) FROM claim c</text>
+  <text class="mono" x="40" y="144"> WHERE c.member_id = m.id)</text>
+  <g class="t"><text x="40" y="178">member 1</text><text x="40" y="202">member 2</text><text x="40" y="226">member 3</text><text x="40" y="250">… 20,000</text></g>
+  <g>
+    <path class="line" d="M114 174 H222"/><path class="ah" d="M220 168 L230 174 L220 180 Z"/>
+    <path class="line" d="M114 198 H222"/><path class="ah" d="M220 192 L230 198 L220 204 Z"/>
+    <path class="line" d="M114 222 H222"/><path class="ah" d="M220 216 L230 222 L220 228 Z"/>
+    <path class="line" d="M114 246 H222" stroke-dasharray="4 4"/><path class="ah" d="M220 240 L230 246 L220 252 Z"/>
+  </g>
+  <rect class="box" x="236" y="160" width="140" height="96" rx="8"/>
+  <text class="b" x="306" y="196" text-anchor="middle">claim</text>
+  <text class="sub" x="306" y="218" text-anchor="middle">probed once</text>
+  <text class="sub" x="306" y="236" text-anchor="middle">per member</text>
+  <text class="badt" x="40" y="278" font-size="14" font-weight="700">SubPlan loops = 20,000: 862 ms</text>
+
+  <rect class="okbg" x="408" y="80" width="368" height="210" rx="10"/>
+  <text class="okt" x="424" y="104" font-size="15" font-weight="700">Set-based join + GROUP BY</text>
+  <text class="mono" x="424" y="126">LEFT JOIN claim … GROUP BY m.id</text>
+  <rect class="box" x="424" y="160" width="124" height="96" rx="8"/>
+  <text class="b" x="486" y="196" text-anchor="middle">claim</text>
+  <text class="sub" x="486" y="218" text-anchor="middle">read in one</text>
+  <text class="sub" x="486" y="236" text-anchor="middle">ordered pass</text>
+  <path class="line" d="M548 208 H592"/><path class="ah" d="M590 202 L600 208 L590 214 Z"/>
+  <rect class="box" x="604" y="160" width="160" height="96" rx="8"/>
+  <text class="b" x="684" y="190" text-anchor="middle">merge join</text>
+  <text class="sub" x="684" y="210" text-anchor="middle">with member, then</text>
+  <text class="b" x="684" y="232" text-anchor="middle">group aggregate</text>
+  <text class="okt" x="424" y="278" font-size="14" font-weight="700">One pass, set-based: 554 ms</text>
+  <text class="sub" x="28" y="318">The planner can't always flatten a correlated subquery. Look for SubPlan with a large loops count.</text>
+  <text class="sub" x="28" y="338">Measured on PostgreSQL 16 with parallel query disabled.</text>
+</svg>

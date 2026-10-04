@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">PgBouncer transaction pooling</title>
+  <desc id="d">Six application client connections connect to PgBouncer in transaction mode, which holds two server connections to PostgreSQL. A server connection is assigned to a client only for the length of one transaction, from BEGIN to COMMIT, and then returned to the pool for the next client. Idle client connections hold no server connection, so many mostly idle clients share a few busy server connections. Counts are illustrative; the page's example is 300 client connections sharing about 40 server connections.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .b{fill:#0f172a;font-size:14px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#4f46e5;font-weight:600}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.ok{fill:#16a34a}.bad{fill:#dc2626}.warn{fill:#d97706}.mut{fill:#94a3b8}
+    .pris{stroke:#4f46e5}.teas{stroke:#0ea5a4}.oks{stroke:#16a34a}.bads{stroke:#dc2626}.warns{stroke:#d97706}.muts{stroke:#94a3b8}
+    .prit{fill:#4f46e5}.teat{fill:#0f766e}.okt{fill:#16a34a}.badt{fill:#dc2626}.warnt{fill:#b45309}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .onm{fill:#ffffff;font-size:13px}
+    .okbg{fill:#16a34a;fill-opacity:.10;stroke:#16a34a;stroke-width:1.5}
+    .badbg{fill:#dc2626;fill-opacity:.08;stroke:#dc2626;stroke-width:1.5}
+    .pribg{fill:#4f46e5;fill-opacity:.10;stroke:#4f46e5;stroke-width:1.5}
+    .teabg{fill:#0ea5a4;fill-opacity:.12;stroke:#0ea5a4;stroke-width:1.5}
+    .line{stroke:#94a3b8;stroke-width:2;fill:none}
+    .ah{fill:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.b{fill:#f1f5f9}.lbl,.t,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .code{fill:#818cf8}.box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.ok{fill:#4ade80}.bad{fill:#f87171}.warn{fill:#fbbf24}.mut{fill:#64748b}
+      .pris{stroke:#818cf8}.teas{stroke:#2dd4bf}.oks{stroke:#4ade80}.bads{stroke:#f87171}.warns{stroke:#fbbf24}.muts{stroke:#64748b}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+      .on,.onm{fill:#0f172a}
+      .okbg{fill:#4ade80;stroke:#4ade80;fill-opacity:.12}.badbg{fill:#f87171;stroke:#f87171;fill-opacity:.10}
+      .pribg{fill:#818cf8;stroke:#818cf8;fill-opacity:.14}.teabg{fill:#2dd4bf;stroke:#2dd4bf;fill-opacity:.14}
+      .line{stroke:#64748b}.ah{fill:#64748b}
+    }
+    .a{opacity:0;animation:12s infinite steps(1,end)}
+    @keyframes t0{0%,4%{opacity:0}6%,28%{opacity:1}30%,100%{opacity:0}}
+    @keyframes t1{0%,14%{opacity:0}16%,38%{opacity:1}40%,100%{opacity:0}}
+    @keyframes t2{0%,32%{opacity:0}34%,56%{opacity:1}58%,100%{opacity:0}}
+    @keyframes t3{0%,42%{opacity:0}44%,66%{opacity:1}68%,100%{opacity:0}}
+    @keyframes t4{0%,60%{opacity:0}62%,84%{opacity:1}86%,100%{opacity:0}}
+.t0{animation-name:t0}.t1{animation-name:t1}.t2{animation-name:t2}.t3{animation-name:t3}.t4{animation-name:t4}
+    .path{fill:none;stroke-width:3}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:0}.t0,.t1{opacity:1}}
+
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">PgBouncer (transaction mode) multiplexes connections</text>
+  <text class="sub" x="28" y="62">A server connection is lent to a client for one transaction, then returned to the pool.</text>
+  <rect class="box" x="300" y="84" width="170" height="268" rx="10"/>
+  <text class="b" x="385" y="210" text-anchor="middle">PgBouncer</text>
+  <text class="sub" x="385" y="230" text-anchor="middle">pool_mode =</text>
+  <text class="sub" x="385" y="248" text-anchor="middle">transaction</text>
+  <rect class="box" x="592" y="84" width="184" height="268" rx="10"/>
+  <text class="b" x="684" y="108" text-anchor="middle">PostgreSQL</text>
+  <rect class="box" x="28" y="96" width="160" height="32" rx="7"/><text class="t" x="40" y="117">pod 1 connection</text>
+  <rect class="box" x="28" y="138" width="160" height="32" rx="7"/><text class="t" x="40" y="159">pod 2 connection</text>
+  <rect class="box" x="28" y="180" width="160" height="32" rx="7"/><text class="t" x="40" y="201">pod 3 connection</text>
+  <rect class="box" x="28" y="222" width="160" height="32" rx="7"/><text class="t" x="40" y="243">pod 4 connection</text>
+  <rect class="box" x="28" y="264" width="160" height="32" rx="7"/><text class="t" x="40" y="285">pod 5 connection</text>
+  <rect class="box" x="28" y="306" width="160" height="32" rx="7"/><text class="t" x="40" y="327">pod 6 connection</text>
+  <rect class="box" x="608" y="150" width="152" height="48" rx="8"/><text class="t" x="620" y="170">server</text><text class="t" x="620" y="188">connection 1</text>
+  <rect class="box" x="608" y="250" width="152" height="48" rx="8"/><text class="t" x="620" y="270">server</text><text class="t" x="620" y="288">connection 2</text>
+  <g class="a t0">
+    <rect class="pri" x="28" y="138" width="160" height="32" rx="7"/><text class="on" x="40" y="159">pod 2: transaction</text>
+    <path class="path pris" d="M188 154 H300 C 385 154, 385 174, 470 174 H608"/>
+    <rect class="tea" x="608" y="150" width="152" height="48" rx="8"/><text class="on" x="620" y="170">connection 1</text><text class="on" x="620" y="188">busy</text>
+  </g>
+  <g class="a t1">
+    <rect class="pri" x="28" y="264" width="160" height="32" rx="7"/><text class="on" x="40" y="285">pod 5: transaction</text>
+    <path class="path pris" d="M188 280 H300 C 385 280, 385 274, 470 274 H608"/>
+    <rect class="tea" x="608" y="250" width="152" height="48" rx="8"/><text class="on" x="620" y="270">connection 2</text><text class="on" x="620" y="288">busy</text>
+  </g>
+  <g class="a t2">
+    <rect class="pri" x="28" y="96" width="160" height="32" rx="7"/><text class="on" x="40" y="117">pod 1: transaction</text>
+    <path class="path pris" d="M188 112 H300 C 385 112, 385 174, 470 174 H608"/>
+    <rect class="tea" x="608" y="150" width="152" height="48" rx="8"/><text class="on" x="620" y="170">connection 1</text><text class="on" x="620" y="188">busy</text>
+  </g>
+  <g class="a t3">
+    <rect class="pri" x="28" y="306" width="160" height="32" rx="7"/><text class="on" x="40" y="327">pod 6: transaction</text>
+    <path class="path pris" d="M188 322 H300 C 385 322, 385 274, 470 274 H608"/>
+    <rect class="tea" x="608" y="250" width="152" height="48" rx="8"/><text class="on" x="620" y="270">connection 2</text><text class="on" x="620" y="288">busy</text>
+  </g>
+  <g class="a t4">
+    <rect class="pri" x="28" y="180" width="160" height="32" rx="7"/><text class="on" x="40" y="201">pod 3: transaction</text>
+    <path class="path pris" d="M188 196 H300 C 385 196, 385 174, 470 174 H608"/>
+    <rect class="tea" x="608" y="150" width="152" height="48" rx="8"/><text class="on" x="620" y="170">connection 1</text><text class="on" x="620" y="188">busy</text>
+  </g>
+  <text class="sub" x="28" y="382">Idle client connections cost PgBouncer little and hold no PostgreSQL process.</text>
+  <text class="sub" x="28" y="402">Counts are illustrative (e.g. 30 pods × 10 = 300 clients onto about 40 server connections).</text>
+</svg>

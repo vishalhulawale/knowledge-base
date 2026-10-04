@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Partition pruning and instant retention</title>
+  <desc id="d">A partitioned table claim_event holds no rows itself; rows live in monthly partitions for January, February and March 2026 plus a default partition. First, a query for 10 days of February scans only the February partition, in 16 ms; the others are pruned. Second, a query on member_id alone, without the partition key, has to scan all four partitions. Third, retiring January is DETACH PARTITION plus DROP TABLE, about 1 ms plus 9 ms, instead of a DELETE of 200,000 rows that would leave dead tuples for VACUUM.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .b{fill:#0f172a;font-size:14px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#4f46e5;font-weight:600}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.ok{fill:#16a34a}.bad{fill:#dc2626}.warn{fill:#d97706}.mut{fill:#94a3b8}
+    .pris{stroke:#4f46e5}.teas{stroke:#0ea5a4}.oks{stroke:#16a34a}.bads{stroke:#dc2626}.warns{stroke:#d97706}.muts{stroke:#94a3b8}
+    .prit{fill:#4f46e5}.teat{fill:#0f766e}.okt{fill:#16a34a}.badt{fill:#dc2626}.warnt{fill:#b45309}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .onm{fill:#ffffff;font-size:13px}
+    .okbg{fill:#16a34a;fill-opacity:.10;stroke:#16a34a;stroke-width:1.5}
+    .badbg{fill:#dc2626;fill-opacity:.08;stroke:#dc2626;stroke-width:1.5}
+    .pribg{fill:#4f46e5;fill-opacity:.10;stroke:#4f46e5;stroke-width:1.5}
+    .teabg{fill:#0ea5a4;fill-opacity:.12;stroke:#0ea5a4;stroke-width:1.5}
+    .line{stroke:#94a3b8;stroke-width:2;fill:none}
+    .ah{fill:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.b{fill:#f1f5f9}.lbl,.t,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .code{fill:#818cf8}.box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.ok{fill:#4ade80}.bad{fill:#f87171}.warn{fill:#fbbf24}.mut{fill:#64748b}
+      .pris{stroke:#818cf8}.teas{stroke:#2dd4bf}.oks{stroke:#4ade80}.bads{stroke:#f87171}.warns{stroke:#fbbf24}.muts{stroke:#64748b}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+      .on,.onm{fill:#0f172a}
+      .okbg{fill:#4ade80;stroke:#4ade80;fill-opacity:.12}.badbg{fill:#f87171;stroke:#f87171;fill-opacity:.10}
+      .pribg{fill:#818cf8;stroke:#818cf8;fill-opacity:.14}.teabg{fill:#2dd4bf;stroke:#2dd4bf;fill-opacity:.14}
+      .line{stroke:#64748b}.ah{fill:#64748b}
+    }
+    .a{opacity:0;animation:12s infinite steps(1,end)}
+    @keyframes p1{0%,4%{opacity:0}6%,31%{opacity:1}33%,100%{opacity:0}}
+    @keyframes p2{0%,34%{opacity:0}36%,62%{opacity:1}64%,100%{opacity:0}}
+    @keyframes p3{0%,65%{opacity:0}67%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes jan{0%,65%{opacity:1}67%,100%{opacity:0}}
+    @keyframes gone{0%,67%{opacity:0}69%,94%{opacity:1}97%,100%{opacity:0}}
+    .p1{animation-name:p1}.p2{animation-name:p2}.p3{animation-name:p3}.jan{animation-name:jan;opacity:1}.gone{animation-name:gone}
+    .dim{fill:#f8fafc;fill-opacity:.75}
+    @media (prefers-color-scheme: dark){.dim{fill:#1f2430}}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:0}.p1{opacity:1}.jan{opacity:1}}
+
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Partitioning: pruning, fan-out and instant retention</text>
+  <text class="sub" x="28" y="62">claim_event is partitioned BY RANGE (created_at); 600,000 rows over three months plus a default.</text>
+  <rect class="box" x="250" y="80" width="300" height="44" rx="8"/>
+  <text class="b" x="400" y="100" text-anchor="middle">claim_event</text>
+  <text class="sub" x="400" y="117" text-anchor="middle">partitioned table, no rows of its own</text>
+  <path class="line" d="M400 124 L113 160"/>
+  <path class="line" d="M400 124 L299 160"/>
+  <path class="line" d="M400 124 L485 160"/>
+  <path class="line" d="M400 124 L671 160"/>
+  <g class="a jan"><rect class="box" x="28" y="160" width="170" height="56" rx="8"/><text class="b" x="40" y="182">Jan 2026</text><text class="mono" x="40" y="204">claim_event_2026_01</text></g>
+  <g><rect class="box" x="214" y="160" width="170" height="56" rx="8"/><text class="b" x="226" y="182">Feb 2026</text><text class="mono" x="226" y="204">claim_event_2026_02</text></g>
+  <g><rect class="box" x="400" y="160" width="170" height="56" rx="8"/><text class="b" x="412" y="182">Mar 2026</text><text class="mono" x="412" y="204">claim_event_2026_03</text></g>
+  <g><rect class="box" x="586" y="160" width="170" height="56" rx="8"/><text class="b" x="598" y="182">anything else</text><text class="mono" x="598" y="204">claim_event_default</text></g>
+  <g class="a gone"><rect class="box" x="28" y="160" width="170" height="56" rx="8" stroke-dasharray="5 4"/><text class="sub" x="40" y="182">January detached</text><text class="sub" x="40" y="204">and dropped</text></g>
+  <!-- phase 1: pruning -->
+  <g class="a p1">
+    <rect class="pribg" x="214" y="160" width="170" height="56" rx="8" stroke-width="3"/>
+    <rect class="dim" x="27" y="159" width="172" height="58" rx="8"/><rect class="dim" x="399" y="159" width="172" height="58" rx="8"/><rect class="dim" x="585" y="159" width="172" height="58" rx="8"/>
+    <text class="sub" x="113" y="236" text-anchor="middle">pruned</text><text class="sub" x="485" y="236" text-anchor="middle">pruned</text><text class="sub" x="671" y="236" text-anchor="middle">pruned</text>
+    <text class="code" x="28" y="276">WHERE created_at &gt;= '2026-02-10' AND created_at &lt; '2026-02-20'</text>
+    <text class="okt" x="28" y="302" font-size="14" font-weight="700">Only the February partition is scanned: 16 ms.</text>
+  </g>
+  <!-- phase 2: no key -->
+  <g class="a p2">
+    <rect class="none warns" x="28" y="160" width="170" height="56" rx="8" fill="none" stroke-width="3"/>
+    <rect class="none warns" x="214" y="160" width="170" height="56" rx="8" fill="none" stroke-width="3"/>
+    <rect class="none warns" x="400" y="160" width="170" height="56" rx="8" fill="none" stroke-width="3"/>
+    <rect class="none warns" x="586" y="160" width="170" height="56" rx="8" fill="none" stroke-width="3"/>
+    <text class="code" x="28" y="276">WHERE member_id = 42</text>
+    <text class="warnt" x="28" y="302" font-size="14" font-weight="700">No partition key in the query: the plan appends scans of all four partitions.</text>
+  </g>
+  <!-- phase 3: retention -->
+  <g class="a p3">
+    <text class="code" x="28" y="276">ALTER TABLE claim_event DETACH PARTITION claim_event_2026_01;</text>
+    <text class="code" x="28" y="294">DROP TABLE claim_event_2026_01;</text>
+    <text class="okt" x="28" y="320" font-size="14" font-weight="700">About 1 ms + 9 ms. No dead tuples, no VACUUM afterwards.</text>
+    <text class="t" x="28" y="342">A DELETE of the same 200,000 rows would bloat the table and need vacuuming.</text>
+  </g>
+  <text class="sub" x="28" y="398">Demonstrated on PostgreSQL 16. Choose the partition key from the queries and the retention rule.</text>
+</svg>

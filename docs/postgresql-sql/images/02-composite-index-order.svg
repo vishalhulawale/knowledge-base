@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Composite index column order</title>
+  <desc id="d">Leaf entries of an index on (member_id, service_date DESC), sorted by member_id first and by service_date within each member. The query member_id = 4242 ORDER BY service_date DESC LIMIT 5 jumps to the first 4242 entry and reads five neighbouring entries that are already in the right order, so there is no sort: 0.08 ms. The query service_date = '2024-03-01' has no constraint on the leading column, so matching entries are scattered and the whole index has to be scanned: 37 ms.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .k{fill:#0f172a;font-size:14px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#4f46e5;font-weight:600}
+    .cell{fill:#ffffff;stroke:#cbd5e1}
+    .page{fill:none;stroke:#64748b;stroke-width:1.5;stroke-dasharray:5 4}
+    .hi{fill:#4f46e5;fill-opacity:.18;stroke:#4f46e5;stroke-width:2}
+    .mt{fill:none;stroke:#0ea5a4;stroke-width:3}
+    .sweep{fill:#0ea5a4;fill-opacity:.16}
+    .okt{fill:#16a34a;font-size:14px;font-weight:700}
+    .badt{fill:#dc2626;font-size:14px;font-weight:700}
+    .arrow{stroke:#4f46e5;stroke-width:2;fill:none}.ah{fill:#4f46e5}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.k{fill:#f1f5f9}.lbl,.t{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .code{fill:#818cf8}.cell{fill:#111827;stroke:#475569}.page{stroke:#94a3b8}
+      .hi{fill:#818cf8;stroke:#818cf8}.mt{stroke:#2dd4bf}.sweep{fill:#2dd4bf}
+      .okt{fill:#4ade80}.badt{fill:#f87171}.arrow{stroke:#818cf8}.ah{fill:#818cf8}
+    }
+    /* 12 s loop. Query A: 5 entries light up 4-20%; Query B: sweep 50-86%, matches at ~66% and ~81% */
+    .a{opacity:0;animation:12s infinite}
+    @keyframes h1{0%,3%{opacity:0}5%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes h2{0%,7%{opacity:0}9%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes h3{0%,11%{opacity:0}13%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes h4{0%,15%{opacity:0}17%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes h5{0%,19%{opacity:0}21%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes ta{0%,23%{opacity:0}26%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes m1{0%,64%{opacity:0}66%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes m2{0%,79%{opacity:0}81%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes tb{0%,86%{opacity:0}88%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes sw{0%,50%{opacity:0;transform:translateX(0)}51%{opacity:1;transform:translateX(0)}86%{opacity:1;transform:translateX(650px)}88%,100%{opacity:0;transform:translateX(650px)}}
+    .x1{animation-name:h1}.x2{animation-name:h2}.x3{animation-name:h3}.x4{animation-name:h4}.x5{animation-name:h5}
+    .xa{animation-name:ta}.y1{animation-name:m1}.y2{animation-name:m2}.xb{animation-name:tb}
+    .sweep{opacity:0;animation:sw 12s infinite linear}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.sweep{animation:none;opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Composite index (member_id, service_date DESC)</text>
+  <text class="sub" x="28" y="62">Leaf entries are sorted by member_id, then by service_date within each member.</text>
+
+  <!-- Query A -->
+  <text class="code" x="28" y="100">WHERE member_id = 4242 ORDER BY service_date DESC LIMIT 5</text>
+  <path class="arrow" d="M178 110 V140"/><path class="ah" d="M172 138 L178 148 L184 138 Z"/>
+  <text class="sub" x="190" y="132">descend the tree to the first 4242</text>
+
+  <!-- leaf strip: cells x = 40 + 80 i, width 76 -->
+  <g>
+    <rect class="cell" x="40" y="152" width="86" height="56" rx="6"/>
+    <rect class="cell" x="132" y="152" width="86" height="56" rx="6"/>
+    <rect class="cell" x="224" y="152" width="86" height="56" rx="6"/>
+    <rect class="cell" x="316" y="152" width="86" height="56" rx="6"/>
+    <rect class="cell" x="408" y="152" width="86" height="56" rx="6"/>
+    <rect class="cell" x="500" y="152" width="86" height="56" rx="6"/>
+    <rect class="cell" x="592" y="152" width="86" height="56" rx="6"/>
+  </g>
+  <rect class="page" x="34" y="146" width="274" height="68" rx="8"/>
+  <rect class="page" x="312" y="146" width="372" height="68" rx="8"/>
+  <text class="t" x="696" y="186">… 1 M</text>
+
+  <!-- query A highlight (behind text) -->
+  <rect class="hi a x1" x="132" y="152" width="86" height="56" rx="6"/>
+  <rect class="hi a x2" x="224" y="152" width="86" height="56" rx="6"/>
+  <rect class="hi a x3" x="316" y="152" width="86" height="56" rx="6"/>
+  <rect class="hi a x4" x="408" y="152" width="86" height="56" rx="6"/>
+  <rect class="hi a x5" x="500" y="152" width="86" height="56" rx="6"/>
+  <!-- sweep for query B -->
+  <rect class="sweep" x="36" y="150" width="10" height="60" rx="3"/>
+
+  <g text-anchor="middle">
+    <text class="k" x="83" y="176">4241</text><text class="sub" x="83" y="196">2023-11-19</text>
+    <text class="k" x="175" y="176">4242</text><text class="sub" x="175" y="196">2024-09-30</text>
+    <text class="k" x="267" y="176">4242</text><text class="sub" x="267" y="196">2024-07-14</text>
+    <text class="k" x="359" y="176">4242</text><text class="sub" x="359" y="196">2024-03-01</text>
+    <text class="k" x="451" y="176">4242</text><text class="sub" x="451" y="196">2023-12-08</text>
+    <text class="k" x="543" y="176">4242</text><text class="sub" x="543" y="196">2023-06-21</text>
+    <text class="k" x="635" y="176">4243</text><text class="sub" x="635" y="196">2024-03-01</text>
+  </g>
+  <text class="sub" x="40" y="232">leaf page</text><text class="sub" x="316" y="232">next leaf page (linked)</text>
+
+  <g class="a xa">
+    <text class="okt" x="28" y="258">Query A: 5 neighbouring entries, already in order.</text>
+    <text class="t" x="28" y="278">Index Scan, no sort, stops after 5 rows: 0.08 ms</text>
+  </g>
+
+  <!-- Query B -->
+  <text class="code" x="28" y="314">WHERE service_date = '2024-03-01'</text>
+  <rect class="mt a y1" x="316" y="152" width="86" height="56" rx="6"/>
+  <rect class="mt a y2" x="592" y="152" width="86" height="56" rx="6"/>
+  <text class="sub" x="28" y="336">The leading column isn't constrained, so matching dates sit in every member's range.</text>
+  <g class="a xb">
+    <text class="badt" x="28" y="362">Query B: must read the whole composite index: 37 ms</text>
+  </g>
+  <text class="sub" x="28" y="396">Measured on 1 M rows, PostgreSQL 16. Equality columns first, then the range or sort column.</text>
+</svg>

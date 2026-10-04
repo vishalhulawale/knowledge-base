@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">GROUP BY versus a window function</title>
+  <desc id="d">Asha's three claims, 120, 80 and 200, in service-date order. On the left, GROUP BY member_id collapses them into one row with a sum of 400. On the right, sum(amount) OVER (PARTITION BY member_id ORDER BY service_date) keeps all three rows; the window frame grows from the first row down to the current row, giving running totals of 120, 200 and 400.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .th{fill:#64748b;font-size:13px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#4f46e5;font-weight:600}
+    .panel{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}
+    .on{fill:#fff;font-size:14px;font-weight:700}
+    .arrow{stroke:#64748b;stroke-width:2;fill:none}
+    .ah{fill:#64748b}
+    .frame{fill:#0ea5a4;fill-opacity:.12;stroke:#0ea5a4;stroke-width:2}
+    .run{fill:#0f766e;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t{fill:#e2e8f0}.sub,.th{fill:#94a3b8}
+      .code{fill:#818cf8}.panel{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.on{fill:#0f172a}
+      .arrow{stroke:#94a3b8}.ah{fill:#94a3b8}
+      .frame{fill:#2dd4bf;stroke:#2dd4bf}.run{fill:#5eead4}
+    }
+    /* 10 s loop: frame covers row 1 (10%), rows 1-2 (35%), rows 1-3 (60%), hold, reset */
+    .f1,.f2,.f3,.r1,.r2,.r3{opacity:0;animation:10s infinite steps(1,end)}
+    .f1{animation-name:f1}.f2{animation-name:f2}.f3{animation-name:f3}
+    .r1{animation-name:r1}.r2{animation-name:r2}.r3{animation-name:f3}
+    @keyframes f1{0%{opacity:0}10%{opacity:1}35%,100%{opacity:0}}
+    @keyframes f2{0%{opacity:0}35%{opacity:1}60%,100%{opacity:0}}
+    @keyframes f3{0%{opacity:0}60%{opacity:1}94%,100%{opacity:0}}
+    @keyframes r1{0%{opacity:0}10%{opacity:1}94%,100%{opacity:0}}
+    @keyframes r2{0%{opacity:0}35%{opacity:1}94%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){.f1,.f2{animation:none;opacity:0}.f3,.r1,.r2,.r3{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">GROUP BY collapses rows; a window keeps them</text>
+  <text class="sub" x="28" y="62">Asha's claims (member 1) in service-date order.</text>
+
+  <!-- left: GROUP BY -->
+  <rect class="panel" x="24" y="80" width="296" height="250" rx="10"/>
+  <text class="code" x="40" y="106">sum(amount)</text>
+  <text class="code" x="40" y="124">… GROUP BY member_id</text>
+  <g class="t">
+    <text x="48" y="160">101</text><text x="150" y="160">120.00</text>
+    <text x="48" y="184">102</text><text x="150" y="184">80.00</text>
+    <text x="48" y="208">103</text><text x="150" y="208">200.00</text>
+  </g>
+  <path class="arrow" d="M172 220 V246"/><path class="ah" d="M166 244 L172 254 L178 244 Z"/>
+  <rect class="pri" x="48" y="260" width="248" height="36" rx="8"/>
+  <text class="on" x="172" y="283" text-anchor="middle">member 1 · sum 400.00</text>
+  <text class="sub" x="40" y="318">3 rows in, 1 row out</text>
+
+  <!-- right: window -->
+  <rect class="panel" x="336" y="80" width="440" height="250" rx="10"/>
+  <text class="code" x="352" y="106">sum(amount) OVER (</text>
+  <text class="code" x="368" y="124">PARTITION BY member_id ORDER BY service_date)</text>
+  <g class="th"><text x="364" y="156">id</text><text x="420" y="156">service_date</text><text x="550" y="156">amount</text><text x="650" y="156">running</text></g>
+  <!-- frames -->
+  <rect class="frame f1" x="352" y="166" width="408" height="32" rx="6"/>
+  <rect class="frame f2" x="352" y="166" width="408" height="64" rx="6"/>
+  <rect class="frame f3" x="352" y="166" width="408" height="96" rx="6"/>
+  <g class="t">
+    <text x="364" y="187">101</text><text x="420" y="187">2026-01-05</text><text x="550" y="187">120.00</text>
+    <text x="364" y="219">102</text><text x="420" y="219">2026-01-20</text><text x="550" y="219">80.00</text>
+    <text x="364" y="251">103</text><text x="420" y="251">2026-02-11</text><text x="550" y="251">200.00</text>
+  </g>
+  <text class="run r1" x="650" y="187">120.00</text>
+  <text class="run r2" x="650" y="219">200.00</text>
+  <text class="run r3" x="650" y="251">400.00</text>
+  <text class="sub" x="352" y="292">The frame runs from the partition's first row to</text>
+  <text class="sub" x="352" y="310">the current row. 3 rows in, 3 rows out.</text>
+
+  <text class="sub" x="28" y="358">Default frame with ORDER BY: RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW.</text>
+  <text class="sub" x="28" y="378">Rows with the same service_date would be peers and share one running total.</text>
+</svg>

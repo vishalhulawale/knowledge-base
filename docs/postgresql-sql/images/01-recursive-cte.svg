@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">How a recursive CTE walks a hierarchy</title>
+  <desc id="d">The anchor query selects Asha, who has no manager, at depth 0. Pass 1 joins member to the previous pass's rows and finds Ben and Chen, whose manager is Asha, at depth 1. Pass 2 finds Dev and Eva, whose manager is Ben, at depth 2. Pass 3 finds nobody who reports to Dev or Eva, returns no rows, and the recursion stops. The org chart grows level by level as each pass runs.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#4f46e5}
+    .panel{fill:#ffffff;stroke:#cbd5e1}
+    .n0{fill:#4f46e5}.n1{fill:#0ea5a4}.n2{fill:#16a34a}
+    .on{fill:#fff;font-size:14px;font-weight:700}
+    .edge{stroke:#94a3b8;stroke-width:2}
+    .stop{fill:#dc2626;font-size:14px;font-weight:700}
+    .res{fill:#0f172a;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.res{fill:#f1f5f9}.lbl,.t{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .code{fill:#818cf8}.panel{fill:#111827;stroke:#475569}
+      .n0{fill:#818cf8}.n1{fill:#2dd4bf}.n2{fill:#4ade80}.on{fill:#0f172a}
+      .edge{stroke:#64748b}.stop{fill:#f87171}
+    }
+    /* 10 s loop: anchor 4%, pass 1 at 26%, pass 2 at 48%, pass 3 (stop) at 70%, hold, reset at 94% */
+    .s0,.s1,.s2,.s3{opacity:0;animation:10s infinite ease-out}
+    .s0{animation-name:a0}.s1{animation-name:a1}.s2{animation-name:a2}.s3{animation-name:a3}
+    @keyframes a0{0%,2%{opacity:0}6%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes a1{0%,24%{opacity:0}28%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes a2{0%,46%{opacity:0}50%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes a3{0%,68%{opacity:0}72%,94%{opacity:1}98%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){.s0,.s1,.s2,.s3{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">WITH RECURSIVE: each pass adds the next level</text>
+  <text class="sub" x="28" y="62">Each pass joins member to the rows the previous pass produced (the working table).</text>
+
+  <!-- tree -->
+  <text class="sub" x="40" y="124">depth 0</text>
+  <text class="sub" x="40" y="214">depth 1</text>
+  <text class="sub" x="40" y="304">depth 2</text>
+  <g class="s1"><line class="edge" x1="250" y1="134" x2="180" y2="192"/><line class="edge" x1="250" y1="134" x2="320" y2="192"/></g>
+  <g class="s2"><line class="edge" x1="180" y1="224" x2="140" y2="282"/><line class="edge" x1="180" y1="224" x2="240" y2="282"/></g>
+  <g class="s0"><rect class="n0" x="202" y="100" width="96" height="34" rx="8"/><text class="on" x="250" y="122" text-anchor="middle">Asha</text></g>
+  <g class="s1">
+    <rect class="n1" x="132" y="190" width="96" height="34" rx="8"/><text class="on" x="180" y="212" text-anchor="middle">Ben</text>
+    <rect class="n1" x="272" y="190" width="96" height="34" rx="8"/><text class="on" x="320" y="212" text-anchor="middle">Chen</text>
+  </g>
+  <g class="s2">
+    <rect class="n2" x="92" y="280" width="96" height="34" rx="8"/><text class="on" x="140" y="302" text-anchor="middle">Dev</text>
+    <rect class="n2" x="192" y="280" width="96" height="34" rx="8"/><text class="on" x="240" y="302" text-anchor="middle">Eva</text>
+  </g>
+
+  <!-- log -->
+  <rect class="panel" x="408" y="84" width="368" height="260" rx="10"/>
+  <g class="s0">
+    <text class="lbl" x="424" y="112">Anchor</text>
+    <text class="code" x="500" y="112">manager_id IS NULL</text>
+    <text class="res" x="500" y="134">→ Asha (id 1)</text>
+  </g>
+  <g class="s1">
+    <text class="lbl" x="424" y="172">Pass 1</text>
+    <text class="code" x="500" y="172">manager_id = 1</text>
+    <text class="res" x="500" y="194">→ Ben (2), Chen (3)</text>
+  </g>
+  <g class="s2">
+    <text class="lbl" x="424" y="232">Pass 2</text>
+    <text class="code" x="500" y="232">manager_id IN (2, 3)</text>
+    <text class="res" x="500" y="254">→ Dev (4), Eva (5)</text>
+  </g>
+  <g class="s3">
+    <text class="lbl" x="424" y="292">Pass 3</text>
+    <text class="code" x="500" y="292">manager_id IN (4, 5)</text>
+    <text class="stop" x="500" y="314">→ no rows: recursion stops</text>
+  </g>
+
+  <text class="sub" x="28" y="372">UNION ALL appends every pass to the result: Asha 0; Ben 1; Chen 1; Dev 2; Eva 2.</text>
+</svg>

@@ -72,6 +72,9 @@ The planner estimates how many rows each condition matches using **statistics** 
 - Indexing a low-cardinality column (`status`, `gender`, boolean flags) alone rarely helps, unless queries target the **rare** values, in which case a **partial index** on those values is smaller and better.
 - **Stale or poor statistics** produce bad plans: estimates of 10 rows when 500,000 come back lead to nested loops over huge inputs. Fix with `ANALYZE`, a higher statistics target for skewed columns, or **extended statistics** (`CREATE STATISTICS … (dependencies)`) for correlated columns like `city` and `zip`.
 
+![Animation: for status PENDING the index points to a few scattered heap pages that are read directly, while for status PAID matching rows sit on almost every page, so the table is read once from start to end](images/02-selectivity-seq-vs-index.svg){ loading=lazy }
+*Watch the two access patterns: a few random reads win for the rare value, while for 90 % of rows one sequential pass is cheaper than following the index to nearly every page.*
+
 ### Composite indexes and column order
 
 An index on `(a, b, c)` is sorted by `a`, then `b` within `a`, then `c`.
@@ -80,6 +83,9 @@ An index on `(a, b, c)` is sorted by `a`, then `b` within `a`, then `c`.
 - Not efficient for: `b = ?` or `c = ?` alone (the leading column isn't constrained, so PostgreSQL 16 must scan the whole index, as measured: 37 ms vs 0.08 ms). PostgreSQL 18 adds **skip scan**, which helps when the leading column has few distinct values.
 - **Rule of thumb:** equality columns first, then the range or sort column. Put the column you `ORDER BY` last in the matching direction to avoid a sort, which makes `ORDER BY … LIMIT` queries stop after N rows.
 - One composite index often replaces several single-column ones; don't create `(a)` if you have `(a, b)`.
+
+![Animation: leaf entries of an index on member_id then service_date; the query for member 4242 ordered by date reads five neighbouring entries and stops, while a query on service_date alone sweeps the whole index to find scattered matches](images/02-composite-index-order.svg){ loading=lazy }
+*Notice that one member's entries sit next to each other in date order, so `ORDER BY … LIMIT 5` reads five entries. Matching dates are spread across every member's range, so filtering on `service_date` alone scans the whole index.*
 
 ### Covering indexes and index-only scans
 

@@ -48,6 +48,9 @@ sequenceDiagram
 
 A **snapshot** records which transactions were in progress when it was taken; a tuple is visible if its `xmin` committed before the snapshot and its `xmax` didn't. Commit status lives in the commit log (`pg_xact`), and hint bits on tuples cache it.
 
+![Animation: on heap page 0, transaction 1318 updates a row, so version 1 at ctid (0,1) gets xmax 1318 and version 2 appears at ctid (0,142); an older snapshot keeps reading version 1, a new snapshot after the commit reads version 2, and VACUUM finally turns the dead version into reusable free space](images/04-mvcc-row-versions.svg){ loading=lazy }
+*Watch the two row versions on the page: the update never overwrites version 1, it only stamps its `xmax`. Each reader follows its own snapshot, and the dead version stays until VACUUM removes it.*
+
 ### Dead tuples, VACUUM and bloat
 
 | Measured on a 100,000-row table (autovacuum disabled) | Result |
@@ -110,6 +113,9 @@ sequenceDiagram
 *Notice that the SELECTs aren't blocked by the long transaction but by the ALTER waiting in the queue. Demonstrated: with a `FOR UPDATE` transaction open, an `ALTER TABLE` waited, a plain `SELECT count(*)` queued behind it for 2.5 s, and both resumed when the ALTER hit its 3 s `lock_timeout`.*
 
 Rule: every DDL migration starts with `SET lock_timeout = '…'` (a few seconds) and is retried, rather than waiting indefinitely and taking the table down.
+
+![Animation: a long transaction holds a lock on rx2, an ALTER TABLE queues for ACCESS EXCLUSIVE, two SELECTs queue behind the ALTER, then the ALTER's 3 second lock_timeout expires, it is cancelled with 55P03 and the SELECTs are granted](images/04-lock-queue.svg){ loading=lazy }
+*Notice that the SELECTs would be compatible with the long transaction. What stops them is the exclusive request queued ahead of them, until `lock_timeout` cancels it.*
 
 ### Deadlocks
 

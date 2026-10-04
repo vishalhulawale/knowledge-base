@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 410" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Lost update: read, compute in Java, write back</title>
+  <desc id="d">Sessions A and B both read balance 100. A writes 90 and commits, then B writes 90 too, computed from its stale read. Under READ COMMITTED B's commit succeeds and the final balance is 90, so one of the two debits of 10 is lost. Under REPEATABLE READ B's update fails with could not serialize access due to concurrent update (SQLSTATE 40001); retrying the whole transaction reads 90 and writes 80. A single UPDATE balance = balance - 10 is also safe at READ COMMITTED and gives 80.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .b{fill:#0f172a;font-size:14px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#4f46e5;font-weight:600}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.ok{fill:#16a34a}.bad{fill:#dc2626}.warn{fill:#d97706}.mut{fill:#94a3b8}
+    .pris{stroke:#4f46e5}.teas{stroke:#0ea5a4}.oks{stroke:#16a34a}.bads{stroke:#dc2626}.warns{stroke:#d97706}.muts{stroke:#94a3b8}
+    .prit{fill:#4f46e5}.teat{fill:#0f766e}.okt{fill:#16a34a}.badt{fill:#dc2626}.warnt{fill:#b45309}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .onm{fill:#ffffff;font-size:13px}
+    .okbg{fill:#16a34a;fill-opacity:.10;stroke:#16a34a;stroke-width:1.5}
+    .badbg{fill:#dc2626;fill-opacity:.08;stroke:#dc2626;stroke-width:1.5}
+    .pribg{fill:#4f46e5;fill-opacity:.10;stroke:#4f46e5;stroke-width:1.5}
+    .teabg{fill:#0ea5a4;fill-opacity:.12;stroke:#0ea5a4;stroke-width:1.5}
+    .line{stroke:#94a3b8;stroke-width:2;fill:none}
+    .ah{fill:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.b{fill:#f1f5f9}.lbl,.t,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .code{fill:#818cf8}.box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.ok{fill:#4ade80}.bad{fill:#f87171}.warn{fill:#fbbf24}.mut{fill:#64748b}
+      .pris{stroke:#818cf8}.teas{stroke:#2dd4bf}.oks{stroke:#4ade80}.bads{stroke:#f87171}.warns{stroke:#fbbf24}.muts{stroke:#64748b}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+      .on,.onm{fill:#0f172a}
+      .okbg{fill:#4ade80;stroke:#4ade80;fill-opacity:.12}.badbg{fill:#f87171;stroke:#f87171;fill-opacity:.10}
+      .pribg{fill:#818cf8;stroke:#818cf8;fill-opacity:.14}.teabg{fill:#2dd4bf;stroke:#2dd4bf;fill-opacity:.14}
+      .line{stroke:#64748b}.ah{fill:#64748b}
+    }
+    .a{opacity:0;animation:12s infinite}
+    @keyframes k1{0%,4%{opacity:0}6%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes k2{0%,14%{opacity:0}16%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes k3{0%,24%{opacity:0}26%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes k4{0%,34%{opacity:0}36%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes k5{0%,46%{opacity:0}48%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes k6{0%,56%{opacity:0}58%,94%{opacity:1}97%,100%{opacity:0}}
+    .k1{animation-name:k1}.k2{animation-name:k2}.k3{animation-name:k3}.k4{animation-name:k4}.k5{animation-name:k5}.k6{animation-name:k6}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="408" rx="14"/>
+  <text class="h" x="28" y="40">Lost update: read, compute in Java, write back</text>
+  <text class="sub" x="28" y="62">Each session debits 10 from a balance of 100. The correct final balance is 80.</text>
+  <text class="lbl" x="28" y="112">Session A</text><text class="sub" x="28" y="130">debit 10</text>
+  <text class="lbl" x="28" y="172">Session B</text><text class="sub" x="28" y="190">debit 10</text>
+  <line class="line" x1="124" y1="115" x2="770" y2="115" stroke-dasharray="3 5"/>
+  <line class="line" x1="124" y1="175" x2="770" y2="175" stroke-dasharray="3 5"/>
+  <text class="sub" x="700" y="84">time →</text>
+  <g class="a k1"><rect class="box" x="130" y="92" width="150" height="46" rx="8"/><text class="mono" x="140" y="111">SELECT balance</text><text class="b" x="140" y="130">→ 100</text></g>
+  <g class="a k2"><rect class="box" x="290" y="152" width="150" height="46" rx="8"/><text class="mono" x="300" y="171">SELECT balance</text><text class="b" x="300" y="190">→ 100</text></g>
+  <g class="a k3"><rect class="pribg" x="450" y="92" width="150" height="46" rx="8"/><text class="mono" x="460" y="111">UPDATE … = 90</text><text class="b" x="460" y="130">COMMIT</text></g>
+  <g class="a k4"><rect class="badbg" x="610" y="152" width="150" height="46" rx="8"/><text class="mono" x="620" y="171">UPDATE … = 90</text><text class="b" x="620" y="190">100 − 10 (stale)</text></g>
+  <text class="lbl" x="28" y="230">balance</text>
+  <g class="t"><text x="140" y="230">100</text><text x="300" y="230">100</text></g>
+  <g class="a k3"><text class="b" x="460" y="230">90</text></g>
+  <g class="a k4"><text class="b" x="620" y="230">90, or B fails</text></g>
+  <g class="a k5">
+    <rect class="badbg" x="28" y="256" width="364" height="104" rx="10"/>
+    <text class="badt" x="44" y="282" font-size="15" font-weight="700">READ COMMITTED (default)</text>
+    <text class="t" x="44" y="306">B's commit succeeds. Final balance 90:</text>
+    <text class="t" x="44" y="326">one debit silently lost.</text>
+  </g>
+  <g class="a k6">
+    <rect class="okbg" x="408" y="256" width="364" height="104" rx="10"/>
+    <text class="okt" x="424" y="282" font-size="15" font-weight="700">REPEATABLE READ</text>
+    <text class="t" x="424" y="306">B fails with 40001 (concurrent update).</text>
+    <text class="t" x="424" y="326">Retrying the whole transaction reads 90</text>
+    <text class="t" x="424" y="346">and writes 80.</text>
+  </g>
+  <text class="sub" x="28" y="390">Also safe at READ COMMITTED: a single UPDATE … SET balance = balance - 10 (final 80).</text>
+</svg>
