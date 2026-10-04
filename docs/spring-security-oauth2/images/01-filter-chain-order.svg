@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Two requests through the security filter chain</title>
+  <desc id="d">A stack of ten security filters in their fixed order: SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, CsrfFilter, LogoutFilter, the authentication filter (here BearerTokenAuthenticationFilter), RequestCacheAwareFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter and AuthorizationFilter. Request A carries a valid JWT to /api/claims, passes all ten filters and reaches the controller with 200 OK. Request B carries an expired JWT to a permitAll URL. It is rejected at the authentication filter, step 6, with 401 and a WWW-Authenticate header, so it never reaches AuthorizationFilter at step 10, where permitAll would be evaluated.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .row{fill:#ffffff;stroke:#cbd5e1}
+    .rt{fill:#334155;font-size:14px}
+    .num{fill:#64748b;font-size:13px;font-weight:700}
+    .dA{fill:#4f46e5}.dB{fill:#d97706}
+    .okbox{fill:#16a34a}.badbox{fill:#dc2626}
+    .on{fill:#fff;font-size:14px;font-weight:700}
+    .badline{fill:none;stroke:#dc2626;stroke-width:2.5}
+    .bt{fill:#dc2626;font-size:13px;font-weight:700}
+    .tealt{fill:#0f766e;font-size:13px;font-weight:700}
+    .ctl{fill:#ffffff;stroke:#16a34a;stroke-width:2}
+    .ctlt{fill:#334155;font-size:14px;font-weight:600}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t,.rt,.ctlt{fill:#e2e8f0}.sub,.num{fill:#94a3b8}
+      .row{fill:#111827;stroke:#475569}
+      .dA{fill:#818cf8}.dB{fill:#fbbf24}
+      .okbox{fill:#4ade80}.badbox{fill:#f87171}.on{fill:#0f172a}
+      .badline{stroke:#f87171}.bt{fill:#f87171}.tealt{fill:#5eead4}
+      .ctl{fill:#111827;stroke:#4ade80}
+    }
+    /* 12 s loop: A descends to the controller, then B descends and stops at step 6 */
+    .mA{animation:mA 12s infinite linear}
+    .mB{animation:mB 12s infinite linear;opacity:0}
+    @keyframes mA{0%,4%{transform:translateY(0);opacity:1}34%,92%{transform:translateY(327px);opacity:1}96%,100%{transform:translateY(327px);opacity:0}}
+    @keyframes mB{0%,40%{transform:translateY(0);opacity:0}41%{transform:translateY(0);opacity:1}56%,92%{transform:translateY(175px);opacity:1}96%,100%{transform:translateY(175px);opacity:0}}
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes s1{0%,34%{opacity:0}36%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s2{0%,56%{opacity:0}58%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s3{0%,64%{opacity:0}66%,92%{opacity:1}96%,100%{opacity:0}}
+    .k1{animation-name:s1}.k2{animation-name:s2}.k3{animation-name:s3}
+    @media (prefers-reduced-motion: reduce){
+      .mA{animation:none;transform:translateY(327px)}
+      .mB{animation:none;opacity:1;transform:translateY(175px)}
+      .a{animation:none;opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="478" rx="14"/>
+  <text class="h" x="28" y="38">Same chain, fixed order: authentication runs before permitAll</text>
+
+  <!-- request legends -->
+  <circle class="dA" cx="36" cy="100" r="8"/>
+  <text class="lbl" x="52" y="105">Request A</text>
+  <text class="t" x="28" y="128">valid JWT</text>
+  <text class="t" x="28" y="146">GET /api/claims</text>
+
+  <circle class="dB" cx="608" cy="100" r="8"/>
+  <text class="lbl" x="624" y="105">Request B</text>
+  <text class="t" x="600" y="128">expired JWT</text>
+  <text class="t" x="600" y="146">GET /api/public/info</text>
+  <text class="t" x="600" y="164">(rule: permitAll)</text>
+
+  <!-- filter rows: y = 92 + 30i, height 26 -->
+  <g>
+    <rect class="row" x="200" y="92" width="360" height="26" rx="6"/>
+    <rect class="row" x="200" y="122" width="360" height="26" rx="6"/>
+    <rect class="row" x="200" y="152" width="360" height="26" rx="6"/>
+    <rect class="row" x="200" y="182" width="360" height="26" rx="6"/>
+    <rect class="row" x="200" y="212" width="360" height="26" rx="6"/>
+    <rect class="row" x="200" y="242" width="360" height="26" rx="6"/>
+    <rect class="row" x="200" y="272" width="360" height="26" rx="6"/>
+    <rect class="row" x="200" y="302" width="360" height="26" rx="6"/>
+    <rect class="row" x="200" y="332" width="360" height="26" rx="6"/>
+    <rect class="row" x="200" y="362" width="360" height="26" rx="6"/>
+  </g>
+  <g>
+    <text class="num" x="212" y="110">1</text><text class="rt" x="238" y="110">SecurityContextHolderFilter</text>
+    <text class="num" x="212" y="140">2</text><text class="rt" x="238" y="140">HeaderWriterFilter</text>
+    <text class="num" x="212" y="170">3</text><text class="rt" x="238" y="170">CorsFilter</text>
+    <text class="num" x="212" y="200">4</text><text class="rt" x="238" y="200">CsrfFilter</text>
+    <text class="num" x="212" y="230">5</text><text class="rt" x="238" y="230">LogoutFilter</text>
+    <text class="num" x="212" y="260">6</text><text class="rt" x="238" y="260">BearerTokenAuthenticationFilter</text>
+    <text class="num" x="212" y="290">7</text><text class="rt" x="238" y="290">RequestCacheAwareFilter</text>
+    <text class="num" x="212" y="320">8</text><text class="rt" x="238" y="320">AnonymousAuthenticationFilter</text>
+    <text class="num" x="212" y="350">9</text><text class="rt" x="238" y="350">ExceptionTranslationFilter</text>
+    <text class="num" x="208" y="380">10</text><text class="rt" x="238" y="380">AuthorizationFilter</text>
+  </g>
+  <!-- controller -->
+  <rect class="ctl" x="200" y="394" width="360" height="28" rx="8"/>
+  <text class="ctlt" x="380" y="413" text-anchor="middle">DispatcherServlet and controller</text>
+
+  <!-- A reaches the controller -->
+  <g class="a k1">
+    <rect class="okbox" x="28" y="393" width="118" height="30" rx="8"/>
+    <text class="on" x="87" y="413" text-anchor="middle">200 OK</text>
+  </g>
+  <!-- B rejected at step 6 -->
+  <g class="a k2">
+    <rect class="badline" x="198" y="240" width="364" height="30" rx="7"/>
+    <rect class="badbox" x="600" y="241" width="96" height="28" rx="8"/>
+    <text class="on" x="648" y="260" text-anchor="middle">401</text>
+    <text class="bt" x="600" y="288">WWW-Authenticate:</text>
+    <text class="bt" x="600" y="305">Bearer invalid_token</text>
+  </g>
+  <g class="a k3">
+    <text class="tealt" x="600" y="370">permitAll is checked</text>
+    <text class="tealt" x="600" y="387">only here, at step 10.</text>
+    <text class="tealt" x="600" y="404">B never gets this far.</text>
+  </g>
+
+  <!-- moving requests: start centre y=80 -->
+  <g class="mA"><circle class="dA" cx="182" cy="80" r="9"/></g>
+  <g class="mB"><circle class="dB" cx="578" cy="80" r="9"/></g>
+
+  <text class="sub" x="28" y="448">Step 6 shows the bearer-token filter. Form login and basic auth filters sit in the same slot.</text>
+  <text class="sub" x="28" y="466">Without any Authorization header, B would pass step 6, reach step 10 and get 200.</text>
+</svg>

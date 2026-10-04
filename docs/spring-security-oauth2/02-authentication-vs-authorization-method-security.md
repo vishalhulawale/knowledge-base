@@ -156,6 +156,9 @@ Spring gives three ways to write object-level rules, from simplest to heaviest:
 2. **A bean reference**: `@PreAuthorize("@memberAuthz.canView(authentication, #memberId)")`. Plain Java, unit-testable, the recommended default.
 3. `hasPermission(#id, 'Prescription', 'read')` with a custom **`PermissionEvaluator`**, or Spring Security ACL for per-object ACL tables. Powerful, but heavy to operate.
 
+![Three requests checked against scope, role and ownership: a member reading their own prescriptions passes all three, the same member reading another member's prescriptions passes scope and role but fails ownership, and an app granted only claims.read fails at scope](images/02-three-authz-layers.svg){ loading=lazy }
+*Notice row 2: a valid scope and the right role still allow an IDOR. Only the object-level check stops it.*
+
 ## In practice: code & configuration
 
 ### Baseline: both layers on
@@ -277,6 +280,9 @@ class PrescriptionService {
     ```
 
 The rule is the same as for `@Transactional` and `@Cacheable`: the advice lives in the proxy, so only calls that come **from outside the bean** are intercepted. If you truly need to secure internal calls, switch method security to AspectJ weaving (`@EnableMethodSecurity(mode = AdviceMode.ASPECTJ)`), but restructuring the beans is almost always simpler.
+
+![Animation: a call to approve from another bean crosses the Spring proxy and is checked, while a call to approveAll crosses the proxy with no rule and then calls this.approve inside the target object, skipping the @PreAuthorize check](images/02-proxy-self-invocation.svg){ loading=lazy }
+*Watch the second call: `this.approve(id)` stays inside the target object, so the interceptor in the proxy never sees it.*
 
 ### Meta-annotations keep rules consistent
 

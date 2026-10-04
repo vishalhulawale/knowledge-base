@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Why a stolen authorization code is useless with PKCE</title>
+  <desc id="d">The client app keeps a random code_verifier in memory and sends only code_challenge, the SHA-256 hash of the verifier, through the browser to the authorization server, which stores it. The authorization code comes back through the browser, where an attacker copies it. The attacker posts the code to the token endpoint without the verifier and gets invalid_grant, no tokens. The real client posts the code together with the verifier over the back channel; the server hashes the verifier, it matches the stored challenge, and the client receives the access and refresh tokens.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .t{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .front{fill:#d97706;opacity:.10}.back{fill:#0ea5a4;opacity:.10}
+    .bandt{fill:#b45309;font-size:13px;font-weight:700}
+    .bandt2{fill:#0f766e;font-size:13px;font-weight:700}
+    .atk{fill:#ffffff;stroke:#dc2626;stroke-width:2}
+    .atkt{fill:#dc2626;font-size:14px;font-weight:700}
+    .cV{fill:#4f46e5}.cC{fill:#0ea5a4}.cCode{fill:#d97706}.cTok{fill:#16a34a}.cBad{fill:#dc2626}
+    .on{fill:#fff;font-size:13px;font-weight:700}
+    .bad{fill:#dc2626;font-size:13px;font-weight:700}
+    .ok{fill:#16a34a;font-size:13px;font-weight:700}
+    .tealt{fill:#0f766e;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .front{fill:#fbbf24;opacity:.10}.back{fill:#2dd4bf;opacity:.10}
+      .bandt{fill:#fbbf24}.bandt2{fill:#5eead4}
+      .atk{fill:#111827;stroke:#f87171}.atkt{fill:#f87171}
+      .cV{fill:#818cf8}.cC{fill:#2dd4bf}.cCode{fill:#fbbf24}.cTok{fill:#4ade80}.cBad{fill:#f87171}
+      .on{fill:#0f172a}.bad{fill:#f87171}.ok{fill:#4ade80}.tealt{fill:#5eead4}
+    }
+    /* 12 s loop */
+    .mv{opacity:0;animation:12s infinite ease-in-out}
+    @keyframes mChal{0%,4%{transform:translate(0,0);opacity:0}6%{transform:translate(0,0);opacity:1}20%{transform:translate(300px,0);opacity:1}23%,100%{transform:translate(300px,0);opacity:0}}
+    @keyframes mCode{0%,26%{transform:translate(0,0);opacity:0}28%{transform:translate(0,0);opacity:1}44%,92%{transform:translate(-344px,0);opacity:1}96%,100%{transform:translate(-344px,0);opacity:0}}
+    @keyframes mCopy{0%,35%{transform:translate(0,0);opacity:0}36%{transform:translate(0,0);opacity:1}44%,48%{transform:translate(0,60px);opacity:1}58%{transform:translate(112px,111px);opacity:1}61%,100%{transform:translate(112px,111px);opacity:0}}
+    @keyframes mReq{0%,63%{transform:translate(0,0);opacity:0}65%{transform:translate(0,0);opacity:1}76%{transform:translate(296px,0);opacity:1}79%,100%{transform:translate(296px,0);opacity:0}}
+    @keyframes mTok{0%,79%{transform:translate(0,0);opacity:0}81%{transform:translate(0,0);opacity:1}88%,92%{transform:translate(-256px,0);opacity:1}96%,100%{transform:translate(-256px,0);opacity:0}}
+    .kChal{animation-name:mChal}.kCode{animation-name:mCode}.kCopy{animation-name:mCopy}.kReq{animation-name:mReq}.kTok{animation-name:mTok}
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes s1{0%,21%{opacity:0}23%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s2{0%,59%{opacity:0}61%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s3{0%,76%{opacity:0}78%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s4{0%,43%{opacity:0}45%,92%{opacity:1}96%,100%{opacity:0}}
+    .k1{animation-name:s1}.k2{animation-name:s2}.k3{animation-name:s3}.k4{animation-name:s4}
+    @media (prefers-reduced-motion: reduce){
+      .mv{animation:none;opacity:0}
+      .kCode{opacity:1;transform:translate(-344px,0)}
+      .kTok{opacity:1;transform:translate(-256px,0)}
+      .a{animation:none;opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="428" rx="14"/>
+  <text class="h" x="28" y="38">PKCE: the code travels through the browser, the proof does not</text>
+
+  <!-- channels -->
+  <rect class="front" x="182" y="92" width="436" height="100" rx="8"/>
+  <text class="bandt" x="194" y="112">Front channel: via the browser (observable)</text>
+  <rect class="back" x="182" y="256" width="436" height="104" rx="8"/>
+  <text class="bandt2" x="194" y="276">Back channel: direct HTTPS POST /token</text>
+
+  <!-- client -->
+  <rect class="box" x="28" y="76" width="150" height="300" rx="10"/>
+  <text class="lbl" x="103" y="102" text-anchor="middle">Client app</text>
+  <rect class="cV" x="40" y="206" width="126" height="28" rx="7"/>
+  <text class="on" x="103" y="225" text-anchor="middle">code_verifier</text>
+  <text class="sub" x="103" y="252" text-anchor="middle">random, kept in</text>
+  <text class="sub" x="103" y="268" text-anchor="middle">memory or session</text>
+
+  <!-- authorization server -->
+  <rect class="box" x="622" y="76" width="150" height="300" rx="10"/>
+  <text class="lbl" x="697" y="102" text-anchor="middle">Authorization</text>
+  <text class="lbl" x="697" y="120" text-anchor="middle">server</text>
+  <g class="a k1">
+    <text class="tealt" x="634" y="150">stores challenge</text>
+    <text class="sub" x="634" y="167">with the code</text>
+  </g>
+  <g class="a k2">
+    <text class="bad" x="634" y="288">attacker: no</text>
+    <text class="bad" x="634" y="304">verifier, so</text>
+    <text class="bad" x="634" y="320">invalid_grant</text>
+  </g>
+  <g class="a k3">
+    <text class="ok" x="634" y="344">client: SHA256 of</text>
+    <text class="ok" x="634" y="360">verifier matches</text>
+  </g>
+
+  <!-- attacker -->
+  <rect class="atk" x="290" y="204" width="220" height="44" rx="8"/>
+  <text class="atkt" x="302" y="223">Attacker</text>
+  <text class="sub" x="302" y="240">copies the redirect</text>
+  <g class="a k4"><text class="bad" x="302" y="196">stole the code</text></g>
+
+  <!-- moving chips -->
+  <g class="mv kChal">
+    <rect class="cC" x="196" y="122" width="132" height="26" rx="7"/>
+    <text class="on" x="262" y="140" text-anchor="middle">code_challenge</text>
+  </g>
+  <g class="mv kCode">
+    <rect class="cCode" x="540" y="152" width="70" height="26" rx="7"/>
+    <text class="on" x="575" y="170" text-anchor="middle">code</text>
+  </g>
+  <g class="mv kCopy">
+    <rect class="cBad" x="436" y="152" width="70" height="26" rx="7"/>
+    <text class="on" x="471" y="170" text-anchor="middle">code</text>
+  </g>
+  <g class="mv kReq">
+    <rect class="cCode" x="190" y="290" width="54" height="26" rx="7"/>
+    <text class="on" x="217" y="308" text-anchor="middle">code</text>
+    <rect class="cV" x="248" y="290" width="76" height="26" rx="7"/>
+    <text class="on" x="286" y="308" text-anchor="middle">verifier</text>
+  </g>
+  <g class="mv kTok">
+    <rect class="cTok" x="446" y="324" width="166" height="26" rx="7"/>
+    <text class="on" x="529" y="342" text-anchor="middle">access + refresh</text>
+  </g>
+
+  <text class="sub" x="28" y="400">code_challenge = BASE64URL(SHA256(code_verifier)), method S256. SHA-256 is one-way,</text>
+  <text class="sub" x="28" y="418">so seeing the challenge or stealing the code does not reveal the verifier.</text>
+</svg>

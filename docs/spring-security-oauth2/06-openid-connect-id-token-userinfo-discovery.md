@@ -103,6 +103,9 @@ Three ideas matter more than the claim list:
 - **The user key is `iss` + `sub`.** `sub` is only unique per issuer. `email` can change, can be unverified, and can be reused.
 - **It is a one-time proof, not a session.** The client validates it once at login and then creates its own session. Its `exp` is short (minutes) and does not define how long the app session lasts.
 
+![Animation: the OpenID Provider returns an ID token with audience member-portal and an access token with audience claims-api; the ID token stays with the Relying Party, the access token goes to UserInfo and to claims-api, and an ID token sent to claims-api is rejected for the wrong audience](images/06-id-vs-access-token.svg){ loading=lazy }
+*Watch the last step: the ID token is a genuine, validly signed token, and the API still rejects it, because its audience is the client.*
+
 ### ID token validation
 
 The spec lists the checks. Spring Security performs them in the JWT decoder (signature, algorithm) and `OidcIdTokenValidator` (`iss`, `sub`, `aud`, `azp`, `exp`, `iat`). The nonce comparison is done separately by `OidcAuthorizationCodeAuthenticationProvider`. Spring does not check `auth_time` or `acr` for you.
@@ -191,6 +194,9 @@ Key fields:
 | `code_challenge_methods_supported` | PKCE support (`S256`). |
 
 The issuer equality rule is a security control. If a client accepted metadata whose `issuer` differs from what it asked for, an attacker who can influence the URL could point it at endpoints they control and impersonate the real provider (the spec calls this out as an impersonation risk, and it is closely related to "mix-up" attacks).
+
+![Animation: from a single issuer-uri, Spring fetches the discovery document, checks that its issuer is identical to the configured one, and then fills the authorization, token, user info, JWK set and logout endpoints of the client registration](images/06-discovery-fanout.svg){ loading=lazy }
+*Notice the order: the issuer check comes first. Only a document that names exactly the configured issuer is allowed to supply the endpoints.*
 
 RFC 8414 defines the same idea for plain OAuth2 at `/.well-known/oauth-authorization-server`. Spring Security tries the OIDC path first and then the RFC 8414 forms when you give it an `issuer-uri`.
 

@@ -68,6 +68,9 @@ sequenceDiagram
 ```
 *Notice that App 2 never talks to App 1. The only shared thing is the IdP session cookie, and each app still builds its own session.*
 
+![Animation: the browser's cookies over four steps; logging in to App 1 sets the IdP cookie and an App 1 session, App 2 gets a session with no prompt, a local logout removes only the App 1 session, and clicking Login again recreates it silently because the IdP cookie is still there](images/08-two-session-layers.svg){ loading=lazy }
+*Watch the IdP cookie: a local logout never touches it, which is why the user is logged straight back in.*
+
 ### SAML 2.0 in one page
 
 SAML 2.0 (OASIS, 2005) was designed for browser-based web applications in enterprises. Its vocabulary:
@@ -92,6 +95,9 @@ An assertion contains:
 - **Conditions**: `NotBefore`, `NotOnOrAfter` and `AudienceRestriction` (the SP entity ID).
 - **AuthnStatement**: when and how the user authenticated, and `SessionIndex` used for logout.
 - **AttributeStatement**: email, groups, department and so on.
+
+![The nested structure of a SAML Response and its Assertion, with Issuer, Signature, Subject, Conditions, AuthnStatement and AttributeStatement, each mapped to its OIDC ID token equivalent such as iss, sub, aud, exp and auth_time](images/08-saml-assertion-anatomy.svg){ loading=lazy }
+*Notice that almost every check you know from the ID token has a SAML counterpart. The format differs, the trust checks do not.*
 
 **Bindings** describe how messages travel. The two that matter: **HTTP-Redirect** (deflated and base64-encoded message in the query string, used for the small `AuthnRequest`) and **HTTP-POST** (base64 in a hidden form field that the browser auto-submits, used for the large `Response`).
 

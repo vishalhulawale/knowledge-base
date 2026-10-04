@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Scope, role and ownership are separate checks</title>
+  <desc id="d">Three requests checked against three layers. Layer one, scope, is the ceiling on what the client application may do. Layer two, role, is the type of user. Layer three, ownership or tenant, asks whether this record belongs to the caller. Member u42 reading their own prescriptions passes all three and gets 200. Member u42 reading member u99's prescriptions passes scope and role but fails ownership and is denied with 403 or 404. The same user through an app that was only granted the claims.read scope fails at the scope layer and is denied with 403.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .colh{fill:#0f172a;font-size:15px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{fill:#334155;font-size:13px;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .rowbg{fill:#ffffff;stroke:#cbd5e1}
+    .track{stroke:#cbd5e1;stroke-width:2}
+    .ok{fill:#16a34a}.bad{fill:#dc2626}
+    .mk{fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+    .skip{fill:#64748b;font-size:13px}
+    .res{fill:#fff;font-size:14px;font-weight:700}
+    .colband{fill:#4f46e5;opacity:.07}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.colh{fill:#f1f5f9}.lbl,.code{fill:#e2e8f0}.sub,.skip{fill:#94a3b8}
+      .rowbg{fill:#111827;stroke:#475569}.track{stroke:#475569}
+      .ok{fill:#4ade80}.bad{fill:#f87171}.mk{stroke:#0f172a}.res{fill:#0f172a}
+      .colband{fill:#818cf8;opacity:.10}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="38">Scope, role, ownership: three separate checks</text>
+
+  <!-- column bands and headers -->
+  <rect class="colband" x="318" y="58" width="104" height="282" rx="10"/>
+  <rect class="colband" x="440" y="58" width="104" height="282" rx="10"/>
+  <rect class="colband" x="562" y="58" width="104" height="282" rx="10"/>
+  <text class="colh" x="370" y="82" text-anchor="middle">Scope</text>
+  <text class="sub" x="370" y="100" text-anchor="middle">client's ceiling</text>
+  <text class="colh" x="492" y="82" text-anchor="middle">Role</text>
+  <text class="sub" x="492" y="100" text-anchor="middle">type of user</text>
+  <text class="colh" x="614" y="82" text-anchor="middle">Ownership</text>
+  <text class="sub" x="614" y="100" text-anchor="middle">this record?</text>
+  <text class="colh" x="724" y="82" text-anchor="middle">Result</text>
+
+  <!-- row 1 -->
+  <rect class="rowbg" x="20" y="116" width="290" height="62" rx="8"/>
+  <text class="lbl" x="32" y="140">Member u42, own record</text>
+  <text class="code" x="32" y="162">GET /members/u42/prescriptions</text>
+  <line class="track" x1="310" y1="147" x2="690" y2="147"/>
+  <circle class="ok" cx="370" cy="147" r="14"/><path class="mk" d="M363 147 l5 5 l9 -10"/>
+  <circle class="ok" cx="492" cy="147" r="14"/><path class="mk" d="M485 147 l5 5 l9 -10"/>
+  <circle class="ok" cx="614" cy="147" r="14"/><path class="mk" d="M607 147 l5 5 l9 -10"/>
+  <rect class="ok" x="690" y="133" width="68" height="28" rx="8"/><text class="res" x="724" y="152" text-anchor="middle">200</text>
+
+  <!-- row 2 -->
+  <rect class="rowbg" x="20" y="194" width="290" height="62" rx="8"/>
+  <text class="lbl" x="32" y="218">Member u42, someone else's</text>
+  <text class="code" x="32" y="240">GET /members/u99/prescriptions</text>
+  <line class="track" x1="310" y1="225" x2="690" y2="225"/>
+  <circle class="ok" cx="370" cy="225" r="14"/><path class="mk" d="M363 225 l5 5 l9 -10"/>
+  <circle class="ok" cx="492" cy="225" r="14"/><path class="mk" d="M485 225 l5 5 l9 -10"/>
+  <circle class="bad" cx="614" cy="225" r="14"/><path class="mk" d="M609 220 l10 10 M619 220 l-10 10"/>
+  <rect class="bad" x="684" y="211" width="80" height="28" rx="8"/><text class="res" x="724" y="230" text-anchor="middle">403/404</text>
+
+  <!-- row 3 -->
+  <rect class="rowbg" x="20" y="272" width="290" height="62" rx="8"/>
+  <text class="lbl" x="32" y="296">u42 via app granted claims.read</text>
+  <text class="code" x="32" y="318">GET /members/u42/prescriptions</text>
+  <line class="track" x1="310" y1="303" x2="384" y2="303"/>
+  <circle class="bad" cx="370" cy="303" r="14"/><path class="mk" d="M365 298 l10 10 M375 298 l-10 10"/>
+  <text class="skip" x="492" y="308" text-anchor="middle">not reached</text>
+  <text class="skip" x="614" y="308" text-anchor="middle">not reached</text>
+  <rect class="bad" x="690" y="289" width="68" height="28" rx="8"/><text class="res" x="724" y="308" text-anchor="middle">403</text>
+
+  <text class="sub" x="28" y="362">The prescription endpoints need scope prescriptions.read and ROLE_MEMBER; rows 1 and 2 have both.</text>
+  <text class="sub" x="28" y="380">Only the ownership check stops row 2: that is the IDOR / BOLA case.</text>
+</svg>

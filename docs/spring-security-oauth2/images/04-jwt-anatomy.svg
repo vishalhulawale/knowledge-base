@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 410" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Anatomy of a signed JWT</title>
+  <desc id="d">A JWT is three base64url parts separated by dots. The header holds alg RS256, kid 2026-09 and typ at+jwt, and is untrusted until the signature is verified. The payload holds the claims iss, sub, aud, exp, jti and scope, and is readable by anyone because base64url is encoding, not encryption. The signature is computed with RS256 and the issuer's private key over the signing input, which is the base64url header, a dot, and the base64url payload, so changing any character of the first two parts makes verification fail.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .t{fill:#334155;font-size:13px}
+    .pH{fill:#4f46e5}.pP{fill:#0ea5a4}.pS{fill:#d97706}
+    .pt{fill:#fff;font-size:14px;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .dot{fill:#0f172a;font-size:28px;font-weight:700}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .tH{fill:#4f46e5;font-size:15px;font-weight:700}
+    .tP{fill:#0f766e;font-size:15px;font-weight:700}
+    .tS{fill:#b45309;font-size:15px;font-weight:700}
+    .code{fill:#334155;font-size:13px;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .warn{fill:#dc2626;font-size:13px;font-weight:700}
+    .br{fill:none;stroke:#64748b;stroke-width:1.5}
+    .arr{stroke:#d97706;stroke-width:2;fill:none}.arh{fill:#d97706}
+    .topH{fill:#4f46e5}.topP{fill:#0ea5a4}.topS{fill:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.sub{fill:#94a3b8}.t,.code{fill:#e2e8f0}
+      .pH,.topH{fill:#818cf8}.pP,.topP{fill:#2dd4bf}.pS,.topS{fill:#fbbf24}.pt{fill:#0f172a}
+      .dot{fill:#f1f5f9}.box{fill:#111827;stroke:#475569}
+      .tH{fill:#818cf8}.tP{fill:#5eead4}.tS{fill:#fbbf24}.warn{fill:#f87171}
+      .br{stroke:#94a3b8}.arr{stroke:#fbbf24}.arh{fill:#fbbf24}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="408" rx="14"/>
+  <text class="h" x="28" y="38">header . payload . signature</text>
+
+  <!-- token pills -->
+  <rect class="pH" x="28" y="58" width="230" height="34" rx="8"/>
+  <text class="pt" x="143" y="80" text-anchor="middle">eyJhbGciOiJSUzI1Ni…</text>
+  <text class="dot" x="266" y="86" text-anchor="middle">.</text>
+  <rect class="pP" x="274" y="58" width="252" height="34" rx="8"/>
+  <text class="pt" x="400" y="80" text-anchor="middle">eyJpc3MiOiJodHRwczovL…</text>
+  <text class="dot" x="534" y="86" text-anchor="middle">.</text>
+  <rect class="pS" x="542" y="58" width="230" height="34" rx="8"/>
+  <text class="pt" x="657" y="80" text-anchor="middle">dBjftJeZ4CVP…</text>
+
+  <!-- signing input bracket -->
+  <path class="br" d="M30 102 v8 h494 v-8"/>
+  <text class="t" x="277" y="130" text-anchor="middle">signing input: base64url(header) + "." + base64url(payload)</text>
+  <path class="arr" d="M524 110 C 600 110, 640 118, 650 140"/>
+  <path class="arh" d="M650 148 l-6 -11 l11 1 z"/>
+
+  <!-- header column -->
+  <rect class="box" x="28" y="150" width="230" height="196" rx="10"/>
+  <rect class="topH" x="28" y="150" width="230" height="5" rx="2"/>
+  <text class="tH" x="42" y="180">Header</text>
+  <text class="code" x="42" y="206">{ "alg": "RS256",</text>
+  <text class="code" x="58" y="225">"kid": "2026-09",</text>
+  <text class="code" x="58" y="244">"typ": "at+jwt" }</text>
+  <text class="warn" x="42" y="300">Attacker-controlled until</text>
+  <text class="warn" x="42" y="318">the signature is verified</text>
+
+  <!-- payload column -->
+  <rect class="box" x="274" y="150" width="252" height="196" rx="10"/>
+  <rect class="topP" x="274" y="150" width="252" height="5" rx="2"/>
+  <text class="tP" x="288" y="180">Payload (claims)</text>
+  <text class="code" x="288" y="206">"iss": "https://idp…"</text>
+  <text class="code" x="288" y="225">"sub": "u42"</text>
+  <text class="code" x="288" y="244">"aud": "orders-api"</text>
+  <text class="code" x="288" y="263">"exp": 1790000900</text>
+  <text class="code" x="288" y="282">"jti": "9f1c2a7e-…"</text>
+  <text class="code" x="288" y="301">"scope": "orders:read …"</text>
+  <text class="warn" x="288" y="330">Readable by anyone</text>
+
+  <!-- signature column -->
+  <rect class="box" x="542" y="150" width="230" height="196" rx="10"/>
+  <rect class="topS" x="542" y="150" width="230" height="5" rx="2"/>
+  <text class="tS" x="556" y="180">Signature</text>
+  <text class="t" x="556" y="206">RS256 over the signing</text>
+  <text class="t" x="556" y="225">input, made with the</text>
+  <text class="t" x="556" y="244">issuer's private key.</text>
+  <text class="t" x="556" y="272">Verifiers check it with</text>
+  <text class="t" x="556" y="291">the public key (kid).</text>
+  <text class="warn" x="556" y="318">Change one character</text>
+  <text class="warn" x="556" y="336">on the left: verify fails</text>
+
+  <text class="sub" x="28" y="374">Base64url is encoding, not encryption: never put secrets or personal data in the payload.</text>
+  <text class="sub" x="28" y="392">Values from the example on this page; base64url strings shortened.</text>
+</svg>

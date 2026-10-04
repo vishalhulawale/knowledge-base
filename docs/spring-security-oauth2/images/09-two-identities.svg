@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Two identities on one internal call</title>
+  <desc id="d">orders-service calls inventory-service. The outer layer is an mTLS connection: orders-service's client certificate, with a SPIFFE identity in its Subject Alternative Name, proves which workload is calling, for this one hop. Inside it travels the HTTP request with an Authorization Bearer JWT that says which user and which permissions: sub user-42, aud inventory-service, scope inventory.read, and an act claim naming orders-service. inventory-service checks both: the certificate chain against the internal CA and whether that workload may call the endpoint, then the JWT signature, issuer, audience and expiry, then the scope and user rules.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .t{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .tun{fill:#0ea5a4;fill-opacity:.08;stroke:#0ea5a4;stroke-width:2.5}
+    .tunt{fill:#0f766e;font-size:14px;font-weight:700}
+    .env{fill:#ffffff;stroke:#4f46e5;stroke-width:2}
+    .envt{fill:#4f46e5;font-size:14px;font-weight:700}
+    .code{fill:#334155;font-size:13px;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .codeS{fill:#0f766e;font-size:13px;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .n{fill:#0ea5a4}.n2{fill:#4f46e5}.nt{fill:#fff;font-size:12px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t,.code{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .tun{fill:#2dd4bf;stroke:#2dd4bf}.tunt,.codeS{fill:#5eead4}
+      .env{fill:#111827;stroke:#818cf8}.envt{fill:#818cf8}
+      .n{fill:#2dd4bf}.n2{fill:#818cf8}.nt{fill:#0f172a}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="38">Which workload, and which user: two proofs, two layers</text>
+
+  <rect class="box" x="24" y="100" width="130" height="200" rx="10"/>
+  <text class="lbl" x="89" y="196" text-anchor="middle">orders-</text>
+  <text class="lbl" x="89" y="214" text-anchor="middle">service</text>
+
+  <rect class="tun" x="154" y="70" width="440" height="260" rx="22"/>
+  <text class="tunt" x="172" y="96">mTLS: the client certificate proves the workload</text>
+  <text class="codeS" x="172" y="118">SAN spiffe://prod.example.com/</text>
+  <text class="codeS" x="172" y="136">    ns/pharmacy/sa/orders-service</text>
+  <text class="sub" x="172" y="156">one hop only, carries no user</text>
+
+  <rect class="env" x="188" y="172" width="372" height="140" rx="10"/>
+  <text class="envt" x="204" y="196">HTTP request: Bearer JWT = the user</text>
+  <text class="code" x="204" y="220">"sub":   "user-42"</text>
+  <text class="code" x="204" y="240">"aud":   "inventory-service"</text>
+  <text class="code" x="204" y="260">"scope": "inventory.read"</text>
+  <text class="code" x="204" y="280">"act":   { "sub": "orders-service" }</text>
+  <text class="sub" x="204" y="302">validated by every service, not only the gateway</text>
+
+  <rect class="box" x="594" y="70" width="182" height="260" rx="10"/>
+  <text class="lbl" x="685" y="96" text-anchor="middle">inventory-service</text>
+  <text class="sub" x="608" y="120">checks, in order:</text>
+  <circle class="n" cx="618" cy="146" r="10"/><text class="nt" x="618" y="150" text-anchor="middle">1</text>
+  <text class="t" x="636" y="144">cert chain from</text><text class="t" x="636" y="161">the internal CA</text>
+  <circle class="n" cx="618" cy="190" r="10"/><text class="nt" x="618" y="194" text-anchor="middle">2</text>
+  <text class="t" x="636" y="188">this workload may</text><text class="t" x="636" y="205">call this endpoint</text>
+  <circle class="n2" cx="618" cy="234" r="10"/><text class="nt" x="618" y="238" text-anchor="middle">3</text>
+  <text class="t" x="636" y="232">JWT signature, iss,</text><text class="t" x="636" y="249">aud, exp</text>
+  <circle class="n2" cx="618" cy="278" r="10"/><text class="nt" x="618" y="282" text-anchor="middle">4</text>
+  <text class="t" x="636" y="276">scope and per-user</text><text class="t" x="636" y="293">rules, audit log</text>
+
+  <text class="sub" x="28" y="360">mTLS is often done by a service mesh sidecar. Either way it is authentication only:</text>
+  <text class="sub" x="28" y="378">step 2 is a separate authorisation decision, and steps 3 and 4 need the token.</text>
+</svg>

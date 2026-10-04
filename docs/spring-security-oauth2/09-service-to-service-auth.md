@@ -33,6 +33,9 @@ This topic shows up in interviews as "how do your microservices talk to each oth
 
 A request with only a service identity is fine for batch jobs and Kafka consumers. A request triggered by a user should carry both, so the downstream service can enforce per-user rules and write a correct audit log.
 
+![orders-service calls inventory-service over an mTLS connection whose client certificate carries a SPIFFE workload identity, and inside it the HTTP request carries a bearer JWT for user-42 with audience inventory-service; inventory-service checks the certificate, the workload's permission, the JWT and then the per-user rules](images/09-two-identities.svg){ loading=lazy }
+*Notice the two layers: the certificate answers "which workload", the token answers "which user and which permissions". Neither replaces the other.*
+
 ### mTLS: service identity at the transport layer
 
 In normal TLS only the server shows a certificate. In **mutual TLS** the server also sends a `CertificateRequest`, and the client must present its own certificate and prove it holds the private key (by signing the handshake transcript in `CertificateVerify`).
@@ -107,6 +110,9 @@ The authorization server applies policy ("may `orders-service` exchange for audi
 ```
 
 Microsoft Entra ID's **on-behalf-of (OBO)** flow solves the same problem with a different grant type (`jwt-bearer`). PingFederate and Keycloak support RFC 8693 token exchange directly.
+
+![Animation: with token relay one broad user token travels gateway to orders to inventory, and a compromised inventory replays it to billing, which accepts it; with token exchange orders swaps its token for one with audience inventory and act orders, and billing rejects the replayed token](images/09-relay-vs-exchange.svg){ loading=lazy }
+*Watch the replay to billing in each lane: the relayed token works there, the exchanged one does not, because its audience is only the next service.*
 
 ### Propagation through a gateway
 

@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 410" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">ID token for the client, access token for the API</title>
+  <desc id="d">The OpenID Provider returns two tokens to the Relying Party member-portal. The ID token, with audience member-portal, is validated once at login and then stays with the Relying Party, which uses its own session. The access token, with audience claims-api, is sent to the UserInfo endpoint, whose sub must equal the ID token's sub, and to the claims-api resource server, which accepts it because the audience matches. When the ID token is sent to claims-api instead, the audience is wrong and the API rejects it with 401.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .cId{fill:#4f46e5}.cAt{fill:#0ea5a4}
+    .ghost{fill:#ffffff;stroke:#dc2626;stroke-width:2;stroke-dasharray:5 3}
+    .gt{fill:#dc2626;font-size:13px;font-weight:700}
+    .gt2{fill:#dc2626;font-size:13px}
+    .on{fill:#fff;font-size:13px;font-weight:700}
+    .on2{fill:#fff;font-size:13px}
+    .ok{fill:#16a34a;font-size:13px;font-weight:700}
+    .bad{fill:#dc2626;font-size:13px;font-weight:700}
+    .tealt{fill:#0f766e;font-size:13px;font-weight:600}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .cId{fill:#818cf8}.cAt{fill:#2dd4bf}.on,.on2{fill:#0f172a}
+      .ghost{fill:#111827;stroke:#f87171}.gt,.gt2{fill:#f87171}
+      .ok{fill:#4ade80}.bad{fill:#f87171}.tealt{fill:#5eead4}
+    }
+    /* 12 s loop */
+    .mv{opacity:0;animation:12s infinite ease-in-out}
+    @keyframes mId{0%,1%{transform:translate(0,0);opacity:0}2%{transform:translate(0,0);opacity:1}15%,92%{transform:translate(269px,95px);opacity:1}96%,100%{transform:translate(269px,95px);opacity:0}}
+    @keyframes mAt1{0%,1%{transform:translate(0,0);opacity:0}2%{transform:translate(0,0);opacity:1}15%,24%{transform:translate(269px,145px);opacity:1}38%{transform:translate(574px,-50px);opacity:1}42%,100%{transform:translate(574px,-50px);opacity:0}}
+    @keyframes pAt{0%,24%{opacity:0}25%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes mAt2{0%,44%{transform:translate(0,0);opacity:0}45%{transform:translate(0,0);opacity:1}58%,62%{transform:translate(305px,-35px);opacity:1}65%,100%{transform:translate(305px,-35px);opacity:0}}
+    @keyframes mGh{0%,65%{transform:translate(0,0);opacity:0}66%{transform:translate(0,0);opacity:1}78%,92%{transform:translate(305px,55px);opacity:1}96%,100%{transform:translate(305px,55px);opacity:0}}
+    .kId{animation-name:mId}.kAt1{animation-name:mAt1}.kpAt{animation-name:pAt}.kAt2{animation-name:mAt2}.kGh{animation-name:mGh}
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes s1{0%,16%{opacity:0}18%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s2{0%,39%{opacity:0}41%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s3{0%,58%{opacity:0}60%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s4{0%,78%{opacity:0}80%,92%{opacity:1}96%,100%{opacity:0}}
+    .k1{animation-name:s1}.k2{animation-name:s2}.k3{animation-name:s3}.k4{animation-name:s4}
+    @media (prefers-reduced-motion: reduce){
+      .mv{animation:none;opacity:0}
+      .kId{opacity:1;transform:translate(269px,95px)}
+      .kpAt{opacity:1}
+      .kGh{opacity:1;transform:translate(305px,55px)}
+      .a{animation:none;opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="408" rx="14"/>
+  <text class="h" x="28" y="38">Two tokens, two audiences</text>
+
+  <!-- OP -->
+  <rect class="box" x="28" y="60" width="164" height="270" rx="10"/>
+  <text class="lbl" x="110" y="86" text-anchor="middle">OpenID Provider</text>
+  <text class="sub" x="110" y="104" text-anchor="middle">token endpoint</text>
+  <text class="sub" x="110" y="270" text-anchor="middle">one token response</text>
+  <text class="sub" x="110" y="287" text-anchor="middle">carries id_token and</text>
+  <text class="sub" x="110" y="304" text-anchor="middle">access_token</text>
+
+  <!-- RP -->
+  <rect class="box" x="290" y="150" width="182" height="200" rx="10"/>
+  <text class="lbl" x="381" y="174" text-anchor="middle">Relying Party</text>
+  <text class="sub" x="381" y="192" text-anchor="middle">client_id member-portal</text>
+
+  <!-- UserInfo -->
+  <rect class="box" x="596" y="60" width="176" height="96" rx="10"/>
+  <text class="lbl" x="684" y="84" text-anchor="middle">UserInfo endpoint</text>
+
+  <!-- API -->
+  <rect class="box" x="596" y="218" width="176" height="96" rx="10"/>
+  <text class="lbl" x="684" y="242" text-anchor="middle">claims-api</text>
+
+  <!-- notes -->
+  <g class="a k1">
+    <text class="tealt" x="381" y="372" text-anchor="middle">ID token checked once at login,</text>
+    <text class="tealt" x="381" y="389" text-anchor="middle">then the RP uses its own session</text>
+  </g>
+  <g class="a k2">
+    <text class="tealt" x="596" y="176">its sub must equal</text>
+    <text class="tealt" x="596" y="193">the ID token's sub</text>
+  </g>
+  <g class="a k3"><text class="ok" x="596" y="334">access token: aud ok, 200</text></g>
+  <g class="a k4"><text class="bad" x="596" y="352">ID token: wrong aud, 401</text></g>
+
+  <!-- parked access token copy at RP -->
+  <g class="mv kpAt">
+    <rect class="cAt" x="305" y="295" width="152" height="40" rx="8"/>
+    <text class="on" x="381" y="312" text-anchor="middle">access token</text>
+    <text class="on2" x="381" y="328" text-anchor="middle">aud: claims-api</text>
+  </g>
+  <!-- moving chips: start in OP at x=36 -->
+  <g class="mv kId">
+    <rect class="cId" x="36" y="110" width="152" height="40" rx="8"/>
+    <text class="on" x="112" y="127" text-anchor="middle">ID token</text>
+    <text class="on2" x="112" y="143" text-anchor="middle">aud: member-portal</text>
+  </g>
+  <g class="mv kAt1">
+    <rect class="cAt" x="36" y="150" width="152" height="40" rx="8"/>
+    <text class="on" x="112" y="167" text-anchor="middle">access token</text>
+    <text class="on2" x="112" y="183" text-anchor="middle">aud: claims-api</text>
+  </g>
+  <g class="mv kAt2">
+    <rect class="cAt" x="305" y="295" width="152" height="40" rx="8"/>
+    <text class="on" x="381" y="312" text-anchor="middle">access token</text>
+    <text class="on2" x="381" y="328" text-anchor="middle">aud: claims-api</text>
+  </g>
+  <g class="mv kGh">
+    <rect class="ghost" x="305" y="205" width="152" height="40" rx="8"/>
+    <text class="gt" x="381" y="222" text-anchor="middle">ID token</text>
+    <text class="gt2" x="381" y="238" text-anchor="middle">aud: member-portal</text>
+  </g>
+</svg>

@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Anatomy of a SAML assertion</title>
+  <desc id="d">A SAML Response contains a signed Assertion. Its parts and their OIDC ID token equivalents: Issuer, the IdP entity ID, maps to iss. The XML Digital Signature maps to the JWS signature. Subject holds the NameID and SubjectConfirmationData with Recipient, NotOnOrAfter and InResponseTo, which binds the response to the request; it maps to sub and to nonce or state. Conditions hold NotBefore, NotOnOrAfter and AudienceRestriction, the SP entity ID; they map to nbf, exp and aud. AuthnStatement says when and how the user authenticated and carries the SessionIndex used for logout; it maps to auth_time and acr. AttributeStatement carries email, groups and department, which map to other claims.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .outer{fill:none;stroke:#94a3b8;stroke-width:1.5}
+    .asr{fill:none;stroke:#4f46e5;stroke-width:2}
+    .asrt{fill:#4f46e5;font-size:14px;font-weight:700;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .rt{fill:#64748b;font-size:14px;font-weight:700;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .row{fill:#ffffff;stroke:#cbd5e1}
+    .el{fill:#334155;font-size:13px;font-weight:700;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .oid{fill:#0ea5a4}.on{fill:#fff;font-size:13px;font-weight:700}
+    .ln{stroke:#94a3b8;stroke-width:1.5;stroke-dasharray:4 3}
+    .colh{fill:#0f766e;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.el{fill:#e2e8f0}.sub,.rt{fill:#94a3b8}
+      .outer{stroke:#64748b}.asr{stroke:#818cf8}.asrt{fill:#818cf8}
+      .row{fill:#111827;stroke:#475569}.oid{fill:#2dd4bf}.on{fill:#0f172a}
+      .ln{stroke:#64748b}.colh{fill:#5eead4}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="558" rx="14"/>
+  <text class="h" x="28" y="38">What a SAML assertion carries, and its OIDC equivalent</text>
+  <rect class="outer" x="24" y="56" width="496" height="438" rx="10"/>
+  <text class="rt" x="38" y="78">samlp:Response</text>
+  <rect class="asr" x="40" y="90" width="464" height="394" rx="9"/>
+  <text class="asrt" x="52" y="114">saml:Assertion</text>
+  <text class="colh" x="660" y="114" text-anchor="middle">OIDC ID token</text>
+    <rect class="row" x="52" y="128" width="440" height="44" rx="7"/>
+  <text class="el" x="64" y="148">Issuer</text>
+  <text class="sub" x="214" y="148">IdP entity ID</text>
+  <line class="ln" x1="492" y1="150.0" x2="560" y2="150.0"/>
+  <rect class="oid" x="560" y="136.0" width="200" height="28" rx="7"/><text class="on" x="660" y="155.0" text-anchor="middle">iss</text>
+  <rect class="row" x="52" y="180" width="440" height="44" rx="7"/>
+  <text class="el" x="64" y="200">ds:Signature</text>
+  <text class="sub" x="214" y="200">XML Digital Signature</text>
+  <line class="ln" x1="492" y1="202.0" x2="560" y2="202.0"/>
+  <rect class="oid" x="560" y="188.0" width="200" height="28" rx="7"/><text class="on" x="660" y="207.0" text-anchor="middle">JWS signature</text>
+  <rect class="row" x="52" y="232" width="440" height="64" rx="7"/>
+  <text class="el" x="64" y="252">Subject</text>
+  <text class="sub" x="214" y="252">NameID; Recipient, NotOnOrAfter,</text>
+  <text class="sub" x="214" y="272">InResponseTo (binds to the request)</text>
+  <line class="ln" x1="492" y1="264.0" x2="560" y2="264.0"/>
+  <rect class="oid" x="560" y="250.0" width="200" height="28" rx="7"/><text class="on" x="660" y="269.0" text-anchor="middle">sub; nonce / state</text>
+  <rect class="row" x="52" y="304" width="440" height="64" rx="7"/>
+  <text class="el" x="64" y="324">Conditions</text>
+  <text class="sub" x="214" y="324">NotBefore, NotOnOrAfter,</text>
+  <text class="sub" x="214" y="344">AudienceRestriction = SP entity ID</text>
+  <line class="ln" x1="492" y1="336.0" x2="560" y2="336.0"/>
+  <rect class="oid" x="560" y="322.0" width="200" height="28" rx="7"/><text class="on" x="660" y="341.0" text-anchor="middle">nbf / exp; aud</text>
+  <rect class="row" x="52" y="376" width="440" height="44" rx="7"/>
+  <text class="el" x="64" y="396">AuthnStatement</text>
+  <text class="sub" x="214" y="396">when and how; SessionIndex</text>
+  <line class="ln" x1="492" y1="398.0" x2="560" y2="398.0"/>
+  <rect class="oid" x="560" y="384.0" width="200" height="28" rx="7"/><text class="on" x="660" y="403.0" text-anchor="middle">auth_time, acr</text>
+  <rect class="row" x="52" y="428" width="440" height="44" rx="7"/>
+  <text class="el" x="64" y="448">AttributeStatement</text>
+  <text class="sub" x="214" y="448">email, groups, department</text>
+  <line class="ln" x1="492" y1="450.0" x2="560" y2="450.0"/>
+  <rect class="oid" x="560" y="436.0" width="200" height="28" rx="7"/><text class="on" x="660" y="455.0" text-anchor="middle">other claims</text>
+  <text class="sub" x="28" y="520">The SP checks signature, Issuer, AudienceRestriction, the time window and InResponseTo</text>
+  <text class="sub" x="28" y="538">before it trusts NameID or attributes. The signature may cover Response, Assertion or both.</text>
+</svg>

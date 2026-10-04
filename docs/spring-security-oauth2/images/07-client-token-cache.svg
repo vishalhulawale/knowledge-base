@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Client credentials token reuse in the authorized client manager</title>
+  <desc id="d">A ten-minute timeline with an example access token lifetime of five minutes. The first outbound RestClient call finds no token, so the manager fetches token T1 from the IdP token endpoint. The following calls reuse T1 from the authorized client store. The first call that falls inside the 60-second clock-skew window before T1 expires triggers a fetch of token T2, and later calls reuse T2. The IdP token endpoint is hit twice for eleven calls.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .rl{fill:#334155;font-size:14px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .t1{fill:#4f46e5}.t2{fill:#4f46e5}
+    .win{fill:#d97706;fill-opacity:.18;stroke:#d97706;stroke-width:2;stroke-dasharray:5 3}
+    .wint{fill:#b45309;font-size:13px;font-weight:700}
+    .on{fill:#fff;font-size:13px;font-weight:700}
+    .dR{fill:#0ea5a4}.dF{fill:#d97706}.idp{fill:#d97706}
+    .fl{stroke:#d97706;stroke-width:2;stroke-dasharray:4 3}
+    .lane{stroke:#e2e8f0;stroke-width:1}
+    .axis{stroke:#94a3b8;stroke-width:1.5}
+    .ph{stroke:#64748b;stroke-width:2}
+    .lg{fill:#334155;font-size:13px}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.rl,.lg{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .t1,.t2{fill:#818cf8}.on{fill:#0f172a}.win{fill:#fbbf24;fill-opacity:.15;stroke:#fbbf24}.wint{fill:#fbbf24}
+      .dR{fill:#2dd4bf}.dF,.idp{fill:#fbbf24}.fl{stroke:#fbbf24}
+      .lane{stroke:#334155}.axis{stroke:#64748b}.ph{stroke:#94a3b8}
+    }
+    /* 10 s loop: playhead covers 10 minutes in 8 s */
+    .phG{animation:ph 10s infinite linear}
+    @keyframes ph{0%{transform:translateX(0)}80%,92%{transform:translateX(600px)}96%,100%{transform:translateX(600px);opacity:0}}
+    .a{opacity:0;animation:10s infinite linear}
+        @keyframes c0{0%,0%{opacity:0}1%,92%{opacity:1}96%,100%{opacity:0}}.q0{animation-name:c0}
+    @keyframes c1{0%,6.4%{opacity:0}7.4%,92%{opacity:1}96%,100%{opacity:0}}.q1{animation-name:c1}
+    @keyframes c2{0%,12.0%{opacity:0}13.0%,92%{opacity:1}96%,100%{opacity:0}}.q2{animation-name:c2}
+    @keyframes c3{0%,18.4%{opacity:0}19.4%,92%{opacity:1}96%,100%{opacity:0}}.q3{animation-name:c3}
+    @keyframes c4{0%,24.8%{opacity:0}25.8%,92%{opacity:1}96%,100%{opacity:0}}.q4{animation-name:c4}
+    @keyframes c5{0%,29.6%{opacity:0}30.6%,92%{opacity:1}96%,100%{opacity:0}}.q5{animation-name:c5}
+    @keyframes c6{0%,34.4%{opacity:0}35.4%,92%{opacity:1}96%,100%{opacity:0}}.q6{animation-name:c6}
+    @keyframes c7{0%,41.6%{opacity:0}42.6%,92%{opacity:1}96%,100%{opacity:0}}.q7{animation-name:c7}
+    @keyframes c8{0%,48.0%{opacity:0}49.0%,92%{opacity:1}96%,100%{opacity:0}}.q8{animation-name:c8}
+    @keyframes c9{0%,56.8%{opacity:0}57.8%,92%{opacity:1}96%,100%{opacity:0}}.q9{animation-name:c9}
+    @keyframes c10{0%,64.0%{opacity:0}65.0%,92%{opacity:1}96%,100%{opacity:0}}.q10{animation-name:c10}
+    @keyframes sT1{0%{opacity:0}1%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes sT2{0%,34.4%{opacity:0}35.4%,92%{opacity:1}96%,100%{opacity:0}}
+    .kT1{animation-name:sT1}.kT2{animation-name:sT2}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.phG{animation:none;transform:translateX(600px)}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="38">Eleven outbound calls, two trips to the token endpoint</text>
+
+  <text class="rl" x="28" y="105">RestClient calls</text>
+  <text class="rl" x="28" y="168">Authorized</text>
+  <text class="rl" x="28" y="186">client store</text>
+  <text class="rl" x="28" y="236">IdP token</text>
+  <text class="rl" x="28" y="254">endpoint</text>
+  <line class="lane" x1="160" y1="100" x2="760" y2="100"/>
+  <line class="lane" x1="160" y1="240" x2="760" y2="240"/>
+
+  <!-- 60 s windows before expiry -->
+  <g class="a kT1"><rect class="t1" x="160" y="156" width="254.0" height="30" rx="6"/><text class="on" x="280.0" y="176" text-anchor="middle">T1 (expires 5:00)</text></g>
+  <g class="a kT2"><rect class="t2" x="418.0" y="156" width="300.0" height="30" rx="6"/><text class="on" x="538.0" y="176" text-anchor="middle">T2 (expires 9:18)</text></g>
+  <rect class="win" x="400" y="152" width="60" height="38"/>
+  <rect class="win" x="658.0" y="152" width="60" height="38"/>
+  <text class="wint" x="424" y="210">last 60 s before T1 expires</text>
+
+    <g class="a q0"><line class="fl" x1="160" y1="108" x2="160" y2="232"/><circle class="idp" cx="160" cy="240" r="8"/><circle class="dF" cx="160" cy="100" r="8"/></g>
+  <g class="a q1"><circle class="dR" cx="208.0" cy="100" r="8"/></g>
+  <g class="a q2"><circle class="dR" cx="250.0" cy="100" r="8"/></g>
+  <g class="a q3"><circle class="dR" cx="298.0" cy="100" r="8"/></g>
+  <g class="a q4"><circle class="dR" cx="346.0" cy="100" r="8"/></g>
+  <g class="a q5"><circle class="dR" cx="382.0" cy="100" r="8"/></g>
+  <g class="a q6"><line class="fl" x1="418.0" y1="108" x2="418.0" y2="232"/><circle class="idp" cx="418.0" cy="240" r="8"/><circle class="dF" cx="418.0" cy="100" r="8"/></g>
+  <g class="a q7"><circle class="dR" cx="472.0" cy="100" r="8"/></g>
+  <g class="a q8"><circle class="dR" cx="520.0" cy="100" r="8"/></g>
+  <g class="a q9"><circle class="dR" cx="586.0" cy="100" r="8"/></g>
+  <g class="a q10"><circle class="dR" cx="640.0" cy="100" r="8"/></g>
+
+  <line class="axis" x1="160" y1="280" x2="760" y2="280"/>
+  <text class="sub" x="160" y="300" text-anchor="middle">0</text>
+  <text class="sub" x="280" y="300" text-anchor="middle">2</text>
+  <text class="sub" x="400" y="300" text-anchor="middle">4</text>
+  <text class="sub" x="520" y="300" text-anchor="middle">6</text>
+  <text class="sub" x="640" y="300" text-anchor="middle">8</text>
+  <text class="sub" x="760" y="300" text-anchor="end">10 min</text>
+  <g class="phG"><line class="ph" x1="160" y1="80" x2="160" y2="286"/></g>
+
+  <circle class="dF" cx="36" cy="330" r="7"/><text class="lg" x="50" y="335">call that fetched a new token</text>
+  <circle class="dR" cx="276" cy="330" r="7"/><text class="lg" x="290" y="335">call that reused the cached token</text>
+  <text class="sub" x="28" y="362">Five-minute lifetime is an example; 60 s is the default clock skew.</text>
+</svg>

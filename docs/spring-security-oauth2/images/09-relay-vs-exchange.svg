@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 410" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Token relay versus token exchange</title>
+  <desc id="d">Top lane, token relay: the gateway passes the user's token to orders, and orders forwards the same token to inventory. Because the token must be valid for every service, its audience covers orders, inventory and billing. When inventory is compromised, it replays the token against billing and the call is accepted. Bottom lane, token exchange: orders receives a token with audience orders, exchanges it at the authorization server for a new token with audience inventory and an act claim naming orders, and sends that to inventory. When inventory is compromised and replays this token against billing, billing rejects it because the audience is inventory.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lt{fill:#334155;font-size:15px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .comp{fill:none;stroke:#dc2626;stroke-width:3}
+    .compt{fill:#dc2626;font-size:13px;font-weight:700}
+    .cR{fill:#d97706}.cO{fill:#4f46e5}.cX{fill:#0ea5a4}
+    .gh{fill:#ffffff;stroke:#dc2626;stroke-width:2;stroke-dasharray:5 3}
+    .on{fill:#fff;font-size:13px;font-weight:700}.on2{fill:#fff;font-size:13px}
+    .gt{fill:#dc2626;font-size:13px;font-weight:700}.gt2{fill:#dc2626;font-size:13px}
+    .bad{fill:#dc2626;font-size:13px;font-weight:700}.ok{fill:#16a34a;font-size:13px;font-weight:700}
+    .ex{fill:#0f766e;font-size:13px;font-weight:700}
+    .sep{stroke:#cbd5e1;stroke-dasharray:4 4}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lt,.lbl{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.comp{stroke:#f87171}.compt{fill:#f87171}
+      .cR{fill:#fbbf24}.cO{fill:#818cf8}.cX{fill:#2dd4bf}.on,.on2{fill:#0f172a}
+      .gh{fill:#111827;stroke:#f87171}.gt,.gt2,.bad{fill:#f87171}.ok{fill:#4ade80}.ex{fill:#5eead4}.sep{stroke:#475569}
+    }
+    /* 12 s loop: relay lane, then exchange lane */
+    .mv{opacity:0;animation:12s infinite ease-in-out}
+    @keyframes mR{0%,2%{transform:translateX(0);opacity:0}3%{transform:translateX(0);opacity:1}10%,12%{transform:translateX(200px);opacity:1}19%,92%{transform:translateX(400px);opacity:1}96%,100%{transform:translateX(400px);opacity:0}}
+    @keyframes mRg{0%,23%{transform:translateX(0);opacity:0}24%{transform:translateX(0);opacity:1}31%,92%{transform:translateX(200px);opacity:1}96%,100%{transform:translateX(200px);opacity:0}}
+    @keyframes mO{0%,39%{transform:translateX(0);opacity:0}40%{transform:translateX(0);opacity:1}47%,49%{transform:translateX(200px);opacity:1}51%,100%{transform:translateX(200px);opacity:0}}
+    @keyframes mX{0%,49%{transform:translateX(0);opacity:0}51%{transform:translateX(0);opacity:1}59%,92%{transform:translateX(200px);opacity:1}96%,100%{transform:translateX(200px);opacity:0}}
+    @keyframes mXg{0%,63%{transform:translateX(0);opacity:0}64%{transform:translateX(0);opacity:1}71%,92%{transform:translateX(200px);opacity:1}96%,100%{transform:translateX(200px);opacity:0}}
+    .kR{animation-name:mR}.kRg{animation-name:mRg}.kO{animation-name:mO}.kX{animation-name:mX}.kXg{animation-name:mXg}
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes s1{0%,20%{opacity:0}22%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s2{0%,31%{opacity:0}33%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s3{0%,47%{opacity:0}49%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s4{0%,60%{opacity:0}62%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s5{0%,71%{opacity:0}73%,92%{opacity:1}96%,100%{opacity:0}}
+    .k1{animation-name:s1}.k2{animation-name:s2}.k3{animation-name:s3}.k4{animation-name:s4}.k5{animation-name:s5}
+    @media (prefers-reduced-motion: reduce){
+      .mv{animation:none;opacity:0}
+      .kR{opacity:1;transform:translateX(400px)}.kRg{opacity:1;transform:translateX(200px)}
+      .kX{opacity:1;transform:translateX(200px)}.kXg{opacity:1;transform:translateX(200px)}
+      .a{animation:none;opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="408" rx="14"/>
+  <text class="h" x="28" y="38">A compromised hop replays the token it received</text>
+
+  <text class="lt" x="28" y="72">Token relay: the same token for every hop</text>
+  <rect class="box" x="30" y="84" width="120" height="40" rx="8"/><text class="lbl" x="90" y="109" text-anchor="middle">Gateway</text>
+  <rect class="box" x="230" y="84" width="120" height="40" rx="8"/><text class="lbl" x="290" y="109" text-anchor="middle">orders</text>
+  <rect class="box" x="430" y="84" width="120" height="40" rx="8"/><text class="lbl" x="490" y="109" text-anchor="middle">inventory</text>
+  <rect class="box" x="630" y="84" width="120" height="40" rx="8"/><text class="lbl" x="690" y="109" text-anchor="middle">billing</text>
+  <line class="sep" x1="24" y1="196" x2="776" y2="196"/>
+  <text class="lt" x="28" y="226">Token exchange: a new, narrower token per hop</text>
+  <rect class="box" x="30" y="238" width="120" height="40" rx="8"/><text class="lbl" x="90" y="263" text-anchor="middle">Gateway</text>
+  <rect class="box" x="230" y="238" width="120" height="40" rx="8"/><text class="lbl" x="290" y="263" text-anchor="middle">orders</text>
+  <rect class="box" x="430" y="238" width="120" height="40" rx="8"/><text class="lbl" x="490" y="263" text-anchor="middle">inventory</text>
+  <rect class="box" x="630" y="238" width="120" height="40" rx="8"/><text class="lbl" x="690" y="263" text-anchor="middle">billing</text>
+
+  <g class="a k1"><rect class="comp" x="430" y="84" width="120" height="40" rx="8"/><text class="compt" x="490" y="78" text-anchor="middle">compromised</text></g>
+  <g class="a k2"><text class="bad" x="776" y="188" text-anchor="end">billing accepts it</text></g>
+  <g class="a k3"><text class="ex" x="290" y="342" text-anchor="middle">orders exchanges its token at the AS</text></g>
+  <g class="a k4"><rect class="comp" x="430" y="238" width="120" height="40" rx="8"/><text class="compt" x="550" y="232" text-anchor="end">compromised</text></g>
+  <g class="a k5"><text class="ok" x="776" y="342" text-anchor="end">rejected: aud is inventory</text></g>
+
+  <g class="mv kR"><rect class="cR" x="25" y="132" width="130" height="38" rx="7"/><text class="on" x="90" y="148" text-anchor="middle">user token</text><text class="on2" x="90" y="164" text-anchor="middle">aud: all three</text></g>
+  <g class="mv kRg"><rect class="gh" x="425" y="132" width="130" height="38" rx="7"/><text class="gt" x="490" y="148" text-anchor="middle">same token</text><text class="gt2" x="490" y="164" text-anchor="middle">replayed</text></g>
+  <g class="mv kO"><rect class="cO" x="25" y="286" width="130" height="38" rx="7"/><text class="on" x="90" y="302" text-anchor="middle">user token</text><text class="on2" x="90" y="318" text-anchor="middle">aud: orders</text></g>
+  <g class="mv kX"><rect class="cX" x="225" y="286" width="130" height="38" rx="7"/><text class="on" x="290" y="302" text-anchor="middle">aud: inventory</text><text class="on2" x="290" y="318" text-anchor="middle">act: orders</text></g>
+  <g class="mv kXg"><rect class="gh" x="425" y="286" width="130" height="38" rx="7"/><text class="gt" x="490" y="302" text-anchor="middle">aud: inventory</text><text class="gt2" x="490" y="318" text-anchor="middle">replayed</text></g>
+
+  <text class="sub" x="28" y="374">With relay, one compromised service can reach everything the token can reach.</text>
+  <text class="sub" x="28" y="392">With exchange, each token is only good for the next service, and act keeps the audit trail.</text>
+</svg>

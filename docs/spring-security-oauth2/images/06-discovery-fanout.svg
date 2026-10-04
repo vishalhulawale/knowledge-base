@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">OIDC discovery from one issuer-uri</title>
+  <desc id="d">The application configures only issuer-uri https://sso.example.com. Spring fetches issuer plus /.well-known/openid-configuration. It first checks that the issuer field in the document is identical to the configured issuer-uri. Then it copies the endpoints into the client registration one by one: authorization_endpoint to the authorization URI, token_endpoint to the token URI, userinfo_endpoint to the user info URI, jwks_uri to the JWK set URI, and end_session_endpoint for RP-initiated logout.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .code{fill:#334155;font-size:13px;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .codeI{fill:#4f46e5;font-size:13px;font-weight:700;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .slot{fill:none;stroke:#cbd5e1;stroke-dasharray:4 3}
+    .slott{fill:#64748b;font-size:13px}
+    .fill{fill:#0ea5a4}.on{fill:#fff;font-size:13px;font-weight:700}
+    .okb{fill:#16a34a}
+    .ln{stroke:#0ea5a4;stroke-width:2}
+    .arr{stroke:#4f46e5;stroke-width:2}.arh{fill:#4f46e5}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.code{fill:#e2e8f0}.sub,.slott{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.codeI{fill:#818cf8}
+      .slot{stroke:#475569}.fill{fill:#2dd4bf}.on{fill:#0f172a}.okb{fill:#4ade80}
+      .ln{stroke:#2dd4bf}.arr{stroke:#818cf8}.arh{fill:#818cf8}
+    }
+    /* 10 s loop: issuer check, then five endpoints copied */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes s0{0%,6%{opacity:0}8%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s1{0%,18%{opacity:0}20%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s2{0%,30%{opacity:0}32%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s3{0%,42%{opacity:0}44%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s4{0%,54%{opacity:0}56%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s5{0%,66%{opacity:0}68%,92%{opacity:1}96%,100%{opacity:0}}
+    .k0{animation-name:s0}.k1{animation-name:s1}.k2{animation-name:s2}.k3{animation-name:s3}.k4{animation-name:s4}.k5{animation-name:s5}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="38">One issuer-uri, every endpoint discovered</text>
+
+  <!-- left: config -->
+  <rect class="box" x="24" y="64" width="210" height="84" rx="10"/>
+  <text class="lbl" x="38" y="88">application.yml</text>
+  <text class="code" x="38" y="112">issuer-uri:</text>
+  <text class="codeI" x="38" y="132">https://sso.example.com</text>
+  <text class="sub" x="38" y="186">Spring fetches</text>
+  <text class="code" x="38" y="208">{issuer}/.well-known/</text>
+  <text class="code" x="38" y="226">openid-configuration</text>
+  <line class="arr" x1="200" y1="246" x2="244" y2="246"/><path class="arh" d="M252 246 l-10 -5 v10 z"/>
+  <line class="arr" x1="129" y1="148" x2="129" y2="168"/><path class="arh" d="M129 176 l-5 -10 h10 z"/>
+
+  <!-- middle: discovery document -->
+  <rect class="box" x="256" y="64" width="268" height="250" rx="10"/>
+  <text class="lbl" x="270" y="88">Discovery document</text>
+  <text class="code" x="270" y="124">"issuer":</text>
+  <text class="codeI" x="282" y="142">"https://sso.example.com"</text>
+  <text class="code" x="270" y="182">"authorization_endpoint"</text>
+  <text class="code" x="270" y="210">"token_endpoint"</text>
+  <text class="code" x="270" y="238">"userinfo_endpoint"</text>
+  <text class="code" x="270" y="266">"jwks_uri"</text>
+  <text class="code" x="270" y="294">"end_session_endpoint"</text>
+
+  <!-- right: client registration -->
+  <rect class="box" x="560" y="64" width="216" height="250" rx="10"/>
+  <text class="lbl" x="574" y="88">ClientRegistration</text>
+  <rect class="slot" x="572" y="114" width="192" height="34" rx="6"/>
+  <text class="slott" x="582" y="136">issuer check</text>
+  <rect class="slot" x="572" y="168" width="192" height="22" rx="5"/><text class="slott" x="582" y="184">authorization-uri</text>
+  <rect class="slot" x="572" y="196" width="192" height="22" rx="5"/><text class="slott" x="582" y="212">token-uri</text>
+  <rect class="slot" x="572" y="224" width="192" height="22" rx="5"/><text class="slott" x="582" y="240">user-info-uri</text>
+  <rect class="slot" x="572" y="252" width="192" height="22" rx="5"/><text class="slott" x="582" y="268">jwk-set-uri</text>
+  <rect class="slot" x="572" y="280" width="192" height="22" rx="5"/><text class="slott" x="582" y="296">logout endpoint</text>
+
+  <g class="a k0">
+    <line class="ln" x1="524" y1="131" x2="572" y2="131"/>
+    <rect class="okb" x="572" y="114" width="192" height="34" rx="6"/>
+    <text class="on" x="582" y="136">issuer identical: OK</text>
+  </g>
+  <g class="a k1"><line class="ln" x1="500" y1="178" x2="572" y2="178"/><rect class="fill" x="572" y="168" width="192" height="22" rx="5"/><text class="on" x="582" y="184">authorization-uri</text></g>
+  <g class="a k2"><line class="ln" x1="400" y1="206" x2="572" y2="206"/><rect class="fill" x="572" y="196" width="192" height="22" rx="5"/><text class="on" x="582" y="212">token-uri</text></g>
+  <g class="a k3"><line class="ln" x1="424" y1="234" x2="572" y2="234"/><rect class="fill" x="572" y="224" width="192" height="22" rx="5"/><text class="on" x="582" y="240">user-info-uri</text></g>
+  <g class="a k4"><line class="ln" x1="354" y1="262" x2="572" y2="262"/><rect class="fill" x="572" y="252" width="192" height="22" rx="5"/><text class="on" x="582" y="268">jwk-set-uri</text></g>
+  <g class="a k5"><line class="ln" x1="456" y1="290" x2="572" y2="290"/><rect class="fill" x="572" y="280" width="192" height="22" rx="5"/><text class="on" x="582" y="296">logout endpoint</text></g>
+
+  <text class="sub" x="28" y="344">For oauth2Login this runs when the registration bean is created, so an unreachable</text>
+  <text class="sub" x="28" y="362">provider stops startup. A different issuer in the document is rejected (impersonation risk).</text>
+</svg>

@@ -63,6 +63,9 @@ Three facts interviewers check:
 2. **The signature covers the header and the payload.** The signing input is the ASCII string `base64url(header) + "." + base64url(payload)`. Change one character of either and verification fails.
 3. **The header is attacker-controlled until the signature is verified.** `alg` and `kid` are hints from an untrusted party. Most historic JWT vulnerabilities come from trusting them.
 
+![A JWT split into its three colour-coded parts: the header with alg, kid and typ, the payload with iss, sub, aud, exp, jti and scope, and the signature computed with the issuer's private key over the base64url header, a dot and the base64url payload](images/04-jwt-anatomy.svg){ loading=lazy }
+*Notice the bracket: the signature covers exactly the first two parts as encoded text. Everything in them is readable, and nothing in them is trustworthy until that signature checks out.*
+
 Registered claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) are all optional in the JWT spec itself. Profiles make them mandatory: RFC 9068 (JWT access tokens) requires `iss`, `exp`, `aud`, `sub`, `client_id`, `iat`, `jti` and the header `typ: at+jwt`.
 
 ### Signing: HS256 vs RS256 (and ES256)
@@ -85,6 +88,9 @@ Registered claims (`iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`) are all opti
 | Fits | One service that both issues and verifies | Many verifiers, third parties, any IdP | Same as RS256, when token size matters |
 
 The decision is about **trust boundaries**, not speed. With HS256 across ten microservices, a compromise of the least-secure service gives the attacker the power to forge an admin token for all ten. With RS256, the same compromise leaks only a public key. This is also why OIDC makes RS256 the algorithm every provider must support for ID tokens, and why Spring Security's `NimbusJwtDecoder` trusts **only RS256 by default**.
+
+![Side by side: with HS256 the issuer and the orders, claims and billing services all hold the same secret, so a compromised billing service can forge tokens for all of them; with RS256 only the issuer holds the private key and a compromised service leaks only a public key](images/04-hs256-vs-rs256.svg){ loading=lazy }
+*Notice what the compromised billing service holds in each case. The shared secret can sign, the public key can only verify.*
 
 !!! tip "Say this in the interview"
     "HS256 is fine when the issuer and the verifier are the same process. The moment a second service verifies tokens, I move to RS256 or ES256, because with a shared secret every verifier is also a potential issuer."
@@ -122,6 +128,9 @@ Safe rotation order:
 4. **Remove** the old key.
 
 Emergency rotation (private key leaked) skips the waiting: remove the old key at once and accept that every outstanding token fails. That is a forced global logout, which is exactly what you want in that case.
+
+![Animation: four columns showing safe rotation, first the new key 2026-12 is published next to 2026-09, then signing switches to 2026-12, then old tokens expire, and finally 2026-09 is removed from the JWKS](images/04-key-rotation.svg){ loading=lazy }
+*Watch the token row: by the time the old key disappears from the JWKS, no token signed with it is still in use.*
 
 ### Validation: the full pipeline
 

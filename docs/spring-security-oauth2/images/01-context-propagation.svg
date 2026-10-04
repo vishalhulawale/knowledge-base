@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">The SecurityContext does not follow work onto other threads</title>
+  <desc id="d">Three threads, each with its own ThreadLocal slot for the SecurityContext. The request thread holds the authenticated user u42. A task handed to a plain ForkJoinPool thread finds an empty slot, so the code logs user=null. A task submitted through DelegatingSecurityContextExecutor carries a copy of the context into the pool thread, logs user=u42, and the copy is cleared when the task ends.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .col{fill:#64748b;font-size:13px;font-weight:700}
+    .lane{fill:#ffffff;stroke:#cbd5e1}
+    .slot{fill:none;stroke:#94a3b8;stroke-dasharray:5 4}
+    .chip{fill:#4f46e5}.task{fill:#0ea5a4}
+    .on{fill:#fff;font-size:13px;font-weight:700}
+    .code{fill:#334155;font-size:13px;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .bad{fill:#dc2626;font-size:15px;font-weight:700}
+    .ok{fill:#16a34a;font-size:15px;font-weight:700}
+    .tealt{fill:#0f766e;font-size:13px;font-weight:600}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t,.code{fill:#e2e8f0}.sub,.col{fill:#94a3b8}
+      .lane{fill:#111827;stroke:#475569}.slot{stroke:#64748b}
+      .chip{fill:#818cf8}.task{fill:#2dd4bf}.on{fill:#0f172a}
+      .bad{fill:#f87171}.ok{fill:#4ade80}.tealt{fill:#5eead4}
+    }
+    /* 10 s loop: plain task first, then wrapped task with a copied context */
+    .m1{animation:m1 10s infinite ease-in-out;opacity:0}
+    .m2{animation:m2 10s infinite ease-in-out;opacity:0}
+    @keyframes m1{0%,6%{transform:translateY(0);opacity:0}8%{transform:translateY(0);opacity:1}22%,92%{transform:translateY(110px);opacity:1}96%,100%{transform:translateY(110px);opacity:0}}
+    @keyframes m2{0%,36%{transform:translateY(0);opacity:0}38%{transform:translateY(0);opacity:1}54%,70%{transform:translateY(220px);opacity:1}76%,100%{transform:translateY(220px);opacity:0}}
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes s1{0%,23%{opacity:0}25%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s2{0%,55%{opacity:0}57%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s3{0%,75%{opacity:0}77%,92%{opacity:1}96%,100%{opacity:0}}
+    .k1{animation-name:s1}.k2{animation-name:s2}.k3{animation-name:s3}
+    @media (prefers-reduced-motion: reduce){
+      .m1{animation:none;opacity:1;transform:translateY(110px)}
+      .m2{animation:none;opacity:1;transform:translateY(220px)}
+      .a{animation:none;opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="438" rx="14"/>
+  <text class="h" x="28" y="38">One ThreadLocal per thread: the context stays where it was set</text>
+  <text class="col" x="268" y="68">ThreadLocal context</text>
+  <text class="col" x="456" y="68">What the code sees</text>
+
+  <!-- lane 0: request thread -->
+  <text class="lbl" x="28" y="108">Request thread</text>
+  <text class="sub" x="28" y="127">http-nio-8080-exec-1</text>
+  <rect class="lane" x="250" y="78" width="522" height="70" rx="10"/>
+  <rect class="chip" x="266" y="96" width="166" height="34" rx="8"/>
+  <text class="on" x="349" y="118" text-anchor="middle">u42, ROLE_MEMBER</text>
+  <text class="code" x="456" y="110">CompletableFuture.runAsync(</text>
+  <text class="code" x="472" y="128">() -&gt; log(user))</text>
+
+  <!-- lane 1: plain pool thread -->
+  <text class="lbl" x="28" y="218">Plain pool thread</text>
+  <text class="sub" x="28" y="237">ForkJoinPool.commonPool</text>
+  <rect class="lane" x="250" y="188" width="522" height="70" rx="10"/>
+  <rect class="slot" x="266" y="206" width="166" height="34" rx="8"/>
+  <text class="sub" x="349" y="228" text-anchor="middle">(empty)</text>
+  <g class="a k1">
+    <text class="bad" x="560" y="229">user=null</text>
+  </g>
+
+  <!-- lane 2: wrapped pool thread -->
+  <text class="lbl" x="28" y="322">Wrapped pool thread</text>
+  <text class="sub" x="28" y="341">DelegatingSecurity-</text>
+  <text class="sub" x="28" y="358">ContextExecutor</text>
+  <rect class="lane" x="250" y="298" width="522" height="70" rx="10"/>
+  <rect class="slot" x="266" y="316" width="166" height="34" rx="8"/>
+  <text class="sub" x="349" y="338" text-anchor="middle">(empty)</text>
+  <g class="a k2">
+    <text class="ok" x="560" y="333">user=u42</text>
+  </g>
+  <g class="a k3">
+    <text class="tealt" x="560" y="355">copy cleared after task</text>
+  </g>
+
+  <!-- moving: plain task (no context) -->
+  <g class="m1">
+    <rect class="task" x="456" y="96" width="88" height="34" rx="8"/>
+    <text class="on" x="500" y="118" text-anchor="middle">task</text>
+  </g>
+  <!-- moving: wrapped task carrying a copy of the context -->
+  <g class="m2">
+    <rect class="chip" x="266" y="96" width="166" height="34" rx="8"/>
+    <text class="on" x="349" y="118" text-anchor="middle">copy: u42</text>
+    <rect class="task" x="456" y="96" width="88" height="34" rx="8"/>
+    <text class="on" x="500" y="118" text-anchor="middle">task</text>
+  </g>
+
+  <text class="sub" x="28" y="400">The wrapper copies the caller's context when the task is submitted and clears it afterwards,</text>
+  <text class="sub" x="28" y="418">so a reused pool thread never carries one user's identity into the next task.</text>
+</svg>

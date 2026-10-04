@@ -71,6 +71,9 @@ Two consequences follow directly from this order:
 - **Authentication happens before authorization.** A request with a bad token is rejected by the authentication filter even if the URL is `permitAll`, because `permitAll` is only evaluated at step 10.
 - **CORS comes before authentication**, because browser preflight (`OPTIONS`) requests carry no credentials. Details are in [Sessions vs tokens; CSRF & CORS](03-sessions-vs-tokens-csrf-and-cors-in-spring.md).
 
+![Animation: request A with a valid JWT passes all ten filters and reaches the controller with 200 OK, while request B with an expired JWT to a permitAll URL is stopped at the bearer-token authentication filter, step 6, with 401](images/01-filter-chain-order.svg){ loading=lazy }
+*Watch request B: it is rejected at step 6 and never reaches `AuthorizationFilter` at step 10, the only place where `permitAll` is evaluated.*
+
 To see the real list for your app, set `logging.level.org.springframework.security=DEBUG` (or `TRACE`). At startup Spring logs every chain and its filters at DEBUG level.
 
 ### The authentication model
@@ -172,6 +175,9 @@ Because of the `ThreadLocal`, the context is absent in `@Async` methods, `Comple
 - A `Callable` returned from a Spring MVC controller is handled automatically by `WebAsyncManagerIntegrationFilter`. A `DeferredResult` is **not**: your own code completes it on a thread Spring Security does not control, so propagate the context yourself with the delegating wrappers above.
 - Reactive (WebFlux) apps do not use `ThreadLocal` at all. The context travels in the Reactor `Context` and is read with `ReactiveSecurityContextHolder`.
 - Virtual threads (Java 21+) still have their own `ThreadLocal`s, so the rule is the same: a new virtual thread starts with an empty context unless you propagate it.
+
+![Animation: a task handed to a plain ForkJoinPool thread finds an empty ThreadLocal and logs user=null, while a task submitted through DelegatingSecurityContextExecutor carries a copy of the context, logs user=u42, and the copy is cleared when the task ends](images/01-context-propagation.svg){ loading=lazy }
+*Notice that each thread has its own empty slot. Only the delegating wrapper copies the context across, and it clears the copy again so pooled threads stay clean.*
 
 ### Multiple filter chains
 

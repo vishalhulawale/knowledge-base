@@ -126,6 +126,9 @@ sequenceDiagram
 ```
 *Notice that the browser only ever carries the code and the challenge. The verifier and the tokens travel on the direct client-to-AS call, so stealing the redirect alone is useless.*
 
+![Animation: the client sends only code_challenge through the browser, an attacker copies the returned code and posts it to the token endpoint without the verifier and gets invalid_grant, while the real client posts code plus verifier over the back channel and receives the tokens](images/05-pkce-stolen-code.svg){ loading=lazy }
+*Watch the stolen code: the attacker can redeem it only with the `code_verifier`, which never left the client.*
+
 Parameters worth knowing by heart:
 
 | Parameter | Purpose |
@@ -181,6 +184,9 @@ Rules:
 - For **public clients**, RFC 9700 requires refresh tokens to be either **sender-constrained** (DPoP or mTLS) or **rotated**.
 - **Rotation:** each use returns a new refresh token and invalidates the old one. The tokens form a "family". If an old (already used) token shows up again, the AS cannot tell whether the attacker or the real client is replaying it, so it revokes the **whole family** and the user must log in again. This is reuse detection.
 - Refresh tokens should have an **absolute lifetime** and often an **idle timeout**, and should be revoked on logout, password change or admin action (RFC 7009 revocation endpoint).
+
+![Animation: a 45-minute timeline where access tokens AT1, AT2 and AT3 each live 15 minutes, every refresh returns a new refresh token and invalidates the used one, and the user stays logged in throughout](images/05-refresh-rotation-timeline.svg){ loading=lazy }
+*Notice that at any moment only one refresh token in the family is valid. That is what makes a replayed old one detectable.*
 
 ```mermaid
 sequenceDiagram

@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 392" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Safe signing-key rotation with JWKS</title>
+  <desc id="d">Four steps shown as columns. Step 1: the new key 2026-12 is published in the JWKS next to the old key 2026-09, while the issuer still signs with 2026-09, so all tokens in use carry kid 2026-09. Step 2: after waiting longer than the verifier cache time, the issuer switches signing to 2026-12, and new tokens carry the new kid while older tokens still carry the old one. Step 3: the old public key stays published until every token it signed has expired, so all tokens in use now carry 2026-12. Step 4: the old key is removed from the JWKS.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .rl{fill:#334155;font-size:14px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .st{fill:#0f172a;font-size:15px;font-weight:700}
+    .colb{fill:#ffffff;stroke:#cbd5e1}
+    .hi{fill:none;stroke:#4f46e5;stroke-width:3}
+    .kO{fill:#4f46e5}.kN{fill:#0ea5a4}
+    .on{fill:#fff;font-size:13px;font-weight:700}
+    .sep{stroke:#e2e8f0;stroke-width:1}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.st{fill:#f1f5f9}.rl{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .colb{fill:#111827;stroke:#475569}.hi{stroke:#818cf8}
+      .kO{fill:#818cf8}.kN{fill:#2dd4bf}.on{fill:#0f172a}.sep{stroke:#334155}
+    }
+    /* 12 s loop: columns appear one by one, highlight frame follows */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes c1{0%,2%{opacity:0}5%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes c2{0%,22%{opacity:0}25%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes c3{0%,42%{opacity:0}45%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes c4{0%,62%{opacity:0}65%,92%{opacity:1}96%,100%{opacity:0}}
+    .k1{animation-name:c1}.k2{animation-name:c2}.k3{animation-name:c3}.k4{animation-name:c4}
+    .hiG{animation:hm 12s infinite steps(1,end)}
+    @keyframes hm{0%,22%{transform:translateX(0)}25%,42%{transform:translateX(157px)}45%,62%{transform:translateX(314px)}65%,100%{transform:translateX(471px)}}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.hiG{animation:none;transform:translateX(471px)}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="390" rx="14"/>
+  <text class="h" x="28" y="38">Rotate by publishing first, switching second, removing last</text>
+
+  <!-- row labels -->
+  <text class="rl" x="28" y="158">JWKS has</text>
+  <text class="rl" x="28" y="208">Issuer</text>
+  <text class="rl" x="28" y="226">signs with</text>
+  <text class="rl" x="28" y="278">Tokens in use</text>
+  <line class="sep" x1="28" y1="180" x2="772" y2="180"/>
+  <line class="sep" x1="28" y1="244" x2="772" y2="244"/>
+
+  <!-- empty column frames -->
+  <rect class="colb" x="150" y="58" width="151" height="248" rx="10" fill-opacity="0.6"/>
+  <rect class="colb" x="307" y="58" width="151" height="248" rx="10" fill-opacity="0.6"/>
+  <rect class="colb" x="464" y="58" width="151" height="248" rx="10" fill-opacity="0.6"/>
+  <rect class="colb" x="621" y="58" width="151" height="248" rx="10" fill-opacity="0.6"/>
+
+  <!-- column 1 -->
+  <g class="a k1">
+    <text class="st" x="162" y="84">1. Publish</text>
+    <text class="sub" x="162" y="103">new key in JWKS</text>
+    <text class="sub" x="162" y="120">(still sign with old)</text>
+    <rect class="kO" x="160" y="140" width="66" height="24" rx="6"/><text class="on" x="192" y="157" text-anchor="middle">2026-09</text>
+    <rect class="kN" x="232" y="140" width="66" height="24" rx="6"/><text class="on" x="265" y="157" text-anchor="middle">2026-12</text>
+    <rect class="kO" x="160" y="200" width="66" height="24" rx="6"/><text class="on" x="192" y="217" text-anchor="middle">2026-09</text>
+    <rect class="kO" x="160" y="264" width="40" height="22" rx="5"/><text class="on" x="180" y="280" text-anchor="middle">09</text>
+    <rect class="kO" x="206" y="264" width="40" height="22" rx="5"/><text class="on" x="226" y="280" text-anchor="middle">09</text>
+    <rect class="kO" x="252" y="264" width="40" height="22" rx="5"/><text class="on" x="272" y="280" text-anchor="middle">09</text>
+  </g>
+  <!-- column 2 -->
+  <g class="a k2">
+    <text class="st" x="319" y="84">2. Switch</text>
+    <text class="sub" x="319" y="103">after the verifier</text>
+    <text class="sub" x="319" y="120">cache time</text>
+    <rect class="kO" x="317" y="140" width="66" height="24" rx="6"/><text class="on" x="349" y="157" text-anchor="middle">2026-09</text>
+    <rect class="kN" x="389" y="140" width="66" height="24" rx="6"/><text class="on" x="422" y="157" text-anchor="middle">2026-12</text>
+    <rect class="kN" x="317" y="200" width="66" height="24" rx="6"/><text class="on" x="349" y="217" text-anchor="middle">2026-12</text>
+    <rect class="kO" x="317" y="264" width="40" height="22" rx="5"/><text class="on" x="337" y="280" text-anchor="middle">09</text>
+    <rect class="kO" x="363" y="264" width="40" height="22" rx="5"/><text class="on" x="383" y="280" text-anchor="middle">09</text>
+    <rect class="kN" x="409" y="264" width="40" height="22" rx="5"/><text class="on" x="429" y="280" text-anchor="middle">12</text>
+  </g>
+  <!-- column 3 -->
+  <g class="a k3">
+    <text class="st" x="476" y="84">3. Wait</text>
+    <text class="sub" x="476" y="103">until old tokens</text>
+    <text class="sub" x="476" y="120">have expired</text>
+    <rect class="kO" x="474" y="140" width="66" height="24" rx="6"/><text class="on" x="506" y="157" text-anchor="middle">2026-09</text>
+    <rect class="kN" x="546" y="140" width="66" height="24" rx="6"/><text class="on" x="579" y="157" text-anchor="middle">2026-12</text>
+    <rect class="kN" x="474" y="200" width="66" height="24" rx="6"/><text class="on" x="506" y="217" text-anchor="middle">2026-12</text>
+    <rect class="kN" x="474" y="264" width="40" height="22" rx="5"/><text class="on" x="494" y="280" text-anchor="middle">12</text>
+    <rect class="kN" x="520" y="264" width="40" height="22" rx="5"/><text class="on" x="540" y="280" text-anchor="middle">12</text>
+    <rect class="kN" x="566" y="264" width="40" height="22" rx="5"/><text class="on" x="586" y="280" text-anchor="middle">12</text>
+  </g>
+  <!-- column 4 -->
+  <g class="a k4">
+    <text class="st" x="633" y="84">4. Remove</text>
+    <text class="sub" x="633" y="103">old key from</text>
+    <text class="sub" x="633" y="120">the JWKS</text>
+    <rect class="kN" x="631" y="140" width="66" height="24" rx="6"/><text class="on" x="663" y="157" text-anchor="middle">2026-12</text>
+    <rect class="kN" x="631" y="200" width="66" height="24" rx="6"/><text class="on" x="663" y="217" text-anchor="middle">2026-12</text>
+    <rect class="kN" x="631" y="264" width="40" height="22" rx="5"/><text class="on" x="651" y="280" text-anchor="middle">12</text>
+    <rect class="kN" x="677" y="264" width="40" height="22" rx="5"/><text class="on" x="697" y="280" text-anchor="middle">12</text>
+    <rect class="kN" x="723" y="264" width="40" height="22" rx="5"/><text class="on" x="743" y="280" text-anchor="middle">12</text>
+  </g>
+  <!-- highlight frame -->
+  <g class="hiG"><rect class="hi" x="150" y="58" width="151" height="248" rx="10"/></g>
+
+  <text class="sub" x="28" y="338">Token chips show the kid that signed them. Every token always finds its key in the JWKS,</text>
+  <text class="sub" x="28" y="356">so no verifier sees an unknown kid it cannot resolve. Emergency rotation skips the waiting</text>
+  <text class="sub" x="28" y="374">and removes the old key at once, which logs everyone out.</text>
+</svg>

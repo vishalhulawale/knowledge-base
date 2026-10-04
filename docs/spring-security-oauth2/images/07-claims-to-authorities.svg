@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 390" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">From JWT claims to Spring authorities</title>
+  <desc id="d">A JWT with scope "claims.read claims.write" and groups ["admin"]. The default converter reads only the scope claim and produces SCOPE_claims.read and SCOPE_claims.write; the groups claim is ignored, so hasRole('ADMIN'), which looks for ROLE_ADMIN, fails with 403. The custom JwtAuthenticationConverter from this page keeps the SCOPE_ authorities and maps each group to ROLE_ plus the upper-cased name, adding ROLE_ADMIN, so hasRole('ADMIN') passes.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .code{fill:#334155;font-size:13px;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .muted{fill:#64748b;font-size:13px;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .cS{fill:#0ea5a4}.cR{fill:#4f46e5}
+    .on{fill:#fff;font-size:13px;font-weight:700;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .res{fill:#fff;font-size:14px;font-weight:700}
+    .okb{fill:#16a34a}.badb{fill:#dc2626}
+    .ln{stroke:#94a3b8;stroke-width:1.5;fill:none}
+    .row{fill:none;stroke:#cbd5e1}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.code{fill:#e2e8f0}.sub,.muted{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.row{stroke:#475569}
+      .cS{fill:#2dd4bf}.cR{fill:#818cf8}.on,.res{fill:#0f172a}
+      .okb{fill:#4ade80}.badb{fill:#f87171}.ln{stroke:#64748b}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="388" rx="14"/>
+  <text class="h" x="28" y="38">Why hasRole('ADMIN') returns 403 with the default converter</text>
+
+  <!-- token -->
+  <rect class="box" x="24" y="110" width="206" height="150" rx="10"/>
+  <text class="lbl" x="38" y="134">JWT claims</text>
+  <text class="code" x="38" y="160">"sub": "u42"</text>
+  <text class="code" x="38" y="182">"scope":</text>
+  <text class="code" x="50" y="200">"claims.read</text>
+  <text class="code" x="50" y="218">claims.write"</text>
+  <text class="code" x="38" y="240">"groups": ["admin"]</text>
+  <path class="ln" d="M230 160 C 250 160, 250 112, 268 112"/>
+  <path class="ln" d="M230 210 C 250 210, 250 258, 268 258"/>
+
+  <!-- row A: default -->
+  <rect class="row" x="268" y="60" width="508" height="124" rx="10"/>
+  <text class="lbl" x="282" y="84">Default converter</text>
+  <text class="sub" x="282" y="102">reads scope / scp only, groups ignored</text>
+  <rect class="cS" x="282" y="114" width="150" height="26" rx="6"/><text class="on" x="357" y="132" text-anchor="middle">SCOPE_claims.read</text>
+  <rect class="cS" x="438" y="114" width="158" height="26" rx="6"/><text class="on" x="517" y="132" text-anchor="middle">SCOPE_claims.write</text>
+  <text class="muted" x="282" y="170">ROLE_ADMIN: missing</text>
+  <text class="code" x="618" y="110">hasRole('ADMIN')</text>
+  <rect class="badb" x="618" y="124" width="140" height="30" rx="8"/>
+  <text class="res" x="688" y="144" text-anchor="middle">403</text>
+
+  <!-- row B: custom -->
+  <rect class="row" x="268" y="200" width="508" height="124" rx="10"/>
+  <text class="lbl" x="282" y="224">Custom JwtAuthenticationConverter</text>
+  <text class="sub" x="282" y="242">scopes kept, groups mapped to ROLE_</text>
+  <rect class="cS" x="282" y="254" width="150" height="26" rx="6"/><text class="on" x="357" y="272" text-anchor="middle">SCOPE_claims.read</text>
+  <rect class="cS" x="438" y="254" width="158" height="26" rx="6"/><text class="on" x="517" y="272" text-anchor="middle">SCOPE_claims.write</text>
+  <rect class="cR" x="282" y="288" width="104" height="26" rx="6"/><text class="on" x="334" y="306" text-anchor="middle">ROLE_ADMIN</text>
+  <text class="code" x="618" y="262">hasRole('ADMIN')</text>
+  <rect class="okb" x="618" y="276" width="140" height="30" rx="8"/>
+  <text class="res" x="688" y="296" text-anchor="middle">allowed</text>
+
+  <text class="sub" x="28" y="352">hasRole('ADMIN') looks for the authority ROLE_ADMIN.</text>
+  <text class="sub" x="28" y="370">hasAuthority('SCOPE_claims.read') works with either converter.</text>
+</svg>

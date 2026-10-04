@@ -93,6 +93,9 @@ If you set `jwk-set-uri` *instead of* `issuer-uri`, you skip discovery but also 
 
 A token with `"scope": "claims.read claims.write"` yields the authorities `SCOPE_claims.read` and `SCOPE_claims.write`. `hasRole("ADMIN")` looks for `ROLE_ADMIN`, which is never there. Enterprise IdPs usually put roles in a custom claim (`groups`, `roles`, `memberOf`, Keycloak's nested `realm_access.roles`). You map those with a `JwtAuthenticationConverter`, shown in the code section.
 
+![A JWT with scope claims.read claims.write and groups admin: the default converter yields only SCOPE_ authorities so hasRole('ADMIN') returns 403, while the custom converter also adds ROLE_ADMIN so the check passes](images/07-claims-to-authorities.svg){ loading=lazy }
+*Notice that the default converter does not fail: it silently ignores the `groups` claim, and the 403 appears only at the authorization step.*
+
 ### JWT vs opaque tokens
 
 | | JWT (`.jwt(...)`) | Opaque (`.opaqueToken(...)`) |
@@ -124,6 +127,9 @@ flowchart TD
     USE --> API["Downstream resource server"]
 ```
 *Notice that your code never calls the token endpoint. The manager decides whether to reuse, refresh or fetch a token, and the registration is static configuration while the authorized client is runtime state.*
+
+![Animation: over ten minutes, eleven RestClient calls go out; the first fetches token T1 from the IdP, the next calls reuse it, and the first call inside the 60-second window before T1 expires fetches T2](images/07-client-token-cache.svg){ loading=lazy }
+*Watch the bottom row: the token endpoint is hit once per token lifetime, not once per call.*
 
 | Type | What it is |
 |---|---|

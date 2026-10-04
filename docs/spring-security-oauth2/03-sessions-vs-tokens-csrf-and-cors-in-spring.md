@@ -62,6 +62,9 @@ This single question explains CSRF.
 
 "Stateless" and "CSRF-safe" are different properties. A JWT in a cookie is stateless and still open to CSRF.
 
+![Animation: a forged POST from evil.example picks up the session cookie automatically and reaches bank.example authenticated, while the same forged POST against an API that expects a bearer header arrives with no credential and gets 401](images/03-who-attaches-credential.svg){ loading=lazy }
+*Watch the top lane: the browser adds the cookie on its own, so the forged request looks legitimate. In the bottom lane nothing adds the token, so there is nothing for CSRF to abuse.*
+
 ### CSRF: the attack
 
 Cross-Site Request Forgery makes the victim's browser send a state-changing request to a site where the victim is already logged in.
@@ -110,6 +113,9 @@ Two request classes:
 
 - **Simple requests**: `GET`, `HEAD`, or `POST` with a content type of `application/x-www-form-urlencoded`, `multipart/form-data` or `text/plain`, and only safelisted headers. The browser sends them immediately and only checks the response headers afterwards. **The server has already processed the request.** This is why CORS does not prevent CSRF.
 - **Preflighted requests**: anything else, for example `PUT`, `DELETE`, `Content-Type: application/json`, or an `Authorization` header. The browser first sends `OPTIONS` with `Origin`, `Access-Control-Request-Method` and `Access-Control-Request-Headers`. Only if the answer allows it does the real request go out.
+
+![Animation: on the left a simple POST is sent at once, the server runs it, and only then does the browser hide the reply from script; on the right the browser first sends an OPTIONS preflight that CorsFilter answers before authentication, then the real PUT with a bearer token, whose reply is readable](images/03-cors-simple-vs-preflight.svg){ loading=lazy }
+*Notice the left panel: the server has already acted before the browser checks any CORS header. CORS controls reading, not sending.*
 
 ```mermaid
 sequenceDiagram

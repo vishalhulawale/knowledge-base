@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 410" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Simple versus preflighted cross-origin requests</title>
+  <desc id="d">Left: a simple request, a form-style POST with text/plain. The browser sends it immediately, the server processes it, and the response has no Access-Control-Allow-Origin header, so script cannot read the reply, but the server has already acted. Right: a preflighted request, a PUT with JSON and an Authorization header. The browser first sends OPTIONS without credentials. CorsFilter answers it before any authentication filter with Allow-Origin and Allow-Methods. Only then does the browser send the real PUT with the bearer token, and the 200 response with Access-Control-Allow-Origin is readable by script.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .col{fill:#334155;font-size:14px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .t{fill:#334155;font-size:13px}
+    .life{stroke:#cbd5e1;stroke-width:1.5;stroke-dasharray:4 4}
+    .ar{stroke:#4f46e5;stroke-width:2}.ah{fill:#4f46e5}
+    .ar2{stroke:#0ea5a4;stroke-width:2}.ah2{fill:#0ea5a4}
+    .nbad{fill:#dc2626}.nok{fill:#16a34a}.nteal{fill:#0ea5a4}
+    .on{fill:#fff;font-size:13px;font-weight:700}
+    .bad{fill:#dc2626;font-size:13px;font-weight:700}
+    .panel{fill:#ffffff;stroke:#cbd5e1}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.col,.t{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .life{stroke:#475569}.ar{stroke:#818cf8}.ah{fill:#818cf8}.ar2{stroke:#2dd4bf}.ah2{fill:#2dd4bf}
+      .nbad{fill:#f87171}.nok{fill:#4ade80}.nteal{fill:#2dd4bf}.on{fill:#0f172a}.bad{fill:#f87171}
+      .panel{fill:#111827;stroke:#475569}
+    }
+    /* 12 s loop: steps appear one after another, left panel then right panel */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes a1{0%,3%{opacity:0}5%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes a2{0%,10%{opacity:0}12%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes a3{0%,17%{opacity:0}19%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes a4{0%,24%{opacity:0}26%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes a5{0%,30%{opacity:0}32%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes b1{0%,40%{opacity:0}42%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes b2{0%,47%{opacity:0}49%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes b3{0%,54%{opacity:0}56%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes b4{0%,61%{opacity:0}63%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes b5{0%,68%{opacity:0}70%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes b6{0%,75%{opacity:0}77%,92%{opacity:1}96%,100%{opacity:0}}
+    .ka1{animation-name:a1}.ka2{animation-name:a2}.ka3{animation-name:a3}.ka4{animation-name:a4}.ka5{animation-name:a5}
+    .kb1{animation-name:b1}.kb2{animation-name:b2}.kb3{animation-name:b3}.kb4{animation-name:b4}.kb5{animation-name:b5}.kb6{animation-name:b6}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="408" rx="14"/>
+  <text class="h" x="28" y="38">CORS only decides who may read the response</text>
+
+  <!-- left panel -->
+  <rect class="panel" x="20" y="56" width="370" height="290" rx="10"/>
+  <text class="lbl" x="36" y="80">Simple request</text>
+  <text class="sub" x="36" y="98">POST, text/plain or form content type</text>
+  <text class="col" x="80" y="124" text-anchor="middle">Browser</text>
+  <text class="col" x="330" y="124" text-anchor="middle">API</text>
+  <line class="life" x1="80" y1="132" x2="80" y2="334"/>
+  <line class="life" x1="330" y1="132" x2="330" y2="334"/>
+  <g class="a ka1">
+    <line class="ar" x1="82" y1="158" x2="320" y2="158"/><path class="ah" d="M328 158 l-10 -5 v10 z"/>
+    <text class="t" x="205" y="150" text-anchor="middle">POST /transfer (sent at once)</text>
+  </g>
+  <g class="a ka2">
+    <rect class="nbad" x="110" y="168" width="190" height="24" rx="6"/>
+    <text class="on" x="205" y="185" text-anchor="middle">server already ran it</text>
+  </g>
+  <g class="a ka3">
+    <line class="ar" x1="90" y1="222" x2="328" y2="222"/><path class="ah" d="M82 222 l10 -5 v10 z"/>
+    <text class="t" x="205" y="214" text-anchor="middle">200, no Allow-Origin header</text>
+  </g>
+  <g class="a ka4">
+    <rect class="nteal" x="110" y="232" width="190" height="24" rx="6"/>
+    <text class="on" x="205" y="249" text-anchor="middle">script can't read reply</text>
+  </g>
+  <g class="a ka5">
+    <text class="bad" x="205" y="292" text-anchor="middle">The request was not blocked,</text>
+    <text class="bad" x="205" y="310" text-anchor="middle">so CORS is no CSRF defence.</text>
+  </g>
+
+  <!-- right panel -->
+  <rect class="panel" x="410" y="56" width="370" height="290" rx="10"/>
+  <text class="lbl" x="426" y="80">Preflighted request</text>
+  <text class="sub" x="426" y="98">PUT, application/json, Authorization</text>
+  <text class="col" x="470" y="124" text-anchor="middle">Browser</text>
+  <text class="col" x="720" y="124" text-anchor="middle">API</text>
+  <line class="life" x1="470" y1="132" x2="470" y2="334"/>
+  <line class="life" x1="720" y1="132" x2="720" y2="334"/>
+  <g class="a kb1">
+    <line class="ar2" x1="472" y1="158" x2="710" y2="158"/><path class="ah2" d="M718 158 l-10 -5 v10 z"/>
+    <text class="t" x="595" y="150" text-anchor="middle">OPTIONS, no credentials</text>
+  </g>
+  <g class="a kb2">
+    <rect class="nteal" x="490" y="168" width="210" height="24" rx="6"/>
+    <text class="on" x="595" y="185" text-anchor="middle">CorsFilter, before auth</text>
+  </g>
+  <g class="a kb3">
+    <line class="ar2" x1="480" y1="222" x2="718" y2="222"/><path class="ah2" d="M472 222 l10 -5 v10 z"/>
+    <text class="t" x="595" y="214" text-anchor="middle">200, Allow-Origin, Allow-Methods</text>
+  </g>
+  <g class="a kb4">
+    <line class="ar" x1="472" y1="258" x2="710" y2="258"/><path class="ah" d="M718 258 l-10 -5 v10 z"/>
+    <text class="t" x="595" y="250" text-anchor="middle">PUT /orders/7 + Bearer token</text>
+  </g>
+  <g class="a kb5">
+    <line class="ar" x1="480" y1="294" x2="718" y2="294"/><path class="ah" d="M472 294 l10 -5 v10 z"/>
+    <text class="t" x="595" y="286" text-anchor="middle">200 + Allow-Origin</text>
+  </g>
+  <g class="a kb6">
+    <rect class="nok" x="490" y="304" width="210" height="24" rx="6"/>
+    <text class="on" x="595" y="321" text-anchor="middle">readable by script</text>
+  </g>
+
+  <text class="sub" x="28" y="372">If the security chain tried to authenticate the OPTIONS call, it would get 401</text>
+  <text class="sub" x="28" y="390">and the browser would report a CORS error even with correct CORS rules.</text>
+</svg>

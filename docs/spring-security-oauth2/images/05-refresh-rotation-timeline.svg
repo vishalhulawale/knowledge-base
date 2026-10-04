@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Short-lived access tokens renewed by rotating refresh tokens</title>
+  <desc id="d">A 45-minute timeline. Access tokens AT1, AT2 and AT3 each live 15 minutes. At minute 15 and minute 30 the client calls the token endpoint with its refresh token and receives a new access token and a new refresh token. Each used refresh token, RT1 and then RT2, is invalidated at that moment. The user stays logged in for the whole period without a login prompt.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .rl{fill:#334155;font-size:14px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .at{fill:#4f46e5}.rt{fill:#0ea5a4}.us{fill:#16a34a}
+    .on{fill:#fff;font-size:13px;font-weight:700}
+    .used{fill:#ffffff;stroke:#cbd5e1}
+    .usedt{fill:#64748b;font-size:13px;font-weight:600}
+    .strike{stroke:#dc2626;stroke-width:2}
+    .ev{stroke:#64748b;stroke-width:1.5;stroke-dasharray:4 4}
+    .evt{fill:#334155;font-size:13px;font-weight:600}
+    .axis{stroke:#94a3b8;stroke-width:1.5}
+    .ph{stroke:#d97706;stroke-width:3}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.rl,.evt{fill:#e2e8f0}.sub,.usedt{fill:#94a3b8}
+      .at{fill:#818cf8}.rt{fill:#2dd4bf}.us{fill:#4ade80}.on{fill:#0f172a}
+      .used{fill:#111827;stroke:#475569}.strike{stroke:#f87171}
+      .ev{stroke:#94a3b8}.axis{stroke:#64748b}.ph{stroke:#fbbf24}
+    }
+    /* 10 s loop: playhead sweeps 45 minutes in 8 s */
+    .phG{animation:ph 10s infinite linear}
+    @keyframes ph{0%{transform:translateX(0)}80%,92%{transform:translateX(600px)}96%,100%{transform:translateX(600px);opacity:0}}
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes s0{0%{opacity:0}2%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s1{0%,26%{opacity:0}28%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s2{0%,53%{opacity:0}55%,92%{opacity:1}96%,100%{opacity:0}}
+    .k0{animation-name:s0}.k1{animation-name:s1}.k2{animation-name:s2}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.phG{animation:none;transform:translateX(600px)}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="38">Access tokens stay short, refresh tokens rotate on every use</text>
+
+  <!-- refresh events -->
+  <line class="ev" x1="360" y1="72" x2="360" y2="282"/>
+  <line class="ev" x1="560" y1="72" x2="560" y2="282"/>
+  <text class="evt" x="360" y="66" text-anchor="middle">refresh with RT1</text>
+  <text class="evt" x="560" y="66" text-anchor="middle">refresh with RT2</text>
+
+  <!-- row labels -->
+  <text class="rl" x="28" y="110">Access token</text>
+  <text class="rl" x="28" y="172">Refresh token</text>
+  <text class="rl" x="28" y="234">User</text>
+
+  <!-- access tokens -->
+  <g class="a k0"><rect class="at" x="160" y="90" width="196" height="30" rx="7"/><text class="on" x="258" y="110" text-anchor="middle">AT1, 15 min</text></g>
+  <g class="a k1"><rect class="at" x="362" y="90" width="194" height="30" rx="7"/><text class="on" x="459" y="110" text-anchor="middle">AT2, 15 min</text></g>
+  <g class="a k2"><rect class="at" x="562" y="90" width="196" height="30" rx="7"/><text class="on" x="660" y="110" text-anchor="middle">AT3, 15 min</text></g>
+
+  <!-- refresh tokens -->
+  <g class="a k0"><rect class="rt" x="160" y="152" width="196" height="30" rx="7"/><text class="on" x="258" y="172" text-anchor="middle">RT1</text></g>
+  <g class="a k1">
+    <rect class="used" x="160" y="152" width="196" height="30" rx="7"/>
+    <text class="usedt" x="258" y="172" text-anchor="middle">RT1 used, now invalid</text>
+    <line class="strike" x1="176" y1="167" x2="340" y2="167"/>
+    <rect class="rt" x="362" y="152" width="194" height="30" rx="7"/><text class="on" x="459" y="172" text-anchor="middle">RT2</text>
+  </g>
+  <g class="a k2">
+    <rect class="used" x="362" y="152" width="194" height="30" rx="7"/>
+    <text class="usedt" x="459" y="172" text-anchor="middle">RT2 used, now invalid</text>
+    <line class="strike" x1="378" y1="167" x2="540" y2="167"/>
+    <rect class="rt" x="562" y="152" width="196" height="30" rx="7"/><text class="on" x="660" y="172" text-anchor="middle">RT3</text>
+  </g>
+
+  <!-- user -->
+  <rect class="us" x="160" y="214" width="598" height="30" rx="7"/>
+  <text class="on" x="459" y="234" text-anchor="middle">logged in the whole time, no login prompt</text>
+
+  <!-- axis -->
+  <line class="axis" x1="160" y1="282" x2="760" y2="282"/>
+  <text class="sub" x="160" y="302" text-anchor="middle">0</text>
+  <text class="sub" x="360" y="302" text-anchor="middle">15</text>
+  <text class="sub" x="560" y="302" text-anchor="middle">30</text>
+  <text class="sub" x="760" y="302" text-anchor="end">45 min</text>
+
+  <!-- playhead -->
+  <g class="phG"><line class="ph" x1="160" y1="80" x2="160" y2="288"/></g>
+
+  <text class="sub" x="28" y="336">15 minutes is an example lifetime. If a used refresh token such as RT1 is presented again,</text>
+  <text class="sub" x="28" y="354">the server detects reuse and revokes the whole family, including the current RT3.</text>
+</svg>

@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 410" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">HS256 versus RS256 trust boundaries</title>
+  <desc id="d">Left, HS256: the issuer and three verifying services, orders, claims and billing, all hold the same shared secret. If billing is compromised, the attacker holds the secret and can forge an admin token that all three services accept, because every verifier can also sign. Right, RS256: only the issuer holds the private key, and the services hold the public key fetched from JWKS. If billing is compromised, only a public key leaks, and a public key cannot create signatures.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .t{fill:#334155;font-size:14px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .panel{fill:#ffffff;stroke:#cbd5e1}
+    .box{fill:#f8fafc;stroke:#94a3b8}
+    .comp{fill:#f8fafc;stroke:#dc2626;stroke-width:2.5}
+    .ln{stroke:#94a3b8;stroke-width:1.5}
+    .kS{fill:#d97706}.kPriv{fill:#4f46e5}.kPub{fill:#0ea5a4}
+    .on{fill:#fff;font-size:13px;font-weight:700}
+    .bad{fill:#dc2626;font-size:13px;font-weight:700}
+    .ok{fill:#16a34a;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .panel{fill:#111827;stroke:#475569}.box{fill:#1f2430;stroke:#64748b}.comp{fill:#1f2430;stroke:#f87171}
+      .ln{stroke:#64748b}
+      .kS{fill:#fbbf24}.kPriv{fill:#818cf8}.kPub{fill:#2dd4bf}.on{fill:#0f172a}
+      .bad{fill:#f87171}.ok{fill:#4ade80}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="408" rx="14"/>
+  <text class="h" x="28" y="38">Who can mint a token if one verifier is compromised?</text>
+
+  <!-- HS256 panel -->
+  <rect class="panel" x="20" y="56" width="370" height="300" rx="10"/>
+  <text class="lbl" x="36" y="80">HS256: one shared secret</text>
+  <line class="ln" x1="205" y1="152" x2="85" y2="200"/>
+  <line class="ln" x1="205" y1="152" x2="205" y2="200"/>
+  <line class="ln" x1="205" y1="152" x2="325" y2="200"/>
+  <rect class="box" x="130" y="96" width="150" height="56" rx="8"/>
+  <text class="t" x="205" y="118" text-anchor="middle">Issuer</text>
+  <rect class="kS" x="168" y="126" width="74" height="20" rx="5"/><text class="on" x="205" y="141" text-anchor="middle">secret</text>
+
+  <rect class="box" x="38" y="200" width="94" height="58" rx="8"/>
+  <text class="t" x="85" y="222" text-anchor="middle">orders</text>
+  <rect class="kS" x="48" y="230" width="74" height="20" rx="5"/><text class="on" x="85" y="245" text-anchor="middle">secret</text>
+  <rect class="box" x="158" y="200" width="94" height="58" rx="8"/>
+  <text class="t" x="205" y="222" text-anchor="middle">claims</text>
+  <rect class="kS" x="168" y="230" width="74" height="20" rx="5"/><text class="on" x="205" y="245" text-anchor="middle">secret</text>
+  <rect class="comp" x="278" y="200" width="94" height="58" rx="8"/>
+  <text class="t" x="325" y="222" text-anchor="middle">billing</text>
+  <rect class="kS" x="288" y="230" width="74" height="20" rx="5"/><text class="on" x="325" y="245" text-anchor="middle">secret</text>
+  <text class="bad" x="325" y="276" text-anchor="middle">compromised</text>
+
+  <text class="bad" x="36" y="314">Attacker signs an admin token with the</text>
+  <text class="bad" x="36" y="332">secret: all three services accept it.</text>
+
+  <!-- RS256 panel -->
+  <rect class="panel" x="410" y="56" width="370" height="300" rx="10"/>
+  <text class="lbl" x="426" y="80">RS256 / ES256: key pair</text>
+  <line class="ln" x1="595" y1="152" x2="475" y2="200"/>
+  <line class="ln" x1="595" y1="152" x2="595" y2="200"/>
+  <line class="ln" x1="595" y1="152" x2="715" y2="200"/>
+  <text class="sub" x="672" y="172">JWKS</text>
+  <rect class="box" x="520" y="96" width="150" height="56" rx="8"/>
+  <text class="t" x="595" y="118" text-anchor="middle">Issuer</text>
+  <rect class="kPriv" x="558" y="126" width="74" height="20" rx="5"/><text class="on" x="595" y="141" text-anchor="middle">private</text>
+
+  <rect class="box" x="428" y="200" width="94" height="58" rx="8"/>
+  <text class="t" x="475" y="222" text-anchor="middle">orders</text>
+  <rect class="kPub" x="438" y="230" width="74" height="20" rx="5"/><text class="on" x="475" y="245" text-anchor="middle">public</text>
+  <rect class="box" x="548" y="200" width="94" height="58" rx="8"/>
+  <text class="t" x="595" y="222" text-anchor="middle">claims</text>
+  <rect class="kPub" x="558" y="230" width="74" height="20" rx="5"/><text class="on" x="595" y="245" text-anchor="middle">public</text>
+  <rect class="comp" x="668" y="200" width="94" height="58" rx="8"/>
+  <text class="t" x="715" y="222" text-anchor="middle">billing</text>
+  <rect class="kPub" x="678" y="230" width="74" height="20" rx="5"/><text class="on" x="715" y="245" text-anchor="middle">public</text>
+  <text class="bad" x="715" y="276" text-anchor="middle">compromised</text>
+
+  <text class="ok" x="426" y="314">Only a public key leaks. It verifies</text>
+  <text class="ok" x="426" y="332">signatures but cannot create them.</text>
+
+  <text class="sub" x="28" y="378">With HS256 every verifier is also a potential issuer.</text>
+  <text class="sub" x="28" y="396">This is why NimbusJwtDecoder trusts only RS256 by default.</text>
+</svg>
