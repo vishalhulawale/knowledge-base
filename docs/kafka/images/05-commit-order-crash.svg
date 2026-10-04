@@ -1,0 +1,297 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">A crash mid-batch: commit before vs commit after processing</title>
+  <desc id="d">A consumer polls records 100 to 109. On the left it commits offset 110 before processing, then crashes after processing 100 to 104. On restart it resumes from the committed offset 110, so records 105 to 109 are never processed: at-most-once, data lost. On the right it processes all ten records first and crashes before committing. On restart it resumes from the last commit, 100, and processes all ten again: at-least-once, duplicates that an idempotent consumer must absorb.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:13s infinite linear}
+    @keyframes p0{0%,26%{opacity:1}27%{opacity:0}100%{opacity:0}}
+    .p0{animation-name:p0}
+    @keyframes p1{0%{opacity:0}26%{opacity:0}27%,56%{opacity:1}57%{opacity:0}100%{opacity:0}}
+    .p1{animation-name:p1}
+    @keyframes p2{0%{opacity:0}56%{opacity:0}57%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .p2{animation-name:p2}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      .p0,.p1{opacity:0!important}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">The consumer crashes in the middle of a batch</text>
+  <text class="sub" x="28" y="62">Polled records 100–109. Where the commit sits decides what a crash costs.</text>
+  <line class="ln dash" x1="400" y1="84" x2="400" y2="300"/>
+  <text class="h2" x="28" y="100">Commit, then process</text>
+  <text class="sm" x="28" y="120">at-most-once</text>
+  <rect class="box" x="28" y="150" width="31" height="36" rx="5"/>
+  <text class="sm" x="43.5" y="208" text-anchor="middle">100</text>
+  <rect class="box" x="63" y="150" width="31" height="36" rx="5"/>
+  <text class="sm" x="78.5" y="208" text-anchor="middle">101</text>
+  <rect class="box" x="98" y="150" width="31" height="36" rx="5"/>
+  <text class="sm" x="113.5" y="208" text-anchor="middle">102</text>
+  <rect class="box" x="133" y="150" width="31" height="36" rx="5"/>
+  <text class="sm" x="148.5" y="208" text-anchor="middle">103</text>
+  <rect class="box" x="168" y="150" width="31" height="36" rx="5"/>
+  <text class="sm" x="183.5" y="208" text-anchor="middle">104</text>
+  <rect class="box" x="203" y="150" width="31" height="36" rx="5"/>
+  <text class="sm" x="218.5" y="208" text-anchor="middle">105</text>
+  <rect class="box" x="238" y="150" width="31" height="36" rx="5"/>
+  <text class="sm" x="253.5" y="208" text-anchor="middle">106</text>
+  <rect class="box" x="273" y="150" width="31" height="36" rx="5"/>
+  <text class="sm" x="288.5" y="208" text-anchor="middle">107</text>
+  <rect class="box" x="308" y="150" width="31" height="36" rx="5"/>
+  <text class="sm" x="323.5" y="208" text-anchor="middle">108</text>
+  <rect class="box" x="343" y="150" width="31" height="36" rx="5"/>
+  <text class="sm" x="358.5" y="208" text-anchor="middle">109</text>
+  <g class="a p0">
+  <rect class="mutf" x="28" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p0">
+  <rect class="mutf" x="63" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p0">
+  <rect class="mutf" x="98" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p0">
+  <rect class="mutf" x="133" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p0">
+  <rect class="mutf" x="168" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p0">
+  <rect class="mutf" x="203" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p0">
+  <rect class="mutf" x="238" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p0">
+  <rect class="mutf" x="273" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p0">
+  <rect class="mutf" x="308" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p0">
+  <rect class="mutf" x="343" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p1">
+  <rect class="okf" x="28" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p1">
+  <rect class="okf" x="63" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p1">
+  <rect class="okf" x="98" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p1">
+  <rect class="okf" x="133" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p1">
+  <rect class="okf" x="168" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p1">
+  <rect class="mutf" x="203" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p1">
+  <rect class="mutf" x="238" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p1">
+  <rect class="mutf" x="273" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p1">
+  <rect class="mutf" x="308" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p1">
+  <rect class="mutf" x="343" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p2">
+  <rect class="okf" x="28" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p2">
+  <rect class="okf" x="63" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p2">
+  <rect class="okf" x="98" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p2">
+  <rect class="okf" x="133" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p2">
+  <rect class="okf" x="168" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p2">
+  <rect class="badf" x="203" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p2">
+  <rect class="badf" x="238" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p2">
+  <rect class="badf" x="273" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p2">
+  <rect class="badf" x="308" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p2">
+  <rect class="badf" x="343" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <text class="sm badt a p1" x="201" y="146" text-anchor="middle">✕ crash</text>
+  <text class="tx a p0" x="28" y="240">committed offset: 100</text>
+  <text class="tx a p1" x="28" y="240">committed offset: 110 (before work)</text>
+  <text class="tx a p2" x="28" y="240">restart reads from 110</text>
+  <text class="h2" x="420" y="100">Process, then commit</text>
+  <text class="sm" x="420" y="120">at-least-once</text>
+  <rect class="box" x="420" y="150" width="31" height="36" rx="5"/>
+  <text class="sm" x="435.5" y="208" text-anchor="middle">100</text>
+  <rect class="box" x="455" y="150" width="31" height="36" rx="5"/>
+  <text class="sm" x="470.5" y="208" text-anchor="middle">101</text>
+  <rect class="box" x="490" y="150" width="31" height="36" rx="5"/>
+  <text class="sm" x="505.5" y="208" text-anchor="middle">102</text>
+  <rect class="box" x="525" y="150" width="31" height="36" rx="5"/>
+  <text class="sm" x="540.5" y="208" text-anchor="middle">103</text>
+  <rect class="box" x="560" y="150" width="31" height="36" rx="5"/>
+  <text class="sm" x="575.5" y="208" text-anchor="middle">104</text>
+  <rect class="box" x="595" y="150" width="31" height="36" rx="5"/>
+  <text class="sm" x="610.5" y="208" text-anchor="middle">105</text>
+  <rect class="box" x="630" y="150" width="31" height="36" rx="5"/>
+  <text class="sm" x="645.5" y="208" text-anchor="middle">106</text>
+  <rect class="box" x="665" y="150" width="31" height="36" rx="5"/>
+  <text class="sm" x="680.5" y="208" text-anchor="middle">107</text>
+  <rect class="box" x="700" y="150" width="31" height="36" rx="5"/>
+  <text class="sm" x="715.5" y="208" text-anchor="middle">108</text>
+  <rect class="box" x="735" y="150" width="31" height="36" rx="5"/>
+  <text class="sm" x="750.5" y="208" text-anchor="middle">109</text>
+  <g class="a p0">
+  <rect class="mutf" x="420" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p0">
+  <rect class="mutf" x="455" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p0">
+  <rect class="mutf" x="490" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p0">
+  <rect class="mutf" x="525" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p0">
+  <rect class="mutf" x="560" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p0">
+  <rect class="mutf" x="595" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p0">
+  <rect class="mutf" x="630" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p0">
+  <rect class="mutf" x="665" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p0">
+  <rect class="mutf" x="700" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p0">
+  <rect class="mutf" x="735" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p1">
+  <rect class="okf" x="420" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p1">
+  <rect class="okf" x="455" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p1">
+  <rect class="okf" x="490" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p1">
+  <rect class="okf" x="525" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p1">
+  <rect class="okf" x="560" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p1">
+  <rect class="okf" x="595" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p1">
+  <rect class="okf" x="630" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p1">
+  <rect class="okf" x="665" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p1">
+  <rect class="okf" x="700" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p1">
+  <rect class="okf" x="735" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p2">
+  <rect class="wrnf" x="420" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p2">
+  <rect class="wrnf" x="455" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p2">
+  <rect class="wrnf" x="490" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p2">
+  <rect class="wrnf" x="525" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p2">
+  <rect class="wrnf" x="560" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p2">
+  <rect class="wrnf" x="595" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p2">
+  <rect class="wrnf" x="630" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p2">
+  <rect class="wrnf" x="665" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p2">
+  <rect class="wrnf" x="700" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <g class="a p2">
+  <rect class="wrnf" x="735" y="150" width="31" height="36" rx="6"/>
+  </g>
+  <text class="sm badt a p1" x="768" y="146" text-anchor="middle">✕ crash</text>
+  <text class="tx a p0" x="420" y="240">committed offset: 100</text>
+  <text class="tx a p1" x="420" y="240">committed offset: 100 (not yet)</text>
+  <text class="tx a p2" x="420" y="240">restart reads from 100</text>
+  <text class="tx badt a p2" x="28" y="262">105–109 never processed: LOST</text>
+  <text class="tx wrnt a p2" x="420" y="262">100–109 processed twice: DUPLICATES</text>
+  <text class="sm a p2" x="420" y="282">safe only if the consumer is idempotent</text>
+  <text class="lbl a p0" x="28" y="332">1  poll() returns 100–109</text>
+  <text class="lbl badt a p1" x="28" y="332">2  Crash: left after processing 100–104, right before its commit</text>
+  <text class="lbl a p2" x="28" y="332">3  Restart from the committed offset</text>
+  <text class="sub" x="28" y="360">Grey = not processed, green = processed, red = lost, amber = processed again.</text>
+  <text class="sub" x="28" y="380">Exactly-once needs the output and the offset commit in one transaction (or one DB transaction).</text>
+</svg>

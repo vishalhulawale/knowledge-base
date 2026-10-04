@@ -39,6 +39,9 @@ flowchart TD
 ```
 *Notice that each duplicate source has a different fix. The idempotent producer alone handles only the first one.*
 
+![Animation: a consumer polls records 100 to 109 and crashes mid-batch; committing before processing loses 105 to 109 on restart, while committing after processing replays all ten as duplicates](images/05-commit-order-crash.svg){ loading=lazy }
+*Watch step 3: the restart always begins at the committed offset. Commit early and you lose work; commit late and you redo it.*
+
 ### How Kafka transactions work
 
 ```mermaid
@@ -65,6 +68,9 @@ Key mechanics:
 - **`transactional.id`**: a stable ID per producer instance (e.g. per input partition or per pod). On `initTransactions()`, the coordinator bumps the **epoch** and **fences** zombie instances with the same ID, so a stuck old instance can't commit.
 - **Transaction markers**: commit/abort markers written to every partition involved.
 - **`isolation.level=read_committed`** consumers read only committed transactional data and skip aborted records. They read up to the **LSO** (last stable offset). The default `read_uncommitted` sees everything, including aborted records.
+
+![A partition holding committed transaction T1 with a COMMIT marker, aborted T2 with an ABORT marker, and open T3; read_uncommitted reads up to the high watermark and sees all five data records, read_committed stops at the last stable offset and sees only a and b](images/05-transaction-markers-lso.svg){ loading=lazy }
+*Notice the LSO sits at the first record of the still-open T3: one slow transaction holds back every `read_committed` consumer of that partition.*
 - **EOS v2** (KIP-447, clients and brokers 2.5+): one producer per application instance (per stream thread in Kafka Streams) instead of one per input partition, which makes EOS scale. Fencing moves from "one `transactional.id` per input partition" to the **consumer group metadata** (generation / member ID) passed in `sendOffsetsToTransaction(offsets, consumer.groupMetadata())`. In Kafka Streams it shipped as `exactly_once_beta` (2.6), was renamed `exactly_once_v2` in 3.0, and the old `exactly_once` / `exactly_once_beta` values were removed in 4.0.
 - **Transaction timeout**: `transaction.timeout.ms` (producer, default 60 s) is how long the coordinator waits before it aborts an open transaction on its own. The broker caps it with `transaction.max.timeout.ms` (default 15 min).
 - **Kafka 4.0 (KIP-890, "transactions server-side defense")**: with 4.0+ clients and brokers (`transaction.version=2`) the producer epoch is bumped on **every** transaction, which closes a hole where a late message from a previous transaction could leak into the next one or leave a hanging transaction.

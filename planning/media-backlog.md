@@ -21,7 +21,7 @@ Suggested pictures per page; ⏵ marks an animation.
 - [x] 02 Architecture: ⏵ ISR and high watermark already there; add partition leaders spread across brokers, and log segments with the active segment
 - [x] 03 Producers: ⏵ batching by `linger.ms` / `batch.size`; ⏵ retry without idempotence duplicates vs sequence numbers deduplicate
 - [x] 04 Consumers: ⏵ eager vs cooperative rebalance (stop-the-world vs incremental); offsets: committed vs position vs log-end (lag)
-- [ ] 05 Delivery semantics: ⏵ commit-before vs commit-after processing on crash (lost vs duplicated); transaction markers and `read_committed`
+- [x] 05 Delivery semantics: ⏵ commit-before vs commit-after processing on crash (lost vs duplicated); transaction markers and `read_committed`
 - [ ] 06 Ordering and keys: hot key skewing one partition; ⏵ retry reordering with `max.in.flight > 1` and no idempotence
 - [ ] 07 Error handling: ⏵ non-blocking retry topics with back-off and DLT; poison pill blocking a partition
 - [ ] 08 Idempotent consumers: ⏵ check-then-insert race vs unique-constraint insert
