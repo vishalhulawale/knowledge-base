@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 390" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">StatefulSet identity: same name, same volume</title>
+  <desc id="d">A StatefulSet db with three replicas: pods db-0, db-1 and db-2, each bound to its own PersistentVolumeClaim, data-db-0, data-db-1 and data-db-2, and each with a stable DNS name through the headless Service. When pod db-1 is deleted, it is recreated with the same name, a new UID and the same claim data-db-1, so it gets its data back. Compare a Deployment, whose replacement pod gets a random name and no per-pod storage. Scaling a StatefulSet down removes the highest ordinal first and keeps the claims by default.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+  </style>
+  <defs><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="388" rx="14"/>
+  <text class="h" x="28" y="40">Delete db-1: what comes back?</text>
+  <text class="sub" x="28" y="62">Measured on the page: StatefulSet db, replicas 3, volumeClaimTemplates data.</text>
+  <rect class="bp" x="28" y="104" width="170" height="44" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="113" y="123" text-anchor="middle" font-weight="700">db-0</text>
+  <text class="sm" x="113" y="140" text-anchor="middle">db-0.db.ns.svc</text>
+  <rect class="bt" x="28" y="200" width="170" height="40" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="113" y="225" text-anchor="middle" font-weight="700">PVC data-db-0</text>
+  <line class="lnt" x1="113" y1="148" x2="113" y2="196" marker-end="url(#art)"/>
+  <rect class="bp" x="218" y="104" width="170" height="44" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="303" y="123" text-anchor="middle" font-weight="700">db-1</text>
+  <text class="sm" x="303" y="140" text-anchor="middle">db-1.db.ns.svc</text>
+  <rect class="bt" x="218" y="200" width="170" height="40" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="303" y="225" text-anchor="middle" font-weight="700">PVC data-db-1</text>
+  <line class="lnt" x1="303" y1="148" x2="303" y2="196" marker-end="url(#art)"/>
+  <rect class="bp" x="408" y="104" width="170" height="44" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="493" y="123" text-anchor="middle" font-weight="700">db-2</text>
+  <text class="sm" x="493" y="140" text-anchor="middle">db-2.db.ns.svc</text>
+  <rect class="bt" x="408" y="200" width="170" height="40" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="493" y="225" text-anchor="middle" font-weight="700">PVC data-db-2</text>
+  <line class="lnt" x1="493" y1="148" x2="493" y2="196" marker-end="url(#art)"/>
+  <rect class="bo" x="218" y="270" width="170" height="44" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="303" y="289" text-anchor="middle" font-weight="700">db-1 (recreated)</text>
+  <text class="sm" x="303" y="306" text-anchor="middle">new UID, same name</text>
+  <path class="lno" d="M 368 292 C 418 270, 418 236, 390 222" marker-end="url(#aro)"/>
+  <text class="sm okt" x="428" y="300">same PVC → same data</text>
+  <text class="lbl" x="610" y="124">Deployment instead:</text>
+  <text class="sm" x="610" y="146">web-796cf-x7k2p → </text>
+  <text class="sm" x="610" y="164">web-796cf-q9m4d</text>
+  <text class="sm" x="610" y="186">random name, no</text>
+  <text class="sm" x="610" y="202">per-pod volume</text>
+  <text class="tx" x="28" y="346">Order: created 0 → 1 → 2 (each waits for Ready), scaled down 2 → 1. PVCs are kept on scale-down by default.</text>
+  <text class="sub" x="28" y="370">Prefer an operator or a managed database over a hand-written StatefulSet for real data stores.</text>
+</svg>

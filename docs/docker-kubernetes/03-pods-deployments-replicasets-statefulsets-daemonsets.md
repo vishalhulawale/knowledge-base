@@ -63,6 +63,9 @@ sequenceDiagram
 ```
 *Notice that endpoint removal and SIGTERM happen in parallel. A short preStop sleep gives load balancers and kube-proxy time to stop sending traffic before the app begins shutting down.*
 
+![Animation over 8 seconds after a pod is marked Terminating: endpoint removal takes about 2 seconds to propagate; without preStop the app gets SIGTERM at once and requests in those 2 seconds fail, while with a 5 second preStop sleep the app keeps serving until traffic is gone and gets SIGTERM at 5 seconds](images/03-termination-prestop.svg){ loading=lazy }
+*Watch the cursor cross the first two seconds: in the top lane traffic is still arriving at an app that already stopped listening.*
+
 For Spring Boot: `server.shutdown=graceful`, `spring.lifecycle.timeout-per-shutdown-phase=20s`, an exec-form entrypoint so the JVM receives SIGTERM ([containers page](01-containers-vs-vms-docker-images-layers-multi-stage-builds.md)), and a `preStop` sleep of a few seconds, all under `terminationGracePeriodSeconds`.
 
 ### ReplicaSets and label ownership
@@ -102,6 +105,9 @@ Measured with `replicas: 3`, a headless Service `db` and a `volumeClaimTemplates
 | Delete pod `db-1` | Recreated with the **same name** and the **same PVC** `data-db-1` (new UID) |
 | Scale 3 → 1 | Deleted `db-2` then `db-1` (reverse order). **All 3 PVCs kept** (default retention) |
 | DNS (with a headless Service) | `db-0.db.<ns>.svc.cluster.local`: stable per-pod hostnames for peers and clients |
+
+![A StatefulSet with pods db-0 to db-2, each bound to its own claim data-db-0 to data-db-2 and a stable DNS name; deleting db-1 brings back a pod with the same name and the same claim, while a Deployment's replacement pod gets a random name and no per-pod volume](images/03-statefulset-identity.svg){ loading=lazy }
+*Notice what survives the deletion: the name and the claim. That pairing is the whole reason StatefulSets exist.*
 
 Use for workloads whose instances aren't interchangeable: databases (PostgreSQL, MongoDB replica sets), Kafka and ZooKeeper, Elasticsearch, anything with leader election by identity or per-instance storage. `podManagementPolicy: Parallel` drops the ordering when the app doesn't need it. `persistentVolumeClaimRetentionPolicy` (stable in 1.32) can delete PVCs on scale-down or StatefulSet deletion. In practice, prefer **operators** (CloudNativePG, Strimzi, the MongoDB operator) or managed databases over hand-written StatefulSets for stateful systems.
 

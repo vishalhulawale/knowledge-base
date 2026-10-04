@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Pod termination: the endpoint race and preStop</title>
+  <desc id="d">Two timelines from the moment a pod is marked Terminating, over 8 seconds. Removing the pod from load balancing takes about 2 seconds to propagate through EndpointSlices, kube-proxy and the load balancer; during that time new requests can still arrive. Top, no preStop: the container gets SIGTERM at time 0 and stops accepting connections immediately, so requests that arrive in the first 2 seconds fail with connection refused or 502. Bottom, with a preStop sleep of 5 seconds: SIGTERM only arrives at 5 seconds, after traffic has drained, so no request fails. Both finish well within terminationGracePeriodSeconds of 30. Illustrative timings.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:14s infinite linear}
+    @media (prefers-color-scheme: dark){.gridl{stroke:#334155!important}}
+    @keyframes cur{0%{transform:translate(0px,0px)}90%{transform:translate(600px,0px)}100%{transform:translate(600px,0px)}}
+    .cur{animation:cur 14s infinite linear}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      .cur{transform:translate(0,0)}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="468" rx="14"/>
+  <text class="h" x="28" y="40">Terminating: who stops first, traffic or the app?</text>
+  <text class="sub" x="28" y="62">t = 0 when the pod is marked Terminating. Illustrative timings.</text>
+  <line x1="150.0" x2="150.0" y1="92" y2="352" style="stroke:#e2e8f0;stroke-width:1" class="gridl"/>
+  <text class="sm" x="150" y="370" text-anchor="middle">0s</text>
+  <line x1="225.0" x2="225.0" y1="92" y2="352" style="stroke:#e2e8f0;stroke-width:1" class="gridl"/>
+  <text class="sm" x="225" y="370" text-anchor="middle">1s</text>
+  <line x1="300.0" x2="300.0" y1="92" y2="352" style="stroke:#e2e8f0;stroke-width:1" class="gridl"/>
+  <text class="sm" x="300" y="370" text-anchor="middle">2s</text>
+  <line x1="375.0" x2="375.0" y1="92" y2="352" style="stroke:#e2e8f0;stroke-width:1" class="gridl"/>
+  <text class="sm" x="375" y="370" text-anchor="middle">3s</text>
+  <line x1="450.0" x2="450.0" y1="92" y2="352" style="stroke:#e2e8f0;stroke-width:1" class="gridl"/>
+  <text class="sm" x="450" y="370" text-anchor="middle">4s</text>
+  <line x1="525.0" x2="525.0" y1="92" y2="352" style="stroke:#e2e8f0;stroke-width:1" class="gridl"/>
+  <text class="sm" x="525" y="370" text-anchor="middle">5s</text>
+  <line x1="600.0" x2="600.0" y1="92" y2="352" style="stroke:#e2e8f0;stroke-width:1" class="gridl"/>
+  <text class="sm" x="600" y="370" text-anchor="middle">6s</text>
+  <line x1="675.0" x2="675.0" y1="92" y2="352" style="stroke:#e2e8f0;stroke-width:1" class="gridl"/>
+  <text class="sm" x="675" y="370" text-anchor="middle">7s</text>
+  <line x1="750.0" x2="750.0" y1="92" y2="352" style="stroke:#e2e8f0;stroke-width:1" class="gridl"/>
+  <text class="sm" x="750" y="370" text-anchor="middle">8s</text>
+  <text class="h2" x="28" y="104">No preStop</text>
+  <text class="sm" x="28" y="136">traffic routed</text>
+  <text class="sm" x="28" y="172">app serving</text>
+  <rect class="bw" x="150" y="118" width="150" height="26" rx="5"/>
+  <text class="sm" x="158" y="136" font-weight="700">propagating</text>
+  <rect class="bm" x="300" y="118" width="450" height="26" rx="5"/>
+  <text class="sm" x="308" y="136" font-weight="700">no new traffic</text>
+  <rect class="bb" x="150" y="154" width="97.5" height="26" rx="5"/>
+  <text class="sm" x="158" y="172" font-weight="700">SIGTERM</text>
+  <rect class="bm" x="247.5" y="154" width="502.5" height="26" rx="5"/>
+  <text class="sm" x="255.5" y="172" font-weight="700">stopped</text>
+  <text class="h2" x="28" y="240">preStop: sleep 5</text>
+  <text class="sm" x="28" y="272">traffic routed</text>
+  <text class="sm" x="28" y="308">app serving</text>
+  <rect class="bw" x="150" y="254" width="150" height="26" rx="5"/>
+  <text class="sm" x="158" y="272" font-weight="700">propagating</text>
+  <rect class="bm" x="300" y="254" width="450" height="26" rx="5"/>
+  <text class="sm" x="308" y="272" font-weight="700">no new traffic</text>
+  <rect class="bo" x="150" y="290" width="375" height="26" rx="5"/>
+  <text class="sm" x="158" y="308" font-weight="700">still serving during preStop</text>
+  <rect class="bp" x="525" y="290" width="97.5" height="26" rx="5"/>
+  <text class="sm" x="533" y="308" font-weight="700">SIGTERM</text>
+  <rect class="bm" x="622.5" y="290" width="127.5" height="26" rx="5"/>
+  <text class="sm" x="630.5" y="308" font-weight="700">exited</text>
+  <text class="sm badt" x="165" y="196">requests here hit a closed port → 502s</text>
+  <text class="sm okt" x="315" y="332">traffic gone before SIGTERM → 0 errors</text>
+  <g class="cur">
+  <line x1="150" x2="150" y1="92" y2="352" class="lnw" style="stroke-width:2"/>
+  </g>
+  <text class="tx" x="28" y="404">Endpoint removal and SIGTERM start together; preStop holds SIGTERM until traffic has drained.</text>
+  <text class="sub" x="28" y="428">Spring Boot: server.shutdown=graceful + a few seconds of preStop sleep, all under terminationGracePeriodSeconds.</text>
+  <text class="sub" x="28" y="448">Use the exec form of ENTRYPOINT so the JVM is PID 1 and actually receives SIGTERM.</text>
+</svg>
