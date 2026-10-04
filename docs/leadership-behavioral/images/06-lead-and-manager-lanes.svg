@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Who does what when performance slips</title>
+  <desc id="d">Two swimlanes, tech lead and people manager with HR. In the tech lead lane: observe and gather facts, hold an early private SBI conversation and listen, agree expectations and support for the next 2 to 4 weeks, then follow up and recognise progress, which usually ends in improvement. The people manager is informed of the plan early and transparently. Only if there is no improvement does the manager start a formal process such as a PIP with HR, which can end in a role change or exit handled with dignity. The steps light up in order.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .lane{fill:#ffffff;stroke:#e2e8f0}
+    .ln{fill:#334155;font-size:15px;font-weight:700}
+    .ls{fill:#64748b;font-size:13px}
+    .bx{fill:#e0e7ff;stroke:#4f46e5;stroke-width:1.5}
+    .bt{fill:#312e81;font-size:13px;font-weight:700}.btn{fill:#312e81;font-size:13px}
+    .ok{fill:#dcfce7;stroke:#16a34a;stroke-width:1.5}
+    .okt{fill:#14532d;font-size:13px;font-weight:700}.oktn{fill:#14532d;font-size:13px}
+    .wr{fill:#fef3c7;stroke:#d97706;stroke-width:1.5}
+    .wrt{fill:#78350f;font-size:13px;font-weight:700}.wrtn{fill:#78350f;font-size:13px}
+    .ar{stroke:#64748b;stroke-width:2;fill:none}
+    .ad{stroke:#64748b;stroke-width:2;stroke-dasharray:5 4;fill:none}
+    .ah{fill:#64748b}
+    .at{fill:#64748b;font-size:13px;font-style:italic}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.sub,.ls{fill:#94a3b8}
+      .lane{fill:#111827;stroke:#334155}.ln{fill:#e2e8f0}
+      .bx{fill:#312e81;stroke:#818cf8}.bt,.btn{fill:#e0e7ff}
+      .ok{fill:#14532d;stroke:#4ade80}.okt,.oktn{fill:#dcfce7}
+      .wr{fill:#422006;stroke:#fbbf24}.wrt,.wrtn{fill:#fde68a}
+      .ar,.ad{stroke:#94a3b8}.ah{fill:#94a3b8}.at{fill:#94a3b8}
+    }
+    /* 10 s loop: steps light up in order */
+    .s{opacity:.25;animation:10s infinite linear}
+    @keyframes a1{0%,95%{opacity:1}100%{opacity:.25}}
+    @keyframes a2{0%,12%{opacity:.25}15%,95%{opacity:1}100%{opacity:.25}}
+    @keyframes a3{0%,26%{opacity:.25}29%,95%{opacity:1}100%{opacity:.25}}
+    @keyframes a4{0%,36%{opacity:.25}39%,95%{opacity:1}100%{opacity:.25}}
+    @keyframes a5{0%,48%{opacity:.25}51%,95%{opacity:1}100%{opacity:.25}}
+    @keyframes a6{0%,60%{opacity:.25}63%,95%{opacity:1}100%{opacity:.25}}
+    @keyframes a7{0%,72%{opacity:.25}75%,95%{opacity:1}100%{opacity:.25}}
+    .k1{animation-name:a1}.k2{animation-name:a2}.k3{animation-name:a3}.k4{animation-name:a4}
+    .k5{animation-name:a5}.k6{animation-name:a6}.k7{animation-name:a7}
+    @media (prefers-reduced-motion: reduce){.s{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">Underperformance: who does what</text>
+  <text class="sub" x="28" y="62">The tech lead gives feedback and support. The people manager owns anything formal.</text>
+
+  <rect class="lane" x="28" y="80" width="744" height="126" rx="10"/>
+  <text class="ln" x="40" y="132">Tech lead</text>
+  <text class="ls" x="40" y="150">feedback,</text>
+  <text class="ls" x="40" y="166">support</text>
+  <rect class="lane" x="28" y="214" width="744" height="126" rx="10"/>
+  <text class="ln" x="40" y="266">Manager</text>
+  <text class="ls" x="40" y="284">+ HR: formal</text>
+  <text class="ls" x="40" y="300">process</text>
+
+  <!-- lead lane -->
+  <g class="s k1">
+    <rect class="bx" x="132" y="106" width="124" height="74" rx="10"/>
+    <text class="bt" x="142" y="130">1. Gather facts</text>
+    <text class="btn" x="142" y="148">dates, examples</text>
+    <text class="btn" x="142" y="166">and impact</text>
+  </g>
+  <g class="s k2">
+    <path class="ar" d="M256 143 H260"/><path class="ah" d="M268 143 l-9 -5 v10 z"/>
+    <rect class="bx" x="268" y="106" width="124" height="74" rx="10"/>
+    <text class="bt" x="278" y="130">2. Private SBI</text>
+    <text class="btn" x="278" y="148">conversation,</text>
+    <text class="btn" x="278" y="166">then listen</text>
+  </g>
+  <g class="s k3">
+    <path class="ar" d="M392 143 H396"/><path class="ah" d="M404 143 l-9 -5 v10 z"/>
+    <rect class="bx" x="404" y="106" width="124" height="74" rx="10"/>
+    <text class="bt" x="414" y="130">3. Agree goals</text>
+    <text class="btn" x="414" y="148">and support for</text>
+    <text class="btn" x="414" y="166">2–4 weeks</text>
+  </g>
+  <g class="s k5">
+    <path class="ar" d="M528 143 H532"/><path class="ah" d="M540 143 l-9 -5 v10 z"/>
+    <rect class="bx" x="540" y="106" width="124" height="74" rx="10"/>
+    <text class="bt" x="550" y="130">4. Follow up</text>
+    <text class="btn" x="550" y="148">recognise</text>
+    <text class="btn" x="550" y="166">progress</text>
+  </g>
+  <g class="s k6">
+    <path class="ar" d="M664 143 H668"/><path class="ah" d="M676 143 l-9 -5 v10 z"/>
+    <rect class="ok" x="676" y="106" width="88" height="74" rx="10"/>
+    <text class="okt" x="686" y="130">Improved</text>
+    <text class="oktn" x="686" y="148">usually</text>
+  </g>
+
+  <!-- manager lane -->
+  <g class="s k4">
+    <path class="ad" d="M466 180 V230"/><path class="ah" d="M466 238 l-5 -9 h10 z"/>
+    <rect class="bx" x="404" y="240" width="124" height="74" rx="10"/>
+    <text class="bt" x="414" y="264">Kept informed</text>
+    <text class="btn" x="414" y="282">early and</text>
+    <text class="btn" x="414" y="300">transparently</text>
+  </g>
+  <g class="s k7">
+    <path class="ad" d="M602 180 V230"/><path class="ah" d="M602 238 l-5 -9 h10 z"/>
+    <text class="at" x="610" y="212">if no change</text>
+    <rect class="wr" x="540" y="240" width="224" height="74" rx="10"/>
+    <text class="wrt" x="550" y="264">Formal plan (PIP)</text>
+    <text class="wrtn" x="550" y="282">with HR, then role change</text>
+    <text class="wrtn" x="550" y="300">or exit, with dignity</text>
+  </g>
+  <text class="sub" x="28" y="364">Document facts and agreements at every step. Health or personal details shared with you stay confidential.</text>
+</svg>

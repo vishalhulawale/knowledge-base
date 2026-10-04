@@ -30,6 +30,9 @@ flowchart LR
 ```
 *Notice where the weight is. The Action is where the interviewer finds evidence of competencies, so a long Situation at the expense of the Action is the most common mistake.*
 
+![Animation: two answers of the same 150-second length fill a timeline; the weak one spends 55% on the Situation and about 30 seconds on the Action, the strong one spends about 90 seconds on the Action](images/01-star-time-split.svg){ loading=lazy }
+*Watch the Action segment: same answer length, three times as much evidence for the interviewer to score.*
+
 | Part | Good | Weak |
 |---|---|---|
 | Situation | "A healthcare app with 750K+ users. Our GraphQL layer aggregated 5 upstream systems, and p95 latency was hurting the main screen." | Five minutes of company history |
@@ -54,6 +57,9 @@ flowchart LR
 3. **Map each story to competencies** in a matrix. Aim for each competency to have **2+ stories** and each story to cover **3+ competencies**.
 4. **Prepare 2 levels of follow-up** per story (hardest part, what you'd change, how you measured).
 5. **Practise aloud**, timed to 2–3 minutes, then cut the Situation down.
+
+![Animation: four follow-up questions appear one level deeper each time, from "Tell me about a time you led a technical initiative" to "What would you do differently?", each linked to the worksheet field that answers it](images/01-follow-up-drill-down.svg){ loading=lazy }
+*Notice that each follow-up maps to a field in the worksheet below. If a field is empty, that is where the interview will stall.*
 
 ```mermaid
 flowchart TB

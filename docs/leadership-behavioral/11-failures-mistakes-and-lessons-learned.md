@@ -40,6 +40,9 @@ flowchart TD
 ```
 *Notice that the strongest stories end with **evidence of change**: a later situation where you behaved differently because of the lesson. That's what separates learning from a confession.*
 
+![A map with stakes on the horizontal axis and ownership on the vertical axis: a trivial column with no signal, a disqualifying column for integrity or security failures, a blame band for other people's decisions, and a green zone for real stakes and your own decision, with the page's example answers placed on it](images/11-failure-story-map.svg){ loading=lazy }
+*Notice where the page's examples land. Only the missed-date story is in the green zone, and it still needs the lesson and the evidence of change.*
+
 ### Categories that make good failure stories (examples to adapt honestly)
 
 | Category | Example shape (only use if true) |

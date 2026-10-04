@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 386" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Role boundaries in the deep dive</title>
+  <desc id="d">Three nested boxes show how to describe your role on OptumRx Meteor. The innermost box is what you owned end to end: the GraphQL Consumer Service (schema, resolvers, upstream integration, caching, resilience), the React app built from the ground up with its micro-frontend architecture, the team's engineering standards, and leading the 8 to 10 engineer team. The middle box is what you collaborated on: API strategy and data integration patterns with senior architects. The outer box is what others decided and should be credited for: platform-level direction by the architects and the five upstream systems owned by their teams.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .o{fill:#ffffff;stroke:#cbd5e1;stroke-width:1.5}
+    .m{fill:#ccfbf1;stroke:#0ea5a4;stroke-width:1.5}
+    .i{fill:#4f46e5}
+    .oh{fill:#475569;font-size:15px;font-weight:700}
+    .mh{fill:#0f766e;font-size:15px;font-weight:700}
+    .ih{fill:#fff;font-size:15px;font-weight:700}
+    .ob{fill:#334155;font-size:13px}
+    .ib{fill:#fff;font-size:13px}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.sub{fill:#94a3b8}
+      .o{fill:#111827;stroke:#475569}.m{fill:#134e4a;stroke:#2dd4bf}.i{fill:#818cf8}
+      .oh{fill:#cbd5e1}.mh{fill:#5eead4}.ih,.ib{fill:#0f172a}.ob{fill:#e2e8f0}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="384" rx="14"/>
+  <text class="h" x="28" y="40">Say what you owned, and credit the rest</text>
+  <text class="sub" x="28" y="62">OptumRx Meteor as the resume describes it. Interviewers probe these boundaries in a deep dive.</text>
+
+  <rect class="o" x="28" y="80" width="744" height="268" rx="14"/>
+  <text class="oh" x="46" y="104">Others decided: "The architects set… / the upstream teams own…"</text>
+  <text class="ob" x="46" y="124">Platform-level direction (senior architects). The 5 upstream systems (their teams).</text>
+
+  <rect class="m" x="56" y="138" width="688" height="196" rx="12"/>
+  <text class="mh" x="74" y="162">Collaborated: "I worked with the architects on…"</text>
+  <text class="ob" x="74" y="182">API strategy, scalable service architecture and data integration patterns.</text>
+
+  <rect class="i" x="84" y="196" width="632" height="124" rx="10"/>
+  <text class="ih" x="102" y="220">Owned end to end: "I owned / I designed / I decided"</text>
+  <text class="ib" x="102" y="242">• GraphQL Consumer Service: schema, resolvers, upstream integration, caching</text>
+  <text class="ib" x="102" y="262">• React app built from the ground up, and its micro-frontend architecture</text>
+  <text class="ib" x="102" y="282">• Team engineering standards: testing, CI/CD, code quality, deployment</text>
+  <text class="ib" x="102" y="302">• Leading 8–10 engineers: planning, delegation, reviews, releases</text>
+
+  <text class="sub" x="28" y="370">Wording from the resume. Where your decisions ended and the architects' began is yours to confirm.</text>
+</svg>

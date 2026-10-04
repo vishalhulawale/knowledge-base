@@ -50,6 +50,9 @@ flowchart TB
 | 7. Commit | Disagree and commit, support it fully | "I'd have chosen B, but I'm committed to A." |
 | 8. Review | Revisit with production data | "Let's check the metrics after a month." |
 
+![Animation: a token climbs an eight-rung ladder from "Seek to understand" to "Review", each rung paired with a phrase to say; at the Decide rung a side note lights up saying to escalate jointly with a written problem and options if still stuck](images/05-disagreement-ladder.svg){ loading=lazy }
+*Notice that escalation sits beside the Decide rung, not at the bottom. You escalate after understanding, criteria, data and a written ADR, and you do it together.*
+
 ### Escalation done well
 
 - Escalate the **problem**, not the person: a shared, written problem statement plus options plus each side's view.

@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Anchoring in hiring debriefs</title>
+  <desc id="d">Two debriefs with the same four interviewers scoring one competency on a 1 to 4 rubric. Their private views are 2, 3, 4 and 3. On the left, the debrief starts with discussion: interviewer A speaks first with a 2, and the other scores drift towards it, ending at 2, 2, 3 and 2. On the right, everyone submits written feedback with evidence before the debrief, so the scores stay at 2, 3, 4 and 3, and the debrief discusses why the scores differ by looking at the evidence.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .pan{fill:#ffffff;stroke:#cbd5e1}
+    .bad{fill:#dc2626;font-size:16px;font-weight:700}
+    .good{fill:#16a34a;font-size:16px;font-weight:700}
+    .trk{stroke:#cbd5e1;stroke-width:4;stroke-linecap:round}
+    .tick{fill:#64748b;font-size:13px}
+    .who{fill:#334155;font-size:14px;font-weight:600}
+    .d{fill:#4f46e5}
+    .ghost{fill:none;stroke:#94a3b8;stroke-width:2;stroke-dasharray:3 3}
+    .first{fill:#d97706}
+    .b{fill:#334155;font-size:13px}
+    .lock{fill:#0f766e;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.sub,.tick{fill:#94a3b8}
+      .pan{fill:#111827;stroke:#475569}
+      .bad{fill:#f87171}.good{fill:#4ade80}
+      .trk{stroke:#475569}.who,.b{fill:#e2e8f0}
+      .d{fill:#818cf8}.ghost{stroke:#64748b}.first{fill:#fbbf24}.lock{fill:#5eead4}
+    }
+    /* 10 s loop: on the left, scores drift towards the first opinion; on the right they stay */
+    .dr{animation:10s infinite ease-in-out}
+    @keyframes toB{0%,20%{transform:translateX(0)}45%,95%{transform:translateX(-64px)}100%{transform:translateX(0)}}
+    @keyframes toC{0%,25%{transform:translateX(0)}50%,95%{transform:translateX(-64px)}100%{transform:translateX(0)}}
+    @keyframes toD{0%,30%{transform:translateX(0)}55%,95%{transform:translateX(-64px)}100%{transform:translateX(0)}}
+    .mB{animation-name:toB}.mC{animation-name:toC}.mD{animation-name:toD}
+    .say{opacity:0;animation:say 10s infinite linear}
+    @keyframes say{0%,8%{opacity:0}12%,95%{opacity:1}100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){.dr{animation:none;transform:translateX(-64px)}.say{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Write feedback before the debrief</text>
+  <text class="sub" x="28" y="62">Four interviewers, one competency, a 1–4 rubric. Private views: 2, 3, 4, 3.</text>
+
+  <!-- left panel: scale 1..4 at x = 116 + 64*(score-1) -->
+  <rect class="pan" x="28" y="78" width="362" height="268" rx="12"/>
+  <text class="bad" x="44" y="104">❌ Discuss first</text>
+  <g class="tick" text-anchor="middle"><text x="116" y="128">1</text><text x="180" y="128">2</text><text x="244" y="128">3</text><text x="308" y="128">4</text></g>
+  <text class="who" x="44" y="161">A</text><line class="trk" x1="116" y1="156" x2="308" y2="156"/>
+  <text class="who" x="44" y="201">B</text><line class="trk" x1="116" y1="196" x2="308" y2="196"/>
+  <text class="who" x="44" y="241">C</text><line class="trk" x1="116" y1="236" x2="308" y2="236"/>
+  <text class="who" x="44" y="281">D</text><line class="trk" x1="116" y1="276" x2="308" y2="276"/>
+  <circle class="ghost" cx="244" cy="196" r="9"/><circle class="ghost" cx="308" cy="236" r="9"/><circle class="ghost" cx="244" cy="276" r="9"/>
+  <circle class="first" cx="180" cy="156" r="10"/>
+  <circle class="d dr mB" cx="244" cy="196" r="10"/>
+  <circle class="d dr mC" cx="308" cy="236" r="10"/>
+  <circle class="d dr mD" cx="244" cy="276" r="10"/>
+  <g class="say"><text class="b" x="194" y="146">"I'd say a 2."</text></g>
+  <text class="b" x="44" y="312">A speaks first; everyone drifts towards 2.</text>
+  <text class="b" x="44" y="330">Three independent signals become one.</text>
+
+  <!-- right panel: same scale shifted by +384 -->
+  <rect class="pan" x="410" y="78" width="362" height="268" rx="12"/>
+  <text class="good" x="426" y="104">✅ Write first, then discuss</text>
+  <g class="tick" text-anchor="middle"><text x="500" y="128">1</text><text x="564" y="128">2</text><text x="628" y="128">3</text><text x="692" y="128">4</text></g>
+  <text class="who" x="426" y="161">A</text><line class="trk" x1="500" y1="156" x2="692" y2="156"/>
+  <text class="who" x="426" y="201">B</text><line class="trk" x1="500" y1="196" x2="692" y2="196"/>
+  <text class="who" x="426" y="241">C</text><line class="trk" x1="500" y1="236" x2="692" y2="236"/>
+  <text class="who" x="426" y="281">D</text><line class="trk" x1="500" y1="276" x2="692" y2="276"/>
+  <circle class="d" cx="564" cy="156" r="10"/><circle class="d" cx="628" cy="196" r="10"/>
+  <circle class="d" cx="692" cy="236" r="10"/><circle class="d" cx="628" cy="276" r="10"/>
+  <text class="lock" x="712" y="161">sent</text><text class="lock" x="712" y="201">sent</text>
+  <text class="lock" x="712" y="241">sent</text><text class="lock" x="712" y="281">sent</text>
+  <text class="b" x="426" y="312">Scores and evidence are submitted first.</text>
+  <text class="b" x="426" y="330">Debrief: "Why a 2 from A and a 4 from C?"</text>
+
+  <text class="sub" x="28" y="374">Illustrative scores. Score each competency separately against the rubric's behavioural anchors.</text>
+</svg>

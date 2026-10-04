@@ -46,6 +46,9 @@ flowchart TD
 6. **Follow up:** recognise improvement specifically. If there's none, escalate with documentation to the manager, who may start a formal improvement plan (PIP).
 7. **Close the loop:** improvement (most common with early action), a role or team change, or exit, handled by the manager and HR with dignity.
 
+![Animation: two swimlanes light up in order; the tech lead gathers facts, holds a private SBI conversation, agrees goals and support for 2 to 4 weeks and follows up, usually ending in improvement; the people manager is kept informed early and only starts a formal plan with HR if nothing changes](images/06-lead-and-manager-lanes.svg){ loading=lazy }
+*Notice that the manager hears about the plan at step 3, long before anything formal. The formal lane is only reached if support didn't work.*
+
 ### Preparing for a difficult conversation
 
 | Before | During | After |

@@ -35,6 +35,9 @@ flowchart LR
 ```
 *Notice how wide early estimates are. A single number at the idea stage is false precision. Commit to dates once uncertainty has narrowed (after spikes or design), and update forecasts as you learn.*
 
+![Animation: a cone on a log scale narrows from 0.25× to 4× at the idea stage, to about 0.5× to 2× once requirements are agreed, 0.8× to 1.25× when design is done and 0.9× to 1.1× while building, with a marker after design saying to commit to a date there](images/07-cone-of-uncertainty.svg){ loading=lazy }
+*Watch the range bars shrink. A date promised at the idea stage could be off by a factor of four either way.*
+
 ### Estimation techniques
 
 | Technique | How | Best for |
@@ -132,8 +135,11 @@ Upstream integration (refill dates)    2    4   10    4.7 days   ← highest unc
 Notification worker + templates        3    4    7    4.3 days
 Tests (unit, contract, e2e)            2    3    5    3.2 days
 Release + monitoring                   1    2    3    2.0 days
-Total ≈ 19.5 days effort (σ ≈ sqrt(Σσᵢ²) ≈ 1.8 days) + review/integration overhead → quote a range
+Total ≈ 19.5 days effort (σ ≈ sqrt(Σσᵢ²) ≈ 1.9 days) + review/integration overhead → quote a range
 ```
+
+![A right-skewed curve for the upstream integration task with optimistic 2, most likely 4 and pessimistic 10 days; the expected value of about 4.7 days sits to the right of the most likely value](images/07-pert-skew.svg){ loading=lazy }
+*Notice the long right tail. It is why the expected value is higher than the most likely one, and why this task gets the first spike.*
 
 ## Real-world usage
 

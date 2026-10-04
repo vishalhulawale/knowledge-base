@@ -85,6 +85,9 @@ flowchart LR
 ```
 *Notice that negotiation is collaborative problem solving over **several components**. When the base is capped by bands, joining bonuses, equity, level or the review timeline can often move.*
 
+![Two illustrative offers as stacked bars without numbers: Offer A has the higher fixed salary, but Offer B's fixed salary plus variable pay, equity vesting, joining bonus and benefits add up to more](images/12-total-compensation.svg){ loading=lazy }
+*Notice the dashed line: judged on base alone, Offer A wins. Add every component, and check vesting and clawback terms, before deciding.*
+
 **Practical points:**
 
 - **Total compensation:** fixed salary, variable/bonus (target and history), equity (type, vesting schedule, cliff, refreshers), joining bonus (clawback terms), benefits (health insurance coverage including family, retirement contributions), leave, remote/hybrid policy, notice-period buyout, relocation, learning budget.

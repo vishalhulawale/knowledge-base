@@ -71,6 +71,9 @@ check_in: "monthly in 1:1; adjust plan"
 - **Design review:** let them present and defend. Ask "what would make this fail?", "what did you consider and reject?". Coach before the meeting, not in front of others.
 - **Pairing:** driver/navigator. Let them drive on your expertise area, and you drive on theirs.
 
+![Two sets of review comments on the same pull request: gatekeeping comments with no reasons ("This is wrong", "Rewrote it, use my version") next to teaching comments labelled Must-fix with a reason and a link, Nit, Question and Nice](images/04-review-comments.svg){ loading=lazy }
+*Notice the labels. The author can see at a glance what blocks the merge, what is optional and what is a question to think about.*
+
 ### Feedback with SBI
 
 ```mermaid

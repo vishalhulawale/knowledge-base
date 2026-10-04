@@ -98,6 +98,9 @@ flowchart TB
     Each item needs an owner, a date and tracking.
 - **Share learnings** widely: postmortem reviews, incident newsletters.
 
+![Animation: an error-rate timeline from the page's postmortem template, with the deploy at 10:02, the p95 alert at 10:09, SEV2 declared at 10:12, rollback at 10:20 and errors normal at 10:27; brackets show 7 minutes to detect, 3 to declare and 15 to mitigate, and action items are placed under the segment each one shortens](images/08-incident-timeline.svg){ loading=lazy }
+*Notice that each action-item type attacks a different segment: prevent removes the incident, detect shortens the 7 minutes, mitigate shortens the 15.*
+
 ## In practice: code & configuration
 
 === "❌ Common mistake"

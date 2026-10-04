@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Bottleneck lead vs ownership map</title>
+  <desc id="d">Two panels with the same five pieces of work. On the left, a bottleneck lead reviews every pull request and takes the hard tickets, so the five items pass through the lead one at a time while the rest wait in a queue. On the right, an ownership map gives each component a directly responsible individual: GraphQL schema, micro-frontends, Kafka consumers, the CI/CD pipeline and test strategy. All five items flow to their owners at the same time, while the lead keeps cross-team decisions, unblocking and early shaping of the riskiest design.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .pan{fill:#ffffff;stroke:#cbd5e1}
+    .bad{fill:#dc2626;font-size:16px;font-weight:700}
+    .good{fill:#16a34a;font-size:16px;font-weight:700}
+    .node{fill:#4f46e5}
+    .nt{fill:#fff;font-size:14px;font-weight:700}
+    .nts{fill:#fff;font-size:13px;font-weight:600}
+    .own{fill:#ccfbf1;stroke:#0ea5a4}
+    .ot{fill:#0f766e;font-size:13px;font-weight:600}
+    .b{fill:#334155;font-size:13px}
+    .w{fill:#d97706}
+    .done{fill:none;stroke:#16a34a;stroke-width:2;stroke-dasharray:5 4}
+    .dt{fill:#15803d;font-size:13px;font-weight:600}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.sub{fill:#94a3b8}
+      .pan{fill:#111827;stroke:#475569}
+      .bad{fill:#f87171}.good{fill:#4ade80}
+      .node{fill:#818cf8}.nt,.nts{fill:#0f172a}
+      .own{fill:#134e4a;stroke:#2dd4bf}.ot{fill:#5eead4}.b{fill:#e2e8f0}
+      .w{fill:#fbbf24}.done{stroke:#4ade80}.dt{fill:#4ade80}
+    }
+    /* 10 s loop. Left: items pass through the lead one at a time. Right: all items go to owners at once. */
+    .q{animation:10s infinite ease-in-out}
+    @keyframes q0{0%{transform:translate(0,0)}6%,10%{transform:translate(98px,68px)}14%,95%{transform:translate(270px,0)}100%{transform:translate(0,0)}}
+    @keyframes q1{0%,16%{transform:translate(0,0)}22%,26%{transform:translate(98px,32px)}30%,95%{transform:translate(270px,0)}100%{transform:translate(0,0)}}
+    @keyframes q2{0%,32%{transform:translate(0,0)}38%,42%{transform:translate(98px,-4px)}46%,95%{transform:translate(270px,0)}100%{transform:translate(0,0)}}
+    @keyframes q3{0%,48%{transform:translate(0,0)}54%,58%{transform:translate(98px,-40px)}62%,95%{transform:translate(270px,0)}100%{transform:translate(0,0)}}
+    @keyframes q4{0%,64%{transform:translate(0,0)}70%,74%{transform:translate(98px,-76px)}78%,95%{transform:translate(270px,0)}100%{transform:translate(0,0)}}
+    .q0{animation-name:q0}.q1{animation-name:q1}.q2{animation-name:q2}.q3{animation-name:q3}.q4{animation-name:q4}
+    .p{animation:par 10s infinite ease-in-out}
+    @keyframes par{0%,4%{transform:translateX(0)}12%,95%{transform:translateX(96px)}100%{transform:translateX(0)}}
+    @media (prefers-reduced-motion: reduce){
+      .q0,.q1,.q2{animation:none;transform:translate(270px,0)}
+      .q3{animation:none;transform:translate(98px,-40px)}
+      .q4{animation:none}
+      .p{animation:none;transform:translateX(96px)}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">Same five pieces of work, two ways to lead</text>
+  <text class="sub" x="28" y="62">A lead who reviews and decides everything becomes the queue. An ownership map runs work in parallel.</text>
+
+  <!-- Left panel: bottleneck -->
+  <rect class="pan" x="28" y="76" width="362" height="282" rx="12"/>
+  <text class="bad" x="44" y="102">❌ Hero / bottleneck lead</text>
+  <text class="b" x="44" y="128">Queue</text>
+  <rect class="node" x="146" y="166" width="156" height="68" rx="10"/>
+  <text class="nt" x="252" y="196" text-anchor="middle">Lead</text>
+  <text class="nts" x="252" y="214" text-anchor="middle">reviews all</text>
+  <rect class="done" x="318" y="136" width="56" height="176" rx="8"/>
+  <text class="dt" x="346" y="128" text-anchor="middle">Done</text>
+  <rect class="w q q0" x="60" y="140" width="24" height="24" rx="5"/>
+  <rect class="w q q1" x="60" y="176" width="24" height="24" rx="5"/>
+  <rect class="w q q2" x="60" y="212" width="24" height="24" rx="5"/>
+  <rect class="w q q3" x="60" y="248" width="24" height="24" rx="5"/>
+  <rect class="w q q4" x="60" y="284" width="24" height="24" rx="5"/>
+  <text class="b" x="44" y="334">One item at a time. When the lead is in</text>
+  <text class="b" x="44" y="350">meetings, everything waits.</text>
+
+  <!-- Right panel: ownership map -->
+  <rect class="pan" x="410" y="76" width="362" height="282" rx="12"/>
+  <text class="good" x="426" y="102">✅ Ownership map (DRIs)</text>
+  <rect class="node" x="426" y="114" width="330" height="42" rx="10"/>
+  <text class="nts" x="440" y="132">Lead keeps: cross-team decisions,</text>
+  <text class="nts" x="440" y="149">unblocking, shaping risky design early</text>
+  <g>
+    <rect class="own" x="560" y="166" width="196" height="28" rx="6"/><text class="ot" x="572" y="185">GraphQL schema</text>
+    <rect class="own" x="560" y="202" width="196" height="28" rx="6"/><text class="ot" x="572" y="221">Micro-frontends</text>
+    <rect class="own" x="560" y="238" width="196" height="28" rx="6"/><text class="ot" x="572" y="257">Kafka consumers</text>
+    <rect class="own" x="560" y="274" width="196" height="28" rx="6"/><text class="ot" x="572" y="293">CI/CD pipeline</text>
+    <rect class="own" x="560" y="310" width="196" height="28" rx="6"/><text class="ot" x="572" y="329">Test strategy</text>
+  </g>
+  <rect class="w p" x="434" y="168" width="24" height="24" rx="5"/>
+  <rect class="w p" x="434" y="204" width="24" height="24" rx="5"/>
+  <rect class="w p" x="434" y="240" width="24" height="24" rx="5"/>
+  <rect class="w p" x="434" y="276" width="24" height="24" rx="5"/>
+  <rect class="w p" x="434" y="312" width="24" height="24" rx="5"/>
+</svg>

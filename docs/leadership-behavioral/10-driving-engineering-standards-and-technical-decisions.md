@@ -49,6 +49,9 @@ flowchart LR
 ```
 *Notice that **automation** turns a standard from a request into the default. A CI gate that blocks untested code works better than a wiki page. And starting from **pain + data** is what makes the team want it.*
 
+![Animation: two commits move through the pipeline stages build, test, quality, security and deploy; commit A collects a tick at every gate and reaches staging, while commit B, which adds a library with a known high-severity vulnerability, is stopped at the security gate](images/10-ci-quality-gates.svg){ loading=lazy }
+*Notice that nobody had to spot the vulnerable library in review. The gate applies the standard the same way to every commit, including the lead's.*
+
 ### Standards that usually pay off
 
 | Area | Standard | Enforcement |

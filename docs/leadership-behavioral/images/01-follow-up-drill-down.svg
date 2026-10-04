@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Follow-up questions drill down</title>
+  <desc id="d">A follow-up chain drills four levels deep. Level 1: tell me about a time you led a technical initiative. Level 2: what pushback did you get? Level 3: how did you measure success? Level 4: what would you do differently? Each level is matched to the part of the story worksheet that answers it: the STAR-L bullets, how you brought people along, how you measured, and what you would do differently.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .q{fill:#4f46e5}
+    .qt{fill:#fff;font-size:14px;font-weight:600}
+    .lv{fill:#fff;font-size:13px;font-weight:700}
+    .prep{fill:#ffffff;stroke:#0ea5a4;stroke-width:1.5}
+    .pt{fill:#0f766e;font-size:14px;font-weight:600}
+    .ps{fill:#334155;font-size:13px}
+    .lnk{stroke:#94a3b8;stroke-dasharray:4 4}
+    .colh{fill:#334155;font-size:15px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.sub{fill:#94a3b8}
+      .q{fill:#818cf8}.qt,.lv{fill:#0f172a}
+      .prep{fill:#111827;stroke:#2dd4bf}.pt{fill:#5eead4}.ps{fill:#e2e8f0}
+      .lnk{stroke:#64748b}.colh{fill:#e2e8f0}
+    }
+    /* 10 s loop: one level appears every ~1.8 s, hold, restart */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes l1{0%,2%{opacity:0}5%,92%{opacity:1}97%,100%{opacity:0}}
+    @keyframes l2{0%,20%{opacity:0}23%,92%{opacity:1}97%,100%{opacity:0}}
+    @keyframes l3{0%,38%{opacity:0}41%,92%{opacity:1}97%,100%{opacity:0}}
+    @keyframes l4{0%,56%{opacity:0}59%,92%{opacity:1}97%,100%{opacity:0}}
+    .k1{animation-name:l1}.k2{animation-name:l2}.k3{animation-name:l3}.k4{animation-name:l4}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="358" rx="14"/>
+  <text class="h" x="28" y="40">Interviewers drill down 2–4 levels</text>
+  <text class="sub" x="28" y="62">Each follow-up goes one level deeper. Prepare the answer to every level before the interview.</text>
+
+  <text class="colh" x="28" y="96">What the interviewer asks</text>
+  <text class="colh" x="548" y="96">Prepared in your worksheet</text>
+
+  <g class="a k1">
+    <rect class="q" x="28" y="110" width="472" height="46" rx="10"/>
+    <text class="lv" x="44" y="138">1</text>
+    <text class="qt" x="66" y="138">"Tell me about a time you led a technical initiative."</text>
+    <line class="lnk" x1="500" y1="133" x2="548" y2="133"/>
+    <rect class="prep" x="548" y="110" width="228" height="46" rx="10"/>
+    <text class="pt" x="562" y="131">The story</text>
+    <text class="ps" x="562" y="148">STAR-L bullets with numbers</text>
+  </g>
+  <g class="a k2">
+    <rect class="q" x="68" y="170" width="432" height="46" rx="10"/>
+    <text class="lv" x="84" y="198">2</text>
+    <text class="qt" x="106" y="198">"What pushback did you get?"</text>
+    <line class="lnk" x1="500" y1="193" x2="548" y2="193"/>
+    <rect class="prep" x="548" y="170" width="228" height="46" rx="10"/>
+    <text class="pt" x="562" y="191">Actions</text>
+    <text class="ps" x="562" y="208">how you brought people along</text>
+  </g>
+  <g class="a k3">
+    <rect class="q" x="108" y="230" width="392" height="46" rx="10"/>
+    <text class="lv" x="124" y="258">3</text>
+    <text class="qt" x="146" y="258">"How did you measure success?"</text>
+    <line class="lnk" x1="500" y1="253" x2="548" y2="253"/>
+    <rect class="prep" x="548" y="230" width="228" height="46" rx="10"/>
+    <text class="pt" x="562" y="251">how_measured</text>
+    <text class="ps" x="562" y="268">numbers you can defend</text>
+  </g>
+  <g class="a k4">
+    <rect class="q" x="148" y="290" width="352" height="46" rx="10"/>
+    <text class="lv" x="164" y="318">4</text>
+    <text class="qt" x="186" y="318">"What would you do differently?"</text>
+    <line class="lnk" x1="500" y1="313" x2="548" y2="313"/>
+    <rect class="prep" x="548" y="290" width="228" height="46" rx="10"/>
+    <text class="pt" x="562" y="311">do_differently</text>
+    <text class="ps" x="562" y="328">one honest lesson</text>
+  </g>
+</svg>

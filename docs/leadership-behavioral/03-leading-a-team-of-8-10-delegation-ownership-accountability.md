@@ -51,6 +51,9 @@ quadrantChart
 ```
 *Notice that style depends on the **person and the task**. The same senior engineer may need directing on an unfamiliar domain (security) and full delegation on their own area. Situational Leadership (Hersey–Blanchard) and Andy Grove's "task-relevant maturity" describe this.*
 
+![Animation: a highlight steps through four delegation styles, Direct, Coach, Support and Delegate, each with what the lead does, how often to check in, an example from the team, and a bar showing the lead's share of decisions shrinking](images/03-delegation-progression.svg){ loading=lazy }
+*Notice the check-in cadence and the decision bar change together. Delegating fully still means weekly check-ins, not silence.*
+
 **How to delegate well:**
 
 1. **Outcome:** what done looks like (acceptance criteria, quality bar, date).
@@ -105,6 +108,9 @@ flowchart LR
     - The bottleneck reviewer.
     - The absent lead who only manages tickets.
     - Avoiding feedback conversations.
+
+![Animation: on the left, five work items pass one at a time through a lead who reviews everything while the rest wait; on the right, the same five items go at once to the owners of the GraphQL schema, micro-frontends, Kafka consumers, CI/CD pipeline and test strategy](images/03-bottleneck-vs-ownership.svg){ loading=lazy }
+*Watch the left queue: the hero lead's team finishes when the lead does. With an ownership map, the lead's time goes to cross-team decisions and unblocking.*
 
 ## In practice: code & configuration
 

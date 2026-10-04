@@ -41,6 +41,9 @@ flowchart LR
 ```
 *Notice the narrative thread: each past role adds a capability (cloud, security, auth) that shows up in the current role. The hook hands the interviewer an easy next question about your best story.*
 
+![Animation: a playhead crosses a 90-second bar split into Present (about 30 seconds), Past (30 to 40 seconds), Future (15 to 20 seconds) and a short Hook, lighting up the content of each part as it is reached](images/02-pitch-timeline.svg){ loading=lazy }
+*Watch where the clock is when you reach your past roles: if Present hasn't finished by 30 seconds, the pitch is running long.*
+
 ### Draft pitch (resume facts only)
 
 > "I'm a Lead Software Engineer with 9+ years building cloud-native platforms in healthcare, banking and cloud security, mostly with Java, Spring Boot, Kafka, GraphQL, AWS and React.
@@ -92,6 +95,9 @@ flowchart LR
     GQL -.->|"downstream consumers"| DC["Multiple consumers"]
 ```
 *Notice that this diagram contains only what the resume states: a React shell with micro-frontends, the GraphQL layer over 5 upstreams with Redis, OAuth2/PingFederate/AD, Kafka workflows with retry/DLQ, and Spring Boot + MongoDB microservices. The upstream names, exact data flows and which services emit which events are **[confirm]**. Redraw it with the real details before interviews.*
+
+![Three nested boxes: the inner box lists what you owned end to end on OptumRx Meteor, the middle box what you collaborated on with senior architects, and the outer box what others decided](images/02-role-boundaries.svg){ loading=lazy }
+*Notice the phrases in each box. "I owned" belongs only in the inner one. Use "I worked with" and "the architects decided" for the rest.*
 
 **Deep-dive talking points to prepare** (each is *[confirm]* for specifics):
 

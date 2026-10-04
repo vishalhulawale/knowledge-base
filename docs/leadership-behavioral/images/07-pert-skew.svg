@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Three-point estimate with a long tail</title>
+  <desc id="d">A right-skewed curve shows the effort distribution for the upstream integration task from the page: optimistic 2 days, most likely 4 days, pessimistic 10 days. The PERT expected value, (2 + 4 times 4 + 10) divided by 6, is about 4.7 days, to the right of the most likely value because the pessimistic tail is long. The spread, (P minus O) divided by 6, is about 1.3 days, the highest in the plan, so this task gets a spike first.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .curve{fill:#fef3c7;stroke:#d97706;stroke-width:2}
+    .axl{stroke:#94a3b8}
+    .ax{fill:#64748b;font-size:13px}
+    .m{stroke:#4f46e5;stroke-width:2.5}
+    .mt{fill:#4f46e5;font-size:14px;font-weight:700}
+    .e{stroke:#0ea5a4;stroke-width:2.5;stroke-dasharray:6 4}
+    .et{fill:#0f766e;font-size:14px;font-weight:700}
+    .op{stroke:#d97706;stroke-width:2}
+    .opt{fill:#b45309;font-size:14px;font-weight:700}
+    .note{fill:#ffffff;stroke:#cbd5e1}
+    .nb{fill:#334155;font-size:13px}
+    .nh{fill:#0f172a;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.sub,.ax{fill:#94a3b8}
+      .curve{fill:#422006;stroke:#fbbf24}.axl{stroke:#64748b}
+      .m{stroke:#818cf8}.mt{fill:#a5b4fc}.e{stroke:#2dd4bf}.et{fill:#5eead4}
+      .op{stroke:#fbbf24}.opt{fill:#fbbf24}
+      .note{fill:#111827;stroke:#475569}.nb{fill:#e2e8f0}.nh{fill:#f1f5f9}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Why the expected value sits right of "most likely"</text>
+  <text class="sub" x="28" y="62">Upstream integration (refill dates) from the page's estimate: O = 2, M = 4, P = 10 days.</text>
+
+  <!-- x axis: 0..12 days over 110..730 -->
+  <line class="axl" x1="110" y1="300" x2="740" y2="300"/>
+  <g class="ax" text-anchor="middle">
+    <text x="110" y="320">0</text><text x="213.3" y="320">2</text><text x="316.7" y="320">4</text><text x="420" y="320">6</text>
+    <text x="523.3" y="320">8</text><text x="626.7" y="320">10</text><text x="730" y="320">12</text>
+    <text x="420" y="342">days of effort</text>
+  </g>
+
+  <path class="curve" d="M213.3 300.0 L220.2 274.5 L227.1 251.5 L234.0 230.9 L240.9 212.6 L247.8 196.5 L254.7 182.5 L261.6 170.4 L268.4 160.1 L275.3 151.5 L282.2 144.5 L289.1 139.0 L296.0 134.9 L302.9 132.1 L309.8 130.5 L316.7 130.0 L323.6 130.5 L330.4 131.9 L337.3 134.1 L344.2 137.1 L351.1 140.8 L358.0 145.1 L364.9 149.9 L371.8 155.1 L378.7 160.7 L385.6 166.7 L392.4 172.9 L399.3 179.3 L406.2 185.9 L413.1 192.6 L420.0 199.3 L426.9 206.0 L433.8 212.6 L440.7 219.2 L447.6 225.7 L454.4 232.0 L461.3 238.1 L468.2 244.0 L475.1 249.7 L482.0 255.1 L488.9 260.2 L495.8 265.0 L502.7 269.5 L509.6 273.7 L516.4 277.6 L523.3 281.1 L530.2 284.3 L537.1 287.2 L544.0 289.7 L550.9 291.9 L557.8 293.8 L564.7 295.4 L571.6 296.7 L578.4 297.7 L585.3 298.5 L592.2 299.1 L599.1 299.6 L606.0 299.8 L612.9 299.9 L619.8 300.0 L626.7 300.0 Z"/>
+
+  <line class="op" x1="213.3" y1="270" x2="213.3" y2="300"/>
+  <text class="opt" x="206" y="268" text-anchor="end">O = 2</text>
+  <line class="op" x1="626.7" y1="270" x2="626.7" y2="300"/>
+  <text class="opt" x="626.7" y="262" text-anchor="middle">P = 10</text>
+
+  <line class="m" x1="316.7" y1="108" x2="316.7" y2="300"/>
+  <text class="mt" x="310" y="104" text-anchor="end">M = 4 (most likely)</text>
+  <line class="e" x1="351.3" y1="108" x2="351.3" y2="300"/>
+  <text class="et" x="358" y="104">E = (2 + 4×4 + 10) / 6 ≈ 4.7</text>
+
+  <rect class="note" x="470" y="128" width="300" height="104" rx="10"/>
+  <text class="nh" x="486" y="152">σ ≈ (P − O) / 6 ≈ 1.3 days</text>
+  <text class="nb" x="486" y="174">The widest spread in the plan. The long</text>
+  <text class="nb" x="486" y="192">pessimistic tail pulls E to the right.</text>
+  <text class="nb" x="486" y="214">Spike it first, then quote a range.</text>
+
+  <text class="sub" x="28" y="380">Curve: the PERT (beta) distribution for these three values. Its mean equals E.</text>
+</svg>

@@ -66,6 +66,9 @@ flowchart LR
 | Confirmation | Looking for proof of a first impression | Same questions, evidence notes |
 | "Culture fit" | Likability over capability | Define values as observable behaviours |
 
+![Animation: four interviewers score one competency 2, 3, 4 and 3; when the debrief starts with discussion, the others drift towards the first speaker's 2, but when written feedback is submitted first, the scores stay where they were](images/09-anchoring-debrief.svg){ loading=lazy }
+*Watch the left panel: the panel still looks like four opinions, but it now carries only one. Written feedback first keeps the disagreement visible so the debrief can examine the evidence.*
+
 ### Writing feedback
 
 ```text

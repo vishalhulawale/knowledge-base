@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Standards enforced by CI quality gates</title>
+  <desc id="d">A pipeline with five stages from the page's GitLab CI example: build; test (unit and integration tests, contract tests); quality (Sonar quality gate on new code); security (OWASP dependency check that fails on CVSS 7 or higher); and deploy to staging from the main branch only. Commit A passes every gate and reaches staging. Commit B adds a dependency with a known high-severity vulnerability and is stopped at the security gate, without anyone having to catch it in review.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .st{fill:#ffffff;stroke:#cbd5e1}
+    .sn{fill:#0f172a;font-size:15px;font-weight:700}
+    .sd{fill:#475569;font-size:13px}
+    .ln{stroke:#cbd5e1;stroke-width:2;stroke-dasharray:4 5}
+    .who{fill:#334155;font-size:14px;font-weight:700}
+    .ws{fill:#64748b;font-size:13px}
+    .ta{fill:#4f46e5}.tb{fill:#d97706}
+    .ok{fill:#16a34a;font-size:18px;font-weight:700}
+    .no{fill:#dc2626;font-size:18px;font-weight:700}
+    .nt{fill:#dc2626;font-size:13px;font-weight:600}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.sub,.ws{fill:#94a3b8}
+      .st{fill:#111827;stroke:#475569}.sn{fill:#f1f5f9}.sd{fill:#cbd5e1}
+      .ln{stroke:#475569}.who{fill:#e2e8f0}
+      .ta{fill:#818cf8}.tb{fill:#fbbf24}
+      .ok{fill:#4ade80}.no,.nt{fill:#f87171}
+    }
+    /* 10 s loop: both commits advance one stage per 12%; B stops at security */
+    .tka{animation:runA 10s infinite steps(1,end)}
+    @keyframes runA{0%{transform:translateX(0)}12%{transform:translateX(144px)}24%{transform:translateX(288px)}36%{transform:translateX(432px)}48%,95%{transform:translateX(576px)}100%{transform:translateX(0)}}
+    .tkb{animation:runB 10s infinite steps(1,end)}
+    @keyframes runB{0%{transform:translateX(0)}12%{transform:translateX(144px)}24%{transform:translateX(288px)}36%,95%{transform:translateX(432px)}100%{transform:translateX(0)}}
+    .m{opacity:0;animation:10s infinite linear}
+    @keyframes m1{0%,10%{opacity:0}12%,95%{opacity:1}100%{opacity:0}}
+    @keyframes m2{0%,22%{opacity:0}24%,95%{opacity:1}100%{opacity:0}}
+    @keyframes m3{0%,34%{opacity:0}36%,95%{opacity:1}100%{opacity:0}}
+    @keyframes m4{0%,46%{opacity:0}48%,95%{opacity:1}100%{opacity:0}}
+    @keyframes m5{0%,56%{opacity:0}58%,95%{opacity:1}100%{opacity:0}}
+    .k1{animation-name:m1}.k2{animation-name:m2}.k3{animation-name:m3}.k4{animation-name:m4}.k5{animation-name:m5}
+    @media (prefers-reduced-motion: reduce){.tka{animation:none;transform:translateX(576px)}.tkb{animation:none;transform:translateX(432px)}.m{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="358" rx="14"/>
+  <text class="h" x="28" y="40">A standard in CI beats a standard on a wiki</text>
+  <text class="sub" x="28" y="62">The page's pipeline stages. Each gate blocks the merge by itself, so the lead isn't the enforcement.</text>
+
+  <!-- stages: x = 48 + 144 i, width 128 -->
+  <g>
+    <rect class="st" x="48" y="80" width="134" height="78" rx="10"/>
+    <text class="sn" x="62" y="104">build</text><text class="sd" x="62" y="124">compile and</text><text class="sd" x="62" y="141">package once</text>
+    <rect class="st" x="192" y="80" width="134" height="78" rx="10"/>
+    <text class="sn" x="206" y="104">test</text><text class="sd" x="206" y="124">unit + integration,</text><text class="sd" x="206" y="141">contract tests</text>
+    <rect class="st" x="336" y="80" width="134" height="78" rx="10"/>
+    <text class="sn" x="350" y="104">quality</text><text class="sd" x="350" y="124">Sonar gate on</text><text class="sd" x="350" y="141">new code</text>
+    <rect class="st" x="480" y="80" width="134" height="78" rx="10"/>
+    <text class="sn" x="494" y="104">security</text><text class="sd" x="494" y="124">dependency scan,</text><text class="sd" x="494" y="141">fail on CVSS ≥ 7</text>
+    <rect class="st" x="624" y="80" width="134" height="78" rx="10"/>
+    <text class="sn" x="638" y="104">deploy</text><text class="sd" x="638" y="124">staging, from</text><text class="sd" x="638" y="141">main only</text>
+  </g>
+
+  <!-- lanes -->
+  <text class="who" x="28" y="184">Commit A</text>
+  <line class="ln" x1="112" y1="222" x2="688" y2="222"/>
+  <text class="who" x="28" y="268">Commit B</text>
+  <text class="ws" x="110" y="268">adds a library with a known high-severity CVE</text>
+  <line class="ln" x1="112" y1="290" x2="688" y2="290"/>
+
+  <!-- marks: a tick appears under a stage once the commit has passed it -->
+  <text class="ok m k1" x="112" y="206" text-anchor="middle">✓</text>
+  <text class="ok m k2" x="256" y="206" text-anchor="middle">✓</text>
+  <text class="ok m k3" x="400" y="206" text-anchor="middle">✓</text>
+  <text class="ok m k4" x="544" y="206" text-anchor="middle">✓</text>
+  <text class="ok m k4" x="688" y="204" text-anchor="middle">staging</text>
+  <text class="ok m k1" x="112" y="322" text-anchor="middle">✓</text>
+  <text class="ok m k2" x="256" y="322" text-anchor="middle">✓</text>
+  <text class="ok m k3" x="400" y="322" text-anchor="middle">✓</text>
+  <text class="no m k4" x="562" y="297">✗</text>
+  <text class="nt m k5" x="582" y="322">blocked by the gate,</text>
+  <text class="nt m k5" x="582" y="340">not caught in review</text>
+  <g class="tka"><circle class="ta" cx="112" cy="222" r="11"/></g>
+  <g class="tkb"><circle class="tb" cx="112" cy="290" r="11"/></g>
+</svg>

@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Compare total compensation, not base</title>
+  <desc id="d">Two illustrative offers drawn as stacked bars with no currency or market numbers. Offer A has the higher fixed salary but only a small variable component. Offer B has a lower fixed salary plus variable pay, equity vesting over the year, a joining bonus and better benefits, so its total is larger. A note says to check vesting schedule and cliff, joining-bonus clawback and bonus payout history, and to compare level and scope as well.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .c1{fill:#4f46e5}.c2{fill:#0ea5a4}.c3{fill:#d97706}.c4{fill:#16a34a}.c5{fill:#64748b}
+    .st{fill:#fff;font-size:13px;font-weight:700}
+    .leg{fill:#334155;font-size:13px}
+    .tot{fill:#0f172a;font-size:14px;font-weight:700}
+    .base{stroke:#dc2626;stroke-width:2;stroke-dasharray:5 4}
+    .bt{fill:#dc2626;font-size:13px;font-weight:600}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.sub{fill:#94a3b8}.lbl,.leg{fill:#e2e8f0}.tot{fill:#f1f5f9}
+      .c1{fill:#818cf8}.c2{fill:#2dd4bf}.c3{fill:#fbbf24}.c4{fill:#4ade80}.c5{fill:#94a3b8}
+      .st{fill:#0f172a}.base{stroke:#f87171}.bt{fill:#f87171}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="338" rx="14"/>
+  <text class="h" x="28" y="40">The higher base isn't always the better offer</text>
+  <text class="sub" x="28" y="62">Two illustrative first-year offers, no real numbers. Add up every component before comparing.</text>
+
+  <text class="lbl" x="28" y="112">Offer A</text>
+  <rect class="c1" x="120" y="92" width="400" height="34"/>
+  <rect class="c2" x="520" y="92" width="40" height="34"/>
+  <rect class="c5" x="560" y="92" width="30" height="34"/>
+  <text class="st" x="320" y="114" text-anchor="middle">Fixed salary (higher)</text>
+  <text class="tot" x="602" y="114">total</text>
+
+  <text class="lbl" x="28" y="172">Offer B</text>
+  <rect class="c1" x="120" y="152" width="340" height="34"/>
+  <rect class="c2" x="460" y="152" width="70" height="34"/>
+  <rect class="c3" x="530" y="152" width="90" height="34"/>
+  <rect class="c4" x="620" y="152" width="50" height="34"/>
+  <rect class="c5" x="670" y="152" width="44" height="34"/>
+  <text class="st" x="290" y="174" text-anchor="middle">Fixed salary</text>
+  <text class="st" x="575" y="174" text-anchor="middle">Equity</text>
+  <text class="tot" x="724" y="174">total</text>
+
+  <line class="base" x1="520" y1="84" x2="520" y2="200"/>
+  <text class="bt" x="514" y="214" text-anchor="end">Compare base only, and A looks better</text>
+
+  <g>
+    <rect class="c1" x="28" y="236" width="14" height="14"/><text class="leg" x="48" y="248">Fixed</text>
+    <rect class="c2" x="110" y="236" width="14" height="14"/><text class="leg" x="130" y="248">Variable / bonus</text>
+    <rect class="c3" x="262" y="236" width="14" height="14"/><text class="leg" x="282" y="248">Equity vesting this year</text>
+    <rect class="c4" x="460" y="236" width="14" height="14"/><text class="leg" x="480" y="248">Joining bonus</text>
+    <rect class="c5" x="600" y="236" width="14" height="14"/><text class="leg" x="620" y="248">Benefits</text>
+  </g>
+  <text class="leg" x="28" y="284">Check the fine print: vesting schedule and cliff, joining-bonus clawback, bonus payout history.</text>
+  <text class="leg" x="28" y="304">Then compare level and scope too: getting the level right often moves more than the base.</text>
+  <text class="sub" x="28" y="326">Bar lengths are illustrative only. Get every component of the final offer in writing.</text>
+</svg>

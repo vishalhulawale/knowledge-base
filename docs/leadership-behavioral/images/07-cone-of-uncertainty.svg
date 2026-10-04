@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">The cone of uncertainty</title>
+  <desc id="d">A cone on a logarithmic scale shows how wide estimates are at each stage, as a multiple of the final actual effort. At the idea stage the range is 0.25 to 4 times. Once requirements are agreed it is about 0.5 to 2 times. When the design is done it is about 0.8 to 1.25 times. While building and testing it is about 0.9 to 1.1 times. At shipping you have the actual. Range bars appear stage by stage, and a marker after the design stage says this is where to commit to a date.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .cone{fill:#ccfbf1;stroke:#0ea5a4;stroke-width:1.5}
+    .grid{stroke:#e2e8f0}
+    .one{stroke:#64748b;stroke-dasharray:4 4}
+    .ax{fill:#64748b;font-size:13px}
+    .ph{fill:#334155;font-size:13px;font-weight:600}
+    .bar{stroke:#4f46e5;stroke-width:4;stroke-linecap:round}
+    .cap{stroke:#4f46e5;stroke-width:3}
+    .rv{fill:#4f46e5;font-size:13px;font-weight:700}
+    .dot{fill:#16a34a}
+    .cm{stroke:#16a34a;stroke-width:2;stroke-dasharray:5 4}
+    .cmt{fill:#15803d;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.sub,.ax{fill:#94a3b8}
+      .cone{fill:#134e4a;stroke:#2dd4bf}.grid{stroke:#334155}.one{stroke:#94a3b8}
+      .ph{fill:#e2e8f0}.bar,.cap{stroke:#818cf8}.rv{fill:#a5b4fc}
+      .dot{fill:#4ade80}.cm{stroke:#4ade80}.cmt{fill:#4ade80}
+    }
+    /* 10 s loop: one range bar per stage, left to right */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes b1{0%,2%{opacity:0}5%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes b2{0%,16%{opacity:0}19%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes b3{0%,30%{opacity:0}33%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes b4{0%,44%{opacity:0}47%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes b5{0%,58%{opacity:0}61%,94%{opacity:1}98%,100%{opacity:0}}
+    @keyframes b6{0%,70%{opacity:0}73%,94%{opacity:1}98%,100%{opacity:0}}
+    .k1{animation-name:b1}.k2{animation-name:b2}.k3{animation-name:b3}.k4{animation-name:b4}.k5{animation-name:b5}.k6{animation-name:b6}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="438" rx="14"/>
+  <text class="h" x="28" y="40">The cone of uncertainty</text>
+  <text class="sub" x="28" y="62">Estimate range as a multiple of the final actual effort (log scale). One number at the idea stage is false precision.</text>
+
+  <!-- y axis: log2 scale, 1x at y=230, 60 px per doubling -->
+  <g>
+    <line class="grid" x1="110" y1="110" x2="760" y2="110"/><line class="grid" x1="110" y1="170" x2="760" y2="170"/>
+    <line class="grid" x1="110" y1="290" x2="760" y2="290"/><line class="grid" x1="110" y1="350" x2="760" y2="350"/>
+    <line class="one" x1="110" y1="230" x2="760" y2="230"/>
+  </g>
+  <g class="ax" text-anchor="end">
+    <text x="100" y="115">4×</text><text x="100" y="175">2×</text><text x="100" y="235">1×</text>
+    <text x="100" y="295">0.5×</text><text x="100" y="355">0.25×</text>
+  </g>
+  <!-- cone through the stage ranges -->
+  <path class="cone" d="M140 110 L290 170 L440 210.7 L590 221.8 L720 230 L590 239.1 L440 249.3 L290 290 L140 350 Z"/>
+
+  <!-- stage labels -->
+  <g class="ph" text-anchor="middle">
+    <text x="140" y="380">Idea</text>
+    <text x="290" y="380">Requirements</text><text x="290" y="396">agreed</text>
+    <text x="440" y="380">Design done</text>
+    <text x="590" y="380">Built /</text><text x="590" y="396">testing</text>
+    <text x="720" y="380">Shipped</text>
+  </g>
+
+  <!-- range bars -->
+  <g class="a k1">
+    <line class="bar" x1="140" y1="112" x2="140" y2="348"/>
+    <line class="cap" x1="130" y1="110" x2="150" y2="110"/><line class="cap" x1="130" y1="350" x2="150" y2="350"/>
+    <text class="rv" x="152" y="150">0.25×–4×</text>
+  </g>
+  <g class="a k2">
+    <line class="bar" x1="290" y1="172" x2="290" y2="288"/>
+    <line class="cap" x1="280" y1="170" x2="300" y2="170"/><line class="cap" x1="280" y1="290" x2="300" y2="290"/>
+    <text class="rv" x="302" y="160">~0.5×–2×</text>
+  </g>
+  <g class="a k3">
+    <line class="bar" x1="440" y1="211" x2="440" y2="249"/>
+    <line class="cap" x1="430" y1="210.7" x2="450" y2="210.7"/><line class="cap" x1="430" y1="249.3" x2="450" y2="249.3"/>
+    <text class="rv" x="440" y="196" text-anchor="middle">~0.8×–1.25×</text>
+  </g>
+  <g class="a k4">
+    <line class="cm" x1="515" y1="96" x2="515" y2="356"/>
+    <text class="cmt" x="523" y="112">Commit to a date</text>
+    <text class="cmt" x="523" y="129">around here</text>
+  </g>
+  <g class="a k5">
+    <line class="bar" x1="590" y1="222" x2="590" y2="238"/>
+    <line class="cap" x1="580" y1="221.8" x2="600" y2="221.8"/><line class="cap" x1="580" y1="239.1" x2="600" y2="239.1"/>
+    <text class="rv" x="590" y="208" text-anchor="middle">~0.9×–1.1×</text>
+  </g>
+  <g class="a k6">
+    <circle class="dot" cx="720" cy="230" r="7"/>
+    <text class="rv" x="720" y="214" text-anchor="middle">actual</text>
+  </g>
+  <text class="sub" x="28" y="424">Ranges from the page. Narrow the cone with spikes and design work, and update the forecast at each stage.</text>
+</svg>

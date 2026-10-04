@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Code review as gatekeeping vs teaching</title>
+  <desc id="d">Two sets of review comments on the same pull request. The gatekeeping review says "This is wrong", "Rewrote it, use my version" and "Why would you do it like this?", with no reasons and no difference between blocking and optional points. The teaching review labels each comment: a must-fix that explains why (no timeout on an upstream call means one slow system stalls the response) and links the standard, an optional nit, a question that builds judgement (what happens if the upstream times out?), and praise for a good test. A note says to pair instead of writing 40 comments and to turn repeated comments into a checklist or lint rule.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .bad{fill:#dc2626;font-size:16px;font-weight:700}
+    .good{fill:#16a34a;font-size:16px;font-weight:700}
+    .cm{fill:#ffffff;stroke:#cbd5e1}
+    .b{fill:#334155;font-size:13px}
+    .m{fill:#64748b;font-size:13px;font-style:italic}
+    .tr{fill:#dc2626}.tg{fill:#64748b}.ti{fill:#4f46e5}.tok{fill:#16a34a}
+    .tt{fill:#fff;font-size:12.5px;font-weight:700}
+    .note{fill:#ccfbf1;stroke:#0ea5a4}
+    .nt{fill:#0f766e;font-size:13px;font-weight:600}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.sub,.m{fill:#94a3b8}
+      .bad{fill:#f87171}.good{fill:#4ade80}
+      .cm{fill:#111827;stroke:#475569}.b{fill:#e2e8f0}
+      .tr{fill:#f87171}.tg{fill:#94a3b8}.ti{fill:#818cf8}.tok{fill:#4ade80}.tt{fill:#0f172a}
+      .note{fill:#134e4a;stroke:#2dd4bf}.nt{fill:#5eead4}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Review comments that grow people</text>
+  <text class="sub" x="28" y="62">Same pull request. One review gatekeeps, the other teaches.</text>
+
+  <text class="bad" x="28" y="96">❌ Gatekeeping</text>
+  <rect class="cm" x="28" y="108" width="300" height="50" rx="10"/>
+  <text class="b" x="44" y="130">"This is wrong."</text>
+  <text class="m" x="44" y="148">No reason, no link. They learn nothing.</text>
+  <rect class="cm" x="28" y="168" width="300" height="50" rx="10"/>
+  <text class="b" x="44" y="190">"Rewrote it, use my version."</text>
+  <text class="m" x="44" y="208">Rescue, not growth.</text>
+  <rect class="cm" x="28" y="228" width="300" height="50" rx="10"/>
+  <text class="b" x="44" y="250">"Why would you do it like this?"</text>
+  <text class="m" x="44" y="268">Sounds like blame, not a question.</text>
+  <text class="m" x="28" y="302">Every comment looks blocking, so the author</text>
+  <text class="m" x="28" y="320">can't tell what really matters.</text>
+
+  <text class="good" x="356" y="96">✅ Teaching</text>
+  <rect class="cm" x="356" y="108" width="416" height="68" rx="10"/>
+  <rect class="tr" x="370" y="118" width="74" height="20" rx="10"/><text class="tt" x="407" y="132" text-anchor="middle">Must-fix</text>
+  <text class="b" x="454" y="133">No timeout on this upstream call, so one</text>
+  <text class="b" x="370" y="152">slow system stalls the whole response. See the</text>
+  <text class="b" x="370" y="168">resilience standard (link).</text>
+  <rect class="cm" x="356" y="184" width="416" height="40" rx="10"/>
+  <rect class="tg" x="370" y="194" width="74" height="20" rx="10"/><text class="tt" x="407" y="208" text-anchor="middle">Nit</text>
+  <text class="b" x="454" y="209">Optional: a clearer name would help here.</text>
+  <rect class="cm" x="356" y="232" width="416" height="40" rx="10"/>
+  <rect class="ti" x="370" y="242" width="74" height="20" rx="10"/><text class="tt" x="407" y="256" text-anchor="middle">Question</text>
+  <text class="b" x="454" y="257">What happens if the upstream times out?</text>
+  <rect class="cm" x="356" y="280" width="416" height="40" rx="10"/>
+  <rect class="tok" x="370" y="290" width="74" height="20" rx="10"/><text class="tt" x="407" y="304" text-anchor="middle">Nice</text>
+  <text class="b" x="454" y="305">The retry test covers the DLQ path. Good call.</text>
+
+  <rect class="note" x="28" y="334" width="744" height="52" rx="10"/>
+  <text class="nt" x="44" y="355">Big gap? Pair instead of writing 40 comments.</text>
+  <text class="nt" x="44" y="374">Repeated comment? Turn it into a checklist item or a lint rule.</text>
+</svg>

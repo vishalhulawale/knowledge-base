@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 370" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Delegation follows task-relevant maturity</title>
+  <desc id="d">Four delegation styles from left to right, picked by competence and commitment on the task. Direct: clear steps and daily check-ins on a critical path, for example a new joiner on an unfamiliar module; the lead makes most of the calls. Coach: explain why, pair and review, with frequent check-ins, for example a mid-level engineer learning Kafka. Support: encourage and remove blockers, for example an expert who is disengaged; the engineer makes most of the calls. Delegate: hand over the outcome and context with weekly check-ins, for example a senior owning the GraphQL schema. A bar in each card shows the lead's share of decisions shrinking from left to right. A highlight moves across the four cards.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .nm{fill:#0f172a;font-size:17px;font-weight:700}
+    .b{fill:#334155;font-size:13px}
+    .ex{fill:#0f766e;font-size:13px;font-style:italic}
+    .lead{fill:#4f46e5}.eng{fill:#0ea5a4}
+    .leg{fill:#334155;font-size:13px}
+    .ring{fill:none;stroke:#4f46e5;stroke-width:3}
+    .arr{stroke:#64748b;stroke-width:2}
+    .arrh{fill:#64748b}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.nm{fill:#f1f5f9}.b,.leg{fill:#e2e8f0}.ex{fill:#5eead4}
+      .lead{fill:#818cf8}.eng{fill:#2dd4bf}.ring{stroke:#818cf8}
+      .arr{stroke:#94a3b8}.arrh{fill:#94a3b8}
+    }
+    /* 10 s loop: the highlight steps through the four styles */
+    .ring{animation:hop 10s infinite steps(1,end)}
+    @keyframes hop{0%{transform:translateX(0);opacity:1}24%{transform:translateX(188px)}48%{transform:translateX(376px)}72%{transform:translateX(564px)}96%{opacity:0}100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){.ring{animation:none;opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="368" rx="14"/>
+  <text class="h" x="28" y="40">Delegation style follows the person on this task</text>
+  <text class="sub" x="28" y="62">Pick the style from competence and commitment on this task, not from job title.</text>
+  <line class="arr" x1="28" y1="80" x2="760" y2="80"/>
+  <path class="arrh" d="M772 80 l-12 -6 v12 z"/>
+
+  <g>
+    <rect class="box" x="28" y="94" width="176" height="214" rx="12"/>
+    <text class="nm" x="44" y="122">Direct</text>
+    <text class="b" x="44" y="146">Clear steps,</text>
+    <text class="b" x="44" y="164">acceptance criteria</text>
+    <text class="b" x="44" y="188">Check-ins: daily on</text>
+    <text class="b" x="44" y="206">a critical path</text>
+    <text class="ex" x="44" y="232">New joiner on an</text>
+    <text class="ex" x="44" y="250">unfamiliar module</text>
+    <rect class="lead" x="44" y="276" width="124" height="14"/><rect class="eng" x="168" y="276" width="20" height="14"/>
+  </g>
+  <g>
+    <rect class="box" x="216" y="94" width="176" height="214" rx="12"/>
+    <text class="nm" x="232" y="122">Coach</text>
+    <text class="b" x="232" y="146">Explain why, pair,</text>
+    <text class="b" x="232" y="164">review together</text>
+    <text class="b" x="232" y="188">Check-ins: frequent,</text>
+    <text class="b" x="232" y="206">plus reviews</text>
+    <text class="ex" x="232" y="232">Mid engineer</text>
+    <text class="ex" x="232" y="250">learning Kafka</text>
+    <rect class="lead" x="232" y="276" width="88" height="14"/><rect class="eng" x="320" y="276" width="56" height="14"/>
+  </g>
+  <g>
+    <rect class="box" x="404" y="94" width="176" height="214" rx="12"/>
+    <text class="nm" x="420" y="122">Support</text>
+    <text class="b" x="420" y="146">Encourage,</text>
+    <text class="b" x="420" y="164">remove blockers</text>
+    <text class="b" x="420" y="188">Check-ins: lighter,</text>
+    <text class="b" x="420" y="206">about blockers</text>
+    <text class="ex" x="420" y="232">Expert but</text>
+    <text class="ex" x="420" y="250">disengaged</text>
+    <rect class="lead" x="420" y="276" width="44" height="14"/><rect class="eng" x="464" y="276" width="100" height="14"/>
+  </g>
+  <g>
+    <rect class="box" x="592" y="94" width="176" height="214" rx="12"/>
+    <text class="nm" x="608" y="122">Delegate</text>
+    <text class="b" x="608" y="146">Outcome, context,</text>
+    <text class="b" x="608" y="164">authority limits</text>
+    <text class="b" x="608" y="188">Check-ins: weekly</text>
+    <text class="b" x="608" y="206">for experts</text>
+    <text class="ex" x="608" y="232">Senior owning the</text>
+    <text class="ex" x="608" y="250">GraphQL schema</text>
+    <rect class="lead" x="608" y="276" width="14" height="14"/><rect class="eng" x="622" y="276" width="130" height="14"/>
+  </g>
+  <rect class="ring" x="24" y="90" width="184" height="222" rx="14"/>
+
+  <rect class="lead" x="28" y="326" width="14" height="14"/><text class="leg" x="48" y="338">Lead makes the call</text>
+  <rect class="eng" x="200" y="326" width="14" height="14"/><text class="leg" x="220" y="338">Engineer makes the call</text>
+  <text class="sub" x="400" y="338">Bar lengths are illustrative. A senior on an</text>
+  <text class="sub" x="400" y="356">unfamiliar domain goes back to Direct.</text>
+</svg>

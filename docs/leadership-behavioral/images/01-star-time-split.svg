@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 330" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Where a STAR answer spends its time</title>
+  <desc id="d">Two answers of the same length, about 150 seconds, play out on a timeline. The weak answer spends 55 percent on the Situation and only 20 percent, about 30 seconds, on the Action. The strong answer spends 10 percent each on Situation and Task, 60 percent, about 90 seconds, on the Action, 15 percent on the Result and 5 percent on the Learning.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .ctx{fill:#64748b}.ctx2{fill:#475569}.act{fill:#4f46e5}.res{fill:#16a34a}.lrn{fill:#d97706}
+    .st{fill:#fff;font-size:13px;font-weight:700}
+    .cov{fill:#f8fafc}
+    .ph{stroke:#0f172a;stroke-width:2}
+    .ax{stroke:#cbd5e1}
+    .bad{fill:#dc2626;font-size:13px;font-weight:600}
+    .good{fill:#16a34a;font-size:13px;font-weight:600}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .ctx{fill:#94a3b8}.ctx2{fill:#cbd5e1}.act{fill:#818cf8}.res{fill:#4ade80}.lrn{fill:#fbbf24}
+      .st{fill:#0f172a}.cov{fill:#1f2430}.ph{stroke:#f1f5f9}.ax{stroke:#475569}
+      .bad{fill:#f87171}.good{fill:#4ade80}
+    }
+    /* 10 s loop: both answers play out over 0-75%, hold the full picture, restart */
+    .cov{transform-box:fill-box;transform-origin:right center;animation:wipe 10s linear infinite}
+    @keyframes wipe{0%{transform:scaleX(1)}75%,95%{transform:scaleX(0)}100%{transform:scaleX(1)}}
+    .phg{animation:play 10s linear infinite}
+    @keyframes play{0%{transform:translateX(0);opacity:1}75%{transform:translateX(560px);opacity:1}78%,100%{transform:translateX(560px);opacity:0}}
+    @media (prefers-reduced-motion: reduce){.cov{animation:none;transform:scaleX(0)}.phg{animation:none;opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="328" rx="14"/>
+  <text class="h" x="28" y="40">Where a 2–3 minute STAR answer spends its time</text>
+  <text class="sub" x="28" y="62">Same length, same project. The interviewer finds the evidence in the Action.</text>
+
+  <text class="lbl" x="28" y="110">Weak answer</text>
+  <text class="sub" x="28" y="128">long context</text>
+  <rect class="ctx" x="190" y="92" width="308" height="40"/>
+  <rect class="ctx2" x="498" y="92" width="56" height="40"/>
+  <rect class="act" x="554" y="92" width="112" height="40"/>
+  <rect class="res" x="666" y="92" width="84" height="40"/>
+  <text class="st" x="344" y="117" text-anchor="middle">Situation 55%</text>
+  <text class="st" x="526" y="117" text-anchor="middle">Task</text>
+  <text class="st" x="610" y="117" text-anchor="middle">Action 20%</text>
+  <text class="st" x="708" y="117" text-anchor="middle">Result</text>
+  <rect class="cov" x="189" y="90" width="563" height="44"/>
+  <text class="bad" x="190" y="152">Action gets about 30 s, so the interviewer has little to score.</text>
+
+  <text class="lbl" x="28" y="194">Strong answer</text>
+  <text class="sub" x="28" y="212">STAR-L</text>
+  <rect class="ctx" x="190" y="176" width="56" height="40"/>
+  <rect class="ctx2" x="246" y="176" width="56" height="40"/>
+  <rect class="act" x="302" y="176" width="336" height="40"/>
+  <rect class="res" x="638" y="176" width="84" height="40"/>
+  <rect class="lrn" x="722" y="176" width="28" height="40"/>
+  <text class="st" x="218" y="201" text-anchor="middle">S</text>
+  <text class="st" x="274" y="201" text-anchor="middle">T</text>
+  <text class="st" x="470" y="201" text-anchor="middle">Action 60%: decisions, trade-offs</text>
+  <text class="st" x="680" y="201" text-anchor="middle">R 15%</text>
+  <text class="st" x="736" y="201" text-anchor="middle">L</text>
+  <rect class="cov" x="189" y="174" width="563" height="44"/>
+  <text class="good" x="190" y="236">Action gets about 90 s: what I did, why, and how others reacted.</text>
+
+  <!-- time axis: 150 s over 560 px -->
+  <line class="ax" x1="190" y1="256" x2="750" y2="256"/>
+  <g class="sub" text-anchor="middle">
+    <line class="ax" x1="190" y1="252" x2="190" y2="260"/><text x="190" y="278">0 s</text>
+    <line class="ax" x1="302" y1="252" x2="302" y2="260"/><text x="302" y="278">30 s</text>
+    <line class="ax" x1="414" y1="252" x2="414" y2="260"/><text x="414" y="278">60 s</text>
+    <line class="ax" x1="526" y1="252" x2="526" y2="260"/><text x="526" y="278">90 s</text>
+    <line class="ax" x1="638" y1="252" x2="638" y2="260"/><text x="638" y="278">120 s</text>
+    <line class="ax" x1="750" y1="252" x2="750" y2="260"/><text x="750" y="278">150 s</text>
+  </g>
+  <g class="phg"><line class="ph" x1="190" y1="84" x2="190" y2="222"/></g>
+  <text class="sub" x="28" y="312">Strong split follows the page (S 10%, T 10%, A 60%, R 15%, L 5%). The weak split is an illustrative example.</text>
+</svg>

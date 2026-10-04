@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">The 90-second pitch on a clock</title>
+  <desc id="d">A 90-second timeline for "tell me about yourself". Present takes about the first 30 seconds: lead engineer on a healthcare platform, team of 8 to 10, owns the GraphQL integration layer. Past takes about 30 to 40 seconds: Deloitte AWS cloud-native and Terraform, Coriolis multi-cloud key management, Johnson Controls auth and SSO plus monolith migration. Future takes about 15 to 20 seconds: why this role. The last few seconds are a hook that invites a follow-up on the strongest story.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .b{fill:#334155;font-size:13px}
+    .bh{fill:#0f172a;font-size:14px;font-weight:700}
+    .p1{fill:#4f46e5}.p2{fill:#0ea5a4}.p3{fill:#d97706}.p4{fill:#16a34a}
+    .st{fill:#fff;font-size:13px;font-weight:700}
+    .ax{stroke:#cbd5e1}
+    .ph{stroke:#0f172a;stroke-width:2.5}
+    .hook{fill:#ffffff;stroke:#16a34a;stroke-width:1.5}
+    .ht{fill:#15803d;font-size:14px;font-weight:600}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.sub{fill:#94a3b8}.b{fill:#e2e8f0}.bh{fill:#f1f5f9}
+      .p1{fill:#818cf8}.p2{fill:#2dd4bf}.p3{fill:#fbbf24}.p4{fill:#4ade80}
+      .st{fill:#0f172a}.ax{stroke:#475569}.ph{stroke:#f1f5f9}
+      .hook{fill:#111827;stroke:#4ade80}.ht{fill:#4ade80}
+    }
+    /* 10 s loop: playhead crosses 90 s of pitch in 0-80%; each part lights up as it is reached */
+    .seg{opacity:.25;animation:10s infinite linear}
+    @keyframes s1{0%,95%{opacity:1}100%{opacity:.25}}
+    @keyframes s2{0%,26%{opacity:.25}28%,95%{opacity:1}100%{opacity:.25}}
+    @keyframes s3{0%,57%{opacity:.25}59%,95%{opacity:1}100%{opacity:.25}}
+    @keyframes s4{0%,73%{opacity:.25}75%,95%{opacity:1}100%{opacity:.25}}
+    .k1{animation-name:s1}.k2{animation-name:s2}.k3{animation-name:s3}.k4{animation-name:s4}
+    .phg{animation:play 10s linear infinite}
+    @keyframes play{0%{transform:translateX(0);opacity:1}80%{transform:translateX(720px);opacity:1}83%,100%{transform:translateX(720px);opacity:0}}
+    @media (prefers-reduced-motion: reduce){.seg{animation:none;opacity:1}.phg{animation:none;opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="338" rx="14"/>
+  <text class="h" x="28" y="40">"Tell me about yourself" in 60–90 seconds</text>
+  <text class="sub" x="28" y="62">Present → past → future → hook. Your current scope comes first, not your first job.</text>
+
+  <!-- time axis: 90 s over 720 px (8 px per second) -->
+  <g class="sub" text-anchor="middle">
+    <text x="40" y="88">0 s</text><text x="280" y="88">30 s</text><text x="520" y="88">60 s</text><text x="760" y="88">90 s</text>
+  </g>
+  <line class="ax" x1="40" y1="94" x2="40" y2="100"/><line class="ax" x1="280" y1="94" x2="280" y2="100"/>
+  <line class="ax" x1="520" y1="94" x2="520" y2="100"/><line class="ax" x1="760" y1="94" x2="760" y2="100"/>
+
+  <g class="seg k1">
+    <rect class="p1" x="40" y="102" width="238" height="40" rx="6"/>
+    <text class="st" x="159" y="127" text-anchor="middle">PRESENT ~30 s</text>
+    <text class="b" x="40" y="168">Lead engineer, healthcare</text>
+    <text class="b" x="40" y="186">platform, team of 8–10,</text>
+    <text class="b" x="40" y="204">owns the GraphQL</text>
+    <text class="b" x="40" y="222">integration layer</text>
+  </g>
+  <g class="seg k2">
+    <rect class="p2" x="280" y="102" width="278" height="40" rx="6"/>
+    <text class="st" x="419" y="127" text-anchor="middle">PAST ~30–40 s</text>
+    <text class="b" x="290" y="168">Deloitte: AWS cloud-native</text>
+    <text class="b" x="290" y="186">+ Terraform</text>
+    <text class="b" x="290" y="204">Coriolis: multi-cloud keys</text>
+    <text class="b" x="290" y="222">JCI: auth/SSO + monolith</text>
+    <text class="b" x="290" y="240">migration</text>
+  </g>
+  <g class="seg k3">
+    <rect class="p3" x="560" y="102" width="142" height="40" rx="6"/>
+    <text class="st" x="631" y="127" text-anchor="middle">FUTURE ~15–20 s</text>
+    <text class="b" x="570" y="168">Why this role:</text>
+    <text class="b" x="570" y="186">scale, ownership,</text>
+    <text class="b" x="570" y="204">tech leadership</text>
+  </g>
+  <g class="seg k4">
+    <rect class="p4" x="704" y="102" width="56" height="40" rx="6"/>
+    <text class="st" x="732" y="127" text-anchor="middle">HOOK</text>
+    <rect class="hook" x="400" y="256" width="360" height="56" rx="10"/>
+    <text class="ht" x="416" y="279">"Happy to go deeper on the GraphQL</text>
+    <text class="ht" x="416" y="299">layer or how I lead the team."</text>
+  </g>
+  <text class="bh" x="40" y="280">The hook hands the</text>
+  <text class="bh" x="40" y="298">interviewer the next question.</text>
+
+  <g class="phg"><line class="ph" x1="40" y1="96" x2="40" y2="148"/></g>
+  <text class="sub" x="28" y="326">Timings and content follow the page's draft pitch. Practise aloud until it sounds conversational.</text>
+</svg>

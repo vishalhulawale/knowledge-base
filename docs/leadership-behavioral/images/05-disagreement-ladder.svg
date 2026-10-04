@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">The disagreement ladder</title>
+  <desc id="d">An eight-rung ladder for resolving a technical disagreement, climbed from the bottom. 1 Seek to understand: "Let me check I understand your concern". 2 Find the interests: "What's the failure you want to avoid?" 3 Agree on criteria: "Can we agree p95 below X and freshness below Y?" 4 Get data: "Let's time-box a 2-day spike for both options." 5 Write it down: "I'll draft the ADR with both options." 6 Decide: "Who makes the call, and by Thursday?" 7 Commit: "I'd have chosen B, but I'm committed to A." 8 Review: "Let's check the metrics after a month." At the Decide rung, a side box says that if you are stuck, escalate jointly with a shared written problem statement and options. A footnote says compliance and safety issues such as PHI or security are escalated, not settled by disagree and commit.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .rail{stroke:#64748b;stroke-width:4;stroke-linecap:round}
+    .rung{stroke:#94a3b8;stroke-width:4;stroke-linecap:round}
+    .num{fill:#4f46e5;font-size:15px;font-weight:700}
+    .nm{fill:#0f172a;font-size:15px;font-weight:700}
+    .ph{fill:#334155;font-size:13px;font-style:italic}
+    .tok{fill:#0ea5a4;stroke:#ffffff;stroke-width:2}
+    .esc{fill:#fef3c7;stroke:#d97706}
+    .et{fill:#92400e;font-size:13px}
+    .eth{fill:#92400e;font-size:14px;font-weight:700}
+    .el{stroke:#d97706;stroke-width:2;stroke-dasharray:5 4}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.sub{fill:#94a3b8}
+      .rail{stroke:#94a3b8}.rung{stroke:#64748b}
+      .num{fill:#818cf8}.nm{fill:#f1f5f9}.ph{fill:#e2e8f0}
+      .tok{fill:#2dd4bf;stroke:#1f2430}
+      .esc{fill:#422006;stroke:#fbbf24}.et,.eth{fill:#fde68a}.el{stroke:#fbbf24}
+    }
+    /* 10 s loop: the token climbs one rung every 10%, holds at the top, restarts */
+    .tg{animation:climb 10s infinite steps(1,end)}
+    @keyframes climb{
+      0%{transform:translateY(0)}10%{transform:translateY(-44px)}20%{transform:translateY(-88px)}
+      30%{transform:translateY(-132px)}40%{transform:translateY(-176px)}50%{transform:translateY(-220px)}
+      60%{transform:translateY(-264px)}70%,95%{transform:translateY(-308px)}100%{transform:translateY(0)}}
+    .eg{animation:esc 10s infinite linear}
+    @keyframes esc{0%,48%{opacity:.25}52%,95%{opacity:1}100%{opacity:.25}}
+    @media (prefers-reduced-motion: reduce){.tg{animation:none;transform:translateY(-308px)}.eg{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="498" rx="14"/>
+  <text class="h" x="28" y="40">Climb the ladder before you escalate</text>
+  <text class="sub" x="28" y="62">From positions to a recorded decision. Each rung has a phrase you can actually say.</text>
+
+  <!-- ladder: rails and rungs; rung i (1..8) at y = 446 - (i-1)*44 -->
+  <line class="rail" x1="44" y1="104" x2="44" y2="466"/>
+  <line class="rail" x1="96" y1="104" x2="96" y2="466"/>
+  <g>
+    <line class="rung" x1="44" y1="446" x2="96" y2="446"/><line class="rung" x1="44" y1="402" x2="96" y2="402"/>
+    <line class="rung" x1="44" y1="358" x2="96" y2="358"/><line class="rung" x1="44" y1="314" x2="96" y2="314"/>
+    <line class="rung" x1="44" y1="270" x2="96" y2="270"/><line class="rung" x1="44" y1="226" x2="96" y2="226"/>
+    <line class="rung" x1="44" y1="182" x2="96" y2="182"/><line class="rung" x1="44" y1="138" x2="96" y2="138"/>
+  </g>
+
+  <g>
+    <text class="num" x="114" y="451">1</text><text class="nm" x="134" y="451">Seek to understand</text><text class="ph" x="314" y="451">"Let me check I understand your concern…"</text>
+    <text class="num" x="114" y="407">2</text><text class="nm" x="134" y="407">Find the interests</text><text class="ph" x="314" y="407">"What's the failure you want to avoid?"</text>
+    <text class="num" x="114" y="363">3</text><text class="nm" x="134" y="363">Agree on criteria</text><text class="ph" x="314" y="363">"Can we agree p95 &lt; X and freshness &lt; Y?"</text>
+    <text class="num" x="114" y="319">4</text><text class="nm" x="134" y="319">Get data</text><text class="ph" x="314" y="319">"Let's time-box a 2-day spike for both options."</text>
+    <text class="num" x="114" y="275">5</text><text class="nm" x="134" y="275">Write it down</text><text class="ph" x="314" y="275">"I'll draft the ADR with both options."</text>
+    <text class="num" x="114" y="231">6</text><text class="nm" x="134" y="231">Decide</text><text class="ph" x="314" y="231">"Who makes the call, and by Thursday?"</text>
+    <text class="num" x="114" y="187">7</text><text class="nm" x="134" y="187">Commit</text><text class="ph" x="314" y="187">"I'd have chosen B, but I'm committed to A."</text>
+    <text class="num" x="114" y="143">8</text><text class="nm" x="134" y="143">Review</text><text class="ph" x="314" y="143">"Let's check the metrics after a month."</text>
+  </g>
+
+  <g class="eg">
+    <line class="el" x1="584" y1="226" x2="626" y2="226"/>
+    <rect class="esc" x="626" y="196" width="148" height="64" rx="10"/>
+    <text class="eth" x="638" y="216">Stuck? Escalate</text>
+    <text class="et" x="638" y="234">jointly: a written</text>
+    <text class="et" x="638" y="251">problem + options</text>
+  </g>
+
+  <g class="tg"><circle class="tok" cx="70" cy="446" r="11"/></g>
+  <text class="sub" x="28" y="486">Compliance and safety (PHI, security) are not up for disagree-and-commit: escalate those straight away.</text>
+</svg>
