@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Null bubbling: nullable versus non-null field</title>
+  <desc id="d">Two copies of the same response tree: data, then member of type Member (nullable), with children name and pharmacy. In both, the pharmacy resolver throws. On the left pharmacy is declared nullable, so only pharmacy becomes null and the result keeps member with its name. On the right pharmacy is declared Pharmacy with a non-null marker, so null is not allowed there; the null moves up to the nearest nullable ancestor, member, and the whole member including its name is lost. Both responses contain one errors entry with path member, pharmacy.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .ln{stroke:#cbd5e1;stroke-width:2}
+    .m{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155;white-space:pre}
+    .bad{fill:#dc2626}.warn{fill:#d97706}.mut{fill:#e2e8f0}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .badT{fill:#dc2626;font-size:13px;font-weight:700}
+    .badS{stroke:#dc2626;stroke-width:3;fill:none}
+    .okT{fill:#16a34a;font-size:14px;font-weight:700}
+    .lost{fill:#64748b;font-size:14px;text-decoration:line-through}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx,.m{fill:#e2e8f0}.sub,.lost{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.ln{stroke:#475569}
+      .bad{fill:#f87171}.warn{fill:#fbbf24}.mut{fill:#334155}
+      .on{fill:#0f172a}.badT{fill:#f87171}.badS{stroke:#f87171}.okT{fill:#4ade80}
+    }
+    /* 10 s loop: 15% resolver throws, 30% left pharmacy null, 40-50% right null climbs to member */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes fl{0%,14%{opacity:0}16%,30%{opacity:1}32%,100%{opacity:0}}
+    @keyframes nl{0%,30%{opacity:0}32%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes rl{0%,34%{opacity:0}37%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes fr{0%,14%{opacity:0}16%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes up{0%,38%{opacity:0}41%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes mr{0%,46%{opacity:0}49%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes rr{0%,52%{opacity:0}55%,92%{opacity:1}96%,100%{opacity:0}}
+    .fl{animation-name:fl}.nl{animation-name:nl}.rl{animation-name:rl}.fr{animation-name:fr}
+    .up{animation-name:up}.mr{animation-name:mr}.rr{animation-name:rr}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.fl{opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="458" rx="14"/>
+  <text class="h" x="28" y="40">Null bubbling: where does the null land?</text>
+  <text class="sub" x="28" y="62">The pharmacy resolver throws in both trees. Only the declared type of pharmacy differs.</text>
+
+  <!-- LEFT panel -->
+  <text class="lbl" x="40" y="96">pharmacy: Pharmacy (nullable)</text>
+  <line class="ln" x1="208" y1="144" x2="208" y2="172"/>
+  <line class="ln" x1="208" y1="206" x2="110" y2="236"/><line class="ln" x1="208" y1="206" x2="290" y2="236"/>
+  <rect class="box" x="163" y="110" width="90" height="34" rx="8"/><text class="tx" x="208" y="132" text-anchor="middle">data</text>
+  <rect class="box" x="133" y="172" width="150" height="34" rx="8"/><text class="tx" x="208" y="194" text-anchor="middle">member: Member</text>
+  <rect class="box" x="40" y="236" width="140" height="34" rx="8"/><text class="tx" x="110" y="258" text-anchor="middle">name: String!</text>
+  <rect class="box" x="200" y="236" width="180" height="34" rx="8"/><text class="tx" x="290" y="258" text-anchor="middle">pharmacy: Pharmacy</text>
+  <g class="a fl"><rect class="bad" x="200" y="236" width="180" height="34" rx="8"/><text class="on" x="290" y="258" text-anchor="middle">resolver throws</text></g>
+  <g class="a nl"><rect class="warn" x="200" y="236" width="180" height="34" rx="8"/><text class="on" x="290" y="258" text-anchor="middle">pharmacy: null</text>
+    <text class="okT" x="290" y="292" text-anchor="middle">null allowed, stops here</text></g>
+  <g class="a rl">
+    <text class="m" x="40" y="330">"member": { "name": "A. Patel",</text>
+    <text class="m" x="40" y="350">            "pharmacy": null }</text>
+    <text class="sub" x="40" y="378">errors: 1 entry, path [member, pharmacy]</text>
+    <text class="okT" x="40" y="404">The screen still shows the member.</text>
+  </g>
+
+  <!-- divider -->
+  <line class="ln" x1="400" y1="84" x2="400" y2="416"/>
+
+  <!-- RIGHT panel -->
+  <text class="lbl" x="424" y="96">pharmacy: Pharmacy! (non-null)</text>
+  <line class="ln" x1="592" y1="144" x2="592" y2="172"/>
+  <line class="ln" x1="592" y1="206" x2="494" y2="236"/><line class="ln" x1="592" y1="206" x2="674" y2="236"/>
+  <rect class="box" x="547" y="110" width="90" height="34" rx="8"/><text class="tx" x="592" y="132" text-anchor="middle">data</text>
+  <rect class="box" x="517" y="172" width="150" height="34" rx="8"/><text class="tx" x="592" y="194" text-anchor="middle">member: Member</text>
+  <rect class="box" x="424" y="236" width="140" height="34" rx="8"/><text class="tx" x="494" y="258" text-anchor="middle">name: String!</text>
+  <rect class="box" x="584" y="236" width="180" height="34" rx="8"/><text class="tx" x="674" y="258" text-anchor="middle">pharmacy: Pharmacy!</text>
+  <g class="a fr"><rect class="bad" x="584" y="236" width="180" height="34" rx="8"/><text class="on" x="674" y="258" text-anchor="middle">resolver throws</text>
+    <text class="badT" x="674" y="292" text-anchor="middle">null not allowed here</text></g>
+  <g class="a up">
+    <path class="badS" d="M700 232 C 712 214, 700 200, 672 192"/>
+    <path class="badS" d="M672 192 l10 -6 M672 192 l9 7"/>
+  </g>
+  <g class="a mr">
+    <rect class="warn" x="517" y="172" width="150" height="34" rx="8"/><text class="on" x="592" y="194" text-anchor="middle">member: null</text>
+    <rect class="mut" x="424" y="236" width="140" height="34" rx="8"/><text class="lost" x="494" y="258" text-anchor="middle">name: lost</text>
+  </g>
+  <g class="a rr">
+    <text class="m" x="424" y="330">"member": null</text>
+    <text class="sub" x="424" y="378">errors: 1 entry, path [member, pharmacy]</text>
+    <text class="badT" x="424" y="404">The whole member disappears.</text>
+  </g>
+  <text class="sub" x="28" y="444">If member were also non-null, the null would keep climbing and "data" itself would be null.</text>
+</svg>

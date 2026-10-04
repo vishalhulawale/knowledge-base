@@ -31,6 +31,9 @@ flowchart LR
 ```
 *Notice that each layer answers a different question: which operation is slow, which field causes it, and which upstream is behind it.*
 
+![Side-by-side dashboards for the same 1,000 requests. The HTTP view shows one row, POST /graphql, with 100 percent status 200 and a p95 of 420 ms. The GraphQL view breaks it down by operation name: MemberDashboard with 8 percent of responses carrying errors, RxHistory with none, CancelPrescription with 2 percent, and 40 anonymous operations that can't be attributed](images/09-http-vs-graphql-view.svg){ loading=lazy }
+*Notice that the failing MemberDashboard calls are invisible in the HTTP view: they all returned 200 with an `errors` array.*
+
 | Signal | Why | Source |
 |---|---|---|
 | `graphql.request` latency by operation | SLOs per screen/use case | Spring for GraphQL observations. Out of the box the timer is tagged only with `graphql.operation.type` and `graphql.outcome`; the operation name is a high-cardinality key (traces only), so add it to metrics with a custom `ExecutionRequestObservationConvention` (see below) |
@@ -213,6 +216,9 @@ export default function () {
 | Head-based trace sampling (e.g. 10%) | Simple, predictable cost | Misses most rare slow or failed requests | Default; fine for common-path analysis |
 | Tail-based sampling (in the OTel Collector) | Keeps errors and slow traces | Collector must buffer whole traces; more infrastructure | p99 investigations, low-volume critical operations |
 | Vendor field-usage analytics (GraphOS, Hive, Cosmo) | Field usage per client, safe deprecation | Extra dependency, schema/usage data leaves the service | Many clients, schema evolution matters |
+
+![Animation: ten traces arrive, one ending in an error and one slow. Head-based sampling at 10 percent decides at the start of each trace and keeps only trace 4 at random, losing the error and slow traces. Tail-based sampling in the OpenTelemetry Collector buffers every trace until it ends, then keeps the error and the slow trace](images/09-head-vs-tail-sampling.svg){ loading=lazy }
+*Notice when each decision is made: head sampling decides before anything has gone wrong, tail sampling decides after the trace has ended, so it can keep the interesting ones.*
 
 !!! warning "Gotchas"
     - Spring for GraphQL already skips trivial property fetchers, but a list of 500 items with a real data fetcher per item still produces 500 observations and spans per request. That is **overhead and trace bloat**. Batch with `@BatchMapping` (one observation), or filter with an `ObservationPredicate`. Custom graphql-java `Instrumentation` that times *every* field has the same problem, worse.

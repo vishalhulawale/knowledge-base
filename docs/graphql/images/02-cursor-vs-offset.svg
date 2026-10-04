@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Offset versus cursor pagination when a row is inserted</title>
+  <desc id="d">Two identical lists sorted newest first, rows 9 down to 3, page size 3. Page 1 returns rows 9, 8 and 7 in both. Then a new row 10 is inserted at the top and every row moves down one position. With offset pagination, page 2 uses offset 3 and returns rows 7, 6 and 5, so row 7 is shown twice. With cursor pagination, page 2 asks for rows after the cursor of row 7 and returns rows 6, 5 and 4, with no repeat and no gap.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .ln{stroke:#cbd5e1;stroke-width:2}
+    .new{fill:#0ea5a4}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .p1{fill:none;stroke:#4f46e5;stroke-width:3}
+    .p1T{fill:#4f46e5;font-size:14px;font-weight:700}
+    .ok{fill:none;stroke:#16a34a;stroke-width:3}
+    .okT{fill:#16a34a;font-size:14px;font-weight:700}
+    .bad{fill:none;stroke:#dc2626;stroke-width:3}
+    .badF{fill:#dc2626}
+    .badT{fill:#dc2626;font-size:14px;font-weight:700}
+    .teaT{fill:#0f766e;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.ln{stroke:#475569}
+      .new{fill:#2dd4bf}.on{fill:#0f172a}
+      .p1{stroke:#818cf8}.p1T{fill:#818cf8}.ok{stroke:#4ade80}.okT{fill:#4ade80}
+      .bad{stroke:#f87171}.badF{fill:#f87171}.badT{fill:#f87171}.teaT{fill:#5eead4}
+    }
+    /* 12 s loop: page 1 (6%), insert row 10 and shift (33-38%), page 2 (52%), hold, reset */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes b1{0%,5%{opacity:0}8%,30%{opacity:1}33%,100%{opacity:0}}
+    @keyframes t1{0%,7%{opacity:0}10%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes ins{0%,33%{opacity:0}38%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes p2{0%,51%{opacity:0}54%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes dup{0%,57%{opacity:0}60%,92%{opacity:1}96%,100%{opacity:0}}
+    .b1{animation-name:b1}.t1{animation-name:t1}.ins{animation-name:ins}.p2{animation-name:p2}.dup{animation-name:dup}
+    @keyframes sh{0%,33%{transform:translateY(0)}38%,93%{transform:translateY(36px)}97%,100%{transform:translateY(0)}}
+    .shift{animation:sh 12s infinite ease-in-out}
+    @keyframes fade{0%,92%{opacity:1}95%,97%{opacity:0}100%{opacity:1}}
+    .rows{animation:fade 12s infinite linear}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.b1{opacity:0}.shift{animation:none;transform:translateY(36px)}.rows{animation:none}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="478" rx="14"/>
+  <text class="h" x="28" y="40">Offset vs cursor pagination under inserts</text>
+  <text class="sub" x="28" y="62">Sorted newest first, page size 3. A new row arrives between page 1 and page 2.</text>
+
+  <text class="lbl" x="44" y="100">Offset: page 2 = offset 3</text>
+  <text class="lbl" x="428" y="100">Cursor: page 2 = after row 7</text>
+  <line class="ln" x1="400" y1="84" x2="400" y2="416"/>
+
+  <!-- ===== LEFT (offset) list, slots at y=130+36i ===== -->
+  <g class="rows"><g class="shift">
+    <rect class="box" x="44" y="130" width="100" height="30" rx="7"/><text class="tx" x="94" y="150" text-anchor="middle">row 9</text>
+    <rect class="box" x="44" y="166" width="100" height="30" rx="7"/><text class="tx" x="94" y="186" text-anchor="middle">row 8</text>
+    <rect class="box" x="44" y="202" width="100" height="30" rx="7"/><text class="tx" x="94" y="222" text-anchor="middle">row 7</text>
+    <rect class="box" x="44" y="238" width="100" height="30" rx="7"/><text class="tx" x="94" y="258" text-anchor="middle">row 6</text>
+    <rect class="box" x="44" y="274" width="100" height="30" rx="7"/><text class="tx" x="94" y="294" text-anchor="middle">row 5</text>
+    <rect class="box" x="44" y="310" width="100" height="30" rx="7"/><text class="tx" x="94" y="330" text-anchor="middle">row 4</text>
+    <rect class="box" x="44" y="346" width="100" height="30" rx="7"/><text class="tx" x="94" y="366" text-anchor="middle">row 3</text>
+  </g></g>
+  <g class="a ins"><rect class="new" x="44" y="130" width="100" height="30" rx="7"/><text class="on" x="94" y="150" text-anchor="middle">row 10</text></g>
+  <!-- page 1 bracket (before shift: slots 0-2) -->
+  <g class="a b1"><rect class="p1" x="38" y="125" width="112" height="112" rx="10"/></g>
+  <g class="a t1"><text class="p1T" x="172" y="150">Page 1 → 9, 8, 7</text></g>
+  <g class="a ins"><text class="teaT" x="172" y="180">Row 10 inserted:</text><text class="tx" x="172" y="198">every row moves down</text></g>
+  <!-- page 2 by offset: slots 3-5 after shift = rows 7,6,5 -->
+  <g class="a p2"><rect class="bad" x="38" y="233" width="112" height="112" rx="10"/>
+    <text class="lbl" x="172" y="262">Page 2: skip 3, take 3</text>
+    <text class="badT" x="172" y="284">→ 7, 6, 5</text></g>
+  <g class="a dup"><rect class="badF" x="44" y="238" width="100" height="30" rx="7"/><text class="on" x="94" y="258" text-anchor="middle">row 7</text>
+    <text class="badT" x="172" y="314">Row 7 shown twice.</text>
+    <text class="tx" x="172" y="334">A delete would skip</text><text class="tx" x="172" y="352">a row instead.</text></g>
+
+  <!-- ===== RIGHT (cursor) list ===== -->
+  <g class="rows"><g class="shift">
+    <rect class="box" x="428" y="130" width="100" height="30" rx="7"/><text class="tx" x="478" y="150" text-anchor="middle">row 9</text>
+    <rect class="box" x="428" y="166" width="100" height="30" rx="7"/><text class="tx" x="478" y="186" text-anchor="middle">row 8</text>
+    <rect class="box" x="428" y="202" width="100" height="30" rx="7"/><text class="tx" x="478" y="222" text-anchor="middle">row 7</text>
+    <rect class="box" x="428" y="238" width="100" height="30" rx="7"/><text class="tx" x="478" y="258" text-anchor="middle">row 6</text>
+    <rect class="box" x="428" y="274" width="100" height="30" rx="7"/><text class="tx" x="478" y="294" text-anchor="middle">row 5</text>
+    <rect class="box" x="428" y="310" width="100" height="30" rx="7"/><text class="tx" x="478" y="330" text-anchor="middle">row 4</text>
+    <rect class="box" x="428" y="346" width="100" height="30" rx="7"/><text class="tx" x="478" y="366" text-anchor="middle">row 3</text>
+  </g></g>
+  <g class="a ins"><rect class="new" x="428" y="130" width="100" height="30" rx="7"/><text class="on" x="478" y="150" text-anchor="middle">row 10</text></g>
+  <g class="a b1"><rect class="p1" x="422" y="125" width="112" height="112" rx="10"/></g>
+  <g class="a t1"><text class="p1T" x="556" y="150">Page 1 → 9, 8, 7</text><text class="sub" x="556" y="168">endCursor = row 7</text></g>
+  <g class="a ins"><text class="teaT" x="556" y="198">Row 10 inserted</text></g>
+  <!-- page 2 by cursor: rows after 7 = 6,5,4 = slots 4-6 after shift -->
+  <g class="a p2"><rect class="ok" x="422" y="269" width="112" height="112" rx="10"/>
+    <text class="lbl" x="556" y="298">Page 2: after row 7</text>
+    <text class="okT" x="556" y="320">→ 6, 5, 4</text>
+    <text class="tx" x="556" y="350">No repeat, no gap.</text></g>
+
+  <text class="sub" x="28" y="440">The cursor encodes the last row's sort key (e.g. updatedAt + id), so the next page</text>
+  <text class="sub" x="28" y="458">starts after that row wherever it now sits. Row numbers are example data.</text>
+</svg>

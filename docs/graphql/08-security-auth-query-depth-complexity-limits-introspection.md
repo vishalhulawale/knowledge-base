@@ -64,6 +64,9 @@ sequenceDiagram
 | Object (BOLA) | A member may only read *their own* prescriptions | Service layer: `rx.memberId == currentUser.memberId` |
 | Data filtering | Lists return only authorised rows | Query filters at the source |
 
+![Animation: the security filter chain validates a bearer JWT once (signature, iss, aud, exp). During execution, member(id: 42) passes an object-level check because the token's member_id is 42, name has no extra rule, ssnLast4 fails a support-staff-only field rule with AccessDeniedException, and prescriptions are filtered to member 42's rows. The response is HTTP 200 with ssnLast4 null and one FORBIDDEN error](images/08-authz-per-field.svg){ loading=lazy }
+*Notice the levels from the table at work in one request: an object check, a field rule and data filtering. The failed field is only nulled, and the HTTP status stays 200.*
+
 !!! warning "BOLA is #1"
     OWASP API Security Top 10 lists **Broken Object Level Authorization** first. In GraphQL, `node(id:)` and `prescription(id:)` are classic leaks if the resolver fetches by ID without an ownership check.
 
@@ -169,6 +172,9 @@ GraphQlSourceBuilderCustomizer limits() {
 ```
 
 Spring Boot also picks up any `Instrumentation` **bean** automatically, so declaring the two instrumentations as `@Bean`s works too. The lambda above is a `FieldComplexityCalculator`: `int calculate(FieldComplexityEnvironment environment, int childComplexity)`. Both instrumentations abort the request with an `AbortExecutionException` before any data fetcher runs.
+
+![Animation: the query member, prescriptions with first 100, drugName, pharmacy and name is scored from the leaves up. The default calculator gives prescriptions 4 and member 5; the list-aware calculator above gives prescriptions 1 + 100 × 3 = 301 and member 302. Against the limit of 500 the default score looks trivial, while the list-aware score uses 60 percent of the budget](images/08-query-complexity.svg){ loading=lazy }
+*Notice that the default calculator scores `first: 100` like a single item. Only the list-aware version sees how much work the query really asks for.*
 
 Pagination cap in the resolver (the schema cannot express a maximum by itself, so enforce it in code or with a validation directive):
 

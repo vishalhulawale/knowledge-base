@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">A partial result rendered by the UI</title>
+  <desc id="d">A member dashboard loads three sections. The member name A. Patel and the prescription Atorvastatin arrive and render. The claims call times out, so claimsSummary comes back as null and the UI shows a "Claims temporarily unavailable" card in its place. Next to it, the matching errors entry has the message Claims temporarily unavailable, path member, claimsSummary, classification UPSTREAM_UNAVAILABLE, upstream claims and retryable true. This works only because claimsSummary is nullable.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .sk{fill:#e2e8f0}
+    .frame{fill:#ffffff;stroke:#cbd5e1;stroke-width:2}
+    .bar{fill:#4f46e5}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .warnB{fill:#fffbeb;stroke:#d97706;stroke-width:2}
+    .warnT{fill:#b45309;font-size:14px;font-weight:700}
+    .okT{fill:#16a34a;font-size:13px;font-weight:700}
+    .m{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155;white-space:pre}
+    .k{fill:#4f46e5}
+    .ar{stroke:#d97706;stroke-width:2;fill:none;stroke-dasharray:5 4}
+    .spin{fill:none;stroke:#94a3b8;stroke-width:3;stroke-dasharray:20 40}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx,.m{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box,.frame{fill:#111827;stroke:#475569}.sk{fill:#334155}
+      .bar{fill:#818cf8}.on{fill:#0f172a}
+      .warnB{fill:#2a2314;stroke:#fbbf24}.warnT{fill:#fbbf24}.okT{fill:#4ade80}
+      .k{fill:#818cf8}.ar{stroke:#fbbf24}.spin{stroke:#64748b}
+    }
+    /* 10 s loop: skeletons, member+rx arrive at 15-22%, claims waits until its 600 ms timeout (48%), then error card + errors[] */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes sk{0%,14%{opacity:1}16%,100%{opacity:0}}
+    @keyframes skc{0%,47%{opacity:1}49%,100%{opacity:0}}
+    @keyframes m1{0%,14%{opacity:0}16%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes r1{0%,20%{opacity:0}22%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes e1{0%,48%{opacity:0}50%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes e2{0%,55%{opacity:0}57%,92%{opacity:1}96%,100%{opacity:0}}
+    .sk1{animation-name:sk;opacity:1}.skc{animation-name:skc;opacity:1}
+    .m1{animation-name:m1}.r1{animation-name:r1}.e1{animation-name:e1}.e2{animation-name:e2}
+    @keyframes rot{to{transform:rotate(360deg)}}
+    .spin{transform-box:fill-box;transform-origin:center;animation:rot 1s infinite linear}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.sk1,.skc{opacity:0}.spin{animation:none}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">One upstream down, one section degraded</text>
+  <text class="sub" x="28" y="62">The claims call times out. Everything else on the screen still renders.</text>
+
+  <!-- screen -->
+  <rect class="frame" x="28" y="82" width="372" height="300" rx="14"/>
+  <rect class="bar" x="29" y="83" width="370" height="36" rx="13"/>
+  <rect class="bar" x="29" y="105" width="370" height="14"/>
+  <text class="on" x="46" y="106">Member dashboard</text>
+
+  <!-- member section -->
+  <rect class="box" x="44" y="132" width="340" height="58" rx="10"/>
+  <g class="a sk1"><rect class="sk" x="60" y="146" width="140" height="12" rx="6"/><rect class="sk" x="60" y="166" width="90" height="10" rx="5"/></g>
+  <g class="a m1"><text class="lbl" x="60" y="157">A. Patel</text><text class="okT" x="60" y="178">member service ✓</text></g>
+  <!-- prescriptions section -->
+  <rect class="box" x="44" y="200" width="340" height="76" rx="10"/>
+  <g class="a sk1"><rect class="sk" x="60" y="214" width="110" height="12" rx="6"/><rect class="sk" x="60" y="236" width="200" height="10" rx="5"/></g>
+  <g class="a r1"><text class="lbl" x="60" y="224">Prescriptions</text><text class="tx" x="60" y="246">Atorvastatin</text><text class="okT" x="60" y="266">prescriptions service ✓</text></g>
+  <!-- claims section -->
+  <rect class="box" x="44" y="286" width="340" height="80" rx="10"/>
+  <g class="a skc"><rect class="sk" x="60" y="300" width="80" height="12" rx="6"/><circle class="spin" cx="214" cy="334" r="12"/><text class="sub" x="236" y="339">waiting for claims…</text></g>
+  <g class="a e1"><rect class="warnB" x="44" y="286" width="340" height="80" rx="10"/>
+    <text class="warnT" x="60" y="312">Claims temporarily unavailable</text>
+    <text class="tx" x="60" y="334">Other sections are up to date.</text>
+    <text class="sub" x="60" y="354">Try again in a moment.</text></g>
+
+  <!-- errors entry -->
+  <g class="a e2">
+    <path class="ar" d="M384 326 C 410 318, 410 250, 430 240"/>
+    <rect class="box" x="430" y="132" width="342" height="226" rx="12"/>
+    <text class="lbl" x="446" y="158">errors[0] in the response</text>
+    <text class="m" x="446" y="186"><tspan class="k">message</tspan>: "Claims temporarily</text>
+    <text class="m" x="446" y="204">  unavailable"</text>
+    <text class="m" x="446" y="228"><tspan class="k">path</tspan>: ["member","claimsSummary"]</text>
+    <text class="m" x="446" y="252"><tspan class="k">extensions</tspan>:</text>
+    <text class="m" x="446" y="272">  classification:</text>
+    <text class="m" x="446" y="290">    "UPSTREAM_UNAVAILABLE"</text>
+    <text class="m" x="446" y="310">  upstream: "claims"</text>
+    <text class="m" x="446" y="330">  retryable: true</text>
+  </g>
+  <text class="sub" x="430" y="404">Needs a nullable claimsSummary. Timing simplified.</text>
+</svg>

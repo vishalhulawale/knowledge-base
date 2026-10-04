@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">DataLoader collects, de-duplicates and batches keys</title>
+  <desc id="d">Six Prescription.pharmacy resolvers, rx1 to rx6, each call load with pharmacy ids 7, 9, 7, 12, 9 and 7 and immediately get back a pending future. The keys queue up inside the per-request DataLoader. When the execution level has been walked, the loader removes duplicates, leaving 7, 9 and 12, and sends one call, GET /pharmacies?ids=7,9,12, to the Pharmacy API. The API returns three pharmacies and every future completes with its value, so six lookups cost one upstream call.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .dl{fill:none;stroke:#4f46e5;stroke-width:2}
+    .api{fill:none;stroke:#0ea5a4;stroke-width:2}
+    .m{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.ok{fill:#16a34a}.mut{fill:#e2e8f0}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .dimT{fill:#64748b;font-size:14px;font-weight:700;text-decoration:line-through}
+    .priT{fill:#4f46e5;font-size:15px;font-weight:700}
+    .teaT{fill:#0f766e;font-size:15px;font-weight:700}
+    .okT{fill:#16a34a;font-size:15px;font-weight:700}
+    .arP{stroke:#4f46e5;stroke-width:2.5;fill:none}
+    .arT{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx,.m{fill:#e2e8f0}.sub,.dimT{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.dl{stroke:#818cf8}.api{stroke:#2dd4bf}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.ok{fill:#4ade80}.mut{fill:#334155}
+      .on{fill:#0f172a}.priT{fill:#818cf8}.teaT{fill:#5eead4}.okT{fill:#4ade80}
+      .arP{stroke:#818cf8}.arT{stroke:#2dd4bf}
+    }
+    /* 12 s loop: loads 3-23%, dedupe 32-36%, dispatch 42%, response 52%, futures complete 60%, hold */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes l1{0%,3%{opacity:0}5%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes l2{0%,7%{opacity:0}9%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes l3{0%,11%{opacity:0}13%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes l4{0%,15%{opacity:0}17%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes l5{0%,19%{opacity:0}21%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes l6{0%,23%{opacity:0}25%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes dd{0%,31%{opacity:0}33%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes st{0%,35%{opacity:0}37%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes go{0%,41%{opacity:0}43%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes bk{0%,51%{opacity:0}53%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes fu{0%,59%{opacity:0}61%,92%{opacity:1}96%,100%{opacity:0}}
+    .l1{animation-name:l1}.l2{animation-name:l2}.l3{animation-name:l3}.l4{animation-name:l4}.l5{animation-name:l5}.l6{animation-name:l6}
+    .dd{animation-name:dd}.st{animation-name:st}.go{animation-name:go}.bk{animation-name:bk}.fu{animation-name:fu}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="468" rx="14"/>
+  <text class="h" x="28" y="40">DataLoader: collect, de-duplicate, one batch call</text>
+  <text class="sub" x="28" y="62">Each resolver returns a future at once. The loader dispatches after the level has been walked.</text>
+
+  <!-- resolvers -->
+  <text class="lbl" x="28" y="98">pharmacy resolvers</text>
+  <g>
+    <rect class="box" x="28" y="110" width="150" height="34" rx="8"/>
+    <rect class="box" x="28" y="154" width="150" height="34" rx="8"/>
+    <rect class="box" x="28" y="198" width="150" height="34" rx="8"/>
+    <rect class="box" x="28" y="242" width="150" height="34" rx="8"/>
+    <rect class="box" x="28" y="286" width="150" height="34" rx="8"/>
+    <rect class="box" x="28" y="330" width="150" height="34" rx="8"/>
+    <rect class="box" x="186" y="110" width="70" height="34" rx="8"/>
+    <rect class="box" x="186" y="154" width="70" height="34" rx="8"/>
+    <rect class="box" x="186" y="198" width="70" height="34" rx="8"/>
+    <rect class="box" x="186" y="242" width="70" height="34" rx="8"/>
+    <rect class="box" x="186" y="286" width="70" height="34" rx="8"/>
+    <rect class="box" x="186" y="330" width="70" height="34" rx="8"/>
+  </g>
+  <text class="sub" x="221" y="98" text-anchor="middle">future</text>
+  <g class="a l1"><text class="m" x="40" y="132">rx1 load(7)</text><text class="sub" x="221" y="132" text-anchor="middle">pending</text></g>
+  <g class="a l2"><text class="m" x="40" y="176">rx2 load(9)</text><text class="sub" x="221" y="176" text-anchor="middle">pending</text></g>
+  <g class="a l3"><text class="m" x="40" y="220">rx3 load(7)</text><text class="sub" x="221" y="220" text-anchor="middle">pending</text></g>
+  <g class="a l4"><text class="m" x="40" y="264">rx4 load(12)</text><text class="sub" x="221" y="264" text-anchor="middle">pending</text></g>
+  <g class="a l5"><text class="m" x="40" y="308">rx5 load(9)</text><text class="sub" x="221" y="308" text-anchor="middle">pending</text></g>
+  <g class="a l6"><text class="m" x="40" y="352">rx6 load(7)</text><text class="sub" x="221" y="352" text-anchor="middle">pending</text></g>
+  <!-- completed futures -->
+  <g class="a fu">
+    <rect class="ok" x="186" y="110" width="70" height="34" rx="8"/><text class="on" x="221" y="132" text-anchor="middle">ph 7</text>
+    <rect class="ok" x="186" y="154" width="70" height="34" rx="8"/><text class="on" x="221" y="176" text-anchor="middle">ph 9</text>
+    <rect class="ok" x="186" y="198" width="70" height="34" rx="8"/><text class="on" x="221" y="220" text-anchor="middle">ph 7</text>
+    <rect class="ok" x="186" y="242" width="70" height="34" rx="8"/><text class="on" x="221" y="264" text-anchor="middle">ph 12</text>
+    <rect class="ok" x="186" y="286" width="70" height="34" rx="8"/><text class="on" x="221" y="308" text-anchor="middle">ph 9</text>
+    <rect class="ok" x="186" y="330" width="70" height="34" rx="8"/><text class="on" x="221" y="352" text-anchor="middle">ph 7</text>
+  </g>
+
+  <!-- DataLoader -->
+  <rect class="dl" x="284" y="86" width="256" height="290" rx="12"/>
+  <text class="priT" x="306" y="112">DataLoader (this request)</text>
+  <text class="sub" x="306" y="138">Queued keys</text>
+  <g class="a l1"><rect class="pri" x="306" y="148" width="60" height="32" rx="8"/><text class="on" x="336" y="169" text-anchor="middle">7</text></g>
+  <g class="a l2"><rect class="pri" x="378" y="148" width="60" height="32" rx="8"/><text class="on" x="408" y="169" text-anchor="middle">9</text></g>
+  <g class="a l3"><rect class="pri" x="450" y="148" width="60" height="32" rx="8"/><text class="on" x="480" y="169" text-anchor="middle">7</text></g>
+  <g class="a l4"><rect class="pri" x="306" y="190" width="60" height="32" rx="8"/><text class="on" x="336" y="211" text-anchor="middle">12</text></g>
+  <g class="a l5"><rect class="pri" x="378" y="190" width="60" height="32" rx="8"/><text class="on" x="408" y="211" text-anchor="middle">9</text></g>
+  <g class="a l6"><rect class="pri" x="450" y="190" width="60" height="32" rx="8"/><text class="on" x="480" y="211" text-anchor="middle">7</text></g>
+  <!-- duplicates dimmed -->
+  <g class="a dd">
+    <rect class="mut" x="450" y="148" width="60" height="32" rx="8"/><text class="dimT" x="480" y="169" text-anchor="middle">7</text>
+    <rect class="mut" x="378" y="190" width="60" height="32" rx="8"/><text class="dimT" x="408" y="211" text-anchor="middle">9</text>
+    <rect class="mut" x="450" y="190" width="60" height="32" rx="8"/><text class="dimT" x="480" y="211" text-anchor="middle">7</text>
+  </g>
+  <g class="a st">
+    <text class="sub" x="306" y="252">De-duplicated batch</text>
+    <rect class="tea" x="306" y="262" width="60" height="32" rx="8"/><text class="on" x="336" y="283" text-anchor="middle">7</text>
+    <rect class="tea" x="378" y="262" width="60" height="32" rx="8"/><text class="on" x="408" y="283" text-anchor="middle">9</text>
+    <rect class="tea" x="450" y="262" width="60" height="32" rx="8"/><text class="on" x="480" y="283" text-anchor="middle">12</text>
+    <text class="tx" x="306" y="322">Same key again returns the</text>
+    <text class="tx" x="306" y="340">same cached future.</text>
+  </g>
+
+  <!-- API -->
+  <rect class="api" x="600" y="230" width="172" height="64" rx="12"/>
+  <text class="teaT" x="686" y="268" text-anchor="middle">Pharmacy API</text>
+  <g class="a go">
+    <path class="arT" d="M540 270 H592"/><path class="arT" d="M592 270 l-9 -6 M592 270 l-9 6"/>
+    <text class="m" x="600" y="200">GET /pharmacies</text>
+    <text class="m" x="600" y="218">  ?ids=7,9,12</text>
+  </g>
+  <g class="a bk">
+    <path class="arP" d="M600 312 C 570 340, 556 340, 544 340"/><path class="arP" d="M544 340 l9 -6 M544 340 l9 6"/>
+    <text class="m" x="600" y="330">[ph7, ph9, ph12]</text>
+  </g>
+
+  <g class="a fu"><text class="okT" x="28" y="410">6 load() calls, 1 upstream call. Keys 7 and 9 were fetched once.</text></g>
+  <text class="sub" x="28" y="446">The cache lives only for this request. A new request starts with an empty DataLoader.</text>
+</svg>

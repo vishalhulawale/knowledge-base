@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">DataLoader cache versus Redis cache scope</title>
+  <desc id="d">Request A and request B each get their own DataLoader. DataLoader A memoises pharmacies 7 and 9 for request A only; DataLoader B memoises pharmacy 7 for request B only. Both are created with the request and discarded when it ends. Both loaders read through a shared Redis cache holding pharmacy:7 and pharmacy:9 with a TTL, and only misses go to the Pharmacy API. A warning box explains that a single DataLoader shared across requests would hand one user's cached objects to another user.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .dl{fill:#ffffff;stroke:#4f46e5;stroke-width:2}
+    .rd{fill:#ffffff;stroke:#0ea5a4;stroke-width:2}
+    .m{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155}
+    .priT{fill:#4f46e5;font-size:15px;font-weight:700}
+    .teaT{fill:#0f766e;font-size:15px;font-weight:700}
+    .badT{fill:#dc2626;font-size:15px;font-weight:700}
+    .bad{fill:none;stroke:#dc2626;stroke-width:2}
+    .badF{fill:#dc2626}
+    .on{fill:#ffffff;font-size:15px;font-weight:700}
+    .ar{stroke:#94a3b8;stroke-width:2;fill:none}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx,.m{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.dl{fill:#111827;stroke:#818cf8}.rd{fill:#111827;stroke:#2dd4bf}
+      .priT{fill:#818cf8}.teaT{fill:#5eead4}.badT{fill:#f87171}.bad{stroke:#f87171}.badF{fill:#f87171}
+      .on{fill:#0f172a}.ar{stroke:#64748b}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Two caches, two lifetimes</text>
+  <text class="sub" x="28" y="62">DataLoader memoises within one request. Redis shares results across requests and pods until the TTL expires.</text>
+
+  <!-- request A -->
+  <rect class="box" x="28" y="92" width="130" height="58" rx="10"/>
+  <text class="lbl" x="93" y="116" text-anchor="middle">Request A</text><text class="sub" x="93" y="136" text-anchor="middle">user 1</text>
+  <path class="ar" d="M158 121 H196"/><path class="ar" d="M196 121 l-8 -5 M196 121 l-8 5"/>
+  <rect class="dl" x="200" y="84" width="230" height="74" rx="10"/>
+  <text class="priT" x="214" y="108">DataLoader A</text>
+  <text class="m" x="214" y="130">7 → ph7, 9 → ph9</text>
+  <text class="sub" x="214" y="148">discarded when A ends</text>
+
+  <!-- request B -->
+  <rect class="box" x="28" y="190" width="130" height="58" rx="10"/>
+  <text class="lbl" x="93" y="214" text-anchor="middle">Request B</text><text class="sub" x="93" y="234" text-anchor="middle">user 2</text>
+  <path class="ar" d="M158 219 H196"/><path class="ar" d="M196 219 l-8 -5 M196 219 l-8 5"/>
+  <rect class="dl" x="200" y="182" width="230" height="74" rx="10"/>
+  <text class="priT" x="214" y="206">DataLoader B</text>
+  <text class="m" x="214" y="228">7 → ph7</text>
+  <text class="sub" x="214" y="246">discarded when B ends</text>
+
+  <!-- to redis -->
+  <path class="ar" d="M430 121 C 455 121, 460 150, 486 156"/><path class="ar" d="M486 156 l-9 -3 M486 156 l-6 7"/>
+  <path class="ar" d="M430 219 C 455 219, 460 190, 486 184"/><path class="ar" d="M486 184 l-9 3 M486 184 l-6 -7"/>
+  <rect class="rd" x="490" y="112" width="160" height="112" rx="10"/>
+  <text class="teaT" x="504" y="136">Redis (shared)</text>
+  <text class="m" x="504" y="160">pharmacy:7</text>
+  <text class="m" x="504" y="180">pharmacy:9</text>
+  <text class="sub" x="504" y="208">expires by TTL</text>
+  <path class="ar" d="M650 168 H678"/><path class="ar" d="M678 168 l-8 -5 M678 168 l-8 5"/>
+  <rect class="box" x="682" y="136" width="94" height="64" rx="10"/>
+  <text class="lbl" x="729" y="163" text-anchor="middle">Pharmacy</text><text class="lbl" x="729" y="183" text-anchor="middle">API</text>
+  <text class="sub" x="729" y="220" text-anchor="middle">misses only</text>
+
+  <!-- wrong way -->
+  <rect class="bad" x="28" y="288" width="748" height="96" rx="12"/>
+  <circle class="badF" cx="58" cy="318" r="14"/><text class="on" x="58" y="323" text-anchor="middle">×</text>
+  <text class="badT" x="84" y="323">One DataLoader shared by all requests (a singleton)</text>
+  <text class="tx" x="84" y="347">Request B would be served objects that request A loaded under user 1's rights,</text>
+  <text class="tx" x="84" y="367">and nothing would ever expire. Frameworks create a new DataLoader per request.</text>
+  <text class="sub" x="28" y="404">Redis keys for per-user data must include the user or tenant. Reference data like pharmacies can share keys.</text>
+</svg>

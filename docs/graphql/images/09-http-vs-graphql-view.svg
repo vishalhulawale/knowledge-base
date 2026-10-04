@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 410" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">The same traffic seen by HTTP metrics and by GraphQL metrics</title>
+  <desc id="d">Left, the HTTP view: one row for POST /graphql with 1,000 requests, 100 percent HTTP 200 and a p95 of 420 milliseconds, which looks healthy. Right, the GraphQL view of the same traffic, broken down by operation name: MemberDashboard with 600 requests, p95 420 milliseconds and 8 percent of responses carrying errors, mostly claims UPSTREAM_UNAVAILABLE; RxHistory with 300 requests, p95 180 milliseconds and no errors; CancelPrescription with 60 requests and 2 percent errors; and 40 anonymous operations that cannot be attributed to any screen. The numbers are illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .m{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155}
+    .ok{fill:#16a34a}.bad{fill:#dc2626}.warn{fill:#d97706}.trk{fill:#e2e8f0}
+    .okT{fill:#16a34a;font-size:14px;font-weight:700}
+    .badT{fill:#dc2626;font-size:14px;font-weight:700}
+    .warnT{fill:#b45309;font-size:14px;font-weight:700}
+    .hd{fill:#64748b;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx,.m{fill:#e2e8f0}.sub,.hd{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .ok{fill:#4ade80}.bad{fill:#f87171}.warn{fill:#fbbf24}.trk{fill:#334155}
+      .okT{fill:#4ade80}.badT{fill:#f87171}.warnT{fill:#fbbf24}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="408" rx="14"/>
+  <text class="h" x="28" y="40">Same traffic, two dashboards</text>
+  <text class="sub" x="28" y="62">HTTP metrics see one URL that nearly always answers 200. GraphQL metrics see operations and errors[].</text>
+
+  <!-- HTTP view -->
+  <rect class="box" x="28" y="82" width="250" height="250" rx="12"/>
+  <text class="lbl" x="44" y="108">HTTP view</text>
+  <text class="m" x="44" y="140">POST /graphql</text>
+  <text class="sub" x="44" y="166">requests</text><text class="tx" x="262" y="166" text-anchor="end">1,000</text>
+  <text class="sub" x="44" y="192">status 200</text><text class="tx" x="262" y="192" text-anchor="end">100%</text>
+  <rect class="ok" x="44" y="202" width="218" height="10" rx="5"/>
+  <text class="sub" x="44" y="238">p95</text><text class="tx" x="262" y="238" text-anchor="end">420 ms</text>
+  <text class="okT" x="44" y="280">Looks healthy</text>
+  <text class="sub" x="44" y="302">Field errors come back</text>
+  <text class="sub" x="44" y="320">inside a 200 response.</text>
+
+  <!-- GraphQL view -->
+  <rect class="box" x="298" y="82" width="474" height="250" rx="12"/>
+  <text class="lbl" x="314" y="108">GraphQL view, by operation name</text>
+  <text class="hd" x="314" y="136">operation</text>
+  <text class="hd" x="530" y="136" text-anchor="end">requests</text>
+  <text class="hd" x="604" y="136" text-anchor="end">p95</text>
+  <text class="hd" x="624" y="136">with errors[]</text>
+
+  <text class="m" x="314" y="168">MemberDashboard</text>
+  <text class="tx" x="530" y="168" text-anchor="end">600</text><text class="tx" x="604" y="168" text-anchor="end">420 ms</text>
+  <rect class="trk" x="624" y="158" width="100" height="10" rx="5"/><rect class="bad" x="624" y="158" width="8" height="10" rx="4"/><text class="badT" x="756" y="168" text-anchor="end">8%</text>
+  <text class="sub" x="314" y="186">mostly claims UPSTREAM_UNAVAILABLE</text>
+
+  <text class="m" x="314" y="218">RxHistory</text>
+  <text class="tx" x="530" y="218" text-anchor="end">300</text><text class="tx" x="604" y="218" text-anchor="end">180 ms</text>
+  <rect class="trk" x="624" y="208" width="100" height="10" rx="5"/><text class="okT" x="756" y="218" text-anchor="end">0%</text>
+
+  <text class="m" x="314" y="250">CancelPrescription</text>
+  <text class="tx" x="530" y="250" text-anchor="end">60</text><text class="tx" x="604" y="250" text-anchor="end">240 ms</text>
+  <rect class="trk" x="624" y="240" width="100" height="10" rx="5"/><rect class="bad" x="624" y="240" width="3" height="10" rx="1.5"/><text class="badT" x="756" y="250" text-anchor="end">2%</text>
+
+  <text class="m" x="314" y="282">(anonymous)</text>
+  <text class="tx" x="530" y="282" text-anchor="end">40</text><text class="tx" x="604" y="282" text-anchor="end">350 ms</text>
+  <text class="warnT" x="624" y="282">unattributed</text>
+  <text class="sub" x="314" y="312">Unnamed operations can't be tied to a screen. Reject or flag them.</text>
+
+  <text class="sub" x="28" y="362">The p95-by-operation column needs a custom ExecutionRequestObservationConvention: out of the box</text>
+  <text class="sub" x="28" y="380">the graphql.request metric is tagged only with operation type and outcome. Numbers are illustrative.</text>
+</svg>

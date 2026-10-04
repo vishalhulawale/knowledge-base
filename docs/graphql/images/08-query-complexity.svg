@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">How query complexity is scored</title>
+  <desc id="d">The query member, prescriptions with first 100, drugName, pharmacy, name is scored bottom-up. Leaves name and drugName score 1. pharmacy scores 1 plus its child, 2. With GraphQL Java's default calculator, prescriptions scores 1 plus 3, which is 4, and member scores 5, because list sizes are ignored. With the list-aware calculator from this page, prescriptions scores 1 plus 100 times 3, which is 301, and member scores 302. Against the limit of 500, the default score of 5 looks trivial, while the list-aware score of 302 uses most of the budget. A list of 100 nested inside another list of 100 would score over 10,000 and be rejected before any data fetcher runs.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .m{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155;white-space:pre}
+    .k{fill:#4f46e5;font-weight:700}
+    .nd{fill:#64748b;font-size:15px;font-weight:700}
+    .nl{fill:#0f766e;font-size:15px;font-weight:700}
+    .f{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#64748b}
+    .row{fill:#4f46e5;opacity:.07}
+    .gD{fill:#94a3b8}.gL{fill:#0ea5a4}
+    .lim{stroke:#dc2626;stroke-width:2;stroke-dasharray:5 4}
+    .badT{fill:#dc2626;font-size:13px;font-weight:700}
+    .okT{fill:#16a34a;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx,.m{fill:#e2e8f0}.sub,.nd,.f{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.k{fill:#818cf8}.nl{fill:#5eead4}
+      .row{fill:#818cf8;opacity:.1}.gD{fill:#64748b}.gL{fill:#2dd4bf}
+      .lim{stroke:#f87171}.badT{fill:#f87171}.okT{fill:#4ade80}
+    }
+    /* 10 s loop: leaves (8%), pharmacy (20%), prescriptions (32%), member (44%), budget bars (56%); hold */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes v1{0%,7%{opacity:0}9%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes v2{0%,19%{opacity:0}21%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes v3{0%,31%{opacity:0}33%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes v4{0%,43%{opacity:0}45%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes v5{0%,55%{opacity:0}57%,92%{opacity:1}96%,100%{opacity:0}}
+    .v1{animation-name:v1}.v2{animation-name:v2}.v3{animation-name:v3}.v4{animation-name:v4}.v5{animation-name:v5}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="448" rx="14"/>
+  <text class="h" x="28" y="40">Scoring a query bottom-up</text>
+  <text class="sub" x="28" y="62">Each field scores 1 plus its children. The list-aware calculator multiplies by the page size.</text>
+
+  <text class="lbl" x="40" y="96">Query</text>
+  <text class="lbl" x="452" y="96" text-anchor="middle">default</text>
+  <text class="lbl" x="540" y="96" text-anchor="middle">list-aware</text>
+  <text class="lbl" x="600" y="96">how</text>
+  <rect class="box" x="28" y="106" width="744" height="164" rx="10"/>
+  <rect class="row" x="29" y="140" width="742" height="28"/>
+  <rect class="row" x="29" y="196" width="742" height="28"/>
+
+  <text class="m" x="40" y="130"><tspan class="k">member</tspan>(id: "42") {</text>
+  <text class="m" x="40" y="158">  <tspan class="k">prescriptions</tspan>(first: 100) {</text>
+  <text class="m" x="40" y="186">    drugName</text>
+  <text class="m" x="40" y="214">    <tspan class="k">pharmacy</tspan> {</text>
+  <text class="m" x="40" y="242">      name</text>
+  <text class="m" x="40" y="262">  } } }</text>
+
+  <g class="a v1">
+    <text class="nd" x="452" y="186" text-anchor="middle">1</text><text class="nl" x="540" y="186" text-anchor="middle">1</text><text class="f" x="600" y="186">leaf</text>
+    <text class="nd" x="452" y="242" text-anchor="middle">1</text><text class="nl" x="540" y="242" text-anchor="middle">1</text><text class="f" x="600" y="242">leaf</text>
+  </g>
+  <g class="a v2"><text class="nd" x="452" y="214" text-anchor="middle">2</text><text class="nl" x="540" y="214" text-anchor="middle">2</text><text class="f" x="600" y="214">1 + 1</text></g>
+  <g class="a v3"><text class="nd" x="452" y="158" text-anchor="middle">4</text><text class="nl" x="540" y="158" text-anchor="middle">301</text><text class="f" x="600" y="158">1 + 100 × (1 + 2)</text></g>
+  <g class="a v4"><text class="nd" x="452" y="130" text-anchor="middle">5</text><text class="nl" x="540" y="130" text-anchor="middle">302</text><text class="f" x="600" y="130">1 + 301</text></g>
+
+  <!-- budget -->
+  <text class="lbl" x="28" y="306">Against MaxQueryComplexityInstrumentation(500)</text>
+  <rect class="box" x="140" y="320" width="500" height="22" rx="4"/>
+  <rect class="box" x="140" y="354" width="500" height="22" rx="4"/>
+  <text class="tx" x="28" y="336">default</text>
+  <text class="tx" x="28" y="370">list-aware</text>
+  <line class="lim" x1="640" y1="312" x2="640" y2="386"/>
+  <text class="badT" x="648" y="336">limit 500</text>
+  <g class="a v5">
+    <rect class="gD" x="140" y="320" width="5" height="22" rx="2"/><text class="sub" x="154" y="336">5: looks trivial</text>
+    <rect class="gL" x="140" y="354" width="302" height="22" rx="4"/><text class="sub" x="452" y="370">302: 60% of budget</text>
+    <text class="okT" x="28" y="410">Both pass. But a list of 100 inside another list of 100 scores over 10,000,</text>
+    <text class="tx" x="28" y="430">so it is aborted before any data fetcher runs.</text>
+  </g>
+</svg>

@@ -163,6 +163,9 @@ Blocking resolvers and concurrency:
     }
     ```
 
+![Animation: a timeline for Member.prescriptions taking 180 ms and Member.claims taking 150 ms. With blocking resolvers and no executor they run one after the other on the request thread and finish at 330 ms. With async resolvers or virtual threads both start at 0 and finish at 180 ms, the slower of the two](images/03-blocking-vs-async-siblings.svg){ loading=lazy }
+*Watch the two lanes: blocking siblings add up (latency = rx + claims), async siblings overlap (latency = max(rx, claims)).*
+
 Testing with `GraphQlTester` (`@MockitoBean` needs Spring Boot 3.4+; older versions use `@MockBean`):
 
 ```java

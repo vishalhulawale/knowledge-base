@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Two subgraphs compose one supergraph</title>
+  <desc id="d">On the left, the Members subgraph defines type Member with key id and fields id and name. The Prescriptions subgraph also defines type Member with key id, contributing the prescriptions field, and defines type Prescription with key id and field drugName. Composition at build time merges them into one supergraph on the right. In the supergraph, Member has id, which is the shared key field, name, resolved by the Members subgraph, and prescriptions, resolved by the Prescriptions subgraph. Prescription with id and drugName comes from the Prescriptions subgraph. The router uses these ownership marks to plan queries.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .bxP{fill:#ffffff;stroke:#4f46e5;stroke-width:2}
+    .bxT{fill:#ffffff;stroke:#0ea5a4;stroke-width:2}
+    .bxS{fill:#ffffff;stroke:#334155;stroke-width:2}
+    .m{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155;white-space:pre}
+    .priT{fill:#4f46e5;font-size:15px;font-weight:700}
+    .teaT{fill:#0f766e;font-size:15px;font-weight:700}
+    .hdT{fill:#0f172a;font-size:15px;font-weight:700}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}
+    .hlP{fill:#4f46e5;opacity:.14}.hlT{fill:#0ea5a4;opacity:.16}
+    .ar{stroke:#94a3b8;stroke-width:2.5;fill:none}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.hdT{fill:#f1f5f9}.lbl,.tx,.m{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .bxP{fill:#111827;stroke:#818cf8}.bxT{fill:#111827;stroke:#2dd4bf}.bxS{fill:#111827;stroke:#94a3b8}
+      .priT{fill:#818cf8}.teaT{fill:#5eead4}.pri{fill:#818cf8}.tea{fill:#2dd4bf}
+      .hlP{fill:#818cf8;opacity:.22}.hlT{fill:#2dd4bf;opacity:.22}.ar{stroke:#64748b}
+    }
+    /* 10 s loop: supergraph fields appear by owner: key id (10%), name (22%), prescriptions (34%), Prescription type (46%); hold */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes f1{0%,9%{opacity:0}11%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes f2{0%,21%{opacity:0}23%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes f3{0%,33%{opacity:0}35%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes f4{0%,45%{opacity:0}47%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes g1{0%,9%{opacity:0}11%,19%{opacity:1}21%,100%{opacity:0}}
+    @keyframes g2{0%,21%{opacity:0}23%,31%{opacity:1}33%,100%{opacity:0}}
+    @keyframes g3{0%,33%{opacity:0}35%,43%{opacity:1}45%,100%{opacity:0}}
+    @keyframes g4{0%,45%{opacity:0}47%,55%{opacity:1}57%,100%{opacity:0}}
+    .f1{animation-name:f1}.f2{animation-name:f2}.f3{animation-name:f3}.f4{animation-name:f4}
+    .g1{animation-name:g1}.g2{animation-name:g2}.g3{animation-name:g3}.g4{animation-name:g4}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.g1,.g2,.g3,.g4{opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="448" rx="14"/>
+  <text class="h" x="28" y="40">Composition: two subgraphs, one supergraph</text>
+  <text class="sub" x="28" y="62">Both subgraphs define Member with the same @key. Each contributes its own fields.</text>
+
+  <!-- Members subgraph -->
+  <rect class="bxP" x="28" y="80" width="340" height="122" rx="12"/>
+  <text class="priT" x="44" y="104">Members subgraph</text>
+  <g class="a g1"><rect class="hlP" x="38" y="132" width="320" height="20" rx="4"/></g>
+  <g class="a g2"><rect class="hlP" x="38" y="152" width="320" height="20" rx="4"/></g>
+  <text class="m" x="44" y="128">type Member @key(fields: "id") {</text>
+  <text class="m" x="44" y="146">  id: ID!</text>
+  <text class="m" x="44" y="166">  name: String!</text>
+  <text class="m" x="44" y="186">}</text>
+
+  <!-- Prescriptions subgraph -->
+  <rect class="bxT" x="28" y="216" width="340" height="196" rx="12"/>
+  <text class="teaT" x="44" y="240">Prescriptions subgraph</text>
+  <g class="a g1"><rect class="hlT" x="38" y="268" width="320" height="20" rx="4"/></g>
+  <g class="a g3"><rect class="hlT" x="38" y="288" width="320" height="20" rx="4"/></g>
+  <g class="a g4"><rect class="hlT" x="38" y="328" width="320" height="76" rx="4"/></g>
+  <text class="m" x="44" y="264">type Member @key(fields: "id") {</text>
+  <text class="m" x="44" y="282">  id: ID!</text>
+  <text class="m" x="44" y="302">  prescriptions: [Prescription!]!</text>
+  <text class="m" x="44" y="322">}</text>
+  <text class="m" x="44" y="344">type Prescription @key(fields: "id") {</text>
+  <text class="m" x="44" y="362">  id: ID!</text>
+  <text class="m" x="44" y="380">  drugName: String!</text>
+  <text class="m" x="44" y="398">}</text>
+
+  <!-- arrow -->
+  <path class="ar" d="M380 246 H446"/><path class="ar" d="M446 246 l-10 -7 M446 246 l-10 7"/>
+  <text class="sub" x="413" y="222" text-anchor="middle">compose</text>
+  <text class="sub" x="413" y="272" text-anchor="middle">at build</text>
+  <text class="sub" x="413" y="288" text-anchor="middle">time</text>
+
+  <!-- supergraph -->
+  <rect class="bxS" x="456" y="112" width="316" height="268" rx="12"/>
+  <text class="hdT" x="472" y="136">Supergraph (router)</text>
+  <text class="m" x="472" y="164">type Member {</text>
+  <g class="a f1"><rect class="pri" x="474" y="174" width="7" height="14" rx="2"/><rect class="tea" x="482" y="174" width="7" height="14" rx="2"/><text class="m" x="496" y="186">id: ID!</text><text class="sub" x="636" y="186">key, both</text></g>
+  <g class="a f2"><rect class="pri" x="474" y="194" width="15" height="14" rx="2"/><text class="m" x="496" y="206">name: String!</text><text class="sub" x="636" y="206">Members</text></g>
+  <g class="a f3"><rect class="tea" x="474" y="214" width="15" height="14" rx="2"/><text class="m" x="496" y="226">prescriptions</text><text class="sub" x="636" y="226">Prescriptions</text></g>
+  <text class="m" x="472" y="248">}</text>
+  <g class="a f4">
+    <text class="m" x="472" y="276">type Prescription {</text>
+    <rect class="tea" x="474" y="286" width="15" height="14" rx="2"/><text class="m" x="496" y="298">id: ID!</text>
+    <rect class="tea" x="474" y="306" width="15" height="14" rx="2"/><text class="m" x="496" y="318">drugName: String!</text>
+    <text class="m" x="472" y="340">}</text>
+    <text class="sub" x="636" y="298">Prescriptions</text>
+  </g>
+  <text class="sub" x="472" y="366">Marks tell the router who resolves what.</text>
+  <text class="sub" x="456" y="402">@link lines omitted. Key fields are</text>
+  <text class="sub" x="456" y="420">implicitly shareable.</text>
+</svg>

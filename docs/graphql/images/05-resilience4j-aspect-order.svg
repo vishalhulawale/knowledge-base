@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Resilience4j default aspect order</title>
+  <desc id="d">Nested boxes show the default Resilience4j aspect order from outermost to innermost: Retry, CircuitBreaker, RateLimiter, TimeLimiter, Bulkhead, and finally the adapter method that calls the upstream. Retry is outermost, so every attempt passes through all inner layers again. The circuit breaker records each attempt's outcome, including timeouts. The rate limiter is not configured in this example. Retry is configured for pharmacy with 2 attempts. The time limiter applies its timeout to each attempt, for example 600 milliseconds for claims. The bulkhead caps concurrent calls, for example 50 for claims.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .tx{fill:#334155;font-size:14px}
+    .r1{fill:#eef2ff;stroke:#4f46e5;stroke-width:2}
+    .r2{fill:#f0fdfa;stroke:#0ea5a4;stroke-width:2}
+    .r3{fill:#ffffff;stroke:#cbd5e1;stroke-width:2;stroke-dasharray:6 4}
+    .core{fill:#4f46e5}
+    .n1{fill:#4f46e5;font-size:15px;font-weight:700}
+    .n2{fill:#0f766e;font-size:15px;font-weight:700}
+    .n3{fill:#64748b;font-size:15px;font-weight:700}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.tx{fill:#e2e8f0}.sub,.n3{fill:#94a3b8}
+      .r1{fill:#232946;stroke:#818cf8}.r2{fill:#16302f;stroke:#2dd4bf}.r3{fill:#111827;stroke:#475569}
+      .core{fill:#818cf8}.n1{fill:#818cf8}.n2{fill:#5eead4}.on{fill:#0f172a}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Resilience4j default aspect order (outermost first)</text>
+  <text class="sub" x="28" y="62">A call enters at the outer ring and works inwards to the upstream call.</text>
+
+  <rect class="r1" x="28" y="80" width="744" height="296" rx="16"/>
+  <text x="44" y="104"><tspan class="n1">Retry</tspan><tspan class="tx" dx="12">outermost: each attempt runs every inner layer again (pharmacy: 2 attempts)</tspan></text>
+
+  <rect class="r2" x="48" y="116" width="704" height="248" rx="14"/>
+  <text x="64" y="140"><tspan class="n2">CircuitBreaker</tspan><tspan class="tx" dx="12">records each attempt, so a timeout counts as a failure</tspan></text>
+
+  <rect class="r3" x="68" y="152" width="664" height="200" rx="12"/>
+  <text x="84" y="176"><tspan class="n3">RateLimiter</tspan><tspan class="tx" dx="12">not configured in this example</tspan></text>
+
+  <rect class="r1" x="88" y="188" width="624" height="152" rx="12"/>
+  <text x="104" y="212"><tspan class="n1">TimeLimiter</tspan><tspan class="tx" dx="12">timeout per attempt (claims: 600 ms)</tspan></text>
+
+  <rect class="r2" x="108" y="224" width="584" height="104" rx="10"/>
+  <text x="124" y="248"><tspan class="n2">Bulkhead</tspan><tspan class="tx" dx="12">caps concurrent calls (claims: 50)</tspan></text>
+
+  <rect class="core" x="128" y="262" width="544" height="52" rx="10"/>
+  <text class="on" x="400" y="293" text-anchor="middle">annotated adapter method → upstream HTTP call</text>
+
+  <text class="sub" x="28" y="398">Retry(CircuitBreaker(RateLimiter(TimeLimiter(Bulkhead(method))))). Example values from this page's YAML.</text>
+</svg>

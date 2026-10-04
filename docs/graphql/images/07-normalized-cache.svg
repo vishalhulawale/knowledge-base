@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">A normalized client cache updates every component</title>
+  <desc id="d">Apollo Client's InMemoryCache stores each object once under __typename and id: ROOT_QUERY points to Member:42, which points to Prescription:rx-1 and Prescription:rx-2. Prescription:rx-1 has drugName Atorvastatin and status APPROVED. Two components, a prescription list and a prescription detail panel, both read Prescription:rx-1. A cancelPrescription mutation returns __typename Prescription, id rx-1 and status CANCELLED. The cache merges it into the single Prescription:rx-1 entry, and both components re-render with CANCELLED without a refetch.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bxP{fill:none;stroke:#4f46e5;stroke-width:2}
+    .ent{fill:#ffffff;stroke:#cbd5e1}
+    .m{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155;white-space:pre}
+    .k{fill:#4f46e5;font-weight:700}
+    .priT{fill:#4f46e5;font-size:15px;font-weight:700}
+    .teaT{fill:#0f766e;font-size:15px;font-weight:700}
+    .ok{fill:#16a34a}.bad{fill:#dc2626}.tea{fill:#0ea5a4}
+    .on{fill:#ffffff;font-size:13px;font-weight:700}
+    .ar{stroke:#94a3b8;stroke-width:2;fill:none}
+    .arT{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .ref{stroke:#94a3b8;stroke-width:1.5;fill:none;stroke-dasharray:4 3}
+    .hl{fill:none;stroke:#0ea5a4;stroke-width:3}
+    .okS{fill:#16a34a;font-weight:700}.badS{fill:#dc2626;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx,.m{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box,.ent{fill:#111827;stroke:#475569}.bxP{stroke:#818cf8}
+      .k,.priT{fill:#818cf8}.teaT{fill:#5eead4}
+      .ok{fill:#4ade80}.bad{fill:#f87171}.tea{fill:#2dd4bf}.on{fill:#0f172a}
+      .ar,.ref{stroke:#64748b}.okS{fill:#4ade80}.badS{fill:#f87171}.arT{stroke:#2dd4bf}.hl{stroke:#2dd4bf}
+    }
+    /* 10 s loop: mutation result (18%), merged into cache (34%), components re-render (50%), hold */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes mu{0%,17%{opacity:0}19%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes ca{0%,33%{opacity:0}35%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes cp{0%,49%{opacity:0}51%,92%{opacity:1}96%,100%{opacity:0}}
+    .mu{animation-name:mu}.ca{animation-name:ca}.cp{animation-name:cp}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="428" rx="14"/>
+  <text class="h" x="28" y="40">Normalized cache: one entry, every component updates</text>
+  <text class="sub" x="28" y="62">Apollo InMemoryCache keys objects by __typename:id, so rx-1 is stored exactly once.</text>
+
+  <!-- components -->
+  <text class="lbl" x="28" y="96">React components</text>
+  <rect class="box" x="28" y="108" width="210" height="104" rx="10"/>
+  <text class="lbl" x="42" y="132">&lt;RxList&gt;</text>
+  <text class="tx" x="42" y="160">Atorvastatin</text>
+  <rect class="ok" x="42" y="172" width="96" height="24" rx="12"/><text class="on" x="90" y="189" text-anchor="middle">APPROVED</text>
+  <g class="a cp"><rect class="bad" x="42" y="172" width="96" height="24" rx="12"/><text class="on" x="90" y="189" text-anchor="middle">CANCELLED</text></g>
+
+  <rect class="box" x="28" y="228" width="210" height="104" rx="10"/>
+  <text class="lbl" x="42" y="252">&lt;RxDetail id="rx-1"&gt;</text>
+  <text class="tx" x="42" y="280">Atorvastatin</text>
+  <rect class="ok" x="42" y="292" width="96" height="24" rx="12"/><text class="on" x="90" y="309" text-anchor="middle">APPROVED</text>
+  <g class="a cp"><rect class="bad" x="42" y="292" width="96" height="24" rx="12"/><text class="on" x="90" y="309" text-anchor="middle">CANCELLED</text></g>
+
+  <!-- reads -->
+  <path class="ar" d="M238 160 C 262 160, 262 266, 290 268"/>
+  <path class="ar" d="M238 280 C 258 280, 268 274, 290 272"/>
+  <path class="ar" d="M290 270 l-9 -5 M290 270 l-8 6"/>
+  <g class="a cp"><text class="teaT" x="40" y="360">Both re-render, no refetch.</text></g>
+
+  <!-- cache -->
+  <rect class="bxP" x="296" y="84" width="270" height="296" rx="12"/>
+  <text class="priT" x="310" y="108">InMemoryCache</text>
+  <rect class="ent" x="310" y="120" width="242" height="36" rx="6"/>
+  <text class="m" x="320" y="143"><tspan class="k">ROOT_QUERY</tspan> member → 42</text>
+  <rect class="ent" x="310" y="166" width="242" height="56" rx="6"/>
+  <text class="m" x="320" y="188"><tspan class="k">Member:42</tspan> name "A. Patel"</text>
+  <text class="m" x="320" y="208">  prescriptions → rx-1, rx-2</text>
+  <rect class="ent" x="310" y="232" width="242" height="76" rx="6"/>
+  <text class="m" x="320" y="254"><tspan class="k">Prescription:rx-1</tspan></text>
+  <text class="m" x="320" y="274">  drugName "Atorvastatin"</text>
+  <text class="m" x="320" y="294">  status <tspan class="okS">APPROVED</tspan></text>
+  <rect class="ent" x="310" y="318" width="242" height="36" rx="6"/>
+  <text class="m" x="320" y="341"><tspan class="k">Prescription:rx-2</tspan> …</text>
+  <g class="a ca">
+    <rect class="hl" x="310" y="232" width="242" height="76" rx="6"/>
+    <rect class="ent" x="372" y="281" width="150" height="20" rx="3" style="stroke:none"/>
+    <text class="m" x="320" y="294">  status <tspan class="badS">CANCELLED</tspan></text>
+  </g>
+
+  <!-- mutation -->
+  <text class="lbl" x="596" y="96">Mutation result</text>
+  <g class="a mu">
+    <rect class="box" x="596" y="108" width="176" height="148" rx="10"/>
+    <text class="m" x="608" y="132">cancelPrescription</text>
+    <text class="m" x="608" y="156">__typename:</text>
+    <text class="m" x="608" y="174">  "Prescription"</text>
+    <text class="m" x="608" y="198">id: "rx-1"</text>
+    <text class="m" x="608" y="222">status:</text>
+    <text class="m" x="608" y="240">  "CANCELLED"</text>
+  </g>
+  <g class="a ca">
+    <path class="arT" d="M596 230 C 580 250, 580 268, 558 270"/><path class="arT" d="M558 270 l9 -6 M558 270 l8 6"/>
+    <text class="sub" x="596" y="282">merged by</text>
+    <text class="sub" x="596" y="298">Prescription:rx-1</text>
+  </g>
+  <text class="sub" x="28" y="404">Works for changes to cached entities. Adding or removing list items still needs an update function.</text>
+</svg>

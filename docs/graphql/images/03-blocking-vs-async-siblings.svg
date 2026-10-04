@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Blocking versus async sibling resolvers</title>
+  <desc id="d">A timeline for the two sibling fields of Member: prescriptions, taking 180 milliseconds, and claims, taking 150 milliseconds. In the top lane the resolvers block and no executor is configured, so both run one after the other on the request thread and the fields finish after 330 milliseconds, the sum. In the bottom lane the resolvers return CompletableFuture or run on virtual threads, so both calls start together and the fields finish after 180 milliseconds, the slower of the two.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .ax{stroke:#cbd5e1;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}
+    .on{fill:#ffffff;font-size:13px;font-weight:700}
+    .badT{fill:#dc2626;font-size:15px;font-weight:700}
+    .okT{fill:#16a34a;font-size:15px;font-weight:700}
+    .badL{stroke:#dc2626;stroke-width:2;stroke-dasharray:5 4}
+    .okL{stroke:#16a34a;stroke-width:2;stroke-dasharray:5 4}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.ax{stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.on{fill:#0f172a}
+      .badT{fill:#f87171}.okT{fill:#4ade80}.badL{stroke:#f87171}.okL{stroke:#4ade80}
+    }
+    /* 10 s loop. Time scale: 1 ms = 1.5 px from x=210, and 0.2% of the loop. 0 ms at 5%. */
+    .g{clip-path:inset(0 100% 0 0);animation:10s infinite linear}
+    @keyframes rx{0%,5%{clip-path:inset(0 100% 0 0)}41%,92%{clip-path:inset(0 0 0 0)}96%,100%{clip-path:inset(0 100% 0 0)}}
+    @keyframes clA{0%,41%{clip-path:inset(0 100% 0 0)}71%,92%{clip-path:inset(0 0 0 0)}96%,100%{clip-path:inset(0 100% 0 0)}}
+    @keyframes clB{0%,5%{clip-path:inset(0 100% 0 0)}35%,92%{clip-path:inset(0 0 0 0)}96%,100%{clip-path:inset(0 100% 0 0)}}
+    .rx{animation-name:rx}.clA{animation-name:clA}.clB{animation-name:clB}
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes eB{0%,41%{opacity:0}43%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes eA{0%,71%{opacity:0}73%,92%{opacity:1}96%,100%{opacity:0}}
+    .eB{animation-name:eB}.eA{animation-name:eA}
+    @media (prefers-reduced-motion: reduce){.g{animation:none;clip-path:none}.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">Sibling resolvers: blocking vs async</text>
+  <text class="sub" x="28" y="62">Member.prescriptions (180 ms) and Member.claims (150 ms), both blocking HTTP calls underneath.</text>
+
+  <!-- time axis -->
+  <line class="ax" x1="210" y1="86" x2="210" y2="318"/>
+  <line class="ax" x1="480" y1="86" x2="480" y2="318"/>
+  <line class="ax" x1="705" y1="86" x2="705" y2="318"/>
+  <text class="sub" x="210" y="336" text-anchor="middle">0 ms</text>
+  <text class="sub" x="480" y="336" text-anchor="middle">180 ms</text>
+  <text class="sub" x="705" y="336" text-anchor="middle">330 ms</text>
+
+  <!-- lane A: blocking -->
+  <text class="lbl" x="28" y="112">Blocking,</text>
+  <text class="lbl" x="28" y="131">no executor</text>
+  <text class="sub" x="28" y="150">one request thread</text>
+  <rect class="box" x="210" y="104" width="495" height="36" rx="6"/>
+  <g class="g rx"><rect class="pri" x="210" y="104" width="270" height="36" rx="6"/><text class="on" x="222" y="127">prescriptions</text></g>
+  <g class="g clA"><rect class="tea" x="480" y="104" width="225" height="36" rx="6"/><text class="on" x="492" y="127">claims</text></g>
+  <g class="a eA"><line class="badL" x1="705" y1="96" x2="705" y2="150"/><text class="badT" x="712" y="168" text-anchor="end">330 ms = sum</text></g>
+
+  <!-- lane B: async -->
+  <text class="lbl" x="28" y="214">Async</text>
+  <text class="sub" x="28" y="233">CompletableFuture,</text>
+  <text class="sub" x="28" y="250">Mono or virtual threads</text>
+  <rect class="box" x="210" y="196" width="270" height="36" rx="6"/>
+  <rect class="box" x="210" y="244" width="225" height="36" rx="6"/>
+  <g class="g rx"><rect class="pri" x="210" y="196" width="270" height="36" rx="6"/><text class="on" x="222" y="219">prescriptions</text></g>
+  <g class="g clB"><rect class="tea" x="210" y="244" width="225" height="36" rx="6"/><text class="on" x="222" y="267">claims</text></g>
+  <g class="a eB"><line class="okL" x1="480" y1="188" x2="480" y2="290"/><text class="okT" x="492" y="219">180 ms = max</text><text class="tx" x="492" y="240">done, the slower call</text><text class="tx" x="492" y="258">sets the pace</text></g>
+
+  <text class="sub" x="28" y="364">GraphQL Java creates no threads. Siblings overlap only when the fetcher is async. Timings are illustrative.</text>
+</svg>

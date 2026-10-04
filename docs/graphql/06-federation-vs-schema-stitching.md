@@ -67,6 +67,9 @@ type Prescription @key(fields: "id") {
 }
 ```
 
+![Animation: the Members subgraph defines Member with key id and name, the Prescriptions subgraph defines Member with key id and prescriptions plus Prescription with id and drugName, and composition merges them into one supergraph where each field is marked with the subgraph that resolves it, and the key field id is shared by both](images/06-supergraph-composition.svg){ loading=lazy }
+*Notice that neither subgraph owns the whole Member type. The supergraph records which subgraph resolves each field, and the router plans queries from that.*
+
 ```mermaid
 sequenceDiagram
     participant C as Client
@@ -179,6 +182,9 @@ The subgraph that **owns** an entity usually has to load it from a data store in
         return idList.stream().map(byId::get).toList();
     }
     ```
+
+![Animation: the router sends one _entities call with three Member representations, ids 42, 43 and 44, to the Members subgraph. Its batched @EntityMapping method makes one findAllById store call, and returns Member 42, null and Member 44 in the same order, which the router matches to the representations by position](images/06-entities-batch.svg){ loading=lazy }
+*Notice that the router matches results by position, so the list must keep the order of the ids and hold `null` for any id that wasn't found.*
 
 An `@EntityMapping` method can also take a `DataLoader` argument, the full representation as `Map<String, Object>`, `DataFetchingEnvironment`, `@ContextValue` and the authenticated `Principal`.
 

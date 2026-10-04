@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">The response has the same shape as the query</title>
+  <desc id="d">On the left, the query MemberDashboard selects member with id 42, its name, and prescriptions with first set to 1, and inside each edge node the drugName and status. On the right, the JSON data appears line by line with exactly the same nesting: member, name, prescriptions, edges, node, drugName and status. Fields that exist in the schema but were not selected, such as Member.id, Prescription.id, pharmacy, updatedAt and pageInfo, are not sent.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .m{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155;white-space:pre}
+    .o{fill:#4f46e5;font-weight:700}
+    .s{fill:#0f766e;font-weight:700}
+    .v{fill:#64748b}
+    .arw{fill:#0f766e;font-size:14px;font-weight:700}
+    .chip{fill:#ffffff;stroke:#cbd5e1;stroke-dasharray:4 3}
+    .ct{fill:#64748b;font-size:13px}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.m{fill:#e2e8f0}.sub,.v,.ct{fill:#94a3b8}
+      .box,.chip{fill:#111827;stroke:#475569}
+      .o{fill:#818cf8}.s,.arw{fill:#5eead4}
+    }
+    /* 10 s loop: response rows appear one selected field at a time, hold, then reset */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes k2{0%,4%{opacity:0}7%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes k3{0%,12%{opacity:0}15%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes k4{0%,20%{opacity:0}23%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes k5{0%,28%{opacity:0}31%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes k6{0%,36%{opacity:0}39%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes k7{0%,44%{opacity:0}47%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes k8{0%,52%{opacity:0}55%,92%{opacity:1}96%,100%{opacity:0}}
+    .r2{animation-name:k2}.r3{animation-name:k3}.r4{animation-name:k4}.r5{animation-name:k5}
+    .r6{animation-name:k6}.r7{animation-name:k7}.r8{animation-name:k8}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="448" rx="14"/>
+  <text class="h" x="28" y="40">The response has the same shape as the query</text>
+  <text class="sub" x="28" y="62">Each selected field becomes one key in "data". Nothing else is sent.</text>
+
+  <text class="lbl" x="28" y="92">Query (client picks the fields)</text>
+  <text class="lbl" x="358" y="92">Response</text>
+  <rect class="box" x="24" y="102" width="306" height="270" rx="10"/>
+  <rect class="box" x="354" y="102" width="422" height="270" rx="10"/>
+
+  <!-- query, rows every 20px from y=126 -->
+  <text class="m" x="36" y="126">query MemberDashboard {</text>
+  <text class="m" x="36" y="146">  <tspan class="o">member</tspan>(id: "42") {</text>
+  <text class="m" x="36" y="166">    <tspan class="s">name</tspan></text>
+  <text class="m" x="36" y="186">    <tspan class="o">prescriptions</tspan>(first: 1) {</text>
+  <text class="m" x="36" y="206">      <tspan class="o">edges</tspan> {</text>
+  <text class="m" x="36" y="226">        <tspan class="o">node</tspan> {</text>
+  <text class="m" x="36" y="246">          <tspan class="s">drugName</tspan></text>
+  <text class="m" x="36" y="266">          <tspan class="s">status</tspan></text>
+  <text class="m" x="36" y="286">        }</text>
+  <text class="m" x="36" y="306">      }</text>
+  <text class="m" x="36" y="326">    }</text>
+  <text class="m" x="36" y="346">  }</text>
+  <text class="m" x="36" y="366">}</text>
+
+  <!-- response rows, aligned with the query rows -->
+  <g class="a r2"><text class="m" x="366" y="126">{ "data": {</text><text class="m" x="366" y="146">  "<tspan class="o">member</tspan>": {</text><text class="arw" x="336" y="146">→</text><text class="m" x="366" y="366">} }</text><text class="m" x="366" y="346">  }</text></g>
+  <g class="a r3"><text class="m" x="366" y="166">    "<tspan class="s">name</tspan>": <tspan class="v">"A. Patel"</tspan>,</text><text class="arw" x="336" y="166">→</text></g>
+  <g class="a r4"><text class="m" x="366" y="186">    "<tspan class="o">prescriptions</tspan>": {</text><text class="arw" x="336" y="186">→</text><text class="m" x="366" y="326">    }</text></g>
+  <g class="a r5"><text class="m" x="366" y="206">      "<tspan class="o">edges</tspan>": [ {</text><text class="arw" x="336" y="206">→</text><text class="m" x="366" y="306">      } ]</text></g>
+  <g class="a r6"><text class="m" x="366" y="226">        "<tspan class="o">node</tspan>": {</text><text class="arw" x="336" y="226">→</text><text class="m" x="366" y="286">        }</text></g>
+  <g class="a r7"><text class="m" x="366" y="246">          "<tspan class="s">drugName</tspan>": <tspan class="v">"Atorvastatin"</tspan>,</text><text class="arw" x="336" y="246">→</text></g>
+  <g class="a r8"><text class="m" x="366" y="266">          "<tspan class="s">status</tspan>": <tspan class="v">"SHIPPED"</tspan></text><text class="arw" x="336" y="266">→</text></g>
+
+  <!-- not requested -->
+  <text class="lbl" x="28" y="402">In the schema but not selected, so not sent:</text>
+  <rect class="chip" x="28" y="414" width="90" height="24" rx="12"/><text class="ct" x="73" y="431" text-anchor="middle">Member.id</text>
+  <rect class="chip" x="126" y="414" width="116" height="24" rx="12"/><text class="ct" x="184" y="431" text-anchor="middle">Prescription.id</text>
+  <rect class="chip" x="250" y="414" width="84" height="24" rx="12"/><text class="ct" x="292" y="431" text-anchor="middle">pharmacy</text>
+  <rect class="chip" x="342" y="414" width="96" height="24" rx="12"/><text class="ct" x="390" y="431" text-anchor="middle">updatedAt</text>
+  <rect class="chip" x="446" y="414" width="88" height="24" rx="12"/><text class="ct" x="490" y="431" text-anchor="middle">pageInfo</text>
+  <text class="sub" x="548" y="431">Values are example data.</text>
+</svg>

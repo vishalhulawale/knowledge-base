@@ -54,6 +54,9 @@ flowchart LR
 !!! warning "Null bubbling"
     If `Member.pharmacy: Pharmacy!` fails, the error is recorded in `errors` and null propagates to the nearest **nullable** ancestor. Here that is `member`, so the whole member disappears from the response. If every ancestor is non-null, `data` itself becomes `null`. Making `pharmacy` nullable keeps the rest of the screen working.
 
+![Animation: two copies of the tree data, member, name and pharmacy. In both the pharmacy resolver throws. With a nullable pharmacy only pharmacy becomes null and the member is kept; with Pharmacy! the null moves up to member, so the member and its name are lost. Both responses carry one error with path member, pharmacy](images/02-null-bubbling.svg){ loading=lazy }
+*Watch where the null lands: the same failure costs one field on the left and the whole member on the right.*
+
 ### Pagination
 
 ```graphql
@@ -74,6 +77,9 @@ type Member {
 - Enforce a **max `first`** (e.g. 100) to bound cost.
 - The Relay spec defines forward (`first`/`after`) and backward (`last`/`before`) arguments. Supporting only forward pagination is acceptable if clients never page backwards.
 - A cursor is only stable if the sort is **deterministic**, so always add a unique tie-breaker (e.g. `updatedAt, id`).
+
+![Animation: two lists sorted newest first with page size 3. Page 1 returns rows 9, 8 and 7 in both. A new row 10 is inserted at the top and every row moves down. Offset pagination then returns rows 7, 6 and 5, showing row 7 twice, while cursor pagination asks for rows after row 7 and returns 6, 5 and 4](images/02-cursor-vs-offset.svg){ loading=lazy }
+*Notice that the offset counts positions, which shift when rows are inserted, while the cursor remembers the last row itself.*
 
 ### Mutation design
 

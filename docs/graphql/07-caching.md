@@ -68,9 +68,15 @@ sequenceDiagram
 - **`Cache-Control` from hints (Apollo Server):** each field/type can carry `@cacheControl(maxAge, scope)`. The response's `max-age` is the **lowest** `maxAge` of any field in it, and the response is `private` if **any** field is `PRIVATE`. Root fields and object-typed fields default to `maxAge: 0`, so one un-annotated field makes the whole response uncacheable. That is why response caching only suits queries that touch purely public data.
 - **On a Spring stack:** GraphQL Java ships `ApolloPersistedQuerySupport` (a `PreparsedDocumentProvider`) with a `PersistedQueryCache`, so the server can resolve hashes. But Spring for GraphQL's HTTP handler accepts **only POST with a JSON body**, and it has no cache-hint mechanism. GET + CDN caching therefore needs an edge component (Apollo Router/gateway, API gateway) or a custom controller. Separately, a `PreparsedDocumentProvider` backed by Caffeine is worth having anyway: it caches the **parsed and validated document**, not the response.
 
+![Animation: the client sends only a query hash, the server answers PersistedQueryNotFound, the client resends the hash with the full query text, the server stores it and returns data, and every later request sends only the hash and gets data back](images/07-apq-flow.svg){ loading=lazy }
+*Notice that the full query crosses the network once per server cache. Since any client can complete step 3, APQ saves bandwidth but doesn't restrict which queries run.*
+
 ### Client-side normalized cache
 
 Apollo Client stores each object once (`Prescription:rx-1`). When a mutation returns `{ id, status }` for `rx-1`, every component showing that prescription updates without refetching. Requirements: return `id` + `__typename` and the changed fields from mutations, and configure `keyFields` (in `typePolicies`) for types with non-`id` keys. By default Apollo uses `__typename` plus `id` (or `_id`). Objects with no identifier are not normalized and are stored inside their parent.
+
+![Animation: Apollo's InMemoryCache stores ROOT_QUERY, Member:42 and Prescription:rx-1 and rx-2 as separate entries. Two components, RxList and RxDetail, both read Prescription:rx-1 with status APPROVED. A cancelPrescription mutation returns __typename Prescription, id rx-1 and status CANCELLED, the cache merges it into the one rx-1 entry, and both components switch to CANCELLED](images/07-normalized-cache.svg){ loading=lazy }
+*Watch the single `Prescription:rx-1` entry: the mutation result only has to update it once, and every component that reads it re-renders.*
 
 The automatic update covers **changes to entities already in the cache**. It does not cover membership of lists: after a create or delete, a cached `prescriptions` list doesn't know it should gain or lose an item. For that you use an `update` function (`cache.modify` / `cache.writeQuery`), `cache.evict`, or `refetchQueries`. Fetch policies (`cache-first` is the default, `cache-and-network`, `network-only`) decide when the cache is trusted.
 

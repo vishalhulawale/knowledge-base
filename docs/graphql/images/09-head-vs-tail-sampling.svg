@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Head-based versus tail-based trace sampling</title>
+  <desc id="d">Ten traces arrive one after another; trace 6 ends in an error and trace 9 is slow. With head-based sampling at 10 percent, the keep-or-drop decision is made when each trace starts, at random, so only trace 4 is kept and the error and slow traces are dropped. With tail-based sampling in the OpenTelemetry Collector, every trace is buffered until it finishes, and the collector then keeps the error trace and the slow trace and drops the rest.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .n{fill:#4f46e5}.e{fill:#dc2626}.s{fill:#d97706}
+    .on{fill:#ffffff;font-size:13px;font-weight:700}
+    .keep{fill:none;stroke:#16a34a;stroke-width:3}
+    .okT{fill:#16a34a;font-size:14px;font-weight:700}
+    .badT{fill:#dc2626;font-size:14px;font-weight:700}
+    .dim{opacity:.25}
+    .buf{fill:none;stroke:#94a3b8;stroke-width:1.5;stroke-dasharray:5 4}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .n{fill:#818cf8}.e{fill:#f87171}.s{fill:#fbbf24}.on{fill:#0f172a}
+      .keep{stroke:#4ade80}.okT{fill:#4ade80}.badT{fill:#f87171}.buf{stroke:#64748b}
+    }
+    /* 12 s loop: traces arrive 3-39%; head decides at arrival; tail decides after the traces end (54%); hold */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes c0{0%,3%{opacity:0}5%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes c1{0%,7%{opacity:0}9%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes c2{0%,11%{opacity:0}13%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes c3{0%,15%{opacity:0}17%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes c4{0%,19%{opacity:0}21%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes c5{0%,23%{opacity:0}25%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes c6{0%,27%{opacity:0}29%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes c7{0%,31%{opacity:0}33%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes c8{0%,35%{opacity:0}37%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes c9{0%,39%{opacity:0}41%,92%{opacity:1}96%,100%{opacity:0}}
+    .c0{animation-name:c0}.c1{animation-name:c1}.c2{animation-name:c2}.c3{animation-name:c3}.c4{animation-name:c4}
+    .c5{animation-name:c5}.c6{animation-name:c6}.c7{animation-name:c7}.c8{animation-name:c8}.c9{animation-name:c9}
+    @keyframes hs{0%,43%{opacity:0}45%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes td{0%,53%{opacity:1}56%,92%{opacity:.25}96%,100%{opacity:1}}
+    @keyframes tk{0%,53%{opacity:0}56%,92%{opacity:1}96%,100%{opacity:0}}
+    .hs{animation-name:hs}.tk{animation-name:tk}
+    .td{animation:td 12s infinite linear}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.td{animation:none;opacity:.25}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Head-based vs tail-based sampling</text>
+  <text class="sub" x="28" y="62">Ten traces, one error and one slow. Which ones are kept?</text>
+
+
+  <!-- HEAD -->
+  <text class="lbl" x="28" y="128">Head-based, 10%</text>
+  <text class="sub" x="28" y="148">decided when the</text>
+  <text class="sub" x="28" y="166">trace starts</text>
+  <g class="a c0"><g class="dim"><rect class="n" x="196" y="114" width="48" height="40" rx="8"/><text class="on" x="220" y="139" text-anchor="middle">1</text></g></g>
+  <g class="a c1"><g class="dim"><rect class="n" x="252" y="114" width="48" height="40" rx="8"/><text class="on" x="276" y="139" text-anchor="middle">2</text></g></g>
+  <g class="a c2"><g class="dim"><rect class="n" x="308" y="114" width="48" height="40" rx="8"/><text class="on" x="332" y="139" text-anchor="middle">3</text></g></g>
+  <g class="a c3"><rect class="n" x="364" y="114" width="48" height="40" rx="8"/><text class="on" x="388" y="139" text-anchor="middle">4</text><rect class="keep" x="360" y="110" width="56" height="48" rx="10"/></g>
+  <g class="a c4"><g class="dim"><rect class="n" x="420" y="114" width="48" height="40" rx="8"/><text class="on" x="444" y="139" text-anchor="middle">5</text></g></g>
+  <g class="a c5"><g class="dim"><rect class="e" x="476" y="114" width="48" height="40" rx="8"/><text class="on" x="500" y="139" text-anchor="middle">6</text></g></g>
+  <g class="a c6"><g class="dim"><rect class="n" x="532" y="114" width="48" height="40" rx="8"/><text class="on" x="556" y="139" text-anchor="middle">7</text></g></g>
+  <g class="a c7"><g class="dim"><rect class="n" x="588" y="114" width="48" height="40" rx="8"/><text class="on" x="612" y="139" text-anchor="middle">8</text></g></g>
+  <g class="a c8"><g class="dim"><rect class="s" x="644" y="114" width="48" height="40" rx="8"/><text class="on" x="668" y="139" text-anchor="middle">9</text></g></g>
+  <g class="a c9"><g class="dim"><rect class="n" x="700" y="114" width="48" height="40" rx="8"/><text class="on" x="724" y="139" text-anchor="middle">10</text></g></g>
+  <g class="a hs"><text class="badT" x="196" y="186">Kept trace 4 at random. The error (6) and the slow trace (9) are lost.</text></g>
+
+  <!-- TAIL -->
+  <text class="lbl" x="28" y="240">Tail-based</text>
+  <text class="sub" x="28" y="260">OTel Collector decides</text>
+  <text class="sub" x="28" y="278">after the trace ends</text>
+  <rect class="buf" x="188" y="218" width="568" height="56" rx="10"/>
+  <text class="sub" x="196" y="294">buffered until complete</text>
+  <g class="a c0"><g class="td"><rect class="n" x="196" y="226" width="48" height="40" rx="8"/><text class="on" x="220" y="251" text-anchor="middle">1</text></g></g>
+  <g class="a c1"><g class="td"><rect class="n" x="252" y="226" width="48" height="40" rx="8"/><text class="on" x="276" y="251" text-anchor="middle">2</text></g></g>
+  <g class="a c2"><g class="td"><rect class="n" x="308" y="226" width="48" height="40" rx="8"/><text class="on" x="332" y="251" text-anchor="middle">3</text></g></g>
+  <g class="a c3"><g class="td"><rect class="n" x="364" y="226" width="48" height="40" rx="8"/><text class="on" x="388" y="251" text-anchor="middle">4</text></g></g>
+  <g class="a c4"><g class="td"><rect class="n" x="420" y="226" width="48" height="40" rx="8"/><text class="on" x="444" y="251" text-anchor="middle">5</text></g></g>
+  <g class="a c5"><rect class="e" x="476" y="226" width="48" height="40" rx="8"/><text class="on" x="500" y="251" text-anchor="middle">6</text></g>
+  <g class="a c6"><g class="td"><rect class="n" x="532" y="226" width="48" height="40" rx="8"/><text class="on" x="556" y="251" text-anchor="middle">7</text></g></g>
+  <g class="a c7"><g class="td"><rect class="n" x="588" y="226" width="48" height="40" rx="8"/><text class="on" x="612" y="251" text-anchor="middle">8</text></g></g>
+  <g class="a c8"><rect class="s" x="644" y="226" width="48" height="40" rx="8"/><text class="on" x="668" y="251" text-anchor="middle">9</text></g>
+  <g class="a c9"><g class="td"><rect class="n" x="700" y="226" width="48" height="40" rx="8"/><text class="on" x="724" y="251" text-anchor="middle">10</text></g></g>
+  <g class="a tk">
+    <rect class="keep" x="472" y="222" width="56" height="48" rx="10"/>
+    <rect class="keep" x="640" y="222" width="56" height="48" rx="10"/>
+    <text class="okT" x="196" y="318">Kept the error (6) and the slow trace (9): what a p99 investigation needs.</text>
+  </g>
+
+  <!-- legend -->
+  <rect class="n" x="28" y="346" width="16" height="16" rx="4"/><text class="sub" x="52" y="359">normal</text>
+  <rect class="e" x="120" y="346" width="16" height="16" rx="4"/><text class="sub" x="144" y="359">error</text>
+  <rect class="s" x="204" y="346" width="16" height="16" rx="4"/><text class="sub" x="228" y="359">slow</text>
+  <rect class="keep" x="288" y="344" width="20" height="20" rx="5"/><text class="sub" x="316" y="359">kept</text>
+  <text class="sub" x="380" y="359">faded = dropped</text>
+  <text class="sub" x="28" y="386">Tail sampling costs a collector that buffers whole traces. Which trace head sampling keeps is random.</text>
+</svg>

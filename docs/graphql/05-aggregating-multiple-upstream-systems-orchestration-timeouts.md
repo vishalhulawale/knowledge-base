@@ -73,6 +73,9 @@ GraphQL helps naturally: sibling fields resolve concurrently **if resolvers are 
 | **Fallback** | Degrade gracefully | Cached value, default, or null + error |
 | **Hedging** (advanced) | Cut tail latency | Duplicate a slow read after p95 |
 
+![Animation: a circuit breaker moves from CLOSED to OPEN when the failure rate over its window reaches 50 percent, rejects calls immediately while a 20 second wait counts down, then moves to HALF-OPEN and lets 5 trial calls through, and closes again when they are healthy](images/05-circuit-breaker.svg){ loading=lazy }
+*Watch the states change: while OPEN the upstream gets no traffic at all, and HALF-OPEN lets only a few trial calls test it before traffic resumes.*
+
 !!! tip "Timeout budget"
     Total budget, e.g. 2 s for the screen. Each dependency chain must fit inside it. Set per-hop timeouts so retries can't blow the budget: (timeout × attempts) + backoff waits < budget. In Resilience4j the `TimeLimiter` sits inside the `Retry`, so the timeout applies to **each attempt**, not to the total.
 
@@ -95,6 +98,9 @@ GraphQL helps naturally: sibling fields resolve concurrently **if resolvers are 
 ```
 
 *The UI renders what it has and shows a "temporarily unavailable" card for claims. That only works if `claimsSummary` is nullable.*
+
+![Animation: a member dashboard renders the member name A. Patel and the prescription Atorvastatin, while the claims section waits, times out and turns into a Claims temporarily unavailable card, linked to the matching errors entry with path member, claimsSummary and classification UPSTREAM_UNAVAILABLE](images/05-partial-result.svg){ loading=lazy }
+*Watch the claims section: the rest of the screen is already usable, and the error entry's `path` tells the UI exactly which card to replace.*
 
 If `claimsSummary` were declared `ClaimsSummary!`, the spec's null propagation would null the nearest nullable ancestor instead: `member` becomes `null` (and if `member` is non-null too, the whole `data` is `null`). The `upstream` and `retryable` extension keys are my own convention. `classification` is the key Spring for GraphQL writes by default.
 
@@ -147,6 +153,9 @@ resilience4j:
 A thread-pool bulkhead is configured under a **different prefix**, `resilience4j.thread-pool-bulkhead.instances.*` (`core-thread-pool-size`, `max-thread-pool-size`, `queue-capacity`), and is selected with `@Bulkhead(type = Bulkhead.Type.THREADPOOL)`. Mixing the semaphore YAML above with the `THREADPOOL` annotation type silently runs with default pool settings.
 
 Default aspect order (outermost first): `Retry ( CircuitBreaker ( RateLimiter ( TimeLimiter ( Bulkhead ( method ) ) ) ) )`. So the breaker records a timeout as a failure, and each retry attempt gets its own timeout.
+
+![Nested boxes showing the default Resilience4j order from outermost to innermost: Retry, CircuitBreaker, RateLimiter, TimeLimiter, Bulkhead, and the adapter method that calls the upstream, annotated with this page's example values](images/05-resilience4j-aspect-order.svg){ loading=lazy }
+*Notice that Retry wraps everything else, so each attempt passes through the breaker, gets its own timeout and takes its own bulkhead permit.*
 
 Resolver with timeout, circuit breaker and graceful degradation. The resilience annotations sit on the **adapter bean** (a public method on a Spring-proxied bean), and the controller stays thin:
 

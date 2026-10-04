@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">A batched _entities call</title>
+  <desc id="d">The router needs three Member entities, ids 42, 43 and 44, from the subgraph that owns Member. It sends one _entities call carrying three representations, each with __typename Member and an id. The subgraph's batched @EntityMapping method receives the list of ids and makes one store call, findAllById for 42, 43 and 44. Member 43 is not found. The method returns a list in the same order as the representations: Member 42, null, Member 44. The router matches results to representations by position.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bxP{fill:none;stroke:#4f46e5;stroke-width:2}
+    .bxT{fill:none;stroke:#0ea5a4;stroke-width:2}
+    .m{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155;white-space:pre}
+    .priT{fill:#4f46e5;font-size:15px;font-weight:700}
+    .teaT{fill:#0f766e;font-size:15px;font-weight:700}
+    .pri{fill:#4f46e5}.ok{fill:#16a34a}.mut{fill:#e2e8f0}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .onM{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;fill:#ffffff;font-size:13px;font-weight:700}
+    .nullT{fill:#64748b;font-size:14px;font-weight:700}
+    .ar{stroke:#94a3b8;stroke-width:2.5;fill:none}
+    .okT{fill:#16a34a;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx,.m{fill:#e2e8f0}.sub,.nullT{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.bxP{stroke:#818cf8}.bxT{stroke:#2dd4bf}
+      .priT{fill:#818cf8}.teaT{fill:#5eead4}.pri{fill:#818cf8}.ok{fill:#4ade80}.mut{fill:#334155}
+      .on,.onM{fill:#0f172a}.ar{stroke:#64748b}.okT{fill:#4ade80}
+    }
+    /* 10 s loop: representations (4-14%), one call (20%), store call (32%), results back in order (46%), hold */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes r1{0%,3%{opacity:0}5%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes r2{0%,7%{opacity:0}9%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes r3{0%,11%{opacity:0}13%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes go{0%,19%{opacity:0}21%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes db{0%,31%{opacity:0}33%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes bk{0%,45%{opacity:0}47%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes nt{0%,53%{opacity:0}55%,92%{opacity:1}96%,100%{opacity:0}}
+    .r1{animation-name:r1}.r2{animation-name:r2}.r3{animation-name:r3}.go{animation-name:go}.db{animation-name:db}.bk{animation-name:bk}.nt{animation-name:nt}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="428" rx="14"/>
+  <text class="h" x="28" y="40">One _entities call, answered in order</text>
+  <text class="sub" x="28" y="62">The router batches every representation for this subgraph into one call per step.</text>
+
+  <!-- router -->
+  <rect class="bxP" x="28" y="84" width="290" height="270" rx="12"/>
+  <text class="priT" x="44" y="110">Router</text>
+  <text class="sub" x="44" y="134">representations</text>
+  <text class="sub" x="270" y="134" text-anchor="middle">result</text>
+  <text class="sub" x="36" y="168">0</text><text class="sub" x="36" y="212">1</text><text class="sub" x="36" y="256">2</text>
+  <g class="a r1"><rect class="pri" x="50" y="146" width="186" height="34" rx="8"/><text class="onM" x="62" y="168">Member, id 42</text></g>
+  <g class="a r2"><rect class="pri" x="50" y="190" width="186" height="34" rx="8"/><text class="onM" x="62" y="212">Member, id 43</text></g>
+  <g class="a r3"><rect class="pri" x="50" y="234" width="186" height="34" rx="8"/><text class="onM" x="62" y="256">Member, id 44</text></g>
+  <rect class="box" x="244" y="146" width="62" height="34" rx="8"/>
+  <rect class="box" x="244" y="190" width="62" height="34" rx="8"/>
+  <rect class="box" x="244" y="234" width="62" height="34" rx="8"/>
+  <g class="a bk">
+    <rect class="ok" x="244" y="146" width="62" height="34" rx="8"/><text class="on" x="275" y="168" text-anchor="middle">M42</text>
+    <rect class="mut" x="244" y="190" width="62" height="34" rx="8"/><text class="nullT" x="275" y="212" text-anchor="middle">null</text>
+    <rect class="ok" x="244" y="234" width="62" height="34" rx="8"/><text class="on" x="275" y="256" text-anchor="middle">M44</text>
+  </g>
+  <g class="a nt"><text class="okT" x="44" y="300">Matched by position:</text><text class="tx" x="44" y="320">item i answers representation i,</text><text class="tx" x="44" y="338">null where nothing was found.</text></g>
+
+  <!-- request / response arrows -->
+  <g class="a go">
+    <path class="ar" d="M318 170 H402"/><path class="ar" d="M402 170 l-10 -7 M402 170 l-10 7"/>
+    <text class="sub" x="360" y="152" text-anchor="middle">1 call</text>
+  </g>
+  <g class="a bk">
+    <path class="ar" d="M406 250 H322"/><path class="ar" d="M322 250 l10 -7 M322 250 l10 7"/>
+    <text class="sub" x="364" y="274" text-anchor="middle">[M42,</text><text class="sub" x="364" y="290" text-anchor="middle">null, M44]</text>
+  </g>
+
+  <!-- subgraph -->
+  <rect class="bxT" x="410" y="84" width="362" height="270" rx="12"/>
+  <text class="teaT" x="426" y="110">Members subgraph (owns Member)</text>
+  <g class="a go">
+    <text class="m" x="426" y="140">_entities(representations: [</text>
+    <text class="m" x="426" y="158">  {__typename: "Member", id: "42"},</text>
+    <text class="m" x="426" y="176">  ... "43" ..., ... "44" ... ])</text>
+  </g>
+  <text class="m" x="426" y="210">@EntityMapping</text>
+  <text class="m" x="426" y="228">List&lt;Member&gt; member(List&lt;String&gt; idList)</text>
+  <g class="a db">
+    <rect class="box" x="426" y="244" width="330" height="52" rx="8"/>
+    <text class="m" x="440" y="266">findAllById([42, 43, 44])</text>
+    <text class="sub" x="440" y="286">one store call; 43 is not found</text>
+  </g>
+  <g class="a bk"><text class="tx" x="426" y="322">Returns the list in the SAME order</text><text class="tx" x="426" y="340">as the ids.</text></g>
+
+  <text class="sub" x="28" y="384">Without the batched List form, @EntityMapping runs once per representation: 3 store lookups here,</text>
+  <text class="sub" x="28" y="402">200 for a list of 200 members. Representations are abbreviated.</text>
+</svg>

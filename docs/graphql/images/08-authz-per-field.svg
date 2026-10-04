@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Authenticate once, authorize per field</title>
+  <desc id="d">A member with member_id 42 sends a query with a bearer JWT. The security filter chain validates the token once: signature against JWKS, issuer, audience and expiry. Then, during execution, each protected field or object is checked separately. member with id 42 passes the object-level check because the token's member_id is 42. name has no extra rule. ssnLast4 is visible to support staff only, so it fails with AccessDeniedException and becomes null with a FORBIDDEN error. prescriptions returns only this member's rows. The response is HTTP 200 with partial data and one FORBIDDEN entry in errors. A missing or invalid token would instead be rejected by the filter chain with HTTP 401.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .gate{fill:none;stroke:#4f46e5;stroke-width:2}
+    .m{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155;white-space:pre}
+    .priT{fill:#4f46e5;font-size:15px;font-weight:700}
+    .pri{fill:#4f46e5}.ok{fill:#16a34a}.bad{fill:#dc2626}
+    .on{fill:#ffffff;font-size:13px;font-weight:700}
+    .okT{fill:#16a34a;font-size:13px;font-weight:700}
+    .badT{fill:#dc2626;font-size:13px;font-weight:700}
+    .ar{stroke:#94a3b8;stroke-width:2;fill:none}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx,.m{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.gate{stroke:#818cf8}
+      .priT{fill:#818cf8}.pri{fill:#818cf8}.ok{fill:#4ade80}.bad{fill:#f87171}
+      .on{fill:#0f172a}.okT{fill:#4ade80}.badT{fill:#f87171}.ar{stroke:#64748b}
+    }
+    /* 12 s loop: token checks 4-16%, field checks 26/36/46/56%, response 68%; hold */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes j1{0%,3%{opacity:0}5%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes j2{0%,7%{opacity:0}9%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes j3{0%,11%{opacity:0}13%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes j4{0%,15%{opacity:0}17%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes q1{0%,25%{opacity:0}27%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes q2{0%,35%{opacity:0}37%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes q3{0%,45%{opacity:0}47%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes q4{0%,55%{opacity:0}57%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes rs{0%,67%{opacity:0}69%,92%{opacity:1}96%,100%{opacity:0}}
+    .j1{animation-name:j1}.j2{animation-name:j2}.j3{animation-name:j3}.j4{animation-name:j4}
+    .q1{animation-name:q1}.q2{animation-name:q2}.q3{animation-name:q3}.q4{animation-name:q4}.rs{animation-name:rs}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="458" rx="14"/>
+  <text class="h" x="28" y="40">Authenticate once, authorize per field</text>
+  <text class="sub" x="28" y="62">A member (token member_id = 42) asks for their own record, including a staff-only field.</text>
+
+  <!-- gate -->
+  <rect class="gate" x="28" y="82" width="230" height="230" rx="12"/>
+  <text class="priT" x="44" y="108">Security filter chain</text>
+  <text class="sub" x="44" y="128">once per request</text>
+  <rect class="pri" x="44" y="140" width="198" height="30" rx="8"/><text class="on" x="143" y="160" text-anchor="middle">Bearer JWT</text>
+  <g class="a j1"><circle class="ok" cx="56" cy="194" r="8"/><text class="tx" x="72" y="199">signature (JWKS)</text></g>
+  <g class="a j2"><circle class="ok" cx="56" cy="222" r="8"/><text class="tx" x="72" y="227">iss</text></g>
+  <g class="a j3"><circle class="ok" cx="56" cy="250" r="8"/><text class="tx" x="72" y="255">aud</text></g>
+  <g class="a j4"><circle class="ok" cx="56" cy="278" r="8"/><text class="tx" x="72" y="283">exp</text></g>
+  <path class="ar" d="M258 196 H290"/><path class="ar" d="M290 196 l-8 -5 M290 196 l-8 5"/>
+
+  <!-- execution -->
+  <rect class="box" x="296" y="82" width="476" height="230" rx="12"/>
+  <text class="lbl" x="312" y="108">Execution: a check per protected field</text>
+  <text class="m" x="312" y="142">member(id: "42") {</text>
+  <text class="m" x="312" y="182">  name</text>
+  <text class="m" x="312" y="222">  ssnLast4</text>
+  <text class="m" x="312" y="262">  prescriptions { … }</text>
+  <text class="m" x="312" y="296">}</text>
+  <g class="a q1"><circle class="ok" cx="500" cy="138" r="8"/><text class="okT" x="516" y="136">object: own record</text><text class="sub" x="516" y="152">token member_id = 42</text></g>
+  <g class="a q2"><circle class="ok" cx="500" cy="178" r="8"/><text class="okT" x="516" y="183">no extra rule</text></g>
+  <g class="a q3"><circle class="bad" cx="500" cy="218" r="8"/><text class="badT" x="516" y="216">field: support staff only</text><text class="sub" x="516" y="232">AccessDeniedException</text></g>
+  <g class="a q4"><circle class="ok" cx="500" cy="258" r="8"/><text class="okT" x="516" y="256">rows filtered</text><text class="sub" x="516" y="272">only member 42's</text></g>
+
+  <!-- response -->
+  <g class="a rs">
+    <rect class="box" x="28" y="330" width="744" height="82" rx="12"/>
+    <text class="lbl" x="44" y="356">HTTP 200</text>
+    <text class="m" x="140" y="356">data.member: { name, ssnLast4: null, prescriptions }</text>
+    <text class="m" x="140" y="380">errors[0]: path [member, ssnLast4],</text>
+    <text class="m" x="140" y="398">           classification FORBIDDEN</text>
+  </g>
+  <text class="sub" x="28" y="440">A missing or invalid token never reaches execution: the filter chain answers with a real HTTP 401.</text>
+</svg>

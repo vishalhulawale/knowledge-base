@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Circuit breaker states for the claims upstream</title>
+  <desc id="d">Three states: CLOSED, OPEN and HALF-OPEN. While CLOSED, calls pass through and the failure rate over the sliding window rises until it reaches the 50 percent threshold, which opens the breaker. While OPEN, calls are rejected immediately and go to the fallback, and a 20 second wait counts down. Then the breaker moves to HALF-OPEN and lets 5 trial calls through. If they are healthy it closes again; if they still fail it opens again.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .st{fill:#ffffff;stroke:#cbd5e1;stroke-width:2}
+    .stT{fill:#334155;font-size:16px;font-weight:700}
+    .okF{fill:#16a34a}.badF{fill:#dc2626}.warnF{fill:#d97706}
+    .on{fill:#ffffff;font-size:16px;font-weight:700}
+    .onS{fill:#ffffff;font-size:13px;font-weight:700}
+    .ar{stroke:#94a3b8;stroke-width:2;fill:none}
+    .thr{stroke:#dc2626;stroke-width:2;stroke-dasharray:4 3}
+    .badT{fill:#dc2626;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx,.stT{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box,.st{fill:#111827;stroke:#475569}
+      .okF{fill:#4ade80}.badF{fill:#f87171}.warnF{fill:#fbbf24}
+      .on,.onS{fill:#0f172a}.ar{stroke:#64748b}.thr{stroke:#f87171}.badT{fill:#f87171}
+    }
+    /* 12 s loop: CLOSED 0-35% (failure rate climbs), OPEN 35-62% (20 s wait), HALF-OPEN 62-82% (5 trials), CLOSED 82-92% */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes c1{0%,35%{opacity:1}36%,100%{opacity:0}}
+    @keyframes o1{0%,35%{opacity:0}36%,62%{opacity:1}63%,100%{opacity:0}}
+    @keyframes h1{0%,62%{opacity:0}63%,82%{opacity:1}83%,100%{opacity:0}}
+    @keyframes c2{0%,82%{opacity:0}83%,96%{opacity:1}100%{opacity:0}}
+    .c1{animation-name:c1;opacity:1}.o1{animation-name:o1}.h1{animation-name:h1}.c2{animation-name:c2}
+    .bar{transform-box:fill-box;transform-origin:left center;animation:12s infinite linear}
+    @keyframes fr{0%,3%{transform:scaleX(.1)}33%{transform:scaleX(.56)}35%,82%{transform:scaleX(.56)}84%,100%{transform:scaleX(.1)}}
+    @keyframes cd{0%,36%{transform:scaleX(1)}62%,100%{transform:scaleX(0)}}
+    .fr{animation-name:fr}.cd{animation-name:cd}
+    @keyframes t1{0%,64%{opacity:0}65%,82%{opacity:1}83%,100%{opacity:0}}
+    @keyframes t2{0%,67%{opacity:0}68%,82%{opacity:1}83%,100%{opacity:0}}
+    @keyframes t3{0%,70%{opacity:0}71%,82%{opacity:1}83%,100%{opacity:0}}
+    @keyframes t4{0%,73%{opacity:0}74%,82%{opacity:1}83%,100%{opacity:0}}
+    @keyframes t5{0%,76%{opacity:0}77%,82%{opacity:1}83%,100%{opacity:0}}
+    .t1{animation-name:t1}.t2{animation-name:t2}.t3{animation-name:t3}.t4{animation-name:t4}.t5{animation-name:t5}
+    @media (prefers-reduced-motion: reduce){
+      .a,.bar{animation:none}.c1,.c2,.h1{opacity:0}.o1{opacity:1}
+      .fr{transform:scaleX(.56)}.cd{transform:scaleX(.5)}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Circuit breaker for the claims upstream</text>
+  <text class="sub" x="28" y="62">Settings from this page: 50% failure threshold, 20 s wait in OPEN, 5 trial calls in HALF-OPEN.</text>
+
+  <!-- arrows -->
+  <path class="ar" d="M220 160 H306"/><path class="ar" d="M306 160 l-9 -6 M306 160 l-9 6"/>
+  <text class="sub" x="263" y="138" text-anchor="middle">failure rate</text><text class="sub" x="263" y="153" text-anchor="middle">≥ 50%</text>
+  <path class="ar" d="M490 150 H576"/><path class="ar" d="M576 150 l-9 -6 M576 150 l-9 6"/>
+  <text class="sub" x="533" y="128" text-anchor="middle">after 20 s</text>
+  <path class="ar" d="M580 172 H494"/><path class="ar" d="M494 172 l9 -6 M494 172 l9 6"/>
+  <text class="sub" x="537" y="192" text-anchor="middle">trials fail</text>
+  <path class="ar" d="M670 124 C 640 84, 160 84, 130 120"/><path class="ar" d="M130 120 l1 -11 M130 120 l10 -4"/>
+  <text class="sub" x="400" y="84" text-anchor="middle">trial calls healthy → close</text>
+
+  <!-- states -->
+  <rect class="st" x="40" y="128" width="180" height="64" rx="32"/><text class="stT" x="130" y="166" text-anchor="middle">CLOSED</text>
+  <rect class="st" x="310" y="128" width="180" height="64" rx="32"/><text class="stT" x="400" y="166" text-anchor="middle">OPEN</text>
+  <rect class="st" x="580" y="128" width="180" height="64" rx="32"/><text class="stT" x="670" y="166" text-anchor="middle">HALF-OPEN</text>
+  <g class="a c1"><rect class="okF" x="40" y="128" width="180" height="64" rx="32"/><text class="on" x="130" y="166" text-anchor="middle">CLOSED</text></g>
+  <g class="a c2"><rect class="okF" x="40" y="128" width="180" height="64" rx="32"/><text class="on" x="130" y="166" text-anchor="middle">CLOSED</text></g>
+  <g class="a o1"><rect class="badF" x="310" y="128" width="180" height="64" rx="32"/><text class="on" x="400" y="166" text-anchor="middle">OPEN</text></g>
+  <g class="a h1"><rect class="warnF" x="580" y="128" width="180" height="64" rx="32"/><text class="on" x="670" y="166" text-anchor="middle">HALF-OPEN</text></g>
+
+  <!-- detail panels -->
+  <rect class="box" x="28" y="222" width="210" height="150" rx="12"/>
+  <text class="lbl" x="44" y="246">Calls pass through</text>
+  <text class="sub" x="44" y="270">failure rate (window)</text>
+  <rect class="box" x="44" y="280" width="152" height="20" rx="4"/>
+  <rect class="badF bar fr" x="44" y="280" width="152" height="20" rx="4"/>
+  <line class="thr" x1="120" y1="274" x2="120" y2="306"/>
+  <text class="badT" x="120" y="322" text-anchor="middle">50%</text>
+  <text class="sub" x="44" y="346">evaluated once 20</text>
+  <text class="sub" x="44" y="362">calls are recorded</text>
+
+  <rect class="box" x="295" y="222" width="210" height="150" rx="12"/>
+  <text class="lbl" x="311" y="246">Rejected at once</text>
+  <text class="sub" x="311" y="268">CallNotPermittedException</text>
+  <text class="sub" x="311" y="286">→ fallback: null + error</text>
+  <text class="sub" x="311" y="314">wait in OPEN: 20 s</text>
+  <rect class="box" x="311" y="324" width="152" height="20" rx="4"/>
+  <rect class="badF bar cd" x="311" y="324" width="152" height="20" rx="4"/>
+
+  <rect class="box" x="562" y="222" width="210" height="150" rx="12"/>
+  <text class="lbl" x="578" y="246">5 trial calls</text>
+  <text class="sub" x="578" y="268">let through to test</text>
+  <text class="sub" x="578" y="286">the upstream</text>
+  <circle class="box" cx="606" cy="320" r="11"/><circle class="box" cx="638" cy="320" r="11"/><circle class="box" cx="670" cy="320" r="11"/><circle class="box" cx="702" cy="320" r="11"/><circle class="box" cx="734" cy="320" r="11"/>
+  <g class="a t1"><circle class="okF" cx="606" cy="320" r="11"/><text class="onS" x="606" y="325" text-anchor="middle">✓</text></g>
+  <g class="a t2"><circle class="okF" cx="638" cy="320" r="11"/><text class="onS" x="638" y="325" text-anchor="middle">✓</text></g>
+  <g class="a t3"><circle class="okF" cx="670" cy="320" r="11"/><text class="onS" x="670" y="325" text-anchor="middle">✓</text></g>
+  <g class="a t4"><circle class="okF" cx="702" cy="320" r="11"/><text class="onS" x="702" y="325" text-anchor="middle">✓</text></g>
+  <g class="a t5"><circle class="okF" cx="734" cy="320" r="11"/><text class="onS" x="734" y="325" text-anchor="middle">✓</text></g>
+  <text class="sub" x="578" y="356">healthy run shown</text>
+
+  <text class="sub" x="28" y="404">State is kept per pod. Times are compressed: the real OPEN wait is 20 s, not the 3 s shown.</text>
+</svg>

@@ -53,10 +53,16 @@ sequenceDiagram
 ```
 *Notice that the resolvers return futures immediately. The engine dispatches the loader once the level has been walked, so 20 lookups become 1 call, and duplicate IDs are fetched once.*
 
+![Animation: six pharmacy resolvers call load with ids 7, 9, 7, 12, 9 and 7 and each gets a pending future. The keys queue in the per-request DataLoader, duplicates are dropped leaving 7, 9 and 12, one GET /pharmacies?ids=7,9,12 call goes to the Pharmacy API, and all six futures complete with their pharmacy](images/04-dataloader-batching.svg){ loading=lazy }
+*Watch the queue: keys pile up while the level is walked, duplicates collapse, and only then does a single call leave the service.*
+
 Two DataLoader features:
 
 1. **Batching:** coalesce `load(key)` calls into one `batchLoad(keys)`.
 2. **Per-request caching (memoisation):** `load(7)` twice returns the same future. This avoids duplicate fetches *within one request* and keeps results consistent within the response.
+
+![Request A and request B each have their own DataLoader, which memoises pharmacies only for that request and is discarded when it ends. Both read through a shared Redis cache with a TTL, and only misses reach the Pharmacy API. A warning box explains that a singleton DataLoader would serve one user's cached objects to another](images/04-dataloader-scope.svg){ loading=lazy }
+*Notice the two lifetimes: a DataLoader lives and dies with one request, while Redis is shared and expires by TTL.*
 
 Batch function rules:
 

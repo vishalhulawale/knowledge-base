@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Automatic persisted queries handshake</title>
+  <desc id="d">A client and a GraphQL server exchange four messages. First the client sends only the SHA-256 hash of its query. The server does not know the hash and answers with a PersistedQueryNotFound error, code PERSISTED_QUERY_NOT_FOUND. The client retries once with the hash plus the full query text; the server stores the query under the hash, executes it and returns data. On later requests the client sends only the hash, and the server looks it up and returns data. Because any client can register any query this way, APQ is a performance feature, not a security control.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .life{stroke:#cbd5e1;stroke-width:2;stroke-dasharray:4 4}
+    .m{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155;white-space:pre}
+    .pri{fill:#4f46e5}.priS{stroke:#4f46e5;stroke-width:2.5;fill:none}
+    .badS{stroke:#dc2626;stroke-width:2.5;fill:none}.badT{fill:#dc2626;font-size:14px;font-weight:700}
+    .okS{stroke:#16a34a;stroke-width:2.5;fill:none}.okT{fill:#16a34a;font-size:14px;font-weight:700}
+    .priT{fill:#4f46e5;font-size:14px;font-weight:700}
+    .num{fill:#64748b;font-size:13px;font-weight:700}
+    .on{fill:#ffffff;font-size:15px;font-weight:700}
+    .reg{fill:#f0fdfa;stroke:#0ea5a4}
+    .teaT{fill:#0f766e;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx,.m{fill:#e2e8f0}.sub,.num{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.life{stroke:#475569}
+      .pri{fill:#818cf8}.priS{stroke:#818cf8}.priT{fill:#818cf8}
+      .badS{stroke:#f87171}.badT{fill:#f87171}.okS{stroke:#4ade80}.okT{fill:#4ade80}
+      .on{fill:#0f172a}.reg{fill:#16302f;stroke:#2dd4bf}.teaT{fill:#5eead4}
+    }
+    /* 12 s loop: step 1 at 4%, 2 at 20%, 3 at 36%, register at 44%, 4 at 60%, hold */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes s1{0%,3%{opacity:0}6%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s2{0%,19%{opacity:0}22%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s3{0%,35%{opacity:0}38%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes rg{0%,43%{opacity:0}46%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s4{0%,59%{opacity:0}62%,92%{opacity:1}96%,100%{opacity:0}}
+    .s1{animation-name:s1}.s2{animation-name:s2}.s3{animation-name:s3}.rg{animation-name:rg}.s4{animation-name:s4}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="468" rx="14"/>
+  <text class="h" x="28" y="40">Automatic persisted queries (APQ)</text>
+  <text class="sub" x="28" y="62">The full query text travels once. After that a short hash is enough.</text>
+
+  <rect class="pri" x="40" y="80" width="140" height="38" rx="10"/><text class="on" x="110" y="105" text-anchor="middle">Client</text>
+  <rect class="pri" x="620" y="80" width="140" height="38" rx="10"/><text class="on" x="690" y="105" text-anchor="middle">Server</text>
+  <line class="life" x1="110" y1="118" x2="110" y2="400"/>
+  <line class="life" x1="690" y1="118" x2="690" y2="400"/>
+
+  <!-- 1 -->
+  <g class="a s1">
+    <text class="num" x="124" y="146">1</text>
+    <text class="m" x="144" y="146">{ sha256Hash: "ecf4…" }   (no query text)</text>
+    <path class="priS" d="M112 160 H684"/><path class="priS" d="M684 160 l-10 -6 M684 160 l-10 6"/>
+  </g>
+  <!-- 2 -->
+  <g class="a s2">
+    <text class="num" x="124" y="194">2</text>
+    <text x="144" y="194"><tspan class="badT">PersistedQueryNotFound</tspan><tspan class="m" dx="10">code PERSISTED_QUERY_NOT_FOUND</tspan></text>
+    <path class="badS" d="M688 208 H116"/><path class="badS" d="M116 208 l10 -6 M116 208 l10 6"/>
+  </g>
+  <!-- 3 -->
+  <g class="a s3">
+    <text class="num" x="124" y="242">3</text>
+    <text class="m" x="144" y="242">{ sha256Hash: "ecf4…", query: "query MemberDashboard …" }</text>
+    <path class="priS" d="M112 256 H684"/><path class="priS" d="M684 256 l-10 -6 M684 256 l-10 6"/>
+  </g>
+  <g class="a rg">
+    <rect class="reg" x="560" y="268" width="226" height="48" rx="8"/>
+    <text class="teaT" x="572" y="288">stores ecf4… → query text</text>
+    <text class="sub" x="572" y="306">then executes it</text>
+    <text class="okT" x="144" y="300">data returned</text>
+    <path class="okS" d="M552 306 H116"/><path class="okS" d="M116 306 l10 -6 M116 306 l10 6"/>
+  </g>
+  <!-- 4 -->
+  <g class="a s4">
+    <text class="sub" x="144" y="338">Every later request</text>
+    <text class="num" x="124" y="360">4</text>
+    <text class="m" x="144" y="360">{ sha256Hash: "ecf4…" }</text>
+    <path class="priS" d="M112 372 H684"/><path class="priS" d="M684 372 l-10 -6 M684 372 l-10 6"/>
+    <text class="okT" x="144" y="396">found → data returned</text>
+    <path class="okS" d="M688 390 H330"/><path class="okS" d="M330 390 l10 -6 M330 390 l10 6"/>
+  </g>
+  <text class="sub" x="28" y="436">Any client can register any query this way, so APQ is a performance feature only.</text>
+  <text class="sub" x="28" y="454">Trusted documents (a build-time allow-list) give the security benefit. Hash shortened.</text>
+</svg>

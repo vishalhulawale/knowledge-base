@@ -36,6 +36,9 @@ sequenceDiagram
 ```
 *Notice that the round-trips move from the client (over a mobile network) to the server (inside the data centre), and the client gets exactly the shape it asked for.*
 
+![Animation: the MemberDashboard query on the left selects member, name, prescriptions, edges, node, drugName and status, and the JSON response on the right fills in line by line with exactly the same nesting, while unselected schema fields such as Member.id, pharmacy, updatedAt and pageInfo are not sent](images/01-query-response-shape.svg){ loading=lazy }
+*Notice that every key in the response matches a field the client selected, at the same depth. Fields that exist in the schema but weren't asked for never reach the client.*
+
 ### The type system (SDL)
 
 ```graphql
