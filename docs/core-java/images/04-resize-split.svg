@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">HashMap resize: the lo/hi split</title>
+  <desc id="d">The table grows from 16 to 32 slots. Old bin 5 holds A (hash 5), B (hash 21), C (hash 37) and D (hash 53). Each node is tested with hash AND 16, the old capacity. A and C give 0 and go to new bin 5, the lo list. B and D give 16 and go to new bin 21, which is 5 plus 16, the hi list. Nodes are processed in order, so A stays before C and B stays before D. No hashCode is recomputed.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .onode{fill:#ffffff;stroke:#cbd5e1}
+    .ot{fill:#0f172a;font-size:16px;font-weight:700}
+    .mono{fill:#334155;font-size:15px;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;letter-spacing:2px}
+    .bit{fill:#d97706;font-weight:700}
+    .slot{fill:#ffffff;stroke:#cbd5e1;stroke-dasharray:5 4}
+    .ln{fill:#4f46e5}.hn{fill:#0ea5a4}
+    .mt{fill:#ffffff;font-size:14px;font-weight:700}
+    .dl{fill:#4f46e5;font-size:14px;font-weight:700}.dh{fill:#0f766e;font-size:14px;font-weight:700}
+    .lk{stroke:#64748b;stroke-width:1.5}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.ot{fill:#f1f5f9}.lbl,.body,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .onode,.slot{fill:#111827;stroke:#475569}
+      .bit{fill:#fbbf24}
+      .ln{fill:#818cf8}.hn{fill:#2dd4bf}.mt{fill:#0f172a}
+      .dl{fill:#818cf8}.dh{fill:#5eead4}.lk{stroke:#94a3b8}
+    }
+    /* 10 s loop: A, B, C, D processed at 14, 30, 46, 62%; hold; reset at 97% */
+    .a{animation-duration:10s;animation-iteration-count:infinite;animation-timing-function:linear}
+    .mv{animation-timing-function:ease-out}
+    @keyframes d0{0%,13%{opacity:0}15%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes m0{0%,14%{opacity:0;transform:translateX(-70px)}20%,95%{opacity:1;transform:translateX(0)}97%,100%{opacity:0;transform:translateX(0)}}
+  @keyframes d1{0%,29%{opacity:0}31%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes m1{0%,30%{opacity:0;transform:translateX(-70px)}36%,95%{opacity:1;transform:translateX(0)}97%,100%{opacity:0;transform:translateX(0)}}
+  @keyframes d2{0%,45%{opacity:0}47%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes m2{0%,46%{opacity:0;transform:translateX(-70px)}52%,95%{opacity:1;transform:translateX(0)}97%,100%{opacity:0;transform:translateX(0)}}
+  @keyframes d3{0%,61%{opacity:0}63%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes m3{0%,62%{opacity:0;transform:translateX(-70px)}68%,95%{opacity:1;transform:translateX(0)}97%,100%{opacity:0;transform:translateX(0)}}
+    @media (prefers-reduced-motion: reduce){.a{animation:none !important;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Resize from 16 to 32 slots: one bit decides</text>
+  <text class="sub" x="28" y="62">Each node in old bin 5 moves to new bin 5 (lo) or 5 + 16 = 21 (hi). The test is hash &amp; oldCap.</text>
+
+  <text class="lbl" x="40" y="108">Old bin 5 (n = 16)</text>
+  <text class="sub" x="200" y="108">hash in binary, bit 16 highlighted</text>
+  <rect class="onode" x="40" y="126" width="250" height="44" rx="8"/><text class="ot" x="62" y="154" text-anchor="middle">A</text><text class="body" x="86" y="154">hash 5</text><text class="mono" x="170" y="154">0<tspan class="bit">0</tspan>0101</text>
+  <rect class="onode" x="40" y="182" width="250" height="44" rx="8"/><text class="ot" x="62" y="210" text-anchor="middle">B</text><text class="body" x="86" y="210">hash 21</text><text class="mono" x="170" y="210">0<tspan class="bit">1</tspan>0101</text>
+  <rect class="onode" x="40" y="238" width="250" height="44" rx="8"/><text class="ot" x="62" y="266" text-anchor="middle">C</text><text class="body" x="86" y="266">hash 37</text><text class="mono" x="170" y="266">1<tspan class="bit">0</tspan>0101</text>
+  <rect class="onode" x="40" y="294" width="250" height="44" rx="8"/><text class="ot" x="62" y="322" text-anchor="middle">D</text><text class="body" x="86" y="322">hash 53</text><text class="mono" x="170" y="322">1<tspan class="bit">1</tspan>0101</text>
+  <g class="a" style="animation-name:d0"><text class="dl" x="302" y="154">&amp; 16 = 0 → lo</text></g>
+  <g class="a" style="animation-name:d1"><text class="dh" x="302" y="210">&amp; 16 = 16 → hi</text></g>
+  <g class="a" style="animation-name:d2"><text class="dl" x="302" y="266">&amp; 16 = 0 → lo</text></g>
+  <g class="a" style="animation-name:d3"><text class="dh" x="302" y="322">&amp; 16 = 16 → hi</text></g>
+
+  <text class="lbl" x="440" y="148">New bin 5: lo list</text>
+  <rect class="slot" x="440" y="162" width="110" height="40" rx="8"/><rect class="slot" x="570" y="162" width="110" height="40" rx="8"/>
+  <line class="lk" x1="552" y1="182" x2="568" y2="182"/>
+  <text class="lbl" x="440" y="268">New bin 21: hi list</text>
+  <rect class="slot" x="440" y="282" width="110" height="40" rx="8"/><rect class="slot" x="570" y="282" width="110" height="40" rx="8"/>
+  <line class="lk" x1="552" y1="302" x2="568" y2="302"/>
+  <g class="a mv" style="animation-name:m0"><rect class="ln" x="440" y="162" width="110" height="40" rx="8"/><text class="mt" x="495" y="188" text-anchor="middle">A (5)</text></g>
+  <g class="a mv" style="animation-name:m1"><rect class="hn" x="440" y="282" width="110" height="40" rx="8"/><text class="mt" x="495" y="308" text-anchor="middle">B (21)</text></g>
+  <g class="a mv" style="animation-name:m2"><rect class="ln" x="570" y="162" width="110" height="40" rx="8"/><text class="mt" x="625" y="188" text-anchor="middle">C (37)</text></g>
+  <g class="a mv" style="animation-name:m3"><rect class="hn" x="570" y="282" width="110" height="40" rx="8"/><text class="mt" x="625" y="308" text-anchor="middle">D (53)</text></g>
+
+  <text class="sub" x="28" y="384">Order is kept: A before C, B before D. Java 7 inserted at the head instead, reversing each list.</text>
+</svg>

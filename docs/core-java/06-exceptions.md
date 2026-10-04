@@ -102,6 +102,9 @@ sequenceDiagram
 ```
 *Notice that a frame without a matching handler (here the service) is simply popped. Only two places did real work: the repository boundary that translated the exception and the web boundary that turned it into a response.*
 
+![Animation: a call stack of JDBC driver, OrderRepository, OrderService, OrderController and Spring MVC; the SQLException pops the driver frame, the repository's catch row translates it into DataAccessException, the service and controller frames are popped, and Spring MVC handles it with a 503 ProblemDetail](images/06-stack-unwinding.svg){ loading=lazy }
+*Watch the frames fade as the exception passes them. Only the repository and Spring MVC have a matching handler; every other frame is just popped.*
+
 **Cost:** creating a `Throwable` calls `fillInStackTrace()`, which walks the thread's stack. That is the expensive part, and it grows with stack depth (deep Spring/proxy stacks are 100+ frames). Throwing and catching a pre-created exception is relatively cheap. So:
 
 - Don't use exceptions for normal control flow (e.g. "user not found" in a hot loop where absence is common; return `Optional` instead).
@@ -144,6 +147,9 @@ flowchart TD
     H --> I
 ```
 *Notice that the body's exception always wins over a close exception, and that any `catch`/`finally` attached to a try-with-resources runs **after** the resources are already closed.*
+
+![Animation: try-with-resources opens in and then out, the body throws X, out is closed first, in.close() throws Y, and Y ends up inside X.getSuppressed() while X propagates](images/06-twr-close-order.svg){ loading=lazy }
+*Watch the close order run right to left, and the close failure Y become a suppressed exception of X instead of replacing it.*
 
 Key details interviewers probe:
 

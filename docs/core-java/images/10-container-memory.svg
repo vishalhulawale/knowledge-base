@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">JVM memory inside a container limit</title>
+  <desc id="d">Two bars against a 2 GiB Kubernetes memory limit. Top, -XX:MaxRAMPercentage=70: the heap takes 70 percent, about 1.4 GiB, and Metaspace, thread stacks, code cache, direct buffers and GC structures fit in the remaining 30 percent, so the process stays under the limit. Bottom, -Xmx2g: the heap alone can grow to the whole limit, the non-heap memory pushes the process past it, and the kernel kills the container with OOMKilled, exit code 137.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .heap{fill:#4f46e5}.ht{fill:#ffffff;font-size:14px;font-weight:700}
+    .nh1{fill:#0ea5a4}.nh2{fill:#14b8a6}.nh3{fill:#2dd4bf}.nh4{fill:#5eead4}
+    .nt{fill:#0f172a;font-size:13px;font-weight:600}
+    .over{fill:#fee2e2;stroke:#dc2626;stroke-width:2;stroke-dasharray:5 3}
+    .limit{stroke:#dc2626;stroke-width:3}
+    .lt{fill:#dc2626;font-size:13px;font-weight:700}
+    .ok{fill:#16a34a;font-size:14px;font-weight:700}.bad{fill:#dc2626;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .heap{fill:#818cf8}.ht{fill:#0f172a}
+      .over{fill:#450a0a;stroke:#f87171}.nt{fill:#fecaca}.limit{stroke:#f87171}.lt{fill:#f87171}
+      .ok{fill:#4ade80}.bad{fill:#f87171}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="358" rx="14"/>
+  <text class="h" x="28" y="40">The heap is not the only memory in the pod</text>
+  <text class="sub" x="28" y="62">Kubernetes memory limit 2 GiB. The kernel counts heap and non-heap memory together.</text>
+
+  <line class="limit" x1="640" y1="82" x2="640" y2="300"/>
+  <text class="lt" x="640" y="78" text-anchor="middle">2 GiB limit</text>
+
+  <text class="lbl" x="40" y="108">-XX:MaxRAMPercentage=70</text>
+  <rect class="heap" x="40" y="118" width="420" height="44" rx="6"/><text class="ht" x="250" y="145" text-anchor="middle">heap ≈ 1.4 GiB (70%)</text>
+  <rect class="nh1" x="462" y="118" width="40" height="44"/><rect class="nh2" x="504" y="118" width="44" height="44"/>
+  <rect class="nh3" x="550" y="118" width="40" height="44"/><rect class="nh4" x="592" y="118" width="38" height="44"/>
+  <text class="sub" x="300" y="186">Teal: Metaspace, thread stacks, code cache,</text>
+  <text class="sub" x="300" y="202">direct buffers, GC structures</text>
+  <text class="ok" x="40" y="186">Fits under the limit</text>
+
+  <text class="lbl" x="40" y="234">-Xmx2g (heap = the whole limit)</text>
+  <rect class="heap" x="40" y="244" width="600" height="44" rx="6"/><text class="ht" x="340" y="271" text-anchor="middle">heap up to 2 GiB</text>
+  <rect class="over" x="642" y="244" width="130" height="44" rx="6"/><text class="nt" x="707" y="271" text-anchor="middle">+ non-heap</text>
+  <text class="bad" x="40" y="314">Over the limit: OOMKilled by the kernel, exit code 137</text>
+
+  <text class="sub" x="28" y="344">Non-heap segment widths are illustrative; measure yours with jcmd VM.native_memory.</text>
+</svg>

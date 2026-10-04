@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">orElse versus orElseGet</title>
+  <desc id="d">Two panels show what happens when the Optional already holds a value. Left, opt.orElse(lookup()): Java evaluates the argument first, so lookup() runs and makes its remote call, then orElse returns the present value and throws the lookup result away. Right, opt.orElseGet(() -> lookup()): only a Supplier is created, the value is present, so the supplier is never called and no remote call happens. When the Optional is empty, both call lookup() once.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .panel{fill:#ffffff;stroke:#cbd5e1}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .code{fill:#0f172a;font-size:15px;font-weight:700}
+    .step{fill:#f8fafc;stroke:#cbd5e1}
+    .cost{fill:#fee2e2;stroke:#dc2626;stroke-width:1.5}
+    .free{fill:#dcfce7;stroke:#16a34a;stroke-width:1.5}
+    .n{fill:#4f46e5;font-size:14px;font-weight:700}
+    .ar{stroke:#94a3b8;stroke-width:1.5}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    .ok{fill:#16a34a;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .panel{fill:#111827;stroke:#475569}
+      .h,.code{fill:#f1f5f9}.lbl,.body{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .step{fill:#1f2430;stroke:#475569}
+      .cost{fill:#450a0a;stroke:#f87171}.free{fill:#052e16;stroke:#4ade80}
+      .n{fill:#818cf8}.ar{stroke:#64748b}.bad{fill:#f87171}.ok{fill:#4ade80}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="358" rx="14"/>
+  <text class="h" x="28" y="40">orElse vs orElseGet when a value is present</text>
+  <text class="sub" x="28" y="62">opt = repo.findById(id) has found a member. lookup() is a remote directory call.</text>
+
+  <rect class="panel" x="20" y="78" width="370" height="250" rx="12"/>
+  <text class="code" x="36" y="104">opt.orElse(lookup())</text>
+  <rect class="cost" x="36" y="120" width="338" height="44" rx="8"/><text class="n" x="52" y="147">1</text><text class="body" x="72" y="147">lookup() runs first: a remote call</text>
+  <line class="ar" x1="205" y1="164" x2="205" y2="176"/>
+  <rect class="step" x="36" y="176" width="338" height="44" rx="8"/><text class="n" x="52" y="203">2</text><text class="body" x="72" y="203">orElse sees the value is present</text>
+  <line class="ar" x1="205" y1="220" x2="205" y2="232"/>
+  <rect class="step" x="36" y="232" width="338" height="44" rx="8"/><text class="n" x="52" y="259">3</text><text class="body" x="72" y="259">returns it; the lookup result is discarded</text>
+  <text class="bad" x="36" y="306">Paid for a call nobody used</text>
+
+  <rect class="panel" x="410" y="78" width="370" height="250" rx="12"/>
+  <text class="code" x="426" y="104">opt.orElseGet(() -&gt; lookup())</text>
+  <rect class="step" x="426" y="120" width="338" height="44" rx="8"/><text class="n" x="442" y="147">1</text><text class="body" x="462" y="147">a Supplier is passed, not called</text>
+  <line class="ar" x1="595" y1="164" x2="595" y2="176"/>
+  <rect class="step" x="426" y="176" width="338" height="44" rx="8"/><text class="n" x="442" y="203">2</text><text class="body" x="462" y="203">orElseGet sees the value is present</text>
+  <line class="ar" x1="595" y1="220" x2="595" y2="232"/>
+  <rect class="free" x="426" y="232" width="338" height="44" rx="8"/><text class="n" x="442" y="259">3</text><text class="body" x="462" y="259">returns it; lookup() never runs</text>
+  <text class="ok" x="426" y="306">No remote call</text>
+
+  <text class="sub" x="28" y="348">If opt is empty, both versions call lookup() exactly once. The difference is only on the present path.</text>
+</svg>

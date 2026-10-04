@@ -98,6 +98,9 @@ Key ideas:
 - "O(1) insert in the middle" is only true if you already hold a `ListIterator` at that position. Finding the position is O(n).
 - Each element costs a node object (header + 3 references) in addition to the element. Nodes are scattered across the heap, so iteration has poor CPU cache locality compared with a contiguous array.
 
+![Two panels: an ArrayList is one contiguous Object array of capacity 10 with five slots pointing to elements A to E; a LinkedList allocates a separate node with item, next and prev fields for every element, placed at scattered heap positions](images/03-arraylist-vs-linkedlist.svg){ loading=lazy }
+*Notice that both lists point to the same element objects. The LinkedList adds a node object per element and gives up the contiguous layout.*
+
 **`Vector`/`Stack`**: legacy, synchronized on every method. Do not use them in new code. `Stack` extends `Vector`, so it even exposes `get(i)` and `add(i, x)` which break stack semantics. Use `ArrayDeque`.
 
 **`CopyOnWriteArrayList`** (`java.util.concurrent`): every write copies the whole array, reads are lock-free and iterators see a snapshot. Great for read-mostly lists such as listener registries; terrible for write-heavy lists.
@@ -147,6 +150,9 @@ The `Queue` API comes in two flavours, which interviewers love to ask about:
 - **`PriorityQueue`**: a binary min-heap in an array. `offer`/`poll` O(log n), `peek` O(1), `remove(Object)`/`contains` O(n). Ordering by natural order or a `Comparator`. **Its iterator is not in priority order**; only repeated `poll()` gives sorted output.
 - **Blocking queues** (`java.util.concurrent`): `ArrayBlockingQueue` (bounded, one lock), `LinkedBlockingQueue` (optionally bounded, separate put/take locks), `PriorityBlockingQueue`, `DelayQueue`, `SynchronousQueue` (no capacity, a hand-off). These back `ThreadPoolExecutor`. Add `put`/`take` (block) and `offer(e, timeout)`/`poll(timeout)`.
 - **`ConcurrentLinkedQueue`/`ConcurrentLinkedDeque`**: non-blocking, CAS-based, unbounded.
+
+![Animation: an ArrayDeque with 8 slots holds A to D; addLast fills slots 6 and 7 and the tail wraps to 0, pollFirst removes A and moves head right, addFirst moves head back to store Z, and addLast places G in slot 0](images/03-arraydeque-circular.svg){ loading=lazy }
+*Watch the tail wrap from slot 7 to slot 0. Adding or removing at either end only moves an index, which is why both ends are amortised O(1).*
 
 ```mermaid
 flowchart TD
@@ -290,6 +296,9 @@ final class LruCache<K, V> extends LinkedHashMap<K, V> {
     }
 }
 ```
+
+![Animation: a LinkedHashMap LRU cache with a maximum of 3 entries links a, b and c in insertion order, get(a) moves a to the tail, put(d) adds a fourth entry, and removeEldestEntry evicts b from the head](images/03-lru-linkedhashmap.svg){ loading=lazy }
+*Watch `get(a)` reorder the list: with access order on, the head is always the least recently used entry, so that is what gets evicted.*
 
 ### Top-K with a bounded PriorityQueue
 

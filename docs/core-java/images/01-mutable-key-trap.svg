@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">The mutable-key trap in a HashSet</title>
+  <desc id="d">A HashSet table with eight buckets. Step 1: add(key) hashes the name alice and stores the entry in bucket 2. Step 2: setName changes the same object to bob, but the entry stays in bucket 2. Step 3: contains(key) hashes bob, looks in bucket 6, finds it empty and returns false. Step 4: remove(key) also misses, so the entry in bucket 2 stays referenced by the table and is never garbage-collected.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .slot{fill:#ffffff;stroke:#cbd5e1}
+    .node{fill:#4f46e5}
+    .nt{fill:#ffffff;font-size:14px;font-weight:700}
+    .ns{fill:#e0e7ff;font-size:13px}
+    .mk{fill:#0f766e;font-size:14px;font-weight:700}
+    .mkl{stroke:#0ea5a4;stroke-width:2.5}
+    .mkh{fill:#0ea5a4}
+    .badbox{fill:none;stroke:#dc2626;stroke-width:3}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    .warnbox{fill:none;stroke:#d97706;stroke-width:3;stroke-dasharray:6 4}
+    .warn{fill:#d97706;font-size:14px;font-weight:700}
+    .link{stroke:#64748b;stroke-width:2}
+    .hl{fill:#4f46e5;opacity:.12}
+    .num{fill:#4f46e5;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.body{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .slot{fill:#111827;stroke:#475569}
+      .node{fill:#818cf8}.nt{fill:#0f172a}.ns{fill:#1e1b4b}
+      .mk{fill:#5eead4}.mkl{stroke:#2dd4bf}.mkh{fill:#2dd4bf}
+      .badbox{stroke:#f87171}.bad{fill:#f87171}
+      .warnbox{stroke:#fbbf24}.warn{fill:#fbbf24}
+      .link{stroke:#94a3b8}.hl{fill:#818cf8;opacity:.18}.num{fill:#818cf8}
+    }
+    /* 10 s loop. 0-22% add, 25-45% mutate, 48-68% contains, 70-94% remove, then reset */
+    .a{animation:10s infinite linear}
+    @keyframes entry{0%,1%{opacity:0}3%,95%{opacity:1}98%,100%{opacity:0}}
+    @keyframes alice{0%,1%{opacity:0}3%,27%{opacity:1}29%,100%{opacity:0}}
+    @keyframes bob{0%,27%{opacity:0}29%,95%{opacity:1}98%,100%{opacity:0}}
+    @keyframes m1{0%,1%{opacity:0}3%,22%{opacity:1}24%,100%{opacity:0}}
+    @keyframes m2{0%,47%{opacity:0}49%,95%{opacity:1}98%,100%{opacity:0}}
+    @keyframes miss{0%,53%{opacity:0}55%,95%{opacity:1}98%,100%{opacity:0}}
+    @keyframes leak{0%,71%{opacity:0}73%,95%{opacity:1}98%,100%{opacity:0}}
+    @keyframes step{0%,24%{transform:translateY(0)}25%,47%{transform:translateY(24px)}48%,69%{transform:translateY(48px)}70%,100%{transform:translateY(72px)}}
+    .entry{animation-name:entry}.alice{animation-name:alice}.bob{animation-name:bob}
+    .m1{animation-name:m1}.m2{animation-name:m2}.miss{animation-name:miss}.leak{animation-name:leak}
+    .hlg{animation:step 10s infinite steps(1,end)}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none}.alice,.m1{opacity:0}.entry,.bob,.m2,.miss,.leak{opacity:1}
+      .hlg{animation:none;transform:translateY(72px)}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="428" rx="14"/>
+  <text class="h" x="28" y="40">The mutable-key trap in a HashSet</text>
+  <text class="sub" x="28" y="62">The bucket is chosen once, at insertion. Changing a hashed field later does not move the entry.</text>
+
+  <!-- hash markers above the table -->
+  <g class="a m1">
+    <text class="mk" x="262" y="98" text-anchor="middle">hash("alice")</text>
+    <line class="mkl" x1="262" y1="106" x2="262" y2="128"/>
+    <path class="mkh" d="M255 126 L262 137 L269 126 Z"/>
+  </g>
+  <g class="a m2">
+    <text class="mk" x="622" y="98" text-anchor="middle">hash("bob")</text>
+    <line class="mkl" x1="622" y1="106" x2="622" y2="128"/>
+    <path class="mkh" d="M615 126 L622 137 L629 126 Z"/>
+  </g>
+
+  <!-- 8 buckets at x = 40 + 90i -->
+  <g>
+    <rect class="slot" x="40" y="140" width="84" height="44" rx="8"/>
+    <rect class="slot" x="130" y="140" width="84" height="44" rx="8"/>
+    <rect class="slot" x="220" y="140" width="84" height="44" rx="8"/>
+    <rect class="slot" x="310" y="140" width="84" height="44" rx="8"/>
+    <rect class="slot" x="400" y="140" width="84" height="44" rx="8"/>
+    <rect class="slot" x="490" y="140" width="84" height="44" rx="8"/>
+    <rect class="slot" x="580" y="140" width="84" height="44" rx="8"/>
+    <rect class="slot" x="670" y="140" width="84" height="44" rx="8"/>
+  </g>
+  <g class="sub" text-anchor="middle">
+    <text x="82" y="167">0</text><text x="172" y="167">1</text><text x="262" y="167">2</text><text x="352" y="167">3</text>
+    <text x="442" y="167">4</text><text x="532" y="167">5</text><text x="622" y="167">6</text><text x="712" y="167">7</text>
+  </g>
+
+  <!-- the stored entry in bucket 2 -->
+  <g class="a entry">
+    <line class="link" x1="262" y1="184" x2="262" y2="200"/>
+    <rect class="node" x="220" y="200" width="84" height="52" rx="8"/>
+    <text class="ns" x="262" y="220" text-anchor="middle">key.name</text>
+  </g>
+  <text class="a alice nt" x="262" y="242" text-anchor="middle">"alice"</text>
+  <text class="a bob nt" x="262" y="242" text-anchor="middle">"bob"</text>
+
+  <!-- lookup misses bucket 6 -->
+  <g class="a miss">
+    <rect class="badbox" x="580" y="140" width="84" height="44" rx="8"/>
+    <text class="bad" x="622" y="212" text-anchor="middle">empty</text>
+    <text class="bad" x="622" y="234" text-anchor="middle">contains = false</text>
+  </g>
+
+  <!-- leak -->
+  <g class="a leak">
+    <rect class="warnbox" x="214" y="194" width="96" height="64" rx="10"/>
+    <text class="warn" x="262" y="278" text-anchor="middle">unreachable by key, still referenced</text>
+  </g>
+
+  <!-- steps -->
+  <g class="hlg"><rect class="hl" x="28" y="292" width="744" height="22" rx="5"/></g>
+  <text class="num" x="40" y="308">1</text><text class="body" x="62" y="308">set.add(key): hash("alice") selects bucket 2 and the entry is stored there</text>
+  <text class="num" x="40" y="332">2</text><text class="body" x="62" y="332">key.setName("bob"): the same object changes, but the entry stays in bucket 2</text>
+  <text class="num" x="40" y="356">3</text><text class="body" x="62" y="356">set.contains(key): hash("bob") selects bucket 6, which is empty, so it returns false</text>
+  <text class="num" x="40" y="380">4</text><text class="body" x="62" y="380">set.remove(key) misses too. The table still holds the entry, so it is never collected</text>
+
+  <text class="sub" x="28" y="412">Bucket numbers are illustrative. The real index is the spread hash AND (table size - 1).</text>
+</svg>

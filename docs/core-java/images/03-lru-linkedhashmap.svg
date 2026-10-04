@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 410" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">LinkedHashMap as an LRU cache</title>
+  <desc id="d">An LRU cache built on LinkedHashMap with access order on and a maximum of 3 entries. put(a), put(b) and put(c) link the entries in insertion order a, b, c. get(a) moves a to the tail, giving b, c, a. put(d) links d at the tail, so the size becomes 4. removeEldestEntry returns true because size() is greater than 3, so the head entry b, the least recently used, is evicted, leaving c, a, d.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .slot{fill:#ffffff;stroke:#cbd5e1;stroke-dasharray:5 4}
+    .ent{fill:#4f46e5}
+    .et{fill:#ffffff;font-size:15px;font-weight:700}
+    .evict{fill:#dc2626}
+    .lk{stroke:#64748b;stroke-width:2}.lh{fill:#64748b}
+    .tag{fill:#0f766e;font-size:14px;font-weight:700}
+    .hl{fill:#4f46e5;opacity:.12}
+    .num{fill:#4f46e5;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.body{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .slot{fill:#111827;stroke:#475569}
+      .ent{fill:#818cf8}.et{fill:#0f172a}.evict{fill:#f87171}
+      .lk{stroke:#94a3b8}.lh{fill:#94a3b8}.tag{fill:#5eead4}
+      .hl{fill:#818cf8;opacity:.18}.num{fill:#818cf8}
+    }
+    /* 10 s loop: puts 2-10%, get(a) 20-28%, put(d) 45%, eviction 56-68%, shift 70-78%, hold, reset 97% */
+    .m{animation-duration:10s;animation-iteration-count:infinite;animation-timing-function:ease-in-out}
+    @keyframes pa{0%,20%{transform:translate(0,0)}24%{transform:translate(160px,-62px)}28%,70%{transform:translate(320px,0)}78%,96%{transform:translate(160px,0)}97%,100%{transform:translate(0,0)}}
+    @keyframes pb{0%,20%{transform:translate(160px,0)}28%,60%{transform:translate(0,0)}68%,96%{transform:translate(0,-46px)}97%,100%{transform:translate(160px,0)}}
+    @keyframes pc{0%,20%{transform:translate(320px,0)}28%,70%{transform:translate(160px,0)}78%,96%{transform:translate(0,0)}97%,100%{transform:translate(320px,0)}}
+    @keyframes pd{0%,70%{transform:translate(480px,0)}78%,96%{transform:translate(320px,0)}97%,100%{transform:translate(480px,0)}}
+    @keyframes oa{0%,1%{opacity:0}3%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes ob{0%,5%{opacity:0}7%,60%{opacity:1}68%,100%{opacity:0}}
+    @keyframes oc{0%,9%{opacity:0}11%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes od{0%,44%{opacity:0}46%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes ored{0%,54%{opacity:0}56%,68%{opacity:1}70%,100%{opacity:0}}
+    @keyframes l01{0%,6%{opacity:0}8%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes l12{0%,10%{opacity:0}12%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes l23{0%,45%{opacity:0}47%,70%{opacity:1}72%,100%{opacity:0}}
+    @keyframes tget{0%,19%{opacity:0}21%,30%{opacity:1}32%,100%{opacity:0}}
+    @keyframes hl{0%,19%{transform:translateY(0)}20%,44%{transform:translateY(24px)}45%,55%{transform:translateY(48px)}56%,96%{transform:translateY(72px)}97%,100%{transform:translateY(0)}}
+    .a{animation-name:pa}.b{animation-name:pb}.c{animation-name:pc}.d{animation-name:pd}
+    .o{animation-duration:10s;animation-iteration-count:infinite;animation-timing-function:linear}
+    .oa{animation-name:oa}.ob{animation-name:ob}.oc{animation-name:oc}.od{animation-name:od}.ored{animation-name:ored}
+    .l01{animation-name:l01}.l12{animation-name:l12}.l23{animation-name:l23}.tget{animation-name:tget}
+    .hlg{animation:hl 10s infinite steps(1,end)}
+    @media (prefers-reduced-motion: reduce){
+      .m,.o,.hlg{animation:none}
+      .a{transform:translate(160px,0)}.c{transform:translate(0,0)}.d{transform:translate(320px,0)}
+      .ob,.ored,.l23,.tget{opacity:0}
+      .hlg{transform:translateY(72px)}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="408" rx="14"/>
+  <text class="h" x="28" y="40">LinkedHashMap as an LRU cache (max 3 entries)</text>
+  <text class="sub" x="28" y="62">super(16, 0.75f, true) turns on access order. removeEldestEntry runs after every put.</text>
+
+  <!-- slots -->
+  <rect class="slot" x="60" y="150" width="120" height="50" rx="10"/>
+  <rect class="slot" x="220" y="150" width="120" height="50" rx="10"/>
+  <rect class="slot" x="380" y="150" width="120" height="50" rx="10"/>
+  <rect class="slot" x="540" y="150" width="120" height="50" rx="10"/>
+
+  <!-- before/after links -->
+  <g class="o l01"><line class="lk" x1="188" y1="175" x2="212" y2="175"/><path class="lh" d="M182 175 L190 170 L190 180 Z"/><path class="lh" d="M218 175 L210 170 L210 180 Z"/></g>
+  <g class="o l12"><line class="lk" x1="348" y1="175" x2="372" y2="175"/><path class="lh" d="M342 175 L350 170 L350 180 Z"/><path class="lh" d="M378 175 L370 170 L370 180 Z"/></g>
+  <g class="o l23"><line class="lk" x1="508" y1="175" x2="532" y2="175"/><path class="lh" d="M502 175 L510 170 L510 180 Z"/><path class="lh" d="M538 175 L530 170 L530 180 Z"/></g>
+
+  <!-- entries, drawn at slot 0 and moved -->
+  <g class="m b"><g class="o ob"><rect class="ent" x="60" y="150" width="120" height="50" rx="10"/><g class="o ored"><rect class="evict" x="60" y="150" width="120" height="50" rx="10"/></g><text class="et" x="120" y="181" text-anchor="middle">b</text></g></g>
+  <g class="m c"><g class="o oc"><rect class="ent" x="60" y="150" width="120" height="50" rx="10"/><text class="et" x="120" y="181" text-anchor="middle">c</text></g></g>
+  <g class="m d"><g class="o od"><rect class="ent" x="60" y="150" width="120" height="50" rx="10"/><text class="et" x="120" y="181" text-anchor="middle">d</text></g></g>
+  <g class="m a"><g class="o oa"><rect class="ent" x="60" y="150" width="120" height="50" rx="10"/><text class="et" x="120" y="181" text-anchor="middle">a</text></g></g>
+  <text class="o tget tag" x="440" y="106" text-anchor="middle">get(a)</text>
+
+  <text class="sub" x="60" y="230">← head: least recently used</text>
+  <text class="sub" x="660" y="230" text-anchor="end">tail: most recently used →</text>
+
+  <!-- steps -->
+  <g class="hlg"><rect class="hl" x="28" y="256" width="744" height="22" rx="5"/></g>
+  <text class="num" x="40" y="272">1</text><text class="body" x="62" y="272">put(a), put(b), put(c): entries are linked in insertion order</text>
+  <text class="num" x="40" y="296">2</text><text class="body" x="62" y="296">get(a): with access order on, a is unlinked and moved to the tail</text>
+  <text class="num" x="40" y="320">3</text><text class="body" x="62" y="320">put(d): d is linked at the tail and the size becomes 4</text>
+  <text class="num" x="40" y="344">4</text><text class="body" x="62" y="344">removeEldestEntry: size() &gt; 3 is true, so the head entry b is evicted</text>
+
+  <text class="sub" x="28" y="388">Every get() changes the order, so even reads are structural changes. For concurrent caches use Caffeine.</text>
+</svg>

@@ -131,6 +131,9 @@ sequenceDiagram
 ```
 *Notice that the mutation through the copied reference is visible to the caller, but the reassignment is not. If Java were pass-by-reference, the caller would see balance 999.*
 
+![Animation: main's acct references Account A with balance 100; update(acct) copies the reference into parameter a, a.setBalance(50) changes Account A, a is then pointed at a new Account B with balance 999, and after the frame is popped acct still points at Account A with balance 50](images/10-pass-by-value.svg){ loading=lazy }
+*Watch the two arrows: they start as copies of the same address, so the mutation is shared, but moving `a` never moves `acct`.*
+
 The classic proof is that you **cannot write a working `swap(a, b)`** for two object variables in Java. In C++ with reference parameters, or C# with `ref`, you can.
 
 ### Object lifecycle
@@ -158,6 +161,9 @@ Step by step:
 6. **Reclaimed.** The collector frees the space (or, in a copying collector, simply does not copy the object).
 
 **GC roots** are the starting points of the trace: local variables and operand stacks of live threads, static fields of loaded classes, JNI references, and objects used as monitors.
+
+![Animation: marking spreads from two GC roots, a stack variable and a static field, through Order, Map, Customer, List, Plan and Item; the unreferenced Temp object and the Session and Token objects that only reference each other stay unmarked and are reclaimed](images/10-gc-reachability.svg){ loading=lazy }
+*Notice that Session and Token still point at each other. With tracing, a cycle that no root reaches is garbage like anything else.*
 
 ### Reference strengths
 
@@ -289,6 +295,9 @@ ENV JAVA_TOOL_OPTIONS="\
 - `MaxRAMPercentage=70` sizes the heap from the **container limit**, leaving about 30% for Metaspace, thread stacks, code cache, direct buffers (Netty, Kafka clients) and GC structures.
 - `HeapDumpOnOutOfMemoryError` captures the evidence. Mount `/dumps` on a volume, and treat the file as sensitive: **a heap dump contains live PHI/PII, tokens and keys**.
 - `ExitOnOutOfMemoryError` makes the JVM die cleanly so Kubernetes restarts the pod, instead of limping on in an undefined state.
+
+![Two bars against a 2 GiB container limit: with MaxRAMPercentage=70 the heap uses about 1.4 GiB and the non-heap areas fit in the rest; with -Xmx2g the heap can fill the whole limit and non-heap memory pushes the pod over it, so it is OOMKilled](images/10-container-memory.svg){ loading=lazy }
+*Notice that the second case often ends without any Java `OutOfMemoryError`: the kernel kills the container first, which is why the heap needs headroom below the limit.*
 
 Diagnosis commands worth quoting in an interview:
 

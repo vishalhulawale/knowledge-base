@@ -125,6 +125,9 @@ sequenceDiagram
 ```
 *Notice that element 2 travels all the way to the terminal op before element 3 is even read, and the pipeline stops as soon as `findFirst` is satisfied. A stage-by-stage mental model (filter everything, then map everything) gives wrong answers to output-prediction questions.*
 
+![Animation: in a filter, map, findFirst pipeline, element 1 is rejected by filter, element 2 passes, becomes dto 2 in map and reaches findFirst, which short-circuits so elements 3 to 5 are never read](images/07-stream-vertical.svg){ loading=lazy }
+*Watch elements 3 to 5: they never leave the source, because `findFirst` is satisfied by element 2.*
+
 A stateful op like `sorted()` breaks this flow: it is a barrier that buffers **all** upstream elements before passing anything on. So `sorted().findFirst()` still reads the whole source (use `min(comparator)` instead).
 
 ### Collectors
@@ -162,6 +165,9 @@ Rules that come straight from that intent:
 - `orElse(x)` **always evaluates** `x`, even when a value is present. `orElseGet(() -> x)` evaluates lazily. Use `orElseGet` when the default is expensive or has side effects.
 - Prefer `map`, `flatMap`, `filter`, `orElseThrow(...)`, `ifPresentOrElse` over `isPresent()` + `get()`.
 - Use `OptionalInt`/`OptionalLong`/`OptionalDouble` for primitives.
+
+![Two panels for an Optional that already holds a value: orElse(lookup()) runs the remote lookup first and then discards its result, while orElseGet(() -> lookup()) passes a supplier that is never called](images/07-orelse-vs-orelseget.svg){ loading=lazy }
+*Notice that the cost on the left comes from Java evaluating method arguments before the call, not from `Optional` itself.*
 
 ## In practice: code & configuration
 

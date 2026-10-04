@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 370" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">equals without hashCode versus both overridden</title>
+  <desc id="d">Two panels compare two equal Money values a and b. Left, only equals is overridden: a.equals(b) is true but their identity hash codes differ, so a lands in bucket 1 and b in bucket 3. A HashSet then holds both (size 2) and map.get(b) returns null. Right, equals and hashCode are both overridden: the hash codes are equal, both map to bucket 2, the lookup finds a and equals confirms the match, so the set has size 1 and map.get(b) returns the value stored for a.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .panel{fill:#ffffff;stroke:#cbd5e1}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .slot{fill:#f8fafc;stroke:#cbd5e1}
+    .chip{fill:#4f46e5}
+    .ct{fill:#ffffff;font-size:14px;font-weight:700}
+    .badp{fill:#dc2626}.okp{fill:#16a34a}
+    .pt{fill:#ffffff;font-size:13px;font-weight:700}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    .ok{fill:#16a34a;font-size:14px;font-weight:700}
+    .arr{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .arh{fill:#0ea5a4}
+    .tl{fill:#0f766e;font-size:13px;font-weight:600}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .panel{fill:#111827;stroke:#475569}
+      .h{fill:#f1f5f9}.lbl,.body{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .slot{fill:#1f2430;stroke:#475569}
+      .chip{fill:#818cf8}.ct{fill:#0f172a}
+      .badp{fill:#f87171}.okp{fill:#4ade80}.pt{fill:#0f172a}
+      .bad{fill:#f87171}.ok{fill:#4ade80}
+      .arr{stroke:#2dd4bf}.arh{fill:#2dd4bf}.tl{fill:#5eead4}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="368" rx="14"/>
+  <text class="h" x="28" y="40">Why "override both or neither"</text>
+  <text class="sub" x="28" y="62">a and b are two Money objects holding the same amount and currency.</text>
+
+  <!-- LEFT: equals only -->
+  <rect class="panel" x="20" y="80" width="370" height="252" rx="12"/>
+  <rect class="badp" x="36" y="94" width="72" height="24" rx="12"/><text class="pt" x="72" y="111" text-anchor="middle">BROKEN</text>
+  <text class="lbl" x="118" y="112">equals() only</text>
+  <text class="body" x="36" y="146">a.equals(b) → true</text>
+  <text class="body" x="36" y="168">a.hashCode() ≠ b.hashCode()  (identity hash)</text>
+  <g>
+    <rect class="slot" x="45" y="190" width="70" height="44" rx="8"/><rect class="slot" x="125" y="190" width="70" height="44" rx="8"/>
+    <rect class="slot" x="205" y="190" width="70" height="44" rx="8"/><rect class="slot" x="285" y="190" width="70" height="44" rx="8"/>
+  </g>
+  <g class="sub" text-anchor="middle"><text x="80" y="252">0</text><text x="160" y="252">1</text><text x="240" y="252">2</text><text x="320" y="252">3</text></g>
+  <rect class="chip" x="137" y="198" width="46" height="28" rx="6"/><text class="ct" x="160" y="217" text-anchor="middle">a</text>
+  <rect class="chip" x="297" y="198" width="46" height="28" rx="6"/><text class="ct" x="320" y="217" text-anchor="middle">b</text>
+  <text class="bad" x="36" y="294">add(a), add(b) → size 2 (a duplicate)</text>
+  <text class="bad" x="36" y="316">map.get(b) → null</text>
+
+  <!-- RIGHT: both -->
+  <rect class="panel" x="410" y="80" width="370" height="252" rx="12"/>
+  <rect class="okp" x="426" y="94" width="82" height="24" rx="12"/><text class="pt" x="467" y="111" text-anchor="middle">CORRECT</text>
+  <text class="lbl" x="518" y="112">equals() + hashCode()</text>
+  <text class="body" x="426" y="146">a.equals(b) → true</text>
+  <text class="body" x="426" y="168">a.hashCode() == b.hashCode()</text>
+  <g>
+    <rect class="slot" x="435" y="190" width="70" height="44" rx="8"/><rect class="slot" x="515" y="190" width="70" height="44" rx="8"/>
+    <rect class="slot" x="595" y="190" width="70" height="44" rx="8"/><rect class="slot" x="675" y="190" width="70" height="44" rx="8"/>
+  </g>
+  <g class="sub" text-anchor="middle"><text x="470" y="252">0</text><text x="550" y="252">1</text><text x="630" y="252">2</text><text x="710" y="252">3</text></g>
+  <rect class="chip" x="607" y="198" width="46" height="28" rx="6"/><text class="ct" x="630" y="217" text-anchor="middle">a</text>
+  <path class="arr" d="M700 156 Q690 176 662 196"/><path class="arh" d="M657 190 L658 203 L669 197 Z"/>
+  <text class="tl" x="706" y="150">get(b)</text>
+  <text class="tl" x="630" y="270" text-anchor="middle">hash matches, then equals() is true</text>
+  <text class="ok" x="426" y="294">add(a), add(b) → size 1</text>
+  <text class="ok" x="426" y="316">map.get(b) → the value stored for a</text>
+
+  <text class="sub" x="28" y="354">Bucket numbers are illustrative. Nothing throws on the left: lookups silently search the wrong bucket.</text>
+</svg>

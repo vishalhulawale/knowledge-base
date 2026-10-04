@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">What type erasure removes and what it keeps</title>
+  <desc id="d">Left, erased: new ArrayList of String and new ArrayList of Integer both become instances of the single runtime class ArrayList, so a.getClass() == b.getClass() is true, and reading list.get(0) as a String works through a cast that javac inserts. Right, kept: generic declarations such as a field List of Prescription, a method returning Page of Claim, and the superclass of an anonymous TypeReference of List of Prescription are stored in Signature attributes in the class file. Reflection reads them with getGenericType, getGenericReturnType and getGenericSuperclass, which is how type tokens recover the full type.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .panel{fill:#ffffff;stroke:#cbd5e1}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .chip{fill:#f8fafc;stroke:#cbd5e1}
+    .ct{fill:#0f172a;font-size:14px;font-weight:500}
+    .targ{fill:#dc2626;text-decoration:line-through}
+    .keep{fill:#0f766e;font-weight:600}
+    .cls{fill:#4f46e5}.clt{fill:#ffffff;font-size:14px;font-weight:700}
+    .decl{fill:#f0fdfa;stroke:#0ea5a4}
+    .ar{stroke:#64748b;stroke-width:1.8;fill:none}.arh{fill:#64748b}
+    .badp{fill:#dc2626}.okp{fill:#0ea5a4}.pt{fill:#ffffff;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .panel{fill:#111827;stroke:#475569}
+      .h,.ct{fill:#f1f5f9}.lbl,.body{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .chip{fill:#1f2430;stroke:#475569}
+      .targ{fill:#f87171}.keep{fill:#5eead4}
+      .cls{fill:#818cf8}.clt{fill:#0f172a}
+      .decl{fill:#042f2e;stroke:#2dd4bf}
+      .ar{stroke:#94a3b8}.arh{fill:#94a3b8}
+      .badp{fill:#f87171}.okp{fill:#2dd4bf}.pt{fill:#0f172a}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">What erasure removes, and what survives</text>
+  <text class="sub" x="28" y="62">Type arguments disappear from objects. Generic declarations stay in the class file as metadata.</text>
+
+  <!-- LEFT -->
+  <rect class="panel" x="20" y="76" width="370" height="272" rx="12"/>
+  <rect class="badp" x="36" y="90" width="78" height="24" rx="12"/><text class="pt" x="75" y="107" text-anchor="middle">ERASED</text>
+  <text class="lbl" x="124" y="108">type arguments of objects</text>
+  <rect class="chip" x="36" y="124" width="338" height="32" rx="8"/><text class="ct" x="48" y="145">a = new ArrayList<tspan class="targ">&lt;String&gt;</tspan>()</text>
+  <rect class="chip" x="36" y="164" width="338" height="32" rx="8"/><text class="ct" x="48" y="185">b = new ArrayList<tspan class="targ">&lt;Integer&gt;</tspan>()</text>
+  <path class="ar" d="M205 196 L205 206"/><path class="arh" d="M205 214 L199 204 L211 204 Z"/>
+  <rect class="cls" x="110" y="214" width="190" height="36" rx="8"/><text class="clt" x="205" y="237" text-anchor="middle">one class: ArrayList</text>
+  <text class="body" x="36" y="282">a.getClass() == b.getClass()  →  true</text>
+  <text class="body" x="36" y="306">Reading an element as String works because</text>
+  <text class="body" x="36" y="328">javac inserts a (String) cast at the call site.</text>
+
+  <!-- RIGHT -->
+  <rect class="panel" x="410" y="76" width="370" height="272" rx="12"/>
+  <rect class="okp" x="426" y="90" width="64" height="24" rx="12"/><text class="pt" x="458" y="107" text-anchor="middle">KEPT</text>
+  <text class="lbl" x="500" y="108">generic declarations</text>
+  <rect class="decl" x="426" y="128" width="338" height="34" rx="8"/><text class="ct" x="438" y="150">field:  List<tspan class="keep">&lt;Prescription&gt;</tspan> items</text>
+  <rect class="decl" x="426" y="170" width="338" height="34" rx="8"/><text class="ct" x="438" y="192">method:  Page<tspan class="keep">&lt;Claim&gt;</tspan> find()</text>
+  <rect class="decl" x="426" y="212" width="338" height="34" rx="8"/><text class="ct" x="434" y="234" style="font-size:13px">extends  TypeReference<tspan class="keep">&lt;List&lt;Prescription&gt;&gt;</tspan></text>
+  <text class="body" x="426" y="272">Reflection reads them back:</text>
+  <text class="body" x="426" y="298">getGenericType(), getGenericReturnType(),</text>
+  <text class="body" x="426" y="320">getGenericSuperclass()  ← type tokens</text>
+
+  <text class="sub" x="28" y="368">The third row is what new TypeReference&lt;List&lt;Prescription&gt;&gt;() {} creates: an anonymous subclass.</text>
+</svg>

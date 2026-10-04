@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 370" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">try-with-resources: close order and suppressed exceptions</title>
+  <desc id="d">try (var in = ...; var out = ...) { in.transferTo(out); }. Step 1 opens in, step 2 opens out. Step 3: the body throws exception X, an IOException. Step 4: resources close right to left, so out.close() runs first and succeeds. Step 5: in.close() throws Y. Step 6: X is the exception that propagates, and Y is attached to it, available from X.getSuppressed().</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .code{fill:#334155;font-size:14px;font-weight:600}
+    .res{fill:#ffffff;stroke:#cbd5e1}
+    .open{fill:#0ea5a4}.ot{fill:#ffffff;font-size:15px;font-weight:700}
+    .rt{fill:#334155;font-size:15px;font-weight:700}
+    .st{fill:#0f766e;font-size:13px;font-weight:700}.cl{fill:#64748b;font-size:13px;font-weight:700}
+    .bodybox{fill:#ffffff;stroke:#cbd5e1}.bodybad{fill:none;stroke:#dc2626;stroke-width:3}
+    .x{fill:#dc2626}.xt{fill:#ffffff;font-size:14px;font-weight:700}
+    .y{fill:#d97706}.yt{fill:#ffffff;font-size:13px;font-weight:700}
+    .slot{fill:#ffffff;stroke:#fecaca;stroke-dasharray:4 3}
+    .hlr{fill:#4f46e5;opacity:.12}.num{fill:#4f46e5;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.body,.code,.rt{fill:#e2e8f0}.sub,.cl{fill:#94a3b8}
+      .res,.bodybox{fill:#111827;stroke:#475569}
+      .open{fill:#2dd4bf}.ot{fill:#0f172a}.st{fill:#5eead4}
+      .bodybad{stroke:#f87171}.x{fill:#f87171}.xt{fill:#0f172a}
+      .y{fill:#fbbf24}.yt{fill:#0f172a}.slot{fill:#7f1d1d;stroke:#0f172a}
+      .hlr{fill:#818cf8;opacity:.18}.num{fill:#818cf8}
+    }
+    /* 10 s loop: steps at 4, 14, 26, 40, 54, 68%; hold; reset at 97% */
+    .a{animation-duration:10s;animation-iteration-count:infinite;animation-timing-function:linear}
+    @keyframes inOpen{0%,3%{opacity:0}5%,53%{opacity:1}55%,100%{opacity:0}}
+  @keyframes outOpen{0%,13%{opacity:0}15%,39%{opacity:1}41%,100%{opacity:0}}
+  @keyframes inClosed{0%,53%{opacity:0}55%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes outClosed{0%,39%{opacity:0}41%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes bodyX{0%,25%{opacity:0}27%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes xChip{0%,25%{opacity:0}27%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes yNear{0%,53%{opacity:0}55%,63%{opacity:1}65%,100%{opacity:0}}
+  @keyframes ySlot{0%,65%{opacity:0}67%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes h0{0%,3%{opacity:0}5%,13%{opacity:1}15%,100%{opacity:0}}
+  @keyframes h1{0%,13%{opacity:0}15%,25%{opacity:1}27%,100%{opacity:0}}
+  @keyframes h2{0%,25%{opacity:0}27%,39%{opacity:1}41%,100%{opacity:0}}
+  @keyframes h3{0%,39%{opacity:0}41%,53%{opacity:1}55%,100%{opacity:0}}
+  @keyframes h4{0%,53%{opacity:0}55%,67%{opacity:1}69%,100%{opacity:0}}
+  @keyframes h5{0%,67%{opacity:0}69%,95%{opacity:1}97%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none !important}
+      .inOpen,.outOpen,.yNear{opacity:0}
+      .hl{opacity:0}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="368" rx="14"/>
+  <text class="h" x="28" y="40">try-with-resources: close order and suppressed exceptions</text>
+  <text class="code" x="28" y="66">try (var in = open(src); var out = open(dst)) { in.transferTo(out); }</text>
+
+  <!-- resources -->
+  <rect class="res" x="40" y="96" width="160" height="48" rx="10"/><text class="rt" x="120" y="126" text-anchor="middle">in</text>
+  <rect class="res" x="220" y="96" width="160" height="48" rx="10"/><text class="rt" x="300" y="126" text-anchor="middle">out</text>
+  <g class="a inOpen" style="animation-name:inOpen"><rect class="open" x="40" y="96" width="160" height="48" rx="10"/><text class="ot" x="120" y="126" text-anchor="middle">in</text><text class="st" x="120" y="162" text-anchor="middle">open</text></g>
+  <g class="a outOpen" style="animation-name:outOpen"><rect class="open" x="220" y="96" width="160" height="48" rx="10"/><text class="ot" x="300" y="126" text-anchor="middle">out</text><text class="st" x="300" y="162" text-anchor="middle">open</text></g>
+  <g class="a" style="animation-name:inClosed"><text class="cl" x="120" y="162" text-anchor="middle">closed (2nd)</text></g>
+  <g class="a" style="animation-name:outClosed"><text class="cl" x="300" y="162" text-anchor="middle">closed (1st)</text></g>
+
+  <rect class="bodybox" x="40" y="176" width="340" height="44" rx="10"/><text class="body" x="56" y="203">body: in.transferTo(out)</text>
+  <g class="a" style="animation-name:bodyX"><rect class="bodybad" x="40" y="176" width="340" height="44" rx="10"/></g>
+
+  <!-- exception X with suppressed slot -->
+  <g class="a" style="animation-name:xChip">
+    <rect class="x" x="40" y="240" width="340" height="80" rx="10"/>
+    <text class="xt" x="56" y="264">X: IOException thrown by the body</text>
+    <text class="xt" x="56" y="298">getSuppressed():</text>
+    <rect class="slot" x="200" y="280" width="164" height="28" rx="6"/>
+  </g>
+  <g class="a yNear" style="animation-name:yNear"><rect class="y" x="56" y="148" width="128" height="24" rx="6"/><text class="yt" x="120" y="165" text-anchor="middle">Y from in.close()</text></g>
+  <g class="a" style="animation-name:ySlot"><rect class="y" x="200" y="280" width="164" height="28" rx="6"/><text class="yt" x="282" y="299" text-anchor="middle">[ Y from in.close() ]</text></g>
+
+  <text class="lbl" x="430" y="96">What happens</text>
+  <g class="a hl" style="animation-name:h0"><rect class="hlr" x="426" y="108" width="350" height="26" rx="5"/></g><text class="num" x="438" y="126">1</text><text class="body" x="458" y="126">open in</text>
+  <g class="a hl" style="animation-name:h1"><rect class="hlr" x="426" y="138" width="350" height="26" rx="5"/></g><text class="num" x="438" y="156">2</text><text class="body" x="458" y="156">open out</text>
+  <g class="a hl" style="animation-name:h2"><rect class="hlr" x="426" y="168" width="350" height="26" rx="5"/></g><text class="num" x="438" y="186">3</text><text class="body" x="458" y="186">body throws X (IOException)</text>
+  <g class="a hl" style="animation-name:h3"><rect class="hlr" x="426" y="198" width="350" height="26" rx="5"/></g><text class="num" x="438" y="216">4</text><text class="body" x="458" y="216">out.close() runs first: OK</text>
+  <g class="a hl" style="animation-name:h4"><rect class="hlr" x="426" y="228" width="350" height="26" rx="5"/></g><text class="num" x="438" y="246">5</text><text class="body" x="458" y="246">in.close() throws Y</text>
+  <g class="a hl" style="animation-name:h5"><rect class="hlr" x="426" y="258" width="350" height="26" rx="5"/></g><text class="num" x="438" y="276">6</text><text class="body" x="458" y="276">X propagates, Y in X.getSuppressed()</text>
+  <text class="sub" x="430" y="320">Any catch or finally on this try</text>
+  <text class="sub" x="430" y="338">runs after both resources are closed.</text>
+</svg>

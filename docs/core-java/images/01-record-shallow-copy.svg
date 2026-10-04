@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Records are shallowly immutable</title>
+  <desc id="d">Two panels show references for a Prescription record with a List component. Left, without a copy: the caller's codes variable and the record's drugCodes field point to the same ArrayList, so codes.add("B02") also changes rx.drugCodes(). Right, with drugCodes = List.copyOf(drugCodes) in the compact constructor: the record points to its own unmodifiable list containing only A01, while the caller's ArrayList gets B02, which no longer reaches the record.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .panel{fill:#ffffff;stroke:#cbd5e1}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#f8fafc;stroke:#64748b;stroke-width:1.5}
+    .list{fill:#f8fafc;stroke:#4f46e5;stroke-width:2}
+    .list2{fill:#f8fafc;stroke:#0ea5a4;stroke-width:2}
+    .chip{fill:#4f46e5}.chip2{fill:#0ea5a4}
+    .ct{fill:#ffffff;font-size:14px;font-weight:700}
+    .new{fill:none;stroke:#d97706;stroke-width:3}
+    .badp{fill:#dc2626}.okp{fill:#16a34a}
+    .pt{fill:#ffffff;font-size:13px;font-weight:700}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    .ok{fill:#16a34a;font-size:14px;font-weight:700}
+    .arr{stroke:#64748b;stroke-width:2;fill:none}
+    .arh{fill:#64748b}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .panel{fill:#111827;stroke:#475569}
+      .h{fill:#f1f5f9}.lbl,.body{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#1f2430;stroke:#94a3b8}
+      .list{fill:#1f2430;stroke:#818cf8}.list2{fill:#1f2430;stroke:#2dd4bf}
+      .chip{fill:#818cf8}.chip2{fill:#2dd4bf}.ct{fill:#0f172a}
+      .new{stroke:#fbbf24}
+      .badp{fill:#f87171}.okp{fill:#4ade80}.pt{fill:#0f172a}
+      .bad{fill:#f87171}.ok{fill:#4ade80}
+      .arr{stroke:#94a3b8}.arh{fill:#94a3b8}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">Records are shallowly immutable</text>
+  <text class="sub" x="28" y="62">record Prescription(String rxId, List&lt;String&gt; drugCodes, byte[] signature)</text>
+
+  <!-- LEFT -->
+  <rect class="panel" x="20" y="80" width="370" height="270" rx="12"/>
+  <rect class="badp" x="36" y="94" width="72" height="24" rx="12"/><text class="pt" x="72" y="111" text-anchor="middle">SHARED</text>
+  <text class="lbl" x="118" y="112">No copy in the constructor</text>
+  <text class="body" x="36" y="144">rx = new Prescription("rx-1", codes, sig)</text>
+  <text class="body" x="36" y="164">codes.add("B02")</text>
+  <rect class="box" x="36" y="186" width="110" height="40" rx="8"/><text class="lbl" x="91" y="211" text-anchor="middle">codes</text>
+  <rect class="box" x="36" y="252" width="110" height="56" rx="8"/><text class="sub" x="91" y="272" text-anchor="middle">record rx</text><text class="lbl" x="91" y="296" text-anchor="middle">drugCodes</text>
+  <rect class="list" x="240" y="210" width="134" height="76" rx="10"/><text class="sub" x="307" y="228" text-anchor="middle">ArrayList</text>
+  <rect class="chip" x="250" y="242" width="54" height="32" rx="6"/><text class="ct" x="277" y="263" text-anchor="middle">A01</text>
+  <rect class="chip" x="312" y="242" width="54" height="32" rx="6"/><text class="ct" x="339" y="263" text-anchor="middle">B02</text>
+  <rect class="new" x="309" y="239" width="60" height="38" rx="8"/>
+  <path class="arr" d="M146 206 L232 236"/><path class="arh" d="M240 239 L229 230 L227 241 Z"/>
+  <path class="arr" d="M146 280 L232 264"/><path class="arh" d="M240 262 L229 258 L231 269 Z"/>
+  <text class="bad" x="36" y="334">rx.drugCodes() now contains B02 as well</text>
+
+  <!-- RIGHT -->
+  <rect class="panel" x="410" y="80" width="370" height="270" rx="12"/>
+  <rect class="okp" x="426" y="94" width="72" height="24" rx="12"/><text class="pt" x="462" y="111" text-anchor="middle">COPIED</text>
+  <text class="lbl" x="508" y="112">Defensive copy on the way in</text>
+  <text class="body" x="426" y="144">drugCodes = List.copyOf(drugCodes);</text>
+  <text class="body" x="426" y="164">codes.add("B02")</text>
+  <rect class="box" x="426" y="186" width="110" height="40" rx="8"/><text class="lbl" x="481" y="211" text-anchor="middle">codes</text>
+  <rect class="box" x="426" y="252" width="110" height="56" rx="8"/><text class="sub" x="481" y="272" text-anchor="middle">record rx</text><text class="lbl" x="481" y="296" text-anchor="middle">drugCodes</text>
+  <rect class="list" x="630" y="174" width="134" height="72" rx="10"/><text class="sub" x="697" y="191" text-anchor="middle">ArrayList</text>
+  <rect class="chip" x="640" y="202" width="54" height="32" rx="6"/><text class="ct" x="667" y="223" text-anchor="middle">A01</text>
+  <rect class="chip" x="702" y="202" width="54" height="32" rx="6"/><text class="ct" x="729" y="223" text-anchor="middle">B02</text>
+  <rect class="new" x="699" y="199" width="60" height="38" rx="8"/>
+  <rect class="list2" x="630" y="256" width="134" height="68" rx="10"/><text class="sub" x="697" y="273" text-anchor="middle">unmodifiable copy</text>
+  <rect class="chip2" x="640" y="282" width="54" height="32" rx="6"/><text class="ct" x="667" y="303" text-anchor="middle">A01</text>
+  <path class="arr" d="M536 206 L622 208"/><path class="arh" d="M630 208 L620 202 L620 214 Z"/>
+  <path class="arr" d="M536 280 L622 288"/><path class="arh" d="M630 289 L621 282 L620 294 Z"/>
+  <text class="ok" x="426" y="334">B02 never reaches the record</text>
+
+  <text class="sub" x="28" y="368">Arrays need the same care: clone() in the constructor and in the accessor, plus Arrays.equals in equals().</text>
+</svg>

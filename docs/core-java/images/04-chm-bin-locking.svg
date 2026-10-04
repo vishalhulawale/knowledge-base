@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">ConcurrentHashMap per-bin locking</title>
+  <desc id="d">Five threads use a ConcurrentHashMap table of 12 bins. T1 puts k1 into empty bin 3 with a single CAS and no lock. T2 then puts k2 into bin 3, which is no longer empty, so it synchronizes on the first node of bin 3 and appends; T3, also writing to bin 3, waits. Meanwhile T4 inserts k4 into bin 9 with CAS and does not wait, and reader R gets k1 from bin 3 with a volatile read and no lock. When T2 releases the bin, T3 takes the lock and appends k3. Only writers that hit the same bin contend.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .body{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .slot{fill:#ffffff;stroke:#cbd5e1}
+    .chip{fill:#334155}
+    .ct{fill:#ffffff;font-size:13px;font-weight:700}
+    .ar{stroke:#4f46e5;stroke-width:2}.arh{fill:#4f46e5}
+    .ar2{stroke:#0ea5a4;stroke-width:2}.ar2h{fill:#0ea5a4}
+    .node{fill:#4f46e5}
+    .nt{fill:#ffffff;font-size:14px;font-weight:700}
+    .lk{stroke:#64748b;stroke-width:1.5}
+    .lockbox{fill:none;stroke:#d97706;stroke-width:3}
+    .ok{fill:#16a34a;font-size:13px;font-weight:700}
+    .warn{fill:#d97706;font-size:13px;font-weight:700}
+    .tl{fill:#0f766e;font-size:13px;font-weight:700}
+    .hl{fill:#4f46e5;opacity:.12}
+    .num{fill:#4f46e5;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.body{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .slot{fill:#111827;stroke:#475569}
+      .chip{fill:#e2e8f0}.ct{fill:#0f172a}
+      .ar{stroke:#818cf8}.arh{fill:#818cf8}.ar2{stroke:#2dd4bf}.ar2h{fill:#2dd4bf}
+      .node{fill:#818cf8}.nt{fill:#0f172a}.lk{stroke:#94a3b8}
+      .lockbox{stroke:#fbbf24}.ok{fill:#4ade80}.warn{fill:#fbbf24}.tl{fill:#5eead4}
+      .hl{fill:#818cf8;opacity:.18}.num{fill:#818cf8}
+    }
+    /* 12 s loop: T1 5-22%, T2 holds 25-50% (T3 waits, T4 and R run), T3 holds 53-72%, summary 75-95% */
+    .a{animation-duration:12s;animation-iteration-count:infinite;animation-timing-function:linear}
+    @keyframes cT1{0%,4%{opacity:.35}6%,21%{opacity:1}23%,100%{opacity:.35}}
+  @keyframes cT2{0%,24%{opacity:.35}26%,49%{opacity:1}51%,100%{opacity:.35}}
+  @keyframes cT3{0%,24%{opacity:.35}26%,71%{opacity:1}73%,100%{opacity:.35}}
+  @keyframes cR{0%,27%{opacity:.35}29%,49%{opacity:1}51%,100%{opacity:.35}}
+  @keyframes cT4{0%,27%{opacity:.35}29%,49%{opacity:1}51%,100%{opacity:.35}}
+  @keyframes aT1{0%,4%{opacity:0}6%,21%{opacity:1}23%,100%{opacity:0}}
+  @keyframes aT2{0%,24%{opacity:0}26%,49%{opacity:1}51%,100%{opacity:0}}
+  @keyframes aT3{0%,24%{opacity:0}26%,71%{opacity:1}73%,100%{opacity:0}}
+  @keyframes aR{0%,27%{opacity:0}29%,49%{opacity:1}51%,100%{opacity:0}}
+  @keyframes aT4{0%,27%{opacity:0}29%,49%{opacity:1}51%,100%{opacity:0}}
+  @keyframes sT1{0%,7%{opacity:0}9%,21%{opacity:1}23%,100%{opacity:0}}
+  @keyframes sT2{0%,25%{opacity:0}27%,49%{opacity:1}51%,100%{opacity:0}}
+  @keyframes sT3w{0%,25%{opacity:0}27%,49%{opacity:1}51%,100%{opacity:0}}
+  @keyframes sT3h{0%,52%{opacity:0}54%,71%{opacity:1}73%,100%{opacity:0}}
+  @keyframes sR{0%,29%{opacity:0}31%,49%{opacity:1}51%,100%{opacity:0}}
+  @keyframes sT4{0%,31%{opacity:0}33%,49%{opacity:1}51%,100%{opacity:0}}
+  @keyframes lock{0%,24%{opacity:0}26%,71%{opacity:1}73%,100%{opacity:0}}
+  @keyframes lk2{0%,25%{opacity:0}27%,49%{opacity:1}51%,100%{opacity:0}}
+  @keyframes lk3{0%,52%{opacity:0}54%,71%{opacity:1}73%,100%{opacity:0}}
+  @keyframes cas1{0%,8%{opacity:0}10%,21%{opacity:1}23%,100%{opacity:0}}
+  @keyframes k1{0%,9%{opacity:0}11%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes k2{0%,39%{opacity:0}41%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes k3{0%,61%{opacity:0}63%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes k4{0%,33%{opacity:0}35%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes h1{0%,4%{opacity:0}6%,21%{opacity:1}23%,100%{opacity:0}}
+  @keyframes h2{0%,24%{opacity:0}26%,49%{opacity:1}51%,100%{opacity:0}}
+  @keyframes h3{0%,24%{opacity:0}26%,49%{opacity:1}51%,100%{opacity:0}}
+  @keyframes h4{0%,52%{opacity:0}54%,71%{opacity:1}73%,100%{opacity:0}}
+  @keyframes h5{0%,74%{opacity:0}76%,94%{opacity:1}96%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none !important}
+      .ar,.ar2,.arh,.ar2h,.ok,.warn,.tl,.lockbox,.lockt,.hl{opacity:0}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="518" rx="14"/>
+  <text class="h" x="28" y="40">ConcurrentHashMap: CAS for empty bins, a lock per bin</text>
+  <text class="sub" x="28" y="62">Writers contend only when they hit the same bin. Reads are volatile and never take a lock.</text>
+  <g class="a" style="animation-name:aT1"><line class="ar" x1="86" y1="122" x2="233" y2="168"/><circle class="arh" cx="233" cy="170" r="4"/></g>
+  <g class="a" style="animation-name:cT1"><rect class="chip" x="40" y="92" width="92" height="30" rx="15"/><text class="ct" x="86" y="112" text-anchor="middle">T1 put k1</text></g>
+  <g class="a" style="animation-name:aT2"><line class="ar" x1="182" y1="122" x2="233" y2="168"/><circle class="arh" cx="233" cy="170" r="4"/></g>
+  <g class="a" style="animation-name:cT2"><rect class="chip" x="136" y="92" width="92" height="30" rx="15"/><text class="ct" x="182" y="112" text-anchor="middle">T2 put k2</text></g>
+  <g class="a" style="animation-name:aT3"><line class="ar" x1="278" y1="122" x2="233" y2="168" stroke-dasharray="5 4"/><circle class="arh" cx="233" cy="170" r="4"/></g>
+  <g class="a" style="animation-name:cT3"><rect class="chip" x="232" y="92" width="92" height="30" rx="15"/><text class="ct" x="278" y="112" text-anchor="middle">T3 put k3</text></g>
+  <g class="a" style="animation-name:aR"><line class="ar2" x1="374" y1="122" x2="233" y2="168"/><circle class="ar2h" cx="233" cy="170" r="4"/></g>
+  <g class="a" style="animation-name:cR"><rect class="chip" x="328" y="92" width="92" height="30" rx="15"/><text class="ct" x="374" y="112" text-anchor="middle">R get k1</text></g>
+  <g class="a" style="animation-name:aT4"><line class="ar" x1="569" y1="122" x2="569" y2="168"/><circle class="arh" cx="569" cy="170" r="4"/></g>
+  <g class="a" style="animation-name:cT4"><rect class="chip" x="523" y="92" width="92" height="30" rx="15"/><text class="ct" x="569" y="112" text-anchor="middle">T4 put k4</text></g>
+  <g class="a" style="animation-name:sT1"><text class="ok" x="86" y="146" text-anchor="middle">CAS</text></g>
+  <g class="a" style="animation-name:sT2"><text class="warn" x="182" y="146" text-anchor="middle">holds lock</text></g>
+  <g class="a" style="animation-name:sT3w"><text class="warn" x="278" y="146" text-anchor="middle">waits</text></g>
+  <g class="a" style="animation-name:sT3h"><text class="warn" x="278" y="146" text-anchor="middle">holds lock</text></g>
+  <g class="a" style="animation-name:sR"><text class="tl" x="374" y="146" text-anchor="middle">no lock</text></g>
+  <g class="a" style="animation-name:sT4"><text class="ok" x="569" y="146" text-anchor="middle">CAS, no wait</text></g>
+  <rect class="slot" x="40" y="176" width="50" height="40" rx="6"/><rect class="slot" x="96" y="176" width="50" height="40" rx="6"/><rect class="slot" x="152" y="176" width="50" height="40" rx="6"/><rect class="slot" x="208" y="176" width="50" height="40" rx="6"/><rect class="slot" x="264" y="176" width="50" height="40" rx="6"/><rect class="slot" x="320" y="176" width="50" height="40" rx="6"/><rect class="slot" x="376" y="176" width="50" height="40" rx="6"/><rect class="slot" x="432" y="176" width="50" height="40" rx="6"/><rect class="slot" x="488" y="176" width="50" height="40" rx="6"/><rect class="slot" x="544" y="176" width="50" height="40" rx="6"/><rect class="slot" x="600" y="176" width="50" height="40" rx="6"/><rect class="slot" x="656" y="176" width="50" height="40" rx="6"/>
+  <g class="sub" text-anchor="middle"><text x="65" y="236">0</text><text x="121" y="236">1</text><text x="177" y="236">2</text><text x="233" y="236">3</text><text x="289" y="236">4</text><text x="345" y="236">5</text><text x="401" y="236">6</text><text x="457" y="236">7</text><text x="513" y="236">8</text><text x="569" y="236">9</text><text x="625" y="236">10</text><text x="681" y="236">11</text></g>
+  <g class="a" style="animation-name:lock"><rect class="lockbox" x="204" y="172" width="58" height="48" rx="8"/></g>
+  <g class="a" style="animation-name:k1"><line class="lk" x1="233" y1="236" x2="233" y2="246"/><rect class="node" x="208" y="246" width="50" height="30" rx="6"/><text class="nt" x="233" y="266" text-anchor="middle">k1</text></g>
+  <g class="a" style="animation-name:k2"><line class="lk" x1="233" y1="276" x2="233" y2="286"/><rect class="node" x="208" y="286" width="50" height="30" rx="6"/><text class="nt" x="233" y="306" text-anchor="middle">k2</text></g>
+  <g class="a" style="animation-name:k3"><line class="lk" x1="233" y1="316" x2="233" y2="326"/><rect class="node" x="208" y="326" width="50" height="30" rx="6"/><text class="nt" x="233" y="346" text-anchor="middle">k3</text></g>
+  <g class="a" style="animation-name:k4"><line class="lk" x1="569" y1="236" x2="569" y2="246"/><rect class="node" x="544" y="246" width="50" height="30" rx="6"/><text class="nt" x="569" y="266" text-anchor="middle">k4</text></g>
+  <g class="a" style="animation-name:lk2"><text class="warn lockt" x="273" y="266">synchronized (first node) by T2</text></g>
+  <g class="a" style="animation-name:lk3"><text class="warn lockt" x="273" y="266">synchronized (first node) by T3</text></g>
+  <g class="a" style="animation-name:cas1"><text class="ok" x="273" y="266">CAS: null → node</text></g>
+  <g class="a" style="animation-name:h1"><rect class="hl" x="28" y="376" width="744" height="22" rx="5"/></g><text class="num" x="40" y="392">1</text><text class="body" x="62" y="392">T1: bin 3 is empty, so the node goes in with one CAS. No lock.</text>
+  <g class="a" style="animation-name:h2"><rect class="hl" x="28" y="400" width="744" height="22" rx="5"/></g><text class="num" x="40" y="416">2</text><text class="body" x="62" y="416">T2: bin 3 is not empty, so it locks the first node of bin 3 and appends k2. T3 waits.</text>
+  <g class="a" style="animation-name:h3"><rect class="hl" x="28" y="424" width="744" height="22" rx="5"/></g><text class="num" x="40" y="440">3</text><text class="body" x="62" y="440">Meanwhile T4 CASes into bin 9 and R reads bin 3 with a volatile read. Neither waits.</text>
+  <g class="a" style="animation-name:h4"><rect class="hl" x="28" y="448" width="744" height="22" rx="5"/></g><text class="num" x="40" y="464">4</text><text class="body" x="62" y="464">T2 releases the bin. T3 takes the lock and appends k3.</text>
+  <g class="a" style="animation-name:h5"><rect class="hl" x="28" y="472" width="744" height="22" rx="5"/></g><text class="num" x="40" y="488">5</text><text class="body" x="62" y="488">Only writers on the same bin ever wait. Readers never block.</text>
+</svg>

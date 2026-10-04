@@ -92,6 +92,9 @@ flowchart TD
 ```
 *Notice that `equals()` is never even called if `hashCode()` sends you to the wrong bucket. Two "equal" objects with different hash codes land in different buckets, so `get` returns `null` and `HashSet` stores both as duplicates.*
 
+![Two panels: with only equals overridden, two equal Money objects land in different buckets so the set holds both and get returns null; with both methods overridden they share a bucket, so the set holds one and get finds it](images/01-equals-without-hashcode.svg){ loading=lazy }
+*Notice that the left side fails without any error: `equals()` would say true, but it is never asked.*
+
 That is the whole reason for the "override both" rule. The deeper internals (treeification when a bucket reaches 8 nodes and the table has at least 64 buckets, resize, `ConcurrentHashMap`) are on the *HashMap & ConcurrentHashMap internals* page.
 
 ### The mutable-key trap
@@ -110,6 +113,9 @@ sequenceDiagram
     Set-->>App: false, remove by key can no longer find it
 ```
 *Notice that the object is still inside the set and still reachable from it, so it is never garbage-collected. This is how mutable keys cause both "missing" cache entries and slow memory leaks.*
+
+![Animation: a key with name alice is stored in bucket 2 of a HashSet, its name is changed to bob, contains(key) looks in bucket 6 and finds nothing, and the entry left in bucket 2 is marked unreachable but still referenced](images/01-mutable-key-trap.svg){ loading=lazy }
+*Watch the lookup go to a different bucket after the mutation, while the original entry stays exactly where it was.*
 
 ### getClass() vs instanceof in equals
 
@@ -155,6 +161,9 @@ flowchart TD
     H --> D
 ```
 *Notice that a `record` is only the first step. Records are shallowly immutable: a `List` or array component can still be changed through the original reference unless you copy it in the compact constructor.*
+
+![Two panels: without a copy, the caller's list and the record's drugCodes field point to the same ArrayList, so adding B02 changes the record; with List.copyOf in the compact constructor, the record holds its own unmodifiable list](images/01-record-shallow-copy.svg){ loading=lazy }
+*Notice that `final` on the record field only fixes the arrow, not the list it points to. The copy is what makes the record deeply immutable.*
 
 ### Records and equality
 

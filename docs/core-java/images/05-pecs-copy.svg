@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">PECS in Collections.copy</title>
+  <desc id="d">Collections.copy(dest, src) with T inferred as Integer. The source is a List of Integer holding 1, 2 and 3; it is a producer, declared as List of ? extends T, so the method only reads T values from it. The destination is a List of Number holding three Doubles 0.0; it is a consumer, declared as List of ? super T, so the method only writes T values into it. One by one, 1, 2 and 3 are read from the source and set into the destination, replacing the Doubles.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .slot{fill:#ffffff;stroke:#cbd5e1}
+    .int{fill:#4f46e5}.it{fill:#ffffff;font-size:15px;font-weight:700}
+    .dbl{fill:#e2e8f0;stroke:#cbd5e1}.dt{fill:#64748b;font-size:15px;font-weight:600}
+    .ext{fill:#4f46e5;font-size:14px;font-weight:700}
+    .sup{fill:#0f766e;font-size:14px;font-weight:700}
+    .code{fill:#334155;font-size:15px;font-weight:600}
+    .ar{stroke:#64748b;stroke-width:2;fill:none;stroke-dasharray:6 5}.arh{fill:#64748b}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.body,.code{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .slot{fill:#111827;stroke:#475569}
+      .int{fill:#818cf8}.it{fill:#0f172a}
+      .dbl{fill:#334155;stroke:#475569}.dt{fill:#94a3b8}
+      .ext{fill:#818cf8}.sup{fill:#5eead4}
+      .ar{stroke:#94a3b8}.arh{fill:#94a3b8}
+    }
+    /* 10 s loop: elements 1, 2, 3 copied at 14, 34, 54%; hold; reset at 97% */
+    .a{animation-duration:10s;animation-iteration-count:infinite;animation-timing-function:linear}
+    .mvv{animation-timing-function:ease-in-out}
+    @keyframes m0{0%,14%{opacity:0;transform:translate(0,0)}15%{opacity:1;transform:translate(0,0)}20%{opacity:1;transform:translate(230.0px,-46px)}26%,95%{opacity:1;transform:translate(460px,0)}97%,100%{opacity:0;transform:translate(460px,0)}}
+  @keyframes o0{0%,24%{opacity:1}26%,95%{opacity:0}97%,100%{opacity:1}}
+  @keyframes m1{0%,34%{opacity:0;transform:translate(0,0)}35%{opacity:1;transform:translate(0,0)}40%{opacity:1;transform:translate(230.0px,-46px)}46%,95%{opacity:1;transform:translate(460px,0)}97%,100%{opacity:0;transform:translate(460px,0)}}
+  @keyframes o1{0%,44%{opacity:1}46%,95%{opacity:0}97%,100%{opacity:1}}
+  @keyframes m2{0%,54%{opacity:0;transform:translate(0,0)}55%{opacity:1;transform:translate(0,0)}60%{opacity:1;transform:translate(230.0px,-46px)}66%,95%{opacity:1;transform:translate(460px,0)}97%,100%{opacity:0;transform:translate(460px,0)}}
+  @keyframes o2{0%,64%{opacity:1}66%,95%{opacity:0}97%,100%{opacity:1}}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none !important}
+      .mvv{opacity:1}
+      #m0{transform:translate(460px,0)}#m1{transform:translate(460px,0)}#m2{transform:translate(460px,0)}
+      .old{opacity:0}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="338" rx="14"/>
+  <text class="h" x="28" y="40">PECS in action: Collections.copy</text>
+  <text class="code" x="28" y="66">static &lt;T&gt; void copy(List&lt;? super T&gt; dest, List&lt;? extends T&gt; src)</text>
+
+  <text class="lbl" x="50" y="112">src: List&lt;Integer&gt;</text>
+  <text class="ext" x="50" y="134">Producer: ? extends T</text>
+  <rect class="int" x="50" y="150" width="70" height="44" rx="8"/><text class="it" x="85" y="177" text-anchor="middle">1</text><rect class="int" x="130" y="150" width="70" height="44" rx="8"/><text class="it" x="165" y="177" text-anchor="middle">2</text><rect class="int" x="210" y="150" width="70" height="44" rx="8"/><text class="it" x="245" y="177" text-anchor="middle">3</text>
+  <text class="body" x="50" y="228">The method only reads T from it</text>
+
+  <text class="lbl" x="510" y="112">dest: List&lt;Number&gt;</text>
+  <text class="sup" x="510" y="134">Consumer: ? super T</text>
+  <rect class="slot" x="510" y="150" width="70" height="44" rx="8"/><rect class="slot" x="590" y="150" width="70" height="44" rx="8"/><rect class="slot" x="670" y="150" width="70" height="44" rx="8"/>
+  <g class="old"><g class="a" style="animation-name:o0"><rect class="dbl" x="510" y="150" width="70" height="44" rx="8"/><text class="dt" x="545" y="177" text-anchor="middle">0.0</text></g><g class="a" style="animation-name:o1"><rect class="dbl" x="590" y="150" width="70" height="44" rx="8"/><text class="dt" x="625" y="177" text-anchor="middle">0.0</text></g><g class="a" style="animation-name:o2"><rect class="dbl" x="670" y="150" width="70" height="44" rx="8"/><text class="dt" x="705" y="177" text-anchor="middle">0.0</text></g></g>
+  <text class="body" x="510" y="228">The method only writes T into it</text>
+
+  <path class="ar" d="M300 172 L490 172"/><path class="arh" d="M500 172 L488 166 L488 178 Z"/>
+  <text class="sub" x="400" y="160" text-anchor="middle">T = Integer</text>
+  <g class="a mvv" id="m0" style="animation-name:m0"><rect class="int" x="50" y="150" width="70" height="44" rx="8"/><text class="it" x="85" y="177" text-anchor="middle">1</text></g>
+  <g class="a mvv" id="m1" style="animation-name:m1"><rect class="int" x="130" y="150" width="70" height="44" rx="8"/><text class="it" x="165" y="177" text-anchor="middle">2</text></g>
+  <g class="a mvv" id="m2" style="animation-name:m2"><rect class="int" x="210" y="150" width="70" height="44" rx="8"/><text class="it" x="245" y="177" text-anchor="middle">3</text></g>
+
+  <text class="body" x="28" y="276">An exact List&lt;T&gt; on both sides would force src and dest to share one element type.</text>
+  <text class="body" x="28" y="298">With the wildcards, a List&lt;Integer&gt; can be copied into a List&lt;Number&gt; or a List&lt;Object&gt;.</text>
+  <text class="sub" x="28" y="324">dest must already be at least as long as src: copy() overwrites positions, it does not append.</text>
+</svg>

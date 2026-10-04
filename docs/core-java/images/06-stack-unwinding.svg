@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 404" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Stack unwinding through exception tables</title>
+  <desc id="d">A call stack with the current frame on top: JDBC driver executeUpdate, OrderRepository save, OrderService placeOrder, OrderController place, and Spring MVC DispatcherServlet at the bottom. The JDBC driver throws SQLException; its exception table has no match, so the frame is popped. OrderRepository has a catch row for SQLException; its handler throws DataAccessException with the SQLException as the cause, and that frame is popped too. OrderService has no handler, so it is popped and the transactional proxy rolls back. OrderController has no handler and is popped. Spring MVC catches the exception and calls the RestControllerAdvice, returns a 503 ProblemDetail.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .frame{fill:#ffffff;stroke:#94a3b8;stroke-width:1.5}
+    .mk{fill:#dc2626}.mkt{fill:#ffffff;font-size:13px;font-weight:700}
+    .bad{fill:#dc2626;font-size:15px;font-weight:700}
+    .warnt{fill:#b45309;font-size:14px;font-weight:500}
+    .okt{fill:#15803d;font-size:14px;font-weight:500}
+    .ok{fill:#16a34a;font-size:15px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.body{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .frame{fill:#111827;stroke:#64748b}
+      .mk{fill:#f87171}.mkt{fill:#0f172a}.bad{fill:#f87171}
+      .warnt{fill:#fbbf24}.okt,.ok{fill:#4ade80}
+    }
+    /* 10 s loop: one frame every ~18%; hold on the handled state; reset at 97% */
+    .a{animation-duration:10s;animation-iteration-count:infinite;animation-timing-function:linear}
+    @keyframes f0{0%,17%{opacity:1}19%,95%{opacity:.3}97%,100%{opacity:1}}
+  @keyframes n0{0%,5%{opacity:0}7%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes f1{0%,35%{opacity:1}37%,95%{opacity:.3}97%,100%{opacity:1}}
+  @keyframes n1{0%,23%{opacity:0}25%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes f2{0%,53%{opacity:1}55%,95%{opacity:.3}97%,100%{opacity:1}}
+  @keyframes n2{0%,41%{opacity:0}43%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes f3{0%,69%{opacity:1}71%,95%{opacity:.3}97%,100%{opacity:1}}
+  @keyframes n3{0%,59%{opacity:0}61%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes n4{0%,75%{opacity:0}77%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes mk{0%,3%{transform:translateY(0)}4%,21%{transform:translateY(0px)}22%,39%{transform:translateY(52px)}40%,57%{transform:translateY(104px)}58%,73%{transform:translateY(156px)}74%,95%{transform:translateY(208px)}97%,100%{transform:translateY(0)}}
+  @keyframes h1{0%,0%{opacity:0}2%,26%{opacity:1}28%,100%{opacity:0}}
+  @keyframes h2{0%,28%{opacity:0}30%,74%{opacity:1}76%,100%{opacity:0}}
+  @keyframes h3{0%,76%{opacity:0}78%,95%{opacity:1}97%,100%{opacity:0}}
+    .mkg{animation:mk 10s infinite steps(1,end)}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none !important}
+      #f0,#f1,#f2,#f3{opacity:.3}
+      .mkg{animation:none;transform:translateY(208px)}
+      .hh1,.hh2{opacity:0}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="402" rx="14"/>
+  <text class="h" x="28" y="40">How a thrown exception unwinds the call stack</text>
+  <text class="sub" x="28" y="62">Current frame on top. Each frame checks its own exception table; no match means the frame is popped.</text>
+  <g class="a hh1" style="animation-name:h1"><text class="bad" x="430" y="88">In flight: SQLException</text></g>
+  <g class="a hh2" style="animation-name:h2"><text class="bad" x="430" y="88">In flight: DataAccessException</text></g>
+  <g class="a hh3" style="animation-name:h3"><text class="ok" x="430" y="88">Handled: HTTP 503, ProblemDetail</text></g>
+  <g class="a" style="animation-name:f0" id="f0">
+  <rect class="frame" x="40" y="104" width="280" height="44" rx="8"/><text class="lbl" x="56" y="124">JDBC driver</text><text class="sub" x="56" y="141">executeUpdate()</text></g>
+  <g class="a" style="animation-name:f1" id="f1">
+  <rect class="frame" x="40" y="156" width="280" height="44" rx="8"/><text class="lbl" x="56" y="176">OrderRepository</text><text class="sub" x="56" y="193">save(order)</text></g>
+  <g class="a" style="animation-name:f2" id="f2">
+  <rect class="frame" x="40" y="208" width="280" height="44" rx="8"/><text class="lbl" x="56" y="228">OrderService</text><text class="sub" x="56" y="245">placeOrder(cmd)</text></g>
+  <g class="a" style="animation-name:f3" id="f3">
+  <rect class="frame" x="40" y="260" width="280" height="44" rx="8"/><text class="lbl" x="56" y="280">OrderController</text><text class="sub" x="56" y="297">place(request)</text></g>
+  <g>
+  <rect class="frame" x="40" y="312" width="280" height="44" rx="8"/><text class="lbl" x="56" y="332">Spring MVC</text><text class="sub" x="56" y="349">DispatcherServlet</text></g>
+  <g class="mkg"><path class="mk" d="M330 126 L344 116 L344 136 Z"/><rect class="mk" x="344" y="114" width="66" height="24" rx="6"/><text class="mkt" x="377" y="131" text-anchor="middle">throw</text></g>
+  <g class="a nn" style="animation-name:n0"><text class="body" x="430" y="122">No row in its exception table matches.</text><text class="body" x="430" y="140">Frame popped.</text></g>
+  <g class="a nn" style="animation-name:n1"><text class="warnt" x="430" y="174">Catch row matches: its handler throws</text><text class="warnt" x="430" y="192">DataAccessException(msg, e). Popped.</text></g>
+  <g class="a nn" style="animation-name:n2"><text class="body" x="430" y="226">No handler: frame popped.</text><text class="body" x="430" y="244">The @Transactional proxy rolls back.</text></g>
+  <g class="a nn" style="animation-name:n3"><text class="body" x="430" y="278">No handler: frame popped.</text></g>
+  <g class="a nn" style="animation-name:n4"><text class="okt" x="430" y="330">Catches it; @RestControllerAdvice</text><text class="okt" x="430" y="348">returns a 503 ProblemDetail.</text></g>
+  <text class="sub" x="28" y="388">Simplified: proxies and servlet frames between these methods are not drawn.</text>
+</svg>

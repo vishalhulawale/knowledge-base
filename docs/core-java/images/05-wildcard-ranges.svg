@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Which lists a wildcard accepts</title>
+  <desc id="d">Two copies of the hierarchy Object, Number, and its subclasses Integer and Double. Left, List of ? extends Number accepts lists whose element type is Number, Integer or Double, looking down from Number: get() returns Number, but add() accepts only null because the list might be a List of Double. Right, List of ? super Integer accepts lists of Integer, Number or Object, looking up from Integer: add(Integer) is allowed, but get() returns only Object.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .panel{fill:#ffffff;stroke:#cbd5e1}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .onA{fill:#4f46e5}.onB{fill:#0ea5a4}
+    .off{fill:#ffffff;stroke:#cbd5e1;stroke-dasharray:4 3}
+    .tw{fill:#ffffff;font-size:14px;font-weight:700}
+    .toff{fill:#94a3b8;font-size:14px}
+    .edge{stroke:#94a3b8;stroke-width:1.5}
+    .dir{stroke:#d97706;stroke-width:2.5;fill:none}.dirh{fill:#d97706}
+    .dt{fill:#b45309;font-size:13px;font-weight:700}
+    .ok{fill:#16a34a;font-size:14px;font-weight:700}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .panel{fill:#111827;stroke:#475569}
+      .h{fill:#f1f5f9}.lbl,.body{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .onA{fill:#818cf8}.onB{fill:#2dd4bf}.tw{fill:#0f172a}
+      .off{fill:#111827;stroke:#475569}.toff{fill:#64748b}.edge{stroke:#64748b}
+      .dir{stroke:#fbbf24}.dirh{fill:#fbbf24}.dt{fill:#fbbf24}
+      .ok{fill:#4ade80}.bad{fill:#f87171}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">Which lists can a wildcard variable refer to?</text>
+  <text class="sub" x="28" y="62">Filled boxes are the element types it accepts. The direction decides what is safe to read or write.</text>
+
+  <rect class="panel" x="20" y="76" width="370" height="290" rx="12"/>
+  <text class="lbl" x="36" y="98">List&lt;? extends Number&gt;</text>
+  <line class="edge" x1="205" y1="168" x2="205" y2="138"/>
+  <line class="edge" x1="135" y1="232" x2="205" y2="202"/>
+  <line class="edge" x1="275" y1="232" x2="205" y2="202"/>
+  <rect class="off" x="150" y="104" width="110" height="34" rx="8"/><text class="toff" x="205" y="126" text-anchor="middle">Object</text>
+  <rect class="onA" x="150" y="168" width="110" height="34" rx="8"/><text class="tw" x="205" y="190" text-anchor="middle">Number</text>
+  <rect class="onA" x="80" y="232" width="110" height="34" rx="8"/><text class="tw" x="135" y="254" text-anchor="middle">Integer</text>
+  <rect class="onA" x="220" y="232" width="110" height="34" rx="8"/><text class="tw" x="275" y="254" text-anchor="middle">Double</text>
+  <path class="dir" d="M360 150 L360 252"/><path class="dirh" d="M360 262 L354 250 L366 250 Z"/>
+  <text class="dt" x="352" y="140" text-anchor="end">looks down</text>
+  <text class="ok" x="36" y="300">read: get() gives a Number</text>
+  <text class="bad" x="36" y="322">write: add() takes only null</text>
+  <text class="sub" x="36" y="344">It might really be a List&lt;Double&gt;.</text>
+
+  <rect class="panel" x="410" y="76" width="370" height="290" rx="12"/>
+  <text class="lbl" x="426" y="98">List&lt;? super Integer&gt;</text>
+  <line class="edge" x1="595" y1="168" x2="595" y2="138"/>
+  <line class="edge" x1="525" y1="232" x2="595" y2="202"/>
+  <line class="edge" x1="665" y1="232" x2="595" y2="202"/>
+  <rect class="onB" x="540" y="104" width="110" height="34" rx="8"/><text class="tw" x="595" y="126" text-anchor="middle">Object</text>
+  <rect class="onB" x="540" y="168" width="110" height="34" rx="8"/><text class="tw" x="595" y="190" text-anchor="middle">Number</text>
+  <rect class="onB" x="470" y="232" width="110" height="34" rx="8"/><text class="tw" x="525" y="254" text-anchor="middle">Integer</text>
+  <rect class="off" x="610" y="232" width="110" height="34" rx="8"/><text class="toff" x="665" y="254" text-anchor="middle">Double</text>
+  <path class="dir" d="M750 262 L750 124"/><path class="dirh" d="M750 114 L744 126 L756 126 Z"/>
+  <text class="dt" x="742" y="276" text-anchor="end">looks up</text>
+  <text class="ok" x="426" y="300">write: add(Integer) is safe</text>
+  <text class="bad" x="426" y="322">read: get() gives only Object</text>
+  <text class="sub" x="426" y="344">It might really be a List&lt;Object&gt;.</text>
+</svg>

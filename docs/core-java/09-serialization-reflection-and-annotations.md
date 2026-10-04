@@ -46,6 +46,9 @@ Consequences:
 - A "singleton" gets a second instance.
 - `final` fields are set by the JVM anyway.
 
+![Animation: with start 10 May and end 1 May, new DateRange runs the constructor check and throws IllegalArgumentException, while readObject allocates the object, skips the constructor, sets the fields from the bytes and returns an invalid DateRange](images/09-deserialization-bypass.svg){ loading=lazy }
+*Watch the bottom path jump over the constructor. The same invalid data that `new` rejects comes back from `readObject()` as a normal object.*
+
 ### `serialVersionUID`
 
 Every serializable class has a version number stored in the stream. On read, the stream's value must equal the local class's value, otherwise you get `InvalidClassException`.
@@ -166,6 +169,9 @@ An annotation is a special interface (`@interface`). It carries constants; it ha
 | `SOURCE` | Source only | Compiler, annotation processors | `@Override`, `@SuppressWarnings`, Lombok's `@Getter` |
 | `CLASS` (**default**) | `.class` file, not visible to reflection | Bytecode tools | Some nullness and static-analysis annotations |
 | `RUNTIME` | `.class` file and loaded into the JVM | Reflection | `@Autowired`, `@Entity`, `@JsonProperty`, `@Test` |
+
+![Three stages, source, class file and running JVM: SOURCE annotations are dropped by javac, CLASS annotations reach the class file but are not visible to reflection, and RUNTIME annotations reach the JVM where frameworks read them](images/09-annotation-retention.svg){ loading=lazy }
+*Notice that the default, `CLASS`, stops one step short of what Spring and other reflection-based frameworks need.*
 
 Meta-annotations you must know:
 

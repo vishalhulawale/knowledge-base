@@ -203,6 +203,9 @@ flowchart TD
 ```
 *Notice that null is checked before any pattern, and that a `default`-free switch over a sealed type is not "unsafe": the compiler proved it exhaustive at compile time, and the synthetic default only fires if the hierarchy changed after compilation.*
 
+![Animation: two panels start with Approved, Declined and Pending and both compile; when Refunded is added, the sealed pattern switch fails to compile because it no longer covers all input values, while the open instanceof chain still compiles and sends Refunded to an HTTP 500 at runtime](images/08-sealed-exhaustive.svg){ loading=lazy }
+*Watch where the missing case is caught: at compile time on the left, in production on the right.*
+
 ### Text blocks (Java 15)
 
 ```java
@@ -218,6 +221,9 @@ How the compiler processes a text block, in order:
 1. **Line terminators** are normalised to `\n`, whatever the source file uses.
 2. **Incidental whitespace** is removed: the smallest common indentation across all non-blank lines **and the closing `"""` line** is stripped. Move the closing delimiter left to keep more indentation. Trailing spaces on each line are removed.
 3. **Escape sequences** are interpreted last. New ones: `\<newline>` joins lines (no `\n` inserted), and `\s` is a single space that survives trailing-space stripping.
+
+![Two versions of the same text block: with the closing triple quote aligned to the content, 8 columns of indentation are stripped; with it moved 4 columns left, only 4 are stripped and each result line keeps 4 leading spaces](images/08-text-block-indent.svg){ loading=lazy }
+*Notice that only the closing delimiter moved. The content lines are identical, but the resulting string is indented differently.*
 
 The result is a normal compile-time constant `String`, interned like any literal (see [String internals](02-string-internals.md)). There is **no interpolation**: use `.formatted(...)` (Java 15) or `String.format`. String Templates (`STR."..."`) were previewed in Java 21 and 22 and then **withdrawn**, so they do not exist in Java 23+.
 

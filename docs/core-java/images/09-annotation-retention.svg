@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Annotation retention</title>
+  <desc id="d">Three stages: source code, compiled by javac into a class file, loaded by the class loader into the running JVM. An annotation with SOURCE retention exists only in the source and is read by the compiler and annotation processors, for example @Override and Lombok's @Getter. CLASS retention, the default, is kept in the class file but not visible to reflection; bytecode tools can read it. RUNTIME retention is kept all the way into the JVM, where reflection such as getAnnotation sees it, for example @Autowired, @Entity and @JsonProperty.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:700}
+    .body{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .stage{fill:#ffffff;stroke:#cbd5e1}
+    .st{fill:#0f172a;font-size:15px;font-weight:700}
+    .b1{fill:#94a3b8}.b2{fill:#0ea5a4}.b3{fill:#4f46e5}
+    .bt{fill:#ffffff;font-size:13px;font-weight:700}
+    .stop{fill:#dc2626;font-size:13px;font-weight:700}
+    .step{fill:#64748b;font-size:13px;font-style:italic}
+    .ar{stroke:#94a3b8;stroke-width:1.5}.arh{fill:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.st{fill:#f1f5f9}.lbl,.body{fill:#e2e8f0}.sub,.step{fill:#94a3b8}
+      .stage{fill:#111827;stroke:#475569}
+      .b1{fill:#64748b}.b2{fill:#2dd4bf}.b3{fill:#818cf8}.bt{fill:#0f172a}
+      .stop{fill:#f87171}.ar{stroke:#64748b}.arh{fill:#64748b}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">@Retention: how far an annotation travels</text>
+  <text class="sub" x="28" y="62">Annotations do nothing on their own. Whatever reads them must be able to see them at that stage.</text>
+
+  <rect class="stage" x="170" y="80" width="180" height="40" rx="8"/><text class="st" x="260" y="105" text-anchor="middle">Source (.java)</text>
+  <rect class="stage" x="390" y="80" width="180" height="40" rx="8"/><text class="st" x="480" y="105" text-anchor="middle">Class file (.class)</text>
+  <rect class="stage" x="610" y="80" width="170" height="40" rx="8"/><text class="st" x="695" y="105" text-anchor="middle">Running JVM</text>
+  <line class="ar" x1="350" y1="100" x2="382" y2="100"/><path class="arh" d="M390 100 L380 95 L380 105 Z"/>
+  <line class="ar" x1="570" y1="100" x2="602" y2="100"/><path class="arh" d="M610 100 L600 95 L600 105 Z"/>
+  <text class="step" x="370" y="138" text-anchor="middle">javac</text>
+  <text class="step" x="590" y="138" text-anchor="middle">class loader</text>
+
+  <text class="lbl" x="28" y="172">SOURCE</text>
+  <rect class="b1" x="170" y="152" width="180" height="32" rx="8"/><text class="bt" x="260" y="173" text-anchor="middle">compiler, processors</text>
+  <text class="stop" x="362" y="173">✕ dropped</text>
+  <text class="sub" x="170" y="204">@Override, @SuppressWarnings, Lombok @Getter</text>
+
+  <text class="lbl" x="28" y="242">CLASS</text><text class="sub" x="28" y="260">(the default)</text>
+  <rect class="b2" x="170" y="222" width="400" height="32" rx="8"/><text class="bt" x="370" y="243" text-anchor="middle">stored in the class file, read by bytecode tools</text>
+  <text class="stop" x="582" y="243">✕ not visible</text>
+  <text class="sub" x="170" y="274">getAnnotation() returns null for these</text>
+
+  <text class="lbl" x="28" y="312">RUNTIME</text>
+  <rect class="b3" x="170" y="292" width="610" height="32" rx="8"/><text class="bt" x="475" y="313" text-anchor="middle">kept all the way: reflection can read it</text>
+  <text class="sub" x="170" y="344">@Autowired, @Entity, @JsonProperty, @Test: frameworks read these at runtime</text>
+  <text class="sub" x="28" y="368">A custom annotation that Spring or your own reflective code should see needs @Retention(RUNTIME).</text>
+</svg>

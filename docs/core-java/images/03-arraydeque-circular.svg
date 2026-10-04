@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">ArrayDeque as a circular array</title>
+  <desc id="d">An ArrayDeque backed by an array of 8 slots starts with A, B, C and D in slots 2 to 5, head at 2 and tail at 6. addLast(E) fills slot 6 and tail moves to 7. addLast(F) fills slot 7 and tail wraps around to 0. pollFirst() removes A and head moves to 3. addFirst(Z) moves head back to 2 and stores Z there. addLast(G) fills slot 0 and tail moves to 1. No element is ever shifted; only the head and tail indices move, wrapping modulo the array length.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .slot{fill:#ffffff;stroke:#cbd5e1}
+    .el{fill:#4f46e5}.el2{fill:#0ea5a4}
+    .et{fill:#ffffff;font-size:15px;font-weight:700}
+    .hm{fill:#0f766e;font-size:14px;font-weight:700}.hml{stroke:#0ea5a4;stroke-width:2.5}.hmh{fill:#0ea5a4}
+    .tm{fill:#b45309;font-size:14px;font-weight:700}.tml{stroke:#d97706;stroke-width:2.5}.tmh{fill:#d97706}
+    .wrap{stroke:#64748b;stroke-width:1.5;fill:none;stroke-dasharray:5 4}.wh{fill:#64748b}
+    .hl{fill:#4f46e5;opacity:.12}
+    .num{fill:#4f46e5;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.body{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .slot{fill:#111827;stroke:#475569}
+      .el{fill:#818cf8}.el2{fill:#2dd4bf}.et{fill:#0f172a}
+      .hm{fill:#5eead4}.hml{stroke:#2dd4bf}.hmh{fill:#2dd4bf}
+      .tm{fill:#fbbf24}.tml{stroke:#fbbf24}.tmh{fill:#fbbf24}
+      .wrap{stroke:#94a3b8}.wh{fill:#94a3b8}
+      .hl{fill:#818cf8;opacity:.18}.num{fill:#818cf8}
+    }
+    /* 12 s loop: operations at 10, 26, 42, 58, 74%; hold, then reset at 97% */
+    .a{animation-duration:12s;animation-iteration-count:infinite;animation-timing-function:linear}
+    @keyframes eA{0%,41%{opacity:1}43%,97%{opacity:0}99%,100%{opacity:1}}
+    @keyframes eE{0%,9%{opacity:0}11%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes eF{0%,25%{opacity:0}27%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes eZ{0%,57%{opacity:0}59%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes eG{0%,73%{opacity:0}75%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes hd{0%,41%{transform:translateX(0)}42%,57%{transform:translateX(62px)}58%,100%{transform:translateX(0)}}
+    @keyframes tl{0%,9%{transform:translateX(372px)}10%,25%{transform:translateX(434px)}26%,73%{transform:translateX(0)}74%,96%{transform:translateX(62px)}97%,100%{transform:translateX(372px)}}
+    @keyframes hl{0%,9%{opacity:0;transform:translateY(0)}10%,25%{opacity:1;transform:translateY(0)}26%,41%{opacity:1;transform:translateY(26px)}42%,57%{opacity:1;transform:translateY(52px)}58%,73%{opacity:1;transform:translateY(78px)}74%,96%{opacity:1;transform:translateY(104px)}97%,100%{opacity:0;transform:translateY(0)}}
+    .hdg{animation:hd 12s infinite steps(1,end)}
+    .tlg{animation:tl 12s infinite steps(1,end)}
+    .hlg{animation:hl 12s infinite steps(1,end)}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none !important;opacity:1}.eA{opacity:0}
+      .hdg{animation:none}.tlg{animation:none;transform:translateX(62px)}.hlg{animation:none;opacity:0}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="358" rx="14"/>
+  <text class="h" x="28" y="40">ArrayDeque: a circular array</text>
+  <text class="sub" x="28" y="62">Elements never shift. Only the head and tail indices move, wrapping around the end of the array.</text>
+
+  <!-- head marker at slot 2 -->
+  <g class="hdg">
+    <text class="hm" x="192" y="100" text-anchor="middle">head</text>
+    <line class="hml" x1="192" y1="108" x2="192" y2="134"/><path class="hmh" d="M185 132 L192 143 L199 132 Z"/>
+  </g>
+  <rect class="slot" x="40" y="148" width="56" height="52" rx="8"/><rect class="slot" x="102" y="148" width="56" height="52" rx="8"/><rect class="slot" x="164" y="148" width="56" height="52" rx="8"/><rect class="slot" x="226" y="148" width="56" height="52" rx="8"/><rect class="slot" x="288" y="148" width="56" height="52" rx="8"/><rect class="slot" x="350" y="148" width="56" height="52" rx="8"/><rect class="slot" x="412" y="148" width="56" height="52" rx="8"/><rect class="slot" x="474" y="148" width="56" height="52" rx="8"/>
+  <g class="sub" text-anchor="middle"><text x="68" y="218">0</text><text x="130" y="218">1</text><text x="192" y="218">2</text><text x="254" y="218">3</text><text x="316" y="218">4</text><text x="378" y="218">5</text><text x="440" y="218">6</text><text x="502" y="218">7</text></g>
+  <g class="a" style="animation-name:eA"><rect class="el" x="168" y="154" width="48" height="40" rx="7"/><text class="et" x="192" y="180" text-anchor="middle">A</text></g>
+    <g><rect class="el" x="230" y="154" width="48" height="40" rx="7"/><text class="et" x="254" y="180" text-anchor="middle">B</text></g>
+    <g><rect class="el" x="292" y="154" width="48" height="40" rx="7"/><text class="et" x="316" y="180" text-anchor="middle">C</text></g>
+    <g><rect class="el" x="354" y="154" width="48" height="40" rx="7"/><text class="et" x="378" y="180" text-anchor="middle">D</text></g>
+    <g class="a" style="animation-name:eE"><rect class="el2" x="416" y="154" width="48" height="40" rx="7"/><text class="et" x="440" y="180" text-anchor="middle">E</text></g>
+    <g class="a" style="animation-name:eF"><rect class="el2" x="478" y="154" width="48" height="40" rx="7"/><text class="et" x="502" y="180" text-anchor="middle">F</text></g>
+    <g class="a" style="animation-name:eZ"><rect class="el2" x="168" y="154" width="48" height="40" rx="7"/><text class="et" x="192" y="180" text-anchor="middle">Z</text></g>
+    <g class="a" style="animation-name:eG"><rect class="el2" x="44" y="154" width="48" height="40" rx="7"/><text class="et" x="68" y="180" text-anchor="middle">G</text></g>
+  <!-- tail marker, positioned at slot 0 and translated -->
+  <g class="tlg">
+    <line class="tml" x1="68" y1="236" x2="68" y2="256"/><path class="tmh" d="M61 238 L68 227 L75 238 Z"/>
+    <text class="tm" x="68" y="274" text-anchor="middle">tail</text>
+  </g>
+  <path class="wrap" d="M530 300 Q544 300 544 286 M530 300 L50 300"/><path class="wh" d="M40 300 L50 295 L50 305 Z"/>
+  <text class="sub" x="52" y="320">index after 7 is 0: (i + 1) mod 8</text>
+
+  <text class="lbl" x="574" y="128">Operations</text>
+  <g class="hlg"><rect class="hl" x="566" y="149" width="214" height="24" rx="5"/></g>
+  <text class="num" x="574" y="166">1</text><text class="body" x="592" y="166">addLast(E)</text>
+    <text class="num" x="574" y="192">2</text><text class="body" x="592" y="192">addLast(F)</text>
+    <text class="num" x="574" y="218">3</text><text class="body" x="592" y="218">pollFirst() returns A</text>
+    <text class="num" x="574" y="244">4</text><text class="body" x="592" y="244">addFirst(Z)</text>
+    <text class="num" x="574" y="270">5</text><text class="body" x="592" y="270">addLast(G)</text>
+  <text class="sub" x="574" y="306">Teal = added during the loop</text>
+
+  <text class="sub" x="28" y="346">8 slots shown for clarity. When tail catches up with head, the JDK grows the array and unwraps the elements.</text>
+</svg>

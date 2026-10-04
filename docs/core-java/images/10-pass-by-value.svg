@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Pass-by-value with object references</title>
+  <desc id="d">The caller's stack frame holds acct, a reference to Account A on the heap with balance 100. Calling update(acct) pushes a new frame whose parameter a receives a copy of the same reference, so both point to Account A. a.setBalance(50) changes Account A, which the caller can see. a = new Account(999) makes only a point to a new Account B. When update returns, its frame is popped, Account B becomes unreachable, and acct still points to Account A with balance 50.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .region{fill:none;stroke:#cbd5e1;stroke-dasharray:6 4}
+    .frame{fill:#ffffff;stroke:#94a3b8;stroke-width:1.5}
+    .var{fill:#e0e7ff;stroke:#4f46e5}
+    .vt{fill:#3730a3;font-size:14px;font-weight:700}
+    .obj{fill:#0ea5a4}.objB{fill:#d97706}
+    .ot{fill:#ffffff;font-size:14px;font-weight:700}.ob{fill:#ffffff;font-size:18px;font-weight:700}
+    .ref{stroke:#4f46e5;stroke-width:2.2;fill:none}.rh{fill:#4f46e5}
+    .gb{fill:#dc2626;font-size:13px;font-weight:700}
+    .hl{fill:#4f46e5;opacity:.12}.num{fill:#4f46e5;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.body{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .region{stroke:#475569}.frame{fill:#111827;stroke:#64748b}
+      .var{fill:#1e1b4b;stroke:#818cf8}.vt{fill:#c7d2fe}
+      .obj{fill:#2dd4bf}.objB{fill:#fbbf24}.ot,.ob{fill:#0f172a}
+      .ref{stroke:#818cf8}.rh{fill:#818cf8}.gb{fill:#f87171}
+      .hl{fill:#818cf8;opacity:.18}.num{fill:#818cf8}
+    }
+    /* 12 s loop: steps at 3, 22, 42, 60, 78%; hold; reset at 97% */
+    .a{animation-duration:12s;animation-iteration-count:infinite;animation-timing-function:linear}
+    @keyframes frame{0%,21%{opacity:0}23%,77%{opacity:1}79%,100%{opacity:0}}
+  @keyframes aA{0%,21%{opacity:0}23%,59%{opacity:1}61%,100%{opacity:0}}
+  @keyframes aB{0%,59%{opacity:0}61%,77%{opacity:1}79%,100%{opacity:0}}
+  @keyframes objB{0%,59%{opacity:0}61%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes b100{0%,41%{opacity:1}43%,96%{opacity:0}97%,100%{opacity:1}}
+  @keyframes b50{0%,41%{opacity:0}43%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes garb{0%,79%{opacity:0}81%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes acctObj{0%,2%{opacity:0}4%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes h0{0%,2%{opacity:0}4%,21%{opacity:1}23%,100%{opacity:0}}
+  @keyframes h1{0%,21%{opacity:0}23%,41%{opacity:1}43%,100%{opacity:0}}
+  @keyframes h2{0%,41%{opacity:0}43%,59%{opacity:1}61%,100%{opacity:0}}
+  @keyframes h3{0%,59%{opacity:0}61%,77%{opacity:1}79%,100%{opacity:0}}
+  @keyframes h4{0%,77%{opacity:0}79%,95%{opacity:1}97%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none !important}
+      .fr,.aA,.aB,.b100,.hl{opacity:0}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="498" rx="14"/>
+  <text class="h" x="28" y="40">Java passes the reference by value</text>
+  <text class="sub" x="28" y="62">The parameter gets a copy of the address, never the caller's variable itself.</text>
+
+  <rect class="region" x="28" y="80" width="330" height="262" rx="12"/><text class="lbl" x="44" y="104">Stack (one thread)</text>
+  <rect class="region" x="386" y="80" width="386" height="262" rx="12"/><text class="lbl" x="402" y="104">Heap</text>
+
+  <g class="a fr" style="animation-name:frame">
+    <rect class="frame" x="44" y="122" width="298" height="84" rx="10"/><text class="sub" x="58" y="144">frame: update(Account a)</text>
+    <rect class="var" x="58" y="156" width="120" height="36" rx="6"/><text class="vt" x="118" y="179" text-anchor="middle">a</text>
+  </g>
+  <rect class="frame" x="44" y="236" width="298" height="84" rx="10"/><text class="sub" x="58" y="258">frame: main</text>
+  <rect class="var" x="58" y="270" width="120" height="36" rx="6"/><text class="vt" x="118" y="293" text-anchor="middle">acct</text>
+
+  <g class="a" style="animation-name:acctObj">
+    <rect class="obj" x="430" y="126" width="150" height="80" rx="10"/><text class="ot" x="505" y="150" text-anchor="middle">Account A</text>
+    <path class="ref" d="M178 288 C300 288 340 180 420 170"/><path class="rh" d="M430 168 L418 163 L419 175 Z"/>
+  </g>
+  <g class="a b100" style="animation-name:b100"><text class="ob" x="505" y="186" text-anchor="middle">balance 100</text></g>
+  <g class="a" style="animation-name:b50"><text class="ob" x="505" y="186" text-anchor="middle">balance 50</text></g>
+  <g class="a aA" style="animation-name:aA"><path class="ref" d="M178 174 L420 158"/><path class="rh" d="M430 157 L419 151 L419 163 Z"/></g>
+  <g class="a" style="animation-name:objB">
+    <rect class="objB" x="600" y="236" width="150" height="80" rx="10"/><text class="ot" x="675" y="260" text-anchor="middle">Account B</text><text class="ob" x="675" y="296" text-anchor="middle">balance 999</text>
+  </g>
+  <g class="a aB" style="animation-name:aB"><path class="ref" d="M178 180 C320 190 480 250 590 268"/><path class="rh" d="M600 270 L588 263 L587 275 Z"/></g>
+  <g class="a" style="animation-name:garb"><text class="gb" x="675" y="334" text-anchor="middle">unreachable: garbage</text></g>
+
+  <g class="a" style="animation-name:h0"><rect class="hl" x="28" y="360" width="744" height="22" rx="5"/></g><text class="num" x="40" y="376">1</text><text class="body" x="62" y="376">Account acct = new Account(100)</text>
+  <g class="a" style="animation-name:h1"><rect class="hl" x="28" y="384" width="744" height="22" rx="5"/></g><text class="num" x="40" y="400">2</text><text class="body" x="62" y="400">update(acct): the reference value is copied into parameter a</text>
+  <g class="a" style="animation-name:h2"><rect class="hl" x="28" y="408" width="744" height="22" rx="5"/></g><text class="num" x="40" y="424">3</text><text class="body" x="62" y="424">a.setBalance(50): the one shared object changes</text>
+  <g class="a" style="animation-name:h3"><rect class="hl" x="28" y="432" width="744" height="22" rx="5"/></g><text class="num" x="40" y="448">4</text><text class="body" x="62" y="448">a = new Account(999): only the local a is rebound</text>
+  <g class="a" style="animation-name:h4"><rect class="hl" x="28" y="456" width="744" height="22" rx="5"/></g><text class="num" x="40" y="472">5</text><text class="body" x="62" y="472">return: the frame is popped; acct still sees balance 50</text>
+</svg>

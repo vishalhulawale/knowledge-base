@@ -42,6 +42,9 @@ static class Node<K,V> {
 
 Each slot of `table` is a **bin**. A bin is empty, a single `Node`, a linked list of `Node`s, or a `TreeNode` (red-black tree). The table is **not allocated in the constructor**. The first `put` calls `resize()`, which creates it. This saves memory for maps that stay empty.
 
+![A HashMap table of length 64 with most bins empty; bin 0 holds the null key, bins 2 and 63 hold single nodes, bin 5 holds a linked list of three colliding nodes, and bin 9 holds a red-black tree of TreeNodes](images/04-hashmap-bins.svg){ loading=lazy }
+*Notice the four shapes a bin can take: empty, one node, a list, or a tree. The tree only appears for a bin with many collisions in a table of at least 64 slots.*
+
 ### 2. From `hashCode()` to bucket index
 
 ```java
@@ -110,6 +113,9 @@ flowchart LR
 ```
 *Notice that the split is decided by a single bit (`hash & oldCap`) and that relative order is preserved. Java 7 instead re-inserted at the head, reversing lists, which is what allowed concurrent resizes to create a cycle.*
 
+![Animation: nodes A, B, C and D from old bin 5 are tested with hash AND 16 one by one; A and C move to new bin 5 and B and D move to new bin 21, keeping their order](images/04-resize-split.svg){ loading=lazy }
+*Watch the highlighted bit: it alone decides lo or hi, so no `hashCode()` call is needed during the resize.*
+
 ### 5. Treeification (JEP 180)
 
 If many keys land in one bin, a linked list makes `get` `O(n)`. Since Java 8:
@@ -166,6 +172,9 @@ sequenceDiagram
     CHM-->>T1: retry put in the new table
 ```
 *Notice that writers only contend when they hit the same bin, readers never block, and a writer that runs into a resize helps finish it instead of waiting.*
+
+![Animation: in a ConcurrentHashMap, T1 inserts into empty bin 3 with CAS, T2 locks bin 3 to append while T3 waits for the same bin, T4 inserts into bin 9 and reader R reads bin 3 without waiting, then T3 takes the lock](images/04-chm-bin-locking.svg){ loading=lazy }
+*Watch who waits: only T3, because it wants the bin T2 holds. The write to bin 9 and the read never block.*
 
 Readers during a resize: `get` that lands on a `ForwardingNode` follows its pointer to the new table. Because Java 8 moves bins by **copying** nodes (reusing a trailing run where possible) instead of mutating the old list, readers of the old table still see a valid chain.
 

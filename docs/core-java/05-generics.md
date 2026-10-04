@@ -112,6 +112,9 @@ classDiagram
 
 Why can't you add to `List<? extends Number>`? The compiler only knows "some unknown subtype of Number". It might be a `List<Double>`, so adding an `Integer` could corrupt it. Why do reads from `List<? super Integer>` give `Object`? It might be a `List<Object>` holding anything.
 
+![Two copies of the Object, Number, Integer, Double hierarchy: List of ? extends Number accepts Number, Integer and Double lists and allows reading Number but adding only null; List of ? super Integer accepts Integer, Number and Object lists and allows adding Integer but reading only Object](images/05-wildcard-ranges.svg){ loading=lazy }
+*Notice that each wildcard gives up one direction: `extends` can't write because the real list might be a narrower type, `super` can only read `Object` because it might be a wider one.*
+
 `List<?>` vs raw `List`: `List<?>` is type-safe (you can't add anything wrong); raw `List` turns off checking and only produces warnings. `List<Object>` is different again: it accepts only `List<Object>`, not `List<String>`.
 
 ### 5. PECS: Producer `extends`, Consumer `super`
@@ -146,6 +149,9 @@ public static <T extends Object & Comparable<? super T>> T max(Collection<? exte
 // java.util.stream.Stream
 <R> Stream<R> map(Function<? super T, ? extends R> mapper)
 ```
+
+![Animation: Collections.copy with T inferred as Integer reads 1, 2 and 3 from a List of Integer declared as ? extends T and writes them over three Doubles in a List of Number declared as ? super T](images/05-pecs-copy.svg){ loading=lazy }
+*Watch the direction: values only come out of the `extends` side and only go into the `super` side. That is why the two lists can have different element types.*
 
 Two senior-level details hidden in `Collections.max`:
 
@@ -243,6 +249,9 @@ static <T> List<T> listOf(T... items) { return List.copyOf(Arrays.asList(items))
 ### 10. Recovering erased types: super type tokens
 
 Erasure removes type arguments from **objects**, but `Signature` attributes keep them on **declarations**: superclasses, fields, method parameters and return types. Reflection exposes them via `getGenericSuperclass()`, `Field.getGenericType()` and `Method.getGenericReturnType()`.
+
+![Two panels: on the left, new ArrayList of String and new ArrayList of Integer both become the single runtime class ArrayList; on the right, a generic field, a method return type and an anonymous TypeReference superclass keep their type arguments in Signature metadata that reflection can read](images/05-erasure-what-survives.svg){ loading=lazy }
+*Notice that type tokens work because they move the type argument from an object, where it is erased, into a superclass declaration, where it is kept.*
 
 Neal Gafter's "super type token" trick uses an anonymous subclass to freeze a type argument into a superclass declaration:
 

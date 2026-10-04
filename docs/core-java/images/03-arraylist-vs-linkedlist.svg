@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">ArrayList and LinkedList in memory</title>
+  <desc id="d">Left, an ArrayList is one contiguous Object array, elementData, with capacity 10 and size 5; slots 0 to 4 hold references to elements A to E, so get(i) is one index calculation. Right, a LinkedList allocates a separate Node object for every element, each holding item, next and prev references, scattered across the heap; get(i) must walk the nodes one by one.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .panel{fill:#ffffff;stroke:#cbd5e1}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .slot{fill:#f8fafc;stroke:#cbd5e1}
+    .used{fill:#e0e7ff;stroke:#4f46e5;stroke-width:1.5}
+    .dot{fill:#4f46e5}
+    .el{fill:#0ea5a4}
+    .et{fill:#ffffff;font-size:14px;font-weight:700}
+    .node{fill:#e0e7ff;stroke:#4f46e5;stroke-width:1.5}
+    .nf{fill:#3730a3;font-size:13px;font-weight:600}
+    .cell{stroke:#a5b4fc;stroke-width:1}
+    .ref{stroke:#64748b;stroke-width:1.5;fill:none}
+    .nx{stroke:#4f46e5;stroke-width:2;fill:none}
+    .pv{stroke:#4f46e5;stroke-width:2;fill:none;stroke-dasharray:5 4}
+    .ah{fill:#4f46e5}.ahg{fill:#64748b}
+    .ok{fill:#16a34a;font-size:14px;font-weight:700}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .panel{fill:#111827;stroke:#475569}
+      .h{fill:#f1f5f9}.lbl,.body{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .slot{fill:#1f2430;stroke:#475569}
+      .used,.node{fill:#1e1b4b;stroke:#818cf8}.dot,.ah{fill:#818cf8}
+      .nf{fill:#c7d2fe}.cell{stroke:#4f46e5}
+      .el{fill:#2dd4bf}.et{fill:#0f172a}
+      .ref{stroke:#94a3b8}.ahg{fill:#94a3b8}
+      .nx,.pv{stroke:#818cf8}
+      .ok{fill:#4ade80}.bad{fill:#f87171}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">ArrayList vs LinkedList in memory</text>
+  <text class="sub" x="28" y="62">Both hold references to the same five element objects. What differs is the structure around them.</text>
+
+  <!-- ArrayList -->
+  <rect class="panel" x="20" y="80" width="370" height="282" rx="12"/>
+  <text class="lbl" x="36" y="104">ArrayList</text>
+  <text class="sub" x="36" y="122">Object[] elementData: size 5, capacity 10</text>
+  <g>
+    <rect class="used" x="36" y="136" width="30" height="36" rx="4"/><rect class="used" x="68" y="136" width="30" height="36" rx="4"/>
+    <rect class="used" x="100" y="136" width="30" height="36" rx="4"/><rect class="used" x="132" y="136" width="30" height="36" rx="4"/>
+    <rect class="used" x="164" y="136" width="30" height="36" rx="4"/>
+    <rect class="slot" x="196" y="136" width="30" height="36" rx="4"/><rect class="slot" x="228" y="136" width="30" height="36" rx="4"/>
+    <rect class="slot" x="260" y="136" width="30" height="36" rx="4"/><rect class="slot" x="292" y="136" width="30" height="36" rx="4"/>
+    <rect class="slot" x="324" y="136" width="30" height="36" rx="4"/>
+  </g>
+  <g class="dot"><circle cx="51" cy="154" r="4"/><circle cx="83" cy="154" r="4"/><circle cx="115" cy="154" r="4"/><circle cx="147" cy="154" r="4"/><circle cx="179" cy="154" r="4"/></g>
+  <g class="ref">
+    <path d="M51 158 L56 214"/><path d="M83 158 L118 214"/><path d="M115 158 L180 214"/><path d="M147 158 L242 214"/><path d="M179 158 L304 214"/>
+  </g>
+  <g class="el">
+    <rect x="38" y="216" width="40" height="30" rx="6"/><rect x="100" y="216" width="40" height="30" rx="6"/><rect x="162" y="216" width="40" height="30" rx="6"/>
+    <rect x="224" y="216" width="40" height="30" rx="6"/><rect x="286" y="216" width="40" height="30" rx="6"/>
+  </g>
+  <g class="et" text-anchor="middle"><text x="58" y="236">A</text><text x="120" y="236">B</text><text x="182" y="236">C</text><text x="244" y="236">D</text><text x="306" y="236">E</text></g>
+  <text class="sub" x="36" y="272">Contiguous slots: cache-friendly iteration</text>
+  <text class="ok" x="36" y="322">get(i): elementData[i], O(1)</text>
+  <text class="body" x="36" y="344">Spare slots wait for future add() calls</text>
+
+  <!-- LinkedList -->
+  <rect class="panel" x="410" y="80" width="370" height="282" rx="12"/>
+  <text class="lbl" x="426" y="104">LinkedList</text>
+  <text class="sub" x="426" y="122">one Node object per element</text>
+  <text class="sub" x="426" y="140">solid arrow = next, dashed = prev (D, E not shown)</text>
+  <rect class="el" x="430" y="152" width="36" height="28" rx="6"/><path class="ref" d="M448 180 L448 196"/><text class="et" x="448" y="171" text-anchor="middle">A</text>
+  <rect class="el" x="642" y="152" width="36" height="28" rx="6"/><path class="ref" d="M660 180 L660 196"/><text class="et" x="660" y="171" text-anchor="middle">C</text>
+  <rect class="el" x="576" y="218" width="36" height="28" rx="6"/><path class="ref" d="M594 246 L594 262"/><text class="et" x="594" y="237" text-anchor="middle">B</text>
+  <rect class="node" x="426" y="196" width="132" height="34" rx="6"/><line class="cell" x1="470" y1="200" x2="470" y2="226"/><line class="cell" x1="514" y1="200" x2="514" y2="226"/><text class="nf" x="448" y="218" text-anchor="middle">item</text><text class="nf" x="492" y="218" text-anchor="middle">next</text><text class="nf" x="536" y="218" text-anchor="middle">prev</text>
+  <rect class="node" x="638" y="196" width="132" height="34" rx="6"/><line class="cell" x1="682" y1="200" x2="682" y2="226"/><line class="cell" x1="726" y1="200" x2="726" y2="226"/><text class="nf" x="660" y="218" text-anchor="middle">item</text><text class="nf" x="704" y="218" text-anchor="middle">next</text><text class="nf" x="748" y="218" text-anchor="middle">prev</text>
+  <rect class="node" x="572" y="262" width="132" height="34" rx="6"/><line class="cell" x1="616" y1="266" x2="616" y2="292"/><line class="cell" x1="660" y1="266" x2="660" y2="292"/><text class="nf" x="594" y="284" text-anchor="middle">item</text><text class="nf" x="638" y="284" text-anchor="middle">next</text><text class="nf" x="682" y="284" text-anchor="middle">prev</text>
+  <path class="nx" d="M524 230 L556 264"/><path class="ah" d="M563 271 L551 267 L559 259 Z"/>
+  <path class="pv" d="M574 256 L546 226"/><path class="ah" d="M539 219 L551 222 L543 230 Z"/>
+  <path class="nx" d="M676 262 L676 240"/><path class="ah" d="M676 231 L670 242 L682 242 Z"/>
+  <path class="pv" d="M696 230 L696 252"/><path class="ah" d="M696 261 L690 250 L702 250 Z"/>
+  <text class="bad" x="426" y="322">get(i): follow next i times, O(n)</text>
+  <text class="body" x="426" y="344">Nodes are scattered: more cache misses</text>
+
+  <text class="sub" x="28" y="386">Each LinkedList node is an extra object (header + 3 references, about 24 bytes) on top of the element.</text>
+</svg>

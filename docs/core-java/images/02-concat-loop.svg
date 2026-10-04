@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Concatenation in a loop versus StringBuilder</title>
+  <desc id="d">Six items of 4 characters are joined two ways. Left, s += item creates a new String on every iteration, of length 4, 8, 12, 16, 20 and 24, each copying everything built so far; the older Strings become garbage. In total 84 characters are copied and 5 Strings are garbage. Right, a StringBuilder with default capacity 16 appends items into one buffer. Item 5 does not fit, so the capacity grows to 16 times 2 plus 2, which is 34, copying 16 characters. toString makes one final copy of 24 characters, so 64 characters are copied in total. The footnote says the gap grows quadratically: for 1,000 items, += copies about 2,000,000 characters and the builder about 12,600.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .panel{fill:#ffffff;stroke:#cbd5e1}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .slot{fill:#f8fafc;stroke:#cbd5e1}
+    .bar{fill:#4f46e5}
+    .tbar{fill:#0ea5a4}
+    .bt{fill:#ffffff;font-size:13px;font-weight:700}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    .ok{fill:#16a34a;font-size:14px;font-weight:700}
+    .warn{fill:#d97706;font-size:13px;font-weight:600}
+    .tick{stroke:#64748b;stroke-width:1.5}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .panel{fill:#111827;stroke:#475569}
+      .h{fill:#f1f5f9}.lbl,.body{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .slot{fill:#1f2430;stroke:#475569}
+      .bar{fill:#818cf8}.tbar{fill:#2dd4bf}.bt{fill:#0f172a}
+      .bad{fill:#f87171}.ok{fill:#4ade80}.warn{fill:#fbbf24}.tick{stroke:#94a3b8}
+    }
+    /* 12 s loop: items at 4,14,24,34,50,62%; resize at 44%; toString at 74%; totals at 80% */
+    .a{animation-duration:12s;animation-iteration-count:infinite;animation-timing-function:linear}
+    @keyframes r1{0%,3%{opacity:0}5%,13%{opacity:1}15%,94%{opacity:.35}97%,100%{opacity:0}}
+    @keyframes i1{0%,3%{opacity:0}5%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes r2{0%,13%{opacity:0}15%,23%{opacity:1}25%,94%{opacity:.35}97%,100%{opacity:0}}
+    @keyframes i2{0%,13%{opacity:0}15%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes r3{0%,23%{opacity:0}25%,33%{opacity:1}35%,94%{opacity:.35}97%,100%{opacity:0}}
+    @keyframes i3{0%,23%{opacity:0}25%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes r4{0%,33%{opacity:0}35%,49%{opacity:1}51%,94%{opacity:.35}97%,100%{opacity:0}}
+    @keyframes i4{0%,33%{opacity:0}35%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes r5{0%,49%{opacity:0}51%,61%{opacity:1}63%,94%{opacity:.35}97%,100%{opacity:0}}
+    @keyframes i5{0%,49%{opacity:0}51%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes r6{0%,61%{opacity:0}63%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes i6{0%,61%{opacity:0}63%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes grow{0%,43%{opacity:0}45%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes ts{0%,73%{opacity:0}75%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes sum{0%,79%{opacity:0}81%,94%{opacity:1}97%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none !important;opacity:1}
+      .r1,.r2,.r3,.r4,.r5{opacity:.35}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Joining 6 items of 4 chars in a loop</text>
+  <text class="sub" x="28" y="62">Each bar is a char array that had to be copied. Faded bars are Strings that are already garbage.</text>
+
+  <rect class="panel" x="20" y="76" width="370" height="284" rx="12"/>
+  <text class="lbl" x="36" y="100">s += item</text>
+  <text class="sub" x="36" y="129">#1</text>
+    <g class="a r1" style="animation-name:r1"><rect class="bar" x="64" y="112" width="48" height="24" rx="5"/><text class="bt" x="106" y="129" text-anchor="end">4</text></g>
+    <text class="sub" x="36" y="161">#2</text>
+    <g class="a r2" style="animation-name:r2"><rect class="bar" x="64" y="144" width="96" height="24" rx="5"/><text class="bt" x="154" y="161" text-anchor="end">8</text></g>
+    <text class="sub" x="36" y="193">#3</text>
+    <g class="a r3" style="animation-name:r3"><rect class="bar" x="64" y="176" width="144" height="24" rx="5"/><text class="bt" x="202" y="193" text-anchor="end">12</text></g>
+    <text class="sub" x="36" y="225">#4</text>
+    <g class="a r4" style="animation-name:r4"><rect class="bar" x="64" y="208" width="192" height="24" rx="5"/><text class="bt" x="250" y="225" text-anchor="end">16</text></g>
+    <text class="sub" x="36" y="257">#5</text>
+    <g class="a r5" style="animation-name:r5"><rect class="bar" x="64" y="240" width="240" height="24" rx="5"/><text class="bt" x="298" y="257" text-anchor="end">20</text></g>
+    <text class="sub" x="36" y="289">#6</text>
+    <g class="a r6" style="animation-name:r6"><rect class="bar" x="64" y="272" width="288" height="24" rx="5"/><text class="bt" x="346" y="289" text-anchor="end">24</text></g>
+  <g class="a" style="animation-name:sum"><text class="bad" x="36" y="326">6 new Strings, 84 chars copied</text><text class="body" x="36" y="346">5 of them are already garbage</text></g>
+
+  <rect class="panel" x="410" y="76" width="370" height="284" rx="12"/>
+  <text class="lbl" x="426" y="100">StringBuilder (default capacity 16)</text>
+  <rect class="slot" x="426" y="130" width="9" height="30" rx="2"/><rect class="slot" x="436" y="130" width="9" height="30" rx="2"/><rect class="slot" x="446" y="130" width="9" height="30" rx="2"/><rect class="slot" x="456" y="130" width="9" height="30" rx="2"/><rect class="slot" x="466" y="130" width="9" height="30" rx="2"/><rect class="slot" x="476" y="130" width="9" height="30" rx="2"/><rect class="slot" x="486" y="130" width="9" height="30" rx="2"/><rect class="slot" x="496" y="130" width="9" height="30" rx="2"/><rect class="slot" x="506" y="130" width="9" height="30" rx="2"/><rect class="slot" x="516" y="130" width="9" height="30" rx="2"/><rect class="slot" x="526" y="130" width="9" height="30" rx="2"/><rect class="slot" x="536" y="130" width="9" height="30" rx="2"/><rect class="slot" x="546" y="130" width="9" height="30" rx="2"/><rect class="slot" x="556" y="130" width="9" height="30" rx="2"/><rect class="slot" x="566" y="130" width="9" height="30" rx="2"/><rect class="slot" x="576" y="130" width="9" height="30" rx="2"/>
+  <g class="a" style="animation-name:grow"><rect class="slot" x="586" y="130" width="9" height="30" rx="2"/><rect class="slot" x="596" y="130" width="9" height="30" rx="2"/><rect class="slot" x="606" y="130" width="9" height="30" rx="2"/><rect class="slot" x="616" y="130" width="9" height="30" rx="2"/><rect class="slot" x="626" y="130" width="9" height="30" rx="2"/><rect class="slot" x="636" y="130" width="9" height="30" rx="2"/><rect class="slot" x="646" y="130" width="9" height="30" rx="2"/><rect class="slot" x="656" y="130" width="9" height="30" rx="2"/><rect class="slot" x="666" y="130" width="9" height="30" rx="2"/><rect class="slot" x="676" y="130" width="9" height="30" rx="2"/><rect class="slot" x="686" y="130" width="9" height="30" rx="2"/><rect class="slot" x="696" y="130" width="9" height="30" rx="2"/><rect class="slot" x="706" y="130" width="9" height="30" rx="2"/><rect class="slot" x="716" y="130" width="9" height="30" rx="2"/><rect class="slot" x="726" y="130" width="9" height="30" rx="2"/><rect class="slot" x="736" y="130" width="9" height="30" rx="2"/><rect class="slot" x="746" y="130" width="9" height="30" rx="2"/><rect class="slot" x="756" y="130" width="9" height="30" rx="2"/></g>
+  <g class="a" style="animation-name:i1"><rect class="bar" x="426" y="130" width="39" height="30" rx="3"/><text class="bt" x="445.5" y="150" text-anchor="middle">1</text></g>
+    <g class="a" style="animation-name:i2"><rect class="bar" x="466" y="130" width="39" height="30" rx="3"/><text class="bt" x="485.5" y="150" text-anchor="middle">2</text></g>
+    <g class="a" style="animation-name:i3"><rect class="bar" x="506" y="130" width="39" height="30" rx="3"/><text class="bt" x="525.5" y="150" text-anchor="middle">3</text></g>
+    <g class="a" style="animation-name:i4"><rect class="bar" x="546" y="130" width="39" height="30" rx="3"/><text class="bt" x="565.5" y="150" text-anchor="middle">4</text></g>
+    <g class="a" style="animation-name:i5"><rect class="bar" x="586" y="130" width="39" height="30" rx="3"/><text class="bt" x="605.5" y="150" text-anchor="middle">5</text></g>
+    <g class="a" style="animation-name:i6"><rect class="bar" x="626" y="130" width="39" height="30" rx="3"/><text class="bt" x="645.5" y="150" text-anchor="middle">6</text></g>
+  <line class="tick" x1="585.5" y1="164" x2="585.5" y2="172"/><text class="sub" x="585" y="186" text-anchor="middle">16</text>
+  <g class="a" style="animation-name:grow">
+    <line class="tick" x1="765.5" y1="164" x2="765.5" y2="172"/><text class="sub" x="762" y="186" text-anchor="middle">34</text>
+    <text class="warn" x="426" y="208">Item 5 doesn't fit: capacity grows to</text>
+    <text class="warn" x="426" y="226">16 × 2 + 2 = 34, copying the 16 chars</text>
+  </g>
+  <g class="a" style="animation-name:ts">
+    <text class="body" x="426" y="256">toString(): one final copy</text>
+    <rect class="tbar" x="426" y="266" width="240" height="24" rx="5"/><text class="bt" x="660" y="283" text-anchor="end">24</text>
+  </g>
+  <g class="a" style="animation-name:sum"><text class="ok" x="426" y="326">One buffer, 64 chars copied</text><text class="body" x="426" y="346">24 appended + 16 on resize + 24 final</text></g>
+
+  <text class="sub" x="28" y="384">The gap grows as n²: for 1,000 items, += copies about 2,000,000 chars and the builder about 12,600.</text>
+</svg>

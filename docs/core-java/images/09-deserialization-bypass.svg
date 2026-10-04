@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 404" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Deserialization skips the constructor</title>
+  <desc id="d">The input is a DateRange with start 10 May and end 1 May. Top row, new DateRange(start, end): memory is allocated, the constructor checks that end is not before start and throws IllegalArgumentException, so no object is ever created. Bottom row, ObjectInputStream.readObject(): memory is allocated without running the constructor, the fields are set directly from the bytes, and a DateRange whose end is before its start is handed to the program.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .code{fill:#0f172a;font-size:15px;font-weight:700}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .ctor{fill:#ffffff;stroke:#4f46e5;stroke-width:2}
+    .ghost{fill:none;stroke:#94a3b8;stroke-dasharray:6 4}
+    .tok{fill:#4f46e5}
+    .badbox{fill:none;stroke:#dc2626;stroke-width:3}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    .mu{fill:#64748b;font-size:14px;font-weight:600}
+    .skip{stroke:#d97706;stroke-width:2.5;fill:none;stroke-dasharray:6 4}.skh{fill:#d97706}
+    .wt{fill:#b45309;font-size:13px;font-weight:700}
+    .ar{stroke:#94a3b8;stroke-width:1.5}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.code{fill:#f1f5f9}.lbl,.body{fill:#e2e8f0}.sub,.mu{fill:#94a3b8}
+      .box,.ctor{fill:#111827}.box{stroke:#475569}.ctor{stroke:#818cf8}.ghost{stroke:#64748b}
+      .tok{fill:#818cf8}.badbox{stroke:#f87171}.bad{fill:#f87171}
+      .skip{stroke:#fbbf24}.skh{fill:#fbbf24}.wt{fill:#fbbf24}.ar{stroke:#64748b}
+    }
+    /* 10 s loop: constructor path 3-20%, deserialization path 45-68%, hold, reset 97% */
+    .a{animation-duration:10s;animation-iteration-count:infinite;animation-timing-function:linear}
+    .mv{animation-timing-function:ease-in-out}
+    @keyframes tA{0%,3%{transform:translateX(0);opacity:1}14%,95%{transform:translateX(250px);opacity:1}97%,100%{transform:translateX(0);opacity:0}}
+  @keyframes tB{0%,44%{transform:translateX(0);opacity:0}45%{opacity:1;transform:translateX(0)}52%{transform:translateX(0)}60%{transform:translateX(250px)}68%,95%{transform:translateX(500px);opacity:1}97%,100%{transform:translateX(500px);opacity:0}}
+  @keyframes throwA{0%,15%{opacity:0}17%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes neverA{0%,19%{opacity:0}21%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes skip{0%,46%{opacity:0}48%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes badB{0%,67%{opacity:0}69%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes setB{0%,57%{opacity:0}59%,95%{opacity:1}97%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none !important}
+      #tA{transform:translateX(250px)}#tB{transform:translateX(500px)}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="402" rx="14"/>
+  <text class="h" x="28" y="40">Deserialization does not call your constructor</text>
+  <text class="sub" x="28" y="62">Same invalid input both times: DateRange with start = 10 May, end = 1 May.</text>
+
+  <text class="code" x="40" y="100">new DateRange(start, end)</text>
+  <rect class="box" x="40" y="112" width="210" height="60" rx="10"/><text class="lbl" x="145" y="138" text-anchor="middle">allocate</text><text class="sub" x="145" y="157" text-anchor="middle">memory for the object</text>
+  <line class="ar" x1="250" y1="142" x2="290" y2="142"/>
+  <rect class="ctor" x="290" y="112" width="210" height="60" rx="10"/><text class="lbl" x="395" y="138" text-anchor="middle">constructor</text><text class="sub" x="395" y="157" text-anchor="middle">if (end &lt; start) throw</text>
+  <line class="ar" x1="500" y1="142" x2="540" y2="142"/>
+  <rect class="ghost" x="540" y="112" width="210" height="60" rx="10"/><text class="mu" x="645" y="148" text-anchor="middle">DateRange object</text>
+  <g class="a mv" id="tA" style="animation-name:tA"><circle class="tok" cx="145" cy="186" r="8"/></g>
+  <g class="a" style="animation-name:throwA"><rect class="badbox" x="290" y="112" width="210" height="60" rx="10"/><text class="bad" x="395" y="214" text-anchor="middle">throws IllegalArgumentException</text></g>
+  <g class="a" style="animation-name:neverA"><text class="mu" x="645" y="214" text-anchor="middle">never created</text></g>
+
+  <text class="code" x="40" y="262">ois.readObject()</text>
+  <rect class="box" x="40" y="274" width="210" height="60" rx="10"/><text class="lbl" x="145" y="300" text-anchor="middle">allocate</text><text class="sub" x="145" y="319" text-anchor="middle">no constructor runs</text>
+  <rect class="ghost" x="290" y="274" width="210" height="60" rx="10"/><text class="mu" x="395" y="300" text-anchor="middle">constructor</text><text class="sub" x="395" y="319" text-anchor="middle">skipped</text>
+  <line class="ar" x1="250" y1="304" x2="290" y2="304"/><line class="ar" x1="500" y1="304" x2="540" y2="304"/>
+  <rect class="box" x="540" y="274" width="210" height="60" rx="10"/><text class="lbl" x="645" y="300" text-anchor="middle">fields set from bytes</text><text class="sub" x="645" y="319" text-anchor="middle">start = 10 May, end = 1 May</text>
+  <g class="a" style="animation-name:skip"><path class="skip" d="M200 274 Q395 226 584 270"/><path class="skh" d="M592 274 L580 272 L586 262 Z"/><text class="wt" x="395" y="246" text-anchor="middle">jumps straight to the fields</text></g>
+  <g class="a mv" id="tB" style="animation-name:tB"><circle class="tok" cx="145" cy="346" r="7"/></g>
+  <g class="a" style="animation-name:badB"><rect class="badbox" x="540" y="274" width="210" height="60" rx="10"/><text class="bad" x="645" y="370" text-anchor="middle">invalid object returned</text></g>
+
+  <text class="sub" x="28" y="392">Fix: re-validate in readObject, use a serialization proxy, or a record (rebuilt via its canonical constructor).</text>
+</svg>

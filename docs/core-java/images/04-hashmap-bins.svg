@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">HashMap table of bins</title>
+  <desc id="d">A HashMap table of length 64, with bins 0 to 11 and bin 63 shown. Most bins are empty (null). Bin 0 holds the entry for the null key, whose hash is 0. Bin 2 holds a single Node A. Bin 5 holds a linked list B, C, D of colliding entries, appended at the tail. Bin 9 has been converted to a red-black tree of TreeNodes. Bin 63 holds a single Node E. The index of a key is (n - 1) AND the spread hash.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .slot{fill:#ffffff;stroke:#cbd5e1}
+    .node{fill:#4f46e5}
+    .tnode{fill:#0ea5a4}
+    .nt{fill:#ffffff;font-size:14px;font-weight:700}
+    .lk{stroke:#64748b;stroke-width:1.5}
+    .code{fill:#0f766e;font-size:15px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .slot{fill:#111827;stroke:#475569}
+      .node{fill:#818cf8}.tnode{fill:#2dd4bf}.nt{fill:#0f172a}
+      .lk{stroke:#94a3b8}.code{fill:#5eead4}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Inside a HashMap: Node[] table (length 64)</text>
+  <text class="code" x="28" y="66">index = (n - 1) &amp; (h ^ (h &gt;&gt;&gt; 16))</text>
+  <text class="sub" x="330" y="66">Empty bins hold null. Bins 12 to 62 are not drawn.</text>
+  <g class="sub" text-anchor="middle"><text x="63" y="102">0</text><text x="115" y="102">1</text><text x="167" y="102">2</text><text x="219" y="102">3</text><text x="271" y="102">4</text><text x="323" y="102">5</text><text x="375" y="102">6</text><text x="427" y="102">7</text><text x="479" y="102">8</text><text x="531" y="102">9</text><text x="583" y="102">10</text><text x="635" y="102">11</text><text x="733" y="102">63</text></g>
+  <rect class="slot" x="40" y="110" width="46" height="40" rx="6"/><rect class="slot" x="92" y="110" width="46" height="40" rx="6"/><rect class="slot" x="144" y="110" width="46" height="40" rx="6"/><rect class="slot" x="196" y="110" width="46" height="40" rx="6"/><rect class="slot" x="248" y="110" width="46" height="40" rx="6"/><rect class="slot" x="300" y="110" width="46" height="40" rx="6"/><rect class="slot" x="352" y="110" width="46" height="40" rx="6"/><rect class="slot" x="404" y="110" width="46" height="40" rx="6"/><rect class="slot" x="456" y="110" width="46" height="40" rx="6"/><rect class="slot" x="508" y="110" width="46" height="40" rx="6"/><rect class="slot" x="560" y="110" width="46" height="40" rx="6"/><rect class="slot" x="612" y="110" width="46" height="40" rx="6"/><rect class="slot" x="710" y="110" width="46" height="40" rx="6"/>
+  <text class="sub" x="683" y="135" text-anchor="middle">…</text>
+  <line class="lk" x1="63" y1="150" x2="63" y2="176"/><rect class="node" x="33" y="176" width="60" height="30" rx="6"/><text class="nt" x="63" y="196" text-anchor="middle">null</text><line class="lk" x1="167" y1="150" x2="167" y2="176"/><rect class="node" x="137" y="176" width="60" height="30" rx="6"/><text class="nt" x="167" y="196" text-anchor="middle">A</text><line class="lk" x1="323" y1="150" x2="323" y2="176"/><rect class="node" x="293" y="176" width="60" height="30" rx="6"/><text class="nt" x="323" y="196" text-anchor="middle">B</text><line class="lk" x1="323" y1="206" x2="323" y2="226"/><rect class="node" x="293" y="226" width="60" height="30" rx="6"/><text class="nt" x="323" y="246" text-anchor="middle">C</text><line class="lk" x1="323" y1="256" x2="323" y2="276"/><rect class="node" x="293" y="276" width="60" height="30" rx="6"/><text class="nt" x="323" y="296" text-anchor="middle">D</text><line class="lk" x1="733" y1="150" x2="733" y2="176"/><rect class="node" x="703" y="176" width="60" height="30" rx="6"/><text class="nt" x="733" y="196" text-anchor="middle">E</text><line class="lk" x1="531" y1="150" x2="531" y2="176"/><line class="lk" x1="531" y1="206" x2="475" y2="226"/><line class="lk" x1="531" y1="206" x2="587" y2="226"/><line class="lk" x1="475" y1="256" x2="447" y2="276"/><line class="lk" x1="475" y1="256" x2="503" y2="276"/><line class="lk" x1="587" y1="256" x2="559" y2="276"/><line class="lk" x1="587" y1="256" x2="615" y2="276"/><rect class="tnode" x="507" y="176" width="48" height="30" rx="6"/><rect class="tnode" x="451" y="226" width="48" height="30" rx="6"/><rect class="tnode" x="563" y="226" width="48" height="30" rx="6"/><rect class="tnode" x="423" y="276" width="48" height="30" rx="6"/><rect class="tnode" x="479" y="276" width="48" height="30" rx="6"/><rect class="tnode" x="535" y="276" width="48" height="30" rx="6"/><rect class="tnode" x="591" y="276" width="48" height="30" rx="6"/>
+  <text class="lbl" x="28" y="340">null key</text><text class="sub" x="28" y="358">hash 0, bin 0</text>
+  <text class="lbl" x="167" y="340" text-anchor="middle">single Node</text>
+  <text class="lbl" x="323" y="340" text-anchor="middle">linked list</text><text class="sub" x="323" y="358" text-anchor="middle">collisions, tail insert</text>
+  <text class="lbl" x="531" y="340" text-anchor="middle">tree bin (TreeNodes)</text><text class="sub" x="531" y="358" text-anchor="middle">O(log n) lookups</text>
+  <text class="lbl" x="733" y="340" text-anchor="middle">single Node</text>
+  <text class="sub" x="28" y="386">A bin becomes a tree only past 8 nodes, and only if the table has 64+ slots. Real tree bins have 9+ nodes.</text>
+</svg>

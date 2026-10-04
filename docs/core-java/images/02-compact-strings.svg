@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Compact Strings: bytes per character</title>
+  <desc id="d">Three rows compare the value array of a String. Java 8 stores "Hello" in a char array, 2 bytes per char, 10 bytes. Java 9 and later store "Hello" in a byte array with coder LATIN1, 1 byte per char, 5 bytes. "Ωmega" contains Omega, which is not Latin-1, so the whole string uses coder UTF16 at 2 bytes per char, 10 bytes.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .b16{fill:#ffffff;stroke:#4f46e5;stroke-width:2}
+    .b8{fill:#ffffff;stroke:#0ea5a4;stroke-width:2}
+    .div{stroke:#94a3b8;stroke-width:1.5}
+    .ct{fill:#0f172a;font-size:16px;font-weight:700}
+    .cnt{fill:#4f46e5;font-size:15px;font-weight:700}
+    .cnt2{fill:#0f766e;font-size:15px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.ct{fill:#f1f5f9}.lbl{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .b16{fill:#111827;stroke:#818cf8}.b8{fill:#111827;stroke:#2dd4bf}
+      .div{stroke:#475569}.cnt{fill:#818cf8}.cnt2{fill:#5eead4}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="358" rx="14"/>
+  <text class="h" x="28" y="40">Compact Strings (JEP 254, Java 9)</text>
+  <text class="sub" x="28" y="62">The value array, one box per character. Box width shows bytes per character.</text>
+
+  <text class="lbl" x="28" y="112">Java 8: char[] value</text>
+  <text class="sub" x="28" y="130">always 2 bytes per char</text>
+  <rect class="b16" x="300" y="96" width="54" height="40" rx="6"/>
+  <line class="div" x1="327" y1="98" x2="327" y2="106"/><line class="div" x1="327" y1="126" x2="327" y2="134"/>
+  <text class="ct" x="327.0" y="122" text-anchor="middle">H</text>
+  <rect class="b16" x="356" y="96" width="54" height="40" rx="6"/>
+  <line class="div" x1="383" y1="98" x2="383" y2="106"/><line class="div" x1="383" y1="126" x2="383" y2="134"/>
+  <text class="ct" x="383.0" y="122" text-anchor="middle">e</text>
+  <rect class="b16" x="412" y="96" width="54" height="40" rx="6"/>
+  <line class="div" x1="439" y1="98" x2="439" y2="106"/><line class="div" x1="439" y1="126" x2="439" y2="134"/>
+  <text class="ct" x="439.0" y="122" text-anchor="middle">l</text>
+  <rect class="b16" x="468" y="96" width="54" height="40" rx="6"/>
+  <line class="div" x1="495" y1="98" x2="495" y2="106"/><line class="div" x1="495" y1="126" x2="495" y2="134"/>
+  <text class="ct" x="495.0" y="122" text-anchor="middle">l</text>
+  <rect class="b16" x="524" y="96" width="54" height="40" rx="6"/>
+  <line class="div" x1="551" y1="98" x2="551" y2="106"/><line class="div" x1="551" y1="126" x2="551" y2="134"/>
+  <text class="ct" x="551.0" y="122" text-anchor="middle">o</text>
+  <text class="cnt" x="596" y="122">10 bytes</text>
+
+  <text class="lbl" x="28" y="192">Java 9+: byte[] value</text>
+  <text class="sub" x="28" y="210">coder = LATIN1 (0), 1 byte per char</text>
+  <rect class="b8" x="300" y="176" width="26" height="40" rx="6"/>
+  <text class="ct" x="313.0" y="202" text-anchor="middle">H</text>
+  <rect class="b8" x="328" y="176" width="26" height="40" rx="6"/>
+  <text class="ct" x="341.0" y="202" text-anchor="middle">e</text>
+  <rect class="b8" x="356" y="176" width="26" height="40" rx="6"/>
+  <text class="ct" x="369.0" y="202" text-anchor="middle">l</text>
+  <rect class="b8" x="384" y="176" width="26" height="40" rx="6"/>
+  <text class="ct" x="397.0" y="202" text-anchor="middle">l</text>
+  <rect class="b8" x="412" y="176" width="26" height="40" rx="6"/>
+  <text class="ct" x="425.0" y="202" text-anchor="middle">o</text>
+  <text class="cnt2" x="456" y="202">5 bytes</text>
+
+  <text class="lbl" x="28" y="272">Java 9+: byte[] value</text>
+  <text class="sub" x="28" y="290">coder = UTF16 (1), 2 bytes per char</text>
+  <rect class="b16" x="300" y="256" width="54" height="40" rx="6"/>
+  <line class="div" x1="327" y1="258" x2="327" y2="266"/><line class="div" x1="327" y1="286" x2="327" y2="294"/>
+  <text class="ct" x="327.0" y="282" text-anchor="middle">Ω</text>
+  <rect class="b16" x="356" y="256" width="54" height="40" rx="6"/>
+  <line class="div" x1="383" y1="258" x2="383" y2="266"/><line class="div" x1="383" y1="286" x2="383" y2="294"/>
+  <text class="ct" x="383.0" y="282" text-anchor="middle">m</text>
+  <rect class="b16" x="412" y="256" width="54" height="40" rx="6"/>
+  <line class="div" x1="439" y1="258" x2="439" y2="266"/><line class="div" x1="439" y1="286" x2="439" y2="294"/>
+  <text class="ct" x="439.0" y="282" text-anchor="middle">e</text>
+  <rect class="b16" x="468" y="256" width="54" height="40" rx="6"/>
+  <line class="div" x1="495" y1="258" x2="495" y2="266"/><line class="div" x1="495" y1="286" x2="495" y2="294"/>
+  <text class="ct" x="495.0" y="282" text-anchor="middle">g</text>
+  <rect class="b16" x="524" y="256" width="54" height="40" rx="6"/>
+  <line class="div" x1="551" y1="258" x2="551" y2="266"/><line class="div" x1="551" y1="286" x2="551" y2="294"/>
+  <text class="ct" x="551.0" y="282" text-anchor="middle">a</text>
+  <text class="cnt" x="596" y="282">10 bytes</text>
+  <text class="sub" x="300" y="318">Ω is not Latin-1, so the whole string switches to UTF-16.</text>
+
+  <text class="sub" x="28" y="344">Array contents only; object and array headers are not shown. -XX:-CompactStrings turns the feature off.</text>
+</svg>

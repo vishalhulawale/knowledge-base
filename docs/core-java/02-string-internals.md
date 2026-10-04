@@ -46,6 +46,9 @@ public final class String implements java.io.Serializable, Comparable<String>, C
 - Compact Strings can be switched off with `-XX:-CompactStrings`, but there is rarely a reason to.
 - The class is `final`, and `value` is `private final` and never exposed. That combination is what makes immutability real.
 
+![Three rows of boxes: Java 8 stores Hello in a char array using 10 bytes; Java 9 and later store Hello as Latin-1 in 5 bytes; Ωmega needs UTF-16 and uses 10 bytes](images/02-compact-strings.svg){ loading=lazy }
+*Notice that the choice is per string: one non-Latin-1 character switches the whole string to 2 bytes per char.*
+
 !!! tip "Java 6 vs Java 7u6 substring"
     Up to Java 7u6, `substring()` shared the parent's `char[]` with an offset and count. A tiny substring of a 10 MB string kept the whole 10 MB alive (a classic memory leak). Since 7u6, `substring()` **copies** the needed range. Interviewers still ask this.
 
@@ -141,6 +144,9 @@ sequenceDiagram
     L->>H: sb.toString() (one final copy)
 ```
 *Notice that the cost of `+=` grows with the length already built, while `StringBuilder` appends into one growing buffer and copies only when it resizes or at the final `toString()`.*
+
+![Animation: six 4-character items are joined; on the left each += creates a longer new String and the old ones fade as garbage, on the right a StringBuilder fills one buffer, grows once from 16 to 34, and makes one final copy](images/02-concat-loop.svg){ loading=lazy }
+*Watch the left bars get longer every iteration while the right side reuses one buffer. At six items the totals are close; the difference is the n² growth.*
 
 ### 6. StringBuilder vs StringBuffer
 

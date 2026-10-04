@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 370" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Adding a subtype: sealed switch vs instanceof chain</title>
+  <desc id="d">Both panels start with three result types, Approved, Declined and Pending, and code that handles them, and both compile. Then a fourth type, Refunded, is added. Left, with a sealed interface and a pattern switch without default, compilation fails with: the switch expression does not cover all possible input values. Right, with an open class hierarchy and an instanceof chain ending in else, the code still compiles, and a Refunded result falls into the else branch and becomes an HTTP 500 in production.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .panel{fill:#ffffff;stroke:#cbd5e1}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .chip{fill:#4f46e5}.ct{fill:#ffffff;font-size:13px;font-weight:700}
+    .newc{fill:#d97706}.ct2{fill:#ffffff;font-size:13px;font-weight:700}
+    .codebox{fill:#f1f5f9;stroke:#e2e8f0}
+    .code{fill:#334155;font-size:14px}
+    .ok{fill:#16a34a;font-size:14px;font-weight:700}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    .badbox{fill:none;stroke:#dc2626;stroke-width:2.5}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .panel{fill:#111827;stroke:#475569}
+      .h{fill:#f1f5f9}.lbl,.code{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .chip{fill:#818cf8}.ct{fill:#0f172a}.newc{fill:#fbbf24}.ct2{fill:#0f172a}
+      .codebox{fill:#1f2430;stroke:#334155}
+      .ok{fill:#4ade80}.bad{fill:#f87171}.badbox{stroke:#f87171}
+    }
+    /* 10 s loop: both compile; Refunded added at 40%; left fails to compile at 50%; right fails at runtime at 56% */
+    .a{animation-duration:10s;animation-iteration-count:infinite;animation-timing-function:linear}
+    @keyframes add{0%,39%{opacity:0}41%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes okL{0%,47%{opacity:1}49%,96%{opacity:0}97%,100%{opacity:1}}
+  @keyframes errL{0%,49%{opacity:0}51%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes errR{0%,55%{opacity:0}57%,95%{opacity:1}97%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){.a{animation:none !important}.okL{opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="368" rx="14"/>
+  <text class="h" x="28" y="40">A new subtype appears: who notices?</text>
+  <text class="sub" x="28" y="62">Same three cases on both sides, then someone adds Refunded.</text>
+
+  <rect class="panel" x="20" y="76" width="370" height="276" rx="12"/>
+  <text class="lbl" x="36" y="102">sealed interface + pattern switch</text>
+  <rect class="chip" x="36" y="118" width="80" height="28" rx="14"/><text class="ct" x="76" y="137" text-anchor="middle">Approved</text><rect class="chip" x="122" y="118" width="80" height="28" rx="14"/><text class="ct" x="162" y="137" text-anchor="middle">Declined</text><rect class="chip" x="208" y="118" width="80" height="28" rx="14"/><text class="ct" x="248" y="137" text-anchor="middle">Pending</text><g class="a" style="animation-name:add"><rect class="newc" x="294" y="118" width="80" height="28" rx="14"/><text class="ct2" x="334" y="137" text-anchor="middle">Refunded</text></g>
+  <rect class="codebox" x="36" y="160" width="338" height="104" rx="8"/>
+  <text class="code" x="48" y="184">return switch (r) {</text>
+  <text class="code" x="64" y="206">case Approved a -&gt; ok(a);</text>
+  <text class="code" x="64" y="228">case Declined d -&gt; reject(d);</text>
+  <text class="code" x="64" y="250">case Pending p -&gt; later(p); };</text>
+  <g class="a okL" style="animation-name:okL"><text class="ok" x="36" y="296">Compiles: all permitted types covered</text></g>
+  <g class="a" style="animation-name:errL"><rect class="badbox" x="36" y="160" width="338" height="104" rx="8"/>
+    <text class="bad" x="36" y="292">Compile error: the switch expression does</text>
+    <text class="bad" x="36" y="312">not cover all possible input values</text>
+    <text class="sub" x="36" y="336">Fixed before it ships.</text></g>
+
+  <rect class="panel" x="410" y="76" width="370" height="276" rx="12"/>
+  <text class="lbl" x="426" y="102">open class + instanceof chain</text>
+  <rect class="chip" x="426" y="118" width="80" height="28" rx="14"/><text class="ct" x="466" y="137" text-anchor="middle">Approved</text><rect class="chip" x="512" y="118" width="80" height="28" rx="14"/><text class="ct" x="552" y="137" text-anchor="middle">Declined</text><rect class="chip" x="598" y="118" width="80" height="28" rx="14"/><text class="ct" x="638" y="137" text-anchor="middle">Pending</text><g class="a" style="animation-name:add"><rect class="newc" x="684" y="118" width="80" height="28" rx="14"/><text class="ct2" x="724" y="137" text-anchor="middle">Refunded</text></g>
+  <rect class="codebox" x="426" y="160" width="338" height="104" rx="8"/>
+  <text class="code" x="438" y="184">if (r instanceof Approved a) return ok(a);</text>
+  <text class="code" x="438" y="206">if (r instanceof Declined d) return reject(d);</text>
+  <text class="code" x="438" y="228">if (r instanceof Pending p) return later(p);</text>
+  <text class="code" x="438" y="250">return internalServerError();</text>
+  <text class="ok" x="426" y="296">Still compiles</text>
+  <g class="a" style="animation-name:errR">
+    <text class="bad" x="426" y="316">At runtime Refunded falls through:</text>
+    <text class="bad" x="426" y="336">HTTP 500 in production</text></g>
+</svg>

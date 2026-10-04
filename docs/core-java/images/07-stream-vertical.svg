@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Lazy, vertical stream evaluation</title>
+  <desc id="d">A stream pipeline source, filter(isActive), map(toDto), findFirst. Element 1 travels into filter and is rejected. Element 2 passes filter, is mapped to dto 2 and reaches findFirst, which has its result and short-circuits. Elements 3, 4 and 5 are never read from the source.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .body{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .stage{fill:#ffffff;stroke:#cbd5e1}
+    .chip{fill:#4f46e5}.chip2{fill:#0ea5a4}
+    .ct{fill:#ffffff;font-size:14px;font-weight:700}
+    .pipe{stroke:#cbd5e1;stroke-width:2;stroke-dasharray:6 5}
+    .bad{fill:#dc2626;font-size:13px;font-weight:700}
+    .ok{fill:#16a34a;font-size:13px;font-weight:700}
+    .tl{fill:#0f766e;font-size:13px;font-weight:700}
+    .mu{fill:#64748b;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.body{fill:#e2e8f0}.sub,.mu{fill:#94a3b8}
+      .stage{fill:#111827;stroke:#475569}
+      .chip{fill:#818cf8}.chip2{fill:#2dd4bf}.ct{fill:#0f172a}
+      .pipe{stroke:#475569}.bad{fill:#f87171}.ok{fill:#4ade80}.tl{fill:#5eead4}
+    }
+    /* 10 s loop: element 1 at 5-18%, element 2 at 24-52%, short-circuit at 53-60%, hold, reset 97% */
+    .a{animation-duration:10s;animation-iteration-count:infinite;animation-timing-function:linear}
+    .mv{animation-timing-function:ease-in-out}
+    @keyframes c1{0%,5%{transform:translate(0,0);opacity:1}13%{transform:translate(210px,43px);opacity:1}18%{transform:translate(210px,83px);opacity:0}96%{transform:translate(210px,83px);opacity:0}97%,100%{transform:translate(0,0);opacity:1}}
+  @keyframes c2{0%,24%{transform:translate(0,0)}32%,34%{transform:translate(210px,-1px)}42%,44%{transform:translate(400px,-1px)}52%,96%{transform:translate(590px,-1px)}97%,100%{transform:translate(0,0)}}
+  @keyframes raw2{0%,41%{opacity:1}43%,96%{opacity:0}97%,100%{opacity:1}}
+  @keyframes dto2{0%,41%{opacity:0}43%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes rej{0%,13%{opacity:0}15%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes pass{0%,32%{opacity:0}34%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes mapd{0%,42%{opacity:0}44%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes found{0%,52%{opacity:0}54%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes never{0%,59%{opacity:0}61%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes dim{0%,59%{opacity:0}61%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes dimq{0%,59%{opacity:1}61%,95%{opacity:.35}97%,100%{opacity:1}}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none !important}
+      #c1,.raw2{opacity:0}
+      #c2{transform:translate(590px,-1px)}
+      .dq{opacity:.35}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">Streams run one element at a time, and stop early</text>
+  <text class="sub" x="28" y="62">list.stream().filter(Member::isActive).map(this::toDto).findFirst()</text>
+
+  <text class="lbl" x="40" y="86">source</text>
+  <line class="pipe" x1="120" y1="160" x2="760" y2="160"/>
+  <rect class="stage" x="210" y="110" width="150" height="100" rx="12"/><text class="lbl" x="285" y="132" text-anchor="middle">filter(isActive)</text>
+  <rect class="stage" x="400" y="110" width="150" height="100" rx="12"/><text class="lbl" x="475" y="132" text-anchor="middle">map(toDto)</text>
+  <rect class="stage" x="590" y="110" width="170" height="100" rx="12"/><text class="lbl" x="675" y="132" text-anchor="middle">findFirst()</text>
+
+  <g class="a dq" style="animation-name:dimq"><rect class="chip" x="40" y="188" width="70" height="34" rx="8"/><text class="ct" x="75" y="210" text-anchor="middle">3</text></g><g class="a dq" style="animation-name:dimq"><rect class="chip" x="40" y="232" width="70" height="34" rx="8"/><text class="ct" x="75" y="254" text-anchor="middle">4</text></g><g class="a dq" style="animation-name:dimq"><rect class="chip" x="40" y="276" width="70" height="34" rx="8"/><text class="ct" x="75" y="298" text-anchor="middle">5</text></g>
+  <g class="a mv" id="c1" style="animation-name:c1"><rect class="chip" x="40" y="100" width="70" height="34" rx="8"/><text class="ct" x="75" y="122" text-anchor="middle">1</text></g>
+  <g class="a mv" id="c2" style="animation-name:c2">
+    <g class="a raw2" style="animation-name:raw2"><rect class="chip" x="40" y="144" width="70" height="34" rx="8"/><text class="ct" x="75" y="166" text-anchor="middle">2</text></g>
+    <g class="a" style="animation-name:dto2"><rect class="chip2" x="40" y="144" width="70" height="34" rx="8"/><text class="ct" x="75" y="166" text-anchor="middle">dto 2</text></g>
+  </g>
+
+  <g class="a" style="animation-name:rej"><text class="bad" x="285" y="234" text-anchor="middle">1: inactive, rejected</text></g>
+  <g class="a" style="animation-name:pass"><text class="ok" x="285" y="254" text-anchor="middle">2: active, passed on</text></g>
+  <g class="a" style="animation-name:mapd"><text class="tl" x="475" y="234" text-anchor="middle">2 → dto 2</text></g>
+  <g class="a" style="animation-name:found"><text class="ok" x="675" y="234" text-anchor="middle">result found:</text><text class="ok" x="675" y="254" text-anchor="middle">short-circuit</text></g>
+  <g class="a" style="animation-name:never"><text class="mu" x="120" y="254">never read</text></g>
+
+  <text class="body" x="28" y="340">Element 2 reaches findFirst before element 3 is even pulled from the source.</text>
+  <text class="sub" x="28" y="364">A stateful stage such as sorted() would break this: it buffers every element before passing any on.</text>
+</svg>

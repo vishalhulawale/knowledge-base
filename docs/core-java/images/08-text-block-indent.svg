@@ -1,0 +1,261 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 384" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Text block indentation</title>
+  <desc id="d">Two versions of the same text block, with dots marking leading spaces. Left, the closing triple quote is indented 8 columns like the content, so 8 columns of incidental whitespace are stripped and the result is: query Member {, then member { name } indented 2 spaces, then }. Right, the closing triple quote is moved left to column 4, so only 4 columns are stripped and every result line keeps 4 extra leading spaces. The opening line is not part of the content.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .panel{fill:#ffffff;stroke:#cbd5e1}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:15px;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .q{fill:#4f46e5;font-weight:700}
+    .dot{fill:#b45309;font-size:15px}
+    .dotk{fill:#0f766e;font-size:15px;font-weight:700}
+    .inc{fill:#fde68a;opacity:.6}
+    .res{fill:#f8fafc;stroke:#cbd5e1}
+    .lg{fill:#334155;font-size:13px}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .panel{fill:#111827;stroke:#475569}
+      .h,.mono{fill:#f1f5f9}.lbl,.lg{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .q{fill:#818cf8}.dot{fill:#fbbf24}.dotk{fill:#5eead4}
+      .inc{fill:#78350f;opacity:.7}.res{fill:#1f2430;stroke:#475569}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="382" rx="14"/>
+  <text class="h" x="28" y="40">Text blocks: the closing """ sets the indentation</text>
+  <text class="sub" x="28" y="62">Shaded columns are incidental whitespace and are removed. Dots mark spaces.</text>
+  <rect class="panel" x="20" y="76" width="370" height="266" rx="12"/><text class="lbl" x="36" y="100">Closing """ aligned with the content</text>
+  <text class="dot" x="44.5" y="128" text-anchor="middle">·</text>
+  <text class="dot" x="53.5" y="128" text-anchor="middle">·</text>
+  <text class="dot" x="62.5" y="128" text-anchor="middle">·</text>
+  <text class="dot" x="71.5" y="128" text-anchor="middle">·</text>
+  <text class="mono" x="80.5" y="128" text-anchor="middle">S</text>
+  <text class="mono" x="89.5" y="128" text-anchor="middle">t</text>
+  <text class="mono" x="98.5" y="128" text-anchor="middle">r</text>
+  <text class="mono" x="107.5" y="128" text-anchor="middle">i</text>
+  <text class="mono" x="116.5" y="128" text-anchor="middle">n</text>
+  <text class="mono" x="125.5" y="128" text-anchor="middle">g</text>
+  <text class="mono" x="143.5" y="128" text-anchor="middle">q</text>
+  <text class="mono" x="161.5" y="128" text-anchor="middle">=</text>
+  <text class="mono q" x="179.5" y="128" text-anchor="middle">"</text>
+  <text class="mono q" x="188.5" y="128" text-anchor="middle">"</text>
+  <text class="mono q" x="197.5" y="128" text-anchor="middle">"</text>
+  <rect class="inc" x="40" y="135" width="72" height="20"/>
+  <text class="dot" x="44.5" y="150" text-anchor="middle">·</text>
+  <text class="dot" x="53.5" y="150" text-anchor="middle">·</text>
+  <text class="dot" x="62.5" y="150" text-anchor="middle">·</text>
+  <text class="dot" x="71.5" y="150" text-anchor="middle">·</text>
+  <text class="dot" x="80.5" y="150" text-anchor="middle">·</text>
+  <text class="dot" x="89.5" y="150" text-anchor="middle">·</text>
+  <text class="dot" x="98.5" y="150" text-anchor="middle">·</text>
+  <text class="dot" x="107.5" y="150" text-anchor="middle">·</text>
+  <text class="mono" x="116.5" y="150" text-anchor="middle">q</text>
+  <text class="mono" x="125.5" y="150" text-anchor="middle">u</text>
+  <text class="mono" x="134.5" y="150" text-anchor="middle">e</text>
+  <text class="mono" x="143.5" y="150" text-anchor="middle">r</text>
+  <text class="mono" x="152.5" y="150" text-anchor="middle">y</text>
+  <text class="mono" x="170.5" y="150" text-anchor="middle">M</text>
+  <text class="mono" x="179.5" y="150" text-anchor="middle">e</text>
+  <text class="mono" x="188.5" y="150" text-anchor="middle">m</text>
+  <text class="mono" x="197.5" y="150" text-anchor="middle">b</text>
+  <text class="mono" x="206.5" y="150" text-anchor="middle">e</text>
+  <text class="mono" x="215.5" y="150" text-anchor="middle">r</text>
+  <text class="mono" x="233.5" y="150" text-anchor="middle">{</text>
+  <rect class="inc" x="40" y="157" width="72" height="20"/>
+  <text class="dot" x="44.5" y="172" text-anchor="middle">·</text>
+  <text class="dot" x="53.5" y="172" text-anchor="middle">·</text>
+  <text class="dot" x="62.5" y="172" text-anchor="middle">·</text>
+  <text class="dot" x="71.5" y="172" text-anchor="middle">·</text>
+  <text class="dot" x="80.5" y="172" text-anchor="middle">·</text>
+  <text class="dot" x="89.5" y="172" text-anchor="middle">·</text>
+  <text class="dot" x="98.5" y="172" text-anchor="middle">·</text>
+  <text class="dot" x="107.5" y="172" text-anchor="middle">·</text>
+  <text class="dot" x="116.5" y="172" text-anchor="middle">·</text>
+  <text class="dot" x="125.5" y="172" text-anchor="middle">·</text>
+  <text class="mono" x="134.5" y="172" text-anchor="middle">m</text>
+  <text class="mono" x="143.5" y="172" text-anchor="middle">e</text>
+  <text class="mono" x="152.5" y="172" text-anchor="middle">m</text>
+  <text class="mono" x="161.5" y="172" text-anchor="middle">b</text>
+  <text class="mono" x="170.5" y="172" text-anchor="middle">e</text>
+  <text class="mono" x="179.5" y="172" text-anchor="middle">r</text>
+  <text class="mono" x="197.5" y="172" text-anchor="middle">{</text>
+  <text class="mono" x="215.5" y="172" text-anchor="middle">n</text>
+  <text class="mono" x="224.5" y="172" text-anchor="middle">a</text>
+  <text class="mono" x="233.5" y="172" text-anchor="middle">m</text>
+  <text class="mono" x="242.5" y="172" text-anchor="middle">e</text>
+  <text class="mono" x="260.5" y="172" text-anchor="middle">}</text>
+  <rect class="inc" x="40" y="179" width="72" height="20"/>
+  <text class="dot" x="44.5" y="194" text-anchor="middle">·</text>
+  <text class="dot" x="53.5" y="194" text-anchor="middle">·</text>
+  <text class="dot" x="62.5" y="194" text-anchor="middle">·</text>
+  <text class="dot" x="71.5" y="194" text-anchor="middle">·</text>
+  <text class="dot" x="80.5" y="194" text-anchor="middle">·</text>
+  <text class="dot" x="89.5" y="194" text-anchor="middle">·</text>
+  <text class="dot" x="98.5" y="194" text-anchor="middle">·</text>
+  <text class="dot" x="107.5" y="194" text-anchor="middle">·</text>
+  <text class="mono" x="116.5" y="194" text-anchor="middle">}</text>
+  <rect class="inc" x="40" y="201" width="72" height="20"/>
+  <text class="dot" x="44.5" y="216" text-anchor="middle">·</text>
+  <text class="dot" x="53.5" y="216" text-anchor="middle">·</text>
+  <text class="dot" x="62.5" y="216" text-anchor="middle">·</text>
+  <text class="dot" x="71.5" y="216" text-anchor="middle">·</text>
+  <text class="dot" x="80.5" y="216" text-anchor="middle">·</text>
+  <text class="dot" x="89.5" y="216" text-anchor="middle">·</text>
+  <text class="dot" x="98.5" y="216" text-anchor="middle">·</text>
+  <text class="dot" x="107.5" y="216" text-anchor="middle">·</text>
+  <text class="mono q" x="116.5" y="216" text-anchor="middle">"</text>
+  <text class="mono q" x="125.5" y="216" text-anchor="middle">"</text>
+  <text class="mono q" x="134.5" y="216" text-anchor="middle">"</text>
+  <text class="mono q" x="143.5" y="216" text-anchor="middle">;</text>
+  <text class="sub" x="36" y="254">Resulting string (8 columns stripped):</text>
+  <rect class="res" x="36" y="262" width="338" height="70" rx="8"/>
+  <text class="mono" x="44.5" y="282" text-anchor="middle">q</text>
+  <text class="mono" x="53.5" y="282" text-anchor="middle">u</text>
+  <text class="mono" x="62.5" y="282" text-anchor="middle">e</text>
+  <text class="mono" x="71.5" y="282" text-anchor="middle">r</text>
+  <text class="mono" x="80.5" y="282" text-anchor="middle">y</text>
+  <text class="mono" x="98.5" y="282" text-anchor="middle">M</text>
+  <text class="mono" x="107.5" y="282" text-anchor="middle">e</text>
+  <text class="mono" x="116.5" y="282" text-anchor="middle">m</text>
+  <text class="mono" x="125.5" y="282" text-anchor="middle">b</text>
+  <text class="mono" x="134.5" y="282" text-anchor="middle">e</text>
+  <text class="mono" x="143.5" y="282" text-anchor="middle">r</text>
+  <text class="mono" x="161.5" y="282" text-anchor="middle">{</text>
+  <text class="dotk" x="44.5" y="302" text-anchor="middle">·</text>
+  <text class="dotk" x="53.5" y="302" text-anchor="middle">·</text>
+  <text class="mono" x="62.5" y="302" text-anchor="middle">m</text>
+  <text class="mono" x="71.5" y="302" text-anchor="middle">e</text>
+  <text class="mono" x="80.5" y="302" text-anchor="middle">m</text>
+  <text class="mono" x="89.5" y="302" text-anchor="middle">b</text>
+  <text class="mono" x="98.5" y="302" text-anchor="middle">e</text>
+  <text class="mono" x="107.5" y="302" text-anchor="middle">r</text>
+  <text class="mono" x="125.5" y="302" text-anchor="middle">{</text>
+  <text class="mono" x="143.5" y="302" text-anchor="middle">n</text>
+  <text class="mono" x="152.5" y="302" text-anchor="middle">a</text>
+  <text class="mono" x="161.5" y="302" text-anchor="middle">m</text>
+  <text class="mono" x="170.5" y="302" text-anchor="middle">e</text>
+  <text class="mono" x="188.5" y="302" text-anchor="middle">}</text>
+  <text class="mono" x="44.5" y="322" text-anchor="middle">}</text>
+  <rect class="panel" x="410" y="76" width="370" height="266" rx="12"/><text class="lbl" x="426" y="100">Closing """ moved 4 columns left</text>
+  <text class="dot" x="434.5" y="128" text-anchor="middle">·</text>
+  <text class="dot" x="443.5" y="128" text-anchor="middle">·</text>
+  <text class="dot" x="452.5" y="128" text-anchor="middle">·</text>
+  <text class="dot" x="461.5" y="128" text-anchor="middle">·</text>
+  <text class="mono" x="470.5" y="128" text-anchor="middle">S</text>
+  <text class="mono" x="479.5" y="128" text-anchor="middle">t</text>
+  <text class="mono" x="488.5" y="128" text-anchor="middle">r</text>
+  <text class="mono" x="497.5" y="128" text-anchor="middle">i</text>
+  <text class="mono" x="506.5" y="128" text-anchor="middle">n</text>
+  <text class="mono" x="515.5" y="128" text-anchor="middle">g</text>
+  <text class="mono" x="533.5" y="128" text-anchor="middle">q</text>
+  <text class="mono" x="551.5" y="128" text-anchor="middle">=</text>
+  <text class="mono q" x="569.5" y="128" text-anchor="middle">"</text>
+  <text class="mono q" x="578.5" y="128" text-anchor="middle">"</text>
+  <text class="mono q" x="587.5" y="128" text-anchor="middle">"</text>
+  <rect class="inc" x="430" y="135" width="36" height="20"/>
+  <text class="dot" x="434.5" y="150" text-anchor="middle">·</text>
+  <text class="dot" x="443.5" y="150" text-anchor="middle">·</text>
+  <text class="dot" x="452.5" y="150" text-anchor="middle">·</text>
+  <text class="dot" x="461.5" y="150" text-anchor="middle">·</text>
+  <text class="dot" x="470.5" y="150" text-anchor="middle">·</text>
+  <text class="dot" x="479.5" y="150" text-anchor="middle">·</text>
+  <text class="dot" x="488.5" y="150" text-anchor="middle">·</text>
+  <text class="dot" x="497.5" y="150" text-anchor="middle">·</text>
+  <text class="mono" x="506.5" y="150" text-anchor="middle">q</text>
+  <text class="mono" x="515.5" y="150" text-anchor="middle">u</text>
+  <text class="mono" x="524.5" y="150" text-anchor="middle">e</text>
+  <text class="mono" x="533.5" y="150" text-anchor="middle">r</text>
+  <text class="mono" x="542.5" y="150" text-anchor="middle">y</text>
+  <text class="mono" x="560.5" y="150" text-anchor="middle">M</text>
+  <text class="mono" x="569.5" y="150" text-anchor="middle">e</text>
+  <text class="mono" x="578.5" y="150" text-anchor="middle">m</text>
+  <text class="mono" x="587.5" y="150" text-anchor="middle">b</text>
+  <text class="mono" x="596.5" y="150" text-anchor="middle">e</text>
+  <text class="mono" x="605.5" y="150" text-anchor="middle">r</text>
+  <text class="mono" x="623.5" y="150" text-anchor="middle">{</text>
+  <rect class="inc" x="430" y="157" width="36" height="20"/>
+  <text class="dot" x="434.5" y="172" text-anchor="middle">·</text>
+  <text class="dot" x="443.5" y="172" text-anchor="middle">·</text>
+  <text class="dot" x="452.5" y="172" text-anchor="middle">·</text>
+  <text class="dot" x="461.5" y="172" text-anchor="middle">·</text>
+  <text class="dot" x="470.5" y="172" text-anchor="middle">·</text>
+  <text class="dot" x="479.5" y="172" text-anchor="middle">·</text>
+  <text class="dot" x="488.5" y="172" text-anchor="middle">·</text>
+  <text class="dot" x="497.5" y="172" text-anchor="middle">·</text>
+  <text class="dot" x="506.5" y="172" text-anchor="middle">·</text>
+  <text class="dot" x="515.5" y="172" text-anchor="middle">·</text>
+  <text class="mono" x="524.5" y="172" text-anchor="middle">m</text>
+  <text class="mono" x="533.5" y="172" text-anchor="middle">e</text>
+  <text class="mono" x="542.5" y="172" text-anchor="middle">m</text>
+  <text class="mono" x="551.5" y="172" text-anchor="middle">b</text>
+  <text class="mono" x="560.5" y="172" text-anchor="middle">e</text>
+  <text class="mono" x="569.5" y="172" text-anchor="middle">r</text>
+  <text class="mono" x="587.5" y="172" text-anchor="middle">{</text>
+  <text class="mono" x="605.5" y="172" text-anchor="middle">n</text>
+  <text class="mono" x="614.5" y="172" text-anchor="middle">a</text>
+  <text class="mono" x="623.5" y="172" text-anchor="middle">m</text>
+  <text class="mono" x="632.5" y="172" text-anchor="middle">e</text>
+  <text class="mono" x="650.5" y="172" text-anchor="middle">}</text>
+  <rect class="inc" x="430" y="179" width="36" height="20"/>
+  <text class="dot" x="434.5" y="194" text-anchor="middle">·</text>
+  <text class="dot" x="443.5" y="194" text-anchor="middle">·</text>
+  <text class="dot" x="452.5" y="194" text-anchor="middle">·</text>
+  <text class="dot" x="461.5" y="194" text-anchor="middle">·</text>
+  <text class="dot" x="470.5" y="194" text-anchor="middle">·</text>
+  <text class="dot" x="479.5" y="194" text-anchor="middle">·</text>
+  <text class="dot" x="488.5" y="194" text-anchor="middle">·</text>
+  <text class="dot" x="497.5" y="194" text-anchor="middle">·</text>
+  <text class="mono" x="506.5" y="194" text-anchor="middle">}</text>
+  <rect class="inc" x="430" y="201" width="36" height="20"/>
+  <text class="dot" x="434.5" y="216" text-anchor="middle">·</text>
+  <text class="dot" x="443.5" y="216" text-anchor="middle">·</text>
+  <text class="dot" x="452.5" y="216" text-anchor="middle">·</text>
+  <text class="dot" x="461.5" y="216" text-anchor="middle">·</text>
+  <text class="mono q" x="470.5" y="216" text-anchor="middle">"</text>
+  <text class="mono q" x="479.5" y="216" text-anchor="middle">"</text>
+  <text class="mono q" x="488.5" y="216" text-anchor="middle">"</text>
+  <text class="mono q" x="497.5" y="216" text-anchor="middle">;</text>
+  <text class="sub" x="426" y="254">Resulting string (4 columns stripped):</text>
+  <rect class="res" x="426" y="262" width="338" height="70" rx="8"/>
+  <text class="dotk" x="434.5" y="282" text-anchor="middle">·</text>
+  <text class="dotk" x="443.5" y="282" text-anchor="middle">·</text>
+  <text class="dotk" x="452.5" y="282" text-anchor="middle">·</text>
+  <text class="dotk" x="461.5" y="282" text-anchor="middle">·</text>
+  <text class="mono" x="470.5" y="282" text-anchor="middle">q</text>
+  <text class="mono" x="479.5" y="282" text-anchor="middle">u</text>
+  <text class="mono" x="488.5" y="282" text-anchor="middle">e</text>
+  <text class="mono" x="497.5" y="282" text-anchor="middle">r</text>
+  <text class="mono" x="506.5" y="282" text-anchor="middle">y</text>
+  <text class="mono" x="524.5" y="282" text-anchor="middle">M</text>
+  <text class="mono" x="533.5" y="282" text-anchor="middle">e</text>
+  <text class="mono" x="542.5" y="282" text-anchor="middle">m</text>
+  <text class="mono" x="551.5" y="282" text-anchor="middle">b</text>
+  <text class="mono" x="560.5" y="282" text-anchor="middle">e</text>
+  <text class="mono" x="569.5" y="282" text-anchor="middle">r</text>
+  <text class="mono" x="587.5" y="282" text-anchor="middle">{</text>
+  <text class="dotk" x="434.5" y="302" text-anchor="middle">·</text>
+  <text class="dotk" x="443.5" y="302" text-anchor="middle">·</text>
+  <text class="dotk" x="452.5" y="302" text-anchor="middle">·</text>
+  <text class="dotk" x="461.5" y="302" text-anchor="middle">·</text>
+  <text class="dotk" x="470.5" y="302" text-anchor="middle">·</text>
+  <text class="dotk" x="479.5" y="302" text-anchor="middle">·</text>
+  <text class="mono" x="488.5" y="302" text-anchor="middle">m</text>
+  <text class="mono" x="497.5" y="302" text-anchor="middle">e</text>
+  <text class="mono" x="506.5" y="302" text-anchor="middle">m</text>
+  <text class="mono" x="515.5" y="302" text-anchor="middle">b</text>
+  <text class="mono" x="524.5" y="302" text-anchor="middle">e</text>
+  <text class="mono" x="533.5" y="302" text-anchor="middle">r</text>
+  <text class="mono" x="551.5" y="302" text-anchor="middle">{</text>
+  <text class="mono" x="569.5" y="302" text-anchor="middle">n</text>
+  <text class="mono" x="578.5" y="302" text-anchor="middle">a</text>
+  <text class="mono" x="587.5" y="302" text-anchor="middle">m</text>
+  <text class="mono" x="596.5" y="302" text-anchor="middle">e</text>
+  <text class="mono" x="614.5" y="302" text-anchor="middle">}</text>
+  <text class="dotk" x="434.5" y="322" text-anchor="middle">·</text>
+  <text class="dotk" x="443.5" y="322" text-anchor="middle">·</text>
+  <text class="dotk" x="452.5" y="322" text-anchor="middle">·</text>
+  <text class="dotk" x="461.5" y="322" text-anchor="middle">·</text>
+  <text class="mono" x="470.5" y="322" text-anchor="middle">}</text>
+  <text class="lg" x="28" y="368">The smallest indentation of the content lines and the closing line wins. Kept spaces shown as teal dots.</text>
+</svg>
