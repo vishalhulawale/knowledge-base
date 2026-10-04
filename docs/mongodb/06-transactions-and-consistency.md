@@ -91,6 +91,9 @@ Key properties:
 
 The **callback API** (`session.withTransaction(fn)` in drivers, `TransactionTemplate`/`@Transactional` + retry in Spring) implements both loops until a 120-second timeout. Measured: 20 threads × 20 transfers between the same two documents → **935 automatic retries**, and the final balances summed exactly to the original total (A + B = 100,000, B = 400). Your callback must be **idempotent with respect to side effects outside the database** (don't send emails or Kafka messages inside it, or they repeat on each retry).
 
+![The withTransaction retry loops: a TransientTransactionError during the callback restarts the whole transaction, while UnknownTransactionCommitResult during commit retries only the commit; both loops stop after 120 seconds](images/06-transaction-retry-loops.svg){ loading=lazy }
+*Notice the two loops restart from different places. Only the commit retry is safe to repeat blindly; the whole-transaction retry re-runs your callback.*
+
 ### Snapshot isolation and write skew
 
 Snapshot isolation prevents dirty reads, non-repeatable reads, lost updates on the same document and phantoms inside the transaction's view. It doesn't prevent **write skew**: two transactions each read an overlapping set of documents, make a decision, and write *different* documents.
@@ -111,6 +114,9 @@ sequenceDiagram
 *Notice that neither transaction wrote a document the other wrote, so there's no write conflict to detect. Each made a decision based on a snapshot that became false.*
 
 Measured: both transactions committed and **0** remained on call. Fix by **materialising the conflict**: have each transaction also update a shared document (`shift-1`). Then the second one gets a WriteConflict, and on retry it sees the new state. With that change: Alice committed, Bob got **WriteConflict**, and **1** stayed on call. Other fixes: put the invariant in one document (a `shift` document holding the on-call list, updated with a conditional `$pull`), or use a unique or partial index to enforce the constraint.
+
+![Animation: Alice and Bob each count two doctors on call and set their own document off; with snapshot transactions alone both commit and nobody is on call, but when each also increments a shared shift document, Bob gets a WriteConflict, retries, sees only one on call and refuses](images/06-write-skew-materialise.svg){ loading=lazy }
+*Watch Bob's red step in the bottom lane: the shared document turns an invisible read dependency into a write conflict the database can detect.*
 
 ### What transactions cost
 
