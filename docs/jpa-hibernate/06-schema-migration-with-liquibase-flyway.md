@@ -145,6 +145,9 @@ flowchart LR
 ```
 *Notice that a rename is never one step. Each release is safe to roll back because the previous version still finds everything it needs in the schema.*
 
+![Animation: renaming phone to mobile_phone over four releases; the new nullable column starts empty, a backfill fills it row by row, reads switch to it, and finally the old phone column is no longer used](images/06-expand-contract.svg){ loading=lazy }
+*Watch the "Writes" and "Reads" lines: they never change in the same release, which is what keeps every step safe to roll back.*
+
 | Change | Safe approach |
 |---|---|
 | Add column | Nullable or with a default (PostgreSQL 11+ adds a constant default without rewriting the table) |
@@ -159,6 +162,9 @@ flowchart LR
 Verified on PostgreSQL 16 with `client_min_messages = debug1`: after `VALIDATE CONSTRAINT`, the `SET NOT NULL` logged *"existing constraints on column \"member.mobile_phone\" are sufficient to prove that it does not contain nulls"*, so no table scan ran under the exclusive lock.
 
 **Lock safety:** most `ALTER TABLE` forms take an `ACCESS EXCLUSIVE` lock. Even a quick one queues behind a long-running query, and then *every* query on that table queues behind the `ALTER`. Set `SET lock_timeout = '5s'` at the top of DDL migrations so they fail fast and can be retried, instead of causing an outage.
+
+![Animation: a long SELECT holds a lock on member, an ALTER TABLE waits for an exclusive lock and new queries queue behind it; with lock_timeout set to 5 seconds the ALTER fails instead and the queued queries run](images/06-ddl-lock-queue.svg){ loading=lazy }
+*Notice that the queries piling up only need ordinary locks. They wait because they are queued behind the ALTER, not because of the long SELECT.*
 
 ### The Flyway + CREATE INDEX CONCURRENTLY hang (reproduced)
 

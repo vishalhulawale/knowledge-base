@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 370" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Only the owning side writes the foreign key</title>
+  <desc id="d">Two side-by-side cases. Left, wrong: code adds rx to patient.getPrescriptions() but never sets rx.patient, so rx.patient is null and Hibernate inserts the rx row with patient_id NULL. Right, correct: patient.addRx(rx) adds to the collection and sets rx.patient, so the rx row is inserted with patient_id 1. Hibernate reads only Rx.patient, the owning side, when writing patient_id; the mappedBy collection is ignored.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .code{fill:#ffffff;stroke:#cbd5e1}
+    .th{fill:#4f46e5}
+    .tht{fill:#fff;font-size:13px;font-weight:700}
+    .cell{fill:#ffffff;stroke:#cbd5e1}
+    .badh{fill:#dc2626;font-size:15px;font-weight:700}
+    .goodh{fill:#16a34a;font-size:15px;font-weight:700}
+    .badc{fill:#dc2626;fill-opacity:.12;stroke:#dc2626;stroke-width:2}
+    .goodc{fill:#16a34a;fill-opacity:.12;stroke:#16a34a;stroke-width:2}
+    .badt{fill:#dc2626;font-weight:700}
+    .goodt{fill:#16a34a;font-weight:700}
+    .div{stroke:#e2e8f0;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.mono{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .code,.cell{fill:#111827;stroke:#475569}
+      .th{fill:#818cf8}.tht{fill:#0f172a}
+      .badh,.badt{fill:#f87171}.goodh,.goodt{fill:#4ade80}
+      .badc{fill:#f87171;stroke:#f87171}.goodc{fill:#4ade80;stroke:#4ade80}
+      .div{stroke:#334155}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="368" rx="14"/>
+  <text class="h" x="28" y="40">Only the owning side (Rx.patient) writes patient_id</text>
+  <text class="sub" x="28" y="62">The mappedBy collection on Patient is ignored when Hibernate builds the INSERT.</text>
+  <line class="div" x1="400" y1="80" x2="400" y2="318"/>
+
+  <!-- wrong -->
+  <text class="badh" x="28" y="98">✗ Only the inverse side set</text>
+  <rect class="code" x="28" y="110" width="352" height="34" rx="8"/>
+  <text class="mono" x="40" y="132">patient.getPrescriptions().add(rx);</text>
+  <text class="sub" x="28" y="170">In memory</text>
+  <text class="mono" x="28" y="192">patient.prescriptions = [rx]</text>
+  <text class="mono" x="28" y="212">rx.patient = <tspan class="badt">null</tspan></text>
+  <text class="sub" x="28" y="244">Row written to table rx</text>
+  <rect class="th" x="28" y="254" width="352" height="28" rx="0"/>
+  <text class="tht" x="40" y="273">id</text><text class="tht" x="100" y="273">drug</text><text class="tht" x="262" y="273">patient_id</text>
+  <rect class="cell" x="28" y="282" width="352" height="32"/>
+  <text class="txt" x="40" y="303">7</text><text class="txt" x="100" y="303">amoxicillin</text>
+  <rect class="badc" x="254" y="285" width="120" height="26" rx="4"/>
+  <text class="txt badt" x="266" y="303">NULL</text>
+
+  <!-- right -->
+  <text class="goodh" x="420" y="98">✓ Both sides set by a helper</text>
+  <rect class="code" x="420" y="110" width="352" height="34" rx="8"/>
+  <text class="mono" x="432" y="132">patient.addRx(rx);</text>
+  <text class="sub" x="420" y="170">In memory</text>
+  <text class="mono" x="420" y="192">patient.prescriptions = [rx]</text>
+  <text class="mono" x="420" y="212">rx.patient = <tspan class="goodt">patient #1</tspan></text>
+  <text class="sub" x="420" y="244">Row written to table rx</text>
+  <rect class="th" x="420" y="254" width="352" height="28"/>
+  <text class="tht" x="432" y="273">id</text><text class="tht" x="492" y="273">drug</text><text class="tht" x="654" y="273">patient_id</text>
+  <rect class="cell" x="420" y="282" width="352" height="32"/>
+  <text class="txt" x="432" y="303">7</text><text class="txt" x="492" y="303">amoxicillin</text>
+  <rect class="goodc" x="646" y="285" width="120" height="26" rx="4"/>
+  <text class="txt goodt" x="658" y="303">1</text>
+
+  <text class="sub" x="28" y="344">Both cases assume the collection cascades PERSIST. With patient_id NOT NULL, the left INSERT fails instead.</text>
+</svg>

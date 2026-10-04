@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Bulk JPQL update versus native SQL update with a second-level cache</title>
+  <desc id="d">Two columns start with plan P1 at copay 10 in both the second-level cache region and the database. In both, an update sets copay to 15 in the database. Left, a bulk JPQL update: Hibernate evicts the whole plan region, so the next findById misses, selects the row and gets copay 15. Right, a native SQL update through JDBC: Hibernate gets no signal, the cache still holds copay 10, and the next findById hits the cache and returns the stale 10 until the TTL expires or code evicts the region.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub,.muted{fill:#64748b;font-size:13px}
+    .muted{font-size:14px;font-style:italic}
+    .val{fill:#0f172a;font-size:14px;font-weight:700}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a;font-weight:600}
+    .l2{fill:#0ea5a4;fill-opacity:.12;stroke:#0ea5a4;stroke-width:2}
+    .l2t{fill:#0f766e;font-size:14px;font-weight:700}
+    .db{fill:#ffffff;stroke:#cbd5e1}
+    .good{fill:#16a34a;font-size:15px;font-weight:700}
+    .bad{fill:#dc2626;font-size:15px;font-weight:700}
+    .div{stroke:#e2e8f0;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.mono,.val{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub,.muted{fill:#94a3b8}
+      .l2{fill:#2dd4bf;fill-opacity:.12;stroke:#2dd4bf}.l2t{fill:#5eead4}
+      .db{fill:#111827;stroke:#475569}
+      .good{fill:#4ade80}.bad{fill:#f87171}.div{stroke:#334155}
+    }
+    /* 10 s loop: UPDATE at 20%, JPQL eviction at 35%, findById at 55%, reload at 60% */
+    .a{animation:10s infinite linear}
+    .d10{animation-name:d10}.d15{opacity:0;animation-name:d15}
+    .c10e{animation-name:c10e}.cev{opacity:0;animation-name:cev}.c15e{opacity:0;animation-name:c15e}
+    .res{opacity:0;animation-name:res}
+    @keyframes d10{0%,20%{opacity:1}22%,95%{opacity:0}97%,100%{opacity:1}}
+    @keyframes d15{0%,20%{opacity:0}22%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes c10e{0%,34%{opacity:1}36%,95%{opacity:0}97%,100%{opacity:1}}
+    @keyframes cev{0%,34%{opacity:0}36%,58%{opacity:1}60%,100%{opacity:0}}
+    @keyframes c15e{0%,58%{opacity:0}60%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes res{0%,54%{opacity:0}56%,95%{opacity:1}97%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none}.d10,.c10e,.cev{opacity:0}.d15,.c15e,.res{opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Who tells the L2 cache that a row changed?</text>
+  <text class="sub" x="28" y="62">Both columns run an update that sets plan P1's copay from 10 to 15 in the database.</text>
+  <line class="div" x1="400" y1="80" x2="400" y2="360"/>
+  
+  <text class="mono" x="28" y="96">update Plan p set p.copay = …</text>
+  <text class="sub" x="28" y="116">Bulk JPQL through Hibernate</text>
+  <rect class="l2" x="28" y="130" width="352" height="54" rx="10"/>
+  <text class="l2t" x="42" y="152">L2 region "plan"</text>
+  <text class="sub" x="42" y="172">P1 →</text>
+  <text class="val a c10e" x="88" y="172">copay 10</text>
+  <text class="muted a cev" x="88" y="172">evicted (whole region)</text>
+  <text class="val a c15e" x="88" y="172">copay 15 (reloaded)</text>
+  <rect class="db" x="28" y="204" width="352" height="54" rx="10"/>
+  <text class="lbl" x="42" y="226">Database: plan table</text>
+  <text class="sub" x="42" y="246">P1 →</text>
+  <text class="val a d10" x="88" y="246">copay 10</text>
+  <text class="val a d15" x="88" y="246">copay 15</text>
+  <text class="sub" x="28" y="288">Next findById("P1")</text>
+  <g class="a res"><text class="good" x="28" y="312">✓ Miss → SELECT → copay 15</text>
+  <text class="txt" x="28" y="334">Hibernate knew which table changed.</text></g>
+  
+  <text class="mono" x="420" y="96">jdbc.update("UPDATE plan …")</text>
+  <text class="sub" x="420" y="116">Native SQL: Hibernate isn't told</text>
+  <rect class="l2" x="420" y="130" width="352" height="54" rx="10"/>
+  <text class="l2t" x="434" y="152">L2 region "plan"</text>
+  <text class="sub" x="434" y="172">P1 →</text>
+  <text class="val" x="480" y="172">copay 10</text>
+  <rect class="db" x="420" y="204" width="352" height="54" rx="10"/>
+  <text class="lbl" x="434" y="226">Database: plan table</text>
+  <text class="sub" x="434" y="246">P1 →</text>
+  <text class="val a d10" x="480" y="246">copay 10</text>
+  <text class="val a d15" x="480" y="246">copay 15</text>
+  <text class="sub" x="420" y="288">Next findById("P1")</text>
+  <g class="a res"><text class="bad" x="420" y="312">✗ Hit → copay 10 (stale)</text>
+  <text class="txt" x="420" y="334">Served until the TTL expires or code</text>
+  <text class="txt" x="420" y="354">calls getCache().evict(Plan.class).</text></g>
+  <text class="sub" x="28" y="384">Single pod shown. Other services or DBA scripts writing the table behave like the native SQL column.</text>
+</svg>

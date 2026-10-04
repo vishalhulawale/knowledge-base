@@ -60,6 +60,9 @@ public void addRx(Rx rx)    { prescriptions.add(rx); rx.setPatient(this); }
 public void removeRx(Rx rx) { prescriptions.remove(rx); rx.setPatient(null); }
 ```
 
+![Side by side: adding rx only to patient.getPrescriptions() leaves rx.patient null and the rx row is inserted with patient_id NULL, while patient.addRx(rx) sets both sides and the row gets patient_id 1](images/02-owning-side-fk.svg){ loading=lazy }
+*Notice that the collection looks the same in both cases. Only `rx.patient` decides what goes into the `patient_id` column.*
+
 ### Unidirectional one-to-many is the expensive choice
 
 | Mapping | SQL to save 1 parent + 2 children |
@@ -123,6 +126,9 @@ flowchart LR
 
 - A `List` without `@OrderColumn` is a **bag** (unordered, duplicates allowed). Join-fetching **two bags** in one query would produce a Cartesian product Hibernate can't de-duplicate, so it throws **`MultipleBagFetchException`**. Verified on Hibernate 6.6 with `join fetch p.prescriptions join fetch p.allergies`.
 - Fixes: fetch one collection per query (two queries in the same transaction; the persistence context stitches them together), use `Set` for one of them (still a Cartesian product in SQL, so beware of row explosion), or use batch fetching.
+
+![Animation: a query join-fetching a patient's three prescriptions and two allergies returns six rows, each prescription repeated twice and each allergy three times, which with two List bags leads to MultipleBagFetchException](images/02-multiple-bag-cartesian.svg){ loading=lazy }
+*Watch the rows pile up: the join multiplies the two collections, which is why Hibernate refuses two bags up front. Switching one to a `Set` avoids the exception but not the extra rows.*
 
 ## In practice: code & configuration
 

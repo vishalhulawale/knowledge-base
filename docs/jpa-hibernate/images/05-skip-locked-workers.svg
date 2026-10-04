@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 388" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Workers claiming jobs with SKIP LOCKED</title>
+  <desc id="d">Twenty READY jobs in a row. Four workers each run SELECT with FOR NO KEY UPDATE SKIP LOCKED and a limit of 5. Worker 1 locks jobs 1 to 5. Worker 2 skips the locked jobs 1 to 5 and locks 6 to 10. Worker 3 skips 1 to 10 and locks 11 to 15. Worker 4 skips 1 to 15 and locks 16 to 20. All 20 jobs are claimed once, with no duplicates and no worker waiting on another.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .slot{fill:#ffffff;stroke:#cbd5e1}
+    .num{fill:#0f172a;font-size:13px;font-weight:700}
+    .w1{fill:#4f46e5;fill-opacity:.35}.w2{fill:#0ea5a4;fill-opacity:.4}.w3{fill:#d97706;fill-opacity:.4}.w4{fill:#16a34a;fill-opacity:.4}
+    .ok{fill:#16a34a;font-size:15px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.mono,.num{fill:#f1f5f9}.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .slot{fill:#111827;stroke:#475569}
+      .w1{fill:#818cf8}.w2{fill:#2dd4bf}.w3{fill:#fbbf24}.w4{fill:#4ade80}
+      .ok{fill:#4ade80}
+    }
+    /* 10 s loop: workers claim at 8%, 22%, 36%, 50%; summary at 64% */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes c0{0%,8%{opacity:0}10%,94%{opacity:1}97%,100%{opacity:0}}.c0{animation-name:c0}
+  @keyframes c1{0%,22%{opacity:0}24%,94%{opacity:1}97%,100%{opacity:0}}.c1{animation-name:c1}
+  @keyframes c2{0%,36%{opacity:0}38%,94%{opacity:1}97%,100%{opacity:0}}.c2{animation-name:c2}
+  @keyframes c3{0%,50%{opacity:0}52%,94%{opacity:1}97%,100%{opacity:0}}.c3{animation-name:c3}
+  @keyframes c4{0%,64%{opacity:0}66%,94%{opacity:1}97%,100%{opacity:0}}.c4{animation-name:c4}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="386" rx="14"/>
+  <text class="h" x="28" y="40">SKIP LOCKED: workers claim different jobs without waiting</text>
+  <text class="mono" x="28" y="66">… where status = 'READY' order by id fetch first 5 rows only for no key update skip locked</text>
+  <rect class="slot" x="44" y="92" width="32" height="40" rx="6"/><g class="a c0"><rect class="w1" x="44" y="92" width="32" height="40" rx="6"/></g><text class="num" x="60" y="117" text-anchor="middle">1</text>
+  <rect class="slot" x="80" y="92" width="32" height="40" rx="6"/><g class="a c0"><rect class="w1" x="80" y="92" width="32" height="40" rx="6"/></g><text class="num" x="96" y="117" text-anchor="middle">2</text>
+  <rect class="slot" x="116" y="92" width="32" height="40" rx="6"/><g class="a c0"><rect class="w1" x="116" y="92" width="32" height="40" rx="6"/></g><text class="num" x="132" y="117" text-anchor="middle">3</text>
+  <rect class="slot" x="152" y="92" width="32" height="40" rx="6"/><g class="a c0"><rect class="w1" x="152" y="92" width="32" height="40" rx="6"/></g><text class="num" x="168" y="117" text-anchor="middle">4</text>
+  <rect class="slot" x="188" y="92" width="32" height="40" rx="6"/><g class="a c0"><rect class="w1" x="188" y="92" width="32" height="40" rx="6"/></g><text class="num" x="204" y="117" text-anchor="middle">5</text>
+  <rect class="slot" x="224" y="92" width="32" height="40" rx="6"/><g class="a c1"><rect class="w2" x="224" y="92" width="32" height="40" rx="6"/></g><text class="num" x="240" y="117" text-anchor="middle">6</text>
+  <rect class="slot" x="260" y="92" width="32" height="40" rx="6"/><g class="a c1"><rect class="w2" x="260" y="92" width="32" height="40" rx="6"/></g><text class="num" x="276" y="117" text-anchor="middle">7</text>
+  <rect class="slot" x="296" y="92" width="32" height="40" rx="6"/><g class="a c1"><rect class="w2" x="296" y="92" width="32" height="40" rx="6"/></g><text class="num" x="312" y="117" text-anchor="middle">8</text>
+  <rect class="slot" x="332" y="92" width="32" height="40" rx="6"/><g class="a c1"><rect class="w2" x="332" y="92" width="32" height="40" rx="6"/></g><text class="num" x="348" y="117" text-anchor="middle">9</text>
+  <rect class="slot" x="368" y="92" width="32" height="40" rx="6"/><g class="a c1"><rect class="w2" x="368" y="92" width="32" height="40" rx="6"/></g><text class="num" x="384" y="117" text-anchor="middle">10</text>
+  <rect class="slot" x="404" y="92" width="32" height="40" rx="6"/><g class="a c2"><rect class="w3" x="404" y="92" width="32" height="40" rx="6"/></g><text class="num" x="420" y="117" text-anchor="middle">11</text>
+  <rect class="slot" x="440" y="92" width="32" height="40" rx="6"/><g class="a c2"><rect class="w3" x="440" y="92" width="32" height="40" rx="6"/></g><text class="num" x="456" y="117" text-anchor="middle">12</text>
+  <rect class="slot" x="476" y="92" width="32" height="40" rx="6"/><g class="a c2"><rect class="w3" x="476" y="92" width="32" height="40" rx="6"/></g><text class="num" x="492" y="117" text-anchor="middle">13</text>
+  <rect class="slot" x="512" y="92" width="32" height="40" rx="6"/><g class="a c2"><rect class="w3" x="512" y="92" width="32" height="40" rx="6"/></g><text class="num" x="528" y="117" text-anchor="middle">14</text>
+  <rect class="slot" x="548" y="92" width="32" height="40" rx="6"/><g class="a c2"><rect class="w3" x="548" y="92" width="32" height="40" rx="6"/></g><text class="num" x="564" y="117" text-anchor="middle">15</text>
+  <rect class="slot" x="584" y="92" width="32" height="40" rx="6"/><g class="a c3"><rect class="w4" x="584" y="92" width="32" height="40" rx="6"/></g><text class="num" x="600" y="117" text-anchor="middle">16</text>
+  <rect class="slot" x="620" y="92" width="32" height="40" rx="6"/><g class="a c3"><rect class="w4" x="620" y="92" width="32" height="40" rx="6"/></g><text class="num" x="636" y="117" text-anchor="middle">17</text>
+  <rect class="slot" x="656" y="92" width="32" height="40" rx="6"/><g class="a c3"><rect class="w4" x="656" y="92" width="32" height="40" rx="6"/></g><text class="num" x="672" y="117" text-anchor="middle">18</text>
+  <rect class="slot" x="692" y="92" width="32" height="40" rx="6"/><g class="a c3"><rect class="w4" x="692" y="92" width="32" height="40" rx="6"/></g><text class="num" x="708" y="117" text-anchor="middle">19</text>
+  <rect class="slot" x="728" y="92" width="32" height="40" rx="6"/><g class="a c3"><rect class="w4" x="728" y="92" width="32" height="40" rx="6"/></g><text class="num" x="744" y="117" text-anchor="middle">20</text>
+  <g class="a c0"><rect class="w1" x="44" y="162" width="18" height="18" rx="4"/><text class="txt" x="72" y="176">Worker 1 locks jobs 1–5</text></g>
+  <g class="a c1"><rect class="w2" x="44" y="194" width="18" height="18" rx="4"/><text class="txt" x="72" y="208">Worker 2 skips 1–5 (locked) and locks 6–10</text></g>
+  <g class="a c2"><rect class="w3" x="44" y="226" width="18" height="18" rx="4"/><text class="txt" x="72" y="240">Worker 3 skips 1–10 and locks 11–15</text></g>
+  <g class="a c3"><rect class="w4" x="44" y="258" width="18" height="18" rx="4"/><text class="txt" x="72" y="272">Worker 4 skips 1–15 and locks 16–20</text></g>
+  <text class="a c4 ok" x="44" y="310">✓ 20 jobs claimed, 0 duplicates, no worker blocked</text>
+  <text class="sub" x="28" y="346">Workers run concurrently; they are staggered here for clarity.</text>
+  <text class="sub" x="28" y="366">Without SKIP LOCKED, workers 2–4 would block on the rows worker 1 has locked.</text>
+</svg>

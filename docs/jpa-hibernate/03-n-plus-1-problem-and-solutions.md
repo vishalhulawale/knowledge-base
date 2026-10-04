@@ -62,6 +62,9 @@ Dataset: 20 members, each with a different plan and 3 claims. PostgreSQL 16, Hib
 | `Page` query with `join fetch m.claims` | First 5 members with claims | 2, but **all rows loaded and paged in memory** (`HHH90003004`) |
 | Two-step: page ids, then fetch those members with claims | First 5 members with claims | **3** (ids page, count, fetch), correct paging in SQL |
 
+![Animation: three lanes load 20 members with their plan, one bar per statement; the lazy loop sends 21 statements, batch size 10 sends 3, and a join fetch, entity graph or DTO projection sends 1](images/03-query-count-lanes.svg){ loading=lazy }
+*Watch the first lane keep going long after the other two have finished. Every bar is a round trip, so the gap grows with the number of members.*
+
 ### Fix 1: JOIN FETCH
 
 ```java
@@ -136,6 +139,9 @@ flowchart TD
     S2 --> OK["Correct page, bounded rows"]
 ```
 *Notice the warning text in the logs: `HHH90003004: firstResult/maxResults specified with collection fetch; applying in memory` (Hibernate 5 logged it as `HHH000104`). Treat it as a bug, or make it fail fast with `hibernate.query.fail_on_pagination_over_collection_fetch=true`.*
+
+![Joined member and claim rows with a dashed LIMIT 5 line after the fifth row, which keeps all three claims of member 1 but only two of member 2's three claims](images/03-paging-limit-rows.svg){ loading=lazy }
+*Notice why SQL paging can't work here: the limit lands in the middle of member 2's claims. Paging the ids first puts the limit on members instead of rows.*
 
 ```java
 @Query("select m.id from Member m where m.status = :status order by m.id")

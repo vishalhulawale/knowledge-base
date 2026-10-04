@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">persist() versus merge()</title>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:14px;fill:#0f172a;font-weight:600}
+    .ctx{fill:none;stroke:#0ea5a4;stroke-width:2;stroke-dasharray:6 5}
+    .ctxt{fill:#0f766e;font-size:13px;font-weight:700}
+    .obj{fill:#ffffff;stroke:#64748b;stroke-width:2}
+    .ot{fill:#0f172a;font-size:15px;font-weight:700}
+    .man{fill:#4f46e5}
+    .mt{fill:#fff;font-size:15px;font-weight:700}
+    .ms{fill:#fff;font-size:13px}
+    .arr{stroke:#d97706;stroke-width:2.5;fill:none}
+    .arrh{fill:#d97706}
+    .at{fill:#b45309;font-size:13px;font-weight:700}
+    .bad{fill:#dc2626;font-size:13px;font-weight:600}
+    .good{fill:#16a34a;font-size:13px;font-weight:600}
+    .div{stroke:#e2e8f0;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.ot,.mono{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .ctx{stroke:#2dd4bf}.ctxt{fill:#5eead4}
+      .obj{fill:#111827;stroke:#94a3b8}
+      .man{fill:#818cf8}.mt,.ms{fill:#0f172a}
+      .arr{stroke:#fbbf24}.arrh{fill:#fbbf24}.at{fill:#fbbf24}
+      .bad{fill:#f87171}.good{fill:#4ade80}.div{stroke:#334155}
+    }
+    /* 10 s loop. persist: m moves into the context at 10-25%.
+       merge: SELECT + r appears 30%, copy arrow 50%, return r 70%. */
+    .a{animation:10s infinite ease-in-out}
+    .mv{animation-name:mv}
+    .tr{animation-name:showA}.mg{opacity:0;animation-name:showB}
+    .p1{opacity:0;animation-name:p1}
+    .s1{opacity:0;animation-name:s1}.s2{opacity:0;animation-name:s2}.s3{opacity:0;animation-name:s3}
+    @keyframes mv{0%,10%{transform:translateY(0)}25%,94%{transform:translateY(126px)}98%,100%{transform:translateY(0)}}
+    @keyframes showA{0%,20%{opacity:1}24%,96%{opacity:0}98%,100%{opacity:1}}
+    @keyframes showB{0%,20%{opacity:0}24%,94%{opacity:1}96%,100%{opacity:0}}
+    @keyframes p1{0%,26%{opacity:0}29%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s1{0%,30%{opacity:0}33%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s2{0%,50%{opacity:0}53%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s3{0%,70%{opacity:0}73%,94%{opacity:1}97%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none}.mv{transform:translateY(126px)}.tr{opacity:0}
+      .mg,.p1,.s1,.s2,.s3{opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">persist() attaches the object; merge() attaches a copy</text>
+  <text class="sub" x="28" y="62">Dashed box: the persistence context. Indigo: a managed instance whose changes are flushed.</text>
+
+  <line class="div" x1="400" y1="80" x2="400" y2="390"/>
+
+  <!-- ===== persist ===== -->
+  <text class="mono" x="28" y="100">em.persist(m)</text>
+  <rect class="ctx" x="28" y="216" width="352" height="110" rx="12"/>
+  <text class="ctxt" x="42" y="236">Persistence context</text>
+  <g class="a mv">
+    <g class="a tr">
+      <rect class="obj" x="144" y="124" width="120" height="56" rx="10"/>
+      <text class="ot" x="204" y="149" text-anchor="middle">m</text>
+      <text class="sub" x="204" y="169" text-anchor="middle">transient</text>
+    </g>
+    <g class="a mg">
+      <rect class="man" x="144" y="124" width="120" height="56" rx="10"/>
+      <text class="mt" x="204" y="149" text-anchor="middle">m</text>
+      <text class="ms" x="204" y="169" text-anchor="middle">managed</text>
+    </g>
+  </g>
+  <g class="a p1">
+    <text class="good" x="28" y="350">✓ The same object m is now managed.</text>
+    <text class="txt" x="28" y="370">INSERT is queued for flush.</text>
+  </g>
+
+  <!-- ===== merge ===== -->
+  <text class="mono" x="420" y="100">Member r = em.merge(d)</text>
+  <rect class="obj" x="440" y="124" width="120" height="56" rx="10"/>
+  <text class="ot" x="500" y="149" text-anchor="middle">d</text>
+  <text class="sub" x="500" y="169" text-anchor="middle">detached</text>
+
+  <rect class="ctx" x="420" y="216" width="352" height="110" rx="12"/>
+  <text class="ctxt" x="434" y="236">Persistence context</text>
+  <g class="a s1">
+    <rect class="man" x="630" y="250" width="120" height="56" rx="10"/>
+    <text class="mt" x="690" y="275" text-anchor="middle">r</text>
+    <text class="ms" x="690" y="295" text-anchor="middle">managed</text>
+    <text class="sub" x="434" y="270">SELECT the row</text>
+    <text class="sub" x="434" y="288">if it isn't loaded yet</text>
+  </g>
+  <g class="a s2">
+    <path class="arr" d="M560 152 C 640 152 690 180 690 240"/>
+    <path class="arrh" d="M683 236 L697 236 L690 249 Z"/>
+    <text class="at" x="632" y="146">copy state</text>
+  </g>
+  <g class="a s3">
+    <text class="good" x="420" y="350">✓ merge returns r: keep using r.</text>
+    <text class="bad" x="420" y="370">✗ d stays detached: later edits to d are lost.</text>
+  </g>
+</svg>

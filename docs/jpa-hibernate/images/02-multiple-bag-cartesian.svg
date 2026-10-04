@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Join fetching two collections multiplies rows</title>
+  <desc id="d">Patient 1 has three prescriptions (amoxicillin, ibuprofen, metformin) and two allergies (penicillin, latex). A query that join-fetches both collections returns 3 times 2, which is 6 rows for one patient: every prescription appears twice and every allergy three times. Because both collections are Lists (bags, which allow duplicates), Hibernate cannot tell real duplicates from join duplicates and refuses the query with MultipleBagFetchException. Using a Set removes the duplicates in memory, but the SQL still returns all 6 rows.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .code{fill:#ffffff;stroke:#cbd5e1}
+    .chip{fill:#4f46e5}.chipt{fill:#fff;font-size:13px;font-weight:600}
+    .chip2{fill:#0ea5a4}
+    .th{fill:#4f46e5}.tht{fill:#fff;font-size:13px;font-weight:700}
+    .cell{fill:#ffffff;stroke:#cbd5e1}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    .warn{fill:#b45309;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.mono{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .code,.cell{fill:#111827;stroke:#475569}
+      .chip,.th{fill:#818cf8}.chip2{fill:#2dd4bf}.chipt,.tht{fill:#0f172a}
+      .bad{fill:#f87171}.warn{fill:#fbbf24}
+    }
+    /* 10 s loop: six result rows arrive one by one (6%-43%), then the verdict (55%) */
+    .a{opacity:0;animation:10s infinite linear}
+        @keyframes r0{0%,6%{opacity:0}8%,94%{opacity:1}97%,100%{opacity:0}}.k0{animation-name:r0}
+    @keyframes r1{0%,13%{opacity:0}15%,94%{opacity:1}97%,100%{opacity:0}}.k1{animation-name:r1}
+    @keyframes r2{0%,20%{opacity:0}22%,94%{opacity:1}97%,100%{opacity:0}}.k2{animation-name:r2}
+    @keyframes r3{0%,27%{opacity:0}29%,94%{opacity:1}97%,100%{opacity:0}}.k3{animation-name:r3}
+    @keyframes r4{0%,34%{opacity:0}36%,94%{opacity:1}97%,100%{opacity:0}}.k4{animation-name:r4}
+    @keyframes r5{0%,41%{opacity:0}43%,94%{opacity:1}97%,100%{opacity:0}}.k5{animation-name:r5}
+    @keyframes v{0%,53%{opacity:0}56%,94%{opacity:1}97%,100%{opacity:0}}.ver{animation-name:v}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Join fetching two List collections: a Cartesian product</text>
+  <rect class="code" x="28" y="54" width="744" height="30" rx="6"/>
+  <text class="mono" x="40" y="74">select p from Patient p join fetch p.prescriptions join fetch p.allergies</text>
+
+  <text class="lbl" x="28" y="122">Patient 1</text>
+  <text class="sub" x="28" y="146">prescriptions (List)</text>
+  <rect class="chip" x="28" y="154" width="120" height="26" rx="13"/><text class="chipt" x="88" y="172" text-anchor="middle">amoxicillin</text>
+  <rect class="chip" x="28" y="186" width="120" height="26" rx="13"/><text class="chipt" x="88" y="204" text-anchor="middle">ibuprofen</text>
+  <rect class="chip" x="28" y="218" width="120" height="26" rx="13"/><text class="chipt" x="88" y="236" text-anchor="middle">metformin</text>
+  <text class="sub" x="28" y="272">allergies (List)</text>
+  <rect class="chip2" x="28" y="280" width="120" height="26" rx="13"/><text class="chipt" x="88" y="298" text-anchor="middle">penicillin</text>
+  <rect class="chip2" x="28" y="312" width="120" height="26" rx="13"/><text class="chipt" x="88" y="330" text-anchor="middle">latex</text>
+
+  <text class="sub" x="230" y="104">Rows this SQL would return</text>
+  <rect class="th" x="230" y="110" width="300" height="26"/>
+  <text class="tht" x="244" y="128">p.id</text><text class="tht" x="300" y="128">rx.drug</text><text class="tht" x="425" y="128">allergy</text>
+    <g class="a k0"><rect class="cell" x="230" y="136" width="300" height="30"/><text class="txt" x="244" y="156">1</text><text class="txt" x="300" y="156">amoxicillin</text><text class="txt" x="425" y="156">penicillin</text></g>
+  <g class="a k1"><rect class="cell" x="230" y="166" width="300" height="30"/><text class="txt" x="244" y="186">1</text><text class="txt" x="300" y="186">amoxicillin</text><text class="txt" x="425" y="186">latex</text></g>
+  <g class="a k2"><rect class="cell" x="230" y="196" width="300" height="30"/><text class="txt" x="244" y="216">1</text><text class="txt" x="300" y="216">ibuprofen</text><text class="txt" x="425" y="216">penicillin</text></g>
+  <g class="a k3"><rect class="cell" x="230" y="226" width="300" height="30"/><text class="txt" x="244" y="246">1</text><text class="txt" x="300" y="246">ibuprofen</text><text class="txt" x="425" y="246">latex</text></g>
+  <g class="a k4"><rect class="cell" x="230" y="256" width="300" height="30"/><text class="txt" x="244" y="276">1</text><text class="txt" x="300" y="276">metformin</text><text class="txt" x="425" y="276">penicillin</text></g>
+  <g class="a k5"><rect class="cell" x="230" y="286" width="300" height="30"/><text class="txt" x="244" y="306">1</text><text class="txt" x="300" y="306">metformin</text><text class="txt" x="425" y="306">latex</text></g>
+  <text class="lbl" x="230" y="342">3 prescriptions × 2 allergies = 6 rows</text>
+
+  <g class="a ver">
+    <text class="bad" x="552" y="152">✗ Two bags</text>
+    <text class="txt" x="552" y="174">Lists allow duplicates, so</text>
+    <text class="txt" x="552" y="194">Hibernate can't tell real</text>
+    <text class="txt" x="552" y="214">repeats from join repeats</text>
+    <text class="txt" x="552" y="234">and refuses the query:</text>
+    <text class="txt" x="552" y="254">MultipleBagFetchException</text>
+    <text class="warn" x="552" y="292">Set for one of them</text>
+    <text class="txt" x="552" y="314">Works, but SQL still</text>
+    <text class="txt" x="552" y="334">returns all 6 rows.</text>
+  </g>
+  <text class="sub" x="28" y="380">With 20 prescriptions and 10 allergies it's 200 rows per patient. Prefer one collection per query or batch fetching.</text>
+</svg>

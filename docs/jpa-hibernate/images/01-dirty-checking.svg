@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 410" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Snapshot-based dirty checking</title>
+  <desc id="d">Inside a persistence context, a managed Member with id 42 sits next to the snapshot Hibernate copied when it was loaded. A setter changes the email on the managed entity. At flush, Hibernate compares each field with the snapshot: name and phone are equal, email differs. Hibernate sends an UPDATE for that row and then the transaction commits. No save() call is made.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .ctx{fill:none;stroke:#0ea5a4;stroke-width:2;stroke-dasharray:6 5}
+    .ctxt{fill:#0f766e;font-size:14px;font-weight:700}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .ent{fill:#4f46e5}
+    .ent-t{fill:#fff;font-size:14px;font-weight:700}
+    .chg{fill:#d97706;fill-opacity:.18;stroke:#d97706;stroke-width:2}
+    .eq{fill:#16a34a;font-size:18px;font-weight:700}
+    .ne{fill:#dc2626;font-size:18px;font-weight:700}
+    .sql{fill:#ffffff;stroke:#4f46e5;stroke-width:2}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .hl{fill:#4f46e5;fill-opacity:.12;stroke:#4f46e5}
+    .ok{fill:#16a34a;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .ctx{stroke:#2dd4bf}.ctxt{fill:#5eead4}
+      .box{fill:#111827;stroke:#475569}
+      .ent{fill:#818cf8}.ent-t{fill:#0f172a}
+      .chg{fill:#fbbf24;stroke:#fbbf24}
+      .eq{fill:#4ade80}.ne{fill:#f87171}
+      .sql{fill:#111827;stroke:#818cf8}.mono{fill:#f1f5f9}
+      .hl{fill:#818cf8;stroke:#818cf8}.ok{fill:#4ade80}
+    }
+    /* 10 s loop: 1 load 0-18%, 2 setter 18-38%, 3 flush/compare 38-58%, 4 UPDATE 58-76%, 5 commit 76-94% */
+    .a{animation:10s infinite linear}
+    .old{animation-name:oldv}
+    .new,.chgbox{opacity:0;animation-name:newv}
+    .cmp{opacity:0;animation-name:cmpv}
+    .sqlv{opacity:0;animation-name:sqlv}
+    .done{opacity:0;animation-name:donev}
+    @keyframes oldv{0%,19%{opacity:1}21%,94%{opacity:0}97%,100%{opacity:1}}
+    @keyframes newv{0%,19%{opacity:0}21%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes cmpv{0%,41%{opacity:0}43%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes sqlv{0%,59%{opacity:0}61%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes donev{0%,77%{opacity:0}79%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes step{0%,18%{transform:translateY(0)}18.01%,38%{transform:translateY(34px)}38.01%,58%{transform:translateY(68px)}58.01%,76%{transform:translateY(102px)}76.01%,96%{transform:translateY(136px)}96.01%,100%{transform:translateY(0)}}
+    .stp{animation:step 10s infinite steps(1,end)}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none}.old{opacity:0}.new,.chgbox,.cmp,.sqlv,.done{opacity:1}
+      .stp{animation:none;transform:translateY(136px)}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="408" rx="14"/>
+  <text class="h" x="28" y="40">Dirty checking: snapshot vs current state at flush</text>
+  <text class="sub" x="28" y="62">A managed entity is compared with the copy Hibernate took when it loaded the row.</text>
+
+  <!-- persistence context -->
+  <rect class="ctx" x="28" y="82" width="470" height="210" rx="12"/>
+  <text class="ctxt" x="44" y="104">Persistence context (one transaction)</text>
+
+  <text class="lbl" x="48" y="134">Managed Member #42</text>
+  <text class="lbl" x="288" y="134">Snapshot at load</text>
+
+  <!-- managed entity fields -->
+  <rect class="box" x="48" y="146" width="200" height="34" rx="6"/><text class="txt" x="60" y="168">name: Asha</text>
+  <rect class="box" x="48" y="188" width="200" height="34" rx="6"/>
+  <rect class="a chgbox chg" x="48" y="188" width="200" height="34" rx="6"/>
+  <text class="txt a old" x="60" y="210">email: a@old.com</text>
+  <text class="txt a new" x="60" y="210">email: a@new.com</text>
+  <rect class="box" x="48" y="230" width="200" height="34" rx="6"/><text class="txt" x="60" y="252">phone: 555-0100</text>
+
+  <!-- snapshot fields -->
+  <rect class="box" x="288" y="146" width="190" height="34" rx="6"/><text class="txt" x="300" y="168">name: Asha</text>
+  <rect class="box" x="288" y="188" width="190" height="34" rx="6"/><text class="txt" x="300" y="210">email: a@old.com</text>
+  <rect class="box" x="288" y="230" width="190" height="34" rx="6"/><text class="txt" x="300" y="252">phone: 555-0100</text>
+
+  <!-- compare markers -->
+  <g class="a cmp">
+    <text class="eq" x="268" y="170" text-anchor="middle">=</text>
+    <text class="ne" x="268" y="212" text-anchor="middle">≠</text>
+    <text class="eq" x="268" y="254" text-anchor="middle">=</text>
+  </g>
+  <text class="sub" x="48" y="282">m.setEmail("a@new.com") changes only the managed object.</text>
+
+  <!-- steps -->
+  <g class="stp"><rect class="hl" x="520" y="84" width="252" height="30" rx="6"/></g>
+  <text class="txt" x="532" y="104">1. find(): row loaded + snapshot</text>
+  <text class="txt" x="532" y="138">2. Setter changes email</text>
+  <text class="txt" x="532" y="172">3. Flush: compare every field</text>
+  <text class="txt" x="532" y="206">4. UPDATE sent for Member #42</text>
+  <text class="txt" x="532" y="240">5. Commit</text>
+  <text class="ok a done" x="532" y="276">✓ Saved without calling save()</text>
+
+  <!-- SQL -->
+  <rect class="sql" x="28" y="310" width="744" height="48" rx="10"/>
+  <text class="sub" x="44" y="339">SQL at flush:</text>
+  <text class="mono a sqlv" x="140" y="339">UPDATE member SET email=?, name=?, phone=? WHERE id=42</text>
+
+  <text class="sub" x="28" y="388">Simplified. By default Hibernate's UPDATE sets every column; a @Version column is also bumped and checked.</text>
+</svg>

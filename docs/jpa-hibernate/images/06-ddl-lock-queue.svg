@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">An ALTER TABLE stuck in the lock queue</title>
+  <desc id="d">A long-running SELECT holds an ACCESS SHARE lock on the member table. A migration's ALTER TABLE needs an ACCESS EXCLUSIVE lock, so it waits. Top row, without lock_timeout: new SELECT, INSERT and UPDATE queries, which only need weaker locks, queue behind the waiting ALTER, and requests time out. Bottom row, with lock_timeout set to 5 seconds: the ALTER fails after 5 seconds, the queued queries run, and the migration is retried later.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .hold{fill:#4f46e5}
+    .waitx{fill:#d97706;fill-opacity:.18;stroke:#d97706;stroke-width:2;stroke-dasharray:6 4}
+    .blk{fill:#ffffff;stroke:#dc2626;stroke-width:2}
+    .okb{fill:#16a34a}
+    .failb{fill:#dc2626}
+    .bt{fill:#fff;font-size:13px;font-weight:700}
+    .blk+text,.blk+text+text{fill:#dc2626}
+    .wt{fill:#b45309;font-size:13px;font-weight:700}
+    .small{font-weight:500}
+    .good{fill:#16a34a;font-size:14px;font-weight:700}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    .div{stroke:#e2e8f0;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .hold{fill:#818cf8}.okb{fill:#4ade80}.failb{fill:#f87171}.bt{fill:#0f172a}
+      .waitx{fill:#fbbf24;stroke:#fbbf24}.wt{fill:#fbbf24}
+      .blk{fill:#111827;stroke:#f87171}.blk+text,.blk+text+text{fill:#f87171}
+      .good{fill:#4ade80}.bad{fill:#f87171}.div{stroke:#334155}
+    }
+    /* 12 s loop. Top: ALTER waits from 8%, queries pile up 18-58%. Bottom: timeout at 45%, queue drains at 49% */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes q0{0%,8%{opacity:0}10%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes q1{0%,18%{opacity:0}20%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes q2{0%,28%{opacity:0}30%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes q3{0%,38%{opacity:0}40%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes q4{0%,48%{opacity:0}50%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes q5{0%,58%{opacity:0}60%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes note1{0%,66%{opacity:0}68%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes q0t{0%,8%{opacity:0}10%,45%{opacity:1}47%,100%{opacity:0}}
+  @keyframes q1t{0%,18%{opacity:0}20%,49%{opacity:1}51%,100%{opacity:0}}
+  @keyframes q2t{0%,28%{opacity:0}30%,49%{opacity:1}51%,100%{opacity:0}}
+  @keyframes fail{0%,45%{opacity:0}47%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes run{0%,49%{opacity:0}51%,95%{opacity:1}97%,100%{opacity:0}}
+  @keyframes note2{0%,56%{opacity:0}58%,95%{opacity:1}97%,100%{opacity:0}}
+    .q0{animation-name:q0}.q1{animation-name:q1}.q2{animation-name:q2}.q3{animation-name:q3}.q4{animation-name:q4}.q5{animation-name:q5}
+    .q0t{animation-name:q0t}.q1t{animation-name:q1t}.q2t{animation-name:q2t}
+    .note1{animation-name:note1}.fail{animation-name:fail}.run{animation-name:run}.note2{animation-name:note2}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none;opacity:1}.q0t,.q1t,.q2t{opacity:0}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="438" rx="14"/>
+  <text class="h" x="28" y="40">A quick ALTER TABLE can still cause an outage</text>
+  <text class="sub" x="28" y="62">PostgreSQL grants table locks in queue order, so queries that arrive later wait behind the ALTER.</text>
+  <text class="lbl" x="28" y="104">Without lock_timeout</text>
+  <rect class="hold" x="28" y="116" width="150" height="46" rx="8"/><text class="bt" x="103.0" y="135" text-anchor="middle">Long SELECT</text><text class="bt small" x="103.0" y="153" text-anchor="middle">holds ACCESS SHARE</text>
+  <g class="a q0"><rect class="waitx" x="188" y="116" width="170" height="46" rx="8"/><text class="wt" x="273.0" y="135" text-anchor="middle">ALTER TABLE (waits)</text><text class="wt small" x="273.0" y="153" text-anchor="middle">ACCESS EXCLUSIVE</text></g>
+  <g class="a q1"><rect class="blk" x="370" y="116" width="74" height="46" rx="8"/><text class="bt" x="407.0" y="135" text-anchor="middle">SELECT</text><text class="bt small" x="407.0" y="153" text-anchor="middle">waiting</text></g>
+  <g class="a q2"><rect class="blk" x="450" y="116" width="74" height="46" rx="8"/><text class="bt" x="487.0" y="135" text-anchor="middle">INSERT</text><text class="bt small" x="487.0" y="153" text-anchor="middle">waiting</text></g>
+  <g class="a q3"><rect class="blk" x="530" y="116" width="74" height="46" rx="8"/><text class="bt" x="567.0" y="135" text-anchor="middle">SELECT</text><text class="bt small" x="567.0" y="153" text-anchor="middle">waiting</text></g>
+  <g class="a q4"><rect class="blk" x="610" y="116" width="74" height="46" rx="8"/><text class="bt" x="647.0" y="135" text-anchor="middle">UPDATE</text><text class="bt small" x="647.0" y="153" text-anchor="middle">waiting</text></g>
+  <g class="a q5"><rect class="blk" x="690" y="116" width="74" height="46" rx="8"/><text class="bt" x="727.0" y="135" text-anchor="middle">SELECT</text><text class="bt small" x="727.0" y="153" text-anchor="middle">waiting</text></g>
+  <g class="a note1"><text class="bad" x="28" y="190">✗ Every new query on member queues behind the ALTER: requests time out.</text></g>
+  <line class="div" x1="28" y1="232" x2="772" y2="232"/>
+  <text class="lbl" x="28" y="270">With SET lock_timeout = '5s'</text>
+  <rect class="hold" x="28" y="282" width="150" height="46" rx="8"/><text class="bt" x="103.0" y="301" text-anchor="middle">Long SELECT</text><text class="bt small" x="103.0" y="319" text-anchor="middle">holds ACCESS SHARE</text>
+  <g class="a q0t"><rect class="waitx" x="188" y="282" width="170" height="46" rx="8"/><text class="wt" x="273.0" y="301" text-anchor="middle">ALTER TABLE (waits)</text><text class="wt small" x="273.0" y="319" text-anchor="middle">ACCESS EXCLUSIVE</text></g>
+  <g class="a q1t"><rect class="blk" x="370" y="282" width="74" height="46" rx="8"/><text class="bt" x="407.0" y="301" text-anchor="middle">SELECT</text><text class="bt small" x="407.0" y="319" text-anchor="middle">waiting</text></g>
+  <g class="a run"><rect class="okb" x="370" y="282" width="74" height="46" rx="8"/><text class="bt" x="407.0" y="301" text-anchor="middle">SELECT</text><text class="bt small" x="407.0" y="319" text-anchor="middle">running</text></g>
+  <g class="a q2t"><rect class="blk" x="450" y="282" width="74" height="46" rx="8"/><text class="bt" x="487.0" y="301" text-anchor="middle">INSERT</text><text class="bt small" x="487.0" y="319" text-anchor="middle">waiting</text></g>
+  <g class="a run"><rect class="okb" x="450" y="282" width="74" height="46" rx="8"/><text class="bt" x="487.0" y="301" text-anchor="middle">INSERT</text><text class="bt small" x="487.0" y="319" text-anchor="middle">running</text></g>
+  <g class="a fail"><rect class="failb" x="188" y="282" width="170" height="46" rx="8"/><text class="bt" x="273.0" y="301" text-anchor="middle">ALTER failed</text><text class="bt small" x="273.0" y="319" text-anchor="middle">lock_timeout 5 s</text></g>
+  <g class="a note2"><text class="good" x="28" y="356">✓ The ALTER gives up, queued queries run, and the migration is retried later.</text></g>
+  <text class="sub" x="28" y="420">Time compressed. The fix is to fail fast and retry, not to wait.</text>
+</svg>

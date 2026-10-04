@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Why LIMIT can't page a collection fetch</title>
+  <desc id="d">A join fetch of members with their claims returns one row per member and claim. Members 1, 2 and 3 each have three claims, so they take nine rows. A LIMIT 5 line falls after the fifth row: member 1 gets all three claims but member 2 gets only two of its three. Because SQL LIMIT counts rows, not members, Hibernate drops the LIMIT, loads every row and pages in memory, logging HHH90003004. The fix is to page member ids first and then join fetch claims for those ids.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .th{fill:#4f46e5}.tht{fill:#fff;font-size:13px;font-weight:700}
+    .m1{fill:#4f46e5;fill-opacity:.10;stroke:#cbd5e1}
+    .m2{fill:#0ea5a4;fill-opacity:.14;stroke:#cbd5e1}
+    .m3{fill:#d97706;fill-opacity:.12;stroke:#cbd5e1}
+    .dim{opacity:.45}
+    .cut{stroke:#dc2626;stroke-width:3;stroke-dasharray:8 5}
+    .cutt{fill:#dc2626;font-size:14px;font-weight:700}
+    .bad{fill:#dc2626;font-size:15px;font-weight:700}
+    .good{fill:#16a34a;font-size:15px;font-weight:700}
+    .warn{fill:#b45309;font-size:15px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .th{fill:#818cf8}.tht{fill:#0f172a}
+      .m1{fill:#818cf8;fill-opacity:.18;stroke:#475569}
+      .m2{fill:#2dd4bf;fill-opacity:.18;stroke:#475569}
+      .m3{fill:#fbbf24;fill-opacity:.16;stroke:#475569}
+      .cut{stroke:#f87171}.cutt,.bad{fill:#f87171}.good{fill:#4ade80}.warn{fill:#fbbf24}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Paging a collection fetch: LIMIT counts rows, not members</text>
+  <text class="sub" x="28" y="62">Rows from: select m from Member m join fetch m.claims order by m.id</text>
+
+  <rect class="th" x="28" y="110" width="300" height="26"/>
+  <text class="tht" x="44" y="128">m.id</text><text class="tht" x="130" y="128">member</text><text class="tht" x="250" y="128">claim id</text>
+    <g><rect class="m1" x="28" y="136" width="300" height="26"/><text class="txt" x="44" y="154">1</text><text class="txt" x="130" y="154">Member 1</text><text class="txt" x="250" y="154">101</text></g>
+  <g><rect class="m1" x="28" y="162" width="300" height="26"/><text class="txt" x="44" y="180">1</text><text class="txt" x="130" y="180">Member 1</text><text class="txt" x="250" y="180">102</text></g>
+  <g><rect class="m1" x="28" y="188" width="300" height="26"/><text class="txt" x="44" y="206">1</text><text class="txt" x="130" y="206">Member 1</text><text class="txt" x="250" y="206">103</text></g>
+  <g><rect class="m2" x="28" y="214" width="300" height="26"/><text class="txt" x="44" y="232">2</text><text class="txt" x="130" y="232">Member 2</text><text class="txt" x="250" y="232">201</text></g>
+  <g><rect class="m2" x="28" y="240" width="300" height="26"/><text class="txt" x="44" y="258">2</text><text class="txt" x="130" y="258">Member 2</text><text class="txt" x="250" y="258">202</text></g>
+  <g class="dim"><rect class="m2" x="28" y="266" width="300" height="26"/><text class="txt" x="44" y="284">2</text><text class="txt" x="130" y="284">Member 2</text><text class="txt" x="250" y="284">203</text></g>
+  <g class="dim"><rect class="m3" x="28" y="292" width="300" height="26"/><text class="txt" x="44" y="310">3</text><text class="txt" x="130" y="310">Member 3</text><text class="txt" x="250" y="310">301</text></g>
+  <g class="dim"><rect class="m3" x="28" y="318" width="300" height="26"/><text class="txt" x="44" y="336">3</text><text class="txt" x="130" y="336">Member 3</text><text class="txt" x="250" y="336">302</text></g>
+  <g class="dim"><rect class="m3" x="28" y="344" width="300" height="26"/><text class="txt" x="44" y="362">3</text><text class="txt" x="130" y="362">Member 3</text><text class="txt" x="250" y="362">303</text></g>
+  <line class="cut" x1="20" y1="266" x2="350" y2="266"/>
+  <text class="cutt" x="28" y="98">Dashed line: where LIMIT 5 would cut</text>
+
+  <text class="bad" x="384" y="122">✗ Member 2 would be cut in half</text>
+  <text class="txt" x="384" y="146">Member 1 gets all 3 claims, member 2</text>
+  <text class="txt" x="384" y="166">gets 2 of its 3. The number of rows per</text>
+  <text class="txt" x="384" y="186">member isn't known before the query runs.</text>
+
+  <text class="warn" x="384" y="226">What Hibernate does instead</text>
+  <text class="txt" x="384" y="250">Drops the LIMIT, loads every member and</text>
+  <text class="txt" x="384" y="270">claim row, then pages in memory and logs</text>
+  <text class="txt" x="384" y="290">HHH90003004.</text>
+
+  <text class="good" x="384" y="330">✓ Two-step fix</text>
+  <text class="txt" x="384" y="354">1. Page member ids (LIMIT on members).</text>
+  <text class="txt" x="384" y="374">2. Join fetch claims WHERE m.id IN :ids.</text>
+  <text class="sub" x="28" y="400">Three members with three claims each shown; the same applies to any page size.</text>
+</svg>

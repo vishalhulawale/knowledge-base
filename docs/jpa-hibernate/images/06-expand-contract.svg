@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Renaming a column with expand and contract</title>
+  <desc id="d">The member table starts with a phone column. Release N adds a nullable mobile_phone column, all NULL; the app still writes and reads phone. Release N+1 writes both columns and a batched backfill copies phone into mobile_phone row by row. Release N+2 reads mobile_phone while still writing both, so rolling back stays safe. Release N+3 writes only mobile_phone; the phone column is greyed out and is dropped in a later migration once no deployed code uses it.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub,.muted{fill:#64748b;font-size:13px}
+    .muted{font-size:14px;font-style:italic}
+    .val{fill:#0f172a;font-size:14px;font-weight:700}
+    .new{fill:#0f766e;font-size:14px;font-weight:700}
+    .chipbg{fill:#ffffff;stroke:#cbd5e1}
+    .chipt{fill:#334155;font-size:14px;font-weight:600}
+    .chiphl{fill:none;stroke:#4f46e5;stroke-width:3}
+    .th{fill:#4f46e5}.tht{fill:#fff;font-size:13px;font-weight:700}
+    .cell{fill:#ffffff;stroke:#cbd5e1}
+    .panel{fill:#ffffff;stroke:#e2e8f0}
+    .dimcol{fill:#64748b;fill-opacity:.35}
+    .dimt{fill:#dc2626;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.val{fill:#f1f5f9}.lbl,.txt,.chipt{fill:#e2e8f0}.sub,.muted{fill:#94a3b8}
+      .new{fill:#5eead4}
+      .chipbg,.cell,.panel{fill:#111827;stroke:#475569}
+      .chiphl{stroke:#818cf8}
+      .th{fill:#818cf8}.tht{fill:#0f172a}
+      .dimcol{fill:#0f172a;fill-opacity:.6}.dimt{fill:#f87171}
+    }
+    /* 12 s loop: four releases of about 2.8 s each, then a short pause on the contract step */
+    .a{animation:12s infinite linear}
+    .st1,.st2,.st3{opacity:0}
+    .bf0,.bf1,.bf2{opacity:0}
+    @keyframes st0{0%,22%{opacity:1}23%,97%{opacity:0}99%,100%{opacity:1}}
+  .st0{animation-name:st0}
+  @keyframes st1{0%,22%{opacity:0}23%,45%{opacity:1}46%,100%{opacity:0}}
+  .st1{animation-name:st1}
+  @keyframes st2{0%,45%{opacity:0}46%,68%{opacity:1}69%,100%{opacity:0}}
+  .st2{animation-name:st2}
+  @keyframes st3{0%,68%{opacity:0}69%,96%{opacity:1}98%,100%{opacity:0}}
+  .st3{animation-name:st3}
+  @keyframes chip{0%,22.9%{transform:translateX(0)}23%,45.9%{transform:translateX(186px)}46%,68.9%{transform:translateX(372px)}69%,97.9%{transform:translateX(558px)}98%,100%{transform:translateX(0)}}
+  @keyframes bf0{0%,28%{opacity:0}29%,97%{opacity:1}99%,100%{opacity:0}}.bf0{animation-name:bf0}
+  @keyframes nl0{0%,28%{opacity:1}29%,97%{opacity:0}99%,100%{opacity:1}}.nl0{animation-name:nl0}
+  @keyframes bf1{0%,33%{opacity:0}34%,97%{opacity:1}99%,100%{opacity:0}}.bf1{animation-name:bf1}
+  @keyframes nl1{0%,33%{opacity:1}34%,97%{opacity:0}99%,100%{opacity:1}}.nl1{animation-name:nl1}
+  @keyframes bf2{0%,38%{opacity:0}39%,97%{opacity:1}99%,100%{opacity:0}}.bf2{animation-name:bf2}
+  @keyframes nl2{0%,38%{opacity:1}39%,97%{opacity:0}99%,100%{opacity:1}}.nl2{animation-name:nl2}
+    .hl{animation:chip 12s infinite steps(1,end)}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none}.st0,.st1,.st2,.nl0,.nl1,.nl2{opacity:0}.st3,.bf0,.bf1,.bf2{opacity:1}
+      .hl{animation:none;transform:translateX(558px)}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">Renaming phone to mobile_phone without downtime</text>
+  <text class="sub" x="28" y="62">Each release is deployed while the previous version is still running against the same table.</text>
+  <rect class="chipbg" x="28" y="80" width="178" height="34" rx="17"/><text class="chipt" x="117" y="102" text-anchor="middle">N: Expand</text>
+  <rect class="chipbg" x="214" y="80" width="178" height="34" rx="17"/><text class="chipt" x="303" y="102" text-anchor="middle">N+1: Dual write</text>
+  <rect class="chipbg" x="400" y="80" width="178" height="34" rx="17"/><text class="chipt" x="489" y="102" text-anchor="middle">N+2: Switch reads</text>
+  <rect class="chipbg" x="586" y="80" width="178" height="34" rx="17"/><text class="chipt" x="675" y="102" text-anchor="middle">N+3: Contract</text>
+  <g class="hl"><rect class="chiphl" x="28" y="80" width="178" height="34" rx="17"/></g>
+
+  <text class="lbl" x="28" y="140">Table member</text>
+  <rect class="th" x="28" y="148" width="380" height="28"/>
+  <text class="tht" x="40" y="167">id</text><text class="tht" x="94" y="167">phone</text><text class="tht" x="236" y="167">mobile_phone</text>
+  <rect class="cell" x="28" y="176" width="380" height="32"/><text class="txt" x="40" y="197">1</text><text class="txt" x="94" y="197">555-0101</text><text class="muted a nl0" x="236" y="197">NULL</text><text class="new a bf0" x="236" y="197">555-0101</text>
+  <rect class="cell" x="28" y="208" width="380" height="32"/><text class="txt" x="40" y="229">2</text><text class="txt" x="94" y="229">555-0102</text><text class="muted a nl1" x="236" y="229">NULL</text><text class="new a bf1" x="236" y="229">555-0102</text>
+  <rect class="cell" x="28" y="240" width="380" height="32"/><text class="txt" x="40" y="261">3</text><text class="txt" x="94" y="261">555-0103</text><text class="muted a nl2" x="236" y="261">NULL</text><text class="new a bf2" x="236" y="261">555-0103</text>
+  <g class="a st3">
+    <rect class="dimcol" x="84" y="148" width="140" height="124"/>
+    <text class="dimt" x="94" y="292">phone: no longer used</text>
+  </g>
+
+  <rect class="panel" x="436" y="132" width="336" height="180" rx="12"/>
+  <text class="lbl" x="452" y="160">New app version</text>
+  <g class="a st0">
+    <text class="sub" x="452" y="190">Writes</text><text class="val" x="520" y="190">phone</text>
+    <text class="sub" x="452" y="216">Reads</text><text class="val" x="520" y="216">phone</text>
+    <text class="txt" x="452" y="252">Add mobile_phone as a nullable</text>
+    <text class="txt" x="452" y="272">column. Old and new versions</text>
+    <text class="txt" x="452" y="292">both ignore it safely.</text>
+  </g>
+  <g class="a st1">
+    <text class="sub" x="452" y="190">Writes</text><text class="val" x="520" y="190">phone + mobile_phone</text>
+    <text class="sub" x="452" y="216">Reads</text><text class="val" x="520" y="216">phone</text>
+    <text class="txt" x="452" y="252">New code writes both columns.</text>
+    <text class="txt" x="452" y="272">A batched job backfills old rows.</text>
+  </g>
+  <g class="a st2">
+    <text class="sub" x="452" y="190">Writes</text><text class="val" x="520" y="190">phone + mobile_phone</text>
+    <text class="sub" x="452" y="216">Reads</text><text class="val" x="520" y="216">mobile_phone</text>
+    <text class="txt" x="452" y="252">Reads move to mobile_phone.</text>
+    <text class="txt" x="452" y="272">Rolling back to N+1 is still safe.</text>
+  </g>
+  <g class="a st3">
+    <text class="sub" x="452" y="190">Writes</text><text class="val" x="520" y="190">mobile_phone</text>
+    <text class="sub" x="452" y="216">Reads</text><text class="val" x="520" y="216">mobile_phone</text>
+    <text class="txt" x="452" y="252">Stop writing phone. Drop it in a</text>
+    <text class="txt" x="452" y="272">later migration, once no deployed</text>
+    <text class="txt" x="452" y="292">code reads or writes it.</text>
+  </g>
+  <text class="sub" x="28" y="352">Simplified to three rows. Each step ships separately; the backfill runs as a batched job, not inside a migration.</text>
+</svg>

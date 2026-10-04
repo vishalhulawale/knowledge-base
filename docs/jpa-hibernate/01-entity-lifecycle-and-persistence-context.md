@@ -50,6 +50,9 @@ stateDiagram-v2
 - **Unit of work:** inserts, updates and deletes are queued and written at **flush** in a dependency-safe order (write-behind). This lets Hibernate batch statements (`hibernate.jdbc.batch_size`) and avoid writing intermediate states.
 - **Snapshot-based dirty checking:** when an entity is loaded, Hibernate keeps a copy of its state. At flush it compares current values with the snapshot and issues `UPDATE` for changed entities. That is why there is no need to call `save()` on a managed entity, and also why loading thousands of entities in a read-write transaction costs memory and flush time.
 
+![Animation: a managed Member sits next to the snapshot taken at load; a setter changes its email, the flush compares each field with the snapshot, finds only email different and sends an UPDATE before commit](images/01-dirty-checking.svg){ loading=lazy }
+*Watch step 3: Hibernate finds the change by comparing with the snapshot, not by intercepting the setter. Every managed entity is compared at flush, which is why large read-write contexts get slow.*
+
 ### Flushing
 
 Flush means "send pending SQL to the database"; it does **not** commit.
@@ -73,6 +76,9 @@ flowchart TD
     D --> E["Caller must use the returned object"]
 ```
 *Notice the trap on the right: with an assigned id (a natural key or a client-generated UUID) Spring Data thinks the entity is not new, so `save()` does a `merge`, which first SELECTs the row to see whether it exists.*
+
+![Animation: persist moves the transient object itself into the persistence context; merge leaves the detached object outside, loads or creates a managed instance, copies the state onto it and returns that instance](images/01-persist-vs-merge.svg){ loading=lazy }
+*Notice that after `merge` there are two objects: the managed `r` that gets flushed and the argument `d`, which is still detached.*
 
 **Verified on Hibernate 6.6.29 / Spring Boot 3.5:**
 

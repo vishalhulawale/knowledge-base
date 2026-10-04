@@ -36,6 +36,9 @@ flowchart LR
 ```
 *Notice that L1 holds entity instances for one transaction, L2 holds dehydrated entity state for the whole application, and Spring's cache abstraction sits above JPA entirely and usually caches DTOs.*
 
+![Two pods: in pod A two transactions each hold their own Drug instance in their L1 cache, above one shared L2 region storing the row's field values; pod B has its own separate L2 region; both read the same database](images/04-cache-scopes.svg){ loading=lazy }
+*Notice the three different Drug instances for one row, and that with a local provider each pod keeps its own L2 copy.*
+
 ### First-level cache (persistence context)
 
 - **Scope:** one `EntityManager`, which in Spring means one transaction (or one repository call when there's no transaction).
@@ -80,6 +83,9 @@ spring.jpa.properties.jakarta.persistence.sharedCache.mode=ENABLE_SELECTIVE
 | Same `find` twice in one `EntityManager` | 1 | L1: same instance |
 
 The bulk-update row matters: Hibernate knows which entity table a JPQL bulk statement touches and evicts that whole region. A **native SQL** update, a stored procedure, another service writing the same table or a DBA script gives Hibernate no such signal, so the cache keeps serving the old value until it expires.
+
+![Animation: plan P1's copay changes from 10 to 15 in the database; after a bulk JPQL update Hibernate evicts the plan region and the next findById reads 15, while after a native SQL update the cache keeps 10 and findById returns the stale value](images/04-stale-native-update.svg){ loading=lazy }
+*Watch the right-hand cache: the database already says 15, but nothing told Hibernate, so the cache keeps answering 10.*
 
 ### Query cache
 

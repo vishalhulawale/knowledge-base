@@ -114,6 +114,9 @@ List<Job> claimBatch(Limit limit);
 
 Each worker locks a batch of unclaimed rows; rows locked by other workers are skipped instead of waited on. Measured: 4 concurrent workers claiming batches of 5 from 20 jobs claimed all 20, **no duplicates**, no blocking. This is how many outbox relays and database-backed job queues (for example JobRunr, Quartz clustering patterns, Postgres-based queues) work.
 
+![Animation: twenty jobs in a row; worker 1 locks jobs 1 to 5, worker 2 skips them and locks 6 to 10, worker 3 locks 11 to 15 and worker 4 locks 16 to 20, so every job is claimed once](images/05-skip-locked-workers.svg){ loading=lazy }
+*Watch each worker step over the rows already locked by others instead of waiting for them.*
+
 ### Choosing
 
 ```mermaid
@@ -135,6 +138,9 @@ flowchart TD
 | Deadlock risk | None | Yes (lock ordering) | Low |
 | Works across user think-time | Yes (version in ETag) | No (never hold locks across requests) | n/a |
 | Measured (10 concurrent debits) | 9 failures, nothing lost | 0 failures, serialised | Exactly the allowed number succeed |
+
+![Animation: two debits of 10 from a balance of 100; with optimistic locking the second update matches 0 rows, throws and retries to reach 80, while with pessimistic locking the second transaction waits for the row lock and then writes 80](images/05-optimistic-vs-pessimistic.svg){ loading=lazy }
+*Notice where the cost lands: optimistic locking makes the loser fail and redo its work, pessimistic locking makes it wait.*
 
 ### Retrying optimistic failures
 
