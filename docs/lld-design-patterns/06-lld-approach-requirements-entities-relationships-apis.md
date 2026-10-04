@@ -43,6 +43,9 @@ flowchart TD
 ```
 *Notice that steps 1–7 should take roughly a third of the time. They make step 8 fast and the twist in step 9 a small change instead of a rewrite.*
 
+![A 45-minute timeline: 20 minutes of design split into clarify 5, entities 5, classes and patterns 5, APIs 3 and state 2; 15 minutes coding the core path; 10 minutes for tests and walkthrough 5 and the extension twist 5](images/06-lld-time-budget.svg){ loading=lazy }
+*Notice the hard edge at minute 20: if coding hasn't started by then, there's no time left to run it or absorb the twist.*
+
 ### Step 1: Clarify
 
 Questions to ask:
@@ -88,6 +91,9 @@ Questions to ask:
     - **Single JVM:** `ConcurrentHashMap.compute`/`putIfAbsent`, `ReentrantLock` per aggregate, atomic classes. Lock ordering (sort the seat IDs) to avoid deadlock.
     - **Multiple instances:** DB constraints and conditional updates (unique index on `(show_id, seat_id)`), optimistic locking (`@Version`), or a short distributed lock with fencing.
 - **Timeouts:** holds expire, either via a scheduled sweeper or lazily when checked.
+
+![Animation: seat C7 goes from AVAILABLE to HELD when Alice holds it; Bob's hold two minutes later is refused; Alice's 5-minute hold expires and the seat returns to AVAILABLE; Bob then holds it and confirms, and it becomes BOOKED](images/06-seat-hold-expiry.svg){ loading=lazy }
+*Watch the amber arrow back to AVAILABLE: a hold is a lease. Without an expiry, abandoned carts would lock seats forever.*
 
 ### What interviewers score
 
