@@ -34,6 +34,9 @@ flowchart LR
 ```
 *Notice the two consumption modes behave differently on change: environment variables are fixed for the container's life, while mounted files are eventually refreshed (except with `subPath`). That decides whether a config change needs a rollout.*
 
+![Animation: after LOG_LEVEL is edited from INFO to DEBUG, a container reading it as an environment variable keeps INFO, a mounted volume file changes to DEBUG after about a minute, a subPath mount stays INFO, and only a pod restart brings DEBUG everywhere](images/05-configmap-update.svg){ loading=lazy }
+*Watch step 3: the same ConfigMap shows two different values in one pod, depending only on how it was mounted.*
+
 | Aspect | Environment variables | Mounted volume |
 |---|---|---|
 | Updates when the ConfigMap/Secret changes | **No**: needs a pod restart | **Yes**, eventually (kubelet sync period plus cache TTL, typically up to about a minute) |
@@ -99,6 +102,9 @@ sequenceDiagram
     Note over API: kubelet attaches + mounts, pod starts
 ```
 *Notice that with `WaitForFirstConsumer`, the scheduler decides the zone first and the disk follows. With `Immediate`, the disk might be created in a zone where the pod can't be scheduled.*
+
+![With Immediate binding the EBS volume is created in zone a before the pod exists, the pod is scheduled into zone b and stays Pending with a volume node affinity conflict; with WaitForFirstConsumer the pod is scheduled into zone b first and the disk is then created there](images/05-volume-binding-zones.svg){ loading=lazy }
+*Notice which decision comes first in each lane: with WaitForFirstConsumer the scheduler picks the zone and the disk follows it.*
 
 Measured with a `gp3` StorageClass (`provisioner: ebs.csi.aws.com`, `WaitForFirstConsumer`):
 

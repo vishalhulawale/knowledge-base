@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">ConfigMap change: env vs mounted file vs subPath</title>
+  <desc id="d">A ConfigMap&#x27;s LOG_LEVEL is edited from INFO to DEBUG. Three containers consume it differently. The one reading it as an environment variable keeps INFO for its whole life, until the pod is restarted or rolled. The one with the ConfigMap mounted as a volume sees the file change to DEBUG after the kubelet&#x27;s sync, typically within about a minute. The one that mounts a single file with subPath never sees the change. Restarting the pod picks up DEBUG everywhere.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:15s infinite linear}
+    @keyframes p0{0%,20%{opacity:1}21%{opacity:0}100%{opacity:0}}
+    .p0{animation-name:p0}
+    @keyframes p1{0%{opacity:0}20%{opacity:0}21%,55%{opacity:1}56%{opacity:0}100%{opacity:0}}
+    .p1{animation-name:p1}
+    @keyframes p2{0%{opacity:0}55%{opacity:0}56%,80%{opacity:1}81%{opacity:0}100%{opacity:0}}
+    .p2{animation-name:p2}
+    @keyframes p3{0%{opacity:0}80%{opacity:0}81%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .p3{animation-name:p3}
+    @keyframes p123{0%{opacity:0}20%{opacity:0}21%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .p123{animation-name:p123}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      .p0,.p1,.p3{opacity:0!important}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">kubectl edit configmap app-config: LOG_LEVEL INFO → DEBUG</text>
+  <text class="sub" x="28" y="62">What each container sees afterwards. Timings typical, not exact.</text>
+  <rect class="bp" x="28" y="96" width="220" height="44" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="138" y="123" text-anchor="middle" font-weight="700">ConfigMap app-config</text>
+  <text class="tx" x="260" y="124">LOG_LEVEL =</text>
+  <g class="a p0">
+  <rect class="mutf" x="360" y="106" width="80" height="26" rx="5"/>
+  <text class="on13" x="400" y="123.5" text-anchor="middle">INFO</text>
+  </g>
+  <g class="a p123">
+  <rect class="pri" x="360" y="106" width="80" height="26" rx="5"/>
+  <text class="on13" x="400" y="123.5" text-anchor="middle">DEBUG</text>
+  </g>
+  <rect class="box" x="28" y="166" width="744" height="48" rx="10" stroke-width="1.2"/>
+  <text class="tx" x="42" y="187" font-weight="700">env: LOG_LEVEL</text>
+  <text class="sm" x="42" y="204">envFrom / valueFrom</text>
+  <g class="a p0">
+  <rect class="mutf" x="640" y="176" width="110" height="28" rx="6"/>
+  <text class="on" x="695" y="194.5" text-anchor="middle">INFO</text>
+  </g>
+  <g class="a p1">
+  <rect class="mutf" x="640" y="176" width="110" height="28" rx="6"/>
+  <text class="on" x="695" y="194.5" text-anchor="middle">INFO</text>
+  </g>
+  <g class="a p2">
+  <rect class="mutf" x="640" y="176" width="110" height="28" rx="6"/>
+  <text class="on" x="695" y="194.5" text-anchor="middle">INFO</text>
+  </g>
+  <g class="a p3">
+  <rect class="pri" x="640" y="176" width="110" height="28" rx="6"/>
+  <text class="on" x="695" y="194.5" text-anchor="middle">DEBUG</text>
+  </g>
+  <rect class="box" x="28" y="224" width="744" height="48" rx="10" stroke-width="1.2"/>
+  <text class="tx" x="42" y="245" font-weight="700">volume: /etc/config/LOG_LEVEL</text>
+  <text class="sm" x="42" y="262">kubelet refreshes the file</text>
+  <g class="a p0">
+  <rect class="mutf" x="640" y="234" width="110" height="28" rx="6"/>
+  <text class="on" x="695" y="252.5" text-anchor="middle">INFO</text>
+  </g>
+  <g class="a p1">
+  <rect class="mutf" x="640" y="234" width="110" height="28" rx="6"/>
+  <text class="on" x="695" y="252.5" text-anchor="middle">INFO</text>
+  </g>
+  <g class="a p2">
+  <rect class="pri" x="640" y="234" width="110" height="28" rx="6"/>
+  <text class="on" x="695" y="252.5" text-anchor="middle">DEBUG</text>
+  </g>
+  <g class="a p3">
+  <rect class="pri" x="640" y="234" width="110" height="28" rx="6"/>
+  <text class="on" x="695" y="252.5" text-anchor="middle">DEBUG</text>
+  </g>
+  <rect class="box" x="28" y="282" width="744" height="48" rx="10" stroke-width="1.2"/>
+  <text class="tx" x="42" y="303" font-weight="700">subPath: /app/LOG_LEVEL</text>
+  <text class="sm" x="42" y="320">single file, never refreshed</text>
+  <g class="a p0">
+  <rect class="mutf" x="640" y="292" width="110" height="28" rx="6"/>
+  <text class="on" x="695" y="310.5" text-anchor="middle">INFO</text>
+  </g>
+  <g class="a p1">
+  <rect class="mutf" x="640" y="292" width="110" height="28" rx="6"/>
+  <text class="on" x="695" y="310.5" text-anchor="middle">INFO</text>
+  </g>
+  <g class="a p2">
+  <rect class="mutf" x="640" y="292" width="110" height="28" rx="6"/>
+  <text class="on" x="695" y="310.5" text-anchor="middle">INFO</text>
+  </g>
+  <g class="a p3">
+  <rect class="pri" x="640" y="292" width="110" height="28" rx="6"/>
+  <text class="on" x="695" y="310.5" text-anchor="middle">DEBUG</text>
+  </g>
+  <text class="lbl a p0" x="28" y="364">1  Before the edit</text>
+  <text class="lbl a p1" x="28" y="364">2  Edited: only the API object changed so far</text>
+  <text class="lbl a p2" x="28" y="364">3  ~1 min later: mounted file updated; env and subPath still INFO</text>
+  <text class="lbl okt a p3" x="28" y="364">4  Pod restarted (rollout): everything reads DEBUG</text>
+  <text class="sub" x="28" y="396">Want config changes to roll out? Hash the ConfigMap into a pod annotation (Helm checksum/config).</text>
+</svg>
