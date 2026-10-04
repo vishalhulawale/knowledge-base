@@ -59,6 +59,9 @@ flowchart LR
 - Java I/O: `new BufferedReader(new InputStreamReader(new FileInputStream(f), UTF_8))`.
 - Modern alternatives: Resilience4j `Decorators.ofSupplier(...)`, Spring AOP, or functional composition (`Function.andThen`).
 
+![Animation: one priceFor call travels through nested decorators: Metrics starts a timer, Retry makes attempt 1, Cache misses, Http returns 503, Retry backs off and tries again, Cache misses, Http returns 200, Cache stores the result and Metrics records 340 ms including the retry](images/03-decorator-call.svg){ loading=lazy }
+*Watch step 9: Metrics sees one call of 340 ms because it sits outside Retry. Move it inside and you'd get two timings, one per attempt.*
+
 ### Proxy, and how Spring uses it
 
 ```mermaid
@@ -123,6 +126,9 @@ classDiagram
     RuleGroup o-- PricingRule : children
 ```
 *Notice that a group **is** a rule, so clients call `apply()` on a single rule or a whole tree the same way. That's the core of Composite: uniform treatment of leaves and branches.*
+
+![A pricing rule tree for a 100 dollar cart: the root group takes the best of a 10 percent leaf worth 10 dollars and a sum group worth 8 dollars made of a 5 dollar coupon and 3 dollar loyalty, so the root returns 10 dollars](images/03-composite-rules.svg){ loading=lazy }
+*Notice the values flowing up: each node answers `apply(cart)` the same way, so the client can't tell, and doesn't care, whether it holds one rule or a whole tree.*
 
 - **Use for:** hierarchies such as rules, menus, org units, UI components (React's component tree), file systems, GraphQL selection sets.
 - **Design question:** where do child-management methods (`add`/`remove`) live? On the composite only (type-safe) or on the interface (uniform but leaves must reject them). Prefer composite-only.

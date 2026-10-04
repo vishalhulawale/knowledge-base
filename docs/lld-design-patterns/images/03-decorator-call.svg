@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Decorators: one call through Metrics, Retry, Cache and HTTP</title>
+  <desc id="d">Four decorators nested like an onion, all implementing the same PricingClient interface: Metrics wraps Retry, which wraps Cache, which wraps the HTTP client. One call: Metrics starts a timer, Retry makes attempt 1, Cache misses, HTTP returns 503. Retry backs off and makes attempt 2, Cache misses again, HTTP returns 200, Cache stores the result, and Metrics records the total time, 340 ms including the retry. Swapping the order changes the behaviour: with Cache outside Retry, a cache hit would skip retries and metrics entirely.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:18s infinite linear}
+    @keyframes s0{0%{opacity:0}1%{opacity:0}2%,11.5%{opacity:1}12.5%{opacity:0}100%{opacity:0}}
+    .s0{animation-name:s0}
+    @keyframes s1{0%{opacity:0}11.5%{opacity:0}12.5%,22%{opacity:1}23%{opacity:0}100%{opacity:0}}
+    .s1{animation-name:s1}
+    @keyframes s2{0%{opacity:0}22%{opacity:0}23%,32.5%{opacity:1}33.5%{opacity:0}100%{opacity:0}}
+    .s2{animation-name:s2}
+    @keyframes s3{0%{opacity:0}32.5%{opacity:0}33.5%,43%{opacity:1}44%{opacity:0}100%{opacity:0}}
+    .s3{animation-name:s3}
+    @keyframes s4{0%{opacity:0}43%{opacity:0}44%,53.5%{opacity:1}54.5%{opacity:0}100%{opacity:0}}
+    .s4{animation-name:s4}
+    @keyframes s5{0%{opacity:0}53.5%{opacity:0}54.5%,64%{opacity:1}65%{opacity:0}100%{opacity:0}}
+    .s5{animation-name:s5}
+    @keyframes s6{0%{opacity:0}64%{opacity:0}65%,74.5%{opacity:1}75.5%{opacity:0}100%{opacity:0}}
+    .s6{animation-name:s6}
+    @keyframes s7{0%{opacity:0}74.5%{opacity:0}75.5%,85%{opacity:1}86%{opacity:0}100%{opacity:0}}
+    .s7{animation-name:s7}
+    @keyframes s8{0%{opacity:0}85%{opacity:0}86%,95.5%{opacity:1}96.5%{opacity:0}100%{opacity:0}}
+    .s8{animation-name:s8}
+    @keyframes l0{0%{opacity:0}1%{opacity:0}2%,98%{opacity:1}99%{opacity:0}100%{opacity:0}}
+    .l0{animation-name:l0}
+    @keyframes l1{0%{opacity:0}11.5%{opacity:0}12.5%,98%{opacity:1}99%{opacity:0}100%{opacity:0}}
+    .l1{animation-name:l1}
+    @keyframes l2{0%{opacity:0}22%{opacity:0}23%,98%{opacity:1}99%{opacity:0}100%{opacity:0}}
+    .l2{animation-name:l2}
+    @keyframes l3{0%{opacity:0}32.5%{opacity:0}33.5%,98%{opacity:1}99%{opacity:0}100%{opacity:0}}
+    .l3{animation-name:l3}
+    @keyframes l4{0%{opacity:0}43%{opacity:0}44%,98%{opacity:1}99%{opacity:0}100%{opacity:0}}
+    .l4{animation-name:l4}
+    @keyframes l5{0%{opacity:0}53.5%{opacity:0}54.5%,98%{opacity:1}99%{opacity:0}100%{opacity:0}}
+    .l5{animation-name:l5}
+    @keyframes l6{0%{opacity:0}64%{opacity:0}65%,98%{opacity:1}99%{opacity:0}100%{opacity:0}}
+    .l6{animation-name:l6}
+    @keyframes l7{0%{opacity:0}74.5%{opacity:0}75.5%,98%{opacity:1}99%{opacity:0}100%{opacity:0}}
+    .l7{animation-name:l7}
+    @keyframes l8{0%{opacity:0}85%{opacity:0}86%,98%{opacity:1}99%{opacity:0}100%{opacity:0}}
+    .l8{animation-name:l8}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      .s0,.s1,.s2,.s3,.s4,.s5,.s6,.s7{opacity:0!important}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="468" rx="14"/>
+  <text class="h" x="28" y="40">Metrics(Retry(Cache(Http))): one priceFor() call</text>
+  <text class="sub" x="28" y="62">Every layer implements PricingClient and holds the next one. Illustrative timings.</text>
+  <rect class="bp" x="28" y="96" width="744" height="250" rx="12" stroke-width="1.5"/>
+  <text class="lbl" x="40" y="116">Metrics</text>
+  <rect class="bt" x="52" y="126" width="696" height="196" rx="12" stroke-width="1.5"/>
+  <text class="lbl" x="64" y="146">Retry</text>
+  <rect class="bw" x="76" y="156" width="648" height="142" rx="12" stroke-width="1.5"/>
+  <text class="lbl" x="88" y="176">Cache</text>
+  <rect class="bm" x="100" y="186" width="600" height="88" rx="12" stroke-width="1.5"/>
+  <text class="lbl" x="112" y="206">Http</text>
+  <g class="a s0">
+  <rect x="28" y="96" width="744" height="250" rx="12" fill="none" class="lnp" style="stroke-width:3"/>
+  <text class="tx prit" x="758" y="116" text-anchor="end">1. start timer</text>
+  </g>
+  <g class="a s1">
+  <rect x="52" y="126" width="696" height="196" rx="12" fill="none" class="lnp" style="stroke-width:3"/>
+  <text class="tx prit" x="734" y="146" text-anchor="end">2. attempt 1</text>
+  </g>
+  <g class="a s2">
+  <rect x="76" y="156" width="648" height="142" rx="12" fill="none" class="lnp" style="stroke-width:3"/>
+  <text class="tx prit" x="710" y="176" text-anchor="end">3. miss</text>
+  </g>
+  <g class="a s3">
+  <rect x="100" y="186" width="600" height="88" rx="12" fill="none" class="lnp" style="stroke-width:3"/>
+  <text class="tx badt" x="686" y="206" text-anchor="end">4. 503 ✕</text>
+  </g>
+  <g class="a s4">
+  <rect x="52" y="126" width="696" height="196" rx="12" fill="none" class="lnp" style="stroke-width:3"/>
+  <text class="tx prit" x="734" y="146" text-anchor="end">5. back off, attempt 2</text>
+  </g>
+  <g class="a s5">
+  <rect x="76" y="156" width="648" height="142" rx="12" fill="none" class="lnp" style="stroke-width:3"/>
+  <text class="tx prit" x="710" y="176" text-anchor="end">6. miss</text>
+  </g>
+  <g class="a s6">
+  <rect x="100" y="186" width="600" height="88" rx="12" fill="none" class="lnp" style="stroke-width:3"/>
+  <text class="tx okt" x="686" y="206" text-anchor="end">7. 200 ✓</text>
+  </g>
+  <g class="a s7">
+  <rect x="76" y="156" width="648" height="142" rx="12" fill="none" class="lnp" style="stroke-width:3"/>
+  <text class="tx prit" x="710" y="176" text-anchor="end">8. store result</text>
+  </g>
+  <g class="a s8">
+  <rect x="28" y="96" width="744" height="250" rx="12" fill="none" class="lnp" style="stroke-width:3"/>
+  <text class="tx prit" x="758" y="116" text-anchor="end">9. record 340 ms total</text>
+  </g>
+  <text class="sm" x="28" y="372">Call log</text>
+  <text class="sm a l0" x="28" y="392">1 Metrics: start timer</text>
+  <text class="sm a l1" x="278" y="392">2 Retry: attempt 1</text>
+  <text class="sm a l2" x="528" y="392">3 Cache: miss</text>
+  <text class="sm badt a l3" x="28" y="410">4 Http: 503 ✕</text>
+  <text class="sm a l4" x="278" y="410">5 Retry: back off, attempt 2</text>
+  <text class="sm a l5" x="528" y="410">6 Cache: miss</text>
+  <text class="sm okt a l6" x="28" y="428">7 Http: 200 ✓</text>
+  <text class="sm a l7" x="278" y="428">8 Cache: store result</text>
+  <text class="sm a l8" x="528" y="428">9 Metrics: record 340 ms total</text>
+  <text class="sub" x="28" y="456">Order is behaviour: Cache(Retry(Http)) retries only misses; Retry(Metrics(Http)) times each attempt separately.</text>
+</svg>

@@ -33,7 +33,7 @@ Suggested pictures per page; ⏵ marks an animation.
 ### LLD & Design Patterns (P0)
 - [x] 01 SOLID: LSP violation (Square/Rectangle); composition vs inheritance change ripple
 - [x] 02 Creational: double-checked locking race without `volatile`; builder vs telescoping constructor
-- [ ] 03 Structural: ⏵ decorator wrapping order; adapter vs decorator vs proxy wrappers compared
+- [x] 03 Structural: ⏵ decorator wrapping order; adapter vs decorator vs proxy wrappers compared
 - [ ] 04 Behavioural: ⏵ chain of responsibility handing a request along; state machine transitions
 - [ ] 05 UML: the six relationships' arrow notation; aggregation vs composition lifetimes
 - [ ] 06 LLD approach: the 7-step process with time budget for a 45-minute round
