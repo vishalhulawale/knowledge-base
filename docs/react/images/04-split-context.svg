@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">One context versus split contexts</title>
+  <desc id="d">Top: one AppContext whose value is a new object literal holding user and logout. Four consumers read it: Avatar and Greeting read user, Logout and IdleTimer read logout. When the user changes, all four re-render, even the two that only call actions. Bottom: the state is split into SessionContext holding user and SessionActionsContext holding stable, memoised actions. When the user changes, only Avatar and Greeting re-render; Logout and IdleTimer are skipped because the actions value never changes.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .node{fill:#ffffff;stroke:#cbd5e1}
+    .prov{fill:#ffffff;stroke:#4f46e5;stroke-width:2}
+    .bus{fill:none;stroke:#4f46e5;stroke-width:2}
+    .bus2{fill:none;stroke:#0ea5a4;stroke-width:2}
+    .ren{fill:none;stroke:#d97706;stroke-width:3}
+    .skip{fill:#64748b;font-size:13px;font-style:italic}
+    .ok{fill:#16a34a;font-size:14px;font-weight:700}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.skip{fill:#94a3b8}
+      .node{fill:#111827;stroke:#475569}
+      .prov{fill:#111827;stroke:#818cf8}.bus{stroke:#818cf8}.bus2{stroke:#2dd4bf}
+      .ren{stroke:#fbbf24}
+      .ok{fill:#4ade80}.bad{fill:#f87171}
+    }
+    /* 10 s loop: row 1 reacts first, then row 2 */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes k1{0%,15%{opacity:0}18%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes k2{0%,23%{opacity:0}26%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes k3{0%,39%{opacity:0}42%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes k4{0%,47%{opacity:0}50%,93%{opacity:1}98%,100%{opacity:0}}
+    .k1{animation-name:k1}.k2{animation-name:k2}.k3{animation-name:k3}.k4{animation-name:k4}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="428" rx="14"/>
+  <text class="h" x="28" y="40">Split contexts so action-only consumers stay still</text>
+  <text class="sub" x="28" y="62">login() sets a new user. Amber outline = re-rendered.</text>
+
+  <!-- row 1: one context -->
+  <text class="lbl" x="28" y="94">One context, new object every render</text>
+  <path class="bus" d="M278 142 H296 V106 H719 M365 106 V118 M483 106 V118 M601 106 V118 M719 106 V118"/>
+  <rect class="prov" x="28" y="112" width="250" height="60" rx="10"/>
+  <text class="tx mono" x="42" y="136">AppContext</text>
+  <text class="sub mono" x="42" y="158">value={{ user, logout }}</text>
+  <rect class="node" x="310" y="118" width="110" height="52" rx="9"/><text class="tx" x="365" y="140" text-anchor="middle">Avatar</text><text class="sub" x="365" y="159" text-anchor="middle">reads user</text>
+  <rect class="node" x="428" y="118" width="110" height="52" rx="9"/><text class="tx" x="483" y="140" text-anchor="middle">Greeting</text><text class="sub" x="483" y="159" text-anchor="middle">reads user</text>
+  <rect class="node" x="546" y="118" width="110" height="52" rx="9"/><text class="tx" x="601" y="140" text-anchor="middle">Logout</text><text class="sub" x="601" y="159" text-anchor="middle">reads logout</text>
+  <rect class="node" x="664" y="118" width="110" height="52" rx="9"/><text class="tx" x="719" y="140" text-anchor="middle">IdleTimer</text><text class="sub" x="719" y="159" text-anchor="middle">reads logout</text>
+  <g class="a k1">
+    <rect class="ren" x="310" y="118" width="110" height="52" rx="9"/><rect class="ren" x="428" y="118" width="110" height="52" rx="9"/>
+    <rect class="ren" x="546" y="118" width="110" height="52" rx="9"/><rect class="ren" x="664" y="118" width="110" height="52" rx="9"/>
+  </g>
+  <g class="a k2"><text class="bad" x="310" y="196">All 4 re-render, even those that only call actions.</text></g>
+
+  <!-- row 2: split -->
+  <text class="lbl" x="28" y="232">Split by update frequency, values memoised</text>
+  <path class="bus" d="M278 264 H296 V246 H483 M365 246 V258 M483 246 V258"/>
+  <path class="bus2" d="M278 316 H296 V326 H719 M601 326 V310 M719 326 V310"/>
+  <rect class="prov" x="28" y="244" width="250" height="40" rx="9"/>
+  <text class="tx mono" x="42" y="269">SessionContext</text><text class="sub" x="264" y="269" text-anchor="end">{ user }</text>
+  <rect class="prov" x="28" y="296" width="250" height="40" rx="9"/>
+  <text class="tx mono" x="42" y="321">SessionActions</text><text class="sub" x="264" y="321" text-anchor="end">stable</text>
+  <rect class="node" x="310" y="258" width="110" height="52" rx="9"/><text class="tx" x="365" y="280" text-anchor="middle">Avatar</text><text class="sub" x="365" y="299" text-anchor="middle">reads user</text>
+  <rect class="node" x="428" y="258" width="110" height="52" rx="9"/><text class="tx" x="483" y="280" text-anchor="middle">Greeting</text><text class="sub" x="483" y="299" text-anchor="middle">reads user</text>
+  <rect class="node" x="546" y="258" width="110" height="52" rx="9"/><text class="tx" x="601" y="280" text-anchor="middle">Logout</text><text class="sub" x="601" y="299" text-anchor="middle">reads logout</text>
+  <rect class="node" x="664" y="258" width="110" height="52" rx="9"/><text class="tx" x="719" y="280" text-anchor="middle">IdleTimer</text><text class="sub" x="719" y="299" text-anchor="middle">reads logout</text>
+  <g class="a k3">
+    <rect class="ren" x="310" y="258" width="110" height="52" rx="9"/><rect class="ren" x="428" y="258" width="110" height="52" rx="9"/>
+    <text class="skip" x="601" y="246" text-anchor="middle">skipped</text><text class="skip" x="719" y="246" text-anchor="middle">skipped</text>
+  </g>
+  <g class="a k4"><text class="ok" x="310" y="358">Only the 2 user readers re-render.</text></g>
+
+  <text class="sub" x="28" y="394">SessionActions is short for SessionActionsContext. Its value is memoised with useMemo(..., [])</text>
+  <text class="sub" x="28" y="412">and the state value with useMemo(..., [user]), as in the SessionProvider example below.</text>
+</svg>

@@ -26,6 +26,9 @@ flowchart LR
 ```
 *Notice the core idea of concurrency: urgent updates can interrupt a long, non-urgent render. That's why renders must be pure. React may start one and throw it away.*
 
+![Animation: without a transition, typing "a" starts one long blocking render and the "b" keystroke waits; with startTransition, the input renders at once, the list renders in small units, and when "b" arrives the unfinished list render is thrown away and restarted for "ab" before committing](images/08-transition-timeline.svg){ loading=lazy }
+*Watch the second keystroke: in the top lane it waits behind the long render; in the bottom lane it runs at once and the stale list work is discarded.*
+
 ## Core concepts
 
 ### React 18
@@ -143,6 +146,9 @@ function Favourite({ pharmacy }: { pharmacy: Pharmacy }) {
   return <form action={toggle}><button>{optimistic ? "★" : "☆"}</button></form>;
 }
 ```
+
+![Animation: clicking the favourite button fills the star immediately while the API call is pending; when the action finishes the star stays filled if the server saved it and goes back to empty if the request failed](images/08-optimistic.svg){ loading=lazy }
+*Notice step 3: the user already sees the filled star while the request is still in flight. Step 4 shows the real state again.*
 
 ### Enabling React Compiler (Vite)
 

@@ -81,6 +81,9 @@ const router = createBrowserRouter([
 ]);
 ```
 
+![Animation: the URL /members/42/prescriptions maps to AppLayout, MemberLayout and the Prescriptions leaf route nested inside each other's Outlet; switching to the Claims tab changes only the leaf route while both layouts stay mounted](images/09-nested-routes-outlet.svg){ loading=lazy }
+*Watch the coloured boxes: when the URL changes to /claims, only the innermost Outlet gets new content.*
+
 ### Loaders and actions
 
 - **Loader:** runs before the route renders (in parallel for all matched routes, avoiding waterfalls); returns data read with `useLoaderData()`.

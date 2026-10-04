@@ -35,6 +35,9 @@ sequenceDiagram
 
 React keeps, per component instance (fiber), a linked list of hook slots. On each render the n-th hook call reads the n-th slot. Calling a hook conditionally shifts all later slots, so state ends up in the wrong hook. The ESLint plugin (`eslint-plugin-react-hooks`) enforces the rules and, since v6, includes React Compiler-powered checks.
 
+![Animation: render 1 fills hook slots 0 to 2 with name, nick and age; in render 2 the conditional nick call is skipped, so the age call reads slot 1 and gets nick's value](images/02-hook-slots.svg){ loading=lazy }
+*Notice that React never sees the variable names. Skipping one call shifts every later hook onto the wrong slot.*
+
 ### useState
 
 - `const [value, setValue] = useState(initial)`; lazy initialiser `useState(() => expensive())` runs once.
@@ -171,6 +174,9 @@ Effect Events must only be called from effects and are not listed as dependencie
       return () => clearInterval(t);
     }, []);
     ```
+
+![Animation: over four interval ticks, setSeconds(seconds + 1) computes 0 + 1 every time and stays at 1, while setSeconds(s => s + 1) counts 1, 2, 3, 4](images/02-stale-closure-interval.svg){ loading=lazy }
+*Watch the top row: the callback was created in the first render, so it always sees seconds = 0.*
 
 ### A custom hook
 

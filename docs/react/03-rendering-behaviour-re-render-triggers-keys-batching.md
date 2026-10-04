@@ -27,6 +27,9 @@ flowchart TD
 ```
 *Notice that every descendant re-renders by default even if its props didn't change. Only memoised children with shallow-equal props are skipped.*
 
+![Animation: setFilter changes App's state, App, Header, List and every Row are re-rendered while memo(Sidebar) is skipped, and in the commit only Row 2 gets a DOM change](images/03-rerender-cascade.svg){ loading=lazy }
+*Watch Header: it re-renders with unchanged props, but its output is the same, so the commit leaves its DOM alone.*
+
 ## Core concepts
 
 ### What triggers a render
@@ -77,6 +80,9 @@ The "children as props" trick: `<ScrollTracker><HeavyContent/></ScrollTracker>`.
 - **React 17:** batched only inside React event handlers; updates in promises/timeouts rendered once per `setState`.
 - **React 18+ (`createRoot`):** **automatic batching everywhere**: multiple updates in the same tick produce one render.
 - `flushSync(() => setX(...))` forces a synchronous render (e.g. scroll to a newly added item). Use sparingly.
+
+![Animation: after an await, three state updates each trigger their own render in React 17, but are queued and rendered once in React 18](images/03-batching.svg){ loading=lazy }
+*Notice the same three setter calls: React 17 rendered after each one because they ran in a promise callback; React 18 batches them into one render.*
 
 ### Render vs commit cost
 

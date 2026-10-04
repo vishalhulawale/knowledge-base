@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Batching in React 17 versus React 18</title>
+  <desc id="d">After await api.save resolves inside an async save function, three state updates run: setSaving, setResult and setToast. In React 17, updates in promise callbacks are not batched, so each update is followed by its own render: three renders. In React 18 and later with createRoot, automatic batching queues all three updates from the same tick and React renders once.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .axis{stroke:#cbd5e1;stroke-width:2}
+    .mark{stroke:#64748b;stroke-width:2;stroke-dasharray:4 4}
+    .dot{fill:#4f46e5}
+    .dt{fill:#fff;font-size:13px;font-weight:700}
+    .ren{fill:#d97706}
+    .rt{fill:#0f172a;font-size:13px;font-weight:700}
+    .bad{fill:#dc2626;font-size:15px;font-weight:700}
+    .ok{fill:#16a34a;font-size:15px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .axis{stroke:#475569}.mark{stroke:#94a3b8}
+      .dot{fill:#818cf8}.dt{fill:#0f172a}
+      .ren{fill:#fbbf24}
+      .bad{fill:#f87171}.ok{fill:#4ade80}
+    }
+    /* 10 s loop */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes e1{0%,8%{opacity:0}10%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes e2{0%,11%{opacity:0}13%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes e3{0%,14%{opacity:0}16%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes e4{0%,18%{opacity:0}21%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes e5{0%,26%{opacity:0}28%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes e6{0%,32%{opacity:0}35%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes e7{0%,42%{opacity:0}44%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes e8{0%,48%{opacity:0}51%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes e9{0%,58%{opacity:0}62%,93%{opacity:1}98%,100%{opacity:0}}
+    .e1{animation-name:e1}.e2{animation-name:e2}.e3{animation-name:e3}.e4{animation-name:e4}.e5{animation-name:e5}
+    .e6{animation-name:e6}.e7{animation-name:e7}.e8{animation-name:e8}.e9{animation-name:e9}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="358" rx="14"/>
+  <text class="h" x="28" y="40">Three updates after an await: how many renders?</text>
+  <text class="sub mono" x="28" y="64">await api.save(form); setSaving(false); setResult(res); setToast("Saved");</text>
+
+  <circle class="dot" cx="36" cy="90" r="9"/><text class="dt" x="36" y="95" text-anchor="middle">1</text><text class="sub" x="52" y="95">setSaving</text>
+  <circle class="dot" cx="146" cy="90" r="9"/><text class="dt" x="146" y="95" text-anchor="middle">2</text><text class="sub" x="162" y="95">setResult</text>
+  <circle class="dot" cx="256" cy="90" r="9"/><text class="dt" x="256" y="95" text-anchor="middle">3</text><text class="sub" x="272" y="95">setToast</text>
+  <rect class="ren" x="366" y="82" width="26" height="16" rx="4"/><text class="sub" x="400" y="95">render + commit</text>
+
+  <!-- await marker -->
+  <path class="mark" d="M220 112 V290"/>
+  <text class="sub" x="220" y="306" text-anchor="middle">promise resolves</text>
+
+  <!-- React 17 lane -->
+  <text class="lbl" x="28" y="156">React 17</text>
+  <text class="sub" x="28" y="174">batches only inside</text>
+  <text class="sub" x="28" y="190">React event handlers</text>
+  <path class="axis" d="M220 164 H620"/>
+  <g class="a e1"><circle class="dot" cx="244" cy="164" r="11"/><text class="dt" x="244" y="169" text-anchor="middle">1</text></g>
+  <g class="a e2"><rect class="ren" x="262" y="150" width="70" height="28" rx="6"/><text class="rt" x="297" y="169" text-anchor="middle">render</text></g>
+  <g class="a e5"><circle class="dot" cx="352" cy="164" r="11"/><text class="dt" x="352" y="169" text-anchor="middle">2</text></g>
+  <g class="a e6"><rect class="ren" x="370" y="150" width="70" height="28" rx="6"/><text class="rt" x="405" y="169" text-anchor="middle">render</text></g>
+  <g class="a e7"><circle class="dot" cx="460" cy="164" r="11"/><text class="dt" x="460" y="169" text-anchor="middle">3</text></g>
+  <g class="a e8"><rect class="ren" x="478" y="150" width="70" height="28" rx="6"/><text class="rt" x="513" y="169" text-anchor="middle">render</text></g>
+  <g class="a e9"><text class="bad" x="640" y="170">3 renders</text></g>
+
+  <!-- React 18 lane -->
+  <text class="lbl" x="28" y="246">React 18+</text>
+  <text class="sub" x="28" y="264">createRoot: automatic</text>
+  <text class="sub" x="28" y="280">batching everywhere</text>
+  <path class="axis" d="M220 254 H620"/>
+  <g class="a e1"><circle class="dot" cx="244" cy="254" r="11"/><text class="dt" x="244" y="259" text-anchor="middle">1</text></g>
+  <g class="a e2"><circle class="dot" cx="270" cy="254" r="11"/><text class="dt" x="270" y="259" text-anchor="middle">2</text></g>
+  <g class="a e3"><circle class="dot" cx="296" cy="254" r="11"/><text class="dt" x="296" y="259" text-anchor="middle">3</text></g>
+  <g class="a e3"><text class="sub" x="270" y="234" text-anchor="middle">queued</text></g>
+  <g class="a e4"><rect class="ren" x="318" y="240" width="70" height="28" rx="6"/><text class="rt" x="353" y="259" text-anchor="middle">render</text></g>
+  <g class="a e9"><text class="ok" x="640" y="260">1 render</text></g>
+
+  <text class="sub" x="28" y="340">flushSync(() =&gt; ...) opts out of batching when you must read the updated DOM straight away.</text>
+</svg>

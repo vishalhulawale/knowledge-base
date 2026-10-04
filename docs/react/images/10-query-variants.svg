@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">getBy, queryBy and findBy over time</title>
+  <desc id="d">A status message, Refill requested, appears in the DOM about 400 milliseconds after the test clicks, once the mocked API responds. getByRole status runs at once, finds nothing and throws. queryByRole status also runs at once and returns null, which is useful for asserting that something is absent. findByRole status polls the DOM every 50 milliseconds and resolves with the element as soon as it appears; if it never appeared it would reject after the default 1000 millisecond timeout.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .axis{stroke:#cbd5e1;stroke-width:2}
+    .grid{stroke:#cbd5e1;stroke-width:1.5;stroke-dasharray:4 4}
+    .el{fill:#16a34a}
+    .elt{fill:#fff;font-size:13px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .badc{fill:#dc2626}.okc{fill:#16a34a}.mutc{fill:#94a3b8}
+    .poll{fill:#0ea5a4}
+    .tick{fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    .ok{fill:#16a34a;font-size:14px;font-weight:700}
+    .play{stroke:#d97706;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .axis,.grid{stroke:#475569}
+      .el,.okc{fill:#4ade80}.elt{fill:#0f172a}.tick{stroke:#0f172a}
+      .badc{fill:#f87171}.mutc{fill:#64748b}.poll{fill:#2dd4bf}
+      .bad{fill:#f87171}.ok{fill:#4ade80}.play{stroke:#fbbf24}
+    }
+    /* 10 s loop: 0-1000 ms of test time runs over 0-80% */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes o1{0%,32.0%{opacity:0}33.0%,93%{opacity:1}97%,100%{opacity:0}}.o1{animation-name:o1}
+    @keyframes o2{0%,0.5%{opacity:0}1.5%,93%{opacity:1}97%,100%{opacity:0}}.o2{animation-name:o2}
+    @keyframes o3{0%,0.5%{opacity:0}1.5%,93%{opacity:1}97%,100%{opacity:0}}.o3{animation-name:o3}
+    @keyframes o4{0%,0.5%{opacity:0}1.5%,93%{opacity:1}97%,100%{opacity:0}}.o4{animation-name:o4}
+    @keyframes o5{0%,4.0%{opacity:0}5.0%,93%{opacity:1}97%,100%{opacity:0}}.o5{animation-name:o5}
+    @keyframes o6{0%,8.0%{opacity:0}9.0%,93%{opacity:1}97%,100%{opacity:0}}.o6{animation-name:o6}
+    @keyframes o7{0%,12.0%{opacity:0}13.0%,93%{opacity:1}97%,100%{opacity:0}}.o7{animation-name:o7}
+    @keyframes o8{0%,16.0%{opacity:0}17.0%,93%{opacity:1}97%,100%{opacity:0}}.o8{animation-name:o8}
+    @keyframes o9{0%,20.0%{opacity:0}21.0%,93%{opacity:1}97%,100%{opacity:0}}.o9{animation-name:o9}
+    @keyframes o10{0%,24.0%{opacity:0}25.0%,93%{opacity:1}97%,100%{opacity:0}}.o10{animation-name:o10}
+    @keyframes o11{0%,28.0%{opacity:0}29.0%,93%{opacity:1}97%,100%{opacity:0}}.o11{animation-name:o11}
+    @keyframes o12{0%,32.0%{opacity:0}33.0%,93%{opacity:1}97%,100%{opacity:0}}.o12{animation-name:o12}
+    .ph{animation:ph 10s infinite linear}
+    @keyframes ph{0%{transform:translateX(0);opacity:1}80%{transform:translateX(520px);opacity:1}81%,100%{transform:translateX(520px);opacity:0}}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.ph{animation:none;opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">getBy, queryBy, findBy: what happens over time</text>
+  <text class="sub" x="28" y="62">After a click, the status message appears once the mocked API responds (here at about 400 ms).</text>
+
+  <text class="lbl" x="28" y="114">DOM</text>
+  <path class="grid" d="M428.0 90 V306 M740 90 V306"/>
+  <text class="lbl mono" x="28" y="171">getByRole</text>
+  <text class="lbl mono" x="28" y="231">queryByRole</text>
+  <text class="lbl mono" x="28" y="291">findByRole</text>
+  <text class="sub" x="28" y="309">await it</text>
+
+  <g class="a o1"><rect class="el" x="428.0" y="96" width="312.0" height="26" rx="5"/><text class="elt" x="438.0" y="114">&lt;p role="status"&gt;Refill requested</text></g>
+  <g class="a o2"><circle class="badc" cx="220" cy="166" r="7"/><text class="bad" x="236" y="171">throws: unable to find role "status"</text></g>
+  <g class="a o3"><circle class="mutc" cx="220" cy="226" r="7"/><text class="tx" x="236" y="231">returns null (good for "is not there")</text></g>
+  <g class="a o4"><circle class="poll" cx="220.0" cy="286" r="5"/></g>
+  <g class="a o5"><circle class="poll" cx="246.0" cy="286" r="5"/></g>
+  <g class="a o6"><circle class="poll" cx="272.0" cy="286" r="5"/></g>
+  <g class="a o7"><circle class="poll" cx="298.0" cy="286" r="5"/></g>
+  <g class="a o8"><circle class="poll" cx="324.0" cy="286" r="5"/></g>
+  <g class="a o9"><circle class="poll" cx="350.0" cy="286" r="5"/></g>
+  <g class="a o10"><circle class="poll" cx="376.0" cy="286" r="5"/></g>
+  <g class="a o11"><circle class="poll" cx="402.0" cy="286" r="5"/></g>
+  <g class="a o12"><circle class="okc" cx="428.0" cy="286" r="9"/><path class="tick" d="M424.0 286 l3 3 l6 -7"/><text class="ok" x="444.0" y="291">resolves with the element</text></g>
+
+  <g class="ph"><path class="play" d="M220 90 V306"/></g>
+
+  <path class="axis" d="M220 322 H740"/>
+  <text class="sub" x="220" y="342" text-anchor="middle">0 ms</text>
+  <text class="sub" x="428.0" y="342" text-anchor="middle">400 ms</text>
+  <text class="sub" x="740" y="342" text-anchor="middle">1000 ms</text>
+  <text class="sub" x="28" y="372">findBy polls every 50 ms by default and rejects after 1000 ms if the element never appears.</text>
+  <text class="sub" x="28" y="390">Teal dots = polls. Use getBy for things already on screen, queryBy for absence, findBy for things that arrive later.</text>
+</svg>

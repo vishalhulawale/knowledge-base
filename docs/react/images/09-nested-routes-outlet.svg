@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Nested routes and Outlet</title>
+  <desc id="d">A browser at the URL /members/42/prescriptions. Each part of the URL maps to a nested route: the root path renders AppLayout with the header, nav and an Outlet; members/:memberId renders MemberLayout with tabs and an Outlet, reading memberId 42; prescriptions renders the leaf route inside MemberLayout's Outlet. The user then clicks the Claims tab, the URL becomes /members/42/claims, and only the leaf route is swapped for the Claims route. AppLayout and MemberLayout stay mounted and keep their state.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .page{fill:#ffffff;stroke:#cbd5e1}
+    .chrome{fill:#e2e8f0}
+    .url{fill:#ffffff;stroke:#cbd5e1}
+    .l1{fill:none;stroke:#4f46e5;stroke-width:2.5}
+    .l2{fill:none;stroke:#0ea5a4;stroke-width:2.5}
+    .l3{fill:none;stroke:#d97706;stroke-width:2.5}
+    .c1{fill:#4f46e5;font-weight:700}
+    .c2{fill:#0f766e;font-weight:700}
+    .c3{fill:#b45309;font-weight:700}
+    .tab{fill:#ffffff;stroke:#cbd5e1}
+    .tabon{fill:#d97706}
+    .sk{fill:#e2e8f0}
+    .ok{fill:#16a34a;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .page,.url,.tab{fill:#111827;stroke:#475569}
+      .chrome{fill:#334155}
+      .l1{stroke:#818cf8}.l2{stroke:#2dd4bf}.l3{stroke:#fbbf24}
+      .c1{fill:#818cf8}.c2{fill:#5eead4}.c3{fill:#fbbf24}
+      .tabon{fill:#fbbf24}.sk{fill:#334155}.ok{fill:#4ade80}
+    }
+    /* 10 s loop: prescriptions until 45%, claims from 50% */
+    .A{animation:A 10s infinite linear}
+    .B{opacity:0;animation:B 10s infinite linear}
+    .R{opacity:0;animation:R 10s infinite linear}
+    @keyframes A{0%,45%{opacity:1}48%,96%{opacity:0}100%{opacity:1}}
+    @keyframes B{0%,47%{opacity:0}50%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes R{0%,54%{opacity:0}58%,93%{opacity:1}97%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){.A{animation:none;opacity:0}.B,.R{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Nested routes: each URL segment fills one Outlet</text>
+  <text class="sub" x="28" y="62">Same colour = same route. Then the user clicks the Claims tab.</text>
+
+  <!-- browser -->
+  <rect class="page" x="28" y="80" width="532" height="316" rx="10"/>
+  <path class="chrome" d="M28 90 a10 10 0 0 1 10 -10 H550 a10 10 0 0 1 10 10 V118 H28 Z"/>
+  <rect class="url" x="40" y="88" width="508" height="24" rx="12"/>
+  <text class="tx mono A" x="56" y="105"><tspan class="c1">/</tspan><tspan class="c2">members/42</tspan>/<tspan class="c3">prescriptions</tspan></text>
+  <text class="tx mono B" x="56" y="105"><tspan class="c1">/</tspan><tspan class="c2">members/42</tspan>/<tspan class="c3">claims</tspan></text>
+
+  <!-- AppLayout -->
+  <rect class="l1" x="40" y="126" width="508" height="260" rx="8"/>
+  <text class="lbl" x="52" y="148">AppLayout</text><text class="sub" x="154" y="148">header, nav</text>
+  <text class="sub mono" x="536" y="148" text-anchor="end">&lt;Outlet/&gt; below</text>
+
+  <!-- MemberLayout -->
+  <rect class="l2" x="54" y="158" width="480" height="218" rx="8"/>
+  <text class="lbl" x="66" y="180">MemberLayout</text><text class="sub" x="202" y="180">useParams(): memberId = 42</text>
+  <rect class="tab" x="66" y="190" width="120" height="28" rx="6"/><text class="tx" x="126" y="209" text-anchor="middle">Prescriptions</text>
+  <rect class="tab" x="194" y="190" width="90" height="28" rx="6"/><text class="tx" x="239" y="209" text-anchor="middle">Claims</text>
+  <rect class="tabon A" x="70" y="214" width="112" height="3" rx="1.5"/>
+  <rect class="tabon B" x="198" y="214" width="82" height="3" rx="1.5"/>
+
+  <!-- leaf -->
+  <rect class="l3" x="68" y="228" width="452" height="136" rx="8"/>
+  <g class="A">
+    <text class="lbl" x="80" y="252">Prescriptions route</text>
+    <text class="sub" x="80" y="272">lazy-loaded route module</text>
+    <rect class="sk" x="80" y="286" width="428" height="16" rx="4"/><rect class="sk" x="80" y="310" width="428" height="16" rx="4"/><rect class="sk" x="80" y="334" width="300" height="16" rx="4"/>
+  </g>
+  <g class="B">
+    <text class="lbl" x="80" y="252">Claims route</text>
+    <text class="sub" x="80" y="272">lazy-loaded route module</text>
+    <rect class="sk" x="80" y="286" width="200" height="56" rx="6"/><rect class="sk" x="292" y="286" width="216" height="56" rx="6"/>
+  </g>
+
+  <!-- mapping -->
+  <text class="tx mono c1" x="584" y="148">/</text>
+  <text class="sub" x="584" y="166">AppLayout + Outlet</text>
+  <text class="tx mono c2" x="584" y="200">members/:memberId</text>
+  <text class="sub" x="584" y="218">MemberLayout + Outlet</text>
+  <text class="tx mono c3 A" x="584" y="252">prescriptions</text>
+  <text class="tx mono c3 B" x="584" y="252">claims</text>
+  <text class="sub" x="584" y="270">leaf route</text>
+  <g class="R">
+    <text class="ok" x="584" y="312">Only the leaf swapped.</text>
+    <text class="sub" x="584" y="332">Both layouts stay</text>
+    <text class="sub" x="584" y="350">mounted with their state.</text>
+  </g>
+  <text class="sub" x="28" y="412">Protect the whole area once by putting the auth middleware on a parent layout route.</text>
+</svg>

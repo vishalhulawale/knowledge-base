@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 350" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">From JSX to a React element</title>
+  <desc id="d">Three stacked stages. First, the JSX you write: a Button element with variant primary, an onClick handler and the text Save. Second, what the compiler emits with the automatic runtime since React 17: a call to _jsx with Button as the type and an object holding variant, onClick and children. Third, what that call returns: a plain object with type Button, the same props and key null. The component type is shown in indigo and the props in teal in every stage. A footnote says elements are immutable descriptions and React touches real DOM nodes only in the commit phase.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .code{fill:#334155;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .ty{fill:#4f46e5;font-weight:700}
+    .pr{fill:#0f766e}
+    .arr{stroke:#64748b;stroke-width:2;fill:none}
+    .ah{fill:#64748b}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.code{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .ty{fill:#818cf8}.pr{fill:#5eead4}
+      .arr{stroke:#94a3b8}.ah{fill:#94a3b8}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="348" rx="14"/>
+  <text class="h" x="28" y="40">From JSX to a React element</text>
+  <text class="sub" x="28" y="62">The same type (indigo) and props (teal) travel through every step. No DOM node exists yet.</text>
+
+  <!-- row 1: JSX -->
+  <text class="lbl" x="28" y="104">You write</text>
+  <text class="sub" x="28" y="121">JSX</text>
+  <rect class="box" x="200" y="82" width="572" height="44" rx="8"/>
+  <text class="code" x="214" y="109">&lt;<tspan class="ty">Button</tspan> <tspan class="pr">variant="primary" onClick={save}</tspan>&gt;<tspan class="pr">Save</tspan>&lt;/<tspan class="ty">Button</tspan>&gt;</text>
+
+  <path class="arr" d="M486 128 V146"/><path class="ah" d="M480 144 L486 154 L492 144 Z"/>
+  <text class="sub" x="500" y="146">compiled at build time</text>
+
+  <!-- row 2: compiled call -->
+  <text class="lbl" x="28" y="180">Compiler emits</text>
+  <text class="sub" x="28" y="197">React 17+ runtime</text>
+  <rect class="box" x="200" y="158" width="572" height="44" rx="8"/>
+  <text class="code" x="214" y="185">_jsx(<tspan class="ty">Button</tspan>, { <tspan class="pr">variant: "primary", onClick: save, children: "Save"</tspan> })</text>
+
+  <path class="arr" d="M486 204 V222"/><path class="ah" d="M480 220 L486 230 L492 220 Z"/>
+  <text class="sub" x="500" y="222">the call returns</text>
+
+  <!-- row 3: element object -->
+  <text class="lbl" x="28" y="256">React element</text>
+  <text class="sub" x="28" y="273">a plain object</text>
+  <rect class="box" x="200" y="234" width="572" height="76" rx="8"/>
+  <text class="code" x="214" y="257">{ type: <tspan class="ty">Button</tspan>,</text>
+  <text class="code" x="230" y="277">props: { <tspan class="pr">variant: "primary", onClick: save, children: "Save"</tspan> },</text>
+  <text class="code" x="230" y="297">key: null, ... }</text>
+
+  <text class="sub" x="28" y="336">Elements are immutable descriptions. React creates or updates real DOM nodes only in the commit phase.</text>
+</svg>

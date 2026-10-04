@@ -67,6 +67,9 @@ const Claims = lazy(() => import("./routes/Claims"));    // separate chunk
 - **Preload** likely next routes (on hover, `<link rel="modulepreload">`); React 19 `preload`/`preinit` APIs.
 - Micro-frontends: share React and design-system libraries as singletons (module federation) to avoid shipping them N times.
 
+![Animation: with one bundle, a long main.js delays Home but Claims shows at once; with route splitting, a short main.js makes Home interactive early and the claims chunk loads behind a PageSkeleton fallback when the user clicks Claims](images/06-code-splitting.svg){ loading=lazy }
+*Notice the trade-off: splitting moves the Claims download to the moment it is needed, so Home gets faster and Claims gets a short loading state.*
+
 ### Lists: virtualization
 
 ```mermaid
@@ -76,6 +79,9 @@ flowchart LR
     R --> S["On scroll: reuse/replace rows, translate offset"]
 ```
 *Notice DOM size stays constant regardless of data size. That fixes both render time and memory, at the cost of find-in-page and some accessibility handling.*
+
+![Animation: a window scrolls through 10,000 data rows while the DOM keeps 30 row elements: 5 overscan rows, 20 visible rows in the viewport and 5 more overscan rows, with the row index labels changing at each position](images/06-virtualization.svg){ loading=lazy }
+*Watch the labels on the right: the same 30 DOM rows just show different indexes as the window moves.*
 
 - Libraries: TanStack Virtual (headless), react-window, react-virtuoso.
 - Alternatives: pagination, infinite scroll with virtualization, server-side filtering.

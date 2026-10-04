@@ -46,6 +46,9 @@ flowchart TB
 - `getByRole("button", { name: /request refill/i })` also checks accessibility: if you can't find it by role and name, neither can a screen reader user.
 - `within(row).getByRole(...)` scopes queries.
 
+![Animation: a status message appears at about 400 ms; getByRole throws at once, queryByRole returns null at once, and findByRole polls every 50 ms until the element appears and then resolves](images/10-query-variants.svg){ loading=lazy }
+*Watch the findBy row: it keeps polling until the element shows up, which is why you await it for anything that arrives after an API call.*
+
 ### Interactions
 
 - `@testing-library/user-event` v14: `const user = userEvent.setup(); await user.click(...); await user.type(...)`. Simulates full event sequences (pointer, keyboard, focus), unlike `fireEvent` which dispatches a single event.
@@ -64,6 +67,9 @@ flowchart TB
 - **Network:** MSW intercepts requests (fetch, XHR, GraphQL) at the network layer; tests use real data-fetching code (React Query, Apollo).
 - **Modules:** `vi.mock`/`jest.mock` sparingly (e.g. analytics, date).
 - **Providers:** a custom `render` that wraps components in QueryClientProvider (fresh client per test, retries off), Router (MemoryRouter or `createMemoryRouter`), theme and session providers.
+
+![With jest.mock the api client is replaced by a fake and the network layer never runs; with MSW the component, React Query, the api client and the fetch request all run for real and MSW intercepts at the network boundary](images/10-msw-boundary.svg){ loading=lazy }
+*Notice how much real code runs on the right: MSW replaces only the server, so the test also checks the request your code actually sends.*
 
 ### Hooks
 

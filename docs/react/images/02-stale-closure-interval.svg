@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Stale closure in an interval</title>
+  <desc id="d">An effect with an empty dependency array starts an interval once, so the interval callback keeps the closure from the first render, where seconds is 0. Over four ticks, the top row calls setSeconds of seconds plus 1 and computes 0 plus 1 equals 1 every time, so the screen stays at 1. The bottom row calls setSeconds with the updater s arrow s plus 1, which receives the latest state, so it computes 1, 2, 3, 4.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .code{fill:#334155;font-size:13px;font-weight:700}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .cell{fill:#ffffff;stroke:#4f46e5;stroke-width:2}
+    .big{fill:#0f172a;font-size:20px;font-weight:700}
+    .bigbad{fill:#dc2626;font-size:20px;font-weight:700}
+    .bigok{fill:#16a34a;font-size:20px;font-weight:700}
+    .ok{fill:#16a34a;font-size:14px;font-weight:700}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.big{fill:#f1f5f9}.lbl,.tx,.code{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .cell{fill:#111827;stroke:#818cf8}
+      .bigbad,.bad{fill:#f87171}.bigok,.ok{fill:#4ade80}
+    }
+    /* 10 s loop: one tick column every ~1.8 s, then the verdict */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes c1{0%,10%{opacity:0}13%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes c2{0%,27%{opacity:0}30%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes c3{0%,44%{opacity:0}47%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes c4{0%,61%{opacity:0}64%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes c5{0%,70%{opacity:0}74%,93%{opacity:1}98%,100%{opacity:0}}
+    .c1{animation-name:c1}.c2{animation-name:c2}.c3{animation-name:c3}.c4{animation-name:c4}.c5{animation-name:c5}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">Stale closure in an interval</text>
+  <text class="sub" x="28" y="62">The effect runs once (deps [ ]), so the interval callback keeps render 1's closure, where seconds = 0.</text>
+
+  <text class="sub" x="310" y="100" text-anchor="middle">tick 1 (1 s)</text>
+  <text class="sub" x="430" y="100" text-anchor="middle">tick 2 (2 s)</text>
+  <text class="sub" x="550" y="100" text-anchor="middle">tick 3 (3 s)</text>
+  <text class="sub" x="670" y="100" text-anchor="middle">tick 4 (4 s)</text>
+
+  <!-- row 1: stale -->
+  <text class="code mono" x="28" y="138">setSeconds(seconds + 1)</text>
+  <text class="sub" x="28" y="158">seconds is always 0 here</text>
+  <rect class="box" x="255" y="112" width="110" height="60" rx="8"/><rect class="box" x="375" y="112" width="110" height="60" rx="8"/><rect class="box" x="495" y="112" width="110" height="60" rx="8"/><rect class="box" x="615" y="112" width="110" height="60" rx="8"/>
+  <!-- row 2: updater -->
+  <text class="code mono" x="28" y="218">setSeconds(s =&gt; s + 1)</text>
+  <text class="sub" x="28" y="238">s is the latest state</text>
+  <rect class="box" x="255" y="192" width="110" height="60" rx="8"/><rect class="box" x="375" y="192" width="110" height="60" rx="8"/><rect class="box" x="495" y="192" width="110" height="60" rx="8"/><rect class="box" x="615" y="192" width="110" height="60" rx="8"/>
+
+  <g class="a c1">
+    <rect class="cell" x="255" y="112" width="110" height="60" rx="8"/><text class="sub mono" x="310" y="134" text-anchor="middle">0 + 1</text><text class="big" x="310" y="160" text-anchor="middle">1</text>
+    <rect class="cell" x="255" y="192" width="110" height="60" rx="8"/><text class="sub mono" x="310" y="214" text-anchor="middle">0 + 1</text><text class="big" x="310" y="240" text-anchor="middle">1</text>
+  </g>
+  <g class="a c2">
+    <rect class="cell" x="375" y="112" width="110" height="60" rx="8"/><text class="sub mono" x="430" y="134" text-anchor="middle">0 + 1</text><text class="big" x="430" y="160" text-anchor="middle">1</text>
+    <rect class="cell" x="375" y="192" width="110" height="60" rx="8"/><text class="sub mono" x="430" y="214" text-anchor="middle">1 + 1</text><text class="big" x="430" y="240" text-anchor="middle">2</text>
+  </g>
+  <g class="a c3">
+    <rect class="cell" x="495" y="112" width="110" height="60" rx="8"/><text class="sub mono" x="550" y="134" text-anchor="middle">0 + 1</text><text class="big" x="550" y="160" text-anchor="middle">1</text>
+    <rect class="cell" x="495" y="192" width="110" height="60" rx="8"/><text class="sub mono" x="550" y="214" text-anchor="middle">2 + 1</text><text class="big" x="550" y="240" text-anchor="middle">3</text>
+  </g>
+  <g class="a c4">
+    <rect class="cell" x="615" y="112" width="110" height="60" rx="8"/><text class="sub mono" x="670" y="134" text-anchor="middle">0 + 1</text><text class="bigbad" x="670" y="160" text-anchor="middle">1</text>
+    <rect class="cell" x="615" y="192" width="110" height="60" rx="8"/><text class="sub mono" x="670" y="214" text-anchor="middle">3 + 1</text><text class="bigok" x="670" y="240" text-anchor="middle">4</text>
+  </g>
+
+  <g class="a c5">
+    <text class="bad" x="28" y="294">Stale: the screen stays at 1 forever.</text>
+    <text class="ok" x="420" y="294">Updater: 1, 2, 3, 4, ...</text>
+  </g>
+  <text class="sub" x="28" y="334">The updater gets the latest pending state from React, so the effect never needs seconds</text>
+  <text class="sub" x="28" y="352">as a dependency and the interval is created only once.</text>
+</svg>

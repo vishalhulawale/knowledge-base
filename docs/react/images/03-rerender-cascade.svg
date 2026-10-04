@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">How a state change re-renders a subtree</title>
+  <desc id="d">A component tree: App holds filter state and renders Header, List and a memoised Sidebar; List renders Row 1, Row 2, Row 3 and more rows. Step 1: setFilter updates App's state. Step 2, the render phase: App, Header, List and every Row are called again, even though Header's props did not change, while memo Sidebar is skipped because its props are the same. Step 3, the commit phase: only output that changed reaches the DOM, in this example Row 2. Header was rendered but produced the same output, so its DOM is untouched.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .node{fill:#ffffff;stroke:#cbd5e1}
+    .ln{stroke:#cbd5e1;stroke-width:2}
+    .appf{fill:#4f46e5}
+    .wt{fill:#fff;font-size:14px;font-weight:700}
+    .ren{fill:none;stroke:#d97706;stroke-width:3}
+    .skip{fill:none;stroke:#94a3b8;stroke-width:2;stroke-dasharray:6 4}
+    .dom{fill:#0ea5a4}
+    .domt{fill:#fff;font-size:13px;font-weight:700}
+    .warn{fill:#b45309;font-size:13px;font-weight:700}
+    .teat{fill:#0f766e;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .node{fill:#111827;stroke:#475569}.ln{stroke:#475569}
+      .appf{fill:#818cf8}.wt,.domt{fill:#0f172a}
+      .ren{stroke:#fbbf24}.skip{stroke:#64748b}
+      .dom{fill:#2dd4bf}.warn{fill:#fbbf24}.teat{fill:#5eead4}
+    }
+    /* 10 s loop: 1 state change (0-20%), 2 render phase (20-48%), 3 commit (48-93%) */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes p1{0%,1%{opacity:0}3%,18%{opacity:1}21%,100%{opacity:0}}
+    @keyframes p2{0%,19%{opacity:0}22%,46%{opacity:1}49%,100%{opacity:0}}
+    @keyframes p3{0%,47%{opacity:0}50%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes k1{0%,5%{opacity:0}8%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes k2{0%,20%{opacity:0}23%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes k3{0%,29%{opacity:0}32%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes k4{0%,53%{opacity:0}56%,93%{opacity:1}98%,100%{opacity:0}}
+    .p1{animation-name:p1}.p2{animation-name:p2}.p3{animation-name:p3}
+    .k1{animation-name:k1}.k2{animation-name:k2}.k3{animation-name:k3}.k4{animation-name:k4}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.p1,.p2{opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="438" rx="14"/>
+  <text class="h" x="28" y="40">A state change re-renders the whole subtree</text>
+  <text class="sub" x="28" y="62">Every descendant is called again unless it is memoised and gets the same props.</text>
+
+  <text class="lbl a p1" x="28" y="96">1. setFilter() changes App's state</text>
+  <text class="lbl a p2" x="28" y="96">2. Render phase: components are called again</text>
+  <text class="lbl a p3" x="28" y="96">3. Commit phase: only changed output reaches the DOM</text>
+
+  <!-- connectors -->
+  <path class="ln" d="M400 160 V180 M150 180 H650 M150 180 V200 M400 180 V200 M650 180 V200"/>
+  <path class="ln" d="M400 246 V266 M290 266 H510 M290 266 V286 M400 266 V286 M510 266 V286"/>
+
+  <!-- nodes -->
+  <rect class="node" x="315" y="112" width="170" height="48" rx="10"/>
+  <text class="tx" x="400" y="133" text-anchor="middle" font-weight="700">App</text>
+  <text class="sub" x="400" y="151" text-anchor="middle">filter state</text>
+  <g class="a k1"><rect class="appf" x="317" y="114" width="166" height="44" rx="9"/><text class="wt" x="400" y="133" text-anchor="middle">App</text><text class="wt" x="400" y="151" text-anchor="middle" font-weight="400">filter: "ready"</text></g>
+
+  <rect class="node" x="75" y="200" width="150" height="46" rx="10"/><text class="tx" x="150" y="228" text-anchor="middle">Header</text>
+  <rect class="node" x="325" y="200" width="150" height="46" rx="10"/><text class="tx" x="400" y="228" text-anchor="middle">List</text>
+  <rect class="node" x="560" y="200" width="180" height="46" rx="10"/><text class="tx" x="650" y="228" text-anchor="middle">memo(Sidebar)</text>
+
+  <rect class="node" x="244" y="286" width="92" height="42" rx="9"/><text class="tx" x="290" y="312" text-anchor="middle">Row 1</text>
+  <rect class="node" x="354" y="286" width="92" height="42" rx="9"/><text class="tx" x="400" y="312" text-anchor="middle">Row 2</text>
+  <rect class="node" x="464" y="286" width="92" height="42" rx="9"/><text class="tx" x="510" y="312" text-anchor="middle">Row 3</text>
+  <text class="sub" x="570" y="312">... x 500</text>
+
+  <!-- render phase highlights -->
+  <g class="a k2">
+    <rect class="ren" x="75" y="200" width="150" height="46" rx="10"/>
+    <rect class="ren" x="325" y="200" width="150" height="46" rx="10"/>
+    <rect class="skip" x="554" y="194" width="192" height="58" rx="13"/>
+    <text class="sub" x="650" y="272" text-anchor="middle">skipped: same props</text>
+    <text class="warn" x="150" y="266" text-anchor="middle">props unchanged,</text>
+    <text class="warn" x="150" y="282" text-anchor="middle">still re-rendered</text>
+  </g>
+  <g class="a k3">
+    <rect class="ren" x="244" y="286" width="92" height="42" rx="9"/>
+    <rect class="ren" x="354" y="286" width="92" height="42" rx="9"/>
+    <rect class="ren" x="464" y="286" width="92" height="42" rx="9"/>
+  </g>
+
+  <!-- commit -->
+  <g class="a k4">
+    <rect class="dom" x="377" y="334" width="46" height="22" rx="11"/><text class="domt" x="400" y="350" text-anchor="middle">DOM</text>
+    <text class="teat" x="150" y="306" text-anchor="middle">same output:</text>
+    <text class="teat" x="150" y="322" text-anchor="middle">no DOM write</text>
+  </g>
+
+  <!-- legend -->
+  <rect class="ren" x="28" y="378" width="26" height="16" rx="4"/><text class="sub" x="62" y="391">re-rendered (function called)</text>
+  <rect class="skip" x="266" y="378" width="26" height="16" rx="4"/><text class="sub" x="300" y="391">skipped by memo</text>
+  <rect class="dom" x="440" y="378" width="26" height="16" rx="4"/><text class="sub" x="474" y="391">DOM changed in commit</text>
+  <text class="sub" x="28" y="422">Example: only Row 2's output changed. Re-rendering is calculation; the DOM write is the commit.</text>
+</svg>

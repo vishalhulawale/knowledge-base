@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 404" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Controlled versus uncontrolled input while typing</title>
+  <desc id="d">The user types the ZIP code 10001 into two inputs. On the left, a controlled input with value and onChange: every keystroke goes through setZip, the zip state updates to 1, 10, 100, 1000, 10001, and the component re-renders five times. On submit the value is read from state. On the right, an uncontrolled input with name zip and defaultValue: the DOM keeps the value, there is no React state and no re-render while typing. On submit, new FormData of the form, get zip, returns 10001.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .val{fill:#0f172a;font-size:16px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .src{fill:none;stroke:#4f46e5;stroke-width:2.5}
+    .src2{fill:none;stroke:#0ea5a4;stroke-width:2.5}
+    .pri{fill:#4f46e5;font-size:13px;font-weight:700}
+    .teat{fill:#0f766e;font-size:13px;font-weight:700}
+    .cnt{fill:#d97706;font-weight:700}
+    .ok{fill:#16a34a;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.val{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .src{stroke:#818cf8}.src2{stroke:#2dd4bf}
+      .pri{fill:#818cf8}.teat{fill:#5eead4}
+      .cnt{fill:#fbbf24}.ok{fill:#4ade80}
+    }
+    /* 10 s loop: one keystroke every second from 8%, submit at 62% */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes v0{0%,7.9%{opacity:1}8%,99%{opacity:0}100%{opacity:1}}
+    @keyframes v1{0%,7.9%{opacity:0}8%,17.9%{opacity:1}18%,100%{opacity:0}}
+    @keyframes v2{0%,17.9%{opacity:0}18%,27.9%{opacity:1}28%,100%{opacity:0}}
+    @keyframes v3{0%,27.9%{opacity:0}28%,37.9%{opacity:1}38%,100%{opacity:0}}
+    @keyframes v4{0%,37.9%{opacity:0}38%,47.9%{opacity:1}48%,100%{opacity:0}}
+    @keyframes v5{0%,47.9%{opacity:0}48%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes sb{0%,59%{opacity:0}62%,93%{opacity:1}98%,100%{opacity:0}}
+    .v0{animation-name:v0;opacity:1}.v1{animation-name:v1}.v2{animation-name:v2}.v3{animation-name:v3}.v4{animation-name:v4}.v5{animation-name:v5}.sb{animation-name:sb}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:0}.v5,.sb{opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="402" rx="14"/>
+  <text class="h" x="28" y="40">Where the value lives while the user types 10001</text>
+  <text class="sub" x="28" y="62">Coloured outline = source of truth.</text>
+
+  <!-- controlled -->
+  <text class="lbl" x="44" y="100">Controlled</text>
+  <text class="sub mono" x="44" y="120">&lt;input value={zip} onChange=...&gt;</text>
+  <text class="sub" x="44" y="146">input (DOM)</text>
+  <rect class="box" x="44" y="154" width="328" height="40" rx="8"/>
+  <text class="sub" x="44" y="220">React state</text>
+  <rect class="box" x="44" y="228" width="328" height="36" rx="8"/><rect class="src" x="44" y="228" width="328" height="36" rx="8"/>
+  <text class="pri" x="358" y="251" text-anchor="end">source of truth</text>
+  <text class="tx mono" x="58" y="251">zip =</text>
+  <g>
+    <text class="val a v1" x="58" y="180">1</text><text class="val a v2" x="58" y="180">10</text><text class="val a v3" x="58" y="180">100</text><text class="val a v4" x="58" y="180">1000</text><text class="val a v5" x="58" y="180">10001</text>
+    <text class="tx mono a v0" x="110" y="251">""</text><text class="tx mono a v1" x="110" y="251">"1"</text><text class="tx mono a v2" x="110" y="251">"10"</text><text class="tx mono a v3" x="110" y="251">"100"</text><text class="tx mono a v4" x="110" y="251">"1000"</text><text class="tx mono a v5" x="110" y="251">"10001"</text>
+  </g>
+  <text class="lbl" x="44" y="296">Re-renders while typing:</text>
+  <text class="lbl cnt a v0" x="270" y="296">0</text><text class="lbl cnt a v1" x="270" y="296">1</text><text class="lbl cnt a v2" x="270" y="296">2</text><text class="lbl cnt a v3" x="270" y="296">3</text><text class="lbl cnt a v4" x="270" y="296">4</text><text class="lbl cnt a v5" x="270" y="296">5</text>
+  <g class="a sb">
+    <text class="tx" x="44" y="332">Submit: send zip from state</text>
+    <text class="tx ok" x="44" y="352">"10001"</text>
+  </g>
+
+  <!-- uncontrolled -->
+  <text class="lbl" x="428" y="100">Uncontrolled</text>
+  <text class="sub mono" x="428" y="120">&lt;input name="zip" defaultValue=""&gt;</text>
+  <text class="sub" x="428" y="146">input (DOM)</text>
+  <rect class="box" x="428" y="154" width="328" height="40" rx="8"/><rect class="src2" x="428" y="154" width="328" height="40" rx="8"/>
+  <text class="teat" x="742" y="180" text-anchor="end">source of truth</text>
+  <text class="val a v1" x="442" y="180">1</text><text class="val a v2" x="442" y="180">10</text><text class="val a v3" x="442" y="180">100</text><text class="val a v4" x="442" y="180">1000</text><text class="val a v5" x="442" y="180">10001</text>
+  <text class="sub" x="428" y="220">React state</text>
+  <rect class="box" x="428" y="228" width="328" height="36" rx="8" stroke-dasharray="5 4"/>
+  <text class="sub" x="442" y="251">none: React isn't told about keystrokes</text>
+  <text class="lbl" x="428" y="296">Re-renders while typing:</text><text class="lbl ok" x="654" y="296">0</text>
+  <g class="a sb">
+    <text class="tx" x="428" y="332">Submit: <tspan class="mono">new FormData(form).get("zip")</tspan></text>
+    <text class="tx ok" x="428" y="352">"10001"</text>
+  </g>
+
+  <text class="sub" x="28" y="386">A render per keystroke is fine for most forms; it matters only for very large or heavy ones.</text>
+</svg>

@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Stable keys versus index keys when inserting at the top</title>
+  <desc id="d">Two lists start as Ann, whose checkbox is ticked, and Ben. Cara is inserted at the top of both. On the left the rows use key equals person id: Ann's and Ben's rows move down, Cara gets a new unticked row, and Ann keeps her tick. On the right the rows use key equals index: the rows stay in place and only their text changes, so row 0 now shows Cara but keeps Ann's tick, Ann moves to row 1 without a tick, and a new row 2 is created for Ben.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .row{fill:#ffffff;stroke:#cbd5e1}
+    .new{fill:none;stroke:#0ea5a4;stroke-width:2.5}
+    .cb{fill:#ffffff;stroke:#64748b;stroke-width:1.5}
+    .cbon{fill:#4f46e5}
+    .tick{fill:none;stroke:#fff;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+    .ok{fill:#16a34a;font-size:14px;font-weight:700}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .row{fill:#111827;stroke:#475569}
+      .new{stroke:#2dd4bf}
+      .cb{fill:#111827;stroke:#94a3b8}
+      .cbon{fill:#818cf8}.tick{stroke:#0f172a}
+      .ok{fill:#4ade80}.bad{fill:#f87171}
+    }
+    /* 10 s loop: 0-30% before, 30-42% insert, 54-93% results, then reset */
+    .mv{animation:mv 10s infinite ease-in-out}
+    .in{opacity:0;animation:in 10s infinite linear}
+    .out{animation:out 10s infinite linear}
+    .res{opacity:0;animation:res 10s infinite linear}
+    @keyframes mv{0%,30%{transform:translateY(0)}40%,93%{transform:translateY(48px)}99%,100%{transform:translateY(0)}}
+    @keyframes in{0%,34%{opacity:0}42%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes out{0%,30%{opacity:1}36%,94%{opacity:0}99%,100%{opacity:1}}
+    @keyframes res{0%,48%{opacity:0}54%,93%{opacity:1}98%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .mv{animation:none;transform:translateY(48px)}
+      .in,.res{animation:none;opacity:1}
+      .out{animation:none;opacity:0}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Keys decide which row keeps the state</text>
+  <text class="sub" x="28" y="62">Ann's tick is state stored inside her row component. Then Cara is inserted at the top.</text>
+
+  <text class="lbl out" x="28" y="98">Before: [Ann (ticked), Ben]</text>
+  <text class="lbl in" x="28" y="98">After: [Cara, Ann, Ben]</text>
+
+  <!-- left panel: stable keys -->
+  <text class="lbl mono" x="44" y="128">key={person.id}</text>
+  <g class="mv">
+    <rect class="row" x="44" y="142" width="328" height="40" rx="8"/>
+    <rect class="cbon" x="58" y="152" width="20" height="20" rx="4"/><path class="tick" d="M62 162 L67 167 L75 157"/>
+    <text class="tx" x="92" y="167">Ann</text><text class="sub mono" x="358" y="167" text-anchor="end">key=ann</text>
+    <rect class="row" x="44" y="190" width="328" height="40" rx="8"/>
+    <rect class="cb" x="58" y="200" width="20" height="20" rx="4"/>
+    <text class="tx" x="92" y="215">Ben</text><text class="sub mono" x="358" y="215" text-anchor="end">key=ben</text>
+  </g>
+  <g class="in">
+    <rect class="row" x="44" y="142" width="328" height="40" rx="8"/>
+    <rect class="new" x="44" y="142" width="328" height="40" rx="8"/>
+    <rect class="cb" x="58" y="152" width="20" height="20" rx="4"/>
+    <text class="tx" x="92" y="167">Cara</text><text class="sub mono" x="358" y="167" text-anchor="end">key=cara</text>
+  </g>
+
+  <!-- right panel: index keys -->
+  <text class="lbl mono" x="428" y="128">key={index}</text>
+  <rect class="row" x="428" y="142" width="328" height="40" rx="8"/>
+  <rect class="cbon" x="442" y="152" width="20" height="20" rx="4"/><path class="tick" d="M446 162 L451 167 L459 157"/>
+  <text class="tx out" x="476" y="167">Ann</text><text class="tx in" x="476" y="167">Cara</text>
+  <text class="sub mono" x="742" y="167" text-anchor="end">key=0</text>
+  <rect class="row" x="428" y="190" width="328" height="40" rx="8"/>
+  <rect class="cb" x="442" y="200" width="20" height="20" rx="4"/>
+  <text class="tx out" x="476" y="215">Ben</text><text class="tx in" x="476" y="215">Ann</text>
+  <text class="sub mono" x="742" y="215" text-anchor="end">key=1</text>
+  <g class="in">
+    <rect class="row" x="428" y="238" width="328" height="40" rx="8"/>
+    <rect class="new" x="428" y="238" width="328" height="40" rx="8"/>
+    <rect class="cb" x="442" y="248" width="20" height="20" rx="4"/>
+    <text class="tx" x="476" y="263">Ben</text><text class="sub mono" x="742" y="263" text-anchor="end">key=2</text>
+  </g>
+
+  <!-- results -->
+  <g class="res">
+    <text class="ok" x="44" y="314">Correct: Ann keeps her tick.</text>
+    <text class="tx" x="44" y="334">Rows moved with their data; Cara is new.</text>
+    <text class="bad" x="428" y="314">Wrong: Cara shows Ann's tick.</text>
+    <text class="tx" x="428" y="334">Row 0 kept its state but got new props.</text>
+  </g>
+  <text class="sub" x="28" y="380">Teal outline = newly mounted row. Same story for typed text in uncontrolled inputs.</text>
+</svg>

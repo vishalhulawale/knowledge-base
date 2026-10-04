@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 432" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Prop drilling versus context when the user changes</title>
+  <desc id="d">Two component chains, each App or provider, Layout, Dashboard and Avatar. On the left, prop drilling: App owns the user state and passes user through Layout and Dashboard, which don't use it, down to Avatar. When the user changes, all four components re-render, and memo can't help because user is one of their props. On the right, context: SessionProvider owns the user state and receives the tree as children, and Avatar reads the user with use(Session). When the user changes, only SessionProvider and Avatar re-render; Layout and Dashboard are skipped.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .node{fill:#ffffff;stroke:#cbd5e1}
+    .ln{stroke:#cbd5e1;stroke-width:2}
+    .prop{fill:#4f46e5;font-size:13px;font-weight:700}
+    .ctx{fill:none;stroke:#0ea5a4;stroke-width:2.5;stroke-dasharray:7 5}
+    .ctxh{fill:#0ea5a4}
+    .teat{fill:#0f766e;font-size:13px;font-weight:700}
+    .ren{fill:none;stroke:#d97706;stroke-width:3}
+    .skip{fill:#64748b;font-size:13px;font-style:italic}
+    .ok{fill:#16a34a;font-size:15px;font-weight:700}
+    .bad{fill:#dc2626;font-size:15px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.skip{fill:#94a3b8}
+      .node{fill:#111827;stroke:#475569}.ln{stroke:#475569}
+      .prop{fill:#818cf8}.ctx{stroke:#2dd4bf}.ctxh{fill:#2dd4bf}.teat{fill:#5eead4}
+      .ren{stroke:#fbbf24}
+      .ok{fill:#4ade80}.bad{fill:#f87171}
+    }
+    /* 10 s loop: user changes at ~15%, re-renders light up, verdicts, reset */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes k1{0%,13%{opacity:0}16%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes k2{0%,19%{opacity:0}22%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes k3{0%,25%{opacity:0}28%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes k4{0%,31%{opacity:0}34%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes k5{0%,42%{opacity:0}46%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes ev{0%,9%{opacity:0}12%,93%{opacity:1}98%,100%{opacity:0}}
+    .k1{animation-name:k1}.k2{animation-name:k2}.k3{animation-name:k3}.k4{animation-name:k4}.k5{animation-name:k5}.ev{animation-name:ev}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="430" rx="14"/>
+  <text class="h" x="28" y="40">Prop drilling vs context: who re-renders?</text>
+  <text class="sub" x="28" y="62">Only Avatar needs the user. Amber outline = re-rendered after the user changes.</text>
+  <text class="lbl a ev" x="28" y="96">The user changes (for example, after login)</text>
+
+  <!-- left: prop drilling -->
+  <text class="lbl" x="88" y="126">Prop drilling</text>
+  <path class="ln" d="M208 176 V192 M208 232 V248 M208 288 V304"/>
+  <rect class="node" x="88" y="136" width="240" height="40" rx="9"/><text class="tx" x="102" y="161">App</text><text class="sub" x="314" y="161" text-anchor="end">owns user</text>
+  <rect class="node" x="88" y="192" width="240" height="40" rx="9"/><text class="tx" x="102" y="217">Layout</text><text class="prop" x="314" y="217" text-anchor="end">passes user</text>
+  <rect class="node" x="88" y="248" width="240" height="40" rx="9"/><text class="tx" x="102" y="273">Dashboard</text><text class="prop" x="314" y="273" text-anchor="end">passes user</text>
+  <rect class="node" x="88" y="304" width="240" height="40" rx="9"/><text class="tx" x="102" y="329">Avatar</text><text class="prop" x="314" y="329" text-anchor="end">uses user</text>
+  <g class="a k1"><rect class="ren" x="88" y="136" width="240" height="40" rx="9"/></g>
+  <g class="a k2"><rect class="ren" x="88" y="192" width="240" height="40" rx="9"/></g>
+  <g class="a k3"><rect class="ren" x="88" y="248" width="240" height="40" rx="9"/></g>
+  <g class="a k4"><rect class="ren" x="88" y="304" width="240" height="40" rx="9"/></g>
+
+  <!-- right: context -->
+  <text class="lbl" x="472" y="126">Context</text>
+  <path class="ln" d="M592 176 V192 M592 232 V248 M592 288 V304"/>
+  <path class="ctx" d="M712 156 C752 156 752 324 722 324"/><path class="ctxh" d="M724 318 L712 324 L724 330 Z"/>
+  <rect class="node" x="472" y="136" width="240" height="40" rx="9"/><text class="tx" x="486" y="161">SessionProvider</text><text class="sub" x="698" y="161" text-anchor="end">owns user</text>
+  <rect class="node" x="472" y="192" width="240" height="40" rx="9"/><text class="tx" x="486" y="217">Layout</text>
+  <rect class="node" x="472" y="248" width="240" height="40" rx="9"/><text class="tx" x="486" y="273">Dashboard</text>
+  <rect class="node" x="472" y="304" width="240" height="40" rx="9"/><text class="tx" x="486" y="329">Avatar</text><text class="teat" x="698" y="329" text-anchor="end">use(Session)</text>
+  <g class="a k1"><rect class="ren" x="472" y="136" width="240" height="40" rx="9"/></g>
+  <g class="a k2"><text class="skip" x="698" y="217" text-anchor="end">skipped</text><text class="skip" x="698" y="273" text-anchor="end">skipped</text></g>
+  <g class="a k4"><rect class="ren" x="472" y="304" width="240" height="40" rx="9"/></g>
+
+  <g class="a k5">
+    <text class="bad" x="88" y="372">4 of 4 re-render</text>
+    <text class="ok" x="472" y="372">2 of 4 re-render</text>
+  </g>
+  <text class="sub" x="28" y="398">Left: memo can't skip Layout or Dashboard, because user is one of their props. Right: the provider</text>
+  <text class="sub" x="28" y="414">gets the tree as children, so those elements are unchanged and React skips them.</text>
+</svg>

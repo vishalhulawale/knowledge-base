@@ -29,6 +29,9 @@ flowchart TD
 ```
 *Notice Layout, Main and Dashboard don't need the user at all. Context lets NavBar and Avatar read it directly, and they are the ones that re-render when it changes.*
 
+![Animation: when the user changes, prop drilling re-renders App, Layout, Dashboard and Avatar, while with context only SessionProvider and Avatar re-render and Layout and Dashboard are skipped](images/04-drilling-vs-context.svg){ loading=lazy }
+*Watch the middle components: with drilling they re-render just to pass the user along; with context they are skipped.*
+
 ## Core concepts
 
 ### API
@@ -57,6 +60,9 @@ function Avatar() {
 - When the provider's `value` changes (`Object.is`), **all consumers re-render**, regardless of `memo`.
 - An object literal `value={{ user, logout }}` is new every render → consumers re-render every time the provider's parent renders. Memoise it.
 - Consumers can't subscribe to part of a context; there are no selectors. Split into multiple contexts (e.g. `SessionStateContext` and `SessionActionsContext`) or use an external store with selectors.
+
+![Animation: with one context holding user and logout, all four consumers re-render when the user changes; with SessionContext and a stable SessionActionsContext, only the two consumers that read user re-render](images/04-split-context.svg){ loading=lazy }
+*Notice Logout and IdleTimer: once the actions live in their own memoised context, a new user no longer re-renders them.*
 
 ### Context vs state management
 

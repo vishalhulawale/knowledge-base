@@ -30,6 +30,9 @@ flowchart TD
 ```
 *Notice the nesting: if the map fails, only the map shows its fallback; the prescriptions list and the app shell keep working. If the whole route fails, the shell still lets the member navigate away.*
 
+![Animation: PharmacyMap throws during render; without a boundary the whole page goes blank, while with route and widget boundaries only the map shows "Map unavailable." and the shell and prescriptions list keep working](images/07-boundary-isolation.svg){ loading=lazy }
+*Watch the right-hand page: the error stops at the closest boundary, so only the map is replaced.*
+
 ## Core concepts
 
 ### What error boundaries catch
@@ -77,6 +80,9 @@ createRoot(container, {
 - **Transitions:** updates wrapped in `startTransition` keep showing the old UI instead of re-showing a fallback for already revealed content (avoids flashing spinners on navigation).
 - **Nested boundaries** give progressive reveal; **sibling** content inside one boundary is revealed together.
 - **Streaming SSR:** the server sends the shell, then streams each Suspense boundary's HTML as it resolves; selective hydration prioritises what the user interacts with.
+
+![Animation: the app shell renders at once while RxList and PharmacyMap show skeletons; the list is revealed when its data arrives and the map follows later when its lazy code and data are ready](images/07-suspense-reveal.svg){ loading=lazy }
+*Notice the list appears before the map: each Suspense boundary reveals its content as soon as its own data is ready.*
 
 ```mermaid
 sequenceDiagram

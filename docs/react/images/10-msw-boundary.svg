@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Where the mock sits: jest.mock versus MSW</title>
+  <desc id="d">Two stacks of the same code path: RxList component, React Query useQuery, the api client fetchRx, and fetch on the network. On the left, jest.mock of the api module replaces fetchRx with a fake function, so the real api client and the network request never run and the test can pass even if the request is wrong. On the right, MSW lets every layer run for real, including the fetch request, and intercepts the request at the network boundary, returning the handler's response instead of calling the GraphQL server. The same handlers work in tests, Storybook and the browser.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .real{fill:#ffffff;stroke:#4f46e5;stroke-width:2}
+    .fake{fill:#ffffff;stroke:#dc2626;stroke-width:2;stroke-dasharray:6 4}
+    .off{fill:none;stroke:#cbd5e1;stroke-dasharray:4 4}
+    .offt{fill:#94a3b8;font-size:14px}
+    .msw{fill:#0ea5a4}
+    .wt{fill:#fff;font-size:13px;font-weight:700}
+    .ln{stroke:#94a3b8;stroke-width:2}
+    .pri{fill:#4f46e5;font-size:13px;font-weight:700}
+    .bad{fill:#dc2626;font-size:13px;font-weight:700}
+    .ok{fill:#16a34a;font-size:14px;font-weight:700}
+    .badl{fill:#dc2626;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .real{fill:#111827;stroke:#818cf8}.fake{fill:#111827;stroke:#f87171}
+      .off{stroke:#475569}.offt{fill:#64748b}
+      .msw{fill:#2dd4bf}.wt{fill:#0f172a}.ln{stroke:#64748b}
+      .pri{fill:#818cf8}.bad,.badl{fill:#f87171}.ok{fill:#4ade80}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Where the mock sits decides what the test proves</text>
+  <text class="sub" x="28" y="62">Indigo = real code that runs in the test.</text>
+
+  <!-- left: jest.mock -->
+  <text class="lbl mono" x="44" y="98">jest.mock("../api")</text>
+  <path class="ln" d="M194 150 V164 M194 204 V218 M194 258 V272"/>
+  <rect class="real" x="44" y="110" width="300" height="40" rx="8"/><text class="tx" x="58" y="135">RxList component</text><text class="pri" x="330" y="135" text-anchor="end">real</text>
+  <rect class="real" x="44" y="164" width="300" height="40" rx="8"/><text class="tx" x="58" y="189">React Query (useQuery)</text><text class="pri" x="330" y="189" text-anchor="end">real</text>
+  <rect class="fake" x="44" y="218" width="300" height="40" rx="8"/><text class="tx mono" x="58" y="243">fetchRx()</text><text class="bad" x="330" y="243" text-anchor="end">jest.fn() fake</text>
+  <rect class="off" x="44" y="272" width="300" height="40" rx="8"/><text class="offt" x="58" y="297">fetch / network</text><text class="offt" x="330" y="297" text-anchor="end">never runs</text>
+  <text class="badl" x="44" y="342">Wrong URL, query or headers</text>
+  <text class="badl" x="44" y="360">still pass.</text>
+
+  <!-- right: MSW -->
+  <text class="lbl" x="436" y="98">MSW handler</text>
+  <path class="ln" d="M586 150 V164 M586 204 V218 M586 258 V272"/>
+  <rect class="real" x="436" y="110" width="300" height="40" rx="8"/><text class="tx" x="450" y="135">RxList component</text><text class="pri" x="722" y="135" text-anchor="end">real</text>
+  <rect class="real" x="436" y="164" width="300" height="40" rx="8"/><text class="tx" x="450" y="189">React Query (useQuery)</text><text class="pri" x="722" y="189" text-anchor="end">real</text>
+  <rect class="real" x="436" y="218" width="300" height="40" rx="8"/><text class="tx mono" x="450" y="243">fetchRx()</text><text class="pri" x="722" y="243" text-anchor="end">real</text>
+  <rect class="real" x="436" y="272" width="300" height="40" rx="8"/><text class="tx" x="450" y="297">fetch / network</text><text class="pri" x="722" y="297" text-anchor="end">request sent</text>
+  <rect class="msw" x="436" y="322" width="300" height="30" rx="8"/><text class="wt" x="586" y="342" text-anchor="middle">MSW intercepts, returns handler data</text>
+  <text class="ok" x="436" y="380">The real request shape is tested.</text>
+
+  <text class="sub" x="28" y="404">The GraphQL server is never called in either case. MSW handlers also work in Storybook and the browser.</text>
+</svg>

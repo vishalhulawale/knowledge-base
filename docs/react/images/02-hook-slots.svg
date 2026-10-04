@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Hooks are matched by call order</title>
+  <desc id="d">A Profile component calls useState for name, then calls useState for nick only when showNick is true, then calls useState for age. In render 1, with showNick true, three calls fill slot 0 with name Ann, slot 1 with nick A and slot 2 with age 34. In render 2, with showNick false, the first call reads slot 0 and correctly gets Ann, but the age call is now the second call, so it reads slot 1 and gets A, nick's value. Slot 2 is never read. React then notices fewer hooks ran and throws an error; the hooks lint rule flags the conditional call before it ships.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .code{fill:#334155;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .cm{fill:#64748b}
+    .cmb{fill:#dc2626;font-weight:700}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .slot{fill:#ffffff;stroke:#4f46e5;stroke-width:2}
+    .sok{fill:#ffffff;stroke:#16a34a;stroke-width:2.5}
+    .sbad{fill:#ffffff;stroke:#dc2626;stroke-width:2.5}
+    .sdash{fill:none;stroke:#94a3b8;stroke-width:1.5;stroke-dasharray:5 4}
+    .ok{fill:#16a34a;font-size:14px;font-weight:700}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx,.code{fill:#e2e8f0}.sub,.cm{fill:#94a3b8}
+      .cmb,.bad{fill:#f87171}.ok{fill:#4ade80}
+      .box{fill:#111827;stroke:#475569}
+      .slot{fill:#111827;stroke:#818cf8}
+      .sok{fill:#111827;stroke:#4ade80}
+      .sbad{fill:#111827;stroke:#f87171}
+      .sdash{stroke:#64748b}
+    }
+    /* 10 s loop: render 1 fills slots, render 2 reads them in call order */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes k1{0%,3%{opacity:0}6%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes k2{0%,9%{opacity:0}12%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes k3{0%,15%{opacity:0}18%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes k4{0%,21%{opacity:0}24%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes k5{0%,33%{opacity:0}36%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes k6{0%,45%{opacity:0}48%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes k7{0%,55%{opacity:0}58%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes k8{0%,61%{opacity:0}64%,93%{opacity:1}98%,100%{opacity:0}}
+    .k1{animation-name:k1}.k2{animation-name:k2}.k3{animation-name:k3}.k4{animation-name:k4}
+    .k5{animation-name:k5}.k6{animation-name:k6}.k7{animation-name:k7}.k8{animation-name:k8}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="438" rx="14"/>
+  <text class="h" x="28" y="40">Hooks are matched by call order, not by name</text>
+  <text class="sub" x="28" y="62">React keeps hook state in a list of slots per component. The n-th hook call reads the n-th slot.</text>
+
+  <!-- code -->
+  <rect class="box" x="28" y="80" width="744" height="140" rx="10"/>
+  <text class="code" x="44" y="102">function Profile({ showNick }) {</text>
+  <text class="code" x="64" y="120">const [name] = useState("Ann");</text><text class="code cm" x="420" y="120">// call 1</text>
+  <text class="code" x="64" y="138">if (showNick) {</text>
+  <text class="code" x="84" y="156">const [nick] = useState("A");</text><text class="code cmb" x="420" y="156">// call 2, only if showNick</text>
+  <text class="code" x="64" y="174">}</text>
+  <text class="code" x="64" y="192">const [age] = useState(34);</text><text class="code cm" x="420" y="192">// call 3, or call 2</text>
+  <text class="code" x="44" y="210">}</text>
+
+  <!-- slot index labels -->
+  <text class="sub" x="242" y="244" text-anchor="middle">slot 0</text>
+  <text class="sub" x="364" y="244" text-anchor="middle">slot 1</text>
+  <text class="sub" x="486" y="244" text-anchor="middle">slot 2</text>
+
+  <!-- render 1 -->
+  <text class="lbl" x="28" y="272">Render 1</text>
+  <text class="sub" x="28" y="290">showNick = true</text>
+  <rect class="box" x="184" y="252" width="116" height="48" rx="8"/><rect class="box" x="306" y="252" width="116" height="48" rx="8"/><rect class="box" x="428" y="252" width="116" height="48" rx="8"/>
+  <g class="a k1"><rect class="slot" x="184" y="252" width="116" height="48" rx="8"/><text class="tx" x="242" y="281" text-anchor="middle">name: "Ann"</text></g>
+  <g class="a k2"><rect class="slot" x="306" y="252" width="116" height="48" rx="8"/><text class="tx" x="364" y="281" text-anchor="middle">nick: "A"</text></g>
+  <g class="a k3"><rect class="slot" x="428" y="252" width="116" height="48" rx="8"/><text class="tx" x="486" y="281" text-anchor="middle">age: 34</text></g>
+  <g class="a k4"><text class="ok" x="566" y="272">3 calls, 3 slots</text><text class="tx" x="566" y="291">every value in place</text></g>
+
+  <!-- render 2 -->
+  <text class="lbl" x="28" y="342">Render 2</text>
+  <text class="sub" x="28" y="360">showNick = false</text>
+  <rect class="box" x="184" y="322" width="116" height="48" rx="8"/><rect class="box" x="306" y="322" width="116" height="48" rx="8"/><rect class="box" x="428" y="322" width="116" height="48" rx="8"/>
+  <g class="a k5"><rect class="sok" x="184" y="322" width="116" height="48" rx="8"/><text class="tx" x="242" y="341" text-anchor="middle">call 1: name</text><text class="ok" x="242" y="360" text-anchor="middle">"Ann"</text></g>
+  <g class="a k6"><rect class="sbad" x="306" y="322" width="116" height="48" rx="8"/><text class="tx" x="364" y="341" text-anchor="middle">call 2: age</text><text class="bad" x="364" y="360" text-anchor="middle">"A"</text></g>
+  <g class="a k7"><rect class="sdash" x="428" y="322" width="116" height="48" rx="8"/><text class="sub" x="486" y="351" text-anchor="middle">never read</text></g>
+  <g class="a k8"><text class="bad" x="566" y="342">age gets nick's value</text><text class="tx" x="566" y="361">every later hook shifts</text></g>
+
+  <text class="sub" x="28" y="404">React then sees fewer hooks than last time and throws an error.</text>
+  <text class="sub" x="28" y="422">eslint-plugin-react-hooks (rules-of-hooks) flags the conditional call before it ships.</text>
+</svg>

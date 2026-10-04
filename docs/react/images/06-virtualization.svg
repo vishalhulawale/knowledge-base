@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">List virtualization</title>
+  <desc id="d">On the left, a strip stands for 10,000 claims in the data, with a small window that jumps from row 1,000 to row 5,000 to row 8,500 as the user scrolls. On the right, the DOM always holds about 30 row elements: 5 overscan rows above the viewport, 20 visible rows inside the viewport, and 5 overscan rows below. The labels change with the scroll position, for example rows 995 to 999 overscan, rows 1,000 to 1,019 visible and rows 1,020 to 1,024 overscan. The scroll container is 480,000 pixels tall, 10,000 rows times 48 pixels, and rows are positioned with translateY.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .strip{fill:#ffffff;stroke:#cbd5e1}
+    .tick{stroke:#e2e8f0;stroke-width:1}
+    .win{fill:#4f46e5;fill-opacity:.25;stroke:#4f46e5;stroke-width:2}
+    .row{fill:#4f46e5}
+    .ovr{fill:#cbd5e1}
+    .vp{fill:none;stroke:#0ea5a4;stroke-width:3}
+    .cont{fill:none;stroke:#94a3b8;stroke-width:1.5;stroke-dasharray:6 5}
+    .pri{fill:#4f46e5;font-size:14px;font-weight:700}
+    .teat{fill:#0f766e;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .strip{fill:#111827;stroke:#475569}.tick{stroke:#334155}
+      .win{fill:#818cf8;stroke:#818cf8}
+      .row{fill:#818cf8}.ovr{fill:#475569}
+      .vp{stroke:#2dd4bf}.cont{stroke:#64748b}
+      .pri{fill:#818cf8}.teat{fill:#5eead4}
+    }
+    /* 10 s loop: three scroll positions */
+    .mv{animation:mv 10s infinite ease-in-out}
+    @keyframes mv{0%,30%{transform:translateY(0)}33%,63%{transform:translateY(112px)}66%,95%{transform:translateY(210px)}99%,100%{transform:translateY(0)}}
+    .t1{animation:t1 10s infinite linear}
+    .t2{opacity:0;animation:t2 10s infinite linear}
+    .t3{opacity:0;animation:t3 10s infinite linear}
+    @keyframes t1{0%,30%{opacity:1}31.5%,97%{opacity:0}100%{opacity:1}}
+    @keyframes t2{0%,31.5%{opacity:0}33%,63%{opacity:1}64.5%,100%{opacity:0}}
+    @keyframes t3{0%,64.5%{opacity:0}66%,95%{opacity:1}97%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .mv{animation:none;transform:translateY(112px)}
+      .t1,.t3{animation:none;opacity:0}.t2{animation:none;opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="458" rx="14"/>
+  <text class="h" x="28" y="40">Virtualization: 10,000 rows, about 30 in the DOM</text>
+  <text class="sub" x="28" y="62">Viewport fits 20 rows (estimateSize 48 px), overscan 5. Only those rows are rendered.</text>
+
+  <!-- data strip -->
+  <text class="lbl" x="28" y="96">Data</text>
+  <text class="sub" x="104" y="116">row 0</text>
+  <text class="sub" x="104" y="392">row 9,999</text>
+  <rect class="strip" x="40" y="110" width="56" height="280" rx="4"/>
+  <path class="tick" d="M40 124 H96 M40 138 H96 M40 152 H96 M40 166 H96 M40 180 H96 M40 194 H96 M40 208 H96 M40 222 H96 M40 236 H96 M40 250 H96 M40 264 H96 M40 278 H96 M40 292 H96 M40 306 H96 M40 320 H96 M40 334 H96 M40 348 H96 M40 362 H96 M40 376 H96"/>
+  <g class="mv"><rect class="win" x="34" y="134" width="68" height="12" rx="3"/></g>
+  <text class="sub" x="28" y="416">10,000 claims</text>
+  <text class="sub" x="28" y="432">(window not to scale)</text>
+
+  <!-- DOM panel -->
+  <text class="lbl" x="200" y="96">DOM</text>
+  <rect class="cont" x="200" y="104" width="190" height="312" rx="8"/>
+  <g>
+    <rect class="ovr" x="212" y="110" width="166" height="8" rx="2"/><rect class="ovr" x="212" y="120" width="166" height="8" rx="2"/><rect class="ovr" x="212" y="130" width="166" height="8" rx="2"/><rect class="ovr" x="212" y="140" width="166" height="8" rx="2"/><rect class="ovr" x="212" y="150" width="166" height="8" rx="2"/>
+    <rect class="row" x="212" y="162" width="166" height="8" rx="2"/><rect class="row" x="212" y="172" width="166" height="8" rx="2"/><rect class="row" x="212" y="182" width="166" height="8" rx="2"/><rect class="row" x="212" y="192" width="166" height="8" rx="2"/><rect class="row" x="212" y="202" width="166" height="8" rx="2"/>
+    <rect class="row" x="212" y="212" width="166" height="8" rx="2"/><rect class="row" x="212" y="222" width="166" height="8" rx="2"/><rect class="row" x="212" y="232" width="166" height="8" rx="2"/><rect class="row" x="212" y="242" width="166" height="8" rx="2"/><rect class="row" x="212" y="252" width="166" height="8" rx="2"/>
+    <rect class="row" x="212" y="262" width="166" height="8" rx="2"/><rect class="row" x="212" y="272" width="166" height="8" rx="2"/><rect class="row" x="212" y="282" width="166" height="8" rx="2"/><rect class="row" x="212" y="292" width="166" height="8" rx="2"/><rect class="row" x="212" y="302" width="166" height="8" rx="2"/>
+    <rect class="row" x="212" y="312" width="166" height="8" rx="2"/><rect class="row" x="212" y="322" width="166" height="8" rx="2"/><rect class="row" x="212" y="332" width="166" height="8" rx="2"/><rect class="row" x="212" y="342" width="166" height="8" rx="2"/><rect class="row" x="212" y="352" width="166" height="8" rx="2"/>
+    <rect class="ovr" x="212" y="364" width="166" height="8" rx="2"/><rect class="ovr" x="212" y="374" width="166" height="8" rx="2"/><rect class="ovr" x="212" y="384" width="166" height="8" rx="2"/><rect class="ovr" x="212" y="394" width="166" height="8" rx="2"/><rect class="ovr" x="212" y="404" width="166" height="8" rx="2"/>
+  </g>
+  <rect class="vp" x="206" y="157" width="178" height="202" rx="6"/>
+
+  <!-- range labels -->
+  <g class="t1">
+    <text class="tx" x="410" y="132">rows 995-999</text>
+    <text class="tx" x="410" y="258">rows 1,000-1,019</text>
+    <text class="tx" x="410" y="390">rows 1,020-1,024</text>
+  </g>
+  <g class="t2">
+    <text class="tx" x="410" y="132">rows 4,995-4,999</text>
+    <text class="tx" x="410" y="258">rows 5,000-5,019</text>
+    <text class="tx" x="410" y="390">rows 5,020-5,024</text>
+  </g>
+  <g class="t3">
+    <text class="tx" x="410" y="132">rows 8,495-8,499</text>
+    <text class="tx" x="410" y="258">rows 8,500-8,519</text>
+    <text class="tx" x="410" y="390">rows 8,520-8,524</text>
+  </g>
+  <text class="sub" x="410" y="150">overscan: 5 rows</text>
+  <text class="teat" x="410" y="278">viewport: 20 visible rows</text>
+  <text class="sub" x="410" y="408">overscan: 5 rows</text>
+
+  <!-- totals -->
+  <text class="pri" x="600" y="196">DOM rows: 30</text>
+  <text class="sub" x="600" y="216">at every scroll position</text>
+  <text class="lbl" x="600" y="306">Data rows: 10,000</text>
+  <text class="sub" x="600" y="326">only the window moves</text>
+
+  <text class="sub" x="200" y="440">Container height = 10,000 x 48 px = 480,000 px; each row is placed with translateY.</text>
+</svg>

@@ -68,6 +68,9 @@ const [email, setEmail] = useState("");
 | Integration with non-React widgets | Harder | Easier |
 | Default value | `value` from state | `defaultValue` |
 
+![Animation: typing 10001 into a controlled input updates zip state and re-renders five times, while an uncontrolled input keeps the value in the DOM with zero re-renders until FormData reads it on submit](images/05-controlled-vs-uncontrolled.svg){ loading=lazy }
+*Watch the re-render counters: the controlled input re-renders on every keystroke, the uncontrolled one never does until you read it on submit.*
+
 ### React 19 Actions
 
 ```mermaid
@@ -97,6 +100,9 @@ sequenceDiagram
 - **Schema libraries:** Zod/Yup/Valibot schemas shared between client and server (TypeScript types inferred from the schema).
 - **When to show errors:** on blur or submit, not on first keystroke; clear on correction.
 - **Accessibility:** `<label htmlFor>`, `aria-invalid`, `aria-describedby` pointing at the error, focus the first invalid field on submit, don't rely on colour alone.
+
+![HTML constraints and client schema validation run in the browser and can be skipped, while a curl or script request goes straight to server validation, which uses the same schema and always runs before saving](images/05-validation-layers.svg){ loading=lazy }
+*Notice the red path: anything that skips the browser still hits server validation, which is why it is the only layer that counts for security.*
 
 ### React Hook Form
 

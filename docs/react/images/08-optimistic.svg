@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Optimistic favourite toggle with useOptimistic</title>
+  <desc id="d">Two runs of the favourite button. Before the click the pharmacy is not a favourite and the star is empty. On click, setOptimistic fills the star immediately while the API call is still saving. When the action finishes, the button shows the real state again: in the top run the server saved the change, so the real value is a filled star; in the bottom run the request failed, so the star goes back to empty.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .btn{fill:#ffffff;stroke:#cbd5e1}
+    .bok{fill:#ffffff;stroke:#16a34a;stroke-width:2.5}
+    .bbad{fill:#ffffff;stroke:#dc2626;stroke-width:2.5}
+    .son{fill:#d97706;stroke:#d97706;stroke-width:1.5;stroke-linejoin:round}
+    .soff{fill:none;stroke:#64748b;stroke-width:1.5;stroke-linejoin:round}
+    .ok{fill:#16a34a;font-size:13px;font-weight:700}
+    .bad{fill:#dc2626;font-size:13px;font-weight:700}
+    .num{fill:#4f46e5;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .btn{fill:#111827;stroke:#475569}.bok{fill:#111827;stroke:#4ade80}.bbad{fill:#111827;stroke:#f87171}
+      .son{fill:#fbbf24;stroke:#fbbf24}.soff{stroke:#94a3b8}
+      .ok{fill:#4ade80}.bad{fill:#f87171}.num{fill:#818cf8}
+    }
+    /* 10 s loop: click at 15%, waiting at 35%, result at 60% */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes c1{0%,13%{opacity:0}16%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes c2{0%,33%{opacity:0}36%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes c3{0%,58%{opacity:0}61%,93%{opacity:1}98%,100%{opacity:0}}
+    .c1{animation-name:c1}.c2{animation-name:c2}.c3{animation-name:c3}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">useOptimistic: show the result now, settle later</text>
+  <text class="sub" x="28" y="62">The favourite button for one pharmacy, clicked twice: once the server saves, once it fails.</text>
+
+  <text class="num" x="270" y="100" text-anchor="middle">1 Before</text>
+  <text class="num" x="410" y="100" text-anchor="middle">2 Click</text>
+  <text class="num" x="550" y="100" text-anchor="middle">3 Waiting</text>
+  <text class="num" x="690" y="100" text-anchor="middle">4 Action done</text>
+
+  <text class="lbl" x="28" y="146">Server saves</text>
+  <text class="lbl" x="28" y="266">Server fails</text>
+
+  <rect class="btn" x="236" y="124" width="68" height="52" rx="10"/><polygon class="soff" points="270.0,135.0 273.8,144.7 284.3,145.4 276.2,152.0 278.8,162.1 270.0,156.5 261.2,162.1 263.8,152.0 255.7,145.4 266.2,144.7"/><text class="sub" x="270" y="198" text-anchor="middle">isFavourite: false</text>
+  <g class="a c1"><rect class="btn" x="376" y="124" width="68" height="52" rx="10"/><polygon class="son" points="410.0,135.0 413.8,144.7 424.3,145.4 416.2,152.0 418.8,162.1 410.0,156.5 401.2,162.1 403.8,152.0 395.7,145.4 406.2,144.7"/><text class="sub" x="410" y="198" text-anchor="middle">set optimistic ★</text></g>
+  <g class="a c2"><rect class="btn" x="516" y="124" width="68" height="52" rx="10"/><polygon class="son" points="550.0,135.0 553.8,144.7 564.3,145.4 556.2,152.0 558.8,162.1 550.0,156.5 541.2,162.1 543.8,152.0 535.7,145.4 546.2,144.7"/><text class="sub" x="550" y="198" text-anchor="middle">API saving...</text></g>
+  <g class="a c3"><rect class="bok" x="656" y="124" width="68" height="52" rx="10"/><polygon class="son" points="690.0,135.0 693.8,144.7 704.3,145.4 696.2,152.0 698.8,162.1 690.0,156.5 681.2,162.1 683.8,152.0 675.7,145.4 686.2,144.7"/><text class="ok" x="690" y="198" text-anchor="middle">saved: real ★</text></g>
+  <rect class="btn" x="236" y="244" width="68" height="52" rx="10"/><polygon class="soff" points="270.0,255.0 273.8,264.7 284.3,265.4 276.2,272.0 278.8,282.1 270.0,276.5 261.2,282.1 263.8,272.0 255.7,265.4 266.2,264.7"/><text class="sub" x="270" y="318" text-anchor="middle">isFavourite: false</text>
+  <g class="a c1"><rect class="btn" x="376" y="244" width="68" height="52" rx="10"/><polygon class="son" points="410.0,255.0 413.8,264.7 424.3,265.4 416.2,272.0 418.8,282.1 410.0,276.5 401.2,282.1 403.8,272.0 395.7,265.4 406.2,264.7"/><text class="sub" x="410" y="318" text-anchor="middle">set optimistic ★</text></g>
+  <g class="a c2"><rect class="btn" x="516" y="244" width="68" height="52" rx="10"/><polygon class="son" points="550.0,255.0 553.8,264.7 564.3,265.4 556.2,272.0 558.8,282.1 550.0,276.5 541.2,282.1 543.8,272.0 535.7,265.4 546.2,264.7"/><text class="sub" x="550" y="318" text-anchor="middle">API saving...</text></g>
+  <g class="a c3"><rect class="bbad" x="656" y="244" width="68" height="52" rx="10"/><polygon class="soff" points="690.0,255.0 693.8,264.7 704.3,265.4 696.2,272.0 698.8,282.1 690.0,276.5 681.2,282.1 683.8,272.0 675.7,265.4 686.2,264.7"/><text class="bad" x="690" y="318" text-anchor="middle">failed: back to ☆</text></g>
+
+  <text class="sub" x="28" y="344">The optimistic value lasts only while the action is pending. Then the button shows the real</text>
+  <text class="sub" x="28" y="362">isFavourite again: filled once the saved value comes back, empty if the request failed.</text>
+</svg>

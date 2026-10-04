@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Route-level code splitting</title>
+  <desc id="d">Two timelines for the same visit: the user lands on Home, then clicks Claims. With one bundle, a large main.js containing every route and heavy widgets must download and parse before Home is interactive; Claims then shows at once because its code is already loaded. With route-level splitting, a small main.js with the shell and Home makes Home interactive much earlier; when the user clicks Claims, the claims chunk is fetched while the Suspense fallback PageSkeleton is shown, and then Claims renders. Bar lengths are illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .axis{stroke:#cbd5e1;stroke-width:2}
+    .bar{fill:#4f46e5}
+    .chunk{fill:#0ea5a4}
+    .click{stroke:#64748b;stroke-width:2;stroke-dasharray:4 4}
+    .ok{fill:#16a34a;font-size:13px;font-weight:700}
+    .warn{fill:#b45309;font-size:13px;font-weight:700}
+    .play{stroke:#d97706;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .axis{stroke:#475569}
+      .bar{fill:#818cf8}.chunk{fill:#2dd4bf}
+      .click{stroke:#94a3b8}
+      .ok{fill:#4ade80}.warn{fill:#fbbf24}.play{stroke:#fbbf24}
+    }
+    /* 10 s loop: time runs x=200..770 over 0-80% */
+    .g{transform-box:fill-box;transform-origin:0 50%;animation:10s infinite linear}
+    @keyframes gA{0%{transform:scaleX(0)}50.5%,93%{transform:scaleX(1)}98%,100%{transform:scaleX(0)}}
+    @keyframes gB{0%{transform:scaleX(0)}19.6%,93%{transform:scaleX(1)}98%,100%{transform:scaleX(0)}}
+    @keyframes gC{0%,58.9%{transform:scaleX(0)}70.2%,93%{transform:scaleX(1)}98%,100%{transform:scaleX(0)}}
+    .gA{animation-name:gA}.gB{animation-name:gB}.gC{animation-name:gC}
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes mB{0%,19.6%{opacity:0}21%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes mA{0%,50.5%{opacity:0}52%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes mK{0%,58.9%{opacity:0}60%,93%{opacity:1}98%,100%{opacity:0}}
+    @keyframes mS{0%,59.5%{opacity:0}61%,70%{opacity:1}71%,100%{opacity:0}}
+    @keyframes mC{0%,70.2%{opacity:0}71.5%,93%{opacity:1}98%,100%{opacity:0}}
+    .mA{animation-name:mA}.mB{animation-name:mB}.mK{animation-name:mK}.mS{animation-name:mS}.mC{animation-name:mC}
+    .ph{animation:ph 10s infinite linear}
+    @keyframes ph{0%{transform:translateX(0);opacity:1}80%{transform:translateX(570px);opacity:1}81%,100%{transform:translateX(570px);opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .g{animation:none;transform:none}
+      .a{animation:none;opacity:1}.mS{opacity:1}
+      .ph{animation:none;opacity:0}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Route-level code splitting</text>
+  <text class="sub" x="28" y="62">Same visit twice: land on Home, then click Claims. Bar length = download and parse time.</text>
+
+  <path class="click" d="M620 96 V346"/>
+  <text class="sub" x="620" y="90" text-anchor="middle">user clicks Claims</text>
+
+  <!-- lane A: one bundle -->
+  <text class="lbl" x="28" y="142">One bundle</text>
+  <text class="sub" x="28" y="160">everything up front</text>
+  <path class="axis" d="M200 146 H770"/>
+  <text class="sub" x="200" y="124">main.js: all routes, charts, editors</text>
+  <rect class="bar g gA" x="200" y="134" width="360" height="24" rx="5"/>
+  <g class="a mA"><text class="ok" x="560" y="180" text-anchor="end">Home interactive</text></g>
+  <g class="a mK"><text class="ok" x="628" y="180">Claims shows</text><text class="ok" x="628" y="196">at once</text></g>
+
+  <!-- lane B: split -->
+  <text class="lbl" x="28" y="262">Split by route</text>
+  <text class="sub" x="28" y="280">lazy() + Suspense</text>
+  <path class="axis" d="M200 266 H770"/>
+  <text class="sub" x="200" y="244">main.js: shell + Home</text>
+  <rect class="bar g gB" x="200" y="254" width="140" height="24" rx="5"/>
+  <g class="a mB"><text class="ok" x="270" y="300" text-anchor="middle">Home interactive</text></g>
+  <text class="sub" x="628" y="244">claims chunk</text>
+  <rect class="chunk g gC" x="620" y="254" width="80" height="24" rx="5"/>
+  <g class="a mS"><text class="warn mono" x="616" y="300">&lt;PageSkeleton/&gt;</text></g>
+  <g class="a mC"><text class="ok" x="706" y="320">Claims</text><text class="ok" x="706" y="336">shows</text></g>
+
+  <!-- playhead -->
+  <g class="ph"><path class="play" d="M200 100 V346"/></g>
+
+  <text class="sub" x="770" y="364" text-anchor="end">time</text>
+  <text class="sub" x="28" y="372">Bar lengths are illustrative. Prefetching the chunk on hover or route intent hides most of the</text>
+  <text class="sub" x="28" y="390">skeleton time; the skeleton appears only while the chunk is loading.</text>
+</svg>

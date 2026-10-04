@@ -49,6 +49,9 @@ const el = _jsx(Button, { variant: "primary", onClick: save, children: "Save" })
 - Attributes use camelCase (`className`, `onClick`, `htmlFor`); `style` takes an object.
 - Text in `{}` is escaped by default, which prevents XSS; `dangerouslySetInnerHTML` bypasses that.
 
+![The JSX for a Button with variant, onClick and Save text, the _jsx call the compiler emits for it, and the plain element object that call returns, with the type and props highlighted in each](images/01-jsx-to-element.svg){ loading=lazy }
+*Notice that nothing in this chain is a DOM node. The element is just data that React reads later when it renders and commits.*
+
 ### Components
 
 - Function components are the standard; class components are legacy (still supported, needed only for error boundaries without a library).
@@ -94,6 +97,9 @@ flowchart TD
     X -->|"index as key"| I["Item 0 becomes c, item 1 becomes a, item 2 created:<br/>state and inputs attached to the wrong rows"]
 ```
 *Notice that keys are about identity, not uniqueness for its own sake. Stable keys from data keep each row's DOM node and state attached to the right item.*
+
+![Animation: Cara is inserted above Ann (ticked) and Ben; with id keys the rows move down and Ann keeps her tick, with index keys row 0 shows Cara but keeps Ann's tick](images/01-keys-vs-index.svg){ loading=lazy }
+*Watch the right-hand list: the rows never move, only their text changes, so the tick stays with position 0 and lands on Cara.*
 
 Consequences interviewers like:
 

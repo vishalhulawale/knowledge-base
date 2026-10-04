@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Progressive reveal with nested Suspense boundaries</title>
+  <desc id="d">A prescriptions page with an app shell on top and two regions, each inside its own Suspense boundary: RxList on the left and PharmacyMap on the right. Step 1: the shell renders at once and both regions show skeleton fallbacks. Step 2: the prescriptions data is ready, so the list replaces its skeleton while the map is still loading. Step 3: the map's lazy code and data are ready and the map is revealed. The list never waits for the slower map.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .page{fill:#ffffff;stroke:#cbd5e1}
+    .chrome{fill:#e2e8f0}
+    .dotc{fill:#94a3b8}
+    .shell{fill:#4f46e5}
+    .wt{fill:#fff;font-size:14px;font-weight:700}
+    .bnd{fill:none;stroke:#0ea5a4;stroke-width:1.5;stroke-dasharray:5 4}
+    .sk{fill:#e2e8f0}
+    .pill{fill:#16a34a}
+    .pt{fill:#fff;font-size:13px;font-weight:700}
+    .grid{stroke:#cbd5e1;stroke-width:1}
+    .road{stroke:#94a3b8;stroke-width:4;fill:none}
+    .pin{fill:#dc2626}
+    .teat{fill:#0f766e;font-size:13px;font-weight:700}
+    .step{fill:none;stroke:#4f46e5;stroke-width:2}
+    .num{fill:#4f46e5;font-size:15px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .page{fill:#111827;stroke:#475569}
+      .chrome{fill:#334155}.dotc{fill:#64748b}
+      .shell{fill:#818cf8}.wt,.pt{fill:#0f172a}
+      .bnd{stroke:#2dd4bf}.sk{fill:#334155}
+      .pill{fill:#4ade80}
+      .grid{stroke:#334155}.road{stroke:#64748b}.pin{fill:#f87171}
+      .teat{fill:#5eead4}.step{stroke:#818cf8}.num{fill:#818cf8}
+    }
+    /* 10 s loop: list ready at 30%, map ready at 60% */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes skA{0%,29%{opacity:1}31%,96%{opacity:0}100%{opacity:1}}
+    @keyframes skB{0%,59%{opacity:1}61%,96%{opacity:0}100%{opacity:1}}
+    @keyframes inA{0%,29%{opacity:0}31%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes inB{0%,59%{opacity:0}61%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s1{0%,29%{opacity:1}31%,100%{opacity:0}}
+    @keyframes s2{0%,29%{opacity:0}31%,59%{opacity:1}61%,100%{opacity:0}}
+    @keyframes s3{0%,59%{opacity:0}61%,95%{opacity:1}97%,100%{opacity:0}}
+    .skA{animation-name:skA;opacity:1}.skB{animation-name:skB;opacity:1}.inA{animation-name:inA}.inB{animation-name:inB}
+    .s1{animation-name:s1;opacity:1}.s2{animation-name:s2}.s3{animation-name:s3}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.skA,.skB,.s1,.s2{opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Nested Suspense boundaries reveal the page in pieces</text>
+  <text class="sub" x="28" y="62">Each region shows its own fallback until its code or data is ready.</text>
+
+  <!-- page mock -->
+  <rect class="page" x="28" y="84" width="520" height="300" rx="10"/>
+  <path class="chrome" d="M28 94 a10 10 0 0 1 10 -10 H538 a10 10 0 0 1 10 10 V110 H28 Z"/>
+  <circle class="dotc" cx="44" cy="97" r="4"/><circle class="dotc" cx="58" cy="97" r="4"/><circle class="dotc" cx="72" cy="97" r="4"/>
+  <text class="sub" x="92" y="102">/prescriptions</text>
+  <rect class="shell" x="40" y="120" width="496" height="34" rx="6"/>
+  <text class="wt" x="54" y="142">App shell: nav and header (no wait)</text>
+
+  <!-- region A: RxList -->
+  <rect class="bnd" x="40" y="166" width="250" height="206" rx="8"/>
+  <text class="teat" x="52" y="186">Suspense: RxList</text>
+  <g class="a skA">
+    <rect class="sk" x="52" y="200" width="226" height="28" rx="5"/><rect class="sk" x="52" y="236" width="226" height="28" rx="5"/>
+    <rect class="sk" x="52" y="272" width="226" height="28" rx="5"/><rect class="sk" x="52" y="308" width="226" height="28" rx="5"/>
+  </g>
+  <g class="a inA">
+    <text class="tx" x="56" y="219">Atorvastatin</text><rect class="pill" x="212" y="203" width="62" height="22" rx="11"/><text class="pt" x="243" y="219" text-anchor="middle">Ready</text>
+    <text class="tx" x="56" y="255">Lisinopril</text><rect class="pill" x="212" y="239" width="62" height="22" rx="11"/><text class="pt" x="243" y="255" text-anchor="middle">Ready</text>
+    <text class="tx" x="56" y="291">Metformin</text><text class="sub" x="274" y="291" text-anchor="end">Shipped</text>
+    <text class="tx" x="56" y="327">Amlodipine</text><text class="sub" x="274" y="327" text-anchor="end">Refill due</text>
+  </g>
+
+  <!-- region B: PharmacyMap -->
+  <rect class="bnd" x="302" y="166" width="234" height="206" rx="8"/>
+  <text class="teat" x="314" y="186">Suspense: PharmacyMap</text>
+  <g class="a skB"><rect class="sk" x="314" y="200" width="210" height="160" rx="6"/></g>
+  <g class="a inB">
+    <path class="grid" d="M314 232 H524 M314 264 H524 M314 296 H524 M314 328 H524 M356 200 V360 M398 200 V360 M440 200 V360 M482 200 V360"/>
+    <path class="road" d="M314 340 C370 300 410 310 450 260 S510 220 524 214"/>
+    <circle class="pin" cx="376" cy="250" r="7"/><circle class="pin" cx="462" cy="300" r="7"/><circle class="pin" cx="500" cy="236" r="7"/>
+  </g>
+
+  <!-- steps -->
+  <g class="a s1"><rect class="step" x="568" y="104" width="212" height="70" rx="10"/></g>
+  <g class="a s2"><rect class="step" x="568" y="186" width="212" height="70" rx="10"/></g>
+  <g class="a s3"><rect class="step" x="568" y="268" width="212" height="70" rx="10"/></g>
+  <text class="num" x="582" y="130">1</text><text class="lbl" x="602" y="130">Shell renders</text>
+  <text class="sub" x="602" y="150">both regions show</text><text class="sub" x="602" y="166">skeleton fallbacks</text>
+  <text class="num" x="582" y="212">2</text><text class="lbl" x="602" y="212">List data ready</text>
+  <text class="sub" x="602" y="232">RxList revealed;</text><text class="sub" x="602" y="248">map still loading</text>
+  <text class="num" x="582" y="294">3</text><text class="lbl" x="602" y="294">Map ready</text>
+  <text class="sub" x="602" y="314">lazy code and data</text><text class="sub" x="602" y="330">arrived; map revealed</text>
+
+  <text class="sub" x="28" y="406">Siblings inside one boundary would be revealed together; separate boundaries let the list skip the wait.</text>
+</svg>
