@@ -43,6 +43,9 @@ flowchart LR
 ```
 *Notice the chain: the external LB only reaches the cluster edge, the Ingress controller makes L7 decisions, and the Service VIP is just a rule on each node that load-balances across ready endpoints. Readiness controls the last hop.*
 
+![Animation: three requests travel from the client through the cloud load balancer and the Ingress controller to the orders Service rule, which sends them to pod A, pod B and pod A; pod C is not ready, is missing from the EndpointSlice and receives nothing](images/04-request-path.svg){ loading=lazy }
+*Notice there's no box for kube-proxy in the path: the Service is a rewrite rule in the node's kernel, not a hop through a process.*
+
 With the AWS Load Balancer Controller in **IP target mode**, the ALB sends traffic straight to pod IPs (registered from EndpointSlices), skipping NodePorts and kube-proxy.
 
 ### Services and EndpointSlices
@@ -85,6 +88,9 @@ Useful fields: `sessionAffinity: ClientIP`, `internalTrafficPolicy: Local` and `
 kube-proxy watches Services and EndpointSlices and programs each node: **iptables** (a random-probability DNAT chain per Service, the long-time default), **IPVS** (in-kernel L4 load balancing, better at thousands of Services) or **nftables** (GA in 1.33). **eBPF** dataplanes (Cilium, Azure CNI powered by Cilium) replace kube-proxy with faster lookups and better observability. There's no proxy process in the request path. The node's kernel rewrites the destination.
 
 Two consequences: Service load balancing is per **connection**, not per request (long-lived HTTP/2 or gRPC connections stick to one pod, so use client-side balancing with a headless Service or a mesh), and a Service VIP isn't pingable (it only exists as rules for its ports).
+
+![Left: a gRPC client's single HTTP/2 connection through a ClusterIP Service sends every request to pod A while B and C are idle; right: with a headless Service and client-side balancing, requests spread over all three pods](images/04-per-connection-lb.svg){ loading=lazy }
+*Notice that scaling to three pods did nothing on the left. A Service picks a backend when a connection opens, and a gRPC connection rarely closes.*
 
 ### DNS
 
