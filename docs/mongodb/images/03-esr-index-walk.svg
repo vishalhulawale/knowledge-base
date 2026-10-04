@@ -1,0 +1,161 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">ESR: walking the index in sort order and stopping early</title>
+  <desc id="d">Query: DENIED claims in March, sorted by amount descending, limit 3; an illustrative small version of the page&#x27;s limit-20 query. Left, index {status, serviceDate}: the DENIED March entries are contiguous but in date order, so all eight are scanned and fetched, then sorted in memory to pick the top 3. Right, the ESR index {status, amount -1, serviceDate}: DENIED entries are in amount order, so the scan walks from the largest amount, checks the date inside the index, skips February and January entries, and stops after the third March match: 5 keys examined, 3 documents fetched, no sort. On the measured data this was 143 keys and 20 documents instead of 4,105 and a sort.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:16s infinite linear}
+    @keyframes L0{0%{opacity:0}2%{opacity:0}3%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .L0{animation-name:L0}
+    @keyframes L1{0%{opacity:0}8%{opacity:0}9%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .L1{animation-name:L1}
+    @keyframes L2{0%{opacity:0}14%{opacity:0}15%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .L2{animation-name:L2}
+    @keyframes L3{0%{opacity:0}20%{opacity:0}21%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .L3{animation-name:L3}
+    @keyframes L4{0%{opacity:0}26%{opacity:0}27%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .L4{animation-name:L4}
+    @keyframes L5{0%{opacity:0}32%{opacity:0}33%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .L5{animation-name:L5}
+    @keyframes L6{0%{opacity:0}38%{opacity:0}39%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .L6{animation-name:L6}
+    @keyframes L7{0%{opacity:0}44%{opacity:0}45%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .L7{animation-name:L7}
+    @keyframes lsort{0%{opacity:0}51%{opacity:0}52%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .lsort{animation-name:lsort}
+    @keyframes R0{0%{opacity:0}2%{opacity:0}3%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .R0{animation-name:R0}
+    @keyframes R1{0%{opacity:0}9%{opacity:0}10%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .R1{animation-name:R1}
+    @keyframes R2{0%{opacity:0}16%{opacity:0}17%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .R2{animation-name:R2}
+    @keyframes R3{0%{opacity:0}23%{opacity:0}24%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .R3{animation-name:R3}
+    @keyframes R4{0%{opacity:0}30%{opacity:0}31%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .R4{animation-name:R4}
+    @keyframes rstop{0%{opacity:0}35%{opacity:0}36%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .rstop{animation-name:rstop}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="468" rx="14"/>
+  <text class="h" x="28" y="40">DENIED, March, sort amount desc, limit 3</text>
+  <text class="sub" x="28" y="62">Illustrative slice of the DENIED part of each index. Measured version: 4,105 keys + SORT vs 143 keys.</text>
+  <line class="ln dash" x1="400" y1="84" x2="400" y2="400"/>
+  <text class="h2" x="28" y="102">{status, serviceDate}  (E, R)</text>
+  <text class="h2" x="420" y="102">{status, amount: -1, date}  (ESR)</text>
+  <rect class="box" x="28" y="118" width="340" height="26" rx="5"/>
+  <text class="sm" x="40" y="136">DENIED · Mar 02 · $310</text>
+  <rect class="bw a L0" x="28" y="118" width="340" height="26" rx="5"/>
+  <text class="sm a L0" x="40" y="136">DENIED · Mar 02 · $310</text>
+  <text class="sm wrnt a L0" x="356" y="136" text-anchor="end">fetch</text>
+  <rect class="box" x="28" y="148" width="340" height="26" rx="5"/>
+  <text class="sm" x="40" y="166">DENIED · Mar 05 · $940</text>
+  <rect class="bw a L1" x="28" y="148" width="340" height="26" rx="5"/>
+  <text class="sm a L1" x="40" y="166">DENIED · Mar 05 · $940</text>
+  <text class="sm wrnt a L1" x="356" y="166" text-anchor="end">fetch</text>
+  <rect class="box" x="28" y="178" width="340" height="26" rx="5"/>
+  <text class="sm" x="40" y="196">DENIED · Mar 09 · $120</text>
+  <rect class="bw a L2" x="28" y="178" width="340" height="26" rx="5"/>
+  <text class="sm a L2" x="40" y="196">DENIED · Mar 09 · $120</text>
+  <text class="sm wrnt a L2" x="356" y="196" text-anchor="end">fetch</text>
+  <rect class="box" x="28" y="208" width="340" height="26" rx="5"/>
+  <text class="sm" x="40" y="226">DENIED · Mar 12 · $900</text>
+  <rect class="bw a L3" x="28" y="208" width="340" height="26" rx="5"/>
+  <text class="sm a L3" x="40" y="226">DENIED · Mar 12 · $900</text>
+  <text class="sm wrnt a L3" x="356" y="226" text-anchor="end">fetch</text>
+  <rect class="box" x="28" y="238" width="340" height="26" rx="5"/>
+  <text class="sm" x="40" y="256">DENIED · Mar 18 · $450</text>
+  <rect class="bw a L4" x="28" y="238" width="340" height="26" rx="5"/>
+  <text class="sm a L4" x="40" y="256">DENIED · Mar 18 · $450</text>
+  <text class="sm wrnt a L4" x="356" y="256" text-anchor="end">fetch</text>
+  <rect class="box" x="28" y="268" width="340" height="26" rx="5"/>
+  <text class="sm" x="40" y="286">DENIED · Mar 21 · $850</text>
+  <rect class="bw a L5" x="28" y="268" width="340" height="26" rx="5"/>
+  <text class="sm a L5" x="40" y="286">DENIED · Mar 21 · $850</text>
+  <text class="sm wrnt a L5" x="356" y="286" text-anchor="end">fetch</text>
+  <rect class="box" x="28" y="298" width="340" height="26" rx="5"/>
+  <text class="sm" x="40" y="316">DENIED · Mar 25 · $200</text>
+  <rect class="bw a L6" x="28" y="298" width="340" height="26" rx="5"/>
+  <text class="sm a L6" x="40" y="316">DENIED · Mar 25 · $200</text>
+  <text class="sm wrnt a L6" x="356" y="316" text-anchor="end">fetch</text>
+  <rect class="box" x="28" y="328" width="340" height="26" rx="5"/>
+  <text class="sm" x="40" y="346">DENIED · Mar 30 · $610</text>
+  <rect class="bw a L7" x="28" y="328" width="340" height="26" rx="5"/>
+  <text class="sm a L7" x="40" y="346">DENIED · Mar 30 · $610</text>
+  <text class="sm wrnt a L7" x="356" y="346" text-anchor="end">fetch</text>
+  <g class="a lsort">
+  <rect class="badf" x="28" y="366" width="340" height="28" rx="6"/>
+  <text class="on13" x="198" y="384.5" text-anchor="middle">SORT 8 in memory → 940, 900, 850</text>
+  </g>
+  <text class="tx badt a lsort" x="28" y="414">keys 8 · docs 8 · + blocking SORT</text>
+  <rect class="box" x="420" y="118" width="352" height="26" rx="5"/>
+  <text class="sm" x="432" y="136">DENIED · $980 · Feb 11</text>
+  <rect class="bm a R0" x="420" y="118" width="352" height="26" rx="5"/>
+  <text class="sm a R0" x="432" y="136">DENIED · $980 · Feb 11</text>
+  <text class="sm  a R0" x="760" y="136" text-anchor="end">date ✕ skip</text>
+  <rect class="box" x="420" y="148" width="352" height="26" rx="5"/>
+  <text class="sm" x="432" y="166">DENIED · $940 · Mar 05</text>
+  <rect class="bo a R1" x="420" y="148" width="352" height="26" rx="5"/>
+  <text class="sm a R1" x="432" y="166">DENIED · $940 · Mar 05</text>
+  <text class="sm okt a R1" x="760" y="166" text-anchor="end">match → fetch</text>
+  <rect class="box" x="420" y="178" width="352" height="26" rx="5"/>
+  <text class="sm" x="432" y="196">DENIED · $900 · Mar 12</text>
+  <rect class="bo a R2" x="420" y="178" width="352" height="26" rx="5"/>
+  <text class="sm a R2" x="432" y="196">DENIED · $900 · Mar 12</text>
+  <text class="sm okt a R2" x="760" y="196" text-anchor="end">match → fetch</text>
+  <rect class="box" x="420" y="208" width="352" height="26" rx="5"/>
+  <text class="sm" x="432" y="226">DENIED · $870 · Jan 20</text>
+  <rect class="bm a R3" x="420" y="208" width="352" height="26" rx="5"/>
+  <text class="sm a R3" x="432" y="226">DENIED · $870 · Jan 20</text>
+  <text class="sm  a R3" x="760" y="226" text-anchor="end">date ✕ skip</text>
+  <rect class="box" x="420" y="238" width="352" height="26" rx="5"/>
+  <text class="sm" x="432" y="256">DENIED · $850 · Mar 21</text>
+  <rect class="bo a R4" x="420" y="238" width="352" height="26" rx="5"/>
+  <text class="sm a R4" x="432" y="256">DENIED · $850 · Mar 21</text>
+  <text class="sm okt a R4" x="760" y="256" text-anchor="end">match → fetch</text>
+  <rect class="box" x="420" y="268" width="352" height="26" rx="5"/>
+  <text class="sm" x="432" y="286">DENIED · $610 · Mar 30</text>
+  <rect class="box" x="420" y="298" width="352" height="26" rx="5"/>
+  <text class="sm" x="432" y="316">DENIED · $450 · Mar 18</text>
+  <line class="a rstop lnb" x1="420" y1="265" x2="772" y2="265" style="stroke-dasharray:6 4"/>
+  <text class="sm badt a rstop" x="420" y="350">3 matches found: LIMIT stops the scan here</text>
+  <text class="tx okt a rstop" x="420" y="414">keys 5 · docs 3 · no SORT</text>
+  <text class="sub" x="28" y="450">Equality first, then the sort field, then the range: the index hands back rows already in the order you asked for.</text>
+</svg>

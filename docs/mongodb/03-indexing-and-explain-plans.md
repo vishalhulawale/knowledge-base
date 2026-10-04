@@ -62,6 +62,9 @@ Properties: `unique`, `partialFilterExpression`, `sparse`, `expireAfterSeconds` 
 | Member's claims, projection `{_id: 0, serviceDate: 1, amount: 1}`, index `{memberId, serviceDate, amount}` | IXSCAN → **PROJECTION_COVERED** | 10 | **0** | 10 | 3 ms |
 | Same projection but `_id` included | IXSCAN → FETCH → PROJECTION | 10 | 10 | 10 | <1 ms |
 
+![Bar chart of the measured times for the DENIED, March, sorted, limit 20 query: 111 ms with no index, 17 ms and 24 ms with the two date-and-status indexes that still need a sort, and 2 ms with the ESR index](images/03-plan-timings.svg){ loading=lazy }
+*Notice that the two middle indexes examine the same 4,105 documents; only the ESR index changes the shape of the work.*
+
 ### The ESR rule
 
 For a compound index serving a query with equality filters, a sort and range filters, order the fields:
@@ -71,6 +74,9 @@ For a compound index serving a query with equality filters, a sort and range fil
 3. **Range** fields last (`serviceDate` between …). They're checked inside the index scan without breaking the sort order.
 
 Putting the range before the sort (`{status, serviceDate, amount}`) would require an in-memory sort, because amounts are only ordered *within* each date. Putting the range first (`{serviceDate, status}`) scans the whole date range for all statuses. ESR is a strong default, not a law: a highly selective range can justify breaking it, so measure with `explain`.
+
+![Animation: for DENIED claims in March sorted by amount with limit 3, the status-then-date index scans and fetches all eight March entries and then sorts them in memory, while the ESR index walks DENIED entries from the largest amount, skips non-March dates inside the index and stops after three matches](images/03-esr-index-walk.svg){ loading=lazy }
+*Watch the right side stop at the red line: because entries arrive in amount order, the first three that pass the date check are already the answer.*
 
 Other compound-index facts:
 
