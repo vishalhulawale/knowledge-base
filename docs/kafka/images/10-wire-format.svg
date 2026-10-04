@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 330" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Confluent wire format: magic byte, schema ID, payload</title>
+  <desc id="d">The value of a Kafka record written by the Confluent Avro serializer. Byte 0 is the magic byte, 0. Bytes 1 to 4 are the schema ID as a 4-byte big-endian integer, here 42. Everything after that is the Avro binary payload, which has no field names. The consumer reads ID 42, fetches that writer schema from Schema Registry once and caches it, then decodes the payload and resolves it into its own reader schema. The prefix lives inside the record value, not in a Kafka header.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="328" rx="14"/>
+  <text class="h" x="28" y="40">What a registry-serialized record value looks like</text>
+  <text class="sub" x="28" y="62">Avro with the Confluent serializer. The full schema is never sent, only its ID.</text>
+  <rect class="mutf" x="28" y="110" width="66" height="44" rx="6"/>
+  <text class="on" x="61" y="136.5" text-anchor="middle">0x00</text>
+  <rect class="pri" x="98" y="110" width="42" height="44" rx="6"/>
+  <text class="on" x="119" y="136.5" text-anchor="middle">00</text>
+  <rect class="pri" x="144" y="110" width="42" height="44" rx="6"/>
+  <text class="on" x="165" y="136.5" text-anchor="middle">00</text>
+  <rect class="pri" x="190" y="110" width="42" height="44" rx="6"/>
+  <text class="on" x="211" y="136.5" text-anchor="middle">00</text>
+  <rect class="pri" x="236" y="110" width="42" height="44" rx="6"/>
+  <text class="on" x="257" y="136.5" text-anchor="middle">2A</text>
+  <rect class="tea" x="282" y="110" width="448" height="44" rx="6"/>
+  <text class="on" x="506" y="136.5" text-anchor="middle">Avro binary payload: field values only, no names</text>
+  <text class="sm" x="61" y="176" text-anchor="middle">byte 0</text>
+  <text class="sm" x="190" y="176" text-anchor="middle">bytes 1–4: schema ID = 42</text>
+  <text class="sm" x="508" y="176" text-anchor="middle">bytes 5…</text>
+  <line class="lnp" x1="98" y1="186" x2="280" y2="186"/>
+  <rect class="box" x="150" y="224" width="180" height="46" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="240" y="244" text-anchor="middle" font-weight="700">Schema Registry</text>
+  <text class="sm" x="240" y="261" text-anchor="middle">GET /schemas/ids/42</text>
+  <line class="lnp" x1="190" y1="190" x2="220" y2="220" marker-end="url(#arp)"/>
+  <rect class="bp" x="400" y="224" width="170" height="46" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="485" y="244" text-anchor="middle" font-weight="700">writer schema 42</text>
+  <text class="sm" x="485" y="261" text-anchor="middle">cached after first fetch</text>
+  <rect class="bt" x="610" y="224" width="162" height="46" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="691" y="244" text-anchor="middle" font-weight="700">reader schema</text>
+  <text class="sm" x="691" y="261" text-anchor="middle">consumer&#x27;s own</text>
+  <line class="ln" x1="330" y1="247" x2="396" y2="247" marker-end="url(#ar)"/>
+  <line class="lnt" x1="570" y1="247" x2="606" y2="247" marker-end="url(#art)"/>
+  <text class="sm teat" x="588" y="214" text-anchor="middle">resolve</text>
+  <text class="sub" x="28" y="306">Only 5 bytes of overhead per record. Open-source brokers never look inside: the serializer is the enforcement point.</text>
+</svg>

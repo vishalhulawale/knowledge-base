@@ -38,6 +38,9 @@ sequenceDiagram
 ```
 *Notice that messages carry only a 5-byte prefix inside the record value (not a Kafka record header), not the full schema. The registry rejects incompatible schemas at registration time, before bad data reaches the topic.*
 
+![A record value laid out byte by byte: magic byte 0, four bytes holding schema ID 42, then the Avro payload with values only; the consumer fetches writer schema 42 from Schema Registry once, caches it, and resolves it into its own reader schema](images/10-wire-format.svg){ loading=lazy }
+*Notice how little travels with each record: one byte of format and a 4-byte ID. Everything else comes from the registry, once per ID.*
+
 Details worth knowing:
 
 - The **broker never validates** the payload in open-source Kafka. The contract is enforced entirely by the serializer talking to the registry. (Broker-side schema ID validation is a Confluent Server / Confluent Cloud feature, not Apache Kafka.) A producer that bypasses the serializer can still write garbage.
@@ -60,6 +63,9 @@ Details worth knowing:
 | `NONE` | No checks | Anything | Coordinated big bang |
 
 The non-transitive modes check the new schema against the **latest registered version only**. Compatibility can be set globally and overridden per subject (`PUT /config/{subject}`).
+
+![Animation: schema v2 deletes the field notes, which has no default; when consumers upgrade first the v2 reader ignores notes and then producers follow; when producers upgrade first the v1 consumer can't find notes and fails to deserialize](images/10-backward-deploy-order.svg){ loading=lazy }
+*Watch the bottom lane: the registry accepted v2 as BACKWARD compatible, yet the rollout still broke. The mode tells you the deploy order; it doesn't enforce it.*
 
 !!! tip "Practical default"
     `BACKWARD_TRANSITIVE` or `FULL_TRANSITIVE` for long-retention topics, so a new consumer can read *any* historical message during replay. Confluent recommends `BACKWARD_TRANSITIVE` for **Protobuf**, because adding a new message type is not forward compatible. **Kafka Streams** apps need a backward-compatible mode (`BACKWARD`, `BACKWARD_TRANSITIVE`, `FULL`, `FULL_TRANSITIVE`) because they re-read their own changelog/state topics.

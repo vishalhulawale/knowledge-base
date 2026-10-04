@@ -26,7 +26,7 @@ Suggested pictures per page; ⏵ marks an animation.
 - [x] 07 Error handling: ⏵ non-blocking retry topics with back-off and DLT; poison pill blocking a partition
 - [x] 08 Idempotent consumers: ⏵ check-then-insert race vs unique-constraint insert
 - [x] 09 Spring Kafka: listener container threads per partition; AckMode commit points on a timeline
-- [ ] 10 Schema registry: schema id in the wire format; compatibility modes as which side can upgrade first
+- [x] 10 Schema registry: schema id in the wire format; compatibility modes as which side can upgrade first
 - [ ] 11 Streams and Connect: ⏵ co-partitioned join vs mismatched partitions; Debezium outbox relay path
 - [ ] 12 Performance and lag: ⏵ lag growing when consume rate < produce rate; where producer latency goes
 
