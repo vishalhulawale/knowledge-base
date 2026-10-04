@@ -126,9 +126,15 @@ sequenceDiagram
 | **KIP-848 "consumer" protocol** (GA in Kafka 4.0, opt-in with `group.protocol=consumer`; the client default is still `classic`) | **Broker-side** assignment (`group.remote.assignor`: `uniform` or `range`), incremental, no global sync barrier | Faster, simpler clients, far fewer stalls |
 | **Static membership** (`group.instance.id`, KIP-345) | A restarted member with the same ID gets its partitions back without a rebalance (within the session timeout). Works with any of the above | Great for rolling deploys on Kubernetes (StatefulSet pod names). Its partitions are **unconsumed** until it returns or the session times out |
 
+![Animation: C3 joins a group where C1 owns P0 to P2 and C2 owns P3 to P5; with eager rebalancing all six partitions are revoked and consumption stops, while with cooperative sticky only P2 and P5 are revoked and the other four keep flowing; both end with C3 owning P2 and P5](images/04-eager-vs-cooperative.svg){ loading=lazy }
+*Watch step 2: the final assignment is identical, but eager stops every partition while cooperative stops only the two that move.*
+
 ### Lag
 
 **Consumer lag** = log end offset − committed offset, per partition (this is what `kafka-consumer-groups.sh --describe` reports; the client's own `records-lag-max` metric is measured against its fetch position instead). It's *the* key consumer health metric. Rising lag means consumers can't keep up, are stuck on a record, or are rebalancing repeatedly.
+
+![One partition with offsets 0 to 10: records 0 to 3 processed and committed, 4 to 6 processed but not committed, 7 to 10 not fetched; committed offset 4, position 7, log end 11, so lag is 7](images/04-offsets-and-lag.svg){ loading=lazy }
+*Notice the orange records: processed but not committed, so a crash replays them. Lag is measured from the committed offset, not from what the consumer has fetched.*
 
 ## In practice: code & configuration
 
