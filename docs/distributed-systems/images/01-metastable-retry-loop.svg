@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 404" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+<title id="t">Metastable failure sustained by retries</title>
+<desc id="d">A line chart of load over time. User demand is steady below capacity except for a brief spike. Total load, which includes retries, follows the spike above capacity and then stays above capacity after the spike is gone, labelled self-sustaining overload. It only drops back below capacity after load is shed. A side panel shows the feedback loop: the database slows briefly, calls time out, clients retry and add load, and the database stays overloaded, which slows it again.</desc>
+<style>
+.card{fill:#f8fafc;stroke:#e2e8f0}.cv{fill:#f8fafc}
+.h{fill:#0f172a;font-size:20px;font-weight:700}
+.lbl{fill:#334155;font-size:15px;font-weight:600}
+.txt{fill:#334155;font-size:14px}.sm{fill:#334155;font-size:13px}
+.sub{fill:#64748b;font-size:13px}.b{font-weight:700}
+.slot{fill:#ffffff;stroke:#cbd5e1}
+.fp{fill:#4f46e5}.ft{fill:#0ea5a4}.fg{fill:#16a34a}.fr{fill:#dc2626}.fa{fill:#d97706}.fmu{fill:#64748b}
+.zp{fill:#4f46e5;fill-opacity:.1}.zg{fill:#16a34a;fill-opacity:.12}.zr{fill:#dc2626;fill-opacity:.1}.za{fill:#d97706;fill-opacity:.14}
+.on{fill:#ffffff}
+.sp{stroke:#4f46e5}.st{stroke:#0ea5a4}.sg{stroke:#16a34a}.sr{stroke:#dc2626}.sa{stroke:#d97706}.smu{stroke:#64748b}.sax{stroke:#cbd5e1}
+.tp{fill:#4f46e5}.tt{fill:#0f766e}.tg{fill:#15803d}.tr{fill:#dc2626}.ta{fill:#b45309}.tm{fill:#64748b}
+.nf{fill:none}
+@media (prefers-color-scheme: dark){
+.card{fill:#1f2430;stroke:#334155}.cv{fill:#1f2430}
+.h{fill:#f1f5f9}.lbl,.txt,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+.slot{fill:#111827;stroke:#475569}
+.fp{fill:#818cf8}.ft{fill:#2dd4bf}.fg{fill:#4ade80}.fr{fill:#f87171}.fa{fill:#fbbf24}.fmu{fill:#94a3b8}
+.zp{fill:#818cf8;fill-opacity:.16}.zg{fill:#4ade80;fill-opacity:.14}.zr{fill:#f87171;fill-opacity:.14}.za{fill:#fbbf24;fill-opacity:.14}
+.on{fill:#0f172a}
+.sp{stroke:#818cf8}.st{stroke:#2dd4bf}.sg{stroke:#4ade80}.sr{stroke:#f87171}.sa{stroke:#fbbf24}.smu{stroke:#94a3b8}.sax{stroke:#475569}
+.tp{fill:#818cf8}.tt{fill:#5eead4}.tg{fill:#4ade80}.tr{fill:#f87171}.ta{fill:#fbbf24}.tm{fill:#94a3b8}
+}
+
+.draw{stroke-dasharray:100;stroke-dashoffset:100;animation:draw 10s linear infinite}
+@keyframes draw{0%{stroke-dashoffset:100;opacity:1}70%,93%{stroke-dashoffset:0;opacity:1}96%{stroke-dashoffset:0;opacity:0}97%,100%{stroke-dashoffset:100;opacity:0}}
+.flow{stroke-dasharray:6 6;animation:flow 1s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-12}}
+
+.a,.d,.w{animation-duration:10s;animation-iteration-count:infinite;animation-timing-function:linear}
+.a{opacity:0}.w{opacity:0}
+@keyframes kp14{0%,12%{opacity:0}14%,92%{opacity:1}96%,100%{opacity:0}}.p14{animation-name:kp14}
+@keyframes kp34{0%,32%{opacity:0}34%,92%{opacity:1}96%,100%{opacity:0}}.p34{animation-name:kp34}
+@keyframes kp48{0%,46%{opacity:0}48%,92%{opacity:1}96%,100%{opacity:0}}.p48{animation-name:kp48}
+@keyframes kp61{0%,59%{opacity:0}61%,92%{opacity:1}96%,100%{opacity:0}}.p61{animation-name:kp61}
+@media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.d{animation:none;opacity:0}.w{animation:none;opacity:0}.draw{animation:none;stroke-dashoffset:0}.flow{animation:none}}
+</style>
+<defs>
+<marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fmu" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fp" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fg" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fr" d="M0,0L10,5L0,10z"/></marker>
+<marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fa" d="M0,0L10,5L0,10z"/></marker>
+<marker id="at" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ft" d="M0,0L10,5L0,10z"/></marker>
+</defs>
+<rect class="card" x="1" y="1" width="798" height="402" rx="14"/>
+
+<text class="h" x="28" y="40">Metastable failure: the overload outlives its trigger</text>
+<text class="sub" x="28" y="62">A brief spike starts a retry loop. Load stays above capacity after the spike is gone, until load is cut.</text>
+<!-- legend -->
+<line x1="80" y1="94" x2="104" y2="94" class="sr" stroke-width="3"/><text class="sm" x="110" y="98">total load (users + retries)</text>
+<line x1="320" y1="94" x2="344" y2="94" class="smu" stroke-width="2" stroke-dasharray="5 4"/><text class="sm" x="350" y="98">user demand</text>
+<!-- axes -->
+<line x1="70" y1="110" x2="70" y2="310" class="sax" stroke-width="1.5"/>
+<line x1="70" y1="310" x2="540" y2="310" class="sax" stroke-width="1.5"/>
+<text class="sub" x="52" y="215" text-anchor="middle" transform="rotate(-90 52 215)">load</text>
+<text class="sub" x="540" y="350" text-anchor="end">time →</text>
+<!-- trigger zone -->
+<g class="a p14"><rect class="za" x="168" y="112" width="64" height="198"/><text class="sm ta b" x="200" y="330" text-anchor="middle">spike</text></g>
+<!-- capacity -->
+<line x1="70" y1="190" x2="540" y2="190" class="st" stroke-width="2" stroke-dasharray="8 5"/>
+<text class="sm tt b" x="536" y="183" text-anchor="end">capacity</text>
+<!-- demand -->
+<path class="smu nf" stroke-width="2" stroke-dasharray="5 4" d="M70,250 H170 L185,140 H215 L230,250 H540"/>
+<!-- total load (drawn over time) -->
+<path class="sr nf draw" stroke-width="3" stroke-linejoin="round" pathLength="100" d="M70,250 H170 L185,130 H215 L235,150 H420 L450,250 H540"/>
+<text class="sm" x="120" y="330" text-anchor="middle">normal</text>
+<g class="a p34"><text class="sm tr b" x="328" y="330" text-anchor="middle">self-sustaining overload</text><text class="sm tr" x="322" y="140" text-anchor="middle">spike gone, still overloaded</text></g>
+<g class="a p48"><line x1="425" y1="112" x2="425" y2="310" class="sg" stroke-width="2" stroke-dasharray="4 4"/><text class="sm tg b" x="431" y="126">load shed</text></g>
+<g class="a p61"><text class="sm tg b" x="495" y="330" text-anchor="middle">recovered</text></g>
+<!-- feedback loop -->
+<text class="lbl" x="580" y="98">The feedback loop</text>
+<g>
+<rect class="slot" x="580" y="112" width="186" height="36" rx="8"/><text class="txt" x="673" y="135" text-anchor="middle">DB slows briefly</text>
+<rect class="slot" x="580" y="170" width="186" height="36" rx="8"/><text class="txt" x="673" y="193" text-anchor="middle">calls time out</text>
+<rect class="slot" x="580" y="228" width="186" height="36" rx="8"/><text class="txt" x="673" y="251" text-anchor="middle">clients retry: more load</text>
+<rect class="slot" x="580" y="286" width="186" height="36" rx="8"/><text class="txt" x="673" y="309" text-anchor="middle">DB stays overloaded</text>
+<line x1="673" y1="148" x2="673" y2="168" class="smu" stroke-width="1.5" marker-end="url(#am)"/>
+<line x1="673" y1="206" x2="673" y2="226" class="smu" stroke-width="1.5" marker-end="url(#am)"/>
+<line x1="673" y1="264" x2="673" y2="284" class="smu" stroke-width="1.5" marker-end="url(#am)"/>
+<path class="sr nf flow" stroke-width="2" d="M766,304 H784 V188 H768" marker-end="url(#ar)"/>
+</g>
+<text class="sm b" x="580" y="348">Break it by cutting load:</text>
+<text class="sm" x="580" y="366">shedding, retry budgets,</text>
+<text class="sm" x="580" y="384">warm caches.</text>
+<text class="sub" x="28" y="384">Illustrative shape. Waiting doesn't end it; reducing load does.</text>
+
+</svg>

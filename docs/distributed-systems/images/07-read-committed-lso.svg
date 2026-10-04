@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 382" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+<title id="t">read_committed and the last stable offset</title>
+<desc id="d">A Kafka partition with offsets 0 to 10. Offsets 0 and 1 belong to transaction T1, committed by a marker at 2. Offsets 3 and 4 belong to T2, aborted by a marker at 5. Offset 6 starts transaction T3, which is still open and also has a record at 10. Offsets 7 and 8 belong to T4, committed by a marker at 9. The last stable offset is 6 and the high watermark is 11. A read_committed consumer gets offsets 0 and 1, skips the aborted 3 and 4, and waits at 6, so T4's committed records stay invisible until T3 finishes.</desc>
+<style>
+.card{fill:#f8fafc;stroke:#e2e8f0}.cv{fill:#f8fafc}
+.h{fill:#0f172a;font-size:20px;font-weight:700}
+.lbl{fill:#334155;font-size:15px;font-weight:600}
+.txt{fill:#334155;font-size:14px}.sm{fill:#334155;font-size:13px}
+.sub{fill:#64748b;font-size:13px}.b{font-weight:700}
+.slot{fill:#ffffff;stroke:#cbd5e1}
+.fp{fill:#4f46e5}.ft{fill:#0ea5a4}.fg{fill:#16a34a}.fr{fill:#dc2626}.fa{fill:#d97706}.fmu{fill:#64748b}
+.zp{fill:#4f46e5;fill-opacity:.1}.zg{fill:#16a34a;fill-opacity:.12}.zr{fill:#dc2626;fill-opacity:.1}.za{fill:#d97706;fill-opacity:.14}
+.on{fill:#ffffff}
+.sp{stroke:#4f46e5}.st{stroke:#0ea5a4}.sg{stroke:#16a34a}.sr{stroke:#dc2626}.sa{stroke:#d97706}.smu{stroke:#64748b}.sax{stroke:#cbd5e1}
+.tp{fill:#4f46e5}.tt{fill:#0f766e}.tg{fill:#15803d}.tr{fill:#dc2626}.ta{fill:#b45309}.tm{fill:#64748b}
+.nf{fill:none}
+@media (prefers-color-scheme: dark){
+.card{fill:#1f2430;stroke:#334155}.cv{fill:#1f2430}
+.h{fill:#f1f5f9}.lbl,.txt,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+.slot{fill:#111827;stroke:#475569}
+.fp{fill:#818cf8}.ft{fill:#2dd4bf}.fg{fill:#4ade80}.fr{fill:#f87171}.fa{fill:#fbbf24}.fmu{fill:#94a3b8}
+.zp{fill:#818cf8;fill-opacity:.16}.zg{fill:#4ade80;fill-opacity:.14}.zr{fill:#f87171;fill-opacity:.14}.za{fill:#fbbf24;fill-opacity:.14}
+.on{fill:#0f172a}
+.sp{stroke:#818cf8}.st{stroke:#2dd4bf}.sg{stroke:#4ade80}.sr{stroke:#f87171}.sa{stroke:#fbbf24}.smu{stroke:#94a3b8}.sax{stroke:#475569}
+.tp{fill:#818cf8}.tt{fill:#5eead4}.tg{fill:#4ade80}.tr{fill:#f87171}.ta{fill:#fbbf24}.tm{fill:#94a3b8}
+}
+
+
+
+</style>
+<defs>
+<marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fmu" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fp" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fg" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fr" d="M0,0L10,5L0,10z"/></marker>
+<marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fa" d="M0,0L10,5L0,10z"/></marker>
+<marker id="at" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ft" d="M0,0L10,5L0,10z"/></marker>
+</defs>
+<rect class="card" x="1" y="1" width="798" height="380" rx="14"/>
+
+<text class="h" x="28" y="40">read_committed stops at the last stable offset</text>
+<text class="sub" x="28" y="62">One partition with four transactions. Numbers above the records are offsets.</text>
+<text class="sub" x="88.0" y="106" text-anchor="middle">0</text><rect class="fp" x="60" y="114" width="56" height="50" rx="8"/><text class="txt b on" x="88.0" y="144" text-anchor="middle">T1</text><text class="sub" x="150.0" y="106" text-anchor="middle">1</text><rect class="fp" x="122" y="114" width="56" height="50" rx="8"/><text class="txt b on" x="150.0" y="144" text-anchor="middle">T1</text><text class="sub" x="212.0" y="106" text-anchor="middle">2</text><rect class="fp" x="184" y="114" width="56" height="50" rx="8"/><text class="sm b on" x="212.0" y="135" text-anchor="middle">T1</text><text class="sm on" x="212.0" y="153" text-anchor="middle">commit</text><text class="sub" x="274.0" y="106" text-anchor="middle">3</text><rect class="slot sr" x="246" y="114" width="56" height="50" rx="8" stroke-width="2" stroke-dasharray="5 3"/><text class="txt b tr" x="274.0" y="144" text-anchor="middle">T2</text><text class="sub" x="336.0" y="106" text-anchor="middle">4</text><rect class="slot sr" x="308" y="114" width="56" height="50" rx="8" stroke-width="2" stroke-dasharray="5 3"/><text class="txt b tr" x="336.0" y="144" text-anchor="middle">T2</text><text class="sub" x="398.0" y="106" text-anchor="middle">5</text><rect class="slot sr" x="370" y="114" width="56" height="50" rx="8" stroke-width="2" stroke-dasharray="5 3"/><text class="sm b tr" x="398.0" y="135" text-anchor="middle">T2</text><text class="sm tr" x="398.0" y="153" text-anchor="middle">abort</text><text class="sub" x="460.0" y="106" text-anchor="middle">6</text><rect class="za" x="432" y="114" width="56" height="50" rx="8"/><rect class="nf sa" x="432" y="114" width="56" height="50" rx="8" stroke-width="2"/><text class="txt b ta" x="460.0" y="144" text-anchor="middle">T3</text><text class="sub" x="522.0" y="106" text-anchor="middle">7</text><rect class="ft" x="494" y="114" width="56" height="50" rx="8"/><text class="txt b on" x="522.0" y="144" text-anchor="middle">T4</text><text class="sub" x="584.0" y="106" text-anchor="middle">8</text><rect class="ft" x="556" y="114" width="56" height="50" rx="8"/><text class="txt b on" x="584.0" y="144" text-anchor="middle">T4</text><text class="sub" x="646.0" y="106" text-anchor="middle">9</text><rect class="ft" x="618" y="114" width="56" height="50" rx="8"/><text class="sm b on" x="646.0" y="135" text-anchor="middle">T4</text><text class="sm on" x="646.0" y="153" text-anchor="middle">commit</text><text class="sub" x="708.0" y="106" text-anchor="middle">10</text><rect class="za" x="680" y="114" width="56" height="50" rx="8"/><rect class="nf sa" x="680" y="114" width="56" height="50" rx="8" stroke-width="2"/><text class="txt b ta" x="708.0" y="144" text-anchor="middle">T3</text>
+<line x1="429" y1="96" x2="429" y2="236" class="st" stroke-width="3"/>
+<text class="sm tt b" x="423" y="190" text-anchor="end">last stable offset 6</text><text class="sm tt" x="423" y="207" text-anchor="end">(first record of open T3)</text>
+<line x1="739" y1="96" x2="739" y2="236" class="smu" stroke-width="2" stroke-dasharray="5 4"/>
+<text class="sm tm b" x="733" y="190" text-anchor="end">high watermark 11</text>
+<rect class="fp" x="60" y="246" width="369" height="10" rx="5"/>
+<text class="sm" x="60" y="278">read_committed consumer: gets 0 and 1, skips aborted 3 and 4, then waits at 6.</text>
+<text class="sm" x="60" y="298">Committed T4 (7, 8) stays invisible until T3 commits or aborts.</text>
+<rect class="fp" x="60" y="322" width="16" height="16" rx="4"/><text class="sm" x="82" y="335">T1 committed</text>
+<rect class="ft" x="200" y="322" width="16" height="16" rx="4"/><text class="sm" x="222" y="335">T4 committed</text>
+<rect class="slot sr" x="340" y="322" width="16" height="16" rx="4" stroke-width="2" stroke-dasharray="3 2"/><text class="sm" x="362" y="335">T2 aborted</text>
+<rect class="za" x="470" y="322" width="16" height="16" rx="4"/><rect class="nf sa" x="470" y="322" width="16" height="16" rx="4" stroke-width="2"/><text class="sm" x="492" y="335">T3 still open</text>
+<text class="sub" x="28" y="366">Commit and abort markers take an offset of their own; consumers never receive them as records.</text>
+
+</svg>

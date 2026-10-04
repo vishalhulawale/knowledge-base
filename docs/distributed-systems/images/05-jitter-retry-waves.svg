@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 412" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+<title id="t">Retry timing with and without jitter</title>
+<desc id="d">Animation of three retry rounds for 1,000 clients that failed at the same moment, with a base delay of 100 ms. Top row, no jitter: in each round all 1,000 clients retry at exactly 100, 200 and 400 ms after the previous failure, shown as one tall red spike per round. Bottom row, full jitter: each client waits a random time between 0 and the delay, so the same 1,000 retries spread evenly as low bars of 200, 100 and 50 clients per 20 ms bucket.</desc>
+<style>
+.card{fill:#f8fafc;stroke:#e2e8f0}.cv{fill:#f8fafc}
+.h{fill:#0f172a;font-size:20px;font-weight:700}
+.lbl{fill:#334155;font-size:15px;font-weight:600}
+.txt{fill:#334155;font-size:14px}.sm{fill:#334155;font-size:13px}
+.sub{fill:#64748b;font-size:13px}.b{font-weight:700}
+.slot{fill:#ffffff;stroke:#cbd5e1}
+.fp{fill:#4f46e5}.ft{fill:#0ea5a4}.fg{fill:#16a34a}.fr{fill:#dc2626}.fa{fill:#d97706}.fmu{fill:#64748b}
+.zp{fill:#4f46e5;fill-opacity:.1}.zg{fill:#16a34a;fill-opacity:.12}.zr{fill:#dc2626;fill-opacity:.1}.za{fill:#d97706;fill-opacity:.14}
+.on{fill:#ffffff}
+.sp{stroke:#4f46e5}.st{stroke:#0ea5a4}.sg{stroke:#16a34a}.sr{stroke:#dc2626}.sa{stroke:#d97706}.smu{stroke:#64748b}.sax{stroke:#cbd5e1}
+.tp{fill:#4f46e5}.tt{fill:#0f766e}.tg{fill:#15803d}.tr{fill:#dc2626}.ta{fill:#b45309}.tm{fill:#64748b}
+.nf{fill:none}
+@media (prefers-color-scheme: dark){
+.card{fill:#1f2430;stroke:#334155}.cv{fill:#1f2430}
+.h{fill:#f1f5f9}.lbl,.txt,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+.slot{fill:#111827;stroke:#475569}
+.fp{fill:#818cf8}.ft{fill:#2dd4bf}.fg{fill:#4ade80}.fr{fill:#f87171}.fa{fill:#fbbf24}.fmu{fill:#94a3b8}
+.zp{fill:#818cf8;fill-opacity:.16}.zg{fill:#4ade80;fill-opacity:.14}.zr{fill:#f87171;fill-opacity:.14}.za{fill:#fbbf24;fill-opacity:.14}
+.on{fill:#0f172a}
+.sp{stroke:#818cf8}.st{stroke:#2dd4bf}.sg{stroke:#4ade80}.sr{stroke:#f87171}.sa{stroke:#fbbf24}.smu{stroke:#94a3b8}.sax{stroke:#475569}
+.tp{fill:#818cf8}.tt{fill:#5eead4}.tg{fill:#4ade80}.tr{fill:#f87171}.ta{fill:#fbbf24}.tm{fill:#94a3b8}
+}
+.c0,.c1,.c2{transform-box:fill-box;transform-origin:100% 50%}
+@keyframes c0{0%,2%{transform:scaleX(1)}22%,95%{transform:scaleX(0)}96%,100%{transform:scaleX(1)}}.c0{animation:c0 10s linear infinite}
+@keyframes h0{0%,1%{transform:translateX(0);opacity:0}2%{transform:translateX(0);opacity:1}22%{transform:translateX(204px);opacity:1}23%,100%{transform:translateX(204px);opacity:0}}.h0{opacity:0;animation:h0 10s linear infinite}
+@keyframes c1{0%,24%{transform:scaleX(1)}44%,95%{transform:scaleX(0)}96%,100%{transform:scaleX(1)}}.c1{animation:c1 10s linear infinite}
+@keyframes h1{0%,23%{transform:translateX(0);opacity:0}24%{transform:translateX(0);opacity:1}44%{transform:translateX(204px);opacity:1}45%,100%{transform:translateX(204px);opacity:0}}.h1{opacity:0;animation:h1 10s linear infinite}
+@keyframes c2{0%,46%{transform:scaleX(1)}66%,95%{transform:scaleX(0)}96%,100%{transform:scaleX(1)}}.c2{animation:c2 10s linear infinite}
+@keyframes h2{0%,45%{transform:translateX(0);opacity:0}46%{transform:translateX(0);opacity:1}66%{transform:translateX(204px);opacity:1}67%,100%{transform:translateX(204px);opacity:0}}.h2{opacity:0;animation:h2 10s linear infinite}
+
+@media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.d{animation:none;opacity:0}.w{animation:none;opacity:0}.cur{animation:none;opacity:0}}
+</style>
+<defs>
+<marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fmu" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fp" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fg" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fr" d="M0,0L10,5L0,10z"/></marker>
+<marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fa" d="M0,0L10,5L0,10z"/></marker>
+<marker id="at" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ft" d="M0,0L10,5L0,10z"/></marker>
+</defs>
+<rect class="card" x="1" y="1" width="798" height="410" rx="14"/>
+
+<text class="h" x="28" y="40">Backoff without and with full jitter</text>
+<text class="sub" x="28" y="62">1,000 clients fail together and every retry fails again. Where do their retries land?</text>
+<text class="lbl tr" x="28" y="150">No jitter</text><text class="sub" x="28" y="170">base × 2ⁿ</text><text class="sub" x="28" y="188">all at once</text>
+<text class="lbl tt" x="28" y="290">Full jitter</text><text class="sub" x="28" y="310">random(0, delay)</text><text class="sub" x="28" y="328">spread out</text>
+<text class="sm b" x="130" y="96">Retry 1: delay 100 ms</text><line x1="130" y1="210" x2="334" y2="210" class="sax" stroke-width="1.5"/><text class="sub" x="130.0" y="227" text-anchor="start">0</text><text class="sub" x="230.0" y="227" text-anchor="middle">200</text><text class="sub" x="330.0" y="227" text-anchor="middle">400</text><line x1="130" y1="350" x2="334" y2="350" class="sax" stroke-width="1.5"/><text class="sub" x="130.0" y="367" text-anchor="start">0</text><text class="sub" x="230.0" y="367" text-anchor="middle">200</text><text class="sub" x="330.0" y="367" text-anchor="middle">400</text><rect class="fr" x="176.0" y="120.0" width="8" height="90.0"/><text class="sm tr b" x="188.0" y="132.0" text-anchor="start">1,000</text><rect class="ft" x="131" y="332.0" width="8" height="18.0"/><rect class="ft" x="141" y="332.0" width="8" height="18.0"/><rect class="ft" x="151" y="332.0" width="8" height="18.0"/><rect class="ft" x="161" y="332.0" width="8" height="18.0"/><rect class="ft" x="171" y="332.0" width="8" height="18.0"/><text class="sm tt b" x="230" y="320" text-anchor="middle">200 per 20 ms bucket</text><g class="cur c0"><rect class="cv" x="131" y="106" width="206" height="104"/><rect class="cv" x="131" y="246" width="206" height="104"/></g><g class="cur h0"><line x1="131" y1="106" x2="131" y2="210" class="sp" stroke-width="2"/><line x1="131" y1="246" x2="131" y2="350" class="sp" stroke-width="2"/></g><text class="sm b" x="350" y="96">Retry 2: delay 200 ms</text><line x1="350" y1="210" x2="554" y2="210" class="sax" stroke-width="1.5"/><text class="sub" x="350.0" y="227" text-anchor="start">0</text><text class="sub" x="450.0" y="227" text-anchor="middle">200</text><text class="sub" x="550.0" y="227" text-anchor="middle">400</text><line x1="350" y1="350" x2="554" y2="350" class="sax" stroke-width="1.5"/><text class="sub" x="350.0" y="367" text-anchor="start">0</text><text class="sub" x="450.0" y="367" text-anchor="middle">200</text><text class="sub" x="550.0" y="367" text-anchor="middle">400</text><rect class="fr" x="446.0" y="120.0" width="8" height="90.0"/><text class="sm tr b" x="458.0" y="132.0" text-anchor="start">1,000</text><rect class="ft" x="351" y="341.0" width="8" height="9.0"/><rect class="ft" x="361" y="341.0" width="8" height="9.0"/><rect class="ft" x="371" y="341.0" width="8" height="9.0"/><rect class="ft" x="381" y="341.0" width="8" height="9.0"/><rect class="ft" x="391" y="341.0" width="8" height="9.0"/><rect class="ft" x="401" y="341.0" width="8" height="9.0"/><rect class="ft" x="411" y="341.0" width="8" height="9.0"/><rect class="ft" x="421" y="341.0" width="8" height="9.0"/><rect class="ft" x="431" y="341.0" width="8" height="9.0"/><rect class="ft" x="441" y="341.0" width="8" height="9.0"/><text class="sm tt b" x="450" y="320" text-anchor="middle">100 per 20 ms bucket</text><g class="cur c1"><rect class="cv" x="351" y="106" width="206" height="104"/><rect class="cv" x="351" y="246" width="206" height="104"/></g><g class="cur h1"><line x1="351" y1="106" x2="351" y2="210" class="sp" stroke-width="2"/><line x1="351" y1="246" x2="351" y2="350" class="sp" stroke-width="2"/></g><text class="sm b" x="570" y="96">Retry 3: delay 400 ms</text><line x1="570" y1="210" x2="774" y2="210" class="sax" stroke-width="1.5"/><text class="sub" x="570.0" y="227" text-anchor="start">0</text><text class="sub" x="670.0" y="227" text-anchor="middle">200</text><text class="sub" x="770.0" y="227" text-anchor="middle">400</text><line x1="570" y1="350" x2="774" y2="350" class="sax" stroke-width="1.5"/><text class="sub" x="570.0" y="367" text-anchor="start">0</text><text class="sub" x="670.0" y="367" text-anchor="middle">200</text><text class="sub" x="770.0" y="367" text-anchor="middle">400</text><rect class="fr" x="766.0" y="120.0" width="8" height="90.0"/><text class="sm tr b" x="762.0" y="132.0" text-anchor="end">1,000</text><rect class="ft" x="571" y="345.5" width="8" height="4.5"/><rect class="ft" x="581" y="345.5" width="8" height="4.5"/><rect class="ft" x="591" y="345.5" width="8" height="4.5"/><rect class="ft" x="601" y="345.5" width="8" height="4.5"/><rect class="ft" x="611" y="345.5" width="8" height="4.5"/><rect class="ft" x="621" y="345.5" width="8" height="4.5"/><rect class="ft" x="631" y="345.5" width="8" height="4.5"/><rect class="ft" x="641" y="345.5" width="8" height="4.5"/><rect class="ft" x="651" y="345.5" width="8" height="4.5"/><rect class="ft" x="661" y="345.5" width="8" height="4.5"/><rect class="ft" x="671" y="345.5" width="8" height="4.5"/><rect class="ft" x="681" y="345.5" width="8" height="4.5"/><rect class="ft" x="691" y="345.5" width="8" height="4.5"/><rect class="ft" x="701" y="345.5" width="8" height="4.5"/><rect class="ft" x="711" y="345.5" width="8" height="4.5"/><rect class="ft" x="721" y="345.5" width="8" height="4.5"/><rect class="ft" x="731" y="345.5" width="8" height="4.5"/><rect class="ft" x="741" y="345.5" width="8" height="4.5"/><rect class="ft" x="751" y="345.5" width="8" height="4.5"/><rect class="ft" x="761" y="345.5" width="8" height="4.5"/><text class="sm tt b" x="670" y="320" text-anchor="middle">50 per 20 ms bucket</text><g class="cur c2"><rect class="cv" x="571" y="106" width="206" height="104"/><rect class="cv" x="571" y="246" width="206" height="104"/></g><g class="cur h2"><line x1="571" y1="106" x2="571" y2="210" class="sp" stroke-width="2"/><line x1="571" y1="246" x2="571" y2="350" class="sp" stroke-width="2"/></g>
+<text class="sub" x="28" y="396">Base 100 ms. Time axis in ms since the previous failure; 20 ms buckets, same scale in both rows.</text>
+
+</svg>

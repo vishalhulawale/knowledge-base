@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+<title id="t">Idempotency key row and outcomes</title>
+<desc id="d">Top: the stored idempotency_key row with columns tenant_id (acme), idem_key (K1), fingerprint (sha256 of the body), status (COMPLETED), response (201 and body) and created_at for TTL cleanup. tenant_id and idem_key form the primary key, where concurrent duplicates conflict. Bottom: four outcomes for a request with key K1. A new key inserts, runs the business transaction, stores the response and returns 201. A repeat with the same body finds the row completed and replays the stored response. The same key with a different body has a fingerprint mismatch and gets 422. A duplicate while the row is still in progress gets 409 with Retry-After.</desc>
+<style>
+.card{fill:#f8fafc;stroke:#e2e8f0}.cv{fill:#f8fafc}
+.h{fill:#0f172a;font-size:20px;font-weight:700}
+.lbl{fill:#334155;font-size:15px;font-weight:600}
+.txt{fill:#334155;font-size:14px}.sm{fill:#334155;font-size:13px}
+.sub{fill:#64748b;font-size:13px}.b{font-weight:700}
+.slot{fill:#ffffff;stroke:#cbd5e1}
+.fp{fill:#4f46e5}.ft{fill:#0ea5a4}.fg{fill:#16a34a}.fr{fill:#dc2626}.fa{fill:#d97706}.fmu{fill:#64748b}
+.zp{fill:#4f46e5;fill-opacity:.1}.zg{fill:#16a34a;fill-opacity:.12}.zr{fill:#dc2626;fill-opacity:.1}.za{fill:#d97706;fill-opacity:.14}
+.on{fill:#ffffff}
+.sp{stroke:#4f46e5}.st{stroke:#0ea5a4}.sg{stroke:#16a34a}.sr{stroke:#dc2626}.sa{stroke:#d97706}.smu{stroke:#64748b}.sax{stroke:#cbd5e1}
+.tp{fill:#4f46e5}.tt{fill:#0f766e}.tg{fill:#15803d}.tr{fill:#dc2626}.ta{fill:#b45309}.tm{fill:#64748b}
+.nf{fill:none}
+@media (prefers-color-scheme: dark){
+.card{fill:#1f2430;stroke:#334155}.cv{fill:#1f2430}
+.h{fill:#f1f5f9}.lbl,.txt,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+.slot{fill:#111827;stroke:#475569}
+.fp{fill:#818cf8}.ft{fill:#2dd4bf}.fg{fill:#4ade80}.fr{fill:#f87171}.fa{fill:#fbbf24}.fmu{fill:#94a3b8}
+.zp{fill:#818cf8;fill-opacity:.16}.zg{fill:#4ade80;fill-opacity:.14}.zr{fill:#f87171;fill-opacity:.14}.za{fill:#fbbf24;fill-opacity:.14}
+.on{fill:#0f172a}
+.sp{stroke:#818cf8}.st{stroke:#2dd4bf}.sg{stroke:#4ade80}.sr{stroke:#f87171}.sa{stroke:#fbbf24}.smu{stroke:#94a3b8}.sax{stroke:#475569}
+.tp{fill:#818cf8}.tt{fill:#5eead4}.tg{fill:#4ade80}.tr{fill:#f87171}.ta{fill:#fbbf24}.tm{fill:#94a3b8}
+}
+
+
+
+</style>
+<defs>
+<marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fmu" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fp" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fg" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fr" d="M0,0L10,5L0,10z"/></marker>
+<marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fa" d="M0,0L10,5L0,10z"/></marker>
+<marker id="at" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ft" d="M0,0L10,5L0,10z"/></marker>
+</defs>
+<rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+
+<text class="h" x="28" y="40">Idempotency key: what's stored and what a repeat gets</text>
+<text class="sub" x="28" y="62">The server inserts the key row first, then decides from it how to answer the same key again.</text>
+<text class="lbl" x="28" y="96">Row in idempotency_key</text>
+<rect class="zp" x="28" y="108" width="104" height="52" rx="6"/><rect class="nf sax" x="28" y="108" width="104" height="52" rx="6"/><text class="sub" x="38" y="126">tenant_id</text><text class="txt b tp" x="38" y="148">acme</text><rect class="zp" x="132" y="108" width="92" height="52" rx="6"/><rect class="nf sax" x="132" y="108" width="92" height="52" rx="6"/><text class="sub" x="142" y="126">idem_key</text><text class="txt b tp" x="142" y="148">K1</text><rect class="slot" x="224" y="108" width="156" height="52" rx="6"/><rect class="nf sax" x="224" y="108" width="156" height="52" rx="6"/><text class="sub" x="234" y="126">fingerprint</text><text class="txt b" x="234" y="148">sha256(body)</text><rect class="slot" x="380" y="108" width="132" height="52" rx="6"/><rect class="nf sax" x="380" y="108" width="132" height="52" rx="6"/><text class="sub" x="390" y="126">status</text><text class="txt b" x="390" y="148">COMPLETED</text><rect class="slot" x="512" y="108" width="128" height="52" rx="6"/><rect class="nf sax" x="512" y="108" width="128" height="52" rx="6"/><text class="sub" x="522" y="126">response</text><text class="txt b" x="522" y="148">201 + body</text><rect class="slot" x="640" y="108" width="132" height="52" rx="6"/><rect class="nf sax" x="640" y="108" width="132" height="52" rx="6"/><text class="sub" x="650" y="126">created_at</text><text class="txt b" x="650" y="148">TTL cleanup</text>
+<path class="nf sp" stroke-width="1.5" d="M30,168 V174 H222 V168"/>
+<text class="sm tp" x="28" y="192">primary key: concurrent duplicates conflict here</text>
+<text class="lbl" x="28" y="224">Next request with key K1</text>
+<rect class="slot" x="28" y="234" width="178" height="128" rx="10"/><rect class="fp" x="28" y="234" width="178" height="6" rx="3"/><text class="lbl" x="42" y="264">New key</text><text class="sm" x="42" y="286">INSERT succeeds: run</text><text class="sm" x="42" y="304">the business TX, store</text><text class="sm" x="42" y="322">the response</text><text class="lbl b tp" x="42" y="348">201 Created</text>
+<rect class="slot" x="216" y="234" width="178" height="128" rx="10"/><rect class="fg" x="216" y="234" width="178" height="6" rx="3"/><text class="lbl" x="230" y="264">Same body again</text><text class="sm" x="230" y="286">row is COMPLETED:</text><text class="sm" x="230" y="304">replay the stored</text><text class="sm" x="230" y="322">response, no re-run</text><text class="lbl b tg" x="230" y="348">201 (replayed)</text>
+<rect class="slot" x="404" y="234" width="178" height="128" rx="10"/><rect class="fr" x="404" y="234" width="178" height="6" rx="3"/><text class="lbl" x="418" y="264">Different body</text><text class="sm" x="418" y="286">fingerprint doesn't</text><text class="sm" x="418" y="304">match the stored one</text><text class="lbl b tr" x="418" y="348">422</text>
+<rect class="slot" x="592" y="234" width="178" height="128" rx="10"/><rect class="fa" x="592" y="234" width="178" height="6" rx="3"/><text class="lbl" x="606" y="264">Still running</text><text class="sm" x="606" y="286">row is IN_PROGRESS:</text><text class="sm" x="606" y="304">a concurrent duplicate</text><text class="lbl b ta" x="606" y="348">409 + Retry-After</text>
+
+</svg>

@@ -74,6 +74,9 @@ sequenceDiagram
 ```
 *Notice that **the consumed offset is part of the same transaction as the output**. That's what makes consume-transform-produce exactly-once: you can't have output written without the offset advancing, or the reverse.*
 
+![A partition with committed transactions T1 and T4, aborted T2 and still-open T3; the last stable offset sits at T3's first record, so a read_committed consumer gets T1's records, skips T2's and waits there even though T4 has committed](images/07-read-committed-lso.svg){ loading=lazy }
+*Notice that one open transaction holds back the whole partition for read_committed consumers, which is why long transactions add latency.*
+
 ### Where EOS ends: external systems
 
 ```mermaid
@@ -93,6 +96,9 @@ flowchart LR
 | DB → Kafka | Commit DB, then crash before publishing → lost event (dual write) | **Transactional outbox** + CDC (Debezium) or poller. Consumers dedupe |
 | Kafka → external API | Call succeeds, ack is lost → retry → duplicate side effect | **Idempotency keys** to the API, dedup store before the call, **reconciliation** |
 | Stream processor → sink | Partial output on failure | **2PC sinks** (Flink `TwoPhaseCommitSinkFunction` with checkpoints), Kafka Connect EOS (source connectors since 3.3), idempotent sink writes |
+
+![Animation: two consumers write to a database, crash before committing offset 101 and get offset 100 again; the plain insert creates a second invoice while the upsert keyed by order_id writes zero rows](images/07-crash-before-offset-commit.svg){ loading=lazy }
+*Watch the last step: the redelivery happens either way. Only the idempotent upsert makes it harmless.*
 
 ### Practical patterns
 

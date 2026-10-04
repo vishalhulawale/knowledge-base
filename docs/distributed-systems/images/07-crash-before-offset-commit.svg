@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 372" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+<title id="t">Redelivery after a crash: insert vs upsert</title>
+<desc id="d">Animation comparing two Kafka consumers writing invoices to a database. Both read the message at offset 100, write to the database, then crash before committing the offset, restart and get offset 100 again. The consumer that does a plain insert with a new UUID writes a second row, leaving two invoices for order 42. The consumer that upserts keyed by order_id writes zero rows the second time, so there is one invoice and the offset is then committed as 101.</desc>
+<style>
+.card{fill:#f8fafc;stroke:#e2e8f0}.cv{fill:#f8fafc}
+.h{fill:#0f172a;font-size:20px;font-weight:700}
+.lbl{fill:#334155;font-size:15px;font-weight:600}
+.txt{fill:#334155;font-size:14px}.sm{fill:#334155;font-size:13px}
+.sub{fill:#64748b;font-size:13px}.b{font-weight:700}
+.slot{fill:#ffffff;stroke:#cbd5e1}
+.fp{fill:#4f46e5}.ft{fill:#0ea5a4}.fg{fill:#16a34a}.fr{fill:#dc2626}.fa{fill:#d97706}.fmu{fill:#64748b}
+.zp{fill:#4f46e5;fill-opacity:.1}.zg{fill:#16a34a;fill-opacity:.12}.zr{fill:#dc2626;fill-opacity:.1}.za{fill:#d97706;fill-opacity:.14}
+.on{fill:#ffffff}
+.sp{stroke:#4f46e5}.st{stroke:#0ea5a4}.sg{stroke:#16a34a}.sr{stroke:#dc2626}.sa{stroke:#d97706}.smu{stroke:#64748b}.sax{stroke:#cbd5e1}
+.tp{fill:#4f46e5}.tt{fill:#0f766e}.tg{fill:#15803d}.tr{fill:#dc2626}.ta{fill:#b45309}.tm{fill:#64748b}
+.nf{fill:none}
+@media (prefers-color-scheme: dark){
+.card{fill:#1f2430;stroke:#334155}.cv{fill:#1f2430}
+.h{fill:#f1f5f9}.lbl,.txt,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+.slot{fill:#111827;stroke:#475569}
+.fp{fill:#818cf8}.ft{fill:#2dd4bf}.fg{fill:#4ade80}.fr{fill:#f87171}.fa{fill:#fbbf24}.fmu{fill:#94a3b8}
+.zp{fill:#818cf8;fill-opacity:.16}.zg{fill:#4ade80;fill-opacity:.14}.zr{fill:#f87171;fill-opacity:.14}.za{fill:#fbbf24;fill-opacity:.14}
+.on{fill:#0f172a}
+.sp{stroke:#818cf8}.st{stroke:#2dd4bf}.sg{stroke:#4ade80}.sr{stroke:#f87171}.sa{stroke:#fbbf24}.smu{stroke:#94a3b8}.sax{stroke:#475569}
+.tp{fill:#818cf8}.tt{fill:#5eead4}.tg{fill:#4ade80}.tr{fill:#f87171}.ta{fill:#fbbf24}.tm{fill:#94a3b8}
+}
+
+.a,.d,.w{animation-duration:10s;animation-iteration-count:infinite;animation-timing-function:linear}
+.a{opacity:0}.w{opacity:0}
+@keyframes kp6{0%,4%{opacity:0}6%,92%{opacity:1}96%,100%{opacity:0}}.p6{animation-name:kp6}
+@keyframes kp20{0%,18%{opacity:0}20%,92%{opacity:1}96%,100%{opacity:0}}.p20{animation-name:kp20}
+@keyframes kp34{0%,32%{opacity:0}34%,92%{opacity:1}96%,100%{opacity:0}}.p34{animation-name:kp34}
+@keyframes kp46{0%,44%{opacity:0}46%,92%{opacity:1}96%,100%{opacity:0}}.p46{animation-name:kp46}
+@keyframes kp58{0%,56%{opacity:0}58%,92%{opacity:1}96%,100%{opacity:0}}.p58{animation-name:kp58}
+@keyframes kp70{0%,68%{opacity:0}70%,92%{opacity:1}96%,100%{opacity:0}}.p70{animation-name:kp70}
+@media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.d{animation:none;opacity:0}.w{animation:none;opacity:0}}
+</style>
+<defs>
+<marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fmu" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fp" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fg" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fr" d="M0,0L10,5L0,10z"/></marker>
+<marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fa" d="M0,0L10,5L0,10z"/></marker>
+<marker id="at" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ft" d="M0,0L10,5L0,10z"/></marker>
+</defs>
+<rect class="card" x="1" y="1" width="798" height="370" rx="14"/>
+
+<text class="h" x="28" y="40">Crash between the DB write and the offset commit</text>
+<text class="sub" x="28" y="62">The consumer writes, crashes before committing offset 101, and gets offset 100 again after restart.</text>
+<text class="lbl tr" x="28" y="96">Plain INSERT with a new UUID</text>
+<g class="a p6"><rect class="slot" x="28" y="108" width="104" height="46" rx="8"/><text class="sm b" x="80" y="127" text-anchor="middle">read</text><text class="sm tm" x="80" y="145" text-anchor="middle">offset 100</text></g><g class="a p20"><rect class="slot" x="138" y="108" width="104" height="46" rx="8"/><text class="sm b" x="190" y="127" text-anchor="middle">INSERT</text><text class="sm tm" x="190" y="145" text-anchor="middle">new row</text></g><g class="a p34"><rect class="fr" x="248" y="108" width="104" height="46" rx="8"/><text class="sm on b" x="300" y="127" text-anchor="middle">crash</text><text class="sm on" x="300" y="145" text-anchor="middle">before commit</text></g><g class="a p46"><rect class="slot" x="358" y="108" width="104" height="46" rx="8"/><text class="sm b" x="410" y="127" text-anchor="middle">restart</text><text class="sm tm" x="410" y="145" text-anchor="middle">gets 100 again</text></g><g class="a p58"><rect class="slot sr" x="468" y="108" width="104" height="46" rx="8" stroke-width="2"/><text class="sm tr b" x="520" y="127" text-anchor="middle">INSERT</text><text class="sm tr" x="520" y="145" text-anchor="middle">another row</text></g>
+<g class="a p70"><text class="sm tr b" x="28" y="178">2 invoices for order 42</text></g>
+<rect class="slot" x="596" y="104" width="176" height="86" rx="10"/><text class="sm tm b" x="610" y="124">invoice table</text>
+<g class="a p20"><text class="sm" x="610" y="148">7f3a · order 42</text></g>
+<g class="a p58"><text class="sm tr b" x="610" y="170">c91e · order 42</text></g>
+<line x1="28" y1="204" x2="772" y2="204" class="sax"/>
+<text class="lbl tg" x="28" y="230">Upsert keyed by order_id (ON CONFLICT DO NOTHING)</text>
+<g class="a p6"><rect class="slot" x="28" y="242" width="104" height="46" rx="8"/><text class="sm b" x="80" y="261" text-anchor="middle">read</text><text class="sm tm" x="80" y="279" text-anchor="middle">offset 100</text></g><g class="a p20"><rect class="slot" x="138" y="242" width="104" height="46" rx="8"/><text class="sm b" x="190" y="261" text-anchor="middle">upsert</text><text class="sm tm" x="190" y="279" text-anchor="middle">1 row</text></g><g class="a p34"><rect class="fr" x="248" y="242" width="104" height="46" rx="8"/><text class="sm on b" x="300" y="261" text-anchor="middle">crash</text><text class="sm on" x="300" y="279" text-anchor="middle">before commit</text></g><g class="a p46"><rect class="slot" x="358" y="242" width="104" height="46" rx="8"/><text class="sm b" x="410" y="261" text-anchor="middle">restart</text><text class="sm tm" x="410" y="279" text-anchor="middle">gets 100 again</text></g><g class="a p58"><rect class="slot sg" x="468" y="242" width="104" height="46" rx="8" stroke-width="2"/><text class="sm tg b" x="520" y="261" text-anchor="middle">upsert</text><text class="sm tg" x="520" y="279" text-anchor="middle">0 rows</text></g>
+<g class="a p70"><text class="sm tg b" x="28" y="312">1 invoice; the offset is then committed as 101</text></g>
+<rect class="slot" x="596" y="238" width="176" height="86" rx="10"/><text class="sm tm b" x="610" y="258">invoice table</text>
+<g class="a p20"><text class="sm" x="610" y="282">order 42 (key)</text></g>
+<g class="a p58"><text class="sm tg b" x="610" y="304">duplicate ignored</text></g>
+<text class="sub" x="28" y="356">Kafka transactions don't cover the database, so the sink itself must make the redelivery harmless.</text>
+
+</svg>

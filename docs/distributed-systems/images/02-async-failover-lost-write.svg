@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+<title id="t">Async replication losing an acknowledged write</title>
+<desc id="d">Animation. A client writes x=5. The leader appends it at LSN 1001 and acknowledges the client. Replication to the asynchronous follower is still in flight when the leader crashes. The follower, which only has LSN 1000 with x=4, is promoted to new leader. The client then reads x=4: the acknowledged write x=5 is lost.</desc>
+<style>
+.card{fill:#f8fafc;stroke:#e2e8f0}.cv{fill:#f8fafc}
+.h{fill:#0f172a;font-size:20px;font-weight:700}
+.lbl{fill:#334155;font-size:15px;font-weight:600}
+.txt{fill:#334155;font-size:14px}.sm{fill:#334155;font-size:13px}
+.sub{fill:#64748b;font-size:13px}.b{font-weight:700}
+.slot{fill:#ffffff;stroke:#cbd5e1}
+.fp{fill:#4f46e5}.ft{fill:#0ea5a4}.fg{fill:#16a34a}.fr{fill:#dc2626}.fa{fill:#d97706}.fmu{fill:#64748b}
+.zp{fill:#4f46e5;fill-opacity:.1}.zg{fill:#16a34a;fill-opacity:.12}.zr{fill:#dc2626;fill-opacity:.1}.za{fill:#d97706;fill-opacity:.14}
+.on{fill:#ffffff}
+.sp{stroke:#4f46e5}.st{stroke:#0ea5a4}.sg{stroke:#16a34a}.sr{stroke:#dc2626}.sa{stroke:#d97706}.smu{stroke:#64748b}.sax{stroke:#cbd5e1}
+.tp{fill:#4f46e5}.tt{fill:#0f766e}.tg{fill:#15803d}.tr{fill:#dc2626}.ta{fill:#b45309}.tm{fill:#64748b}
+.nf{fill:none}
+@media (prefers-color-scheme: dark){
+.card{fill:#1f2430;stroke:#334155}.cv{fill:#1f2430}
+.h{fill:#f1f5f9}.lbl,.txt,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+.slot{fill:#111827;stroke:#475569}
+.fp{fill:#818cf8}.ft{fill:#2dd4bf}.fg{fill:#4ade80}.fr{fill:#f87171}.fa{fill:#fbbf24}.fmu{fill:#94a3b8}
+.zp{fill:#818cf8;fill-opacity:.16}.zg{fill:#4ade80;fill-opacity:.14}.zr{fill:#f87171;fill-opacity:.14}.za{fill:#fbbf24;fill-opacity:.14}
+.on{fill:#0f172a}
+.sp{stroke:#818cf8}.st{stroke:#2dd4bf}.sg{stroke:#4ade80}.sr{stroke:#f87171}.sa{stroke:#fbbf24}.smu{stroke:#94a3b8}.sax{stroke:#475569}
+.tp{fill:#818cf8}.tt{fill:#5eead4}.tg{fill:#4ade80}.tr{fill:#f87171}.ta{fill:#fbbf24}.tm{fill:#94a3b8}
+}
+
+.fade{animation:fade 10s linear infinite}
+@keyframes fade{0%,38%{opacity:1}40%,94%{opacity:.35}97%,100%{opacity:1}}
+.rep{opacity:0;animation:rep 10s linear infinite}
+@keyframes rep{0%,20%{opacity:0;transform:translateY(0)}22%{opacity:1;transform:translateY(0)}39%{opacity:1;transform:translateY(38px)}40%,100%{opacity:0;transform:translateY(38px)}}
+
+.a,.d,.w{animation-duration:10s;animation-iteration-count:infinite;animation-timing-function:linear}
+.a{opacity:0}.w{opacity:0}
+@keyframes kp4{0%,2%{opacity:0}4%,92%{opacity:1}96%,100%{opacity:0}}.p4{animation-name:kp4}
+@keyframes kp6{0%,4%{opacity:0}6%,92%{opacity:1}96%,100%{opacity:0}}.p6{animation-name:kp6}
+@keyframes kp8{0%,6%{opacity:0}8%,92%{opacity:1}96%,100%{opacity:0}}.p8{animation-name:kp8}
+@keyframes kp18{0%,16%{opacity:0}18%,92%{opacity:1}96%,100%{opacity:0}}.p18{animation-name:kp18}
+@keyframes kp40{0%,38%{opacity:0}40%,92%{opacity:1}96%,100%{opacity:0}}.p40{animation-name:kp40}
+@keyframes kp55{0%,53%{opacity:0}55%,92%{opacity:1}96%,100%{opacity:0}}.p55{animation-name:kp55}
+@keyframes kp72{0%,70%{opacity:0}72%,92%{opacity:1}96%,100%{opacity:0}}.p72{animation-name:kp72}
+@keyframes kv55{0%,53%{opacity:1}55%,94%{opacity:0}97%,100%{opacity:1}}.v55{animation-name:kv55}
+@keyframes kw18-72{0%,16%{opacity:0}18%,70%{opacity:1}72%,100%{opacity:0}}.w18-72{animation-name:kw18-72}
+@media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.d{animation:none;opacity:0}.w{animation:none;opacity:0}.fade{animation:none;opacity:.35}.rep{animation:none;opacity:0}}
+</style>
+<defs>
+<marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fmu" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fp" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fg" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fr" d="M0,0L10,5L0,10z"/></marker>
+<marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fa" d="M0,0L10,5L0,10z"/></marker>
+<marker id="at" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ft" d="M0,0L10,5L0,10z"/></marker>
+</defs>
+<rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+
+<text class="h" x="28" y="40">Async replication: an acknowledged write lost on failover</text>
+<text class="sub" x="28" y="62">The leader acks before the async follower has the write. Promoting that follower loses it.</text>
+<!-- client -->
+<rect class="slot" x="28" y="170" width="140" height="80" rx="10"/>
+<text class="lbl" x="98" y="198" text-anchor="middle">Client</text>
+<g class="w w18-72"><text class="sm tg b" x="98" y="228" text-anchor="middle">got OK for x=5</text></g>
+<g class="a p72"><text class="sm tr b" x="98" y="228" text-anchor="middle">reads x = 4</text></g>
+<!-- leader -->
+<g class="fade">
+<rect class="slot" x="240" y="88" width="270" height="100" rx="10"/>
+<text class="lbl" x="256" y="112">Leader</text>
+<g><rect class="fp" x="256" y="124" width="110" height="52" rx="8"/><text class="sm on b" x="311.0" y="144" text-anchor="middle">LSN 1000</text><text class="txt on" x="311.0" y="163" text-anchor="middle">x = 4</text></g>
+<rect class="slot" x="382" y="124" width="110" height="52" rx="8" stroke-dasharray="4 3"/>
+<g class="a p6"><rect class="fp" x="382" y="124" width="110" height="52" rx="8"/><text class="sm on b" x="437.0" y="144" text-anchor="middle">LSN 1001</text><text class="txt on" x="437.0" y="163" text-anchor="middle">x = 5</text></g>
+</g>
+<g class="a p40"><line x1="345" y1="108" x2="405" y2="168" class="sr" stroke-width="5" stroke-linecap="round"/><line x1="405" y1="108" x2="345" y2="168" class="sr" stroke-width="5" stroke-linecap="round"/><text class="sm tr b" x="500" y="112" text-anchor="end">crashed</text></g>
+<!-- follower -->
+<rect class="slot" x="240" y="232" width="270" height="100" rx="10"/>
+<g class="a p55"><rect class="nf sp" x="240" y="232" width="270" height="100" rx="10" stroke-width="3"/></g>
+<g class="d v55"><text class="lbl" x="256" y="256">Follower (async)</text></g>
+<g class="a p55"><text class="lbl tp" x="256" y="256">New leader</text></g>
+<g><rect class="fp" x="256" y="268" width="110" height="52" rx="8"/><text class="sm on b" x="311.0" y="288" text-anchor="middle">LSN 1000</text><text class="txt on" x="311.0" y="307" text-anchor="middle">x = 4</text></g>
+<rect class="slot" x="382" y="268" width="110" height="52" rx="8" stroke-dasharray="4 3"/>
+<text class="sm tm b" x="437" y="288" text-anchor="middle">LSN 1001</text>
+<g class="a p72"><text class="sm tr b" x="437" y="308" text-anchor="middle">x=5 lost</text></g>
+<!-- arrows -->
+<g class="a p4"><line x1="168" y1="182" x2="236" y2="132" class="smu" stroke-width="2" marker-end="url(#am)"/><text class="sm" x="140" y="152" text-anchor="middle">write x=5</text></g>
+<g class="a p18"><line x1="238" y1="166" x2="172" y2="216" class="sg" stroke-width="2" marker-end="url(#ag)"/><text class="sm tg b" x="216" y="214" text-anchor="middle">OK</text></g>
+<g class="a p8"><line x1="437" y1="178" x2="437" y2="264" class="smu" stroke-width="1.5" stroke-dasharray="4 4"/><text class="sm tm" x="447" y="226">async</text></g>
+<circle class="fp rep" cx="437" cy="186" r="6"/>
+<g class="a p72"><line x1="168" y1="240" x2="236" y2="282" class="sr" stroke-width="2" marker-end="url(#ar)"/></g>
+<!-- steps -->
+<text class="lbl" x="560" y="100">What happened</text>
+<g class="a p4"><text class="txt" x="560" y="128">1. Leader writes x=5</text><text class="txt" x="576" y="146">at LSN 1001</text></g>
+<g class="a p18"><text class="txt" x="560" y="172">2. Leader acks the client</text></g>
+<g class="a p40"><text class="txt" x="560" y="198">3. Leader crashes before</text><text class="txt" x="576" y="216">the follower copies 1001</text></g>
+<g class="a p55"><text class="txt" x="560" y="242">4. Follower is promoted</text><text class="txt" x="576" y="260">with only LSN 1000</text></g>
+<g class="a p72"><text class="txt tr b" x="560" y="286">5. Client reads x = 4:</text><text class="txt tr b" x="576" y="304">the acked write is lost</text></g>
+<text class="sub" x="28" y="362">Semi-sync or w: majority waits for a follower before acking, which closes this gap.</text>
+
+</svg>

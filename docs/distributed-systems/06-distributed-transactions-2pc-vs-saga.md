@@ -44,6 +44,9 @@ sequenceDiagram
 ```
 *Notice the **blocking window**: once a participant votes YES, it has given up the right to decide alone. Coordinator failure leaves it holding locks until recovery. That's why 2PC hurts **availability** and **latency** (2 round trips plus fsyncs, and locks held across the network).*
 
+![Animation: a timeline where the coordinator sends PREPARE, both participants take locks and vote YES, the coordinator crashes before sending the decision, both stay in doubt holding locks, and the locks are released only after the coordinator recovers and sends COMMIT](images/06-2pc-in-doubt.svg){ loading=lazy }
+*Watch the lock bars: they keep running through the whole in-doubt window, because a participant that voted YES can't commit or abort on its own.*
+
 | Property | 2PC |
 |---|---|
 | Atomicity | Yes (all or nothing) |
@@ -75,6 +78,9 @@ sequenceDiagram
     O->>O: Order → CANCELLED (notify customer)
 ```
 *Notice that compensations are **semantic undo** (refund, release), not rollbacks. Some effects can't be undone (an email was sent), so you order steps to put **compensatable steps first**, then the **pivot**, then **retriable steps** that are expected to eventually succeed.*
+
+![Animation: Reserve stock and the pivot Charge card succeed, Create shipment fails, then Refund and Release stock run in reverse order and the order ends cancelled](images/06-saga-compensation.svg){ loading=lazy }
+*Watch the direction change: once shipping fails, the saga walks back through the completed steps, newest first.*
 
 **Step types** (Richardson):
 

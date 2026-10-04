@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 426" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+<title id="t">Last-writer-wins with clock skew</title>
+<desc id="d">Animation with two node timelines above a real-time axis from 9 to 12 seconds. Node A's clock is correct, node B's clock is 2 seconds slow, so its tick labels read 7 to 10. At real time 10 s node A writes x=1 stamped 10.0. At real time 11 s node B writes x=2 stamped 9.0. A replica resolving by last-writer-wins keeps x=1 because 10.0 is greater than 9.0, so the later write x=2 is silently lost.</desc>
+<style>
+.card{fill:#f8fafc;stroke:#e2e8f0}.cv{fill:#f8fafc}
+.h{fill:#0f172a;font-size:20px;font-weight:700}
+.lbl{fill:#334155;font-size:15px;font-weight:600}
+.txt{fill:#334155;font-size:14px}.sm{fill:#334155;font-size:13px}
+.sub{fill:#64748b;font-size:13px}.b{font-weight:700}
+.slot{fill:#ffffff;stroke:#cbd5e1}
+.fp{fill:#4f46e5}.ft{fill:#0ea5a4}.fg{fill:#16a34a}.fr{fill:#dc2626}.fa{fill:#d97706}.fmu{fill:#64748b}
+.zp{fill:#4f46e5;fill-opacity:.1}.zg{fill:#16a34a;fill-opacity:.12}.zr{fill:#dc2626;fill-opacity:.1}.za{fill:#d97706;fill-opacity:.14}
+.on{fill:#ffffff}
+.sp{stroke:#4f46e5}.st{stroke:#0ea5a4}.sg{stroke:#16a34a}.sr{stroke:#dc2626}.sa{stroke:#d97706}.smu{stroke:#64748b}.sax{stroke:#cbd5e1}
+.tp{fill:#4f46e5}.tt{fill:#0f766e}.tg{fill:#15803d}.tr{fill:#dc2626}.ta{fill:#b45309}.tm{fill:#64748b}
+.nf{fill:none}
+@media (prefers-color-scheme: dark){
+.card{fill:#1f2430;stroke:#334155}.cv{fill:#1f2430}
+.h{fill:#f1f5f9}.lbl,.txt,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+.slot{fill:#111827;stroke:#475569}
+.fp{fill:#818cf8}.ft{fill:#2dd4bf}.fg{fill:#4ade80}.fr{fill:#f87171}.fa{fill:#fbbf24}.fmu{fill:#94a3b8}
+.zp{fill:#818cf8;fill-opacity:.16}.zg{fill:#4ade80;fill-opacity:.14}.zr{fill:#f87171;fill-opacity:.14}.za{fill:#fbbf24;fill-opacity:.14}
+.on{fill:#0f172a}
+.sp{stroke:#818cf8}.st{stroke:#2dd4bf}.sg{stroke:#4ade80}.sr{stroke:#f87171}.sa{stroke:#fbbf24}.smu{stroke:#94a3b8}.sax{stroke:#475569}
+.tp{fill:#818cf8}.tt{fill:#5eead4}.tg{fill:#4ade80}.tr{fill:#f87171}.ta{fill:#fbbf24}.tm{fill:#94a3b8}
+}
+
+.ph{opacity:0;animation:ph 10s linear infinite}
+@keyframes ph{0%,1%{transform:translateX(0);opacity:0}2%{transform:translateX(0);opacity:1}58%{transform:translateX(540px);opacity:1}60%,100%{transform:translateX(540px);opacity:0}}
+
+.a,.d,.w{animation-duration:10s;animation-iteration-count:infinite;animation-timing-function:linear}
+.a{opacity:0}.w{opacity:0}
+@keyframes kp21{0%,19%{opacity:0}21%,92%{opacity:1}96%,100%{opacity:0}}.p21{animation-name:kp21}
+@keyframes kp40{0%,38%{opacity:0}40%,92%{opacity:1}96%,100%{opacity:0}}.p40{animation-name:kp40}
+@keyframes kp64{0%,62%{opacity:0}64%,92%{opacity:1}96%,100%{opacity:0}}.p64{animation-name:kp64}
+@keyframes kp74{0%,72%{opacity:0}74%,92%{opacity:1}96%,100%{opacity:0}}.p74{animation-name:kp74}
+@media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.d{animation:none;opacity:0}.w{animation:none;opacity:0}.ph{animation:none;opacity:0}}
+</style>
+<defs>
+<marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fmu" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fp" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fg" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fr" d="M0,0L10,5L0,10z"/></marker>
+<marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fa" d="M0,0L10,5L0,10z"/></marker>
+<marker id="at" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ft" d="M0,0L10,5L0,10z"/></marker>
+</defs>
+<rect class="card" x="1" y="1" width="798" height="424" rx="14"/>
+
+<text class="h" x="28" y="40">Last-writer-wins with a skewed clock drops the newer write</text>
+<text class="sub" x="28" y="62">Node B's clock runs 2 s slow. Each node stamps writes with its own wall clock.</text>
+<text class="lbl" x="28" y="146">Node A</text><text class="sub" x="28" y="164">clock correct</text>
+<text class="lbl" x="28" y="236">Node B</text><text class="sub" x="28" y="254">clock 2 s slow</text>
+<text class="lbl" x="28" y="294">Real time</text>
+<line x1="160" y1="150" x2="730" y2="150" class="sax" stroke-width="2"/>
+<line x1="160" y1="240" x2="730" y2="240" class="sax" stroke-width="2"/>
+<line x1="160" y1="290" x2="740" y2="290" class="smu" stroke-width="1.5" marker-end="url(#am)"/>
+<line x1="170" y1="145" x2="170" y2="155" class="smu" stroke-width="1.5"/><text class="sub" x="170" y="172" text-anchor="middle">9.0</text><line x1="170" y1="235" x2="170" y2="245" class="smu" stroke-width="1.5"/><text class="sub" x="170" y="262" text-anchor="middle">7.0</text><line x1="170" y1="285" x2="170" y2="295" class="smu" stroke-width="1.5"/><text class="sm" x="170" y="310" text-anchor="middle">9 s</text><line x1="350" y1="145" x2="350" y2="155" class="smu" stroke-width="1.5"/><text class="sub" x="350" y="172" text-anchor="middle">10.0</text><line x1="350" y1="235" x2="350" y2="245" class="smu" stroke-width="1.5"/><text class="sub" x="350" y="262" text-anchor="middle">8.0</text><line x1="350" y1="285" x2="350" y2="295" class="smu" stroke-width="1.5"/><text class="sm" x="350" y="310" text-anchor="middle">10 s</text><line x1="530" y1="145" x2="530" y2="155" class="smu" stroke-width="1.5"/><text class="sub" x="530" y="172" text-anchor="middle">11.0</text><line x1="530" y1="235" x2="530" y2="245" class="smu" stroke-width="1.5"/><text class="sub" x="530" y="262" text-anchor="middle">9.0</text><line x1="530" y1="285" x2="530" y2="295" class="smu" stroke-width="1.5"/><text class="sm" x="530" y="310" text-anchor="middle">11 s</text><line x1="710" y1="145" x2="710" y2="155" class="smu" stroke-width="1.5"/><text class="sub" x="710" y="172" text-anchor="middle">12.0</text><line x1="710" y1="235" x2="710" y2="245" class="smu" stroke-width="1.5"/><text class="sub" x="710" y="262" text-anchor="middle">10.0</text><line x1="710" y1="285" x2="710" y2="295" class="smu" stroke-width="1.5"/><text class="sm" x="710" y="310" text-anchor="middle">12 s</text>
+<g class="a p21"><line x1="350" y1="150" x2="350" y2="290" class="sp" stroke-width="1.5" stroke-dasharray="3 4"/>
+<circle class="fp" cx="350" cy="150" r="8"/><text class="sm tp b" x="362" y="122">write x=1</text><text class="sm tp" x="362" y="138">stamp 10.0</text></g>
+<g class="a p40"><line x1="530" y1="240" x2="530" y2="290" class="sa" stroke-width="1.5" stroke-dasharray="3 4"/>
+<circle class="fa" cx="530" cy="240" r="8"/><text class="sm ta b" x="542" y="212">write x=2 (1 s later)</text><text class="sm ta" x="542" y="228">stamp 9.0</text></g>
+<g class="ph"><line x1="170" y1="104" x2="170" y2="290" class="st" stroke-width="2"/></g>
+<g class="a p64"><rect class="slot" x="170" y="326" width="602" height="62" rx="10"/>
+<text class="txt" x="186" y="350">Replica keeps the highest stamp: x=1, because 10.0 &gt; 9.0.</text></g>
+<g class="a p74"><text class="txt tr b" x="186" y="374">x=2 is silently lost, although it was written later.</text></g>
+<text class="sub" x="28" y="410">Skew exaggerated for clarity. Use server-assigned versions or logical clocks instead.</text>
+
+</svg>

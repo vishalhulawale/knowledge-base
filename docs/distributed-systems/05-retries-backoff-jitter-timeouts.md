@@ -69,6 +69,9 @@ flowchart LR
 | Equal jitter | `d/2 + random(0, d/2)` with d as above | Guarantees some wait |
 | Decorrelated jitter | `min(c, random(b, prev·3))` | Good spread, uses the previous delay |
 
+![Animation: for 1,000 clients that failed together, three retry rounds without jitter land as one spike of 1,000 at 100, 200 and 400 ms, while with full jitter the same retries spread evenly as 200, 100 and 50 per 20 ms bucket](images/05-jitter-retry-waves.svg){ loading=lazy }
+*Watch the two rows fill in: the same number of retries, but full jitter turns each spike into a low, even trickle the recovering service can absorb.*
+
 ### Retry budgets and amplification
 
 - **Amplification:** with 3 attempts at each of 3 layers (client → gateway → service → DB), one user request can become **27 DB calls** during an outage, exactly when the DB is weakest.
@@ -77,6 +80,9 @@ flowchart LR
     2. **Retry budget:** allow retries only while `retries / requests ≤ 10%` over a window (gRPC and Envoy support this; Finagle popularised it). During an outage, retries stop automatically.
     3. **Circuit breaker:** after sustained failures, stop calling for a while.
     4. **Honour `Retry-After`** on 429/503, which the server sets to shed load.
+
+![One client request fanning out through a gateway and a service that each retry 3 times, ending in 27 database calls](images/05-retry-amplification.svg){ loading=lazy }
+*Notice where the load lands: three layers of 3 attempts turn one request into 27 calls on the database, which is usually the part that's already struggling.*
 
 ### Timeouts: kinds and sizing
 

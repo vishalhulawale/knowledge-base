@@ -57,6 +57,9 @@ Logical logs power **change data capture** (Debezium): the replication stream be
 - **Semi-synchronous / quorum commit:** wait for k followers (Postgres `synchronous_standby_names = 'ANY 1 (...)'`, MongoDB `w: "majority"`, MySQL semi-sync, Aurora's 4/6 storage quorum).
 - **Chain replication** (CRAQ, some storage systems) pipelines writes down a chain. Reads from the tail are strongly consistent.
 
+![Animation: the leader writes x=5 at LSN 1001 and acks the client, crashes before the async follower copies it, the follower is promoted with only LSN 1000, and the client then reads the old value x=4](images/02-async-failover-lost-write.svg){ loading=lazy }
+*Watch the order of events: the client got OK before the follower had LSN 1001, so promoting that follower loses an acknowledged write.*
+
 ### Failover hazards
 
 1. **Detecting** leader failure: timeouts (too short means flapping, too long means downtime).
@@ -80,6 +83,9 @@ flowchart LR
     RD -->|"sees v2 and v1 → returns v2,<br/>read-repairs C to v2"| FIX["Read repair"]
 ```
 *Notice why **W + R > N** works: with N=3, W=2, R=2, any 2 read replicas overlap the 2 written ones in at least one node, so the read sees v2. It **repairs** stale replica C on the way. With W=1, R=1, it could have read only C and returned stale v1.*
+
+![Two panels of three replicas: with W=2 and R=2 the write set and the read set overlap on replica B so the read sees v2, while with W=1 and R=1 the write reaches only A and the read asks only C, which returns stale v1](images/02-quorum-overlap.svg){ loading=lazy }
+*Notice the highlighted replica: with W + R > N the read always includes at least one replica that took the write.*
 
 Convergence mechanisms:
 

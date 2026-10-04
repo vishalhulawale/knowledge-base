@@ -39,6 +39,9 @@ flowchart LR
 ```
 *Notice the non-linearity (M/M/1 approximation: wait ≈ ρ/(1−ρ) × service time). Running "hot" at 90% leaves no headroom for spikes. That's why capacity targets usually sit around 50–70%, and why bounded queues plus shedding are needed for the rest.*
 
+![A curve of queueing wait against utilisation, 1 times service time at 50%, 4 at 80%, 9 at 90% and 19 at 95%, unbounded at 100%, with a 50 to 70% target band and a side note on Little's law](images/09-utilisation-latency-curve.svg){ loading=lazy }
+*Notice how flat the curve is in the target band and how steep it gets past 80%: the last few percent of utilisation cost the most latency.*
+
 **Little's law (L = λW):**
 
 - Size thread pools and concurrency: 400 RPS at 50 ms → about 20 in-flight. Add headroom and size the pool to around 30–40, not 500.
@@ -65,6 +68,9 @@ flowchart LR
 | Reactive Streams `request(n)` | WebFlux, Reactor, RxJava | Demand-driven flow, buffer limits |
 | TCP / HTTP/2 flow control | Network | Sender window shrinks |
 | `Retry-After` / 429 | APIs | Clients pause (if they honour it) |
+
+![Animation: with twice the traffic the workers can handle, an unbounded queue keeps growing and latency rises until requests time out, while a bounded queue fills, rejects extra work with 503 and Retry-After, and keeps latency short](images/09-bounded-vs-unbounded-queue.svg){ loading=lazy }
+*Watch the latency bars: the unbounded queue makes everyone wait, the bounded one says no quickly to some so the rest stay fast.*
 
 ### Load shedding strategies
 

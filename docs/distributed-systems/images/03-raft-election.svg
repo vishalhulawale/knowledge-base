@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 458" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+<title id="t">Raft leader election</title>
+<desc id="d">Animation of a five-node Raft cluster. Leader S1 of term 1 has crashed. Each remaining follower has an election timer drawn as a draining ring. S3's timer, 155 ms, runs out first, so it becomes a candidate for term 2, votes for itself and sends RequestVote to S2, S4 and S5. They grant their votes, which resets their timers. With 4 of 5 votes, more than the majority of 3, S3 becomes leader for term 2 and sends heartbeats.</desc>
+<style>
+.card{fill:#f8fafc;stroke:#e2e8f0}.cv{fill:#f8fafc}
+.h{fill:#0f172a;font-size:20px;font-weight:700}
+.lbl{fill:#334155;font-size:15px;font-weight:600}
+.txt{fill:#334155;font-size:14px}.sm{fill:#334155;font-size:13px}
+.sub{fill:#64748b;font-size:13px}.b{font-weight:700}
+.slot{fill:#ffffff;stroke:#cbd5e1}
+.fp{fill:#4f46e5}.ft{fill:#0ea5a4}.fg{fill:#16a34a}.fr{fill:#dc2626}.fa{fill:#d97706}.fmu{fill:#64748b}
+.zp{fill:#4f46e5;fill-opacity:.1}.zg{fill:#16a34a;fill-opacity:.12}.zr{fill:#dc2626;fill-opacity:.1}.za{fill:#d97706;fill-opacity:.14}
+.on{fill:#ffffff}
+.sp{stroke:#4f46e5}.st{stroke:#0ea5a4}.sg{stroke:#16a34a}.sr{stroke:#dc2626}.sa{stroke:#d97706}.smu{stroke:#64748b}.sax{stroke:#cbd5e1}
+.tp{fill:#4f46e5}.tt{fill:#0f766e}.tg{fill:#15803d}.tr{fill:#dc2626}.ta{fill:#b45309}.tm{fill:#64748b}
+.nf{fill:none}
+@media (prefers-color-scheme: dark){
+.card{fill:#1f2430;stroke:#334155}.cv{fill:#1f2430}
+.h{fill:#f1f5f9}.lbl,.txt,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+.slot{fill:#111827;stroke:#475569}
+.fp{fill:#818cf8}.ft{fill:#2dd4bf}.fg{fill:#4ade80}.fr{fill:#f87171}.fa{fill:#fbbf24}.fmu{fill:#94a3b8}
+.zp{fill:#818cf8;fill-opacity:.16}.zg{fill:#4ade80;fill-opacity:.14}.zr{fill:#f87171;fill-opacity:.14}.za{fill:#fbbf24;fill-opacity:.14}
+.on{fill:#0f172a}
+.sp{stroke:#818cf8}.st{stroke:#2dd4bf}.sg{stroke:#4ade80}.sr{stroke:#f87171}.sa{stroke:#fbbf24}.smu{stroke:#94a3b8}.sax{stroke:#475569}
+.tp{fill:#818cf8}.tt{fill:#5eead4}.tg{fill:#4ade80}.tr{fill:#f87171}.ta{fill:#fbbf24}.tm{fill:#94a3b8}
+}
+
+.ring{stroke-dasharray:100;animation:10s linear infinite}
+.r3{animation-name:r3}.r2{animation-name:r2}.r4{animation-name:r4}.r5{animation-name:r5}
+@keyframes r3{0%{stroke-dashoffset:0;opacity:1}20%{stroke-dashoffset:100;opacity:1}21%,96%{stroke-dashoffset:100;opacity:0}100%{stroke-dashoffset:0;opacity:0}}
+@keyframes r2{0%{stroke-dashoffset:0}23.9%{stroke-dashoffset:71.6}24%,100%{stroke-dashoffset:0}}
+@keyframes r4{0%{stroke-dashoffset:0}23.9%{stroke-dashoffset:88.5}24%,100%{stroke-dashoffset:0}}
+@keyframes r5{0%{stroke-dashoffset:0}23.9%{stroke-dashoffset:64.6}24%,100%{stroke-dashoffset:0}}
+.flow{stroke-dasharray:8 6;animation:flow .8s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-14}}
+
+.a,.d,.w{animation-duration:10s;animation-iteration-count:infinite;animation-timing-function:linear}
+.a{opacity:0}.w{opacity:0}
+@keyframes kp20{0%,18%{opacity:0}20%,92%{opacity:1}96%,100%{opacity:0}}.p20{animation-name:kp20}
+@keyframes kp36{0%,34%{opacity:0}36%,92%{opacity:1}96%,100%{opacity:0}}.p36{animation-name:kp36}
+@keyframes kp46{0%,44%{opacity:0}46%,92%{opacity:1}96%,100%{opacity:0}}.p46{animation-name:kp46}
+@keyframes kp48{0%,46%{opacity:0}48%,92%{opacity:1}96%,100%{opacity:0}}.p48{animation-name:kp48}
+@keyframes kv20{0%,18%{opacity:1}20%,94%{opacity:0}97%,100%{opacity:1}}.v20{animation-name:kv20}
+@keyframes kv36{0%,34%{opacity:1}36%,94%{opacity:0}97%,100%{opacity:1}}.v36{animation-name:kv36}
+@keyframes kw20-46{0%,18%{opacity:0}20%,44%{opacity:1}46%,100%{opacity:0}}.w20-46{animation-name:kw20-46}
+@keyframes kw22-46{0%,20%{opacity:0}22%,44%{opacity:1}46%,100%{opacity:0}}.w22-46{animation-name:kw22-46}
+@media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.d{animation:none;opacity:0}.w{animation:none;opacity:0}.ring{animation:none;stroke-dashoffset:0}.r3{opacity:0}.flow{animation:none}}
+</style>
+<defs>
+<marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fmu" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fp" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fg" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fr" d="M0,0L10,5L0,10z"/></marker>
+<marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fa" d="M0,0L10,5L0,10z"/></marker>
+<marker id="at" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ft" d="M0,0L10,5L0,10z"/></marker>
+</defs>
+<rect class="card" x="1" y="1" width="798" height="456" rx="14"/>
+
+<text class="h" x="28" y="40">Raft leader election</text>
+<text class="sub" x="28" y="62">The first follower whose randomised election timeout fires asks for votes; a majority makes it leader.</text>
+<!-- old leader -->
+<circle class="slot" cx="290" cy="135" r="30" stroke-width="1.5" stroke-dasharray="4 3"/><text class="lbl tm" x="290" y="140" text-anchor="middle">S1</text>
+<line x1="270" y1="115" x2="310" y2="155" class="sr" stroke-width="3"/><line x1="310" y1="115" x2="270" y2="155" class="sr" stroke-width="3"/>
+<text class="sm tr" x="290" y="94" text-anchor="middle">old leader (term 1), crashed</text>
+<!-- messages -->
+<g class="w w22-46"><line x1="373" y1="314" x2="391" y2="260" class="sa" stroke-width="2" marker-end="url(#aa)" stroke-dasharray="6 4"/><line x1="321" y1="352" x2="263" y2="352" class="sa" stroke-width="2" marker-end="url(#aa)" stroke-dasharray="6 4"/><line x1="329" y1="329" x2="212" y2="244" class="sa" stroke-width="2" marker-end="url(#aa)" stroke-dasharray="6 4"/>
+<text class="sm ta b" x="290" y="210" text-anchor="middle">RequestVote</text><text class="sm ta" x="290" y="228" text-anchor="middle">(term 2)</text></g>
+<g class="a p48"><line x1="373" y1="314" x2="391" y2="260" class="sp flow" stroke-width="2" marker-end="url(#ap)"/><line x1="321" y1="352" x2="263" y2="352" class="sp flow" stroke-width="2" marker-end="url(#ap)"/><line x1="329" y1="329" x2="212" y2="244" class="sp flow" stroke-width="2" marker-end="url(#ap)"/>
+<text class="sm tp b" x="290" y="210" text-anchor="middle">heartbeats</text><text class="sm tp" x="290" y="228" text-anchor="middle">(AppendEntries)</text></g>
+<!-- rings -->
+<circle class="st nf ring r2" cx="404" cy="218" r="37" stroke-width="4" pathLength="100" transform="rotate(-90 404 218)"/><circle class="st nf ring r3" cx="361" cy="352" r="37" stroke-width="4" pathLength="100" transform="rotate(-90 361 352)"/><circle class="st nf ring r4" cx="219" cy="352" r="37" stroke-width="4" pathLength="100" transform="rotate(-90 219 352)"/><circle class="st nf ring r5" cx="176" cy="218" r="37" stroke-width="4" pathLength="100" transform="rotate(-90 176 218)"/>
+<!-- nodes -->
+<circle class="slot" cx="404" cy="218" r="30" stroke-width="1.5"/><text class="lbl" x="404" y="223" text-anchor="middle">S2</text><circle class="slot" cx="219" cy="352" r="30" stroke-width="1.5"/><text class="lbl" x="219" y="357" text-anchor="middle">S4</text><circle class="slot" cx="176" cy="218" r="30" stroke-width="1.5"/><text class="lbl" x="176" y="223" text-anchor="middle">S5</text>
+<circle class="slot" cx="361" cy="352" r="30" stroke-width="1.5"/><text class="lbl" x="361" y="357" text-anchor="middle">S3</text>
+<g class="w w20-46"><circle class="fa" cx="361" cy="352" r="30"/><text class="lbl on" x="361" y="357" text-anchor="middle">S3</text></g>
+<g class="a p46"><circle class="fp" cx="361" cy="352" r="30"/><text class="lbl on" x="361" y="357" text-anchor="middle">S3</text></g>
+<!-- role labels -->
+<g class="d v36"><text class="sm" x="448" y="223">follower</text><text class="sm" x="132" y="223" text-anchor="end">follower</text><text class="sm" x="219" y="408" text-anchor="middle">follower</text></g>
+<g class="a p36"><text class="sm tg b" x="448" y="223">voted S3</text><text class="sm tg b" x="132" y="223" text-anchor="end">voted S3</text><text class="sm tg b" x="219" y="408" text-anchor="middle">voted S3</text></g>
+<g class="d v20"><text class="sm" x="361" y="408" text-anchor="middle">follower</text></g>
+<g class="w w20-46"><text class="sm ta b" x="372" y="408" text-anchor="middle">candidate, term 2</text></g>
+<g class="a p46"><text class="sm tp b" x="372" y="408" text-anchor="middle">leader, term 2</text></g>
+<!-- steps -->
+<text class="txt" x="520" y="110">1. Leader S1 crashes and its</text><text class="txt" x="538" y="128">heartbeats stop</text>
+<g class="a p20"><text class="txt" x="520" y="162">2. S3's timeout (155 ms) fires</text><text class="txt" x="538" y="180">first: candidate for term 2,</text><text class="txt" x="538" y="198">votes for itself</text></g>
+<g class="a p36"><text class="txt" x="520" y="232">3. S2, S4, S5 grant their vote</text><text class="txt" x="538" y="250">(one vote per term; S3's log</text><text class="txt" x="538" y="268">is at least as up to date)</text></g>
+<g class="a p46"><text class="txt tp b" x="520" y="302">4. 4 of 5 votes (majority is 3):</text><text class="txt" x="538" y="320">S3 is leader and sends</text><text class="txt" x="538" y="338">heartbeats that reset timers</text></g>
+<text class="sub" x="520" y="380">Teal rings: election timers</text>
+<text class="sub" x="520" y="398">(S2 260 ms, S4 210 ms, S5 290 ms)</text>
+<text class="sub" x="28" y="440">Timeouts are examples from the Raft paper's randomised 150–300 ms range.</text>
+
+</svg>

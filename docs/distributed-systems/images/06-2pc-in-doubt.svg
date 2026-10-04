@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 398" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+<title id="t">Two-phase commit blocking window</title>
+<desc id="d">Animated timeline with three lanes: coordinator, participant A (orders DB) and participant B (inventory DB). The coordinator sends PREPARE. A and B write redo and undo records, take locks and vote YES. The coordinator then crashes before the decision reaches them. During the shaded in-doubt window A and B can neither commit nor abort on their own, and their locks stay held. When the coordinator recovers it sends COMMIT and the locks are released.</desc>
+<style>
+.card{fill:#f8fafc;stroke:#e2e8f0}.cv{fill:#f8fafc}
+.h{fill:#0f172a;font-size:20px;font-weight:700}
+.lbl{fill:#334155;font-size:15px;font-weight:600}
+.txt{fill:#334155;font-size:14px}.sm{fill:#334155;font-size:13px}
+.sub{fill:#64748b;font-size:13px}.b{font-weight:700}
+.slot{fill:#ffffff;stroke:#cbd5e1}
+.fp{fill:#4f46e5}.ft{fill:#0ea5a4}.fg{fill:#16a34a}.fr{fill:#dc2626}.fa{fill:#d97706}.fmu{fill:#64748b}
+.zp{fill:#4f46e5;fill-opacity:.1}.zg{fill:#16a34a;fill-opacity:.12}.zr{fill:#dc2626;fill-opacity:.1}.za{fill:#d97706;fill-opacity:.14}
+.on{fill:#ffffff}
+.sp{stroke:#4f46e5}.st{stroke:#0ea5a4}.sg{stroke:#16a34a}.sr{stroke:#dc2626}.sa{stroke:#d97706}.smu{stroke:#64748b}.sax{stroke:#cbd5e1}
+.tp{fill:#4f46e5}.tt{fill:#0f766e}.tg{fill:#15803d}.tr{fill:#dc2626}.ta{fill:#b45309}.tm{fill:#64748b}
+.nf{fill:none}
+@media (prefers-color-scheme: dark){
+.card{fill:#1f2430;stroke:#334155}.cv{fill:#1f2430}
+.h{fill:#f1f5f9}.lbl,.txt,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+.slot{fill:#111827;stroke:#475569}
+.fp{fill:#818cf8}.ft{fill:#2dd4bf}.fg{fill:#4ade80}.fr{fill:#f87171}.fa{fill:#fbbf24}.fmu{fill:#94a3b8}
+.zp{fill:#818cf8;fill-opacity:.16}.zg{fill:#4ade80;fill-opacity:.14}.zr{fill:#f87171;fill-opacity:.14}.za{fill:#fbbf24;fill-opacity:.14}
+.on{fill:#0f172a}
+.sp{stroke:#818cf8}.st{stroke:#2dd4bf}.sg{stroke:#4ade80}.sr{stroke:#f87171}.sa{stroke:#fbbf24}.smu{stroke:#94a3b8}.sax{stroke:#475569}
+.tp{fill:#818cf8}.tt{fill:#5eead4}.tg{fill:#4ade80}.tr{fill:#f87171}.ta{fill:#fbbf24}.tm{fill:#94a3b8}
+}
+
+.cur{transform-box:fill-box;transform-origin:100% 50%;animation:cur 10s linear infinite}
+@keyframes cur{0%,2%{transform:scaleX(1)}80%,95%{transform:scaleX(0)}96%,100%{transform:scaleX(1)}}
+.ph{opacity:0;animation:ph 10s linear infinite}
+@keyframes ph{0%,1%{transform:translateX(0);opacity:0}2%{transform:translateX(0);opacity:1}80%{transform:translateX(616px);opacity:1}81%,100%{transform:translateX(616px);opacity:0}}
+
+
+@media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.d{animation:none;opacity:0}.w{animation:none;opacity:0}.cur{animation:none;opacity:0}.ph{animation:none;opacity:0}}
+</style>
+<defs>
+<marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fmu" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fp" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fg" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fr" d="M0,0L10,5L0,10z"/></marker>
+<marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fa" d="M0,0L10,5L0,10z"/></marker>
+<marker id="at" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ft" d="M0,0L10,5L0,10z"/></marker>
+</defs>
+<rect class="card" x="1" y="1" width="798" height="396" rx="14"/>
+
+<text class="h" x="28" y="40">2PC: the in-doubt window after a coordinator crash</text>
+<text class="sub" x="28" y="62">Once A and B vote YES they can't decide alone. They wait, holding locks, until the coordinator returns.</text>
+<text class="lbl" x="28" y="125">Coordinator</text>
+<text class="lbl" x="28" y="206">Participant A</text><text class="sub" x="28" y="224">orders DB</text>
+<text class="lbl" x="28" y="286">Participant B</text><text class="sub" x="28" y="304">inventory DB</text>
+<g>
+<rect class="zr" x="372" y="186" width="278" height="134"/>
+<text class="sm tr b" x="511" y="255" text-anchor="middle">IN DOUBT: can't commit or abort alone</text>
+<line x1="160" y1="120" x2="370" y2="120" class="smu" stroke-width="2"/>
+<line x1="370" y1="120" x2="650" y2="120" class="smu" stroke-width="2" stroke-dasharray="3 5"/>
+<line x1="650" y1="120" x2="760" y2="120" class="smu" stroke-width="2"/>
+<line x1="160" y1="210" x2="760" y2="210" class="sax" stroke-width="2"/>
+<line x1="160" y1="290" x2="760" y2="290" class="sax" stroke-width="2"/>
+<!-- prepare -->
+<text class="sm tp b" x="182" y="108" text-anchor="middle">PREPARE</text>
+<line x1="182" y1="124" x2="208" y2="200" class="sp" stroke-width="2" marker-end="url(#ap)"/>
+<line x1="182" y1="124" x2="212" y2="280" class="sp" stroke-width="2" marker-end="url(#ap)"/>
+<!-- locks -->
+<rect class="fa" x="216" y="204" width="474" height="12" rx="4"/>
+<rect class="fa" x="220" y="284" width="470" height="12" rx="4"/>
+<text class="sm ta b" x="222" y="196">prepared, locks held</text><text class="sm ta b" x="226" y="276">prepared, locks held</text>
+<text class="sm tg b" x="698" y="215">released</text><text class="sm tg b" x="698" y="295">released</text>
+<!-- votes -->
+<line x1="268" y1="204" x2="292" y2="128" class="sg" stroke-width="2" marker-end="url(#ag)"/>
+<line x1="272" y1="284" x2="300" y2="128" class="sg" stroke-width="2" marker-end="url(#ag)"/>
+<text class="sm tg b" x="300" y="108" text-anchor="middle">YES, YES</text>
+<!-- crash -->
+<line x1="360" y1="110" x2="380" y2="130" class="sr" stroke-width="4" stroke-linecap="round"/><line x1="380" y1="110" x2="360" y2="130" class="sr" stroke-width="4" stroke-linecap="round"/>
+<text class="sm tr b" x="388" y="108">crash: decision not sent</text>
+<!-- recovery -->
+<text class="sm tp b" x="660" y="108" text-anchor="middle">recovers: COMMIT</text>
+<line x1="652" y1="124" x2="676" y2="200" class="sp" stroke-width="2" marker-end="url(#ap)"/>
+<line x1="652" y1="124" x2="680" y2="280" class="sp" stroke-width="2" marker-end="url(#ap)"/>
+</g>
+<g class="cur"><rect class="cv" x="158" y="92" width="616" height="232"/></g>
+<g class="ph"><line x1="158" y1="92" x2="158" y2="324" class="sp" stroke-width="2"/></g>
+<line x1="160" y1="340" x2="760" y2="340" class="sax" stroke-width="1.5" marker-end="url(#am)"/><text class="sub" x="760" y="358" text-anchor="end">time</text>
+<text class="sub" x="28" y="382">Other transactions touching the locked rows wait too. The window is shortened for clarity.</text>
+
+</svg>

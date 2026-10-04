@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 362" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+<title id="t">Majority quorum sizes and AZ placement</title>
+<desc id="d">Left: clusters of 3, 4 and 5 nodes, with the nodes needed for a majority filled in. 3 nodes need 2 and tolerate 1 failure, 4 nodes need 3 and still tolerate only 1, 5 nodes need 3 and tolerate 2. Right: placing 3 nodes as 2 plus 1 across two availability zones means losing the zone with 2 nodes leaves 1 of 3, so there is no quorum. Placing one node in each of three zones means losing any zone leaves 2 of 3, so the quorum is kept.</desc>
+<style>
+.card{fill:#f8fafc;stroke:#e2e8f0}.cv{fill:#f8fafc}
+.h{fill:#0f172a;font-size:20px;font-weight:700}
+.lbl{fill:#334155;font-size:15px;font-weight:600}
+.txt{fill:#334155;font-size:14px}.sm{fill:#334155;font-size:13px}
+.sub{fill:#64748b;font-size:13px}.b{font-weight:700}
+.slot{fill:#ffffff;stroke:#cbd5e1}
+.fp{fill:#4f46e5}.ft{fill:#0ea5a4}.fg{fill:#16a34a}.fr{fill:#dc2626}.fa{fill:#d97706}.fmu{fill:#64748b}
+.zp{fill:#4f46e5;fill-opacity:.1}.zg{fill:#16a34a;fill-opacity:.12}.zr{fill:#dc2626;fill-opacity:.1}.za{fill:#d97706;fill-opacity:.14}
+.on{fill:#ffffff}
+.sp{stroke:#4f46e5}.st{stroke:#0ea5a4}.sg{stroke:#16a34a}.sr{stroke:#dc2626}.sa{stroke:#d97706}.smu{stroke:#64748b}.sax{stroke:#cbd5e1}
+.tp{fill:#4f46e5}.tt{fill:#0f766e}.tg{fill:#15803d}.tr{fill:#dc2626}.ta{fill:#b45309}.tm{fill:#64748b}
+.nf{fill:none}
+@media (prefers-color-scheme: dark){
+.card{fill:#1f2430;stroke:#334155}.cv{fill:#1f2430}
+.h{fill:#f1f5f9}.lbl,.txt,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+.slot{fill:#111827;stroke:#475569}
+.fp{fill:#818cf8}.ft{fill:#2dd4bf}.fg{fill:#4ade80}.fr{fill:#f87171}.fa{fill:#fbbf24}.fmu{fill:#94a3b8}
+.zp{fill:#818cf8;fill-opacity:.16}.zg{fill:#4ade80;fill-opacity:.14}.zr{fill:#f87171;fill-opacity:.14}.za{fill:#fbbf24;fill-opacity:.14}
+.on{fill:#0f172a}
+.sp{stroke:#818cf8}.st{stroke:#2dd4bf}.sg{stroke:#4ade80}.sr{stroke:#f87171}.sa{stroke:#fbbf24}.smu{stroke:#94a3b8}.sax{stroke:#475569}
+.tp{fill:#818cf8}.tt{fill:#5eead4}.tg{fill:#4ade80}.tr{fill:#f87171}.ta{fill:#fbbf24}.tm{fill:#94a3b8}
+}
+
+
+
+</style>
+<defs>
+<marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fmu" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fp" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fg" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fr" d="M0,0L10,5L0,10z"/></marker>
+<marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fa" d="M0,0L10,5L0,10z"/></marker>
+<marker id="at" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ft" d="M0,0L10,5L0,10z"/></marker>
+</defs>
+<rect class="card" x="1" y="1" width="798" height="360" rx="14"/>
+
+<text class="h" x="28" y="40">Majority quorums: why 3 or 5 nodes, and why 3 AZs</text>
+<text class="sub" x="28" y="62">A majority must stay up. 2f + 1 nodes tolerate f failures, so an even size adds cost, not tolerance.</text>
+<text class="lbl" x="28" y="100">Cluster size</text>
+<text class="txt b" x="40" y="136">3 nodes</text><circle class="fp" cx="120" cy="131" r="12"/><circle class="fp" cx="154" cy="131" r="12"/><circle class="slot sr" cx="188" cy="131" r="11" stroke-width="2.5" stroke-dasharray="4 3"/><text class="sm" x="300" y="128">majority 2</text><text class="sm tg b" x="300" y="146">tolerates 1</text>
+<text class="txt b" x="40" y="206">4 nodes</text><circle class="fp" cx="120" cy="201" r="12"/><circle class="fp" cx="154" cy="201" r="12"/><circle class="fp" cx="188" cy="201" r="12"/><circle class="slot sr" cx="222" cy="201" r="11" stroke-width="2.5" stroke-dasharray="4 3"/><text class="sm" x="300" y="198">majority 3</text><text class="sm ta b" x="300" y="216">tolerates 1</text>
+<text class="txt b" x="40" y="276">5 nodes</text><circle class="fp" cx="120" cy="271" r="12"/><circle class="fp" cx="154" cy="271" r="12"/><circle class="fp" cx="188" cy="271" r="12"/><circle class="slot sr" cx="222" cy="271" r="11" stroke-width="2.5" stroke-dasharray="4 3"/><circle class="slot sr" cx="256" cy="271" r="11" stroke-width="2.5" stroke-dasharray="4 3"/><text class="sm" x="300" y="268">majority 3</text><text class="sm tg b" x="300" y="286">tolerates 2</text>
+<circle class="fp" cx="48" cy="324" r="8"/><text class="sm" x="62" y="329">needed for a majority</text>
+<circle class="slot sr" cx="220" cy="324" r="8" stroke-width="2" stroke-dasharray="3 2"/><text class="sm" x="234" y="329">can fail</text>
+<line x1="398" y1="86" x2="398" y2="340" class="sax"/>
+<text class="lbl tr" x="420" y="100">Avoid: 3 nodes in 2 AZs (2 + 1)</text>
+<rect x="420" y="112" width="170" height="64" rx="10" class="nf sr" stroke-width="2.5" stroke-dasharray="6 4"/><text class="sm b tr" x="430" y="132">AZ a</text><circle class="fp" cx="488.0" cy="154" r="11"/><circle class="fp" cx="522.0" cy="154" r="11"/><rect x="606" y="112" width="110" height="64" rx="10" class="slot"/><text class="sm b" x="616" y="132">AZ b</text><circle class="fp" cx="661.0" cy="154" r="11"/>
+<text class="sm" x="420" y="200">Losing AZ a leaves 1 of 3 nodes: no quorum.</text>
+<text class="lbl tg" x="420" y="240">Prefer: 3 nodes in 3 AZs</text>
+<rect x="420" y="252" width="104" height="64" rx="10" class="slot"/><text class="sm b" x="430" y="272">AZ a</text><circle class="fp" cx="472.0" cy="294" r="11"/><rect x="536" y="252" width="104" height="64" rx="10" class="slot"/><text class="sm b" x="546" y="272">AZ b</text><circle class="fp" cx="588.0" cy="294" r="11"/><rect x="652" y="252" width="104" height="64" rx="10" class="slot"/><text class="sm b" x="662" y="272">AZ c</text><circle class="fp" cx="704.0" cy="294" r="11"/>
+<text class="sm" x="420" y="340">Losing any one AZ leaves 2 of 3: quorum kept.</text>
+
+</svg>

@@ -49,6 +49,9 @@ stateDiagram-v2
 - The voter hasn't voted for someone else in this term.
 - The candidate's log is **at least as up-to-date**: a higher last log term, or the same last term with a log index ≥ the voter's. This rule ensures the new leader already has every committed entry (**leader completeness**).
 
+![Animation: in a five-node cluster whose leader S1 crashed, S3's election timer runs out first, it becomes candidate for term 2 and asks for votes, S2, S4 and S5 grant them, and S3 becomes leader and sends heartbeats](images/03-raft-election.svg){ loading=lazy }
+*Watch the rings: they are the randomised election timers. The shortest one fires first, so one candidate usually wins before anyone else times out.*
+
 ### Log replication and commit
 
 ```mermaid
@@ -202,6 +205,9 @@ final class RaftNode {
 | ReadIndex reads | Linearisable without clock assumptions | Extra round trip | Correctness-critical reads |
 | Lease reads | Fast | Unsafe with clock jumps | Latency-sensitive reads, good clocks |
 | DB lock (ShedLock) | Simple, uses existing DB | Not general consensus, still needs care | "Run once" schedulers |
+
+![Clusters of 3, 4 and 5 nodes with the nodes needed for a majority filled in, showing that 4 nodes tolerate only 1 failure like 3, and a comparison of 3 nodes placed 2 plus 1 across two AZs, which loses quorum with the bigger AZ, against one node in each of three AZs](images/03-quorum-sizes.svg){ loading=lazy }
+*Notice that the fourth node raises the majority to 3 without adding tolerance, and that the AZ layout decides whether losing one AZ costs you the quorum.*
 
 !!! warning "Gotchas"
     - **Even numbers of nodes** add cost without fault tolerance.

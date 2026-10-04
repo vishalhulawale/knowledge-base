@@ -90,6 +90,9 @@ flowchart LR
 - **Gray failure:** a component is degraded in a way some observers notice and others don't. A node passes health checks but drops 5% of requests, or a disk is slow. Detect it from the **caller's perspective** (client metrics, outlier ejection).
 - **Metastable failure:** a trigger (a brief spike, a cache flush, a deploy) pushes the system into a bad state that **sustains itself** after the trigger is gone. For example: retries double the load → more timeouts → more retries. Or a cold cache → DB overload → slow fills → cache stays cold. Recovery needs **load reduction** (shedding, turning off retries, warming caches), not just waiting.
 
+![Animation: user demand spikes briefly above capacity, total load including retries follows it but stays above capacity after the spike is gone, and only drops back once load is shed; a side panel shows the loop of slow DB, timeouts, retries and more load](images/01-metastable-retry-loop.svg){ loading=lazy }
+*Watch the red line: the spike ends, but retries keep total load above capacity. Waiting changes nothing; the system recovers only when load is shed.*
+
 ### Time and ordering
 
 - There's no global clock. Physical clocks drift and jump (NTP corrections, leap seconds, VM pauses). See [clocks, ordering & locks](08-clocks-ordering-distributed-locks.md).

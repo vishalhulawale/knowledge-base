@@ -67,6 +67,9 @@ sequenceDiagram
 | Expiry | TTL (e.g. 24 h–7 d) longer than any client retry window |
 | Standard | IETF draft `Idempotency-Key` HTTP header field (Stripe-style semantics) |
 
+![The stored idempotency_key row with tenant_id and idem_key as primary key, fingerprint, status, response and created_at, above four outcomes for the same key: a new key runs and returns 201, the same body again replays the stored 201, a different body gets 422, and a duplicate while in progress gets 409](images/04-idempotency-key-outcomes.svg){ loading=lazy }
+*Notice that every outcome is decided from one row inserted up front; the primary key is what makes concurrent duplicates collide.*
+
 ### Idempotent message consumers
 
 ```mermaid
@@ -97,6 +100,9 @@ flowchart LR
 - **Non-deterministic handlers** (`now()`, random IDs) producing different results on replay. Store and return the first result.
 - **Partial side effects across systems** (DB updated, email sent, then a crash): use an outbox or saga, plus downstream idempotency.
 - **Expired keys** while clients are still retrying (mobile offline queues).
+
+![Animation: two concurrent retries; with check-then-insert both find nothing and both create a refill and submit it, while with the key inserted first the second INSERT conflicts, gets 409, and its later retry replays the stored 201](images/04-check-then-insert-race.svg){ loading=lazy }
+*Watch request B on each side: without a unique constraint both checks pass, so you get two refills; with it, the database itself turns the duplicate away.*
 
 ## In practice: code & configuration
 

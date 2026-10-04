@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 396" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+<title id="t">Saga compensation running backwards</title>
+<desc id="d">Animation of an orchestrated order saga. Reserve stock succeeds, then the pivot step Charge card succeeds, then Create shipment fails because the address is invalid. The saga then runs compensations in reverse order: Refund undoes the charge, then Release stock undoes the reservation, and the order ends as cancelled with the customer notified.</desc>
+<style>
+.card{fill:#f8fafc;stroke:#e2e8f0}.cv{fill:#f8fafc}
+.h{fill:#0f172a;font-size:20px;font-weight:700}
+.lbl{fill:#334155;font-size:15px;font-weight:600}
+.txt{fill:#334155;font-size:14px}.sm{fill:#334155;font-size:13px}
+.sub{fill:#64748b;font-size:13px}.b{font-weight:700}
+.slot{fill:#ffffff;stroke:#cbd5e1}
+.fp{fill:#4f46e5}.ft{fill:#0ea5a4}.fg{fill:#16a34a}.fr{fill:#dc2626}.fa{fill:#d97706}.fmu{fill:#64748b}
+.zp{fill:#4f46e5;fill-opacity:.1}.zg{fill:#16a34a;fill-opacity:.12}.zr{fill:#dc2626;fill-opacity:.1}.za{fill:#d97706;fill-opacity:.14}
+.on{fill:#ffffff}
+.sp{stroke:#4f46e5}.st{stroke:#0ea5a4}.sg{stroke:#16a34a}.sr{stroke:#dc2626}.sa{stroke:#d97706}.smu{stroke:#64748b}.sax{stroke:#cbd5e1}
+.tp{fill:#4f46e5}.tt{fill:#0f766e}.tg{fill:#15803d}.tr{fill:#dc2626}.ta{fill:#b45309}.tm{fill:#64748b}
+.nf{fill:none}
+@media (prefers-color-scheme: dark){
+.card{fill:#1f2430;stroke:#334155}.cv{fill:#1f2430}
+.h{fill:#f1f5f9}.lbl,.txt,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+.slot{fill:#111827;stroke:#475569}
+.fp{fill:#818cf8}.ft{fill:#2dd4bf}.fg{fill:#4ade80}.fr{fill:#f87171}.fa{fill:#fbbf24}.fmu{fill:#94a3b8}
+.zp{fill:#818cf8;fill-opacity:.16}.zg{fill:#4ade80;fill-opacity:.14}.zr{fill:#f87171;fill-opacity:.14}.za{fill:#fbbf24;fill-opacity:.14}
+.on{fill:#0f172a}
+.sp{stroke:#818cf8}.st{stroke:#2dd4bf}.sg{stroke:#4ade80}.sr{stroke:#f87171}.sa{stroke:#fbbf24}.smu{stroke:#94a3b8}.sax{stroke:#475569}
+.tp{fill:#818cf8}.tt{fill:#5eead4}.tg{fill:#4ade80}.tr{fill:#f87171}.ta{fill:#fbbf24}.tm{fill:#94a3b8}
+}
+
+.a,.d,.w{animation-duration:10s;animation-iteration-count:infinite;animation-timing-function:linear}
+.a{opacity:0}.w{opacity:0}
+@keyframes kp20{0%,18%{opacity:0}20%,92%{opacity:1}96%,100%{opacity:0}}.p20{animation-name:kp20}
+@keyframes kp34{0%,32%{opacity:0}34%,92%{opacity:1}96%,100%{opacity:0}}.p34{animation-name:kp34}
+@keyframes kp36{0%,34%{opacity:0}36%,92%{opacity:1}96%,100%{opacity:0}}.p36{animation-name:kp36}
+@keyframes kp46{0%,44%{opacity:0}46%,92%{opacity:1}96%,100%{opacity:0}}.p46{animation-name:kp46}
+@keyframes kp50{0%,48%{opacity:0}50%,92%{opacity:1}96%,100%{opacity:0}}.p50{animation-name:kp50}
+@keyframes kp60{0%,58%{opacity:0}60%,92%{opacity:1}96%,100%{opacity:0}}.p60{animation-name:kp60}
+@keyframes kp64{0%,62%{opacity:0}64%,92%{opacity:1}96%,100%{opacity:0}}.p64{animation-name:kp64}
+@keyframes kp76{0%,74%{opacity:0}76%,92%{opacity:1}96%,100%{opacity:0}}.p76{animation-name:kp76}
+@keyframes kw22-50{0%,20%{opacity:0}22%,48%{opacity:1}50%,100%{opacity:0}}.w22-50{animation-name:kw22-50}
+@keyframes kw8-64{0%,6%{opacity:0}8%,62%{opacity:1}64%,100%{opacity:0}}.w8-64{animation-name:kw8-64}
+@media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.d{animation:none;opacity:0}.w{animation:none;opacity:0}}
+</style>
+<defs>
+<marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fmu" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fp" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fg" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fr" d="M0,0L10,5L0,10z"/></marker>
+<marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fa" d="M0,0L10,5L0,10z"/></marker>
+<marker id="at" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ft" d="M0,0L10,5L0,10z"/></marker>
+</defs>
+<rect class="card" x="1" y="1" width="798" height="394" rx="14"/>
+
+<text class="h" x="28" y="40">Saga: a failed step runs compensations backwards</text>
+<text class="sub" x="28" y="62">Order 42. Each step commits locally; when shipping fails, earlier steps are undone in reverse.</text>
+<text class="sm tm b" x="140" y="108" text-anchor="middle">compensatable</text><text class="sm tm b" x="400" y="108" text-anchor="middle">pivot</text><text class="sm tm b" x="660" y="108" text-anchor="middle">after the pivot</text>
+<!-- forward base -->
+<rect class="slot" x="40" y="118" width="200" height="56" rx="10"/><text class="lbl" x="140" y="151" text-anchor="middle">Reserve stock</text>
+<rect class="slot" x="300" y="118" width="200" height="56" rx="10" stroke-width="2.5"/><text class="lbl" x="400" y="151" text-anchor="middle">Charge card</text>
+<rect class="slot" x="560" y="118" width="200" height="56" rx="10"/><text class="lbl" x="660" y="151" text-anchor="middle">Create shipment</text>
+<!-- forward progress -->
+<g class="w8-64"><rect class="fg" x="40" y="118" width="200" height="56" rx="10"/><text class="lbl on" x="140" y="142" text-anchor="middle">Reserve stock</text><text class="sm on" x="140" y="162" text-anchor="middle">Reserved</text></g>
+<g class="a p64"><rect class="fg" x="40" y="118" width="200" height="56" rx="10"/><text class="lbl on" x="140" y="142" text-anchor="middle">Reserve stock</text><text class="sm on" x="140" y="162" text-anchor="middle">Reserved, then released</text></g>
+<g class="w22-50"><rect class="fg" x="300" y="118" width="200" height="56" rx="10"/><text class="lbl on" x="400" y="142" text-anchor="middle">Charge card</text><text class="sm on" x="400" y="162" text-anchor="middle">Charged</text></g>
+<g class="a p50"><rect class="fg" x="300" y="118" width="200" height="56" rx="10"/><text class="lbl on" x="400" y="142" text-anchor="middle">Charge card</text><text class="sm on" x="400" y="162" text-anchor="middle">Charged, then refunded</text></g>
+<g class="a p36"><rect class="fr" x="560" y="118" width="200" height="56" rx="10"/><text class="lbl on" x="660" y="142" text-anchor="middle">Create shipment</text><text class="sm on" x="660" y="162" text-anchor="middle">FAILED: address invalid</text></g>
+<g class="a p20"><line x1="242" y1="146" x2="296" y2="146" class="smu" stroke-width="2" marker-end="url(#am)"/></g>
+<g class="a p34"><line x1="502" y1="146" x2="556" y2="146" class="smu" stroke-width="2" marker-end="url(#am)"/></g>
+<!-- compensations -->
+<text class="sm tm b" x="40" y="226">Compensations, in reverse order</text>
+<rect class="slot" x="300" y="236" width="200" height="56" rx="10" stroke-dasharray="5 4"/><text class="lbl tm" x="400" y="269" text-anchor="middle">Refund</text>
+<rect class="slot" x="40" y="236" width="200" height="56" rx="10" stroke-dasharray="5 4"/><text class="lbl tm" x="140" y="269" text-anchor="middle">Release stock</text>
+<g class="a p50"><rect class="fa" x="300" y="236" width="200" height="56" rx="10"/><text class="lbl on" x="400" y="260" text-anchor="middle">Refund</text><text class="sm on" x="400" y="280" text-anchor="middle">undoes the charge</text></g>
+<g class="a p64"><rect class="fa" x="40" y="236" width="200" height="56" rx="10"/><text class="lbl on" x="140" y="260" text-anchor="middle">Release stock</text><text class="sm on" x="140" y="280" text-anchor="middle">undoes the reservation</text></g>
+<g class="a p46"><path class="nf sa" stroke-width="2.5" d="M660,176 V264 H504" marker-end="url(#aa)"/></g>
+<g class="a p60"><line x1="298" y1="264" x2="244" y2="264" class="sa" stroke-width="2.5" marker-end="url(#aa)"/></g>
+<g class="a p76"><rect class="slot" x="40" y="314" width="720" height="40" rx="10"/><text class="lbl" x="400" y="339" text-anchor="middle">Order 42 → CANCELLED, customer notified</text></g>
+<text class="sub" x="28" y="380">Compensations are semantic undo, not rollbacks, so they must be idempotent and retriable.</text>
+
+</svg>

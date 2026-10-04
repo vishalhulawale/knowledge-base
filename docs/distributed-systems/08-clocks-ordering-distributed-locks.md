@@ -42,6 +42,9 @@ tags: [distributed-systems, P0]
 - `System.currentTimeMillis()` / `Instant.now()`: wall time, can jump. Use it for timestamps shown to humans or stored.
 - `System.nanoTime()`: monotonic, only meaningful as a **difference** within one JVM. Use it for timeouts, latency and rate limiters.
 
+![Animation: node A, with a correct clock, writes x=1 stamped 10.0; one second later node B, whose clock is 2 s slow, writes x=2 stamped 9.0; last-writer-wins keeps x=1 and silently drops the later write](images/08-lww-clock-skew.svg){ loading=lazy }
+*Notice the two tick rows: the same real instant reads differently on each node, so the later write gets the smaller timestamp and loses.*
+
 ### Logical clocks
 
 ```mermaid
@@ -90,6 +93,9 @@ sequenceDiagram
     S-->>A: REJECT (33 < 34)
 ```
 *Notice that the lock service did nothing wrong, and A **genuinely believed** it held the lock. Only the storage-side check of a **monotonic fencing token** prevents corruption. Any lock without fencing is a best-effort optimisation.*
+
+![Animation: a 0 to 20 second timeline where client A takes a 10 s lease with token 33 and pauses for 15 s, the lease expires, client B takes token 34 and writes, and A's late write with token 33 is rejected by storage](images/08-lease-pause-fencing.svg){ loading=lazy }
+*Watch the GC pause bar run past the lease expiry: A still believes it holds the lock when it wakes, and only the token check at storage stops its write.*
 
 **Lock options:**
 

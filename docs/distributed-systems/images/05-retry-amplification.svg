@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 402" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+<title id="t">Retry amplification across layers</title>
+<desc id="d">A fan-out diagram. One client request goes to the gateway up to 3 times. Each gateway attempt calls the service up to 3 times, giving 9 service calls. Each service attempt calls the database up to 3 times, giving 27 database calls for one user request during an outage.</desc>
+<style>
+.card{fill:#f8fafc;stroke:#e2e8f0}.cv{fill:#f8fafc}
+.h{fill:#0f172a;font-size:20px;font-weight:700}
+.lbl{fill:#334155;font-size:15px;font-weight:600}
+.txt{fill:#334155;font-size:14px}.sm{fill:#334155;font-size:13px}
+.sub{fill:#64748b;font-size:13px}.b{font-weight:700}
+.slot{fill:#ffffff;stroke:#cbd5e1}
+.fp{fill:#4f46e5}.ft{fill:#0ea5a4}.fg{fill:#16a34a}.fr{fill:#dc2626}.fa{fill:#d97706}.fmu{fill:#64748b}
+.zp{fill:#4f46e5;fill-opacity:.1}.zg{fill:#16a34a;fill-opacity:.12}.zr{fill:#dc2626;fill-opacity:.1}.za{fill:#d97706;fill-opacity:.14}
+.on{fill:#ffffff}
+.sp{stroke:#4f46e5}.st{stroke:#0ea5a4}.sg{stroke:#16a34a}.sr{stroke:#dc2626}.sa{stroke:#d97706}.smu{stroke:#64748b}.sax{stroke:#cbd5e1}
+.tp{fill:#4f46e5}.tt{fill:#0f766e}.tg{fill:#15803d}.tr{fill:#dc2626}.ta{fill:#b45309}.tm{fill:#64748b}
+.nf{fill:none}
+@media (prefers-color-scheme: dark){
+.card{fill:#1f2430;stroke:#334155}.cv{fill:#1f2430}
+.h{fill:#f1f5f9}.lbl,.txt,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+.slot{fill:#111827;stroke:#475569}
+.fp{fill:#818cf8}.ft{fill:#2dd4bf}.fg{fill:#4ade80}.fr{fill:#f87171}.fa{fill:#fbbf24}.fmu{fill:#94a3b8}
+.zp{fill:#818cf8;fill-opacity:.16}.zg{fill:#4ade80;fill-opacity:.14}.zr{fill:#f87171;fill-opacity:.14}.za{fill:#fbbf24;fill-opacity:.14}
+.on{fill:#0f172a}
+.sp{stroke:#818cf8}.st{stroke:#2dd4bf}.sg{stroke:#4ade80}.sr{stroke:#f87171}.sa{stroke:#fbbf24}.smu{stroke:#94a3b8}.sax{stroke:#475569}
+.tp{fill:#818cf8}.tt{fill:#5eead4}.tg{fill:#4ade80}.tr{fill:#f87171}.ta{fill:#fbbf24}.tm{fill:#94a3b8}
+}
+
+
+
+</style>
+<defs>
+<marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fmu" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fp" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fg" d="M0,0L10,5L0,10z"/></marker>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fr" d="M0,0L10,5L0,10z"/></marker>
+<marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="fa" d="M0,0L10,5L0,10z"/></marker>
+<marker id="at" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ft" d="M0,0L10,5L0,10z"/></marker>
+</defs>
+<rect class="card" x="1" y="1" width="798" height="400" rx="14"/>
+
+<text class="h" x="28" y="40">Nested retries multiply: 3 × 3 × 3 = 27</text>
+<text class="sub" x="28" y="62">Each layer makes up to 3 attempts. During an outage every attempt fails, so all of them happen.</text>
+<text class="sm tm b" x="185" y="104" text-anchor="middle">×3</text><text class="sm tm b" x="375" y="104" text-anchor="middle">×3</text><text class="sm tm b" x="565" y="104" text-anchor="middle">×3</text>
+<line x1="98" y1="210" x2="272" y2="150" class="smu" stroke-width="1.2"/><line x1="98" y1="210" x2="272" y2="210" class="smu" stroke-width="1.2"/><line x1="98" y1="210" x2="272" y2="270" class="smu" stroke-width="1.2"/><line x1="288" y1="150" x2="462" y2="128" class="smu" stroke-width="1.2"/><line x1="288" y1="150" x2="462" y2="150" class="smu" stroke-width="1.2"/><line x1="288" y1="150" x2="462" y2="172" class="smu" stroke-width="1.2"/><line x1="288" y1="210" x2="462" y2="188" class="smu" stroke-width="1.2"/><line x1="288" y1="210" x2="462" y2="210" class="smu" stroke-width="1.2"/><line x1="288" y1="210" x2="462" y2="232" class="smu" stroke-width="1.2"/><line x1="288" y1="270" x2="462" y2="248" class="smu" stroke-width="1.2"/><line x1="288" y1="270" x2="462" y2="270" class="smu" stroke-width="1.2"/><line x1="288" y1="270" x2="462" y2="292" class="smu" stroke-width="1.2"/><line x1="478" y1="128" x2="672" y2="128" class="smu" stroke-width="1.2"/><line x1="478" y1="150" x2="672" y2="150" class="smu" stroke-width="1.2"/><line x1="478" y1="172" x2="672" y2="172" class="smu" stroke-width="1.2"/><line x1="478" y1="188" x2="672" y2="188" class="smu" stroke-width="1.2"/><line x1="478" y1="210" x2="672" y2="210" class="smu" stroke-width="1.2"/><line x1="478" y1="232" x2="672" y2="232" class="smu" stroke-width="1.2"/><line x1="478" y1="248" x2="672" y2="248" class="smu" stroke-width="1.2"/><line x1="478" y1="270" x2="672" y2="270" class="smu" stroke-width="1.2"/><line x1="478" y1="292" x2="672" y2="292" class="smu" stroke-width="1.2"/><circle class="fp" cx="90" cy="210" r="10"/><circle class="fp" cx="280" cy="150" r="9"/><circle class="fp" cx="280" cy="210" r="9"/><circle class="fp" cx="280" cy="270" r="9"/><circle class="fa" cx="470" cy="128" r="7"/><circle class="fa" cx="470" cy="150" r="7"/><circle class="fa" cx="470" cy="172" r="7"/><circle class="fa" cx="470" cy="188" r="7"/><circle class="fa" cx="470" cy="210" r="7"/><circle class="fa" cx="470" cy="232" r="7"/><circle class="fa" cx="470" cy="248" r="7"/><circle class="fa" cx="470" cy="270" r="7"/><circle class="fa" cx="470" cy="292" r="7"/><circle class="fr" cx="640" cy="128" r="7"/><circle class="fr" cx="662" cy="128" r="7"/><circle class="fr" cx="684" cy="128" r="7"/><circle class="fr" cx="640" cy="150" r="7"/><circle class="fr" cx="662" cy="150" r="7"/><circle class="fr" cx="684" cy="150" r="7"/><circle class="fr" cx="640" cy="172" r="7"/><circle class="fr" cx="662" cy="172" r="7"/><circle class="fr" cx="684" cy="172" r="7"/><circle class="fr" cx="640" cy="188" r="7"/><circle class="fr" cx="662" cy="188" r="7"/><circle class="fr" cx="684" cy="188" r="7"/><circle class="fr" cx="640" cy="210" r="7"/><circle class="fr" cx="662" cy="210" r="7"/><circle class="fr" cx="684" cy="210" r="7"/><circle class="fr" cx="640" cy="232" r="7"/><circle class="fr" cx="662" cy="232" r="7"/><circle class="fr" cx="684" cy="232" r="7"/><circle class="fr" cx="640" cy="248" r="7"/><circle class="fr" cx="662" cy="248" r="7"/><circle class="fr" cx="684" cy="248" r="7"/><circle class="fr" cx="640" cy="270" r="7"/><circle class="fr" cx="662" cy="270" r="7"/><circle class="fr" cx="684" cy="270" r="7"/><circle class="fr" cx="640" cy="292" r="7"/><circle class="fr" cx="662" cy="292" r="7"/><circle class="fr" cx="684" cy="292" r="7"/>
+<text class="lbl" x="90" y="330" text-anchor="middle">Client</text><text class="sm" x="90" y="348" text-anchor="middle">1 request</text>
+<text class="lbl" x="280" y="330" text-anchor="middle">Gateway</text><text class="sm" x="280" y="348" text-anchor="middle">receives 3</text>
+<text class="lbl" x="470" y="330" text-anchor="middle">Service</text><text class="sm" x="470" y="348" text-anchor="middle">receives 9</text>
+<text class="lbl" x="662" y="330" text-anchor="middle">Database</text><text class="sm tr b" x="662" y="348" text-anchor="middle">receives 27</text>
+<text class="sub" x="28" y="384">Retry at one layer, close to the failure, within a budget: then 1 request means at most 3 DB calls.</text>
+
+</svg>
