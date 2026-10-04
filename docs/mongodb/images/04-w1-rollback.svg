@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">A w:1 write lost in failover</title>
+  <desc id="d">A three-member replica set. Document a was written with w majority, so all three members have it. Document b is written with w 1: the primary acknowledges it at once, before any secondary has copied it. The primary then crashes. After about 10 seconds secondary A, which has only a, wins the election in term 6. When the old primary rejoins as a secondary, it rolls back b, because the majority never had it, and writes b to a rollback file for manual recovery. The client was told b succeeded, yet it is no longer in the database.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:16s infinite linear}
+    @keyframes p0{0%,19%{opacity:1}20%{opacity:0}100%{opacity:0}}
+    .p0{animation-name:p0}
+    @keyframes p1{0%{opacity:0}19%{opacity:0}20%,39%{opacity:1}40%{opacity:0}100%{opacity:0}}
+    .p1{animation-name:p1}
+    @keyframes p2{0%{opacity:0}39%{opacity:0}40%,64%{opacity:1}65%{opacity:0}100%{opacity:0}}
+    .p2{animation-name:p2}
+    @keyframes p3{0%{opacity:0}64%{opacity:0}65%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .p3{animation-name:p3}
+    @keyframes p123{0%{opacity:0}19%{opacity:0}20%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .p123{animation-name:p123}
+    @keyframes p23{0%{opacity:0}39%{opacity:0}40%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .p23{animation-name:p23}
+    @keyframes p01{0%,39%{opacity:1}40%{opacity:0}100%{opacity:0}}
+    .p01{animation-name:p01}
+    @keyframes p012{0%,64%{opacity:1}65%{opacity:0}100%{opacity:0}}
+    .p012{animation-name:p012}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      .p0,.p1,.p2,.p01,.p012{opacity:0!important}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="438" rx="14"/>
+  <text class="h" x="28" y="40">Acknowledged, then gone</text>
+  <text class="sub" x="28" y="62">w:1 means the primary alone has it. A majority-acknowledged write survives any election.</text>
+  <rect class="box" x="28" y="90" width="240" height="150" rx="12" stroke-width="1.5"/>
+  <text class="lbl a p01" x="42" y="114">Primary (term 5)</text>
+  <rect class="okf" x="42" y="130" width="100" height="32" rx="6"/>
+  <text class="on13" x="92" y="150.5" text-anchor="middle">a (majority)</text>
+  <rect class="box" x="280" y="90" width="240" height="150" rx="12" stroke-width="1.5"/>
+  <text class="lbl" x="294" y="114">Secondary A</text>
+  <rect class="okf" x="294" y="130" width="100" height="32" rx="6"/>
+  <text class="on13" x="344" y="150.5" text-anchor="middle">a (majority)</text>
+  <rect class="box" x="532" y="90" width="240" height="150" rx="12" stroke-width="1.5"/>
+  <text class="lbl" x="546" y="114">Secondary B</text>
+  <rect class="okf" x="546" y="130" width="100" height="32" rx="6"/>
+  <text class="on13" x="596" y="150.5" text-anchor="middle">a (majority)</text>
+  <g class="a p012">
+  <rect class="wrnf" x="152" y="130" width="90" height="32" rx="6"/>
+  <text class="on13" x="197" y="150.5" text-anchor="middle">b (w:1)</text>
+  </g>
+  <text class="sm okt a p012" x="42" y="200">ack sent to client ✓</text>
+  <g class="a p1">
+  <rect class="bb" x="28" y="90" width="240" height="150" rx="12" stroke-width="2"/>
+  <text class="h2 badt" x="148" y="170" text-anchor="middle">CRASHED</text>
+  </g>
+  <g class="a p2">
+  <rect class="bm" x="28" y="90" width="240" height="150" rx="12" stroke-width="1.5"/>
+  <text class="h2" x="148" y="170" text-anchor="middle">down</text>
+  </g>
+  <g class="a p23">
+  <rect class="bo" x="280" y="90" width="240" height="36" rx="12"/>
+  <text class="lbl okt" x="294" y="114">Primary (term 6)</text>
+  </g>
+  <g class="a p3">
+  <rect class="box" x="28" y="90" width="240" height="150" rx="12" stroke-width="1.5"/>
+  <text class="lbl" x="42" y="114">Secondary (rejoined)</text>
+  <rect class="okf" x="42" y="130" width="100" height="32" rx="6"/>
+  <text class="on13" x="92" y="150.5" text-anchor="middle">a (majority)</text>
+  <rect class="bb" x="150" y="130" width="108" height="32" rx="6" stroke-width="1.5"/>
+  <text class="sm badt" x="204" y="151" text-anchor="middle">b rolled back</text>
+  <text class="sm badt" x="42" y="200">b → rollback/ file</text>
+  </g>
+  <text class="lbl a p0" x="28" y="290">1  insert(b, {w: 1}) → acknowledged before any secondary has it</text>
+  <text class="lbl badt a p1" x="28" y="290">2  The primary crashes; secondaries never received b</text>
+  <text class="lbl a p2" x="28" y="290">3  After ~10 s Secondary A is elected; its data is the truth now</text>
+  <text class="lbl badt a p3" x="28" y="290">4  The old primary rejoins and rolls back b: an acknowledged write is gone</text>
+  <text class="tx" x="28" y="330">With w: &quot;majority&quot; (the default since 5.0), b would be on two members before the ack, and any</text>
+  <text class="tx" x="28" y="350">candidate that wins an election must be at least as up to date as a majority of voters.</text>
+  <text class="sub" x="28" y="386">Measured on the page: election 10.9 s after kill -9; the w:1 document was missing after the old primary rejoined.</text>
+</svg>

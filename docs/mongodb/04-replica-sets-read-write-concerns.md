@@ -75,7 +75,13 @@ Measured: after `kill -9` on the primary, a new primary was elected **10.9 s** l
 
 `j: true` waits for the journal (on-disk write-ahead log). With `writeConcernMajorityJournalDefault: true` (the default), majority writes already wait for journaling on the members.
 
+![Median and p99 insert latency per write concern on a three-member replica set: w 0 about 0.1 to 0.9 ms, w 1 0.85 to 2.8 ms, w majority 2.2 to 5.5 ms, w 3 2.6 to 5.7 ms, and majority with j true 2.2 to 3.7 ms](images/04-write-concern-latency.svg){ loading=lazy }
+*Notice the price of not losing writes: roughly 1.4 ms at the median. `w: 3` costs about the same but stops working the moment any member is down.*
+
 **Lost w:1 write, measured:** the primary acknowledged `{_id: "acked-w1-only"}` with `w:1` while both secondaries were down, then crashed. The secondaries restarted and elected a new primary, which contained only the earlier majority-committed document. When the old primary rejoined as a secondary, the `w:1` document was gone. In a network partition the same thing happens through **rollback**: the old primary undoes writes that the majority never received and saves them to `<dbpath>/rollback/` files for manual recovery.
+
+![Animation: the primary acknowledges document b with w 1 before any secondary has it, then crashes; Secondary A, which only has the majority-written document a, is elected in term 6; when the old primary rejoins it rolls b back into a rollback file](images/04-w1-rollback.svg){ loading=lazy }
+*Watch step 4: the client saw a success for b, yet the cluster's history no longer contains it. Only a majority acknowledgment survives an election.*
 
 **`wtimeout` semantics, measured:** with both secondaries frozen, a `w:"majority", wtimeout: 2000` insert failed with `WTimeoutError` (code 64). After the secondaries resumed and a failover happened, **that document existed**. A write-concern timeout means "not confirmed in time", not "not applied". Retry idempotently (upsert or unique key) or check before retrying.
 
