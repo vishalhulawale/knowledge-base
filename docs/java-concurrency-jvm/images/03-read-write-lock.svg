@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">ReentrantReadWriteLock: many readers or one writer</title>
+  <desc id="d">Animation in four steps. Step 1: three readers hold the read lock at the same time while a writer waits at the head of the queue. Step 2: a fourth reader arrives and queues behind the waiting writer instead of joining the other readers. Step 3: the three readers leave, and the writer takes the lock alone. Step 4: the writer releases the lock and the waiting reader enters.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .lock{fill:#ffffff;stroke:#4f46e5;stroke-width:2.5}
+    .pr{fill:#0ea5a4}.pw{fill:#4f46e5}
+    .wt{fill:#fff;font-size:15px;font-weight:700}
+    .tp{fill:#4f46e5;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.lock{fill:#111827;stroke:#818cf8}
+      .pr{fill:#2dd4bf}.pw{fill:#818cf8}.wt{fill:#0f172a}.tp{fill:#a5b4fc}
+    }
+    /* 12 s loop, four steps */
+    .x{animation:12s infinite ease-in-out}
+    .rr{animation-name:rr}.W{animation-name:mw}.R4{opacity:0;animation-name:r4}
+    @keyframes rr{0%,44%{opacity:1;transform:translate(0,0)}48%,96%{opacity:0;transform:translate(40px,0)}100%{opacity:1;transform:translate(0,0)}}
+    @keyframes mw{0%,44%{opacity:1;transform:translate(0,0)}48%,66%{opacity:1;transform:translate(260px,0)}70%,96%{opacity:0;transform:translate(300px,0)}100%{opacity:1;transform:translate(0,0)}}
+    @keyframes r4{0%,21%{opacity:0;transform:translate(0,0)}24%,44%{opacity:1;transform:translate(0,0)}48%,66%{opacity:1;transform:translate(90px,0)}70%,94%{opacity:1;transform:translate(260px,0)}98%,100%{opacity:0;transform:translate(260px,0)}}
+    .f{opacity:0;animation:12s infinite linear}
+    .st1{animation-name:o1}.st2{animation-name:o2}.st3{animation-name:o3}
+    @keyframes o1{0%,45%{opacity:1}47%,98%{opacity:0}100%{opacity:1}}
+    @keyframes o2{0%,46%{opacity:0}48%,67%{opacity:1}69%,100%{opacity:0}}
+    @keyframes o3{0%,68%{opacity:0}70%,96%{opacity:1}98%,100%{opacity:0}}
+    .c1{animation-name:k1}.c2{animation-name:k2}.c3{animation-name:k3}.c4{animation-name:k4}
+    @keyframes k1{0%,20%{opacity:1}22%,98%{opacity:0}100%{opacity:1}}
+    @keyframes k2{0%,21%{opacity:0}23%,45%{opacity:1}47%,100%{opacity:0}}
+    @keyframes k3{0%,46%{opacity:0}48%,67%{opacity:1}69%,100%{opacity:0}}
+    @keyframes k4{0%,68%{opacity:0}70%,96%{opacity:1}98%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .x,.f{animation:none}.rr,.W,.R4{opacity:1;transform:none}.f{opacity:0}.st1,.c2{opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">ReentrantReadWriteLock: many readers or one writer</text>
+  <text class="sub" x="28" y="62">R = thread wanting the read lock, W = thread wanting the write lock.</text>
+
+  <rect class="box" x="40" y="86" width="300" height="150" rx="12"/>
+  <text class="lbl" x="56" y="110">Wait queue</text>
+  <text class="sub" x="324" y="110" text-anchor="end">head →</text>
+
+  <rect class="lock" x="380" y="86" width="380" height="150" rx="12"/>
+  <text class="lbl" x="396" y="110">Holding the lock</text>
+  <text class="tp f st1" x="744" y="110" text-anchor="end">read holds 3, write 0</text>
+  <text class="tp f st2" x="744" y="110" text-anchor="end">read holds 0, write 1</text>
+  <text class="tp f st3" x="744" y="110" text-anchor="end">read holds 1, write 0</text>
+
+  <!-- readers holding the read lock -->
+  <g class="x rr">
+    <rect class="pr" x="410" y="150" width="70" height="38" rx="19"/><text class="wt" x="445" y="175" text-anchor="middle">R1</text>
+    <rect class="pr" x="500" y="150" width="70" height="38" rx="19"/><text class="wt" x="535" y="175" text-anchor="middle">R2</text>
+    <rect class="pr" x="590" y="150" width="70" height="38" rx="19"/><text class="wt" x="625" y="175" text-anchor="middle">R3</text>
+  </g>
+  <!-- writer waiting at the head of the queue -->
+  <g class="x W"><rect class="pw" x="240" y="150" width="70" height="38" rx="19"/><text class="wt" x="275" y="175" text-anchor="middle">W</text></g>
+  <!-- late reader -->
+  <g class="x R4"><rect class="pr" x="150" y="150" width="70" height="38" rx="19"/><text class="wt" x="185" y="175" text-anchor="middle">R4</text></g>
+
+  <g class="t">
+    <text class="f c1" x="28" y="276">1. Three readers share the read lock. The writer must wait until every reader has left.</text>
+    <g class="f c2"><text x="28" y="276">2. A new reader arrives. Because a writer is waiting at the head of the queue, it waits</text><text x="28" y="296">too (the JDK's heuristic against writer starvation, not a guarantee).</text></g>
+    <text class="f c3" x="28" y="276">3. The last reader leaves. The writer gets the lock alone: no readers, no other writer.</text>
+    <text class="f c4" x="28" y="276">4. The writer releases the lock and the waiting reader enters.</text>
+  </g>
+  <text class="sub" x="28" y="334">Downgrade (hold write, take read, release write) is allowed. Upgrade (hold read, ask for write)</text>
+  <text class="sub" x="28" y="354">waits for all readers to leave, including itself, so it blocks forever.</text>
+</svg>

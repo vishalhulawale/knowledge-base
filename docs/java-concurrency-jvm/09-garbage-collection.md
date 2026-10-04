@@ -44,6 +44,9 @@ Allocation itself is very fast. Each thread owns a **TLAB** (thread-local alloca
 
 To collect young without scanning old, the JVM must know which old objects point into young. A **write barrier** (a few instructions the JIT adds to every reference store) records these in a **card table** / **remembered set**.
 
+![Animation: objects are allocated in Eden, most already garbage; a young collection copies only live objects A and B to a survivor space and empties Eden; Eden refills; a second young collection copies C to survivor and promotes A to the old generation](images/09-generations-promotion.svg){ loading=lazy }
+*Notice that a young collection never visits the grey objects. Its cost depends on the few survivors, not on how much garbage there is.*
+
 ### Stop-the-world, safepoints and concurrency
 
 - **Stop-the-world (STW)**: all application ("mutator") threads are paused.
@@ -92,6 +95,9 @@ Key ideas:
 - **Remembered sets.** Each region tracks which other regions point into it, so a region can be evacuated without scanning the whole heap. This costs extra native memory, often several percent of the heap.
 - **Humongous objects.** An object of **half a region or more** is allocated directly in contiguous old regions. These are expensive: they waste the tail of the last region, can trigger marking early, and need contiguous free space.
 - **IHOP.** Marking starts when old-generation occupancy crosses the *Initiating Heap Occupancy Percent*, expressed as a percentage of the **whole heap**. It starts at 45% and is then adjusted automatically (adaptive IHOP).
+
+![Animation of a G1 heap as a grid of regions labelled Eden, Survivor, Old and Humongous; a young pause empties all Eden and Survivor regions into a few free regions; a mixed pause then also evacuates the two old regions that are mostly garbage](images/09-g1-regions.svg){ loading=lazy }
+*Watch the regions change role: after each pause the evacuated regions are simply free again, and live data has been compacted into fewer regions.*
 
 ### ZGC: move objects while the application runs
 

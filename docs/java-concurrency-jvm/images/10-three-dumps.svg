@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 384" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Why you take three thread dumps</title>
+  <desc id="d">Animation. Three thread dumps are taken 10 seconds apart and shown side by side, listing the top stack frame of four threads. http-exec-3, http-exec-9 and kafka-listener-0 show different frames in each dump, so they are making progress. http-exec-7 is in SocketDispatcher.read0 in all three dumps, so it is stuck in a socket read, and it is highlighted.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px;font-weight:600}
+    .mono{fill:#334155;font-size:12px;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .hl{fill:none;stroke:#dc2626;stroke-width:2.5}
+    .tr{fill:#dc2626;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.hl{stroke:#f87171}.tr{fill:#f87171}
+    }
+    /* 10 s loop: dumps appear at 5%, 25%, 45%; verdict at 62% */
+    .a{opacity:0;animation:10s infinite linear}
+    .d1{animation-name:a1}.d2{animation-name:a2}.d3{animation-name:a3}.v{animation-name:a4}
+    @keyframes a1{0%,4%{opacity:0}6%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes a2{0%,24%{opacity:0}26%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes a3{0%,44%{opacity:0}46%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes a4{0%,61%{opacity:0}63%,95%{opacity:1}97%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="382" rx="14"/>
+  <text class="h" x="28" y="40">One dump is a photo. Three dumps show who is stuck.</text>
+  <text class="sub" x="28" y="62">Top stack frame of four threads in three dumps taken 10 seconds apart.</text>
+  <text class="lbl" x="28" y="118">Thread</text>
+  <text class="t" x="28" y="150">http-exec-3</text><text class="t" x="28" y="190">http-exec-7</text><text class="t" x="28" y="230">http-exec-9</text><text class="t" x="28" y="270">kafka-listener-0</text>
+  <g class="a d1"><rect class="box" x="170" y="96" width="196" height="196" rx="10"/><text class="lbl" x="182" y="118">Dump 1</text><text class="sub" x="354" y="118" text-anchor="end">t = 0 s</text>
+  <text class="mono" x="182" y="150">OrderMapper.toDto</text>
+  <text class="mono" x="182" y="190">SocketDispatcher.read0</text>
+  <text class="mono" x="182" y="230">HikariPool.getConnection</text>
+  <text class="mono" x="182" y="270">KafkaConsumer.poll</text>
+  </g>
+  <g class="a d2"><rect class="box" x="372" y="96" width="196" height="196" rx="10"/><text class="lbl" x="384" y="118">Dump 2</text><text class="sub" x="556" y="118" text-anchor="end">t = 10 s</text>
+  <text class="mono" x="384" y="150">PriceService.price</text>
+  <text class="mono" x="384" y="190">SocketDispatcher.read0</text>
+  <text class="mono" x="384" y="230">ClaimRepo.save</text>
+  <text class="mono" x="384" y="270">RuleEngine.apply</text>
+  </g>
+  <g class="a d3"><rect class="box" x="574" y="96" width="196" height="196" rx="10"/><text class="lbl" x="586" y="118">Dump 3</text><text class="sub" x="758" y="118" text-anchor="end">t = 20 s</text>
+  <text class="mono" x="586" y="150">JsonWriter.write</text>
+  <text class="mono" x="586" y="190">SocketDispatcher.read0</text>
+  <text class="mono" x="586" y="230">getTask (idle)</text>
+  <text class="mono" x="586" y="270">KafkaConsumer.poll</text>
+  </g>
+  <rect class="hl a v" x="20" y="172" width="762" height="34" rx="8"/>
+  <text class="tr a v" x="28" y="324">http-exec-7 is in the same socket read in all three dumps: stuck, waiting on a remote system.</text>
+  <text class="sub" x="28" y="350">It shows as RUNNABLE but uses no CPU. The fix is usually a read timeout, not more threads.</text>
+  <text class="sub" x="28" y="368">The other threads show a different frame each time, so they are making progress.</text>
+</svg>

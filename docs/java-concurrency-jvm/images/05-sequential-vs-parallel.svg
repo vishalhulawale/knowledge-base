@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Sequential versus parallel upstream calls</title>
+  <desc id="d">Animated timeline of three upstream calls of 200 milliseconds each: Member, Rx and Benefits. In the sequential version each call starts after the previous one ends, so the request takes about 600 milliseconds. In the parallel version all three are started first with supplyAsync on a dedicated executor and combined with thenCombine, so the request takes about 200 milliseconds, the time of the slowest call.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .lane{fill:#ffffff;stroke:#e2e8f0}
+    .b1{fill:#4f46e5}.b2{fill:#0ea5a4}.b3{fill:#d97706}
+    .ax{stroke:#94a3b8;stroke-width:1.5}
+    .cur{stroke:#dc2626;stroke-width:2;stroke-dasharray:4 4}
+    .tr{fill:#dc2626;font-size:15px;font-weight:700}
+    .tg{fill:#15803d;font-size:15px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .lane{fill:#111827;stroke:#334155}
+      .b1{fill:#818cf8}.b2{fill:#2dd4bf}.b3{fill:#fbbf24}
+      .ax{stroke:#64748b}.cur{stroke:#f87171}.tr{fill:#f87171}.tg{fill:#4ade80}
+    }
+    /* 9 s loop: 600 ms of request time is played over 75% of the loop */
+    .g{transform-box:fill-box;transform-origin:0 50%;animation:9s infinite linear}
+    .g1{animation-name:g1}.g2{animation-name:g2}.g3{animation-name:g3}
+    @keyframes g1{0%{transform:scaleX(0)}25%,96%{transform:scaleX(1)}97%,100%{transform:scaleX(0)}}
+    @keyframes g2{0%,25%{transform:scaleX(0)}50%,96%{transform:scaleX(1)}97%,100%{transform:scaleX(0)}}
+    @keyframes g3{0%,50%{transform:scaleX(0)}75%,96%{transform:scaleX(1)}97%,100%{transform:scaleX(0)}}
+    .cur{animation:cu 9s infinite linear}
+    @keyframes cu{0%{transform:translate(0,0)}75%,96%{transform:translate(540px,0)}97%,100%{transform:translate(0,0)}}
+    .a{opacity:0;animation:9s infinite linear}
+    .a25{animation-name:a25}.a75{animation-name:a75}
+    @keyframes a25{0%,24%{opacity:0}26%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes a75{0%,74%{opacity:0}76%,95%{opacity:1}97%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){.g{animation:none;transform:none}.cur{animation:none;opacity:0}.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Three 200 ms upstream calls: one after another vs in parallel</text>
+  <text class="sub" x="28" y="62">Same calls, same work. Only the moment each call starts is different.</text>
+
+  <text class="lbl" x="28" y="94">Sequential: get(), then the next call</text>
+  <rect class="lane" x="200" y="104" width="540" height="24" rx="4"/>
+  <rect class="lane" x="200" y="136" width="540" height="24" rx="4"/>
+  <rect class="lane" x="200" y="168" width="540" height="24" rx="4"/>
+  <text class="t" x="44" y="121">Member API</text>
+  <text class="t" x="44" y="153">Rx API</text>
+  <text class="t" x="44" y="185">Benefits API</text>
+  <rect class="b1 g g1" x="200" y="104" width="180" height="24" rx="4"/>
+  <rect class="b2 g g2" x="380" y="136" width="180" height="24" rx="4"/>
+  <rect class="b3 g g3" x="560" y="168" width="180" height="24" rx="4"/>
+  <text class="tr a a75" x="200" y="214">total ≈ 600 ms (the sum)</text>
+
+  <text class="lbl" x="28" y="246">Parallel: start all three, then combine</text>
+  <rect class="lane" x="200" y="256" width="540" height="24" rx="4"/>
+  <rect class="lane" x="200" y="288" width="540" height="24" rx="4"/>
+  <rect class="lane" x="200" y="320" width="540" height="24" rx="4"/>
+  <text class="t" x="44" y="273">Member API</text>
+  <text class="t" x="44" y="305">Rx API</text>
+  <text class="t" x="44" y="337">Benefits API</text>
+  <rect class="b1 g g1" x="200" y="256" width="180" height="24" rx="4"/>
+  <rect class="b2 g g1" x="200" y="288" width="180" height="24" rx="4"/>
+  <rect class="b3 g g1" x="200" y="320" width="180" height="24" rx="4"/>
+  <text class="tg a a25" x="396" y="309">total ≈ 200 ms (the slowest call)</text>
+
+  <line class="ax" x1="200" y1="358" x2="740" y2="358"/>
+  <line class="ax" x1="200" y1="354" x2="200" y2="362"/><line class="ax" x1="380" y1="354" x2="380" y2="362"/>
+  <line class="ax" x1="560" y1="354" x2="560" y2="362"/><line class="ax" x1="740" y1="354" x2="740" y2="362"/>
+  <text class="sub" x="200" y="378" text-anchor="middle">0</text><text class="sub" x="380" y="378" text-anchor="middle">200 ms</text>
+  <text class="sub" x="560" y="378" text-anchor="middle">400 ms</text><text class="sub" x="740" y="378" text-anchor="middle">600 ms</text>
+  <line class="cur" x1="200" y1="100" x2="200" y2="348"/>
+  <text class="sub" x="28" y="378">elapsed time</text>
+</svg>

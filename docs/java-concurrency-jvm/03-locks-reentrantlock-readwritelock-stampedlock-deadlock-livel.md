@@ -47,6 +47,9 @@ flowchart TD
 ```
 *Notice that an uncontended lock is just one CAS, with no queue and no kernel call. Also notice that a woken thread goes back to the CAS and can lose to a newly arriving thread: that is "barging", and it is why the default lock is unfair.*
 
+![Animation: T1 holds a ReentrantLock with state 1 while T2 and T3 are parked in the queue; T1 unlocks and T2 is unparked; a new thread T4 wins the compare-and-swap before T2 wakes; T2's compare-and-swap fails and it parks again](images/03-aqs-barging.svg){ loading=lazy }
+*Watch step 3: the newcomer takes the lock while the queued thread is still waking up. That is barging, and it keeps the lock busy.*
+
 ### ReentrantLock
 
 **Reentrant** means the owner can acquire again without blocking; each `lock()` needs a matching `unlock()`. What it adds over `synchronized`:
@@ -78,6 +81,9 @@ One lock, two views: a **shared read lock** and an **exclusive write lock**.
 The read lock is not free. Each acquire and release does a CAS on the shared `state` word, so many cores doing short reads all fight over the same cache line. For a short critical section (a map lookup), a read-write lock is often **slower** than a plain lock. It wins when reads are long (as a rough guide, well beyond the cost of the lock bookkeeping itself: think microseconds of work or I/O-free scans of large structures, not a single lookup) and writes are rare. Measure rather than trust a threshold.
 
 **Writer starvation.** With a constant stream of readers the read count might never reach zero. The JDK reduces this: in the default unfair mode, a new reader blocks if the thread at the head of the queue is a waiting writer. This is a heuristic, not a guarantee; the Javadoc says a continuously contended unfair lock may postpone readers or writers indefinitely.
+
+![Animation: three readers hold the read lock while a writer waits at the head of the queue; a fourth reader queues behind the writer; the readers leave and the writer holds the lock alone; then the writer leaves and the fourth reader enters](images/03-read-write-lock.svg){ loading=lazy }
+*Notice that readers share the lock with each other but never with the writer, and that a waiting writer makes new readers wait too.*
 
 ### StampedLock
 
@@ -134,6 +140,9 @@ sequenceDiagram
     Note over T1,T2: Circular wait. Both threads are parked forever, CPU is idle
 ```
 *Notice that each thread's code is correct on its own. The bug exists only in the interleaving, and only because the two threads take the same locks in opposite order.*
+
+![Animation with two panels: on the left T1 locks A and T2 locks B, then each waits for the other's lock and a deadlock badge appears; on the right both threads lock A first, so T2 waits holding nothing, T1 takes B and finishes, then T2 takes both locks](images/03-deadlock-vs-lock-order.svg){ loading=lazy }
+*Same two transfers, same two locks. Taking them in one global order removes the circular wait.*
 
 **Livelock**: threads are not blocked; they are running, reacting to each other, and still getting nowhere. The classic case is two threads that both `tryLock`, both fail, both release and both retry at exactly the same moment, forever. CPU is busy; throughput is zero. The fix is **randomised back-off (jitter)** so that they stop moving in step. The same idea shows up in distributed systems: retry storms, and a poison message that is re-queued and re-consumed forever.
 

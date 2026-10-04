@@ -160,6 +160,9 @@ class OrderService {
 }
 ```
 
+![Diagram of where the OrderService.total example lives: the thread stack frame holds the references id and o and the primitive qty; the heap holds the OrderService Class mirror with the static CACHE field, the HashMap, the Order and the String; Metaspace holds the bytecode and the code cache holds the compiled machine code](images/08-where-things-live.svg){ loading=lazy }
+*Notice that only the heap box is limited by `-Xmx`. The other three areas are native memory.*
+
 ### Execution engine: interpreter and JIT
 
 The JVM starts by **interpreting** bytecode. Interpreting is slow, but starts instantly and collects **profiles**: how often a method runs, which branches are taken, which concrete types arrive at each call site. Code that proves to be **hot** is compiled to machine code. This is **just-in-time (JIT)** compilation.
@@ -239,6 +242,9 @@ The main optimisations:
     ```
 
 The JVM has been container-aware since Java 10 (backported to 8u191): it reads the cgroup memory and CPU limits instead of the host values. Without any flag the maximum heap is **25% of the container limit**, which wastes memory. Remember that the CPU limit also decides the number of JIT compiler threads, GC threads and the size of `ForkJoinPool.commonPool()`.
+
+![Two bars against a 2 GiB pod limit: with -Xmx2g the heap fills the whole limit and non-heap memory pushes the process over it, causing an OOM kill with exit code 137; with MaxRAMPercentage=70 the heap is about 1.4 GiB and non-heap memory fits with headroom](images/08-container-memory-budget.svg){ loading=lazy }
+*The heap setting has to leave room for everything that is not heap, or the kernel kills the pod with no Java error.*
 
 Verifying where memory goes:
 

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Memory budget of a JVM in a 2 GiB pod</title>
+  <desc id="d">Two bars drawn against a 2 GiB pod memory limit. Top bar, -Xms2g -Xmx2g: the Java heap alone fills the whole limit, and non-heap memory (Metaspace, thread stacks, code cache, direct buffers, GC structures) pushes the process past the limit, so the kernel kills it with exit code 137 and no heap dump. Bottom bar, MaxRAMPercentage=70: the heap is about 1.4 GiB, non-heap memory fits after it, and some headroom remains below the limit.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .heap{fill:#4f46e5}
+    .nh{fill:#0ea5a4}
+    .over{fill:none;stroke:#dc2626;stroke-width:3}
+    .head{fill:#ffffff;stroke:#94a3b8;stroke-dasharray:5 4}
+    .lim{stroke:#dc2626;stroke-width:2.5;stroke-dasharray:7 5}
+    .wt{fill:#fff;font-size:14px;font-weight:700}
+    .tr{fill:#dc2626;font-size:14px;font-weight:700}
+    .tg{fill:#15803d;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .heap{fill:#818cf8}.nh{fill:#2dd4bf}.over{stroke:#f87171}.head{fill:#111827;stroke:#64748b}
+      .lim{stroke:#f87171}.wt{fill:#0f172a}.tr{fill:#f87171}.tg{fill:#4ade80}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">2 GiB pod: the heap is not the whole process</text>
+  <text class="sub" x="28" y="62">Process memory ≈ heap + Metaspace + thread stacks + code cache + direct buffers + GC structures.</text>
+
+  <!-- limit line at 2 GiB: scale 560 px = 2048 MiB, starting at x=40 -->
+  <line class="lim" x1="600" y1="80" x2="600" y2="268"/>
+  <text class="tr" x="608" y="94">pod limit 2 GiB</text>
+
+  <text class="lbl" x="40" y="104">❌ -Xms2g -Xmx2g</text>
+  <rect class="heap" x="40" y="114" width="560" height="40" rx="6"/>
+  <text class="wt" x="320" y="139" text-anchor="middle">Java heap 2 GiB</text>
+  <rect class="nh" x="600" y="114" width="115" height="40" rx="6"/>
+  <rect class="over" x="600" y="110" width="119" height="48" rx="8"/>
+  <text class="wt" x="657" y="139" text-anchor="middle">non-heap</text>
+  <text class="tr" x="40" y="178">Over the limit: kernel OOM kill (exit 137), no heap dump.</text>
+
+  <text class="lbl" x="40" y="214">✅ -XX:MaxRAMPercentage=70</text>
+  <rect class="heap" x="40" y="224" width="392" height="40" rx="6"/>
+  <text class="wt" x="236" y="249" text-anchor="middle">Java heap ≈ 1.4 GiB</text>
+  <rect class="nh" x="432" y="224" width="115" height="40" rx="6"/>
+  <text class="wt" x="489" y="249" text-anchor="middle">non-heap</text>
+  <rect class="head" x="549" y="224" width="49" height="40" rx="6"/>
+  <text class="sub" x="573" y="284" text-anchor="middle">headroom</text>
+  <text class="tg" x="40" y="288">Fits: heap and non-heap stay under the limit.</text>
+
+  <rect class="heap" x="40" y="314" width="16" height="16" rx="3"/><text class="t" x="64" y="327">Java heap (-Xmx or MaxRAMPercentage)</text>
+  <rect class="nh" x="390" y="314" width="16" height="16" rx="3"/><text class="t" x="414" y="327">non-heap, outside -Xmx (≈ 420 MB)</text>
+  <text class="sub" x="40" y="362">Non-heap size is illustrative (Metaspace alone is often ~150 MB for Spring Boot). Measure with NMT.</text>
+</svg>

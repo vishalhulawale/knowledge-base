@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 392" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">The pool was a hidden limit: use a semaphore with virtual threads</title>
+  <desc id="d">Two panels. Left, platform threads: incoming requests go through a Tomcat pool of 200 platform threads, so at most 200 calls reach the database or upstream at once; the pool size is an implicit concurrency limit. Right, virtual threads: every request gets its own virtual thread, so thousands can run at once and there is no pool limit; a Semaphore with 50 permits in front of the upstream call states the limit explicitly, and threads waiting for a permit are parked without blocking a carrier.</desc>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pool{fill:#eef2ff;stroke:#4f46e5;stroke-width:2}
+    .vt{fill:#e0f2f1;stroke:#0ea5a4;stroke-width:2}
+    .gate{fill:#fffbeb;stroke:#d97706;stroke-width:2.5}
+    .db{fill:#ffffff;stroke:#334155;stroke-width:1.5}
+    .ln{stroke:#64748b;stroke-width:2}
+    .mk{fill:#64748b}
+    .tp{fill:#4f46e5;font-size:13px;font-weight:700}
+    .ta{fill:#b45309;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box,.db{fill:#111827}.box{stroke:#475569}.db{stroke:#cbd5e1}
+      .pool{fill:#262b47;stroke:#818cf8}.vt{fill:#123b3b;stroke:#2dd4bf}.gate{fill:#3a2c10;stroke:#fbbf24}
+      .ln{stroke:#94a3b8}.mk{fill:#94a3b8}.tp{fill:#a5b4fc}.ta{fill:#fbbf24}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="390" rx="14"/>
+  <text class="h" x="28" y="40">The thread pool was also a concurrency limit</text>
+  <text class="sub" x="28" y="62">With virtual threads that limit disappears, so it has to be written down explicitly.</text>
+
+  <!-- left -->
+  <rect class="box" x="28" y="76" width="364" height="270" rx="12"/>
+  <text class="lbl" x="44" y="100">Platform threads</text>
+  <text class="sub" x="210" y="126" text-anchor="middle">incoming requests</text>
+  <line class="ln" x1="170" y1="134" x2="170" y2="160" marker-end="url(#ar)"/><line class="ln" x1="210" y1="134" x2="210" y2="160" marker-end="url(#ar)"/><line class="ln" x1="250" y1="134" x2="250" y2="160" marker-end="url(#ar)"/>
+  <rect class="pool" x="90" y="164" width="240" height="52" rx="10"/>
+  <text class="lbl" x="210" y="186" text-anchor="middle">Tomcat request pool</text>
+  <text class="sub" x="210" y="205" text-anchor="middle">200 platform threads</text>
+  <line class="ln" x1="210" y1="218" x2="210" y2="270" marker-end="url(#ar)"/>
+  <text class="tp" x="222" y="244">at most 200 calls</text>
+  <text class="sub" x="222" y="260">(implicit)</text>
+  <rect class="db" x="110" y="274" width="200" height="44" rx="10"/>
+  <text class="t" x="210" y="301" text-anchor="middle">Database / upstream</text>
+
+  <!-- right -->
+  <rect class="box" x="408" y="76" width="364" height="270" rx="12"/>
+  <text class="lbl" x="424" y="100">Virtual threads</text>
+  <rect class="vt" x="445" y="110" width="290" height="52" rx="10"/>
+  <text class="lbl" x="590" y="132" text-anchor="middle">a virtual thread per request</text>
+  <text class="sub" x="590" y="151" text-anchor="middle">thousands, no pool</text>
+  <line class="ln" x1="590" y1="164" x2="590" y2="184" marker-end="url(#ar)"/>
+  <rect class="gate" x="490" y="188" width="200" height="40" rx="10"/>
+  <text class="lbl" x="590" y="213" text-anchor="middle">Semaphore(50)</text>
+  <line class="ln" x1="590" y1="230" x2="590" y2="270" marker-end="url(#ar)"/>
+  <text class="ta" x="602" y="254">at most 50 calls</text>
+  <rect class="db" x="490" y="274" width="200" height="44" rx="10"/>
+  <text class="t" x="590" y="301" text-anchor="middle">Upstream</text>
+
+  <text class="sub" x="28" y="370">Waiting in acquire() parks the virtual thread, so no carrier is held. Numbers follow the page's examples.</text>
+</svg>

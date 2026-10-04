@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">wait and notify on one monitor</title>
+  <desc id="d">Animation in four steps. One monitor has an entry set, where threads are BLOCKED, an owner slot, where the thread is RUNNABLE and holds the monitor, and a wait set, where threads are WAITING. Step 1: thread A owns the monitor and thread B is blocked in the entry set. Step 2: A calls wait, releases the monitor and moves to the wait set; B acquires the monitor. Step 3: B calls notify; A moves from the wait set to the entry set and is BLOCKED because B still holds the monitor. Step 4: B leaves the synchronized block; A re-acquires the monitor and its wait call returns.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .own{fill:#ffffff;stroke:#4f46e5;stroke-width:2.5}
+    .tr{fill:#dc2626;font-size:13px;font-weight:700}
+    .tg{fill:#15803d;font-size:13px;font-weight:700}
+    .ta{fill:#b45309;font-size:13px;font-weight:700}
+    .pa{fill:#4f46e5}.pb{fill:#0ea5a4}
+    .wt{fill:#fff;font-size:15px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.own{fill:#111827;stroke:#818cf8}
+      .tr{fill:#f87171}.tg{fill:#4ade80}.ta{fill:#fbbf24}
+      .pa{fill:#818cf8}.pb{fill:#2dd4bf}.wt{fill:#0f172a}
+    }
+    /* 12 s loop, four steps of about 3 s each */
+    .A{animation:mA 12s infinite ease-in-out}
+    .B{animation:mB 12s infinite ease-in-out}
+    @keyframes mA{0%,22%{transform:translate(0,0)}26%,47%{transform:translate(255px,0)}51%,72%{transform:translate(-255px,0)}76%,100%{transform:translate(0,0)}}
+    @keyframes mB{0%,22%{transform:translate(0,0)}26%,72%{transform:translate(255px,0)}76%,95%{transform:translate(255px,102px)}99%,100%{transform:translate(0,0)}}
+    .c{opacity:0;animation:12s infinite linear}
+    .c1{animation-name:k1}.c2{animation-name:k2}.c3{animation-name:k3}.c4{animation-name:k4}
+    @keyframes k1{0%,22%{opacity:1}24%,98%{opacity:0}100%{opacity:1}}
+    @keyframes k2{0%,24%{opacity:0}26%,47%{opacity:1}49%,100%{opacity:0}}
+    @keyframes k3{0%,49%{opacity:0}51%,72%{opacity:1}74%,100%{opacity:0}}
+    @keyframes k4{0%,74%{opacity:0}76%,96%{opacity:1}98%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .A{animation:none;transform:translate(-255px,0)}
+      .B{animation:none;transform:translate(255px,0)}
+      .c{animation:none;opacity:0}.c3{opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">wait() and notify(): one monitor, three places to be</text>
+  <text class="sub" x="28" y="62">A thread woken by notify() cannot continue until it wins the monitor back.</text>
+
+  <!-- zones -->
+  <rect class="box" x="40" y="84" width="210" height="140" rx="12"/>
+  <text class="lbl" x="145" y="108" text-anchor="middle">Entry set</text>
+  <text class="tr" x="145" y="208" text-anchor="middle">BLOCKED</text>
+
+  <rect class="own" x="295" y="84" width="210" height="140" rx="12"/>
+  <text class="lbl" x="400" y="108" text-anchor="middle">Owner (holds monitor)</text>
+  <text class="tg" x="400" y="208" text-anchor="middle">RUNNABLE</text>
+
+  <rect class="box" x="550" y="84" width="210" height="140" rx="12"/>
+  <text class="lbl" x="655" y="108" text-anchor="middle">Wait set</text>
+  <text class="ta" x="655" y="208" text-anchor="middle">WAITING</text>
+
+  <text class="sub" x="400" y="302" text-anchor="middle">outside the synchronized block</text>
+
+  <!-- threads: A drawn at owner, B drawn at entry set -->
+  <g class="A"><rect class="pa" x="340" y="134" width="120" height="44" rx="22"/><text class="wt" x="400" y="161" text-anchor="middle">Thread A</text></g>
+  <g class="B"><rect class="pb" x="85" y="134" width="120" height="44" rx="22"/><text class="wt" x="145" y="161" text-anchor="middle">Thread B</text></g>
+
+  <!-- captions -->
+  <g class="t">
+    <text class="c c1" x="28" y="336">1. A holds the monitor. B wants it too, so B is BLOCKED in the entry set.</text>
+    <text class="c c2" x="28" y="336">2. A calls wait(): it releases the monitor and becomes WAITING. B acquires it.</text>
+    <g class="c c3"><text x="28" y="336">3. B calls notify(): A leaves the wait set but is BLOCKED, because B still</text><text x="28" y="356">holds the monitor. This is why a thread leaving wait() passes through BLOCKED.</text></g>
+    <text class="c c4" x="28" y="336">4. B leaves the synchronized block. A re-acquires the monitor and wait() returns.</text>
+  </g>
+  <text class="sub" x="28" y="386">wait() can also wake spuriously, so it always sits in a while (!condition) loop.</text>
+</svg>

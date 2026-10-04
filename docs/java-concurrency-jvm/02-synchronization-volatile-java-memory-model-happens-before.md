@@ -125,6 +125,9 @@ A volatile field has two guarantees:
 
 What it does **not** give: atomicity of compound actions. `count++` is three steps (read, add, write). Two threads can both read 5 and both write 6.
 
+![Animation: a volatile int count starts at 5; thread 1 reads 5, thread 2 reads 5, thread 1 writes 6, thread 2 writes 6, and a banner says two increments ran but one update was lost](images/02-lost-update.svg){ loading=lazy }
+*Notice that every read and write here is visible to the other thread. The update is lost because the read and the write are two separate steps.*
+
 Use `volatile` when **all** of these hold:
 
 - Writes do not depend on the current value (or only one thread ever writes).
@@ -288,6 +291,9 @@ public class DrugReferenceCache {
 ```
 
 Why this is correct: the write does not depend on the old value, the map is immutable (`Map.copyOf`), and the volatile write happens-before every later read. Readers that are mid-request keep using the old snapshot, which is consistent.
+
+![Animation: a volatile snapshot field points to immutable map v1 while a request reads it; a refresh builds map v2 off to the side; one volatile write moves the reference to v2; a new request reads v2 while the first request keeps v1, which is later freed](images/02-snapshot-swap.svg){ loading=lazy }
+*Watch the reference move in one step. No reader ever sees a half-built map, and nobody takes a lock.*
 
 ### 4. Compound invariant: needs a lock
 

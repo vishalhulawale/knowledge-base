@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Where the parts of one method live in the JVM</title>
+  <desc id="d">Map of the OrderService.total example. The thread's stack frame for total() holds the references id and o and the primitive qty. On the heap are the OrderService Class mirror, which holds the static field CACHE, the HashMap it points to, and the Order object. Metaspace holds the class metadata, including the bytecode of total(). The code cache holds the machine code of total() once the JIT has compiled it. Stack, heap, Metaspace and code cache are separate areas, and only the heap is limited by -Xmx.</desc>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:13px}
+    .mono{fill:#334155;font-size:13px;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .sub{fill:#64748b;font-size:13px}
+    .zs{fill:#e0f2f1;stroke:#0ea5a4}
+    .zh{fill:#eef2ff;stroke:#4f46e5}
+    .zm{fill:#fffbeb;stroke:#d97706}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .ref{stroke:#4f46e5;stroke-width:2;fill:none}
+    .mk{fill:#4f46e5}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .zs{fill:#123b3b;stroke:#2dd4bf}.zh{fill:#262b47;stroke:#818cf8}.zm{fill:#3a2c10;stroke:#fbbf24}
+      .box{fill:#111827;stroke:#475569}.ref{stroke:#818cf8}.mk{fill:#818cf8}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">One method, four memory areas</text>
+  <text class="sub" x="28" y="62">Where the pieces of OrderService.total(id) live while it runs.</text>
+
+  <!-- stack -->
+  <rect class="zs" x="28" y="80" width="210" height="236" rx="12"/>
+  <text class="lbl" x="44" y="104">Thread stack</text>
+  <text class="sub" x="44" y="122">per thread, -Xss</text>
+  <rect class="box" x="44" y="136" width="178" height="130" rx="8"/>
+  <text class="t" x="56" y="158">frame: total(id)</text>
+  <text class="mono" x="56" y="186">id  → ref</text>
+  <text class="mono" x="56" y="214">o   → ref</text>
+  <text class="mono" x="56" y="242">qty = 3</text>
+  <text class="sub" x="44" y="292">primitive: value in frame</text>
+
+  <!-- heap -->
+  <rect class="zh" x="258" y="80" width="300" height="236" rx="12"/>
+  <text class="lbl" x="274" y="104">Heap</text>
+  <text class="sub" x="274" y="122">shared, -Xmx, garbage collected</text>
+  <rect class="box" x="274" y="136" width="130" height="48" rx="8"/>
+  <text class="t" x="339" y="156" text-anchor="middle">OrderService</text>
+  <text class="sub" x="339" y="174" text-anchor="middle">Class mirror</text>
+  <text class="mono" x="280" y="202">static CACHE</text>
+  <rect class="box" x="430" y="136" width="112" height="48" rx="8"/>
+  <text class="t" x="486" y="165" text-anchor="middle">HashMap</text>
+  <rect class="box" x="430" y="228" width="112" height="48" rx="8"/>
+  <text class="t" x="486" y="250" text-anchor="middle">Order</text>
+  <text class="sub" x="486" y="268" text-anchor="middle">"42"</text>
+  <rect class="box" x="274" y="228" width="130" height="48" rx="8"/>
+  <text class="t" x="339" y="257" text-anchor="middle">String id</text>
+  <path class="ref" d="M404,160 L426,160" marker-end="url(#ar)"/>
+  <path class="ref" d="M486,184 L486,224" marker-end="url(#ar)"/>
+  <path class="ref" d="M150,182 C210,182 230,252 270,252" marker-end="url(#ar)"/>
+  <path class="ref" d="M150,210 C240,300 380,300 440,280" marker-end="url(#ar)"/>
+
+  <!-- metaspace + code cache -->
+  <rect class="zm" x="578" y="80" width="194" height="110" rx="12"/>
+  <text class="lbl" x="594" y="104">Metaspace</text>
+  <text class="sub" x="594" y="122">native memory</text>
+  <text class="t" x="594" y="148">class metadata,</text>
+  <text class="t" x="594" y="166">bytecode of total()</text>
+  <rect class="zm" x="578" y="206" width="194" height="110" rx="12"/>
+  <text class="lbl" x="594" y="230">Code cache</text>
+  <text class="sub" x="594" y="248">native memory</text>
+  <text class="t" x="594" y="274">machine code of</text>
+  <text class="t" x="594" y="292">total() once JIT-hot</text>
+
+  <text class="sub" x="28" y="350">References live in the frame, objects on the heap. Static fields sit in the Class mirror on the heap (since Java 7).</text>
+  <text class="sub" x="28" y="370">Only the heap counts against -Xmx. Metaspace, stacks and code cache add to process memory on top.</text>
+</svg>

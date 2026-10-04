@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 392" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Young collections and promotion to the old generation</title>
+  <desc id="d">Animation. New objects are allocated in Eden; most of them are already unreachable garbage. At young GC number 1, only the two live objects, A and B, are copied to a Survivor space and their age goes up; Eden is then empty and reused. New objects, including live object C, fill Eden again. At young GC number 2, B has died, C is copied to Survivor, and A, which has now survived enough collections, is promoted to the old generation.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .ze{fill:#e0f2f1;stroke:#0ea5a4}.zs{fill:#eef2ff;stroke:#4f46e5}.zo{fill:#fffbeb;stroke:#d97706}
+    .live{fill:#4f46e5}.dead{fill:#cbd5e1}
+    .wt{fill:#fff;font-size:14px;font-weight:700}
+    .tr{fill:#dc2626;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .ze{fill:#123b3b;stroke:#2dd4bf}.zs{fill:#262b47;stroke:#818cf8}.zo{fill:#3a2c10;stroke:#fbbf24}
+      .live{fill:#818cf8}.dead{fill:#475569}.wt{fill:#0f172a}.tr{fill:#f87171}
+    }
+    /* 12 s loop */
+    .o{opacity:0;animation:12s infinite ease-in-out}
+    @keyframes eA{0%,2%{opacity:0;transform:translate(0,0)}3%,28%{opacity:1;transform:translate(0,0)}33%,62%{opacity:1;transform:translate(310px,0px)}67%,95%{opacity:1;transform:translate(500px,0px)}97%,100%{opacity:0;transform:translate(500px,0px)}}
+    @keyframes eB{0%,4%{opacity:0;transform:translate(0,0)}5%,28%{opacity:1;transform:translate(0,0)}33%,60%{opacity:1;transform:translate(310px,0px)}63%,100%{opacity:0;transform:translate(310px,0px)}}
+    @keyframes g0{0%,6%{opacity:0}7%,27%{opacity:1}31%,100%{opacity:0}}
+    @keyframes g1{0%,8%{opacity:0}9%,27%{opacity:1}31%,100%{opacity:0}}
+    @keyframes g2{0%,10%{opacity:0}11%,27%{opacity:1}31%,100%{opacity:0}}
+    @keyframes g3{0%,12%{opacity:0}13%,27%{opacity:1}31%,100%{opacity:0}}
+    @keyframes g4{0%,14%{opacity:0}15%,27%{opacity:1}31%,100%{opacity:0}}
+    @keyframes g5{0%,16%{opacity:0}17%,27%{opacity:1}31%,100%{opacity:0}}
+    @keyframes nC{0%,39%{opacity:0;transform:translate(0,0)}40%,62%{opacity:1;transform:translate(0,0)}67%,95%{opacity:1;transform:translate(310px,52px)}97%,100%{opacity:0;transform:translate(310px,52px)}}
+    @keyframes n0{0%,42%{opacity:0}43%,61%{opacity:1}65%,100%{opacity:0}}
+    @keyframes n1{0%,45%{opacity:0}46%,61%{opacity:1}65%,100%{opacity:0}}
+    @keyframes n2{0%,48%{opacity:0}49%,61%{opacity:1}65%,100%{opacity:0}}
+    .bd{opacity:0;animation:bd 12s infinite linear}
+    @keyframes bd{0%,39%{opacity:0}41%,100%{opacity:1}}
+    .f{opacity:0;animation:12s infinite linear}
+    .g1{animation-name:q1}.g2{animation-name:q2}
+    @keyframes q1{0%,24%{opacity:0}26%,36%{opacity:1}38%,100%{opacity:0}}
+    @keyframes q2{0%,57%{opacity:0}59%,69%{opacity:1}71%,100%{opacity:0}}
+    .c1{animation-name:k1}.c2{animation-name:k2}.c3{animation-name:k3}.c4{animation-name:k4}
+    @keyframes k1{0%,23%{opacity:1}25%,98%{opacity:0}100%{opacity:1}}
+    @keyframes k2{0%,24%{opacity:0}26%,38%{opacity:1}40%,100%{opacity:0}}
+    @keyframes k3{0%,39%{opacity:0}41%,57%{opacity:1}59%,100%{opacity:0}}
+    @keyframes k4{0%,58%{opacity:0}60%,96%{opacity:1}98%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .o,.f{animation:none}#eA{opacity:1;transform:translate(500px,0)}#nC{opacity:1;transform:translate(310px,52px)}.c4{opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="390" rx="14"/>
+  <text class="h" x="28" y="40">Generations: copy the few survivors, promote the old ones</text>
+  <text class="sub" x="28" y="62">Indigo = still reachable. Grey = already garbage. A young GC only touches the live objects.</text>
+
+  <rect class="ze" x="40" y="82" width="300" height="150" rx="12"/>
+  <text class="lbl" x="56" y="106">Eden</text>
+  <text class="tr f g1" x="324" y="106" text-anchor="end">Young GC 1</text>
+  <text class="tr f g2" x="324" y="106" text-anchor="end">Young GC 2</text>
+  <rect class="zs" x="352" y="82" width="148" height="150" rx="12"/>
+  <text class="lbl" x="366" y="106">Survivor</text>
+  <rect class="zo" x="512" y="82" width="248" height="150" rx="12"/>
+  <text class="lbl" x="528" y="106">Old generation</text>
+  <text class="sub" x="40" y="252">young generation</text>
+  <text class="sub" x="512" y="252">collected rarely</text>
+  <g id="eA" class="o" style="animation-name:eA"><rect class="live" x="56" y="120" width="52" height="38" rx="6"/><text class="wt" x="82" y="144" text-anchor="middle">A</text></g>
+  <g class="o" style="animation-name:eB"><rect class="live" x="122" y="120" width="52" height="38" rx="6"/><rect class="dead bd" x="122" y="120" width="52" height="38" rx="6"/><text class="wt" x="148" y="144" text-anchor="middle">B</text></g>
+  <g class="o" style="animation-name:g0"><rect class="dead" x="188" y="120" width="52" height="38" rx="6"/><text class="wt" x="214" y="144" text-anchor="middle"></text></g>
+  <g class="o" style="animation-name:g1"><rect class="dead" x="254" y="120" width="52" height="38" rx="6"/><text class="wt" x="280" y="144" text-anchor="middle"></text></g>
+  <g class="o" style="animation-name:g2"><rect class="dead" x="56" y="172" width="52" height="38" rx="6"/><text class="wt" x="82" y="196" text-anchor="middle"></text></g>
+  <g class="o" style="animation-name:g3"><rect class="dead" x="122" y="172" width="52" height="38" rx="6"/><text class="wt" x="148" y="196" text-anchor="middle"></text></g>
+  <g class="o" style="animation-name:g4"><rect class="dead" x="188" y="172" width="52" height="38" rx="6"/><text class="wt" x="214" y="196" text-anchor="middle"></text></g>
+  <g class="o" style="animation-name:g5"><rect class="dead" x="254" y="172" width="52" height="38" rx="6"/><text class="wt" x="280" y="196" text-anchor="middle"></text></g>
+  <g id="nC" class="o" style="animation-name:nC"><rect class="live" x="56" y="120" width="52" height="38" rx="6"/><text class="wt" x="82" y="144" text-anchor="middle">C</text></g>
+  <g class="o" style="animation-name:n0"><rect class="dead" x="122" y="120" width="52" height="38" rx="6"/><text class="wt" x="148" y="144" text-anchor="middle"></text></g>
+  <g class="o" style="animation-name:n1"><rect class="dead" x="188" y="120" width="52" height="38" rx="6"/><text class="wt" x="214" y="144" text-anchor="middle"></text></g>
+  <g class="o" style="animation-name:n2"><rect class="dead" x="56" y="172" width="52" height="38" rx="6"/><text class="wt" x="82" y="196" text-anchor="middle"></text></g>
+
+  <g class="t">
+    <text class="f c1" x="28" y="296">1. New objects are allocated in Eden by bumping a pointer in the thread's TLAB.</text>
+    <g class="f c2"><text x="28" y="296">2. Young GC: only A and B are reachable, so only they are copied to Survivor (age 1).</text><text x="28" y="316">Eden is now empty and is reused. The garbage cost nothing to "free".</text></g>
+    <text class="f c3" x="28" y="296">3. Eden fills again. B has become unreachable. C is new and still live.</text>
+    <g class="f c4"><text x="28" y="296">4. Young GC: C is copied to Survivor. A has survived enough collections, so it is</text><text x="28" y="316">promoted to the old generation.</text></g>
+  </g>
+  <text class="sub" x="28" y="356">Promotion here happens after 2 collections for clarity. HotSpot's tenuring threshold is adaptive, at most 15.</text>
+  <text class="sub" x="28" y="374">G1 does the same with regions instead of fixed spaces.</text>
+</svg>

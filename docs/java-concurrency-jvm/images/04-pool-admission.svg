@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">How ThreadPoolExecutor admits 15 tasks with core 2, max 4 and a queue of 10</title>
+  <desc id="d">Animation. Fifteen long-running tasks are submitted quickly to a pool with core size 2, maximum size 4 and an ArrayBlockingQueue of capacity 10. Tasks 1 and 2 each start a core thread. Tasks 3 to 12 fill the queue while the pool still has only two threads. Tasks 13 and 14 find the queue full, so two extra threads are created and run them immediately, ahead of the queued tasks. Task 15 finds the queue full and the pool at its maximum, so it is rejected; with the default AbortPolicy the submitter gets a RejectedExecutionException.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .slot{fill:#ffffff;stroke:#cbd5e1}
+    .slotx{fill:#ffffff;stroke:#94a3b8;stroke-dasharray:6 4}
+    .run{fill:#4f46e5}.q{fill:#0ea5a4}.rej{fill:#dc2626}
+    .wt{fill:#fff;font-size:15px;font-weight:700}
+    .tr{fill:#dc2626;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .slot{fill:#111827;stroke:#475569}.slotx{fill:#111827;stroke:#64748b}
+      .run{fill:#818cf8}.q{fill:#2dd4bf}.rej{fill:#f87171}.wt{fill:#0f172a}.tr{fill:#f87171}
+    }
+    /* 12 s loop: task i appears at 5% + (i-1) x 5.5% */
+    .a,.c{opacity:0;animation:12s infinite linear}
+    @keyframes k1{0%,4.0%{opacity:0}5.0%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes k2{0%,9.5%{opacity:0}10.5%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes k3{0%,15.0%{opacity:0}16.0%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes k4{0%,20.5%{opacity:0}21.5%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes k5{0%,26.0%{opacity:0}27.0%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes k6{0%,31.5%{opacity:0}32.5%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes k7{0%,37.0%{opacity:0}38.0%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes k8{0%,42.5%{opacity:0}43.5%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes k9{0%,48.0%{opacity:0}49.0%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes k10{0%,53.5%{opacity:0}54.5%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes k11{0%,59.0%{opacity:0}60.0%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes k12{0%,64.5%{opacity:0}65.5%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes k13{0%,70.0%{opacity:0}71.0%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes k14{0%,75.5%{opacity:0}76.5%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes k15{0%,81.0%{opacity:0}82.0%,95%{opacity:1}97%,100%{opacity:0}}
+    .c1{animation-name:p1}.c2{animation-name:p2}.c3{animation-name:p3}.c4{animation-name:p4}
+    @keyframes p1{0%,15%{opacity:1}16%,99%{opacity:0}100%{opacity:1}}
+    @keyframes p2{0%,15%{opacity:0}16%,70%{opacity:1}71%,100%{opacity:0}}
+    @keyframes p3{0%,70%{opacity:0}71%,81%{opacity:1}82%,100%{opacity:0}}
+    @keyframes p4{0%,81%{opacity:0}82%,96%{opacity:1}97%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){.a,.c{animation:none;opacity:1}.c1,.c2,.c3{opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">15 tasks into core 2, max 4, ArrayBlockingQueue(10)</text>
+  <text class="sub" x="28" y="62">Order of admission: core threads, then the queue, then extra threads up to max, then rejection.</text>
+
+  <text class="lbl" x="28" y="122">Threads</text>
+  <text class="sub" x="28" y="140">running</text>
+  <rect class="slot" x="150" y="100" width="80" height="50" rx="10"/><rect class="slot" x="240" y="100" width="80" height="50" rx="10"/><rect class="slotx" x="330" y="100" width="80" height="50" rx="10"/><rect class="slotx" x="420" y="100" width="80" height="50" rx="10"/><rect class="slot" x="150" y="204" width="52" height="44" rx="8"/><rect class="slot" x="208" y="204" width="52" height="44" rx="8"/><rect class="slot" x="266" y="204" width="52" height="44" rx="8"/><rect class="slot" x="324" y="204" width="52" height="44" rx="8"/><rect class="slot" x="382" y="204" width="52" height="44" rx="8"/><rect class="slot" x="440" y="204" width="52" height="44" rx="8"/><rect class="slot" x="498" y="204" width="52" height="44" rx="8"/><rect class="slot" x="556" y="204" width="52" height="44" rx="8"/><rect class="slot" x="614" y="204" width="52" height="44" rx="8"/><rect class="slot" x="672" y="204" width="52" height="44" rx="8"/>
+  <text class="sub" x="230" y="170" text-anchor="middle">core threads</text>
+  <text class="sub" x="410" y="170" text-anchor="middle">extra threads (up to max)</text>
+  <text class="lbl" x="28" y="224">Queue</text>
+  <text class="sub" x="28" y="242">capacity 10</text>
+  <text class="lbl" x="28" y="312">Rejected</text>
+  <rect class="slot" x="150" y="290" width="60" height="46" rx="8"/>
+  <text class="tr a" style="animation-name:k15" x="226" y="318">RejectedExecutionException (AbortPolicy)</text>
+  <g class="a" style="animation-name:k1"><rect class="run" x="154" y="104" width="72" height="42" rx="8"/><text class="wt" x="190.0" y="130.0" text-anchor="middle">1</text></g>
+  <g class="a" style="animation-name:k2"><rect class="run" x="244" y="104" width="72" height="42" rx="8"/><text class="wt" x="280.0" y="130.0" text-anchor="middle">2</text></g>
+  <g class="a" style="animation-name:k3"><rect class="q" x="153" y="207" width="46" height="38" rx="8"/><text class="wt" x="176.0" y="231.0" text-anchor="middle">3</text></g>
+  <g class="a" style="animation-name:k4"><rect class="q" x="211" y="207" width="46" height="38" rx="8"/><text class="wt" x="234.0" y="231.0" text-anchor="middle">4</text></g>
+  <g class="a" style="animation-name:k5"><rect class="q" x="269" y="207" width="46" height="38" rx="8"/><text class="wt" x="292.0" y="231.0" text-anchor="middle">5</text></g>
+  <g class="a" style="animation-name:k6"><rect class="q" x="327" y="207" width="46" height="38" rx="8"/><text class="wt" x="350.0" y="231.0" text-anchor="middle">6</text></g>
+  <g class="a" style="animation-name:k7"><rect class="q" x="385" y="207" width="46" height="38" rx="8"/><text class="wt" x="408.0" y="231.0" text-anchor="middle">7</text></g>
+  <g class="a" style="animation-name:k8"><rect class="q" x="443" y="207" width="46" height="38" rx="8"/><text class="wt" x="466.0" y="231.0" text-anchor="middle">8</text></g>
+  <g class="a" style="animation-name:k9"><rect class="q" x="501" y="207" width="46" height="38" rx="8"/><text class="wt" x="524.0" y="231.0" text-anchor="middle">9</text></g>
+  <g class="a" style="animation-name:k10"><rect class="q" x="559" y="207" width="46" height="38" rx="8"/><text class="wt" x="582.0" y="231.0" text-anchor="middle">10</text></g>
+  <g class="a" style="animation-name:k11"><rect class="q" x="617" y="207" width="46" height="38" rx="8"/><text class="wt" x="640.0" y="231.0" text-anchor="middle">11</text></g>
+  <g class="a" style="animation-name:k12"><rect class="q" x="675" y="207" width="46" height="38" rx="8"/><text class="wt" x="698.0" y="231.0" text-anchor="middle">12</text></g>
+  <g class="a" style="animation-name:k13"><rect class="run" x="334" y="104" width="72" height="42" rx="8"/><text class="wt" x="370.0" y="130.0" text-anchor="middle">13</text></g>
+  <g class="a" style="animation-name:k14"><rect class="run" x="424" y="104" width="72" height="42" rx="8"/><text class="wt" x="460.0" y="130.0" text-anchor="middle">14</text></g>
+  <g class="a" style="animation-name:k15"><rect class="rej" x="154" y="294" width="52" height="38" rx="8"/><text class="wt" x="180.0" y="318.0" text-anchor="middle">15</text></g>
+
+  <g class="t">
+    <text class="c c1" x="28" y="372">Tasks 1 and 2: fewer than core threads exist, so each task starts a new thread.</text>
+    <text class="c c2" x="28" y="372">Tasks 3 to 12: core is full, so tasks wait in the queue. The pool still has only 2 threads.</text>
+    <text class="c c3" x="28" y="372">Tasks 13 and 14: the queue is full, so extra threads start and run them before 3 to 12.</text>
+    <text class="c c4" x="28" y="372">Task 15: queue full and threads at max. Rejected. Capacity = max 4 + queue 10 = 14.</text>
+  </g>
+  <text class="sub" x="28" y="400">With an unbounded queue the pool would never pass 2 threads and nothing would be rejected.</text>
+</svg>

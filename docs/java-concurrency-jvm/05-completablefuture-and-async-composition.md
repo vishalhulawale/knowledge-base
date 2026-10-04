@@ -17,6 +17,9 @@ tags: [java-concurrency-jvm, P0]
 
 A lead-level backend service spends most of its time waiting on other systems: databases, REST upstreams, Kafka, caches. If a request needs three upstream calls of 200 ms each, doing them one after another costs 600 ms. Doing them in parallel costs about 200 ms. `CompletableFuture` is the standard JDK tool for that.
 
+![Animation: two timelines of three 200 ms upstream calls; in the sequential one the calls run one after another and finish at about 600 ms, in the parallel one all three start together and finish at about 200 ms](images/05-sequential-vs-parallel.svg){ loading=lazy }
+*Notice that the parallel version is as slow as its slowest call, not as slow as the sum.*
+
 What came before:
 
 - **`Future` (Java 5).** You submit a task and get a handle, but the only way to use the result is `get()`, which blocks. You cannot say "when this finishes, do that", you cannot combine two futures, and you cannot complete one by hand.
@@ -41,6 +44,9 @@ When you call `cf.thenApply(fn)`:
 3. If `cf` is **already complete**, `fn` runs right now on the calling thread.
 
 When some thread later completes `cf`, that thread pops the stack and runs every dependent action (or hands it to an executor, for the `*Async` variants). That is the whole model: *completion triggers the dependents*.
+
+![Animation: the request thread calls thenApply and thenAccept on an incomplete future, which pushes two completions onto its stack; an ioPool thread completes the future, sets the result and runs both dependents; a later thenApply on the completed future runs immediately on the request thread](images/05-cf-completion-stack.svg){ loading=lazy }
+*Watch which thread runs each stage: the ioPool thread runs f1 and f2, but f3 runs on the request thread because the future was already complete.*
 
 This also explains the name. A CF is **completable**: any code can call `complete(value)` or `completeExceptionally(ex)`. That is how you wrap a callback-based API (a Kafka send callback, a Netty listener) as a future.
 

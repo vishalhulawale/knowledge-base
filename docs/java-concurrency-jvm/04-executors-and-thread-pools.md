@@ -63,6 +63,9 @@ flowchart TD
 ```
 *Notice that extra threads are created only when the queue is full. With an unbounded queue, `offer` never fails, so the pool never grows past core and the rejection handler is never called.*
 
+![Animation: fifteen tasks are submitted to a pool with core size 2, max 4 and a queue of 10; tasks 1 and 2 start core threads, tasks 3 to 12 fill the queue, tasks 13 and 14 start two extra threads, and task 15 is rejected](images/04-pool-admission.svg){ loading=lazy }
+*Watch the thread row while the queue fills: it stays at two threads until the queue is full. This is interview question Q6 below, step by step.*
+
 Three details worth knowing:
 
 - **Core threads are created lazily**, one per submitted task, until `corePoolSize` is reached, even if existing threads are idle. Call `prestartAllCoreThreads()` to warm the pool.
@@ -172,6 +175,9 @@ flowchart LR
     D2 -. "steals T1, the oldest and biggest - FIFO" .-> D1
 ```
 *Notice that the owner and the thief work at opposite ends of the deque, so contention is rare and stolen tasks are the large ones.*
+
+![Animation: worker 1 pops its newest small task T3 from the owner end of its deque; idle worker 2 steals the oldest big task T1 from the other end; worker 1 then pops T2](images/04-work-stealing.svg){ loading=lazy }
+*Notice the two ends: the owner takes the newest task, the thief takes the oldest and biggest one.*
 
 Key facts:
 
@@ -379,6 +385,9 @@ On Kubernetes, the total wait must fit inside `terminationGracePeriodSeconds` (3
 - **Common pool starvation** is a frequent production finding: a blocking HTTP or JDBC call inside `parallelStream()` or `CompletableFuture.supplyAsync()` occupies the few common pool workers, and every other parallel stream in the JVM slows down.
 - **Kafka consumers.** Spring Kafka's listener container runs one consumer thread per `concurrency` unit. Teams that hand records to a separate pool to "go faster" lose per-partition ordering and can commit offsets for records that have not finished processing.
 - **Healthcare and banking.** Silent loss is not acceptable for a claim, a prescription event or a payment. That rules out `DiscardPolicy` and unbounded in-memory queues (lost on restart) for anything that matters. The usual design is fail fast with `AbortPolicy`, return an error or a retryable status, and keep durable work in a broker (Kafka, SQS) rather than in an executor queue.
+
+![Two panels: on the left every thread of one shared request pool is stuck on slow upstream C, so calls to A and B cannot get a thread; on the right each upstream has its own small pool, only pool C is full and rejects fast with a fallback, and pools A and B still have free threads](images/04-bulkhead.svg){ loading=lazy }
+*The bulkhead idea from the Tomcat and Hystrix bullets above: a slow dependency can only fill its own pool.*
 
 ## Trade-offs & production gotchas
 

@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 424" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">AtomicLong versus LongAdder under contention</title>
+  <desc id="d">Animation with two panels. Left, AtomicLong: four threads send an increment to the same single value at the same moment; one compare-and-swap succeeds and the other three fail and must retry. Right, LongAdder: each of the four threads is hashed to its own cell, and each cell is padded so it sits on its own cache line, so all four increments succeed. sum adds the base and every cell one by one, here 12 plus 7, 9, 5 and 8, which is 41, but it is not an atomic snapshot.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pt{fill:#4f46e5}
+    .wt{fill:#fff;font-size:14px;font-weight:700}
+    .cell{fill:#e0f2f1;stroke:#0ea5a4}
+    .hot{fill:#fef2f2;stroke:#dc2626;stroke-width:2}
+    .pad{fill:none;stroke:#94a3b8;stroke-dasharray:4 4}
+    .ln{stroke:#94a3b8;stroke-width:1.5}
+    .dot{fill:#d97706}
+    .okl{fill:#15803d;font-size:15px;font-weight:700}
+    .bad{fill:#dc2626;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.pt{fill:#818cf8}.wt{fill:#0f172a}
+      .cell{fill:#123b3b;stroke:#2dd4bf}.hot{fill:#3a1d24;stroke:#f87171}.pad{stroke:#64748b}.ln{stroke:#64748b}
+      .dot{fill:#fbbf24}.okl{fill:#4ade80}.bad{fill:#f87171}
+    }
+    /* 5 s loop: increments travel 0-35%, results shown 37-90% */
+    .dl,.dr{animation:5s infinite ease-in}
+    @keyframes dl0{0%{opacity:1;transform:translate(0,0)}35%{opacity:1;transform:translate(82px,71px)}37%,100%{opacity:0;transform:translate(82px,71px)}}
+    @keyframes dl1{0%{opacity:1;transform:translate(0,0)}35%{opacity:1;transform:translate(82px,27px)}37%,100%{opacity:0;transform:translate(82px,27px)}}
+    @keyframes dl2{0%{opacity:1;transform:translate(0,0)}35%{opacity:1;transform:translate(82px,-17px)}37%,100%{opacity:0;transform:translate(82px,-17px)}}
+    @keyframes dl3{0%{opacity:1;transform:translate(0,0)}35%{opacity:1;transform:translate(82px,-61px)}37%,100%{opacity:0;transform:translate(82px,-61px)}}
+    .dr{animation-name:dr}
+    @keyframes dr{0%{opacity:1;transform:translate(0,0)}35%{opacity:1;transform:translate(64px,0)}37%,100%{opacity:0;transform:translate(64px,0)}}
+    .lab{opacity:0;animation:lab 5s infinite linear}
+    @keyframes lab{0%,36%{opacity:0}38%,90%{opacity:1}93%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){.dl,.dr{animation:none;opacity:0}.lab{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="422" rx="14"/>
+  <text class="h" x="28" y="40">Hot counter: AtomicLong vs LongAdder</text>
+  <text class="sub" x="28" y="62">Four threads increment at the same moment.</text>
+
+  <rect class="box" x="28" y="76" width="364" height="290" rx="12"/>
+  <text class="lbl" x="44" y="96">AtomicLong: one shared value</text>
+  <rect class="hot" x="280" y="181" width="90" height="50" rx="8"/>
+  <text class="t" x="325" y="211" text-anchor="middle">value: 41</text>
+  <rect class="pt" x="110" y="120" width="80" height="30" rx="15"/><text class="wt" x="150" y="140" text-anchor="middle">T1</text>
+  <line class="ln" x1="190" y1="135" x2="278" y2="206"/>
+  <circle class="dot dl" style="animation-name:dl0" cx="196" cy="135" r="6"/>
+  <text class="bad lab" x="100" y="140" text-anchor="end">retry</text>
+  <rect class="pt" x="110" y="164" width="80" height="30" rx="15"/><text class="wt" x="150" y="184" text-anchor="middle">T2</text>
+  <line class="ln" x1="190" y1="179" x2="278" y2="206"/>
+  <circle class="dot dl" style="animation-name:dl1" cx="196" cy="179" r="6"/>
+  <text class="okl lab" x="100" y="184" text-anchor="end">✓</text>
+  <rect class="pt" x="110" y="208" width="80" height="30" rx="15"/><text class="wt" x="150" y="228" text-anchor="middle">T3</text>
+  <line class="ln" x1="190" y1="223" x2="278" y2="206"/>
+  <circle class="dot dl" style="animation-name:dl2" cx="196" cy="223" r="6"/>
+  <text class="bad lab" x="100" y="228" text-anchor="end">retry</text>
+  <rect class="pt" x="110" y="252" width="80" height="30" rx="15"/><text class="wt" x="150" y="272" text-anchor="middle">T4</text>
+  <line class="ln" x1="190" y1="267" x2="278" y2="206"/>
+  <circle class="dot dl" style="animation-name:dl3" cx="196" cy="267" r="6"/>
+  <text class="bad lab" x="100" y="272" text-anchor="end">retry</text>
+  <text class="sub" x="44" y="318">Every CAS hits the same cache line.</text>
+  <text class="sub" x="44" y="336">Losers retry, so CPU is spent on failures.</text>
+
+  <rect class="box" x="408" y="76" width="364" height="290" rx="12"/>
+  <text class="lbl" x="424" y="96">LongAdder: base + padded cells</text>
+  <rect class="pt" x="440" y="120" width="80" height="30" rx="15"/><text class="wt" x="480" y="140" text-anchor="middle">T1</text>
+  <line class="ln" x1="520" y1="135" x2="588" y2="135"/>
+  <rect class="pad" x="590" y="114" width="110" height="42" rx="8"/><rect class="cell" x="602" y="120" width="86" height="30" rx="6"/><text class="t" x="645" y="140" text-anchor="middle">cell0: 7</text>
+  <circle class="dot dr" cx="526" cy="135" r="6"/>
+  <text class="okl lab" x="712" y="140">✓</text>
+  <rect class="pt" x="440" y="164" width="80" height="30" rx="15"/><text class="wt" x="480" y="184" text-anchor="middle">T2</text>
+  <line class="ln" x1="520" y1="179" x2="588" y2="179"/>
+  <rect class="pad" x="590" y="158" width="110" height="42" rx="8"/><rect class="cell" x="602" y="164" width="86" height="30" rx="6"/><text class="t" x="645" y="184" text-anchor="middle">cell1: 9</text>
+  <circle class="dot dr" cx="526" cy="179" r="6"/>
+  <text class="okl lab" x="712" y="184">✓</text>
+  <rect class="pt" x="440" y="208" width="80" height="30" rx="15"/><text class="wt" x="480" y="228" text-anchor="middle">T3</text>
+  <line class="ln" x1="520" y1="223" x2="588" y2="223"/>
+  <rect class="pad" x="590" y="202" width="110" height="42" rx="8"/><rect class="cell" x="602" y="208" width="86" height="30" rx="6"/><text class="t" x="645" y="228" text-anchor="middle">cell2: 5</text>
+  <circle class="dot dr" cx="526" cy="223" r="6"/>
+  <text class="okl lab" x="712" y="228">✓</text>
+  <rect class="pt" x="440" y="252" width="80" height="30" rx="15"/><text class="wt" x="480" y="272" text-anchor="middle">T4</text>
+  <line class="ln" x1="520" y1="267" x2="588" y2="267"/>
+  <rect class="pad" x="590" y="246" width="110" height="42" rx="8"/><rect class="cell" x="602" y="252" width="86" height="30" rx="6"/><text class="t" x="645" y="272" text-anchor="middle">cell3: 8</text>
+  <circle class="dot dr" cx="526" cy="267" r="6"/>
+  <text class="okl lab" x="712" y="272">✓</text>
+  <rect class="cell" x="602" y="298" width="86" height="30" rx="6"/><text class="t" x="645" y="318" text-anchor="middle">base: 12</text>
+  <text class="sub" x="424" y="318">used while uncontended</text>
+  <text class="sub" x="424" y="352">sum() = 12 + 7 + 9 + 5 + 8 = 41, read cell by cell</text>
+
+  <text class="sub" x="28" y="392">Dashed outline = @Contended padding. Cells are created only after contention, up to about the CPU count.</text>
+  <text class="sub" x="28" y="410">sum() is not an atomic snapshot: increments made during the walk may or may not be counted.</text>
+</svg>

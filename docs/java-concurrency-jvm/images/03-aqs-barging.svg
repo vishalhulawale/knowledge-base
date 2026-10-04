@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 392" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">AQS hand-off and barging in an unfair ReentrantLock</title>
+  <desc id="d">Animation in four steps. Step 1: thread T1 holds a ReentrantLock, so the AQS state is 1 and the owner is T1; T2 and T3 are parked in the FIFO wait queue. Step 2: T1 calls unlock; state goes back to 0 and AQS unparks T2, the head of the queue, which takes time to wake up. Step 3: a new thread T4 arrives and its compare-and-swap of state from 0 to 1 succeeds at once, so T4 owns the lock; this is barging. Step 4: T2 finally retries the compare-and-swap, fails and parks again. A fair lock would have made T4 queue behind T3.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .lock{fill:#ffffff;stroke:#4f46e5;stroke-width:2.5}
+    .p1{fill:#4f46e5}.pq{fill:#64748b}.p4{fill:#0ea5a4}
+    .wt{fill:#fff;font-size:15px;font-weight:700}
+    .tp{fill:#4f46e5;font-size:15px;font-weight:700}
+    .tg{fill:#15803d;font-size:13px;font-weight:700}
+    .tr{fill:#dc2626;font-size:13px;font-weight:700}
+    .ta{fill:#b45309;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.lock{fill:#111827;stroke:#818cf8}
+      .p1{fill:#818cf8}.pq{fill:#94a3b8}.p4{fill:#2dd4bf}.wt{fill:#0f172a}
+      .tp{fill:#a5b4fc}.tg{fill:#4ade80}.tr{fill:#f87171}.ta{fill:#fbbf24}
+    }
+    /* 12 s loop, four steps */
+    .m{animation:12s infinite ease-in-out}
+    .T1{animation-name:t1}.T4{opacity:0;animation-name:t4}
+    @keyframes t1{0%,22%{opacity:1;transform:translate(0,0)}26%,97%{opacity:0;transform:translate(-30px,0)}100%{opacity:1;transform:translate(0,0)}}
+    @keyframes t4{0%,45%{opacity:0;transform:translate(0,104px)}48%{opacity:1;transform:translate(0,104px)}53%,95%{opacity:1;transform:translate(0,0)}98%,100%{opacity:0;transform:translate(0,0)}}
+    .f{opacity:0;animation:12s infinite linear}
+    .st1{animation-name:o1}.st2{animation-name:o2}.st3{animation-name:o3}
+    @keyframes o1{0%,22%{opacity:1}24%,98%{opacity:0}100%{opacity:1}}
+    @keyframes o2{0%,23%{opacity:0}25%,47%{opacity:1}49%,100%{opacity:0}}
+    @keyframes o3{0%,48%{opacity:0}50%,96%{opacity:1}98%,100%{opacity:0}}
+    .pk{animation-name:pk}.wk{animation-name:wk}.ok{animation-name:o3s}.fail{animation-name:k4}
+    @keyframes pk{0%,22%{opacity:1}24%,71%{opacity:0}73%,100%{opacity:1}}
+    @keyframes wk{0%,23%{opacity:0}25%,70%{opacity:1}72%,100%{opacity:0}}
+    @keyframes o3s{0%,51%{opacity:0}53%,70%{opacity:1}72%,100%{opacity:0}}
+    .c1{animation-name:o1}.c2{animation-name:o2}.c3{animation-name:k3}.c4{animation-name:k4}
+    @keyframes k3{0%,48%{opacity:0}50%,70%{opacity:1}72%,100%{opacity:0}}
+    @keyframes k4{0%,71%{opacity:0}73%,96%{opacity:1}98%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .m,.f{animation:none}.T1{opacity:0}.T4{opacity:1;transform:none}
+      .f{opacity:0}.st3,.wk,.ok,.c3{opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="390" rx="14"/>
+  <text class="h" x="28" y="40">Unfair lock hand-off: why a newcomer can win</text>
+  <text class="sub" x="28" y="62">AQS keeps a volatile int state, an owner thread and a FIFO queue of parked threads.</text>
+
+  <rect class="lock" x="40" y="84" width="290" height="160" rx="12"/>
+  <text class="lbl" x="56" y="108">ReentrantLock (AQS)</text>
+  <text class="tp f st1" x="56" y="136">state = 1, owner = T1</text>
+  <text class="tp f st2" x="56" y="136">state = 0, owner = none</text>
+  <text class="tp f st3" x="56" y="136">state = 1, owner = T4</text>
+  <g class="m T1"><rect class="p1" x="125" y="156" width="120" height="40" rx="20"/><text class="wt" x="185" y="181" text-anchor="middle">T1</text></g>
+  <g class="m T4"><rect class="p4" x="125" y="156" width="120" height="40" rx="20"/><text class="wt" x="185" y="181" text-anchor="middle">T4 (new)</text></g>
+  <text class="tg f ok" x="185" y="226" text-anchor="middle">CAS 0 → 1 succeeds</text>
+
+  <rect class="box" x="370" y="84" width="390" height="160" rx="12"/>
+  <text class="lbl" x="386" y="108">Wait queue (FIFO)</text>
+  <text class="sub" x="744" y="108" text-anchor="end">← head</text>
+  <rect class="pq" x="396" y="146" width="120" height="40" rx="20"/><text class="wt" x="456" y="171" text-anchor="middle">T2</text>
+  <rect class="pq" x="540" y="146" width="120" height="40" rx="20"/><text class="wt" x="600" y="171" text-anchor="middle">T3</text>
+  <text class="sub f pk" x="456" y="210" text-anchor="middle">parked</text>
+  <text class="ta f wk" x="456" y="210" text-anchor="middle">unparked, waking…</text>
+  <text class="tr f fail" x="456" y="230" text-anchor="middle">CAS fails, parks again</text>
+  <text class="sub" x="600" y="210" text-anchor="middle">parked</text>
+
+  <g class="t">
+    <text class="f c1" x="28" y="330">1. T1 holds the lock. T2 and T3 failed their CAS earlier and are parked.</text>
+    <text class="f c2" x="28" y="330">2. T1 calls unlock(): state goes back to 0 and AQS unparks the head, T2. Waking it takes time.</text>
+    <g class="f c3"><text x="28" y="330">3. T4 arrives while T2 is still waking. Its CAS 0 → 1 succeeds at once: barging.</text><text x="28" y="350">The lock never sits idle, which is why unfair mode has higher throughput.</text></g>
+    <g class="f c4"><text x="28" y="330">4. T2 retries the CAS, finds state = 1 and parks again at the head of the queue.</text><text x="28" y="350">With new ReentrantLock(true), T4 would have queued behind T3 instead.</text></g>
+  </g>
+  <text class="sub" x="28" y="378">Timing is exaggerated for clarity. Reentrant acquires by the owner just add 1 to state.</text>
+</svg>

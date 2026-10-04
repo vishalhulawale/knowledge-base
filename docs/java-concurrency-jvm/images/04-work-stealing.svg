@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">ForkJoinPool work stealing</title>
+  <desc id="d">Animation. Worker 1 has a deque holding T1, the oldest and biggest task, then T2, then T3, the newest and smallest. Worker 2 is idle with an empty deque. Step 1: Worker 1 pops T3 from the owner end of its own deque, last in first out. Step 2: idle Worker 2 steals T1 from the opposite end, first in first out. Step 3: Worker 1 finishes T3 and pops T2. Owner and thief work at opposite ends of the deque, so they rarely contend.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .run{fill:#ffffff;stroke:#4f46e5;stroke-width:2;stroke-dasharray:6 4}
+    .tk{fill:#0ea5a4}
+    .wt{fill:#fff;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.run{fill:#111827;stroke:#818cf8}
+      .tk{fill:#2dd4bf}.wt{fill:#0f172a}
+    }
+    /* 10 s loop */
+    .m{animation:10s infinite ease-in-out}
+    .T3{animation-name:m3}.T1{animation-name:m1}.T2{animation-name:m2}
+    @keyframes m3{0%,10%{opacity:1;transform:translate(0,0)}16%,50%{opacity:1;transform:translate(210px,0)}54%,97%{opacity:0;transform:translate(210px,0)}100%{opacity:1;transform:translate(0,0)}}
+    @keyframes m1{0%,28%{opacity:1;transform:translate(0,0)}36%,92%{opacity:1;transform:translate(0,140px)}96%{opacity:0;transform:translate(0,140px)}97%{opacity:0;transform:translate(0,0)}100%{opacity:1;transform:translate(0,0)}}
+    @keyframes m2{0%,56%{opacity:1;transform:translate(0,0)}64%,92%{opacity:1;transform:translate(315px,0)}96%{opacity:0;transform:translate(315px,0)}97%{opacity:0;transform:translate(0,0)}100%{opacity:1;transform:translate(0,0)}}
+    .c{opacity:0;animation:10s infinite linear}
+    .c1{animation-name:k1}.c2{animation-name:k2}.c3{animation-name:k3}
+    @keyframes k1{0%,26%{opacity:1}28%,98%{opacity:0}100%{opacity:1}}
+    @keyframes k2{0%,27%{opacity:0}29%,54%{opacity:1}56%,100%{opacity:0}}
+    @keyframes k3{0%,55%{opacity:0}57%,95%{opacity:1}97%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .m,.c{animation:none}.T3{transform:translate(210px,0)}.T1{transform:translate(0,140px)}
+      .c{opacity:0}.c2{opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">ForkJoinPool: owner pops one end, thief steals the other</text>
+  <text class="sub" x="28" y="62">Each worker has its own deque. Forked subtasks are pushed at the owner end.</text>
+
+  <!-- worker 1 -->
+  <text class="lbl" x="28" y="136">Worker 1</text>
+  <text class="sub" x="28" y="154">deque</text>
+  <rect class="box" x="150" y="106" width="410" height="64" rx="10"/>
+  <text class="sub" x="158" y="190">← oldest: steal end (FIFO)</text>
+  <text class="sub" x="552" y="190" text-anchor="end">newest: owner end (LIFO) →</text>
+  <rect class="run" x="600" y="106" width="170" height="64" rx="10"/>
+  <text class="sub" x="685" y="190" text-anchor="middle">Worker 1 running</text>
+
+  <!-- worker 2 -->
+  <rect class="run" x="150" y="246" width="170" height="64" rx="10"/>
+  <text class="sub" x="235" y="330" text-anchor="middle">Worker 2 running</text>
+  <text class="lbl" x="28" y="276">Worker 2</text>
+  <text class="sub" x="28" y="294">idle at first</text>
+  <rect class="box" x="340" y="246" width="220" height="64" rx="10"/>
+  <text class="sub" x="450" y="283" text-anchor="middle">deque empty</text>
+
+  <!-- tasks -->
+  <g class="m T1"><rect class="tk" x="160" y="114" width="150" height="48" rx="8"/><text class="wt" x="235" y="143" text-anchor="middle">T1 (big)</text></g>
+  <g class="m T2"><rect class="tk" x="320" y="114" width="110" height="48" rx="8"/><text class="wt" x="375" y="143" text-anchor="middle">T2</text></g>
+  <g class="m T3"><rect class="tk" x="440" y="114" width="80" height="48" rx="8"/><text class="wt" x="480" y="143" text-anchor="middle">T3</text></g>
+
+  <g class="t">
+    <text class="c c1" x="28" y="364">1. Worker 1 pops its newest, smallest task from the owner end. Its data is still in cache.</text>
+    <text class="c c2" x="28" y="364">2. Idle Worker 2 steals the oldest task from the other end: the biggest chunk of work.</text>
+    <text class="c c3" x="28" y="364">3. Worker 1 finishes T3 and pops T2. Owner and thief rarely touch the same end.</text>
+  </g>
+  <text class="sub" x="28" y="388">The common pool works the same way; it has (processors − 1) workers by default.</text>
+</svg>

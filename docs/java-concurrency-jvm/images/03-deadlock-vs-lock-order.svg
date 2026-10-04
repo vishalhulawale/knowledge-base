@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 396" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Deadlock from opposite lock order, fixed by a global order</title>
+  <desc id="d">Animation with two panels. Left panel, opposite order: thread 1 transfers from A to B and locks A; thread 2 transfers from B to A and locks B; thread 1 then waits for B and thread 2 waits for A, forming a cycle, so both are parked forever. Right panel, global order with the smaller id first: thread 1 locks A; thread 2 also wants A first, so it waits for A while holding nothing; thread 1 locks B, finishes and releases both; thread 2 then locks A and B and finishes. Solid lines mean holds, dashed lines mean waiting for.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .lk{fill:#ffffff;stroke:#334155;stroke-width:2}
+    .p1{fill:#4f46e5}.p2{fill:#0ea5a4}
+    .wt{fill:#fff;font-size:14px;font-weight:700}
+    .hold{stroke:#4f46e5;stroke-width:3.5;fill:none}
+    .waitR{stroke:#dc2626;stroke-width:3;stroke-dasharray:7 6;fill:none}
+    .waitA{stroke:#d97706;stroke-width:3;stroke-dasharray:7 6;fill:none}
+    .tr{fill:#dc2626;font-size:15px;font-weight:700}
+    .tg{fill:#15803d;font-size:15px;font-weight:700}
+    .bad{fill:#fef2f2;stroke:#dc2626}.good{fill:#f0fdf4;stroke:#16a34a}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.lk{fill:#111827;stroke:#cbd5e1}
+      .p1{fill:#818cf8}.p2{fill:#2dd4bf}.wt{fill:#0f172a}
+      .hold{stroke:#818cf8}.waitR{stroke:#f87171}.waitA{stroke:#fbbf24}
+      .tr{fill:#f87171}.tg{fill:#4ade80}.bad{fill:#3a1d24;stroke:#f87171}.good{fill:#14301f;stroke:#4ade80}
+    }
+    /* 12 s loop */
+    .a{opacity:0;animation:12s infinite linear}
+    .a08{animation-name:a08}.a20{animation-name:a20}.a32{animation-name:a32}.a44{animation-name:a44}.a54{animation-name:a54}
+    .w08{animation-name:w08}.w20{animation-name:w20}.w32{animation-name:w32}
+    .a58{animation-name:a58}.a68{animation-name:a68}.a76{animation-name:a76}
+    @keyframes a08{0%,7%{opacity:0}9%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes a20{0%,19%{opacity:0}21%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes a32{0%,31%{opacity:0}33%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes a44{0%,43%{opacity:0}45%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes a54{0%,53%{opacity:0}55%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes w08{0%,7%{opacity:0}9%,55%{opacity:1}57%,100%{opacity:0}}
+    @keyframes w20{0%,19%{opacity:0}21%,55%{opacity:1}57%,100%{opacity:0}}
+    @keyframes w32{0%,31%{opacity:0}33%,55%{opacity:1}57%,100%{opacity:0}}
+    @keyframes a58{0%,57%{opacity:0}59%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes a68{0%,67%{opacity:0}69%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes a76{0%,75%{opacity:0}77%,95%{opacity:1}97%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none;opacity:1}.w08,.w20,.w32{opacity:0}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="394" rx="14"/>
+  <text class="h" x="28" y="40">Two transfers, two locks: opposite order vs global order</text>
+  <text class="sub" x="28" y="62">Solid line = holds the lock. Dashed line = waiting for it.</text>
+
+  <!-- LEFT: opposite order -->
+  <rect class="box" x="28" y="76" width="364" height="270" rx="12"/>
+  <text class="tr" x="44" y="100">❌ Opposite lock order</text>
+  <rect class="lk" x="68" y="116" width="120" height="46" rx="8"/><text class="lbl" x="128" y="145" text-anchor="middle">Lock A</text>
+  <rect class="lk" x="232" y="116" width="120" height="46" rx="8"/><text class="lbl" x="292" y="145" text-anchor="middle">Lock B</text>
+  <rect class="p1" x="68" y="236" width="120" height="40" rx="20"/><text class="wt" x="128" y="261" text-anchor="middle">T1: A → B</text>
+  <rect class="p2" x="232" y="236" width="120" height="40" rx="20"/><text class="wt" x="292" y="261" text-anchor="middle">T2: B → A</text>
+  <line class="hold a a08" x1="118" y1="234" x2="118" y2="164"/>
+  <line class="hold a a20" x1="302" y1="234" x2="302" y2="164"/>
+  <line class="waitR a a32" x1="150" y1="234" x2="262" y2="164"/>
+  <line class="waitR a a44" x1="270" y1="234" x2="158" y2="164"/>
+  <g class="a a54">
+    <rect class="bad" x="44" y="290" width="332" height="44" rx="10"/>
+    <text class="tr" x="210" y="309" text-anchor="middle">Circular wait: deadlock</text>
+    <text class="sub" x="210" y="326" text-anchor="middle">both parked forever, CPU idle</text>
+  </g>
+
+  <!-- RIGHT: global order -->
+  <rect class="box" x="408" y="76" width="364" height="270" rx="12"/>
+  <text class="tg" x="424" y="100">✅ Same order: smaller id (A) first</text>
+  <rect class="lk" x="448" y="116" width="120" height="46" rx="8"/><text class="lbl" x="508" y="145" text-anchor="middle">Lock A</text>
+  <rect class="lk" x="612" y="116" width="120" height="46" rx="8"/><text class="lbl" x="672" y="145" text-anchor="middle">Lock B</text>
+  <rect class="p1" x="448" y="236" width="120" height="40" rx="20"/><text class="wt" x="508" y="261" text-anchor="middle">T1: A → B</text>
+  <rect class="p2" x="612" y="236" width="120" height="40" rx="20"/><text class="wt" x="672" y="261" text-anchor="middle">T2: B → A</text>
+  <line class="hold a w08" x1="498" y1="234" x2="498" y2="164"/>
+  <line class="waitA a w20" x1="650" y1="234" x2="538" y2="164"/>
+  <line class="hold a w32" x1="530" y1="234" x2="642" y2="164"/>
+  <line class="hold a a58" x1="650" y1="234" x2="538" y2="164"/>
+  <line class="hold a a68" x1="682" y1="234" x2="682" y2="164"/>
+  <g class="a a76">
+    <rect class="good" x="424" y="290" width="332" height="44" rx="10"/>
+    <text class="tg" x="590" y="309" text-anchor="middle">No cycle possible</text>
+    <text class="sub" x="590" y="326" text-anchor="middle">T1 finishes, then T2 takes A and B</text>
+  </g>
+
+  <text class="sub" x="28" y="374">T2 waits for A while holding nothing, so no circular wait can form. The order key is the account id.</text>
+</svg>

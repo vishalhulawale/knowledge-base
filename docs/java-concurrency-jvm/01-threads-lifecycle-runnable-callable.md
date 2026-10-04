@@ -33,6 +33,9 @@ A **process** has its own address space. A **thread** is a path of execution ins
 
 Shared heap is what makes threads useful (cheap communication) and dangerous (data races). Subtopic 2 covers how to share safely.
 
+![Diagram of one JVM process: the heap at the top holds an OrderService singleton, a map behind a static field and an Order object; below it three threads each have their own stack frames and program counter, with arrows from their local variables to heap objects, two of which are reached by more than one thread](images/01-thread-memory-layout.svg){ loading=lazy }
+*Locals live in one thread's stack frames. Anything on the heap that two threads can reach is shared state.*
+
 ### Platform threads vs virtual threads
 
 | | Platform thread | Virtual thread (Java 21, JEP 444) |
@@ -90,6 +93,9 @@ Three precise points that separate senior answers:
 - **RUNNABLE is the JVM's view, not the OS view.** A thread blocked in a JDBC socket read is `RUNNABLE` in the dump but uses zero CPU. Many threads `RUNNABLE` in `socketRead0` means a slow downstream, not a CPU problem. The frame name depends on the JDK: `java.net.SocketInputStream.socketRead0` is what you see up to Java 12. From Java 13 (JEP 353 reimplemented the legacy socket API) the same blocked read shows `sun.nio.ch.NioSocketImpl.implRead` over `sun.nio.ch.SocketDispatcher.read0` (or `sun.nio.ch.Net.poll` when a read timeout is set). The state is still `RUNNABLE`.
 - **`BLOCKED` is only for intrinsic locks.** A thread waiting for a `ReentrantLock` is parked through `LockSupport.park`, so it shows as `WAITING (parking)`.
 - **`sleep()` does not release locks. `wait()` does.** `wait()` releases the monitor of the object it is called on and must be called while holding that monitor.
+
+![Animation: thread A owns a monitor while thread B is blocked in the entry set; A calls wait and moves to the wait set while B takes the monitor; B calls notify and A moves to the entry set as BLOCKED; B leaves and A re-acquires the monitor](images/01-wait-notify-monitor.svg){ loading=lazy }
+*Watch step 3: after `notify()` thread A is BLOCKED, not RUNNABLE, until B releases the monitor.*
 
 ### Interruption: cooperative cancellation
 

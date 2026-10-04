@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Inside a CompletableFuture: result plus a stack of dependents</title>
+  <desc id="d">Animation. The request thread calls cf.thenApply with f1 and cf.thenAccept with f2 while cf is not complete, so each call only pushes a completion onto cf's stack and returns at once. Later an ioPool thread completes cf: the result is set once with a compare-and-swap, and that same thread pops the stack and runs f2 and then f1. Finally the request thread calls cf.thenApply with f3 on the already completed future, so f3 runs immediately on the request thread.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .mono{fill:#334155;font-size:14px;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .cf{fill:#ffffff;stroke:#4f46e5;stroke-width:2.5}
+    .slot{fill:#ffffff;stroke:#94a3b8;stroke-dasharray:5 4}
+    .comp{fill:#4f46e5}
+    .val{fill:#0ea5a4}
+    .wt{fill:#fff;font-size:14px;font-weight:700}
+    .tt{fill:#0f766e;font-size:14px;font-weight:600}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.cf{fill:#111827;stroke:#818cf8}.slot{fill:#111827;stroke:#64748b}
+      .comp{fill:#818cf8}.val{fill:#2dd4bf}.wt{fill:#0f172a}.tt{fill:#5eead4}
+    }
+    /* 12 s loop */
+    .a{opacity:0;animation:12s infinite linear}
+    .a08{animation-name:a08}.a22{animation-name:a22}.a38{animation-name:a38}.a52{animation-name:a52}.a62{animation-name:a62}.a74{animation-name:a74}
+    @keyframes a08{0%,7%{opacity:0}9%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes a22{0%,21%{opacity:0}23%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes a38{0%,37%{opacity:0}39%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes a52{0%,51%{opacity:0}53%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes a62{0%,61%{opacity:0}63%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes a74{0%,73%{opacity:0}75%,95%{opacity:1}97%,100%{opacity:0}}
+    .e{animation:em 12s infinite linear}
+    @keyframes em{0%,37%{opacity:1}39%,96%{opacity:0}98%,100%{opacity:1}}
+    .m{opacity:0;animation:12s infinite ease-out}
+    .f1{animation-name:f1}.f2{animation-name:f2}
+    @keyframes f1{0%,7%{opacity:0;transform:translate(-160px,0)}12%,60%{opacity:1;transform:translate(0,0)}64%,100%{opacity:0;transform:translate(160px,0)}}
+    @keyframes f2{0%,21%{opacity:0;transform:translate(-160px,0)}26%,50%{opacity:1;transform:translate(0,0)}54%,100%{opacity:0;transform:translate(160px,0)}}
+    .c1{animation-name:k1}.c2{animation-name:k2}.c3{animation-name:k3}.c4{animation-name:k4}
+    @keyframes k1{0%,36%{opacity:1}38%,98%{opacity:0}100%{opacity:1}}
+    @keyframes k2{0%,37%{opacity:0}39%,49%{opacity:1}51%,100%{opacity:0}}
+    @keyframes k3{0%,50%{opacity:0}52%,72%{opacity:1}74%,100%{opacity:0}}
+    @keyframes k4{0%,73%{opacity:0}75%,95%{opacity:1}97%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .a,.m,.e{animation:none}.a{opacity:1}.e,.m{opacity:0}.c1,.c2,.c3{opacity:0}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Inside a CompletableFuture: completion triggers the dependents</text>
+  <text class="sub" x="28" y="62">A non-async stage runs on whichever thread completes the future, or on the caller if it is already done.</text>
+
+  <!-- request thread -->
+  <rect class="box" x="28" y="80" width="236" height="250" rx="12"/>
+  <text class="lbl" x="44" y="104">Request thread</text>
+  <text class="mono a a08" x="44" y="140">cf.thenApply(f1)</text>
+  <text class="sub a a08" x="44" y="158">returns at once</text>
+  <text class="mono a a22" x="44" y="190">cf.thenAccept(f2)</text>
+  <text class="sub a a22" x="44" y="208">returns at once</text>
+  <text class="mono a a74" x="44" y="268">cf.thenApply(f3)</text>
+  <text class="tt a a74" x="44" y="290">f3 runs now,</text>
+  <text class="tt a a74" x="44" y="308">on this thread</text>
+
+  <!-- the future -->
+  <rect class="cf" x="282" y="80" width="236" height="250" rx="12"/>
+  <text class="lbl" x="298" y="104">CompletableFuture cf</text>
+  <text class="sub" x="298" y="138">result</text>
+  <rect class="slot" x="352" y="118" width="150" height="30" rx="6"/>
+  <text class="sub e" x="427" y="138" text-anchor="middle">empty</text>
+  <g class="a a38"><rect class="val" x="352" y="118" width="150" height="30" rx="6"/><text class="wt" x="427" y="138" text-anchor="middle">member #42</text></g>
+  <text class="sub" x="298" y="178">stack of dependents</text>
+  <rect class="slot" x="298" y="188" width="204" height="124" rx="8"/>
+  <g class="m f1"><rect class="comp" x="310" y="266" width="180" height="34" rx="6"/><text class="wt" x="400" y="288" text-anchor="middle">thenApply f1</text></g>
+  <g class="m f2"><rect class="comp" x="310" y="226" width="180" height="34" rx="6"/><text class="wt" x="400" y="248" text-anchor="middle">thenAccept f2</text></g>
+
+  <!-- worker thread -->
+  <rect class="box" x="536" y="80" width="236" height="250" rx="12"/>
+  <text class="lbl" x="552" y="104">ioPool thread</text>
+  <text class="mono a a38" x="552" y="140">cf.complete(member)</text>
+  <text class="sub a a38" x="552" y="158">result set once, by CAS</text>
+  <text class="t a a52" x="552" y="200">pops and runs f2</text>
+  <text class="t a a62" x="552" y="230">pops and runs f1</text>
+
+  <g class="t">
+    <text class="a c1" x="28" y="362">cf is not complete yet, so each call just pushes a completion onto the stack.</text>
+    <text class="a c2" x="28" y="362">The upstream answers. The ioPool thread sets the result; only the first completion wins.</text>
+    <text class="a c3" x="28" y="362">The same ioPool thread then pops the stack and runs each non-async dependent.</text>
+    <text class="a c4" x="28" y="362">cf is already complete, so a new non-async stage runs immediately on the caller.</text>
+  </g>
+  <text class="sub" x="28" y="396">With thenApplyAsync(fn, executor) the completing thread would hand each stage to that executor instead.</text>
+</svg>

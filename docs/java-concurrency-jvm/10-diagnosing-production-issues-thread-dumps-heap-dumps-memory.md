@@ -109,6 +109,9 @@ Patterns to recognise:
 !!! tip "Why three dumps"
     One dump is a photograph. A thread in `socketRead` in one dump may be perfectly healthy. The same thread in the same frame in three dumps taken 10 seconds apart is stuck. Always compare.
 
+![Animation: three thread dumps taken 10 seconds apart appear side by side; three threads show a different top frame in each dump, while http-exec-7 is in SocketDispatcher.read0 in all three and is highlighted as stuck](images/10-three-dumps.svg){ loading=lazy }
+*Read across the rows, not down the columns: a thread whose frame never changes is the one to investigate.*
+
 **Virtual threads (Java 21+).** `jcmd Thread.print` and `jstack` show platform threads only, so you see the carrier threads but not the thousands of virtual threads. Use `jcmd <pid> Thread.dump_to_file -format=json <file>`, which includes virtual threads and groups them by their owner. On Java 21 to 23 a virtual thread that blocks inside `synchronized` pins its carrier; look for the JFR event `jdk.VirtualThreadPinned`. JEP 491 in Java 24 removed that pinning case (see page 7).
 
 ### Heap dumps
@@ -169,6 +172,9 @@ GC logs answer this (`-Xlog:gc*`, see page 9). Look at **heap used after each fu
 - **Flat baseline, tall sawtooth:** healthy. High allocation rate, but everything is collected.
 - **Baseline that rises after every collection and never comes down:** a leak.
 - **Baseline is flat but close to the maximum:** under-sized heap, or a legitimate large data set.
+
+![Three sketches of heap usage over time: a healthy sawtooth with a flat, low after-GC baseline; a memory leak whose after-GC baseline rises steadily; and an undersized heap whose baseline is flat but close to the maximum](images/10-heap-after-gc.svg){ loading=lazy }
+*Notice that the peaks look similar in all three. Only the dashed after-GC line tells them apart.*
 
 ### Not all memory is heap
 

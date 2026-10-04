@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 384" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Heap used after GC: healthy, leak, undersized</title>
+  <desc id="d">Three sketches of heap usage over time, each a sawtooth where usage climbs with allocation and drops at each collection. The dashed line joins the heap used after each collection. Healthy: the baseline is flat and low. Memory leak: the baseline rises after every collection and never comes back down. Heap too small: the baseline is flat but close to the maximum heap, which points to an undersized heap or a legitimately large data set.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .saw{fill:none;stroke:#4f46e5;stroke-width:2;stroke-linejoin:round}
+    .ax{stroke:#94a3b8;stroke-width:1.5}
+    .max{stroke:#94a3b8;stroke-width:1.5;stroke-dasharray:3 4}
+    .bg{stroke:#16a34a;stroke-width:3;stroke-dasharray:8 5}.br{stroke:#dc2626;stroke-width:3;stroke-dasharray:8 5}.ba{stroke:#d97706;stroke-width:3;stroke-dasharray:8 5}
+    .tg{fill:#15803d;font-size:14px;font-weight:700}.tr{fill:#dc2626;font-size:14px;font-weight:700}.ta{fill:#b45309;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.saw{stroke:#818cf8}.ax,.max{stroke:#64748b}
+      .bg{stroke:#4ade80}.br{stroke:#f87171}.ba{stroke:#fbbf24}
+      .tg{fill:#4ade80}.tr{fill:#f87171}.ta{fill:#fbbf24}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="382" rx="14"/>
+  <text class="h" x="28" y="40">Read the heap after each GC, not the peaks</text>
+  <text class="sub" x="28" y="62">Solid line = heap used over time. Dashed line = heap used right after each collection.</text>
+  <rect class="box" x="28" y="80" width="228" height="244" rx="12"/>
+  <text class="lbl" x="44" y="104">Healthy</text>
+  <line class="max" x1="44" y1="122" x2="240" y2="122"/><text class="sub" x="240" y="117" text-anchor="end">max heap</text>
+  <line class="ax" x1="44" y1="250" x2="240" y2="250"/>
+  <polyline class="saw" points="44,225 68,150 68,225 68,225 93,150 93,225 93,225 118,150 118,225 118,225 142,150 142,225 142,225 166,150 166,225 166,225 191,150 191,225 191,225 216,150 216,225 216,225 240,150 240,225"/>
+  <line class="bg" x1="44" y1="225" x2="240" y2="225"/>
+  <text class="tg" x="44" y="276">Flat baseline</text>
+  <text class="t" x="44" y="296">high allocation, but GC</text>
+  <text class="t" x="44" y="314">reclaims it all</text>
+  <rect class="box" x="286" y="80" width="228" height="244" rx="12"/>
+  <text class="lbl" x="302" y="104">Memory leak</text>
+  <line class="max" x1="302" y1="122" x2="498" y2="122"/><text class="sub" x="498" y="117" text-anchor="end">max heap</text>
+  <line class="ax" x1="302" y1="250" x2="498" y2="250"/>
+  <polyline class="saw" points="302,236 324,132 324,223 324,223 346,132 346,210 346,210 367,132 367,197 367,197 389,132 389,184 389,184 411,132 411,171 411,171 433,132 433,158 433,158 454,132 454,145 454,145 476,132 476,132 476,132 498,132 498,132"/>
+  <line class="br" x1="302" y1="236" x2="498" y2="132"/>
+  <text class="tr" x="302" y="276">Rising baseline</text>
+  <text class="t" x="302" y="296">heap after GC climbs</text>
+  <text class="t" x="302" y="314">and never comes back</text>
+  <rect class="box" x="544" y="80" width="228" height="244" rx="12"/>
+  <text class="lbl" x="560" y="104">Heap too small</text>
+  <line class="max" x1="560" y1="122" x2="756" y2="122"/><text class="sub" x="756" y="117" text-anchor="end">max heap</text>
+  <line class="ax" x1="560" y1="250" x2="756" y2="250"/>
+  <polyline class="saw" points="560,150 580,128 580,150 580,150 599,128 599,150 599,150 619,128 619,150 619,150 638,128 638,150 638,150 658,128 658,150 658,150 678,128 678,150 678,150 697,128 697,150 697,150 717,128 717,150 717,150 736,128 736,150 736,150 756,128 756,150"/>
+  <line class="ba" x1="560" y1="150" x2="756" y2="150"/>
+  <text class="ta" x="560" y="276">Flat but near max</text>
+  <text class="t" x="560" y="296">or a genuinely large</text>
+  <text class="t" x="560" y="314">data set: size it up</text>
+  <text class="sub" x="28" y="352">Sketches, not real data. Get the numbers from -Xlog:gc* or the Micrometer metric jvm.gc.live.data.size.</text>
+  <text class="sub" x="28" y="370">A heap near full just before a collection is normal in all three.</text>
+</svg>

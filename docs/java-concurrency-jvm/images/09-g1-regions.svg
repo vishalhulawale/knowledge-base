@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">G1 heap regions during young and mixed collections</title>
+  <desc id="d">Animation of a G1 heap drawn as 48 equal regions. Each region currently plays one role: Eden, Survivor, Old, Humongous (one large object spanning two contiguous regions) or free. Two old regions are marked as mostly garbage. During a young pause, live objects from all Eden and Survivor regions are copied into a few free regions, which become Survivor or Old, and the former Eden and Survivor regions become free. Later, after concurrent marking, a mixed pause also evacuates the two old regions with the most garbage into one free region, freeing them.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .t{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .fr{fill:#ffffff;stroke:#cbd5e1}
+    .re{fill:#0ea5a4}.rs{fill:#4f46e5}.ro{fill:#d97706}.rh{fill:#475569}
+    .rg{fill:#fef3c7;stroke:#d97706;stroke-width:2;stroke-dasharray:4 3}
+    .wt{fill:#fff;font-size:14px;font-weight:700}.gt{fill:#b45309;font-size:14px;font-weight:700}
+    .tr{fill:#dc2626;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.t{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .fr{fill:#111827;stroke:#475569}
+      .re{fill:#2dd4bf}.rs{fill:#818cf8}.ro{fill:#fbbf24}.rh{fill:#94a3b8}
+      .rg{fill:#3a2c10;stroke:#fbbf24}.wt{fill:#0f172a}.gt{fill:#fbbf24}.tr{fill:#f87171}
+    }
+    /* 12 s loop: young pause at 32%, mixed pause at 64% */
+    .v1,.v2,.v3,.v4,.v5,.f{animation:12s infinite linear}
+    .v1{animation-name:v1}.v2{animation-name:v2}.v3{opacity:0;animation-name:v3}.v4{opacity:0;animation-name:v4}.v5{opacity:0;animation-name:v5}
+    @keyframes v1{0%,31%{opacity:1}33%,98%{opacity:0}100%{opacity:1}}
+    @keyframes v2{0%,63%{opacity:1}65%,98%{opacity:0}100%{opacity:1}}
+    @keyframes v3{0%,31%{opacity:0}33%,96%{opacity:1}98%,100%{opacity:0}}
+    @keyframes v4{0%,31%{opacity:0}33%,63%{opacity:1}65%,100%{opacity:0}}
+    @keyframes v5{0%,63%{opacity:0}65%,96%{opacity:1}98%,100%{opacity:0}}
+    .f{opacity:0}
+    .c1{animation-name:k1}.c2{animation-name:k2}.c3{animation-name:k3}
+    @keyframes k1{0%,30%{opacity:1}32%,98%{opacity:0}100%{opacity:1}}
+    @keyframes k2{0%,31%{opacity:0}33%,62%{opacity:1}64%,100%{opacity:0}}
+    @keyframes k3{0%,63%{opacity:0}65%,96%{opacity:1}98%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .v1,.v2,.v3,.v4,.v5,.f{animation:none}.v1,.v2,.v4,.f{opacity:0}.v3,.v5,.c3{opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">G1: the heap as equal regions, collected by evacuation</text>
+  <text class="sub" x="28" y="62">E = Eden, S = Survivor, O = Old, H = Humongous, empty = free. O* = old region that is mostly garbage.</text>
+  <rect class="fr" x="40" y="96" width="52" height="40" rx="5"/>
+  <g class="s v1"><rect class="re" x="40" y="96" width="52" height="40" rx="5"/><text class="wt" x="66" y="121" text-anchor="middle">E</text></g>
+  <rect class="fr" x="98" y="96" width="52" height="40" rx="5"/>
+  <g class="s v1"><rect class="re" x="98" y="96" width="52" height="40" rx="5"/><text class="wt" x="124" y="121" text-anchor="middle">E</text></g>
+  <rect class="fr" x="156" y="96" width="52" height="40" rx="5"/>
+  <g class="s v1"><rect class="re" x="156" y="96" width="52" height="40" rx="5"/><text class="wt" x="182" y="121" text-anchor="middle">E</text></g>
+  <rect class="fr" x="214" y="96" width="52" height="40" rx="5"/>
+  <g class="s v1"><rect class="re" x="214" y="96" width="52" height="40" rx="5"/><text class="wt" x="240" y="121" text-anchor="middle">E</text></g>
+  <rect class="fr" x="272" y="96" width="52" height="40" rx="5"/>
+  <g class="s"><rect class="ro" x="272" y="96" width="52" height="40" rx="5"/><text class="wt" x="298" y="121" text-anchor="middle">O</text></g>
+  <rect class="fr" x="330" y="96" width="52" height="40" rx="5"/>
+  <g class="s"><rect class="ro" x="330" y="96" width="52" height="40" rx="5"/><text class="wt" x="356" y="121" text-anchor="middle">O</text></g>
+  <rect class="fr" x="388" y="96" width="52" height="40" rx="5"/>
+  <g class="s"><rect class="ro" x="388" y="96" width="52" height="40" rx="5"/><text class="wt" x="414" y="121" text-anchor="middle">O</text></g>
+  <rect class="fr" x="446" y="96" width="52" height="40" rx="5"/>
+  <g class="s"><rect class="rh" x="446" y="96" width="52" height="40" rx="5"/><text class="wt" x="472" y="121" text-anchor="middle">H</text></g>
+  <rect class="fr" x="504" y="96" width="52" height="40" rx="5"/>
+  <g class="s"><rect class="rh" x="504" y="96" width="52" height="40" rx="5"/><text class="wt" x="530" y="121" text-anchor="middle">H</text></g>
+  <rect class="fr" x="562" y="96" width="52" height="40" rx="5"/>
+  <g class="s v3"><rect class="rs" x="562" y="96" width="52" height="40" rx="5"/><text class="wt" x="588" y="121" text-anchor="middle">S</text></g>
+  <rect class="fr" x="620" y="96" width="52" height="40" rx="5"/>
+  <g class="s v3"><rect class="rs" x="620" y="96" width="52" height="40" rx="5"/><text class="wt" x="646" y="121" text-anchor="middle">S</text></g>
+  <rect class="fr" x="678" y="96" width="52" height="40" rx="5"/>
+  <rect class="fr" x="40" y="142" width="52" height="40" rx="5"/>
+  <g class="s v1"><rect class="re" x="40" y="142" width="52" height="40" rx="5"/><text class="wt" x="66" y="167" text-anchor="middle">E</text></g>
+  <rect class="fr" x="98" y="142" width="52" height="40" rx="5"/>
+  <g class="s v1"><rect class="re" x="98" y="142" width="52" height="40" rx="5"/><text class="wt" x="124" y="167" text-anchor="middle">E</text></g>
+  <rect class="fr" x="156" y="142" width="52" height="40" rx="5"/>
+  <g class="s v1"><rect class="re" x="156" y="142" width="52" height="40" rx="5"/><text class="wt" x="182" y="167" text-anchor="middle">E</text></g>
+  <rect class="fr" x="214" y="142" width="52" height="40" rx="5"/>
+  <g class="s v1"><rect class="rs" x="214" y="142" width="52" height="40" rx="5"/><text class="wt" x="240" y="167" text-anchor="middle">S</text></g>
+  <rect class="fr" x="272" y="142" width="52" height="40" rx="5"/>
+  <g class="s"><rect class="ro" x="272" y="142" width="52" height="40" rx="5"/><text class="wt" x="298" y="167" text-anchor="middle">O</text></g>
+  <rect class="fr" x="330" y="142" width="52" height="40" rx="5"/>
+  <g class="s"><rect class="ro" x="330" y="142" width="52" height="40" rx="5"/><text class="wt" x="356" y="167" text-anchor="middle">O</text></g>
+  <rect class="fr" x="388" y="142" width="52" height="40" rx="5"/>
+  <g class="s"><rect class="ro" x="388" y="142" width="52" height="40" rx="5"/><text class="wt" x="414" y="167" text-anchor="middle">O</text></g>
+  <rect class="fr" x="446" y="142" width="52" height="40" rx="5"/>
+  <g class="s"><rect class="ro" x="446" y="142" width="52" height="40" rx="5"/><text class="wt" x="472" y="167" text-anchor="middle">O</text></g>
+  <rect class="fr" x="504" y="142" width="52" height="40" rx="5"/>
+  <g class="s v3"><rect class="ro" x="504" y="142" width="52" height="40" rx="5"/><text class="wt" x="530" y="167" text-anchor="middle">O</text></g>
+  <rect class="fr" x="562" y="142" width="52" height="40" rx="5"/>
+  <rect class="fr" x="620" y="142" width="52" height="40" rx="5"/>
+  <rect class="fr" x="678" y="142" width="52" height="40" rx="5"/>
+  <rect class="fr" x="40" y="188" width="52" height="40" rx="5"/>
+  <g class="s"><rect class="ro" x="40" y="188" width="52" height="40" rx="5"/><text class="wt" x="66" y="213" text-anchor="middle">O</text></g>
+  <rect class="fr" x="98" y="188" width="52" height="40" rx="5"/>
+  <g class="s v2"><rect class="rg" x="98" y="188" width="52" height="40" rx="5"/><text class="gt" x="124" y="213" text-anchor="middle">O*</text></g>
+  <rect class="fr" x="156" y="188" width="52" height="40" rx="5"/>
+  <g class="s"><rect class="ro" x="156" y="188" width="52" height="40" rx="5"/><text class="wt" x="182" y="213" text-anchor="middle">O</text></g>
+  <rect class="fr" x="214" y="188" width="52" height="40" rx="5"/>
+  <g class="s"><rect class="ro" x="214" y="188" width="52" height="40" rx="5"/><text class="wt" x="240" y="213" text-anchor="middle">O</text></g>
+  <rect class="fr" x="272" y="188" width="52" height="40" rx="5"/>
+  <g class="s v5"><rect class="ro" x="272" y="188" width="52" height="40" rx="5"/><text class="wt" x="298" y="213" text-anchor="middle">O</text></g>
+  <rect class="fr" x="330" y="188" width="52" height="40" rx="5"/>
+  <rect class="fr" x="388" y="188" width="52" height="40" rx="5"/>
+  <rect class="fr" x="446" y="188" width="52" height="40" rx="5"/>
+  <rect class="fr" x="504" y="188" width="52" height="40" rx="5"/>
+  <rect class="fr" x="562" y="188" width="52" height="40" rx="5"/>
+  <g class="s v1"><rect class="re" x="562" y="188" width="52" height="40" rx="5"/><text class="wt" x="588" y="213" text-anchor="middle">E</text></g>
+  <rect class="fr" x="620" y="188" width="52" height="40" rx="5"/>
+  <g class="s v1"><rect class="re" x="620" y="188" width="52" height="40" rx="5"/><text class="wt" x="646" y="213" text-anchor="middle">E</text></g>
+  <rect class="fr" x="678" y="188" width="52" height="40" rx="5"/>
+  <rect class="fr" x="40" y="234" width="52" height="40" rx="5"/>
+  <g class="s"><rect class="ro" x="40" y="234" width="52" height="40" rx="5"/><text class="wt" x="66" y="259" text-anchor="middle">O</text></g>
+  <rect class="fr" x="98" y="234" width="52" height="40" rx="5"/>
+  <g class="s"><rect class="ro" x="98" y="234" width="52" height="40" rx="5"/><text class="wt" x="124" y="259" text-anchor="middle">O</text></g>
+  <rect class="fr" x="156" y="234" width="52" height="40" rx="5"/>
+  <g class="s v2"><rect class="rg" x="156" y="234" width="52" height="40" rx="5"/><text class="gt" x="182" y="259" text-anchor="middle">O*</text></g>
+  <rect class="fr" x="214" y="234" width="52" height="40" rx="5"/>
+  <g class="s"><rect class="ro" x="214" y="234" width="52" height="40" rx="5"/><text class="wt" x="240" y="259" text-anchor="middle">O</text></g>
+  <rect class="fr" x="272" y="234" width="52" height="40" rx="5"/>
+  <g class="s"><rect class="ro" x="272" y="234" width="52" height="40" rx="5"/><text class="wt" x="298" y="259" text-anchor="middle">O</text></g>
+  <rect class="fr" x="330" y="234" width="52" height="40" rx="5"/>
+  <rect class="fr" x="388" y="234" width="52" height="40" rx="5"/>
+  <rect class="fr" x="446" y="234" width="52" height="40" rx="5"/>
+  <rect class="fr" x="504" y="234" width="52" height="40" rx="5"/>
+  <rect class="fr" x="562" y="234" width="52" height="40" rx="5"/>
+  <rect class="fr" x="620" y="234" width="52" height="40" rx="5"/>
+  <rect class="fr" x="678" y="234" width="52" height="40" rx="5"/>
+
+  <g class="t">
+    <g class="f c1"><text x="28" y="312">Generations are just sets of regions. The humongous object (half a region or more)</text><text x="28" y="332">takes two contiguous regions.</text></g>
+    <g class="f c2"><text x="28" y="312"><tspan class="tr">Pause Young</tspan>: live objects from every E and S region are copied into a few free</text><text x="28" y="332">regions (new S, and O for promoted objects). The old E and S regions are now free.</text></g>
+    <g class="f c3"><text x="28" y="312"><tspan class="tr">Pause Young (Mixed)</tspan>: after concurrent marking, the old regions with the</text><text x="28" y="332">most garbage are evacuated too. Their few live objects are compacted into one region.</text></g>
+  </g>
+  <text class="sub" x="28" y="372">G1 picks as many regions as fit in MaxGCPauseMillis (200 ms by default). Copying compacts, so no fragmentation.</text>
+  <text class="sub" x="28" y="392">Real heaps have about 2,048 regions of 1 to 32 MB. Live data in each region is not drawn.</text>
+</svg>

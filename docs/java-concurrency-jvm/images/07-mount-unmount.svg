@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 384" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Virtual threads mounting and unmounting on carrier threads</title>
+  <desc id="d">Animation in four steps with two carrier threads, C1 and C2. Step 1: virtual thread VT1 runs on C1, VT2 runs on C2, and VT3 is runnable in the scheduler queue. Step 2: VT1 makes a blocking socket read, so it unmounts: its stack frames are copied to the heap, its socket is registered with the poller, and carrier C1 picks up VT3. Step 3: data arrives, the poller makes VT1 runnable again and it goes back to the scheduler queue, while VT2 finishes and frees C2. Step 4: VT1 mounts on C2, a different carrier from before, and continues.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .car{fill:#ffffff;stroke:#4f46e5;stroke-width:2.5}
+    .heap{fill:#e0f2f1;stroke:#0ea5a4}
+    .v1{fill:#d97706}.v2{fill:#4f46e5}.v3{fill:#0ea5a4}
+    .wt{fill:#fff;font-size:14px;font-weight:700}
+    .ta{fill:#b45309;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.car{fill:#111827;stroke:#818cf8}.heap{fill:#123b3b;stroke:#2dd4bf}
+      .v1{fill:#fbbf24}.v2{fill:#818cf8}.v3{fill:#2dd4bf}.wt{fill:#0f172a}.ta{fill:#fbbf24}
+    }
+    /* 12 s loop, four steps */
+    .m{animation:12s infinite ease-in-out}
+    .VT1{animation-name:m1}.VT2{animation-name:m2}.VT3{animation-name:m3}
+    @keyframes m1{0%,20%{transform:translate(0,0)}24%,42%{transform:translate(-280px,80px)}46%,64%{transform:translate(-280px,0)}68%,96%{transform:translate(0,80px)}99%,100%{transform:translate(0,0)}}
+    @keyframes m2{0%,44%{opacity:1;transform:translate(0,0)}48%,97%{opacity:0;transform:translate(40px,0)}100%{opacity:1;transform:translate(0,0)}}
+    @keyframes m3{0%,20%{transform:translate(0,0)}24%,96%{transform:translate(280px,0)}99%,100%{transform:translate(0,0)}}
+    .f{opacity:0;animation:12s infinite linear}
+    .p1{animation-name:o2}.p2{animation-name:o3}
+    .c1{animation-name:o1}.c2{animation-name:o2}.c3{animation-name:o3}.c4{animation-name:o4}
+    @keyframes o1{0%,20%{opacity:1}22%,98%{opacity:0}100%{opacity:1}}
+    @keyframes o2{0%,21%{opacity:0}23%,43%{opacity:1}45%,100%{opacity:0}}
+    @keyframes o3{0%,44%{opacity:0}46%,65%{opacity:1}67%,100%{opacity:0}}
+    @keyframes o4{0%,66%{opacity:0}68%,96%{opacity:1}98%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .m,.f{animation:none}.VT1{transform:translate(-280px,80px)}.VT3{transform:translate(280px,0)}
+      .f{opacity:0}.p1,.c2{opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="382" rx="14"/>
+  <text class="h" x="28" y="40">Virtual threads: blocking unmounts, the carrier moves on</text>
+  <text class="sub" x="28" y="62">Two carriers (platform threads of the scheduler's ForkJoinPool) run three virtual threads.</text>
+
+  <rect class="box" x="40" y="84" width="220" height="72" rx="12"/>
+  <text class="sub" x="52" y="100">scheduler queue: runnable</text>
+  <rect class="heap" x="40" y="164" width="220" height="72" rx="12"/>
+  <text class="sub" x="52" y="180">heap: parked (stack chunks)</text>
+
+  <rect class="car" x="330" y="84" width="200" height="72" rx="12"/>
+  <text class="lbl" x="545" y="118">carrier C1</text>
+  <rect class="car" x="330" y="164" width="200" height="72" rx="12"/>
+  <text class="lbl" x="545" y="198">carrier C2</text>
+
+  <text class="ta f p1" x="545" y="222">VT1's socket waits in the poller</text>
+  <text class="ta f p2" x="545" y="222">data ready: VT1 runnable</text>
+
+  <!-- virtual threads: VT1 drawn on C1, VT2 on C2, VT3 in the queue -->
+  <g class="m VT1"><rect class="v1" x="375" y="110" width="110" height="36" rx="18"/><text class="wt" x="430" y="133" text-anchor="middle">VT1</text></g>
+  <g class="m VT2"><rect class="v2" x="375" y="190" width="110" height="36" rx="18"/><text class="wt" x="430" y="213" text-anchor="middle">VT2</text></g>
+  <g class="m VT3"><rect class="v3" x="95" y="110" width="110" height="36" rx="18"/><text class="wt" x="150" y="133" text-anchor="middle">VT3</text></g>
+
+  <g class="t">
+    <text class="f c1" x="28" y="282">1. VT1 and VT2 are mounted on the two carriers. VT3 is runnable and waits for a carrier.</text>
+    <g class="f c2"><text x="28" y="282">2. VT1 calls a blocking socket read. It unmounts: frames go to the heap, the socket goes</text><text x="28" y="302">to the poller, and carrier C1 is free at once. C1 now runs VT3.</text></g>
+    <text class="f c3" x="28" y="282">3. Data arrives. The poller makes VT1 runnable again. Meanwhile VT2 finishes and frees C2.</text>
+    <text class="f c4" x="28" y="282">4. VT1 mounts on C2, a different carrier from before, and continues after the read.</text>
+  </g>
+  <text class="sub" x="28" y="344">No OS thread was blocked during the read. A pinned virtual thread (for example in a native frame)</text>
+  <text class="sub" x="28" y="362">would instead keep its carrier blocked for the whole wait.</text>
+</svg>

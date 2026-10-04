@@ -63,6 +63,9 @@ stateDiagram-v2
 ```
 *Notice that a normal blocking call goes to Unmounted (the carrier is released), but a pinned block stays on the carrier, so that OS thread is stuck for the whole wait.*
 
+![Animation: VT1 and VT2 run on carriers C1 and C2 while VT3 waits; VT1 blocks on a socket read, unmounts to the heap and C1 picks up VT3; data arrives and VT1 becomes runnable while VT2 finishes; VT1 then mounts on C2 and continues](images/07-mount-unmount.svg){ loading=lazy }
+*Watch carrier C1: it starts running VT3 the moment VT1 blocks. VT1 later resumes on C2, a different carrier.*
+
 ### The scheduler
 
 - The default scheduler is a dedicated **`ForkJoinPool` in FIFO mode** (it is not the common pool).
@@ -93,6 +96,9 @@ How to find pinning:
 ### Why you must not pool virtual threads
 
 A pool exists to share an **expensive** resource. Virtual threads are cheap, so pooling them adds nothing and removes the point (one thread per task). But many teams used the pool size as a hidden **concurrency limit**: "200 Tomcat threads" also meant "at most 200 concurrent DB calls". With virtual threads that limit disappears. You must now state limits **explicitly**, with a `Semaphore`, a connection pool size, a bulkhead or a rate limiter.
+
+![Two panels: on the left a Tomcat pool of 200 platform threads means at most 200 calls reach the database, an implicit limit; on the right each request has its own virtual thread and a Semaphore with 50 permits limits calls to the upstream explicitly](images/07-semaphore-limit.svg){ loading=lazy }
+*The limit does not go away with virtual threads. It moves from the pool size into a `Semaphore` you write yourself.*
 
 ### Structured concurrency
 

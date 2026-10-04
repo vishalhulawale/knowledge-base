@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 384" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Shared pool versus bulkheads</title>
+  <desc id="d">Two panels. Left, one shared pool: every thread of the shared request pool is stuck waiting on upstream C, which is slow, so requests for upstreams A and B cannot get a thread either and the whole API looks down. Right, bulkheads: each upstream has its own small bounded pool. Pool A and pool B have a few busy threads and free capacity. Pool C is full, so new calls to C are rejected quickly and answered with a fallback, while A and B keep working.</desc>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mkb" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pool{fill:#ffffff;stroke:#4f46e5;stroke-width:1.5}
+    .poolbad{fill:#ffffff;stroke:#dc2626;stroke-width:2}
+    .run{fill:#4f46e5}.bad{fill:#dc2626}.idle{fill:#e2e8f0}
+    .up{fill:#ffffff;stroke:#334155}.upbad{fill:#ffffff;stroke:#dc2626;stroke-width:2.5}
+    .ln{stroke:#94a3b8;stroke-width:2}.lnb{stroke:#dc2626;stroke-width:3}
+    .mkb{fill:#dc2626}
+    .tr{fill:#dc2626;font-size:15px;font-weight:700}.trs{fill:#dc2626;font-size:13px;font-weight:700}
+    .tg{fill:#15803d;font-size:15px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box,.pool,.poolbad,.up,.upbad{fill:#111827}.box{stroke:#475569}.pool{stroke:#818cf8}.poolbad,.upbad{stroke:#f87171}.up{stroke:#cbd5e1}
+      .run{fill:#818cf8}.bad{fill:#f87171}.idle{fill:#334155}
+      .ln{stroke:#64748b}.lnb{stroke:#f87171}.mkb{fill:#f87171}
+      .tr,.trs{fill:#f87171}.tg{fill:#4ade80}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="382" rx="14"/>
+  <text class="h" x="28" y="40">One slow upstream: shared pool vs bulkheads</text>
+  <text class="sub" x="28" y="62">Each square is a thread. Red = stuck waiting on upstream C, which has become slow.</text>
+
+  <rect class="box" x="28" y="76" width="364" height="264" rx="12"/>
+  <text class="tr" x="44" y="100">❌ One shared request pool</text>
+  <rect class="poolbad" x="44" y="112" width="332" height="140" rx="10"/>
+  <text class="sub" x="60" y="134">all threads busy, queue growing</text>
+  <rect class="bad" x="55" y="146" width="26" height="26" rx="5"/><rect class="bad" x="87" y="146" width="26" height="26" rx="5"/><rect class="bad" x="119" y="146" width="26" height="26" rx="5"/><rect class="bad" x="151" y="146" width="26" height="26" rx="5"/><rect class="bad" x="183" y="146" width="26" height="26" rx="5"/><rect class="bad" x="215" y="146" width="26" height="26" rx="5"/><rect class="bad" x="247" y="146" width="26" height="26" rx="5"/><rect class="bad" x="279" y="146" width="26" height="26" rx="5"/><rect class="bad" x="311" y="146" width="26" height="26" rx="5"/><rect class="bad" x="343" y="146" width="26" height="26" rx="5"/><rect class="bad" x="55" y="178" width="26" height="26" rx="5"/><rect class="bad" x="87" y="178" width="26" height="26" rx="5"/><rect class="bad" x="119" y="178" width="26" height="26" rx="5"/><rect class="bad" x="151" y="178" width="26" height="26" rx="5"/><rect class="bad" x="183" y="178" width="26" height="26" rx="5"/><rect class="bad" x="215" y="178" width="26" height="26" rx="5"/><rect class="bad" x="247" y="178" width="26" height="26" rx="5"/><rect class="bad" x="279" y="178" width="26" height="26" rx="5"/><rect class="bad" x="311" y="178" width="26" height="26" rx="5"/><rect class="bad" x="343" y="178" width="26" height="26" rx="5"/><rect class="bad" x="55" y="210" width="26" height="26" rx="5"/><rect class="bad" x="87" y="210" width="26" height="26" rx="5"/><rect class="bad" x="119" y="210" width="26" height="26" rx="5"/><rect class="bad" x="151" y="210" width="26" height="26" rx="5"/><rect class="bad" x="183" y="210" width="26" height="26" rx="5"/><rect class="bad" x="215" y="210" width="26" height="26" rx="5"/><rect class="bad" x="247" y="210" width="26" height="26" rx="5"/><rect class="bad" x="279" y="210" width="26" height="26" rx="5"/><rect class="bad" x="311" y="210" width="26" height="26" rx="5"/><rect class="bad" x="343" y="210" width="26" height="26" rx="5"/>
+  <rect class="up" x="60" y="282" width="90" height="36" rx="8"/><text class="t" x="105" y="305" text-anchor="middle">A</text>
+  <rect class="up" x="165" y="282" width="90" height="36" rx="8"/><text class="t" x="210" y="305" text-anchor="middle">B</text>
+  <rect class="upbad" x="270" y="282" width="90" height="36" rx="8"/><text class="trs" x="315" y="305" text-anchor="middle">C (slow)</text>
+  <line class="lnb" x1="315" y1="254" x2="315" y2="278" marker-end="url(#ar)"/>
+  <text class="sub" x="44" y="334">A and B have no free thread either.</text>
+
+  <rect class="box" x="408" y="76" width="364" height="264" rx="12"/>
+  <text class="tg" x="424" y="100">✅ A bounded pool per upstream</text>
+  <rect class="pool" x="424" y="116" width="332" height="48" rx="10"/><text class="lbl" x="440" y="146">Pool A</text><rect class="run" x="530" y="128" width="18" height="24" rx="4"/><rect class="run" x="552" y="128" width="18" height="24" rx="4"/><rect class="run" x="574" y="128" width="18" height="24" rx="4"/><rect class="idle" x="596" y="128" width="18" height="24" rx="4"/><rect class="idle" x="618" y="128" width="18" height="24" rx="4"/><rect class="idle" x="640" y="128" width="18" height="24" rx="4"/><rect class="idle" x="662" y="128" width="18" height="24" rx="4"/><rect class="idle" x="684" y="128" width="18" height="24" rx="4"/><rect class="idle" x="706" y="128" width="18" height="24" rx="4"/><rect class="idle" x="728" y="128" width="18" height="24" rx="4"/><rect class="pool" x="424" y="178" width="332" height="48" rx="10"/><text class="lbl" x="440" y="208">Pool B</text><rect class="run" x="530" y="190" width="18" height="24" rx="4"/><rect class="run" x="552" y="190" width="18" height="24" rx="4"/><rect class="run" x="574" y="190" width="18" height="24" rx="4"/><rect class="run" x="596" y="190" width="18" height="24" rx="4"/><rect class="idle" x="618" y="190" width="18" height="24" rx="4"/><rect class="idle" x="640" y="190" width="18" height="24" rx="4"/><rect class="idle" x="662" y="190" width="18" height="24" rx="4"/><rect class="idle" x="684" y="190" width="18" height="24" rx="4"/><rect class="idle" x="706" y="190" width="18" height="24" rx="4"/><rect class="idle" x="728" y="190" width="18" height="24" rx="4"/><rect class="poolbad" x="424" y="240" width="332" height="48" rx="10"/><text class="lbl" x="440" y="270">Pool C</text><rect class="bad" x="530" y="252" width="18" height="24" rx="4"/><rect class="bad" x="552" y="252" width="18" height="24" rx="4"/><rect class="bad" x="574" y="252" width="18" height="24" rx="4"/><rect class="bad" x="596" y="252" width="18" height="24" rx="4"/><rect class="bad" x="618" y="252" width="18" height="24" rx="4"/><rect class="bad" x="640" y="252" width="18" height="24" rx="4"/><rect class="bad" x="662" y="252" width="18" height="24" rx="4"/><rect class="bad" x="684" y="252" width="18" height="24" rx="4"/><rect class="bad" x="706" y="252" width="18" height="24" rx="4"/><rect class="bad" x="728" y="252" width="18" height="24" rx="4"/>
+  <text class="trs" x="424" y="316">C full: reject fast, return a fallback</text>
+  <text class="sub" x="424" y="334">A and B keep answering.</text>
+
+  <text class="sub" x="28" y="368">Sizes are illustrative. A semaphore bulkhead gives the same isolation without extra threads.</text>
+</svg>

@@ -103,6 +103,9 @@ flowchart TD
 ```
 *Notice that with no contention it behaves like a plain CAS on `base`, and it only pays for cells once threads actually collide. Also notice that `sum()` just walks the cells, so it is not a snapshot.*
 
+![Animation with two panels: four threads increment one AtomicLong value at the same moment and three of the compare-and-swap attempts fail and retry; four threads increment a LongAdder, each lands on its own padded cell and all succeed, and sum adds base and cells](images/06-atomiclong-vs-longadder.svg){ loading=lazy }
+*Notice that `LongAdder` does not win the race faster. It removes the race by giving each thread its own cell.*
+
 Key details:
 
 - The cell array is created **lazily** and grows by doubling, up to the next power of two at or above the number of CPUs. More cells than cores would not help.
@@ -137,6 +140,9 @@ flowchart TD
     TB --> CNT["addCount using base plus counter cells<br/>and check if resize is needed"]
 ```
 *Notice that the common case, an empty bin, takes no lock at all, and a collision locks only one bin, so writers to different bins never wait for each other.*
+
+![Diagram of a ConcurrentHashMap table: an empty bin gets a new node by compare-and-swap with no lock, a bin with a linked list has only its head node locked, a bin with 8 or more nodes is a red-black tree, and a bin holding a ForwardingNode points to the new, twice as large table during a resize](images/06-chm-bins.svg){ loading=lazy }
+*The four cases a `put` can meet, one bin each. Only the collision case takes a lock, and only on that bin.*
 
 What to be able to explain:
 

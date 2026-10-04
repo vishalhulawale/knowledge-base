@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 352" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Lost update with count++ on a volatile int</title>
+  <desc id="d">Animation. A shared volatile int count starts at 5. Thread 1 reads 5. Thread 2 also reads 5. Thread 1 adds one and writes 6. Thread 2 adds one to its own stale copy and also writes 6. Two increments ran but count only went from 5 to 6, so one update was lost. The fix is AtomicInteger.incrementAndGet, LongAdder or synchronized.</desc>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:19px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .var{fill:#ffffff;stroke:#4f46e5;stroke-width:2.5}
+    .val{fill:#4f46e5;font-size:40px;font-weight:700}
+    .badline{fill:none;stroke:#dc2626;stroke-width:3}
+    .ln{stroke:#64748b;stroke-width:2}
+    .mk{fill:#64748b}
+    .tr{fill:#dc2626;font-size:15px;font-weight:700}
+    .tg{fill:#15803d;font-size:14px;font-weight:600}
+    .bann{fill:#fef2f2;stroke:#dc2626}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.t{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.var{fill:#111827;stroke:#818cf8}.val{fill:#818cf8}
+      .badline{stroke:#f87171}.ln{stroke:#94a3b8}.mk{fill:#94a3b8}
+      .tr{fill:#f87171}.tg{fill:#4ade80}.bann{fill:#3a1d24;stroke:#f87171}
+    }
+    /* 10 s loop: steps appear at 10%, 22%, 34%, 46%; verdict at 58% */
+    .a{opacity:0;animation:10s infinite linear}
+    .a1{animation-name:s1}.a2{animation-name:s2}.a3{animation-name:s3}.a4{animation-name:s4}.a5{animation-name:s5}
+    @keyframes s1{0%,9%{opacity:0}11%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s2{0%,21%{opacity:0}23%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s3{0%,33%{opacity:0}35%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s4{0%,45%{opacity:0}47%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s5{0%,57%{opacity:0}59%,93%{opacity:1}97%,100%{opacity:0}}
+    .v5{animation:v5 10s infinite linear}.v6{opacity:0;animation:v6 10s infinite linear}
+    @keyframes v5{0%,33%{opacity:1}35%,96%{opacity:0}99%,100%{opacity:1}}
+    @keyframes v6{0%,33%{opacity:0}35%,95%{opacity:1}98%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){.a,.v6{animation:none;opacity:1}.v5{animation:none;opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="350" rx="14"/>
+  <text class="h" x="28" y="40">count++ on a volatile int: read, add, write</text>
+  <text class="sub" x="28" y="62">volatile makes every read and write visible, but the three steps of ++ can still interleave.</text>
+
+  <rect class="box" x="40" y="88" width="210" height="130" rx="12"/>
+  <text class="lbl" x="56" y="114">Thread 1</text>
+  <text class="t a a1" x="56" y="154">1. read count: 5</text>
+  <text class="t a a3" x="56" y="190">3. 5 + 1, write 6</text>
+
+  <rect class="box" x="550" y="88" width="210" height="130" rx="12"/>
+  <text class="lbl" x="566" y="114">Thread 2</text>
+  <text class="t a a2" x="566" y="154">2. read count: 5</text>
+  <text class="t a a4" x="566" y="190">4. 5 + 1, write 6</text>
+
+  <rect class="var" x="310" y="98" width="180" height="110" rx="12"/>
+  <text class="sub" x="400" y="122" text-anchor="middle">volatile int count</text>
+  <text class="val v5" x="400" y="182" text-anchor="middle">5</text>
+  <text class="val v6" x="400" y="182" text-anchor="middle">6</text>
+  <rect class="badline a a4" x="306" y="94" width="188" height="118" rx="14"/>
+
+  <!-- arrows: reads go to the thread, writes go to the variable -->
+  <line class="ln a a1" x1="306" y1="149" x2="256" y2="149" marker-end="url(#ar)"/>
+  <line class="ln a a3" x1="254" y1="185" x2="304" y2="185" marker-end="url(#ar)"/>
+  <line class="ln a a2" x1="494" y1="149" x2="544" y2="149" marker-end="url(#ar)"/>
+  <line class="ln a a4" x1="546" y1="185" x2="496" y2="185" marker-end="url(#ar)"/>
+
+  <g class="a a5">
+    <rect class="bann" x="40" y="238" width="720" height="40" rx="10"/>
+    <text class="tr" x="400" y="264" text-anchor="middle">Two increments ran, but count went 5 → 6. One update was lost.</text>
+  </g>
+  <text class="tg" x="40" y="306">Fix: AtomicInteger.incrementAndGet(), LongAdder, or synchronized around the ++.</text>
+  <text class="sub" x="40" y="332">Real interleavings are random; the result differs on each run and is usually below the expected total.</text>
+</svg>
