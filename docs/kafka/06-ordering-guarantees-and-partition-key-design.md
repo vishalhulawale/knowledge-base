@@ -54,6 +54,9 @@ Guarantee chain (all must hold):
 !!! tip "Rule of thumb"
     Choose the **smallest scope that still needs ordering**. Smaller scope means more distinct keys, better distribution and more parallelism.
 
+![Two bar charts of event share across 8 partitions: keyed by status, three partitions get nothing and one gets 40 percent; keyed by prescriptionId, every partition gets about 12 percent](images/06-key-skew.svg){ loading=lazy }
+*Notice the red bar: with a low-cardinality key one partition, and so one consumer thread, carries 40% of the load no matter how many consumers you add.*
+
 ### How ordering breaks
 
 ```mermaid
@@ -67,6 +70,9 @@ flowchart TD
     B --> H["Producer retries without idempotence and more than 1 in-flight request"]
 ```
 *Notice that most causes are design or config changes, not Kafka bugs. Each needs a guardrail: a review checklist, versioning, or per-key processing.*
+
+![Animation: rx-1 hashes to 10, so with 4 partitions CREATED and APPROVED go to P2; after growing to 6 partitions SHIPPED goes to P4, whose idle consumer applies it before P2's lagging consumer applies APPROVED, so the status goes back from SHIPPED to APPROVED](images/06-partition-increase-reorder.svg){ loading=lazy }
+*Watch steps 3 and 4: Kafka kept order within each partition, but rx-1's events now live in two partitions with independent consumers. The version check below is what rejects the stale APPROVED.*
 
 ### Defensive design: versions and sequence numbers
 

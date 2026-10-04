@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Adding partitions breaks per-key ordering</title>
+  <desc id="d">Prescription rx-1 hashes to 10. With 4 partitions, 10 mod 4 is 2, so CREATED and APPROVED go to P2. The topic is then grown to 6 partitions; 10 mod 6 is 4, so the next event, SHIPPED, goes to P4. P2&#x27;s consumer is behind and hasn&#x27;t processed APPROVED yet, while P4&#x27;s consumer is idle and processes SHIPPED at once. APPROVED is applied afterwards and overwrites SHIPPED, so the prescription goes back in time. A version check in the consumer would reject the stale APPROVED.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:16s infinite linear}
+    @keyframes p0{0%,24%{opacity:1}25%{opacity:0}100%{opacity:0}}
+    .p0{animation-name:p0}
+    @keyframes p1{0%{opacity:0}24%{opacity:0}25%,49%{opacity:1}50%{opacity:0}100%{opacity:0}}
+    .p1{animation-name:p1}
+    @keyframes p2{0%{opacity:0}49%{opacity:0}50%,74%{opacity:1}75%{opacity:0}100%{opacity:0}}
+    .p2{animation-name:p2}
+    @keyframes p3{0%{opacity:0}74%{opacity:0}75%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .p3{animation-name:p3}
+    @keyframes p123{0%{opacity:0}24%{opacity:0}25%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .p123{animation-name:p123}
+    @keyframes p23{0%{opacity:0}49%{opacity:0}50%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .p23{animation-name:p23}
+    @keyframes p012{0%,74%{opacity:1}75%{opacity:0}100%{opacity:0}}
+    .p012{animation-name:p012}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      .p0,.p1,.p2,.p012{opacity:0!important}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="438" rx="14"/>
+  <text class="h" x="28" y="40">Growing a topic from 4 to 6 partitions</text>
+  <text class="sub" x="28" y="62">Key rx-1 hashes to 10. Partition = hash mod partition count.</text>
+  <text class="lbl" x="28" y="118">P0</text>
+  <rect class="box" x="64" y="96" width="90" height="30" rx="6"/>
+  <rect class="box" x="160" y="96" width="90" height="30" rx="6"/>
+  <rect class="box" x="256" y="96" width="90" height="30" rx="6"/>
+  <rect class="box" x="352" y="96" width="90" height="30" rx="6"/>
+  <rect class="mutf" x="64" y="96" width="90" height="30" rx="6"/>
+  <text class="lbl" x="28" y="158">P1</text>
+  <rect class="box" x="64" y="136" width="90" height="30" rx="6"/>
+  <rect class="box" x="160" y="136" width="90" height="30" rx="6"/>
+  <rect class="box" x="256" y="136" width="90" height="30" rx="6"/>
+  <rect class="box" x="352" y="136" width="90" height="30" rx="6"/>
+  <rect class="mutf" x="64" y="136" width="90" height="30" rx="6"/>
+  <text class="lbl" x="28" y="198">P2</text>
+  <rect class="box" x="64" y="176" width="90" height="30" rx="6"/>
+  <rect class="box" x="160" y="176" width="90" height="30" rx="6"/>
+  <rect class="box" x="256" y="176" width="90" height="30" rx="6"/>
+  <rect class="box" x="352" y="176" width="90" height="30" rx="6"/>
+  <rect class="mutf" x="64" y="176" width="90" height="30" rx="6"/>
+  <text class="lbl" x="28" y="238">P3</text>
+  <rect class="box" x="64" y="216" width="90" height="30" rx="6"/>
+  <rect class="box" x="160" y="216" width="90" height="30" rx="6"/>
+  <rect class="box" x="256" y="216" width="90" height="30" rx="6"/>
+  <rect class="box" x="352" y="216" width="90" height="30" rx="6"/>
+  <rect class="mutf" x="64" y="216" width="90" height="30" rx="6"/>
+  <g class="a p123">
+  <text class="lbl" x="28" y="278">P4</text>
+  <rect class="box" x="64" y="256" width="90" height="30" rx="6"/>
+  <rect class="box" x="160" y="256" width="90" height="30" rx="6"/>
+  <rect class="box" x="256" y="256" width="90" height="30" rx="6"/>
+  <rect class="box" x="352" y="256" width="90" height="30" rx="6"/>
+  </g>
+  <g class="a p123">
+  <text class="lbl" x="28" y="318">P5</text>
+  <rect class="box" x="64" y="296" width="90" height="30" rx="6"/>
+  <rect class="box" x="160" y="296" width="90" height="30" rx="6"/>
+  <rect class="box" x="256" y="296" width="90" height="30" rx="6"/>
+  <rect class="box" x="352" y="296" width="90" height="30" rx="6"/>
+  </g>
+  <rect class="pri" x="160" y="176" width="90" height="30" rx="6"/>
+  <text class="on13" x="205" y="195.5" text-anchor="middle">CREATED</text>
+  <g class="a p012">
+  <rect class="pri" x="256" y="176" width="90" height="30" rx="6"/>
+  <text class="on13" x="301" y="195.5" text-anchor="middle">APPROVED</text>
+  </g>
+  <g class="a p3">
+  <rect class="wrnf" x="256" y="176" width="90" height="30" rx="6"/>
+  <text class="on13" x="301" y="195.5" text-anchor="middle">APPROVED</text>
+  </g>
+  <g class="a p123">
+  <rect class="pri" x="64" y="256" width="90" height="30" rx="6"/>
+  <text class="on13" x="109" y="275.5" text-anchor="middle">SHIPPED</text>
+  </g>
+  <text class="tx prit a p0" x="28" y="344">10 mod 4 = 2 → P2</text>
+  <text class="tx wrnt a p123" x="28" y="344">6 partitions now: 10 mod 6 = 4 → SHIPPED lands in P4</text>
+  <text class="sm a p012" x="456" y="211">◀ P2 consumer: behind, still on CREATED</text>
+  <text class="sm wrnt a p3" x="456" y="211">◀ P2 consumer: applies APPROVED now</text>
+  <text class="sm a p23" x="456" y="291">◀ P4 consumer: idle, applies SHIPPED</text>
+  <rect class="box" x="520" y="352" width="252" height="50" rx="10" stroke-width="1.5"/>
+  <text class="sm" x="532" y="370">rx-1 status in the DB</text>
+  <text class="lbl a p0" x="532" y="392">CREATED</text>
+  <text class="lbl a p1" x="532" y="392">CREATED</text>
+  <text class="lbl okt a p2" x="532" y="392">SHIPPED</text>
+  <text class="lbl badt a p3" x="532" y="392">APPROVED  ✕ went back</text>
+  <text class="lbl a p0" x="28" y="424">1  4 partitions: rx-1 always goes to P2</text>
+  <text class="lbl a p1" x="28" y="424">2  Partitions added: the same key now maps to P4</text>
+  <text class="lbl a p2" x="28" y="424">3  P4 is idle, so the newer event is processed first</text>
+  <text class="lbl badt a p3" x="28" y="424">4  The older event lands last: fix with a version check</text>
+</svg>

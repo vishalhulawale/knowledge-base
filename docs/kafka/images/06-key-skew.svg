@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Partition load by key choice: status vs prescriptionId</title>
+  <desc id="d">The same stream of prescription events on a topic with 8 partitions, keyed two ways. Keyed by status, there are only five distinct keys, so at most five partitions get traffic and the busiest status, CREATED, puts about 40 percent of all events on one partition while three partitions stay empty; that partition&#x27;s consumer caps throughput. Keyed by prescriptionId, thousands of keys hash evenly, so each partition gets about one eighth. Illustrative numbers.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="358" rx="14"/>
+  <text class="h" x="28" y="40">Same events, two keys</text>
+  <text class="sub" x="28" y="62">Share of events per partition on an 8-partition topic. Illustrative numbers.</text>
+  <text class="h2" x="28" y="100">key = status</text>
+  <text class="sm" x="45" y="284" text-anchor="middle">0</text>
+  <text class="sm" x="45" y="308" text-anchor="middle">P0</text>
+  <rect class="badf" x="72" y="146" width="34" height="144" rx="4"/>
+  <text class="sm" x="89" y="140" text-anchor="middle">40%</text>
+  <text class="sm" x="89" y="308" text-anchor="middle">P1</text>
+  <text class="sm" x="133" y="284" text-anchor="middle">0</text>
+  <text class="sm" x="133" y="308" text-anchor="middle">P2</text>
+  <rect class="wrnf" x="160" y="210.8" width="34" height="79.2" rx="4"/>
+  <text class="sm" x="177" y="204.8" text-anchor="middle">22%</text>
+  <text class="sm" x="177" y="308" text-anchor="middle">P3</text>
+  <rect class="wrnf" x="204" y="225.2" width="34" height="64.8" rx="4"/>
+  <text class="sm" x="221" y="219.2" text-anchor="middle">18%</text>
+  <text class="sm" x="221" y="308" text-anchor="middle">P4</text>
+  <text class="sm" x="265" y="284" text-anchor="middle">0</text>
+  <text class="sm" x="265" y="308" text-anchor="middle">P5</text>
+  <rect class="wrnf" x="292" y="246.8" width="34" height="43.2" rx="4"/>
+  <text class="sm" x="309" y="240.8" text-anchor="middle">12%</text>
+  <text class="sm" x="309" y="308" text-anchor="middle">P6</text>
+  <rect class="wrnf" x="336" y="261.2" width="34" height="28.8" rx="4"/>
+  <text class="sm" x="353" y="255.2" text-anchor="middle">8%</text>
+  <text class="sm" x="353" y="308" text-anchor="middle">P7</text>
+  <line class="ln" x1="24" y1="290" x2="374" y2="290"/>
+  <text class="h2" x="420" y="100">key = prescriptionId</text>
+  <rect class="okf" x="420" y="243.92" width="34" height="46.08" rx="4"/>
+  <text class="sm" x="437" y="237.92" text-anchor="middle">13%</text>
+  <text class="sm" x="437" y="308" text-anchor="middle">P0</text>
+  <rect class="okf" x="464" y="246.08" width="34" height="43.92" rx="4"/>
+  <text class="sm" x="481" y="240.08" text-anchor="middle">12%</text>
+  <text class="sm" x="481" y="308" text-anchor="middle">P1</text>
+  <rect class="okf" x="508" y="244.64" width="34" height="45.36" rx="4"/>
+  <text class="sm" x="525" y="238.64" text-anchor="middle">13%</text>
+  <text class="sm" x="525" y="308" text-anchor="middle">P2</text>
+  <rect class="okf" x="552" y="245.36" width="34" height="44.64" rx="4"/>
+  <text class="sm" x="569" y="239.36" text-anchor="middle">12%</text>
+  <text class="sm" x="569" y="308" text-anchor="middle">P3</text>
+  <rect class="okf" x="596" y="245" width="34" height="45" rx="4"/>
+  <text class="sm" x="613" y="239" text-anchor="middle">12%</text>
+  <text class="sm" x="613" y="308" text-anchor="middle">P4</text>
+  <rect class="okf" x="640" y="243.56" width="34" height="46.44" rx="4"/>
+  <text class="sm" x="657" y="237.56" text-anchor="middle">13%</text>
+  <text class="sm" x="657" y="308" text-anchor="middle">P5</text>
+  <rect class="okf" x="684" y="246.44" width="34" height="43.56" rx="4"/>
+  <text class="sm" x="701" y="240.44" text-anchor="middle">12%</text>
+  <text class="sm" x="701" y="308" text-anchor="middle">P6</text>
+  <rect class="okf" x="728" y="245" width="34" height="45" rx="4"/>
+  <text class="sm" x="745" y="239" text-anchor="middle">12%</text>
+  <text class="sm" x="745" y="308" text-anchor="middle">P7</text>
+  <line class="ln" x1="416" y1="290" x2="766" y2="290"/>
+  <text class="sm badt" x="28" y="120">5 keys → 3 partitions idle, P1 is hot</text>
+  <text class="sm okt" x="420" y="120">high cardinality → even spread</text>
+  <text class="tx" x="28" y="336">Throughput is capped by the busiest partition: one consumer thread owns it.</text>
+  <text class="sub" x="28" y="354">status is also the wrong ordering scope: you need order per prescription, not per status.</text>
+</svg>
