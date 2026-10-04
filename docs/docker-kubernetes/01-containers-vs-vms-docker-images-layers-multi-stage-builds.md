@@ -83,6 +83,9 @@ flowchart BT
 | `hello:layered` | `eclipse-temurin:21-jre-alpine` (multi-stage) | Spring Boot layered extraction | **95 MB** | `app` (uid 100) |
 | `hello:distroless` | `gcr.io/distroless/java21-debian12:nonroot` (multi-stage) | Layered extraction | **84 MB** | nonroot (uid 65532) |
 
+![Bar chart of measured image sizes: 248 MB for a fat jar on the JDK image running as root, 95 MB for layered extraction on JRE Alpine running as uid 100, and 84 MB on distroless running as nonroot](images/01-image-sizes.svg){ loading=lazy }
+*Notice the biggest win is the base image, JDK to JRE, plus the multi-stage build. Distroless shaves a little more size but mainly removes the shell an attacker would use.*
+
 After changing one line of code and rebuilding:
 
 | Image | New layers | Size of the changed layer |
@@ -92,6 +95,9 @@ After changing one line of code and rebuilding:
 | Distroless layered | 1 | ~70 kB |
 
 Each deploy of the fat-jar image pushes and pulls 23.6 MB per node. The layered image moves about 70 kB, because dependency layers are already cached in the registry and on nodes.
+
+![Animation: after a one-line code change, the fat-jar image rebuilds and pushes its whole 23.6 MB jar layer, while the layered image rebuilds only the 69.6 kB application layer and reuses the dependencies, loader and base layers from cache](images/01-layer-cache-rebuild.svg){ loading=lazy }
+*Watch the red boxes: the cache works per layer, so splitting the jar by how often each part changes is what turns a 23.6 MB deploy into a 70 kB one.*
 
 ## In practice: code & configuration
 

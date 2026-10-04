@@ -49,7 +49,7 @@ Suggested pictures per page; ⏵ marks an animation.
 - [x] 07 Spring Data MongoDB: `save()` whole-document overwrite lost update vs `$set`; optimistic locking `@Version` conflict
 
 ### Docker & Kubernetes (P0)
-- [ ] 01 Containers and images: containers vs VMs stack; layer cache invalidation (copy deps before source)
+- [x] 01 Containers and images: containers vs VMs stack; layer cache invalidation (copy deps before source)
 - [ ] 02 Architecture: ⏵ life of `kubectl apply` through API server, etcd, scheduler, kubelet; reconciliation loop
 - [ ] 03 Workloads: ⏵ graceful termination (preStop, SIGTERM, endpoint removal race); StatefulSet ordered pods and stable volumes
 - [ ] 04 Networking: ⏵ request path internet → LB → Ingress → Service → pod; NetworkPolicy default deny

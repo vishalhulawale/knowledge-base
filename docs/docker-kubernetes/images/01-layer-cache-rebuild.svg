@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Rebuild after a one-line code change: fat jar vs layered image</title>
+  <desc id="d">Two images for the same Spring Boot service, shown as stacks of layers. A developer changes one line of code and rebuilds. In the fat-jar image the whole jar is one layer, so the 23.6 MB layer is rebuilt and has to be pushed to the registry and pulled by every node. In the layered image the jar is split into dependencies, spring-boot-loader, snapshot-dependencies and application layers; only the 69.6 kB application layer changes, and everything below it is reused from cache.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:14s infinite linear}
+    @keyframes p0{0%,30%{opacity:1}31%{opacity:0}100%{opacity:0}}
+    .p0{animation-name:p0}
+    @keyframes p1{0%{opacity:0}30%{opacity:0}31%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .p1{animation-name:p1}
+    @keyframes push{0%{opacity:0}44%{opacity:0}45%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .push{animation-name:push}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      .p0{opacity:0!important}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="468" rx="14"/>
+  <text class="h" x="28" y="40">One line of code changed. What gets pushed?</text>
+  <text class="sub" x="28" y="62">Measured on the page: Spring Boot service, rebuild after a one-line change.</text>
+  <line class="ln dash" x1="400" y1="84" x2="400" y2="344"/>
+  <text class="h2" x="28" y="100">Fat jar (one COPY)</text>
+  <rect class="bm" x="28" y="304" width="250" height="36" rx="6" stroke-width="1"/>
+  <text class="sm" x="40" y="327" font-weight="700">JDK base</text>
+  <text class="sm" x="266" y="327" text-anchor="end">shared</text>
+  <text class="sm okt a p1" x="290" y="327">cached ✓</text>
+  <rect class="bm" x="28" y="264" width="250" height="36" rx="6" stroke-width="1"/>
+  <text class="sm" x="40" y="287" font-weight="700">app.jar</text>
+  <text class="sm" x="266" y="287" text-anchor="end">23.6 MB</text>
+  <g class="a p1">
+  <rect class="bb" x="28" y="264" width="250" height="36" rx="6" stroke-width="2"/>
+  <text class="sm badt" x="40" y="287" font-weight="700">app.jar  ↻ rebuilt</text>
+  <text class="sm badt" x="266" y="287" text-anchor="end">23.6 MB</text>
+  </g>
+  <text class="h2" x="420" y="100">Layered extraction</text>
+  <rect class="bm" x="420" y="304" width="250" height="36" rx="6" stroke-width="1"/>
+  <text class="sm" x="432" y="327" font-weight="700">JRE base</text>
+  <text class="sm" x="658" y="327" text-anchor="end">shared</text>
+  <text class="sm okt a p1" x="682" y="327">cached ✓</text>
+  <rect class="bm" x="420" y="264" width="250" height="36" rx="6" stroke-width="1"/>
+  <text class="sm" x="432" y="287" font-weight="700">dependencies/</text>
+  <text class="sm" x="658" y="287" text-anchor="end">23.5 MB</text>
+  <text class="sm okt a p1" x="682" y="287">cached ✓</text>
+  <rect class="bm" x="420" y="224" width="250" height="36" rx="6" stroke-width="1"/>
+  <text class="sm" x="432" y="247" font-weight="700">spring-boot-loader/</text>
+  <text class="sm" x="658" y="247" text-anchor="end">692 kB</text>
+  <text class="sm okt a p1" x="682" y="247">cached ✓</text>
+  <rect class="bm" x="420" y="184" width="250" height="36" rx="6" stroke-width="1"/>
+  <text class="sm" x="432" y="207" font-weight="700">snapshot-dependencies/</text>
+  <text class="sm" x="658" y="207" text-anchor="end">4 kB</text>
+  <text class="sm okt a p1" x="682" y="207">cached ✓</text>
+  <rect class="bm" x="420" y="144" width="250" height="36" rx="6" stroke-width="1"/>
+  <text class="sm" x="432" y="167" font-weight="700">application/</text>
+  <text class="sm" x="658" y="167" text-anchor="end">69.6 kB</text>
+  <g class="a p1">
+  <rect class="bb" x="420" y="144" width="250" height="36" rx="6" stroke-width="2"/>
+  <text class="sm badt" x="432" y="167" font-weight="700">application/  ↻ rebuilt</text>
+  <text class="sm badt" x="658" y="167" text-anchor="end">69.6 kB</text>
+  </g>
+  <text class="lbl a p0" x="28" y="376">1  Code changed in one class</text>
+  <text class="lbl a p1" x="28" y="376">2  Rebuild: everything above the first changed layer is redone</text>
+  <text class="tx badt a push" x="28" y="408">push/pull per node: 23.6 MB</text>
+  <text class="tx okt a push" x="420" y="408">push/pull per node: ~70 kB</text>
+  <text class="sub" x="28" y="446">Order layers from least to most frequently changed; one early change invalidates every layer after it.</text>
+</svg>
