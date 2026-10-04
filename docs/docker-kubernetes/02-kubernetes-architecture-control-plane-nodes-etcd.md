@@ -91,6 +91,9 @@ Measured on the v1.33 cluster:
 | Pause `kube-scheduler`, scale to 7 | 2 new pods `Pending`, `nodeName` = `<none>` |
 | Resume it | 0 pending. Pods spread 2/3/2 over the three nodes |
 
+![Animation from the measured experiment: with the controller manager paused, scaling the Deployment from 3 to 5 changes only spec.replicas while the ReplicaSet and running pods stay at 3; on resume one reconcile brings both to 5](images/02-reconcile-paused.svg){ loading=lazy }
+*Watch step 3: the controller doesn't replay "scaled to 5", it simply sees desired 5 and actual 3. That's what level-triggered means.*
+
 ### Life of a `kubectl apply`
 
 ```mermaid
@@ -116,6 +119,9 @@ sequenceDiagram
     K->>A: update Pod status Running / Ready
 ```
 *Notice that `kubectl` returns as soon as the API server has stored the Deployment. Everything after that is asynchronous, which is why you check `kubectl rollout status` rather than trusting the apply.*
+
+![Animation: kubectl apply stores a Deployment; the Deployment controller creates a ReplicaSet; the ReplicaSet controller creates three Pods with no node; the scheduler binds them to nodes 1 to 3; kubelets start them and report Running and Ready](images/02-kubectl-apply-flow.svg){ loading=lazy }
+*Notice where kubectl returns: right after step 1. Every later state change is a separate actor reacting to a watch event.*
 
 Measured with a watch while scaling: the new pod appeared as `Pending <none>`, then `Pending node-000002` (bound by the scheduler), then `Running node-000002` (reported by the simulated kubelet).
 

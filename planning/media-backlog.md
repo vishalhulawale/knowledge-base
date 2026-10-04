@@ -50,7 +50,7 @@ Suggested pictures per page; ⏵ marks an animation.
 
 ### Docker & Kubernetes (P0)
 - [x] 01 Containers and images: containers vs VMs stack; layer cache invalidation (copy deps before source)
-- [ ] 02 Architecture: ⏵ life of `kubectl apply` through API server, etcd, scheduler, kubelet; reconciliation loop
+- [x] 02 Architecture: ⏵ life of `kubectl apply` through API server, etcd, scheduler, kubelet; reconciliation loop
 - [ ] 03 Workloads: ⏵ graceful termination (preStop, SIGTERM, endpoint removal race); StatefulSet ordered pods and stable volumes
 - [ ] 04 Networking: ⏵ request path internet → LB → Ingress → Service → pod; NetworkPolicy default deny
 - [ ] 05 Config and volumes: ConfigMap as env (frozen) vs mounted (refreshes); PV/PVC/StorageClass binding
