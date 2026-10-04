@@ -97,6 +97,9 @@ flowchart LR
 ```
 *Notice that the only difference between 0/1 and unbounded knapsack in the 1D form is the loop direction. Get it wrong and you silently solve the other problem.*
 
+![Animation: item 1 (weight 1, value 15) processed on dp for capacities 0 to 4; the downward loop leaves every cell at 15, while the upward loop builds 15, 30, 45, 60 by reading cells already updated; final answers 35 and 60](images/10-knapsack-loop-direction.svg){ loading=lazy }
+*Watch the lighter cell each step reads. Going down, it still holds the value from before this item; going up, it already includes the item, so the item gets reused.*
+
 Measured with W = 4 and items (weight 1, value 15), (3, 20), (4, 30): the downward loop returned **35** (items 1 + 3), the upward loop returned **60** (item 1 used four times).
 
 **Combinations vs permutations in counting:** with coins outer and amounts inner, each combination is counted once (each coin is "introduced" in a fixed order): {1,2,5} → 5 has **4** ways. With amounts outer and coins inner, different orders count separately: **9** sequences (measured). Ask which one the problem wants.
@@ -116,6 +119,9 @@ flowchart LR
     L["dp[i][j−1]<br/>(insert b[j])"] --> X
 ```
 *Notice that each cell depends only on the previous row and the cell to its left, so two rows of length n+1 are enough. That's how 5,000 × 5,000 fits in kilobytes instead of 100 MB.*
+
+![Animation: the edit distance table for horse and ros fills row by row; each new cell highlights its diagonal, above and left neighbours, copies the diagonal on a letter match, otherwise takes 1 plus their minimum, ending with 3](images/10-edit-distance-table.svg){ loading=lazy }
+*Watch the three outlined neighbours move with each cell. Matching letters (teal) copy the diagonal for free; the bottom-right cell is the answer, 3.*
 
 `dp[i][j]` = edits to turn the first i characters of a into the first j of b. If `a[i−1] == b[j−1]`, `dp[i][j] = dp[i−1][j−1]`; otherwise `1 + min(replace, delete, insert)`. Base cases: `dp[i][0] = i`, `dp[0][j] = j`. LCS uses the same shape with "+1 on match, else max of top and left".
 

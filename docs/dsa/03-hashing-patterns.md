@@ -41,6 +41,9 @@ flowchart LR
 ```
 *Notice that `equals` is only called on keys in the same bucket with the same hash. A good `hashCode` keeps buckets short, which is what makes lookups O(1) on average.*
 
+![A 16-bucket HashMap holding 10 string keys: Aa and BB share bucket 0 because both hash to 2112, pharmacy, claims and member are chained in bucket 8, and a worked example traces put of member from hashCode through spreading and masking to bucket 8](images/03-hashmap-buckets.svg){ loading=lazy }
+*Notice that three unrelated keys share bucket 8, and that walking the chain compares hashes first, so equals() runs only for keys like Aa and BB whose hash codes are equal.*
+
 - **Default capacity** is 16 (allocated lazily on the first put) and the **load factor** 0.75, so the first resize happens at the 13th entry. Each resize is O(n) but rare (doubling), so puts are amortised O(1). Presize with `HashMap.newHashMap(expected)` (Java 19+) or `new HashMap<>((int) (expected / 0.75f) + 1)`.
 - **Spreading** XORs the high bits into the low bits because the index uses only the low bits of the hash.
 - **Tree bins (JEP 180):** a long bucket becomes a balanced tree ordered by hash, then by `compareTo` if keys are `Comparable`. That bounds the worst case at O(log n). Non-comparable keys with identical hashes can't be ordered usefully, so the tree must search both sides: effectively linear.
@@ -107,6 +110,9 @@ flowchart TD
     G -->|"yes"| G1["Two maps (both directions)"]
 ```
 *Notice that each pattern stores exactly the information needed to answer "have I seen what I need?" in O(1), which replaces an inner loop.*
+
+![Animation: two sum on 3, 8, 4, 11, 6 with target 10; each element looks up its complement in a value-to-index map before inserting itself, and 6 finds 4 at index 2](images/03-two-sum-complement-map.svg){ loading=lazy }
+*Watch the order inside each step: look up the complement first, then insert. That's what stops an element pairing with itself.*
 
 | Pattern | Classic problems | Complexity |
 |---|---|---|

@@ -56,6 +56,9 @@ flowchart LR
 ```
 *Notice the invariant: every discarded element provably can't be part of a solution with the remaining elements, which is why one pass is enough.*
 
+![Animation: on the sorted array 1, 3, 4, 6, 8, 11 with target 10, lo and hi move inwards one step at a time until 4 + 6 = 10 is found at indices 2 and 3](images/02-two-pointers-pair-sum.svg){ loading=lazy }
+*Watch which element gets greyed out at each step: the sum tells you which end can't be part of any pair, so five comparisons replace fifteen pairs.*
+
 Variants:
 
 - **Container with most water:** move the shorter side inward, since the area is limited by the shorter line and moving the taller one can't help.
@@ -84,6 +87,9 @@ sequenceDiagram
     end
 ```
 *Notice that `left` never moves backwards. Together the two pointers make at most 2n moves, which is why nested-looking code is still linear.*
+
+![Animation: a window slides over abcabcbb; right advances one character per step, and on a repeat left jumps just past the previous copy, using a last-seen index table; the best length is 3](images/02-sliding-window-longest-substring.svg){ loading=lazy }
+*Watch the last-seen table: when the new character's previous copy is inside the window, left jumps straight past it instead of shrinking one step at a time.*
 
 | Type | Example | State |
 |---|---|---|

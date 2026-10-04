@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">N-Queens backtracking with pruning, n = 4</title>
+  <desc id="d">A 4 by 4 board. Queens are placed one per row, trying columns left to right and skipping attacked cells. Row 0 column 0, row 1 column 2, then row 2 has no safe cell, so the search backtracks. Row 1 column 3 and row 2 column 1 leave row 3 with no safe cell; rows 2 and 1 have no other safe column, so the row 0 queen moves to column 1. Then row 1 column 3, row 2 column 0 and row 3 column 2 give the first solution, columns 1, 3, 0, 2.</desc>
+  <style>.card{fill:#f8fafc;stroke:#e2e8f0}
+.h{fill:#0f172a;font-size:19px;font-weight:700}
+.t{fill:#334155;font-size:14px}
+.tb{fill:#334155;font-size:14px;font-weight:700}
+.lb{fill:#334155;font-size:15px;font-weight:600}
+.m{fill:#64748b;font-size:13px}
+.mono{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace}
+.box{fill:#ffffff;stroke:#cbd5e1}
+.pri{fill:#4f46e5}.spri{stroke:#4f46e5}.tpri{fill:#4f46e5}
+.tea{fill:#0ea5a4}.stea{stroke:#0ea5a4}.ttea{fill:#0f766e}
+.ok{fill:#16a34a}.sok{stroke:#16a34a}.tok{fill:#16a34a}
+.bad{fill:#dc2626}.sbad{stroke:#dc2626}.tbad{fill:#dc2626}
+.warn{fill:#d97706}.swarn{stroke:#d97706}.twarn{fill:#d97706}
+.smut{stroke:#94a3b8}.mut{fill:#94a3b8}
+.tint{fill:#4f46e5;fill-opacity:.14}.ttint{fill:#0ea5a4;fill-opacity:.16}
+.gtint{fill:#16a34a;fill-opacity:.16}.rtint{fill:#dc2626;fill-opacity:.14}.atint{fill:#d97706;fill-opacity:.16}
+.on{fill:#ffffff;font-size:14px;font-weight:700}
+.ln{fill:none;stroke-width:2}
+.ah{stroke:none}
+@media (prefers-color-scheme: dark){
+.card{fill:#1f2430;stroke:#334155}
+.h{fill:#f1f5f9}.t,.tb,.lb{fill:#e2e8f0}.m{fill:#94a3b8}
+.box{fill:#111827;stroke:#475569}
+.pri,.tint{fill:#818cf8}.spri{stroke:#818cf8}.tpri{fill:#818cf8}
+.tea,.ttint{fill:#2dd4bf}.stea{stroke:#2dd4bf}.ttea{fill:#5eead4}
+.ok,.gtint{fill:#4ade80}.sok{stroke:#4ade80}.tok{fill:#4ade80}
+.bad,.rtint{fill:#f87171}.sbad{stroke:#f87171}.tbad{fill:#f87171}
+.warn,.atint{fill:#fbbf24}.swarn{stroke:#fbbf24}.twarn{fill:#fbbf24}
+.smut{stroke:#64748b}.mut{fill:#64748b}
+.on{fill:#0f172a}
+}
+.fr{opacity:0;animation-duration:12s;animation-iteration-count:infinite;animation-timing-function:linear}
+@keyframes k0{0%,6.90%{opacity:1}7.50%,100%{opacity:0}}.f0{animation-name:k0}
+@keyframes k1{0%,7.50%{opacity:0}8.10%,14.40%{opacity:1}15.00%,100%{opacity:0}}.f1{animation-name:k1}
+@keyframes k2{0%,15.00%{opacity:0}15.60%,21.90%{opacity:1}22.50%,100%{opacity:0}}.f2{animation-name:k2}
+@keyframes k3{0%,22.50%{opacity:0}23.10%,29.40%{opacity:1}30.00%,100%{opacity:0}}.f3{animation-name:k3}
+@keyframes k4{0%,30.00%{opacity:0}30.60%,36.90%{opacity:1}37.50%,100%{opacity:0}}.f4{animation-name:k4}
+@keyframes k5{0%,37.50%{opacity:0}38.10%,44.40%{opacity:1}45.00%,100%{opacity:0}}.f5{animation-name:k5}
+@keyframes k6{0%,45.00%{opacity:0}45.60%,51.90%{opacity:1}52.50%,100%{opacity:0}}.f6{animation-name:k6}
+@keyframes k7{0%,52.50%{opacity:0}53.10%,59.40%{opacity:1}60.00%,100%{opacity:0}}.f7{animation-name:k7}
+@keyframes k8{0%,60.00%{opacity:0}60.60%,66.90%{opacity:1}67.50%,100%{opacity:0}}.f8{animation-name:k8}
+@keyframes k9{0%,67.50%{opacity:0}68.10%,74.40%{opacity:1}75.00%,100%{opacity:0}}.f9{animation-name:k9}
+@keyframes k10{0%,75.00%{opacity:0}75.60%,99.40%{opacity:1}100%{opacity:0}}.f10{animation-name:k10}
+@media (prefers-reduced-motion: reduce){.fr{animation:none!important;opacity:0}.f10{opacity:1}}</style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">N-Queens (n = 4): place, prune, backtrack</text>
+  <text class="m" x="28" y="62">One queen per row, columns tried left to right; red cells are attacked and never explored.</text>
+  <text class="m" x="46" y="121" text-anchor="end">0</text>
+  <rect class="box" x="60" y="88" width="56" height="56" rx="0"/>
+  <rect class="card" x="116" y="88" width="56" height="56" rx="0"/>
+  <rect class="box" x="172" y="88" width="56" height="56" rx="0"/>
+  <rect class="card" x="228" y="88" width="56" height="56" rx="0"/>
+  <text class="m" x="46" y="177" text-anchor="end">1</text>
+  <rect class="card" x="60" y="144" width="56" height="56" rx="0"/>
+  <rect class="box" x="116" y="144" width="56" height="56" rx="0"/>
+  <rect class="card" x="172" y="144" width="56" height="56" rx="0"/>
+  <rect class="box" x="228" y="144" width="56" height="56" rx="0"/>
+  <text class="m" x="46" y="233" text-anchor="end">2</text>
+  <rect class="box" x="60" y="200" width="56" height="56" rx="0"/>
+  <rect class="card" x="116" y="200" width="56" height="56" rx="0"/>
+  <rect class="box" x="172" y="200" width="56" height="56" rx="0"/>
+  <rect class="card" x="228" y="200" width="56" height="56" rx="0"/>
+  <text class="m" x="46" y="289" text-anchor="end">3</text>
+  <rect class="card" x="60" y="256" width="56" height="56" rx="0"/>
+  <rect class="box" x="116" y="256" width="56" height="56" rx="0"/>
+  <rect class="card" x="172" y="256" width="56" height="56" rx="0"/>
+  <rect class="box" x="228" y="256" width="56" height="56" rx="0"/>
+  <text class="m" x="88" y="80" text-anchor="middle">0</text>
+  <text class="m" x="144" y="80" text-anchor="middle">1</text>
+  <text class="m" x="200" y="80" text-anchor="middle">2</text>
+  <text class="m" x="256" y="80" text-anchor="middle">3</text>
+  <g class="fr f0"><rect class="bad" x="62" y="146" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="118" y="146" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="62" y="202" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="174" y="202" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="62" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="230" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><circle class="pri" cx="88" cy="116" r="19"/><text class="on" x="88" y="121" text-anchor="middle">Q</text><text class="t" x="340" y="120" font-weight="700">Row 0: column 0 is safe.</text><text class="t" x="340" y="142">Place a queen and go to the next row.</text><text class="m" x="340" y="206">Step 1 of 11</text></g>
+  <g class="fr f1"><rect class="bad" x="62" y="202" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="118" y="202" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="174" y="202" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="230" y="202" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="62" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="174" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="230" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><circle class="pri" cx="88" cy="116" r="19"/><text class="on" x="88" y="121" text-anchor="middle">Q</text><circle class="pri" cx="200" cy="172" r="19"/><text class="on" x="200" y="177" text-anchor="middle">Q</text><text class="t" x="340" y="120" font-weight="700">Row 1: column 2 is safe.</text><text class="t" x="340" y="142">Place a queen and go to the next row.</text><text class="m" x="340" y="206">Step 2 of 11</text></g>
+  <g class="fr f2"><rect class="bad" x="62" y="202" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="118" y="202" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="174" y="202" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="230" y="202" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="62" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="174" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="230" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="ln sbad" x="57" y="197" width="230" height="62" rx="4" fill="none" stroke-width="3"/><circle class="pri" cx="88" cy="116" r="19"/><text class="on" x="88" y="121" text-anchor="middle">Q</text><circle class="pri" cx="200" cy="172" r="19"/><text class="on" x="200" y="177" text-anchor="middle">Q</text><text class="tbad" x="340" y="120" font-weight="700">Row 2: every cell is attacked.</text><text class="t" x="340" y="142">Dead end: backtrack to row 1</text><text class="t" x="340" y="164">and try its next column.</text><text class="m" x="340" y="206">Step 3 of 11</text></g>
+  <g class="fr f3"><rect class="bad" x="62" y="202" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="174" y="202" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="230" y="202" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="62" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="118" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="230" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><circle class="pri" cx="88" cy="116" r="19"/><text class="on" x="88" y="121" text-anchor="middle">Q</text><circle class="pri" cx="256" cy="172" r="19"/><text class="on" x="256" y="177" text-anchor="middle">Q</text><text class="t" x="340" y="120" font-weight="700">Row 1: column 3 is safe.</text><text class="t" x="340" y="142">Place a queen and go to the next row.</text><text class="m" x="340" y="206">Step 4 of 11</text></g>
+  <g class="fr f4"><rect class="bad" x="62" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="118" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="174" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="230" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><circle class="pri" cx="88" cy="116" r="19"/><text class="on" x="88" y="121" text-anchor="middle">Q</text><circle class="pri" cx="256" cy="172" r="19"/><text class="on" x="256" y="177" text-anchor="middle">Q</text><circle class="pri" cx="144" cy="228" r="19"/><text class="on" x="144" y="233" text-anchor="middle">Q</text><text class="t" x="340" y="120" font-weight="700">Row 2: column 1 is safe.</text><text class="t" x="340" y="142">Place a queen and go to the next row.</text><text class="m" x="340" y="206">Step 5 of 11</text></g>
+  <g class="fr f5"><rect class="bad" x="62" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="118" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="174" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="230" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="ln sbad" x="57" y="253" width="230" height="62" rx="4" fill="none" stroke-width="3"/><circle class="pri" cx="88" cy="116" r="19"/><text class="on" x="88" y="121" text-anchor="middle">Q</text><circle class="pri" cx="256" cy="172" r="19"/><text class="on" x="256" y="177" text-anchor="middle">Q</text><circle class="pri" cx="144" cy="228" r="19"/><text class="on" x="144" y="233" text-anchor="middle">Q</text><text class="tbad" x="340" y="120" font-weight="700">Row 3: every cell is attacked.</text><text class="t" x="340" y="142">Dead end: backtrack to row 2</text><text class="t" x="340" y="164">and try its next column.</text><text class="m" x="340" y="206">Step 6 of 11</text></g>
+  <g class="fr f6"><rect class="bad" x="62" y="146" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="118" y="146" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="62" y="202" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="174" y="202" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="62" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="230" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><circle class="pri" cx="88" cy="116" r="19"/><text class="on" x="88" y="121" text-anchor="middle">Q</text><text class="tbad" x="340" y="120" font-weight="700">Back in row 2: no other safe column.</text><text class="t" x="340" y="142">Row 1 has no column after 3 either,</text><text class="t" x="340" y="164">so the row 0 queen moves on.</text><text class="m" x="340" y="206">Step 7 of 11</text></g>
+  <g class="fr f7"><rect class="bad" x="62" y="146" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="118" y="146" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="174" y="146" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="118" y="202" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="230" y="202" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="118" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><circle class="pri" cx="144" cy="116" r="19"/><text class="on" x="144" y="121" text-anchor="middle">Q</text><text class="t" x="340" y="120" font-weight="700">Row 0: column 1 is safe.</text><text class="t" x="340" y="142">Place a queen and go to the next row.</text><text class="m" x="340" y="206">Step 8 of 11</text></g>
+  <g class="fr f8"><rect class="bad" x="118" y="202" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="174" y="202" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="230" y="202" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="118" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="230" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><circle class="pri" cx="144" cy="116" r="19"/><text class="on" x="144" y="121" text-anchor="middle">Q</text><circle class="pri" cx="256" cy="172" r="19"/><text class="on" x="256" y="177" text-anchor="middle">Q</text><text class="t" x="340" y="120" font-weight="700">Row 1: column 3 is safe.</text><text class="t" x="340" y="142">Place a queen and go to the next row.</text><text class="m" x="340" y="206">Step 9 of 11</text></g>
+  <g class="fr f9"><rect class="bad" x="62" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="118" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><rect class="bad" x="230" y="258" width="52" height="52" rx="3" fill-opacity=".28"/><circle class="pri" cx="144" cy="116" r="19"/><text class="on" x="144" y="121" text-anchor="middle">Q</text><circle class="pri" cx="256" cy="172" r="19"/><text class="on" x="256" y="177" text-anchor="middle">Q</text><circle class="pri" cx="88" cy="228" r="19"/><text class="on" x="88" y="233" text-anchor="middle">Q</text><text class="t" x="340" y="120" font-weight="700">Row 2: column 0 is safe.</text><text class="t" x="340" y="142">Place a queen and go to the next row.</text><text class="m" x="340" y="206">Step 10 of 11</text></g>
+  <g class="fr f10"><circle class="ok" cx="144" cy="116" r="19"/><text class="on" x="144" y="121" text-anchor="middle">Q</text><circle class="ok" cx="256" cy="172" r="19"/><text class="on" x="256" y="177" text-anchor="middle">Q</text><circle class="ok" cx="88" cy="228" r="19"/><text class="on" x="88" y="233" text-anchor="middle">Q</text><circle class="ok" cx="200" cy="284" r="19"/><text class="on" x="200" y="289" text-anchor="middle">Q</text><text class="tok" x="340" y="120" font-weight="700">Row 3: column 2 is safe.</text><text class="t" x="340" y="142">First solution: columns 1, 3, 0, 2.</text><text class="t" x="340" y="164">(2 solutions exist for n = 4.)</text><text class="m" x="340" y="206">Step 11 of 11</text></g>
+  <text class="t" x="340" y="260">For n = 8 the same pruning visits</text>
+  <text class="t" x="340" y="280">2,057 nodes instead of 19,173,961.</text>
+  <text class="m" x="28" y="362">Each dead end abandons a partial board as soon as it can't be completed, instead of building full boards.</text>
+</svg>

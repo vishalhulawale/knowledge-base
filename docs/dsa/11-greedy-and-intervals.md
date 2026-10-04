@@ -60,7 +60,13 @@ flowchart TD
 | **Insert into sorted, non-overlapping list** | Already sorted | Before / overlap / after phases | Linear |
 | **Interval intersection of two sorted lists** | Already sorted | Two pointers, advance the one that ends first | Linear |
 
+![Animation: intervals [8,10], [1,3], [15,18], [2,6], [9,12] sorted by start and scanned in order; overlapping ones extend the last merged interval, giving [1,6], [8,12] and [15,18]](images/11-merge-intervals.svg){ loading=lazy }
+*Watch the green merged interval: after sorting by start, an interval can only overlap the last merged one, so a single comparison decides extend or start new.*
+
 Measured counterexamples for activity selection on `[0,10], [1,2], [3,4], [5,6]`: sorting by end picks 3, by start picks 1 (the long interval blocks everything). On `[0,5], [4,7], [6,11]`, "shortest first" picks 1 while the optimum is 2.
+
+![The intervals [0,10], [1,2], [3,4] and [5,6] on a timeline twice: sorting by start keeps only [0,10], sorting by end keeps [1,2], [3,4] and [5,6]](images/11-activity-selection-sort-key.svg){ loading=lazy }
+*Notice that the long interval [0,10] starts first but ends last. Taking it blocks everything, which is why the sort key, not the pick rule, decides the answer.*
 
 **Closed vs half-open intervals:** decide whether `[1,3]` and `[3,5]` overlap. Meetings usually use half-open `[start, end)` (back-to-back is fine: use `start >= lastEnd`). Balloons and closed ranges overlap at shared endpoints (use `start > pos`). Write the comparison deliberately.
 

@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Binary search on the answer: Koko eating bananas</title>
+  <desc id="d">Piles 3, 6, 7, 11 must be eaten within 8 hours. A bar chart shows the hours needed at each speed k from 1 to 11: 27, 15, 10, 8, 8, 6, 5, 5, 5, 5, 4. Bars at or below the 8-hour line are feasible. Binary search over k in [1, 11] probes k = 6 (6 hours, feasible, hi = 6), k = 3 (10 hours, not feasible, lo = 4), k = 5 (8 hours, feasible, hi = 5) and k = 4 (8 hours, feasible, hi = 4), and stops at k = 4, the minimum speed.</desc>
+  <style>.card{fill:#f8fafc;stroke:#e2e8f0}
+.h{fill:#0f172a;font-size:19px;font-weight:700}
+.t{fill:#334155;font-size:14px}
+.tb{fill:#334155;font-size:14px;font-weight:700}
+.lb{fill:#334155;font-size:15px;font-weight:600}
+.m{fill:#64748b;font-size:13px}
+.mono{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace}
+.box{fill:#ffffff;stroke:#cbd5e1}
+.pri{fill:#4f46e5}.spri{stroke:#4f46e5}.tpri{fill:#4f46e5}
+.tea{fill:#0ea5a4}.stea{stroke:#0ea5a4}.ttea{fill:#0f766e}
+.ok{fill:#16a34a}.sok{stroke:#16a34a}.tok{fill:#16a34a}
+.bad{fill:#dc2626}.sbad{stroke:#dc2626}.tbad{fill:#dc2626}
+.warn{fill:#d97706}.swarn{stroke:#d97706}.twarn{fill:#d97706}
+.smut{stroke:#94a3b8}.mut{fill:#94a3b8}
+.tint{fill:#4f46e5;fill-opacity:.14}.ttint{fill:#0ea5a4;fill-opacity:.16}
+.gtint{fill:#16a34a;fill-opacity:.16}.rtint{fill:#dc2626;fill-opacity:.14}.atint{fill:#d97706;fill-opacity:.16}
+.on{fill:#ffffff;font-size:14px;font-weight:700}
+.ln{fill:none;stroke-width:2}
+.ah{stroke:none}
+@media (prefers-color-scheme: dark){
+.card{fill:#1f2430;stroke:#334155}
+.h{fill:#f1f5f9}.t,.tb,.lb{fill:#e2e8f0}.m{fill:#94a3b8}
+.box{fill:#111827;stroke:#475569}
+.pri,.tint{fill:#818cf8}.spri{stroke:#818cf8}.tpri{fill:#818cf8}
+.tea,.ttint{fill:#2dd4bf}.stea{stroke:#2dd4bf}.ttea{fill:#5eead4}
+.ok,.gtint{fill:#4ade80}.sok{stroke:#4ade80}.tok{fill:#4ade80}
+.bad,.rtint{fill:#f87171}.sbad{stroke:#f87171}.tbad{fill:#f87171}
+.warn,.atint{fill:#fbbf24}.swarn{stroke:#fbbf24}.twarn{fill:#fbbf24}
+.smut{stroke:#64748b}.mut{fill:#64748b}
+.on{fill:#0f172a}
+}
+.fr{opacity:0;animation-duration:11.2s;animation-iteration-count:infinite;animation-timing-function:linear}
+@keyframes k0{0%,17.26%{opacity:1}17.86%,100%{opacity:0}}.f0{animation-name:k0}
+@keyframes k1{0%,17.86%{opacity:0}18.46%,35.11%{opacity:1}35.71%,100%{opacity:0}}.f1{animation-name:k1}
+@keyframes k2{0%,35.71%{opacity:0}36.31%,52.97%{opacity:1}53.57%,100%{opacity:0}}.f2{animation-name:k2}
+@keyframes k3{0%,53.57%{opacity:0}54.17%,70.83%{opacity:1}71.43%,100%{opacity:0}}.f3{animation-name:k3}
+@keyframes k4{0%,71.43%{opacity:0}72.03%,99.40%{opacity:1}100%{opacity:0}}.f4{animation-name:k4}
+@media (prefers-reduced-motion: reduce){.fr{animation:none!important;opacity:0}.f4{opacity:1}}</style>
+  <rect class="card" x="1" y="1" width="798" height="428" rx="14"/>
+  <text class="h" x="28" y="40">Binary search on the answer: minimum eating speed</text>
+  <text class="m" x="28" y="62">piles = [3, 6, 7, 11], h = 8. feasible(k) = Σ ceil(pile / k) ≤ 8 flips from F to T exactly once.</text>
+  <rect class="bad" x="60" y="141" width="44" height="189" rx="4" fill-opacity=".30"/>
+  <text class="t" x="82" y="135" text-anchor="middle" font-size="13">27</text>
+  <text class="lb" x="82" y="350" text-anchor="middle">1</text>
+  <text class="tbad" x="82" y="370" text-anchor="middle" font-weight="700">F</text>
+  <rect class="bad" x="118" y="225" width="44" height="105" rx="4" fill-opacity=".30"/>
+  <text class="t" x="140" y="219" text-anchor="middle" font-size="13">15</text>
+  <text class="lb" x="140" y="350" text-anchor="middle">2</text>
+  <text class="tbad" x="140" y="370" text-anchor="middle" font-weight="700">F</text>
+  <rect class="bad" x="176" y="260" width="44" height="70" rx="4" fill-opacity=".30"/>
+  <text class="t" x="198" y="254" text-anchor="middle" font-size="13">10</text>
+  <text class="lb" x="198" y="350" text-anchor="middle">3</text>
+  <text class="tbad" x="198" y="370" text-anchor="middle" font-weight="700">F</text>
+  <rect class="ok" x="234" y="274" width="44" height="56" rx="4" fill-opacity=".30"/>
+  <text class="t" x="256" y="268" text-anchor="middle" font-size="13">8</text>
+  <text class="lb" x="256" y="350" text-anchor="middle">4</text>
+  <text class="tok" x="256" y="370" text-anchor="middle" font-weight="700">T</text>
+  <rect class="ok" x="292" y="274" width="44" height="56" rx="4" fill-opacity=".30"/>
+  <text class="t" x="314" y="268" text-anchor="middle" font-size="13">8</text>
+  <text class="lb" x="314" y="350" text-anchor="middle">5</text>
+  <text class="tok" x="314" y="370" text-anchor="middle" font-weight="700">T</text>
+  <rect class="ok" x="350" y="288" width="44" height="42" rx="4" fill-opacity=".30"/>
+  <text class="t" x="372" y="282" text-anchor="middle" font-size="13">6</text>
+  <text class="lb" x="372" y="350" text-anchor="middle">6</text>
+  <text class="tok" x="372" y="370" text-anchor="middle" font-weight="700">T</text>
+  <rect class="ok" x="408" y="295" width="44" height="35" rx="4" fill-opacity=".30"/>
+  <text class="t" x="430" y="289" text-anchor="middle" font-size="13">5</text>
+  <text class="lb" x="430" y="350" text-anchor="middle">7</text>
+  <text class="tok" x="430" y="370" text-anchor="middle" font-weight="700">T</text>
+  <rect class="ok" x="466" y="295" width="44" height="35" rx="4" fill-opacity=".30"/>
+  <text class="t" x="488" y="289" text-anchor="middle" font-size="13">5</text>
+  <text class="lb" x="488" y="350" text-anchor="middle">8</text>
+  <text class="tok" x="488" y="370" text-anchor="middle" font-weight="700">T</text>
+  <rect class="ok" x="524" y="295" width="44" height="35" rx="4" fill-opacity=".30"/>
+  <text class="t" x="546" y="289" text-anchor="middle" font-size="13">5</text>
+  <text class="lb" x="546" y="350" text-anchor="middle">9</text>
+  <text class="tok" x="546" y="370" text-anchor="middle" font-weight="700">T</text>
+  <rect class="ok" x="582" y="295" width="44" height="35" rx="4" fill-opacity=".30"/>
+  <text class="t" x="604" y="289" text-anchor="middle" font-size="13">5</text>
+  <text class="lb" x="604" y="350" text-anchor="middle">10</text>
+  <text class="tok" x="604" y="370" text-anchor="middle" font-weight="700">T</text>
+  <rect class="ok" x="640" y="302" width="44" height="28" rx="4" fill-opacity=".30"/>
+  <text class="t" x="662" y="296" text-anchor="middle" font-size="13">4</text>
+  <text class="lb" x="662" y="350" text-anchor="middle">11</text>
+  <text class="tok" x="662" y="370" text-anchor="middle" font-weight="700">T</text>
+  <line class="ln smut" x1="52" y1="330" x2="692" y2="330" stroke-width="1.5"/>
+  <line class="ln swarn" x1="52" y1="274" x2="692" y2="274" stroke-width="2" stroke-dasharray="6 4"/>
+  <text class="twarn" x="696" y="279" font-weight="700" font-size="14">h = 8</text>
+  <text class="m" x="20" y="350">k</text>
+  <text class="m" x="64" y="104">hours needed</text>
+  <g class="fr f0"><rect class="ln spri" x="55" y="334" width="634" height="44" rx="8" fill="none" stroke-width="2"/><rect class="ok" x="350" y="288" width="44" height="42" rx="4"/><text class="on" x="372" y="314" text-anchor="middle">6</text><text class="t" x="40" y="408">Range [1, 11], probe k = 6: 6 hours ≤ 8, feasible, so try slower: hi = 6.</text></g>
+  <g class="fr f1"><rect class="ln spri" x="55" y="334" width="344" height="44" rx="8" fill="none" stroke-width="2"/><rect class="bad" x="176" y="260" width="44" height="70" rx="4"/><text class="on" x="198" y="300" text-anchor="middle">10</text><text class="t" x="40" y="408">Range [1, 6], probe k = 3: 10 hours &gt; 8, too slow, so go faster: lo = 4.</text></g>
+  <g class="fr f2"><rect class="ln spri" x="229" y="334" width="170" height="44" rx="8" fill="none" stroke-width="2"/><rect class="ok" x="292" y="274" width="44" height="56" rx="4"/><text class="on" x="314" y="307" text-anchor="middle">8</text><text class="t" x="40" y="408">Range [4, 6], probe k = 5: 8 hours ≤ 8, feasible, so try slower: hi = 5.</text></g>
+  <g class="fr f3"><rect class="ln spri" x="229" y="334" width="112" height="44" rx="8" fill="none" stroke-width="2"/><rect class="ok" x="234" y="274" width="44" height="56" rx="4"/><text class="on" x="256" y="307" text-anchor="middle">8</text><text class="t" x="40" y="408">Range [4, 5], probe k = 4: 8 hours ≤ 8, feasible, so try slower: hi = 4.</text></g>
+  <g class="fr f4"><rect class="ln spri" x="229" y="334" width="54" height="44" rx="8" fill="none" stroke-width="2"/><rect class="ok" x="234" y="274" width="44" height="56" rx="4"/><text class="on" x="256" y="307" text-anchor="middle">8</text><text class="tok" x="40" y="408" font-weight="700">lo == hi = 4: the minimum speed. 4 feasibility checks instead of 11.</text></g>
+</svg>

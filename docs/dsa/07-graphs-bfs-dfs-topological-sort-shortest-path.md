@@ -54,6 +54,9 @@ flowchart TD
 ```
 *Notice that BFS gives shortest paths only when every edge has the same cost. Once weights differ, you need Dijkstra or Bellman-Ford.*
 
+![Animation: BFS from node 0 on an 8-node graph; nodes are coloured by distance layer as they are enqueued, the queue and the dist array update after each poll, ending with distances 0, 1, 1, 2, 2, 3, 3, 4](images/07-bfs-frontier.svg){ loading=lazy }
+*Watch the queue: nodes enter it in order of distance, so every distance-1 node is polled before any distance-2 node. Node 3 is reachable from both 1 and 2 but is enqueued only once.*
+
 **BFS rules:** mark a node visited when it's enqueued (otherwise it can be enqueued many times). Process level by level with `queue.size()` when you need distances or levels. **Multi-source BFS** starts with all sources in the queue at distance 0 (rotting oranges, distance to nearest exit). **Bidirectional BFS** searches from both ends to cut the explored area (word ladder).
 
 **DFS rules:** recursion is concise but limited by stack depth (measured overflow on a 1000×1000 grid). Use an explicit stack for large inputs. For directed cycle detection, track three states: unvisited, **in progress** (on the current path), done. An edge to an in-progress node is a back edge, which means a cycle. In undirected graphs, a visited neighbour other than the parent means a cycle (or use union-find).
@@ -69,6 +72,9 @@ flowchart LR
     D --> F["integration-tests"]
 ```
 *Notice that any valid build order must put every arrow's source first: for example jackson, spring-core, kafka-client, spring-web, claims-service, integration-tests. Several orders can be valid, and a cycle makes every order impossible.*
+
+![Animation: Kahn's algorithm on the build graph; each module shows its in-degree, modules with in-degree 0 join the ready queue, and taking one decrements its successors, giving spring-core, jackson, kafka-client, spring-web, claims-service, integration-tests](images/07-kahn-topological-sort.svg){ loading=lazy }
+*Watch the in-degree badges: a module joins the ready queue the moment its last prerequisite is built. If a cycle existed, some badges would never reach 0.*
 
 **Kahn's algorithm (BFS):** compute in-degrees, queue every node with in-degree 0, repeatedly remove one, append it to the order, and decrement its neighbours' in-degrees (queueing those that reach 0). If the order has fewer than V nodes, the remaining ones are in a cycle. O(V + E). It naturally gives "levels" that can run in parallel (all nodes ready at the same time).
 
@@ -100,6 +106,9 @@ sequenceDiagram
 *Notice the "skip stale entries" step. Java's `PriorityQueue` has no decrease-key, so you push a new entry and ignore outdated ones when they're polled (lazy deletion).*
 
 **Why Dijkstra fails with negative edges:** it finalises the closest node assuming no later path can be shorter, which non-negative weights guarantee. Measured with edges 0→1 (2), 0→2 (5), 2→1 (−4): textbook Dijkstra finalised node 1 at distance 2, while the true shortest path 0→2→1 costs 1 (Bellman-Ford found 1). With a negative cycle, shortest paths are undefined, and Bellman-Ford detects it (measured).
+
+![A three-node graph with edges 0 to 1 weight 2, 0 to 2 weight 5 and 2 to 1 weight minus 4: textbook Dijkstra settles node 1 at 2 before exploring node 2, while Bellman-Ford finds the true distance 1 via 0, 2, 1](images/07-dijkstra-negative-edge.svg){ loading=lazy }
+*Notice that the cheaper path goes through a node that's farther away at first. Dijkstra has already settled node 1 by the time it explores that path.*
 
 ### Union-find (disjoint set union)
 

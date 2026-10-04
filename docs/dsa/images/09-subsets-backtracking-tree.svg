@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Backtracking tree for subsets of [1, 2, 3]</title>
+  <desc id="d">The search tree for subsets of 1, 2, 3 with a start index. The search visits nodes depth first: empty, [1], [1,2], [1,2,3], then backtracks to [1,3], then [2], [2,3] and finally [3]. Every node is recorded as a copy, giving 8 subsets. The current path grows on choose and shrinks on unchoose.</desc>
+  <style>.card{fill:#f8fafc;stroke:#e2e8f0}
+.h{fill:#0f172a;font-size:19px;font-weight:700}
+.t{fill:#334155;font-size:14px}
+.tb{fill:#334155;font-size:14px;font-weight:700}
+.lb{fill:#334155;font-size:15px;font-weight:600}
+.m{fill:#64748b;font-size:13px}
+.mono{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace}
+.box{fill:#ffffff;stroke:#cbd5e1}
+.pri{fill:#4f46e5}.spri{stroke:#4f46e5}.tpri{fill:#4f46e5}
+.tea{fill:#0ea5a4}.stea{stroke:#0ea5a4}.ttea{fill:#0f766e}
+.ok{fill:#16a34a}.sok{stroke:#16a34a}.tok{fill:#16a34a}
+.bad{fill:#dc2626}.sbad{stroke:#dc2626}.tbad{fill:#dc2626}
+.warn{fill:#d97706}.swarn{stroke:#d97706}.twarn{fill:#d97706}
+.smut{stroke:#94a3b8}.mut{fill:#94a3b8}
+.tint{fill:#4f46e5;fill-opacity:.14}.ttint{fill:#0ea5a4;fill-opacity:.16}
+.gtint{fill:#16a34a;fill-opacity:.16}.rtint{fill:#dc2626;fill-opacity:.14}.atint{fill:#d97706;fill-opacity:.16}
+.on{fill:#ffffff;font-size:14px;font-weight:700}
+.ln{fill:none;stroke-width:2}
+.ah{stroke:none}
+@media (prefers-color-scheme: dark){
+.card{fill:#1f2430;stroke:#334155}
+.h{fill:#f1f5f9}.t,.tb,.lb{fill:#e2e8f0}.m{fill:#94a3b8}
+.box{fill:#111827;stroke:#475569}
+.pri,.tint{fill:#818cf8}.spri{stroke:#818cf8}.tpri{fill:#818cf8}
+.tea,.ttint{fill:#2dd4bf}.stea{stroke:#2dd4bf}.ttea{fill:#5eead4}
+.ok,.gtint{fill:#4ade80}.sok{stroke:#4ade80}.tok{fill:#4ade80}
+.bad,.rtint{fill:#f87171}.sbad{stroke:#f87171}.tbad{fill:#f87171}
+.warn,.atint{fill:#fbbf24}.swarn{stroke:#fbbf24}.twarn{fill:#fbbf24}
+.smut{stroke:#64748b}.mut{fill:#64748b}
+.on{fill:#0f172a}
+}
+.fr{opacity:0;animation-duration:10.7s;animation-iteration-count:infinite;animation-timing-function:linear}
+@keyframes k0{0%,9.68%{opacity:1}10.28%,100%{opacity:0}}.f0{animation-name:k0}
+@keyframes k1{0%,10.28%{opacity:0}10.88%,19.96%{opacity:1}20.56%,100%{opacity:0}}.f1{animation-name:k1}
+@keyframes k2{0%,20.56%{opacity:0}21.16%,30.24%{opacity:1}30.84%,100%{opacity:0}}.f2{animation-name:k2}
+@keyframes k3{0%,30.84%{opacity:0}31.44%,40.52%{opacity:1}41.12%,100%{opacity:0}}.f3{animation-name:k3}
+@keyframes k4{0%,41.12%{opacity:0}41.72%,50.80%{opacity:1}51.40%,100%{opacity:0}}.f4{animation-name:k4}
+@keyframes k5{0%,51.40%{opacity:0}52.00%,61.08%{opacity:1}61.68%,100%{opacity:0}}.f5{animation-name:k5}
+@keyframes k6{0%,61.68%{opacity:0}62.28%,71.36%{opacity:1}71.96%,100%{opacity:0}}.f6{animation-name:k6}
+@keyframes k7{0%,71.96%{opacity:0}72.56%,99.40%{opacity:1}100%{opacity:0}}.f7{animation-name:k7}
+@media (prefers-reduced-motion: reduce){.fr{animation:none!important;opacity:0}.f7{opacity:1}}</style>
+  <rect class="card" x="1" y="1" width="798" height="428" rx="14"/>
+  <text class="h" x="28" y="40">Backtracking: subsets of [1, 2, 3] in visit order</text>
+  <text class="m" x="28" y="62">Choose → explore → unchoose. Every node is a subset, so a copy is recorded at each one.</text>
+  <line class="ln smut" x1="250" y1="126" x2="100" y2="178"/>
+  <text class="m" x="169" y="156" text-anchor="end">+1</text>
+  <line class="ln smut" x1="250" y1="126" x2="280" y2="178"/>
+  <text class="m" x="271" y="156" text-anchor="start">+2</text>
+  <line class="ln smut" x1="250" y1="126" x2="420" y2="178"/>
+  <text class="m" x="341" y="156" text-anchor="start">+3</text>
+  <line class="ln smut" x1="100" y1="206" x2="50" y2="258"/>
+  <text class="m" x="69" y="236" text-anchor="end">+2</text>
+  <line class="ln smut" x1="100" y1="206" x2="160" y2="258"/>
+  <text class="m" x="136" y="236" text-anchor="start">+3</text>
+  <line class="ln smut" x1="280" y1="206" x2="280" y2="258"/>
+  <text class="m" x="286" y="236" text-anchor="start">+3</text>
+  <line class="ln smut" x1="50" y1="286" x2="50" y2="338"/>
+  <text class="m" x="56" y="316" text-anchor="start">+3</text>
+  <rect class="box" x="212" y="97" width="76" height="30" rx="15"/>
+  <text class="t" x="250" y="117" text-anchor="middle">[]</text>
+  <rect class="box" x="62" y="177" width="76" height="30" rx="15"/>
+  <text class="t" x="100" y="197" text-anchor="middle">[1]</text>
+  <rect class="box" x="242" y="177" width="76" height="30" rx="15"/>
+  <text class="t" x="280" y="197" text-anchor="middle">[2]</text>
+  <rect class="box" x="382" y="177" width="76" height="30" rx="15"/>
+  <text class="t" x="420" y="197" text-anchor="middle">[3]</text>
+  <rect class="box" x="12" y="257" width="76" height="30" rx="15"/>
+  <text class="t" x="50" y="277" text-anchor="middle">[1,2]</text>
+  <rect class="box" x="122" y="257" width="76" height="30" rx="15"/>
+  <text class="t" x="160" y="277" text-anchor="middle">[1,3]</text>
+  <rect class="box" x="242" y="257" width="76" height="30" rx="15"/>
+  <text class="t" x="280" y="277" text-anchor="middle">[2,3]</text>
+  <rect class="box" x="12" y="337" width="76" height="30" rx="15"/>
+  <text class="t" x="50" y="357" text-anchor="middle">[1,2,3]</text>
+  <text class="m" x="520" y="104">path (shared list)</text>
+  <text class="m" x="520" y="186">results (copies)</text>
+  <g class="fr f0"><rect class="pri" x="212" y="97" width="76" height="30" rx="15"/><text class="on" x="250" y="117" text-anchor="middle">[]</text><text class="t" x="520" y="136">[] (empty)</text><text class="tb" x="520" y="212">1. []</text><text class="t" x="520" y="320">Start: record [].</text></g>
+  <g class="fr f1"><rect class="tint" x="212" y="97" width="76" height="30" rx="15"/><text class="t" x="250" y="117" text-anchor="middle">[]</text><line class="ln spri" x1="250" y1="126" x2="100" y2="178" stroke-width="3"/><rect class="pri" x="62" y="177" width="76" height="30" rx="15"/><text class="on" x="100" y="197" text-anchor="middle">[1]</text><rect class="pri" x="520" y="114" width="34" height="34" rx="6"/><text class="on" x="537" y="136" text-anchor="middle">1</text><text class="t" x="520" y="212">1. []</text><text class="tb" x="640" y="212">2. [1]</text><text class="t" x="520" y="320">Choose 1: record [1].</text></g>
+  <g class="fr f2"><rect class="tint" x="212" y="97" width="76" height="30" rx="15"/><text class="t" x="250" y="117" text-anchor="middle">[]</text><rect class="tint" x="62" y="177" width="76" height="30" rx="15"/><text class="t" x="100" y="197" text-anchor="middle">[1]</text><line class="ln spri" x1="250" y1="126" x2="100" y2="178" stroke-width="3"/><line class="ln spri" x1="100" y1="206" x2="50" y2="258" stroke-width="3"/><rect class="pri" x="12" y="257" width="76" height="30" rx="15"/><text class="on" x="50" y="277" text-anchor="middle">[1,2]</text><rect class="pri" x="520" y="114" width="34" height="34" rx="6"/><text class="on" x="537" y="136" text-anchor="middle">1</text><rect class="pri" x="560" y="114" width="34" height="34" rx="6"/><text class="on" x="577" y="136" text-anchor="middle">2</text><text class="t" x="520" y="212">1. []</text><text class="t" x="640" y="212">2. [1]</text><text class="tb" x="520" y="234">3. [1,2]</text><text class="t" x="520" y="320">Choose 2: record [1,2].</text></g>
+  <g class="fr f3"><rect class="tint" x="212" y="97" width="76" height="30" rx="15"/><text class="t" x="250" y="117" text-anchor="middle">[]</text><rect class="tint" x="62" y="177" width="76" height="30" rx="15"/><text class="t" x="100" y="197" text-anchor="middle">[1]</text><rect class="tint" x="12" y="257" width="76" height="30" rx="15"/><text class="t" x="50" y="277" text-anchor="middle">[1,2]</text><line class="ln spri" x1="250" y1="126" x2="100" y2="178" stroke-width="3"/><line class="ln spri" x1="100" y1="206" x2="50" y2="258" stroke-width="3"/><line class="ln spri" x1="50" y1="286" x2="50" y2="338" stroke-width="3"/><rect class="pri" x="12" y="337" width="76" height="30" rx="15"/><text class="on" x="50" y="357" text-anchor="middle">[1,2,3]</text><rect class="pri" x="520" y="114" width="34" height="34" rx="6"/><text class="on" x="537" y="136" text-anchor="middle">1</text><rect class="pri" x="560" y="114" width="34" height="34" rx="6"/><text class="on" x="577" y="136" text-anchor="middle">2</text><rect class="pri" x="600" y="114" width="34" height="34" rx="6"/><text class="on" x="617" y="136" text-anchor="middle">3</text><text class="t" x="520" y="212">1. []</text><text class="t" x="640" y="212">2. [1]</text><text class="t" x="520" y="234">3. [1,2]</text><text class="tb" x="640" y="234">4. [1,2,3]</text><text class="t" x="520" y="320">Choose 3: record [1,2,3].</text></g>
+  <g class="fr f4"><rect class="tint" x="212" y="97" width="76" height="30" rx="15"/><text class="t" x="250" y="117" text-anchor="middle">[]</text><rect class="tint" x="62" y="177" width="76" height="30" rx="15"/><text class="t" x="100" y="197" text-anchor="middle">[1]</text><rect class="tint" x="12" y="257" width="76" height="30" rx="15"/><text class="t" x="50" y="277" text-anchor="middle">[1,2]</text><rect class="tint" x="12" y="337" width="76" height="30" rx="15"/><text class="t" x="50" y="357" text-anchor="middle">[1,2,3]</text><line class="ln spri" x1="250" y1="126" x2="100" y2="178" stroke-width="3"/><line class="ln spri" x1="100" y1="206" x2="160" y2="258" stroke-width="3"/><rect class="pri" x="122" y="257" width="76" height="30" rx="15"/><text class="on" x="160" y="277" text-anchor="middle">[1,3]</text><rect class="pri" x="520" y="114" width="34" height="34" rx="6"/><text class="on" x="537" y="136" text-anchor="middle">1</text><rect class="pri" x="560" y="114" width="34" height="34" rx="6"/><text class="on" x="577" y="136" text-anchor="middle">3</text><text class="t" x="520" y="212">1. []</text><text class="t" x="640" y="212">2. [1]</text><text class="t" x="520" y="234">3. [1,2]</text><text class="t" x="640" y="234">4. [1,2,3]</text><text class="tb" x="520" y="256">5. [1,3]</text><text class="t" x="520" y="320">Unchoose 2 steps, then</text><text class="t" x="520" y="340">choose 3: record [1,3].</text></g>
+  <g class="fr f5"><rect class="tint" x="212" y="97" width="76" height="30" rx="15"/><text class="t" x="250" y="117" text-anchor="middle">[]</text><rect class="tint" x="62" y="177" width="76" height="30" rx="15"/><text class="t" x="100" y="197" text-anchor="middle">[1]</text><rect class="tint" x="12" y="257" width="76" height="30" rx="15"/><text class="t" x="50" y="277" text-anchor="middle">[1,2]</text><rect class="tint" x="12" y="337" width="76" height="30" rx="15"/><text class="t" x="50" y="357" text-anchor="middle">[1,2,3]</text><rect class="tint" x="122" y="257" width="76" height="30" rx="15"/><text class="t" x="160" y="277" text-anchor="middle">[1,3]</text><line class="ln spri" x1="250" y1="126" x2="280" y2="178" stroke-width="3"/><rect class="pri" x="242" y="177" width="76" height="30" rx="15"/><text class="on" x="280" y="197" text-anchor="middle">[2]</text><rect class="pri" x="520" y="114" width="34" height="34" rx="6"/><text class="on" x="537" y="136" text-anchor="middle">2</text><text class="t" x="520" y="212">1. []</text><text class="t" x="640" y="212">2. [1]</text><text class="t" x="520" y="234">3. [1,2]</text><text class="t" x="640" y="234">4. [1,2,3]</text><text class="t" x="520" y="256">5. [1,3]</text><text class="tb" x="640" y="256">6. [2]</text><text class="t" x="520" y="320">Unchoose 2 steps, then</text><text class="t" x="520" y="340">choose 2: record [2].</text></g>
+  <g class="fr f6"><rect class="tint" x="212" y="97" width="76" height="30" rx="15"/><text class="t" x="250" y="117" text-anchor="middle">[]</text><rect class="tint" x="62" y="177" width="76" height="30" rx="15"/><text class="t" x="100" y="197" text-anchor="middle">[1]</text><rect class="tint" x="12" y="257" width="76" height="30" rx="15"/><text class="t" x="50" y="277" text-anchor="middle">[1,2]</text><rect class="tint" x="12" y="337" width="76" height="30" rx="15"/><text class="t" x="50" y="357" text-anchor="middle">[1,2,3]</text><rect class="tint" x="122" y="257" width="76" height="30" rx="15"/><text class="t" x="160" y="277" text-anchor="middle">[1,3]</text><rect class="tint" x="242" y="177" width="76" height="30" rx="15"/><text class="t" x="280" y="197" text-anchor="middle">[2]</text><line class="ln spri" x1="250" y1="126" x2="280" y2="178" stroke-width="3"/><line class="ln spri" x1="280" y1="206" x2="280" y2="258" stroke-width="3"/><rect class="pri" x="242" y="257" width="76" height="30" rx="15"/><text class="on" x="280" y="277" text-anchor="middle">[2,3]</text><rect class="pri" x="520" y="114" width="34" height="34" rx="6"/><text class="on" x="537" y="136" text-anchor="middle">2</text><rect class="pri" x="560" y="114" width="34" height="34" rx="6"/><text class="on" x="577" y="136" text-anchor="middle">3</text><text class="t" x="520" y="212">1. []</text><text class="t" x="640" y="212">2. [1]</text><text class="t" x="520" y="234">3. [1,2]</text><text class="t" x="640" y="234">4. [1,2,3]</text><text class="t" x="520" y="256">5. [1,3]</text><text class="t" x="640" y="256">6. [2]</text><text class="tb" x="520" y="278">7. [2,3]</text><text class="t" x="520" y="320">Choose 3: record [2,3].</text></g>
+  <g class="fr f7"><rect class="tint" x="212" y="97" width="76" height="30" rx="15"/><text class="t" x="250" y="117" text-anchor="middle">[]</text><rect class="tint" x="62" y="177" width="76" height="30" rx="15"/><text class="t" x="100" y="197" text-anchor="middle">[1]</text><rect class="tint" x="12" y="257" width="76" height="30" rx="15"/><text class="t" x="50" y="277" text-anchor="middle">[1,2]</text><rect class="tint" x="12" y="337" width="76" height="30" rx="15"/><text class="t" x="50" y="357" text-anchor="middle">[1,2,3]</text><rect class="tint" x="122" y="257" width="76" height="30" rx="15"/><text class="t" x="160" y="277" text-anchor="middle">[1,3]</text><rect class="tint" x="242" y="177" width="76" height="30" rx="15"/><text class="t" x="280" y="197" text-anchor="middle">[2]</text><rect class="tint" x="242" y="257" width="76" height="30" rx="15"/><text class="t" x="280" y="277" text-anchor="middle">[2,3]</text><line class="ln spri" x1="250" y1="126" x2="420" y2="178" stroke-width="3"/><rect class="pri" x="382" y="177" width="76" height="30" rx="15"/><text class="on" x="420" y="197" text-anchor="middle">[3]</text><rect class="pri" x="520" y="114" width="34" height="34" rx="6"/><text class="on" x="537" y="136" text-anchor="middle">3</text><text class="t" x="520" y="212">1. []</text><text class="t" x="640" y="212">2. [1]</text><text class="t" x="520" y="234">3. [1,2]</text><text class="t" x="640" y="234">4. [1,2,3]</text><text class="t" x="520" y="256">5. [1,3]</text><text class="t" x="640" y="256">6. [2]</text><text class="t" x="520" y="278">7. [2,3]</text><text class="tb" x="640" y="278">8. [3]</text><text class="tok" x="520" y="320" font-weight="700">Done: 8 = 2³ subsets, no [2,1].</text></g>
+  <text class="m" x="28" y="404">Children only use later elements (the start index), so each subset appears once, in one order.</text>
+</svg>

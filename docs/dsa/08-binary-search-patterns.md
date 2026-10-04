@@ -42,6 +42,9 @@ flowchart LR
 
 **Invariant** for the first-true template on `[lo, hi)`: everything before `lo` is false, everything from `hi` onwards is true (or out of range). Each step shrinks the unknown range `[lo, hi)` while keeping the invariant, so when `lo == hi`, it's the boundary.
 
+![Animation: lowerBound for 7 in 2, 5, 7, 7, 7, 9, 12, 15, 18, 21; the half-open range [lo, hi) shrinks from [0, 10) to [0, 5), [0, 2) and finally lo = hi = 2, the first 7](images/08-lower-bound-narrowing.svg){ loading=lazy }
+*Watch the bracket shrink while the F/T row never changes: everything left of lo stays F, everything from hi on stays T, and the loop stops on the boundary.*
+
 ### Three templates
 
 | Template | Range | Loop | Updates | Returns | Use for |
@@ -101,6 +104,9 @@ sequenceDiagram
     Note over BS: O(n · log(hi − lo)) total
 ```
 *Notice that you never construct the optimal solution directly. You only need a fast yes/no check, and binary search finds the threshold.*
+
+![Animation: bar chart of hours needed for eating speeds 1 to 11 with piles 3, 6, 7, 11 and an 8-hour line; binary search probes speeds 6, 3, 5 and 4 and stops at 4, the minimum feasible speed](images/08-binary-search-on-answer.svg){ loading=lazy }
+*Watch the feasible bars (at or below the 8-hour line) form one block on the right. That single F-to-T flip is what makes binary search valid, even though the hours aren't a sorted array you were given.*
 
 | Problem | X | Feasibility check | Range |
 |---|---|---|---|

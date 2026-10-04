@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Inside a Java HashMap</title>
+  <desc id="d">A table of 16 buckets holding 10 string keys. Keys are placed by spreading the hash code and masking it with 15. Bucket 0 holds Aa and BB, which have the same hash code 2112 and are told apart only by equals. Bucket 8 holds pharmacy, claims and member, bucket 15 holds billing and order, and profile, payment, user are alone in buckets 7, 10 and 13. A worked example shows put of member: hashCode 0xBFC28A9A, spread to 0xBFC23558, masked to index 8, then the chain is walked and member is appended at the end. Notes: the table doubles after 12 entries (16 times 0.75), and a bucket becomes a red-black tree at 8 or more nodes once the table has at least 64 buckets.</desc>
+  <style>.card{fill:#f8fafc;stroke:#e2e8f0}
+.h{fill:#0f172a;font-size:19px;font-weight:700}
+.t{fill:#334155;font-size:14px}
+.tb{fill:#334155;font-size:14px;font-weight:700}
+.lb{fill:#334155;font-size:15px;font-weight:600}
+.m{fill:#64748b;font-size:13px}
+.mono{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace}
+.box{fill:#ffffff;stroke:#cbd5e1}
+.pri{fill:#4f46e5}.spri{stroke:#4f46e5}.tpri{fill:#4f46e5}
+.tea{fill:#0ea5a4}.stea{stroke:#0ea5a4}.ttea{fill:#0f766e}
+.ok{fill:#16a34a}.sok{stroke:#16a34a}.tok{fill:#16a34a}
+.bad{fill:#dc2626}.sbad{stroke:#dc2626}.tbad{fill:#dc2626}
+.warn{fill:#d97706}.swarn{stroke:#d97706}.twarn{fill:#d97706}
+.smut{stroke:#94a3b8}.mut{fill:#94a3b8}
+.tint{fill:#4f46e5;fill-opacity:.14}.ttint{fill:#0ea5a4;fill-opacity:.16}
+.gtint{fill:#16a34a;fill-opacity:.16}.rtint{fill:#dc2626;fill-opacity:.14}.atint{fill:#d97706;fill-opacity:.16}
+.on{fill:#ffffff;font-size:14px;font-weight:700}
+.ln{fill:none;stroke-width:2}
+.ah{stroke:none}
+@media (prefers-color-scheme: dark){
+.card{fill:#1f2430;stroke:#334155}
+.h{fill:#f1f5f9}.t,.tb,.lb{fill:#e2e8f0}.m{fill:#94a3b8}
+.box{fill:#111827;stroke:#475569}
+.pri,.tint{fill:#818cf8}.spri{stroke:#818cf8}.tpri{fill:#818cf8}
+.tea,.ttint{fill:#2dd4bf}.stea{stroke:#2dd4bf}.ttea{fill:#5eead4}
+.ok,.gtint{fill:#4ade80}.sok{stroke:#4ade80}.tok{fill:#4ade80}
+.bad,.rtint{fill:#f87171}.sbad{stroke:#f87171}.tbad{fill:#f87171}
+.warn,.atint{fill:#fbbf24}.swarn{stroke:#fbbf24}.twarn{fill:#fbbf24}
+.smut{stroke:#64748b}.mut{fill:#64748b}
+.on{fill:#0f172a}
+}</style>
+  <rect class="card" x="1" y="1" width="798" height="498" rx="14"/>
+  <text class="h" x="28" y="40">Inside a Java HashMap (capacity 16, 10 keys)</text>
+  <text class="m" x="28" y="62">index = (h ^ (h &gt;&gt;&gt; 16)) &amp; (16 − 1); keys in the same bucket are chained in insertion order.</text>
+  <rect class="box" x="40" y="84" width="44" height="20" rx="4"/>
+  <text class="m" x="62" y="99" text-anchor="middle" font-size="13">0</text>
+  <line class="ln smut" stroke-width="1.5" x1="85" y1="94" x2="93" y2="94"/><path class="ah mut" d="M99.0,94.0 L93.0,97.0 L93.0,91.0 Z"/>
+  <rect class="tint" x="100" y="84" width="86" height="20" rx="5"/>
+  <text class="t" x="143" y="99" text-anchor="middle" font-size="13">Aa</text>
+  <line class="ln smut" stroke-width="1.5" x1="187" y1="94" x2="195" y2="94"/><path class="ah mut" d="M201.0,94.0 L195.0,97.0 L195.0,91.0 Z"/>
+  <rect class="tint" x="202" y="84" width="86" height="20" rx="5"/>
+  <text class="t" x="245" y="99" text-anchor="middle" font-size="13">BB</text>
+  <rect class="box" x="40" y="107" width="44" height="20" rx="4"/>
+  <text class="m" x="62" y="122" text-anchor="middle" font-size="13">1</text>
+  <rect class="box" x="40" y="130" width="44" height="20" rx="4"/>
+  <text class="m" x="62" y="145" text-anchor="middle" font-size="13">2</text>
+  <rect class="box" x="40" y="153" width="44" height="20" rx="4"/>
+  <text class="m" x="62" y="168" text-anchor="middle" font-size="13">3</text>
+  <rect class="box" x="40" y="176" width="44" height="20" rx="4"/>
+  <text class="m" x="62" y="191" text-anchor="middle" font-size="13">4</text>
+  <rect class="box" x="40" y="199" width="44" height="20" rx="4"/>
+  <text class="m" x="62" y="214" text-anchor="middle" font-size="13">5</text>
+  <rect class="box" x="40" y="222" width="44" height="20" rx="4"/>
+  <text class="m" x="62" y="237" text-anchor="middle" font-size="13">6</text>
+  <rect class="box" x="40" y="245" width="44" height="20" rx="4"/>
+  <text class="m" x="62" y="260" text-anchor="middle" font-size="13">7</text>
+  <line class="ln smut" stroke-width="1.5" x1="85" y1="255" x2="93" y2="255"/><path class="ah mut" d="M99.0,255.0 L93.0,258.0 L93.0,252.0 Z"/>
+  <rect class="box" x="100" y="245" width="86" height="20" rx="5"/>
+  <text class="t" x="143" y="260" text-anchor="middle" font-size="13">profile</text>
+  <rect class="pri" x="40" y="268" width="44" height="20" rx="4"/>
+  <text class="on" x="62" y="283" text-anchor="middle" font-size="13">8</text>
+  <line class="ln spri" stroke-width="1.5" x1="85" y1="278" x2="93" y2="278"/><path class="ah pri" d="M99.0,278.0 L93.0,281.0 L93.0,275.0 Z"/>
+  <rect class="box" x="100" y="268" width="86" height="20" rx="5"/>
+  <text class="t" x="143" y="283" text-anchor="middle" font-size="13">pharmacy</text>
+  <line class="ln spri" stroke-width="1.5" x1="187" y1="278" x2="195" y2="278"/><path class="ah pri" d="M201.0,278.0 L195.0,281.0 L195.0,275.0 Z"/>
+  <rect class="box" x="202" y="268" width="86" height="20" rx="5"/>
+  <text class="t" x="245" y="283" text-anchor="middle" font-size="13">claims</text>
+  <line class="ln spri" stroke-width="1.5" x1="289" y1="278" x2="297" y2="278"/><path class="ah pri" d="M303.0,278.0 L297.0,281.0 L297.0,275.0 Z"/>
+  <rect class="tea" x="304" y="268" width="86" height="20" rx="5"/>
+  <text class="on" x="347" y="283" text-anchor="middle" font-size="13">member</text>
+  <rect class="box" x="40" y="291" width="44" height="20" rx="4"/>
+  <text class="m" x="62" y="306" text-anchor="middle" font-size="13">9</text>
+  <rect class="box" x="40" y="314" width="44" height="20" rx="4"/>
+  <text class="m" x="62" y="329" text-anchor="middle" font-size="13">10</text>
+  <line class="ln smut" stroke-width="1.5" x1="85" y1="324" x2="93" y2="324"/><path class="ah mut" d="M99.0,324.0 L93.0,327.0 L93.0,321.0 Z"/>
+  <rect class="box" x="100" y="314" width="86" height="20" rx="5"/>
+  <text class="t" x="143" y="329" text-anchor="middle" font-size="13">payment</text>
+  <rect class="box" x="40" y="337" width="44" height="20" rx="4"/>
+  <text class="m" x="62" y="352" text-anchor="middle" font-size="13">11</text>
+  <rect class="box" x="40" y="360" width="44" height="20" rx="4"/>
+  <text class="m" x="62" y="375" text-anchor="middle" font-size="13">12</text>
+  <rect class="box" x="40" y="383" width="44" height="20" rx="4"/>
+  <text class="m" x="62" y="398" text-anchor="middle" font-size="13">13</text>
+  <line class="ln smut" stroke-width="1.5" x1="85" y1="393" x2="93" y2="393"/><path class="ah mut" d="M99.0,393.0 L93.0,396.0 L93.0,390.0 Z"/>
+  <rect class="box" x="100" y="383" width="86" height="20" rx="5"/>
+  <text class="t" x="143" y="398" text-anchor="middle" font-size="13">user</text>
+  <rect class="box" x="40" y="406" width="44" height="20" rx="4"/>
+  <text class="m" x="62" y="421" text-anchor="middle" font-size="13">14</text>
+  <rect class="box" x="40" y="429" width="44" height="20" rx="4"/>
+  <text class="m" x="62" y="444" text-anchor="middle" font-size="13">15</text>
+  <line class="ln smut" stroke-width="1.5" x1="85" y1="439" x2="93" y2="439"/><path class="ah mut" d="M99.0,439.0 L93.0,442.0 L93.0,436.0 Z"/>
+  <rect class="box" x="100" y="429" width="86" height="20" rx="5"/>
+  <text class="t" x="143" y="444" text-anchor="middle" font-size="13">billing</text>
+  <line class="ln smut" stroke-width="1.5" x1="187" y1="439" x2="195" y2="439"/><path class="ah mut" d="M201.0,439.0 L195.0,442.0 L195.0,436.0 Z"/>
+  <rect class="box" x="202" y="429" width="86" height="20" rx="5"/>
+  <text class="t" x="245" y="444" text-anchor="middle" font-size="13">order</text>
+  <text class="ttea" x="308" y="99" font-size="13" font-weight="700">same hashCode 2112</text>
+  <line class="ln smut" x1="450" y1="84" x2="450" y2="448" stroke-width="1"/>
+  <text class="lb" x="470" y="100">put("member", …)</text>
+  <text class="t" x="470" y="128">hashCode()</text>
+  <text class="tb" x="598" y="128">0xBFC28A9A</text>
+  <text class="t" x="470" y="152">h ^ (h &gt;&gt;&gt; 16)</text>
+  <text class="tb" x="598" y="152">0xBFC23558</text>
+  <text class="t" x="470" y="176">&amp; (16 − 1)</text>
+  <text class="tb" x="598" y="176">bucket 8</text>
+  <text class="t" x="470" y="212">Walk bucket 8: pharmacy, claims.</text>
+  <text class="t" x="470" y="232">Hashes differ, so equals() isn't</text>
+  <text class="t" x="470" y="252">even called. Append member.</text>
+  <text class="t" x="470" y="290">Aa and BB: equal hash codes,</text>
+  <text class="t" x="470" y="310">so same bucket; equals() tells</text>
+  <text class="t" x="470" y="330">them apart.</text>
+  <text class="t" x="470" y="368">Resize: the 13th put doubles the</text>
+  <text class="t" x="470" y="388">table (16 × 0.75 = 12 allowed).</text>
+  <text class="t" x="470" y="418">Tree bin: a bucket with ≥ 8 nodes</text>
+  <text class="t" x="470" y="438">becomes a red-black tree (table ≥ 64).</text>
+  <text class="m" x="28" y="482">Hash codes are real Java String values. Iteration walks the buckets in order, so HashMap order looks random.</text>
+</svg>

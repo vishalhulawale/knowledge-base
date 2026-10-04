@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Merging overlapping intervals</title>
+  <desc id="d">Input intervals [8,10], [1,3], [15,18], [2,6], [9,12] are sorted by start: [1,3], [2,6], [8,10], [9,12], [15,18]. Scanning in order, [1,3] starts the output, [2,6] overlaps it and extends it to [1,6], [8,10] starts a new interval, [9,12] extends it to [8,12], and [15,18] starts a third. The result is [1,6], [8,12], [15,18].</desc>
+  <style>.card{fill:#f8fafc;stroke:#e2e8f0}
+.h{fill:#0f172a;font-size:19px;font-weight:700}
+.t{fill:#334155;font-size:14px}
+.tb{fill:#334155;font-size:14px;font-weight:700}
+.lb{fill:#334155;font-size:15px;font-weight:600}
+.m{fill:#64748b;font-size:13px}
+.mono{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace}
+.box{fill:#ffffff;stroke:#cbd5e1}
+.pri{fill:#4f46e5}.spri{stroke:#4f46e5}.tpri{fill:#4f46e5}
+.tea{fill:#0ea5a4}.stea{stroke:#0ea5a4}.ttea{fill:#0f766e}
+.ok{fill:#16a34a}.sok{stroke:#16a34a}.tok{fill:#16a34a}
+.bad{fill:#dc2626}.sbad{stroke:#dc2626}.tbad{fill:#dc2626}
+.warn{fill:#d97706}.swarn{stroke:#d97706}.twarn{fill:#d97706}
+.smut{stroke:#94a3b8}.mut{fill:#94a3b8}
+.tint{fill:#4f46e5;fill-opacity:.14}.ttint{fill:#0ea5a4;fill-opacity:.16}
+.gtint{fill:#16a34a;fill-opacity:.16}.rtint{fill:#dc2626;fill-opacity:.14}.atint{fill:#d97706;fill-opacity:.16}
+.on{fill:#ffffff;font-size:14px;font-weight:700}
+.ln{fill:none;stroke-width:2}
+.ah{stroke:none}
+@media (prefers-color-scheme: dark){
+.card{fill:#1f2430;stroke:#334155}
+.h{fill:#f1f5f9}.t,.tb,.lb{fill:#e2e8f0}.m{fill:#94a3b8}
+.box{fill:#111827;stroke:#475569}
+.pri,.tint{fill:#818cf8}.spri{stroke:#818cf8}.tpri{fill:#818cf8}
+.tea,.ttint{fill:#2dd4bf}.stea{stroke:#2dd4bf}.ttea{fill:#5eead4}
+.ok,.gtint{fill:#4ade80}.sok{stroke:#4ade80}.tok{fill:#4ade80}
+.bad,.rtint{fill:#f87171}.sbad{stroke:#f87171}.tbad{fill:#f87171}
+.warn,.atint{fill:#fbbf24}.swarn{stroke:#fbbf24}.twarn{fill:#fbbf24}
+.smut{stroke:#64748b}.mut{fill:#64748b}
+.on{fill:#0f172a}
+}
+.fr{opacity:0;animation-duration:9.8s;animation-iteration-count:infinite;animation-timing-function:linear}
+@keyframes k0{0%,15.73%{opacity:1}16.33%,100%{opacity:0}}.f0{animation-name:k0}
+@keyframes k1{0%,16.33%{opacity:0}16.93%,32.05%{opacity:1}32.65%,100%{opacity:0}}.f1{animation-name:k1}
+@keyframes k2{0%,32.65%{opacity:0}33.25%,48.38%{opacity:1}48.98%,100%{opacity:0}}.f2{animation-name:k2}
+@keyframes k3{0%,48.98%{opacity:0}49.58%,64.71%{opacity:1}65.31%,100%{opacity:0}}.f3{animation-name:k3}
+@keyframes k4{0%,65.31%{opacity:0}65.91%,99.40%{opacity:1}100%{opacity:0}}.f4{animation-name:k4}
+@media (prefers-reduced-motion: reduce){.fr{animation:none!important;opacity:0}.f4{opacity:1}}</style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">Merge intervals: sort by start, then extend or start new</text>
+  <text class="m" x="28" y="62">Input [8,10], [1,3], [15,18], [2,6], [9,12], sorted by start so overlapping intervals become neighbours.</text>
+  <text class="m" x="28" y="98">sorted</text>
+  <text class="m" x="120" y="292" text-anchor="middle">0</text>
+  <line class="ln smut" x1="120" y1="84" x2="120" y2="278" stroke-width="1" stroke-opacity=".3"/>
+  <text class="m" x="184" y="292" text-anchor="middle">2</text>
+  <line class="ln smut" x1="184" y1="84" x2="184" y2="278" stroke-width="1" stroke-opacity=".3"/>
+  <text class="m" x="248" y="292" text-anchor="middle">4</text>
+  <line class="ln smut" x1="248" y1="84" x2="248" y2="278" stroke-width="1" stroke-opacity=".3"/>
+  <text class="m" x="312" y="292" text-anchor="middle">6</text>
+  <line class="ln smut" x1="312" y1="84" x2="312" y2="278" stroke-width="1" stroke-opacity=".3"/>
+  <text class="m" x="376" y="292" text-anchor="middle">8</text>
+  <line class="ln smut" x1="376" y1="84" x2="376" y2="278" stroke-width="1" stroke-opacity=".3"/>
+  <text class="m" x="440" y="292" text-anchor="middle">10</text>
+  <line class="ln smut" x1="440" y1="84" x2="440" y2="278" stroke-width="1" stroke-opacity=".3"/>
+  <text class="m" x="504" y="292" text-anchor="middle">12</text>
+  <line class="ln smut" x1="504" y1="84" x2="504" y2="278" stroke-width="1" stroke-opacity=".3"/>
+  <text class="m" x="568" y="292" text-anchor="middle">14</text>
+  <line class="ln smut" x1="568" y1="84" x2="568" y2="278" stroke-width="1" stroke-opacity=".3"/>
+  <text class="m" x="632" y="292" text-anchor="middle">16</text>
+  <line class="ln smut" x1="632" y1="84" x2="632" y2="278" stroke-width="1" stroke-opacity=".3"/>
+  <text class="m" x="696" y="292" text-anchor="middle">18</text>
+  <line class="ln smut" x1="696" y1="84" x2="696" y2="278" stroke-width="1" stroke-opacity=".3"/>
+  <text class="m" x="760" y="292" text-anchor="middle">20</text>
+  <line class="ln smut" x1="760" y1="84" x2="760" y2="278" stroke-width="1" stroke-opacity=".3"/>
+  <text class="m" x="28" y="254">merged</text>
+  <g class="fr f0"><rect class="pri" x="152" y="86" width="64" height="22" rx="5"/><text class="t" x="222" y="102" font-size="13">[1,3]</text><rect class="box" x="184" y="114" width="128" height="22" rx="5"/><text class="t" x="318" y="130" font-size="13">[2,6]</text><rect class="box" x="376" y="142" width="64" height="22" rx="5"/><text class="t" x="446" y="158" font-size="13">[8,10]</text><rect class="box" x="408" y="170" width="96" height="22" rx="5"/><text class="t" x="510" y="186" font-size="13">[9,12]</text><rect class="box" x="600" y="198" width="96" height="22" rx="5"/><text class="t" x="702" y="214" font-size="13">[15,18]</text><rect class="ok" x="152" y="238" width="64" height="26" rx="6"/><text class="on" x="184" y="256" text-anchor="middle" font-size="13">[1,3]</text><text class="t" x="28" y="330">[1,3] is the first interval: copy it to the output.</text></g>
+  <g class="fr f1"><rect class="tint" x="152" y="86" width="64" height="22" rx="5"/><text class="t" x="222" y="102" font-size="13">[1,3]</text><rect class="pri" x="184" y="114" width="128" height="22" rx="5"/><text class="t" x="318" y="130" font-size="13">[2,6]</text><rect class="box" x="376" y="142" width="64" height="22" rx="5"/><text class="t" x="446" y="158" font-size="13">[8,10]</text><rect class="box" x="408" y="170" width="96" height="22" rx="5"/><text class="t" x="510" y="186" font-size="13">[9,12]</text><rect class="box" x="600" y="198" width="96" height="22" rx="5"/><text class="t" x="702" y="214" font-size="13">[15,18]</text><rect class="ok" x="152" y="238" width="160" height="26" rx="6"/><text class="on" x="232" y="256" text-anchor="middle" font-size="13">[1,6]</text><text class="t" x="28" y="330">[2,6] starts at 2 ≤ last end 3: overlap, so extend to [1,6].</text></g>
+  <g class="fr f2"><rect class="tint" x="152" y="86" width="64" height="22" rx="5"/><text class="t" x="222" y="102" font-size="13">[1,3]</text><rect class="tint" x="184" y="114" width="128" height="22" rx="5"/><text class="t" x="318" y="130" font-size="13">[2,6]</text><rect class="pri" x="376" y="142" width="64" height="22" rx="5"/><text class="t" x="446" y="158" font-size="13">[8,10]</text><rect class="box" x="408" y="170" width="96" height="22" rx="5"/><text class="t" x="510" y="186" font-size="13">[9,12]</text><rect class="box" x="600" y="198" width="96" height="22" rx="5"/><text class="t" x="702" y="214" font-size="13">[15,18]</text><rect class="tea" x="152" y="238" width="160" height="26" rx="6"/><text class="on" x="232" y="256" text-anchor="middle" font-size="13">[1,6]</text><rect class="ok" x="376" y="238" width="64" height="26" rx="6"/><text class="on" x="408" y="256" text-anchor="middle" font-size="13">[8,10]</text><text class="t" x="28" y="330">[8,10] starts after the last merged end: add it as a new interval.</text></g>
+  <g class="fr f3"><rect class="tint" x="152" y="86" width="64" height="22" rx="5"/><text class="t" x="222" y="102" font-size="13">[1,3]</text><rect class="tint" x="184" y="114" width="128" height="22" rx="5"/><text class="t" x="318" y="130" font-size="13">[2,6]</text><rect class="tint" x="376" y="142" width="64" height="22" rx="5"/><text class="t" x="446" y="158" font-size="13">[8,10]</text><rect class="pri" x="408" y="170" width="96" height="22" rx="5"/><text class="t" x="510" y="186" font-size="13">[9,12]</text><rect class="box" x="600" y="198" width="96" height="22" rx="5"/><text class="t" x="702" y="214" font-size="13">[15,18]</text><rect class="tea" x="152" y="238" width="160" height="26" rx="6"/><text class="on" x="232" y="256" text-anchor="middle" font-size="13">[1,6]</text><rect class="ok" x="376" y="238" width="128" height="26" rx="6"/><text class="on" x="440" y="256" text-anchor="middle" font-size="13">[8,12]</text><text class="t" x="28" y="330">[9,12] starts at 9 ≤ last end 10: overlap, so extend to [8,12].</text></g>
+  <g class="fr f4"><rect class="tint" x="152" y="86" width="64" height="22" rx="5"/><text class="t" x="222" y="102" font-size="13">[1,3]</text><rect class="tint" x="184" y="114" width="128" height="22" rx="5"/><text class="t" x="318" y="130" font-size="13">[2,6]</text><rect class="tint" x="376" y="142" width="64" height="22" rx="5"/><text class="t" x="446" y="158" font-size="13">[8,10]</text><rect class="tint" x="408" y="170" width="96" height="22" rx="5"/><text class="t" x="510" y="186" font-size="13">[9,12]</text><rect class="pri" x="600" y="198" width="96" height="22" rx="5"/><text class="t" x="702" y="214" font-size="13">[15,18]</text><rect class="tea" x="152" y="238" width="160" height="26" rx="6"/><text class="on" x="232" y="256" text-anchor="middle" font-size="13">[1,6]</text><rect class="tea" x="376" y="238" width="128" height="26" rx="6"/><text class="on" x="440" y="256" text-anchor="middle" font-size="13">[8,12]</text><rect class="ok" x="600" y="238" width="96" height="26" rx="6"/><text class="on" x="648" y="256" text-anchor="middle" font-size="13">[15,18]</text><text class="t" x="28" y="330">[15,18] starts after the last merged end: add it as a new interval.</text><text class="tok" x="28" y="354" font-weight="700">Result: [1,6], [8,12], [15,18]. O(n log n), dominated by the sort.</text></g>
+</svg>

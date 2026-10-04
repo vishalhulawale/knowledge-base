@@ -58,6 +58,9 @@ sequenceDiagram
 ```
 *Notice that both sift operations walk a single root-to-leaf path, which is why they're O(log n).*
 
+![Animation: offer(0) on the min-heap 1, 3, 2, 7, 4, 5, 6 appends 0 at index 7, then swaps it with 7, 3 and 1, shown on both the tree and the array, until 0 is the root](images/06-heap-sift-up.svg){ loading=lazy }
+*Watch the tree and the array change together: each swap moves 0 from index i to (i − 1) / 2, so three swaps take it from the last slot to the root.*
+
 | Operation | Cost | Note |
 |---|---|---|
 | `peek` | O(1) | Root |
@@ -88,6 +91,9 @@ flowchart LR
     I --> B["Bucket / counting<br/>O(n) when values or<br/>frequencies are bounded"]
 ```
 *Notice why the heap keeps the k largest in a **min**-heap: its root is the smallest of the current top k, so it's the one to evict when a bigger item arrives.*
+
+![Animation: the stream 5, 1, 8, 3, 9, 2, 7 passes a min-heap of size 3; 3, 9 and 7 each evict the root, 2 is rejected after one comparison, and the heap ends with 7, 8 and 9](images/06-top-k-min-heap.svg){ loading=lazy }
+*Watch the teal root: it's the smallest of the current top 3, so a new item only has to beat it. Most items in a large stream are rejected by that single comparison.*
 
 Measured, top-100 of 10,000,000 random ints:
 

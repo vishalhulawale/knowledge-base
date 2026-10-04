@@ -47,6 +47,9 @@ flowchart LR
 ```
 *Notice that each step to the right is a different league. For n = 1,000,000, n log n is about 20 million operations, n² is a trillion.*
 
+![Line chart of operations against n from 1 to 20, capped at 100: log n and n stay low, n log n reaches about 86, n squared leaves the chart at n = 10 and 2 to the n before n = 7](images/01-growth-classes.svg){ loading=lazy }
+*Notice how early the n² and 2ⁿ curves leave the chart, while n log n stays close to linear. Doubling n doubles O(n) work and quadruples O(n²) work.*
+
 | n | log₂ n | n log₂ n | n² | 2ⁿ |
 |---|---|---|---|---|
 | 10 | 3.3 | 33 | 100 | 1,024 |
@@ -129,6 +132,9 @@ flowchart LR
     C --> A
 ```
 *Notice that growing by a constant factor makes copies rare: total copying over n adds is a geometric series bounded by a constant times n, so each add is O(1) amortised.*
+
+![Animation: an ArrayList fills capacity 10, then resizes to 15, 22 and 33, copying all existing elements each time, while a counter shows about 2 copies per add after 23 adds](images/01-arraylist-amortised-growth.svg){ loading=lazy }
+*Watch the copies-per-add counter: each resize copies more elements, but resizes get rarer at the same rate, so the average stays a small constant.*
 
 Measured in Java 21: 1,000,000 `ArrayList.add` calls caused **30** capacity changes (growth ≈ 1.5×), final capacity 1,215,487, and **2,430,972** elements copied in total, i.e. **2.43 copies per add**: a constant, so amortised O(1). Growing by a fixed amount (+10 each time) would instead be O(n²) total.
 

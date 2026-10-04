@@ -57,6 +57,9 @@ Arrays usually win in practice because of cache locality and fewer allocations. 
 - **Two pointers with a gap:** advance `fast` n+1 steps from the dummy, then move both until `fast` is null. `slow.next` is the node to remove.
 - **Merge:** a tail pointer appends the smaller head each step, then attaches the remainder.
 
+![Animation: the list 1, 2, 3, 4 is reversed in four steps; at each step one arrow flips to point left and the prev and cur pointers move one node right, until prev is at 4, the new head](images/04-reverse-linked-list.svg){ loading=lazy }
+*Watch one arrow flip per step. Saving `next` first is what keeps the rest of the list reachable after `cur.next` is overwritten.*
+
 ```mermaid
 flowchart LR
     H["head"] -->|"a steps"| S["cycle start"]
@@ -90,6 +93,9 @@ sequenceDiagram
     I->>S: 76 > 72 → pop 5, 76 > 75 → pop 2 (ans 4), push 6
 ```
 *Notice that each index waits on the stack until a warmer day arrives, and leaves exactly once. That's why the double loop is O(n).*
+
+![Animation: bars for temperatures 73, 74, 75, 71, 69, 72, 76, 73; a stack of waiting days grows and shrinks, warmer days pop cooler ones and fill in answers 1, 1, 4, 2, 1, 1, 0, 0](images/04-monotonic-stack-temperatures.svg){ loading=lazy }
+*Watch day 5 (72) pop days 4 and 3, then day 6 (76) pop days 5 and 2. Amber bars are still waiting, and their temperatures always decrease towards the top of the stack.*
 
 Uses: next greater element, daily temperatures, stock span, largest rectangle in a histogram (for each bar, the nearest smaller bars on both sides bound its rectangle), trapping rain water, removing k digits to make the smallest number.
 

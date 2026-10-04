@@ -47,6 +47,9 @@ flowchart TD
 ```
 *Notice the outputs for this BST: pre-order 4 2 1 3 6 5 7 · in-order 1 2 3 4 5 6 7 (sorted) · post-order 1 3 2 5 7 6 4 · level order [4] [2 6] [1 3 5 7].*
 
+![Animation: three copies of the BST 4, 2, 6, 1, 3, 5, 7 light up node by node in pre-order (4 2 1 3 6 5 7), in-order (1 2 3 4 5 6 7) and post-order (1 3 2 5 7 6 4)](images/05-tree-traversal-orders.svg){ loading=lazy }
+*Watch the same tree produce three different outputs. Only in-order comes out sorted, and only post-order visits both children before their parent.*
+
 | Traversal | Order | Typical use |
 |---|---|---|
 | Pre-order | node, left, right | Copy or serialise a tree, print a hierarchy |
@@ -90,6 +93,9 @@ flowchart LR
 **Delete** has three cases: a leaf (remove), one child (splice it up), two children (replace the value with the in-order successor, the minimum of the right subtree, then delete that successor).
 
 **Validation pitfall:** checking only `left.val < node.val < right.val` misses violations deeper down. Measured: the tree `5` with left child `3`, whose right child is `7`, passed the parent-child check but fails the bounds check (7 is in 5's left subtree). Pass bounds down, as `long` so `Integer.MIN_VALUE`/`MAX_VALUE` nodes work.
+
+![Two copies of the tree 5, left child 3, right grandchild 7: the parent-child check accepts it because 3 < 5 and 7 > 3, while passing bounds down gives 7 the range (3, 5), so it is rejected](images/05-bst-validation-bounds.svg){ loading=lazy }
+*Notice that every single edge passes the local check. Only the bounds inherited from the root show that 7 is on the wrong side of 5.*
 
 ### Balance: why TreeMap is O(log n)
 

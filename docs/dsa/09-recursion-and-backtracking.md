@@ -103,6 +103,9 @@ flowchart TD
 ```
 *Notice the subsets tree for [1,2,3] using a `start` index: each node is a subset (record at every node), and children only use later elements, so [2,1] never appears. That index is what separates combinations from permutations.*
 
+![Animation: the subsets search tree for 1, 2, 3 is walked depth first; the current node and path are highlighted, the shared path list grows and shrinks, and copies are recorded in the order [], [1], [1,2], [1,2,3], [1,3], [2], [2,3], [3]](images/09-subsets-backtracking-tree.svg){ loading=lazy }
+*Watch the path list: it's one shared object that grows on choose and shrinks on unchoose, which is why each result must be recorded as a copy.*
+
 | Problem | Key state | Record when | Avoid duplicates by | Count |
 |---|---|---|---|---|
 | Subsets | `start` index | Every node | Children start at `j + 1` | 2ⁿ |
@@ -122,6 +125,9 @@ All counts were verified on 500 random inputs against bitmask enumeration (subse
 |---|---|---|
 | No pruning (check only complete boards) | 19,173,961 | 92 |
 | Prune on column and diagonals | **2,057** | 92 |
+
+![Animation: 4-queens search placing one queen per row with attacked cells shaded red; dead ends in rows 2 and 3 force backtracking, the row 0 queen moves to column 1, and the first solution is columns 1, 3, 0, 2](images/09-n-queens-backtracking.svg){ loading=lazy }
+*Watch the red cells: they're never tried, which is what pruning means. A dead end abandons the partial board immediately instead of filling in the remaining rows.*
 
 Represent the occupied columns and diagonals as **bitmasks** (`cols`, `d1`, `d2`) and get the available positions with `~(cols | d1 | d2) & mask`, iterating set bits with `bit = avail & −avail`. Measured n = 14: 4,974 ms with array scanning vs **253 ms** with bitmasks. Known counts for n = 1..9 (1, 0, 0, 2, 10, 4, 40, 92, 352) were verified.
 

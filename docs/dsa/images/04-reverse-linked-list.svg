@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Reversing a singly linked list in place</title>
+  <desc id="d">A list 1, 2, 3, 4 followed by null is reversed with three pointers. At each step the code saves next, points cur.next back to prev, then moves prev and cur one node to the right. After four steps every arrow points left, prev is at node 4, which is the new head, and cur is null.</desc>
+  <style>.card{fill:#f8fafc;stroke:#e2e8f0}
+.h{fill:#0f172a;font-size:19px;font-weight:700}
+.t{fill:#334155;font-size:14px}
+.tb{fill:#334155;font-size:14px;font-weight:700}
+.lb{fill:#334155;font-size:15px;font-weight:600}
+.m{fill:#64748b;font-size:13px}
+.mono{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace}
+.box{fill:#ffffff;stroke:#cbd5e1}
+.pri{fill:#4f46e5}.spri{stroke:#4f46e5}.tpri{fill:#4f46e5}
+.tea{fill:#0ea5a4}.stea{stroke:#0ea5a4}.ttea{fill:#0f766e}
+.ok{fill:#16a34a}.sok{stroke:#16a34a}.tok{fill:#16a34a}
+.bad{fill:#dc2626}.sbad{stroke:#dc2626}.tbad{fill:#dc2626}
+.warn{fill:#d97706}.swarn{stroke:#d97706}.twarn{fill:#d97706}
+.smut{stroke:#94a3b8}.mut{fill:#94a3b8}
+.tint{fill:#4f46e5;fill-opacity:.14}.ttint{fill:#0ea5a4;fill-opacity:.16}
+.gtint{fill:#16a34a;fill-opacity:.16}.rtint{fill:#dc2626;fill-opacity:.14}.atint{fill:#d97706;fill-opacity:.16}
+.on{fill:#ffffff;font-size:14px;font-weight:700}
+.ln{fill:none;stroke-width:2}
+.ah{stroke:none}
+@media (prefers-color-scheme: dark){
+.card{fill:#1f2430;stroke:#334155}
+.h{fill:#f1f5f9}.t,.tb,.lb{fill:#e2e8f0}.m{fill:#94a3b8}
+.box{fill:#111827;stroke:#475569}
+.pri,.tint{fill:#818cf8}.spri{stroke:#818cf8}.tpri{fill:#818cf8}
+.tea,.ttint{fill:#2dd4bf}.stea{stroke:#2dd4bf}.ttea{fill:#5eead4}
+.ok,.gtint{fill:#4ade80}.sok{stroke:#4ade80}.tok{fill:#4ade80}
+.bad,.rtint{fill:#f87171}.sbad{stroke:#f87171}.tbad{fill:#f87171}
+.warn,.atint{fill:#fbbf24}.swarn{stroke:#fbbf24}.twarn{fill:#fbbf24}
+.smut{stroke:#64748b}.mut{fill:#64748b}
+.on{fill:#0f172a}
+}
+.fr{opacity:0;animation-duration:12.4s;animation-iteration-count:infinite;animation-timing-function:linear}
+@keyframes k0{0%,16.38%{opacity:1}16.98%,100%{opacity:0}}.f0{animation-name:k0}
+@keyframes k1{0%,16.98%{opacity:0}17.58%,33.36%{opacity:1}33.96%,100%{opacity:0}}.f1{animation-name:k1}
+@keyframes k2{0%,33.96%{opacity:0}34.56%,50.34%{opacity:1}50.94%,100%{opacity:0}}.f2{animation-name:k2}
+@keyframes k3{0%,50.94%{opacity:0}51.54%,67.32%{opacity:1}67.92%,100%{opacity:0}}.f3{animation-name:k3}
+@keyframes k4{0%,67.92%{opacity:0}68.52%,99.40%{opacity:1}100%{opacity:0}}.f4{animation-name:k4}
+@media (prefers-reduced-motion: reduce){.fr{animation:none!important;opacity:0}.f4{opacity:1}}</style>
+  <rect class="card" x="1" y="1" width="798" height="298" rx="14"/>
+  <text class="h" x="28" y="40">Reversing a linked list: prev, cur, next</text>
+  <text class="m" x="28" y="62">Each step: next = cur.next; cur.next = prev; prev = cur; cur = next.</text>
+  <rect class="card" x="30" y="126" width="62" height="32" rx="6"/>
+  <text class="m" x="61" y="147" text-anchor="middle">null</text>
+  <rect class="card" x="640" y="126" width="62" height="32" rx="6"/>
+  <text class="m" x="671" y="147" text-anchor="middle">null</text>
+  <rect class="box" x="140" y="120" width="64" height="44" rx="8"/>
+  <text class="lb" x="172" y="148" text-anchor="middle">1</text>
+  <rect class="box" x="270" y="120" width="64" height="44" rx="8"/>
+  <text class="lb" x="302" y="148" text-anchor="middle">2</text>
+  <rect class="box" x="400" y="120" width="64" height="44" rx="8"/>
+  <text class="lb" x="432" y="148" text-anchor="middle">3</text>
+  <rect class="box" x="530" y="120" width="64" height="44" rx="8"/>
+  <text class="lb" x="562" y="148" text-anchor="middle">4</text>
+  <g class="fr f0"><line class="ln smut" stroke-width="2" x1="206" y1="142" x2="259" y2="142"/><path class="ah mut" d="M267.0,142.0 L259.0,146.0 L259.0,138.0 Z"/><line class="ln smut" stroke-width="2" x1="336" y1="142" x2="389" y2="142"/><path class="ah mut" d="M397.0,142.0 L389.0,146.0 L389.0,138.0 Z"/><line class="ln smut" stroke-width="2" x1="466" y1="142" x2="519" y2="142"/><path class="ah mut" d="M527.0,142.0 L519.0,146.0 L519.0,138.0 Z"/><line class="ln smut" stroke-width="2" x1="596" y1="142" x2="629" y2="142"/><path class="ah mut" d="M637.0,142.0 L629.0,146.0 L629.0,138.0 Z"/><line class="ln stea" stroke-width="2" x1="61" y1="212" x2="61" y2="180"/><path class="ah tea" d="M61.0,172.0 L65.0,180.0 L57.0,180.0 Z"/><text class="ttea" x="61" y="230" text-anchor="middle" font-weight="700" font-size="14">prev</text><line class="ln spri" stroke-width="2" x1="172" y1="212" x2="172" y2="180"/><path class="ah pri" d="M172.0,172.0 L176.0,180.0 L168.0,180.0 Z"/><text class="tpri" x="172" y="230" text-anchor="middle" font-weight="700" font-size="14">cur</text><text class="t" x="30" y="258">Start: prev = null, cur = head (1).</text></g>
+  <g class="fr f1"><line class="ln stea" stroke-width="2.5" x1="138" y1="142" x2="104" y2="142"/><path class="ah tea" d="M95.0,142.0 L104.0,137.5 L104.0,146.5 Z"/><line class="ln smut" stroke-width="2" x1="336" y1="142" x2="389" y2="142"/><path class="ah mut" d="M397.0,142.0 L389.0,146.0 L389.0,138.0 Z"/><line class="ln smut" stroke-width="2" x1="466" y1="142" x2="519" y2="142"/><path class="ah mut" d="M527.0,142.0 L519.0,146.0 L519.0,138.0 Z"/><line class="ln smut" stroke-width="2" x1="596" y1="142" x2="629" y2="142"/><path class="ah mut" d="M637.0,142.0 L629.0,146.0 L629.0,138.0 Z"/><line class="ln stea" stroke-width="2" x1="172" y1="212" x2="172" y2="180"/><path class="ah tea" d="M172.0,172.0 L176.0,180.0 L168.0,180.0 Z"/><text class="ttea" x="172" y="230" text-anchor="middle" font-weight="700" font-size="14">prev</text><line class="ln spri" stroke-width="2" x1="302" y1="212" x2="302" y2="180"/><path class="ah pri" d="M302.0,172.0 L306.0,180.0 L298.0,180.0 Z"/><text class="tpri" x="302" y="230" text-anchor="middle" font-weight="700" font-size="14">cur</text><text class="t" x="30" y="258">Step 1: saved next = 2, pointed 1.next back at null, moved prev to 1 and cur to 2.</text></g>
+  <g class="fr f2"><line class="ln stea" stroke-width="2.5" x1="138" y1="142" x2="104" y2="142"/><path class="ah tea" d="M95.0,142.0 L104.0,137.5 L104.0,146.5 Z"/><line class="ln stea" stroke-width="2.5" x1="268" y1="142" x2="216" y2="142"/><path class="ah tea" d="M207.0,142.0 L216.0,137.5 L216.0,146.5 Z"/><line class="ln smut" stroke-width="2" x1="466" y1="142" x2="519" y2="142"/><path class="ah mut" d="M527.0,142.0 L519.0,146.0 L519.0,138.0 Z"/><line class="ln smut" stroke-width="2" x1="596" y1="142" x2="629" y2="142"/><path class="ah mut" d="M637.0,142.0 L629.0,146.0 L629.0,138.0 Z"/><line class="ln stea" stroke-width="2" x1="302" y1="212" x2="302" y2="180"/><path class="ah tea" d="M302.0,172.0 L306.0,180.0 L298.0,180.0 Z"/><text class="ttea" x="302" y="230" text-anchor="middle" font-weight="700" font-size="14">prev</text><line class="ln spri" stroke-width="2" x1="432" y1="212" x2="432" y2="180"/><path class="ah pri" d="M432.0,172.0 L436.0,180.0 L428.0,180.0 Z"/><text class="tpri" x="432" y="230" text-anchor="middle" font-weight="700" font-size="14">cur</text><text class="t" x="30" y="258">Step 2: saved next = 3, pointed 2.next back at 1, moved prev to 2 and cur to 3.</text></g>
+  <g class="fr f3"><line class="ln stea" stroke-width="2.5" x1="138" y1="142" x2="104" y2="142"/><path class="ah tea" d="M95.0,142.0 L104.0,137.5 L104.0,146.5 Z"/><line class="ln stea" stroke-width="2.5" x1="268" y1="142" x2="216" y2="142"/><path class="ah tea" d="M207.0,142.0 L216.0,137.5 L216.0,146.5 Z"/><line class="ln stea" stroke-width="2.5" x1="398" y1="142" x2="346" y2="142"/><path class="ah tea" d="M337.0,142.0 L346.0,137.5 L346.0,146.5 Z"/><line class="ln smut" stroke-width="2" x1="596" y1="142" x2="629" y2="142"/><path class="ah mut" d="M637.0,142.0 L629.0,146.0 L629.0,138.0 Z"/><line class="ln stea" stroke-width="2" x1="432" y1="212" x2="432" y2="180"/><path class="ah tea" d="M432.0,172.0 L436.0,180.0 L428.0,180.0 Z"/><text class="ttea" x="432" y="230" text-anchor="middle" font-weight="700" font-size="14">prev</text><line class="ln spri" stroke-width="2" x1="562" y1="212" x2="562" y2="180"/><path class="ah pri" d="M562.0,172.0 L566.0,180.0 L558.0,180.0 Z"/><text class="tpri" x="562" y="230" text-anchor="middle" font-weight="700" font-size="14">cur</text><text class="t" x="30" y="258">Step 3: saved next = 4, pointed 3.next back at 2, moved prev to 3 and cur to 4.</text></g>
+  <g class="fr f4"><line class="ln stea" stroke-width="2.5" x1="138" y1="142" x2="104" y2="142"/><path class="ah tea" d="M95.0,142.0 L104.0,137.5 L104.0,146.5 Z"/><line class="ln stea" stroke-width="2.5" x1="268" y1="142" x2="216" y2="142"/><path class="ah tea" d="M207.0,142.0 L216.0,137.5 L216.0,146.5 Z"/><line class="ln stea" stroke-width="2.5" x1="398" y1="142" x2="346" y2="142"/><path class="ah tea" d="M337.0,142.0 L346.0,137.5 L346.0,146.5 Z"/><line class="ln stea" stroke-width="2.5" x1="528" y1="142" x2="476" y2="142"/><path class="ah tea" d="M467.0,142.0 L476.0,137.5 L476.0,146.5 Z"/><line class="ln stea" stroke-width="2" x1="562" y1="212" x2="562" y2="180"/><path class="ah tea" d="M562.0,172.0 L566.0,180.0 L558.0,180.0 Z"/><text class="ttea" x="562" y="230" text-anchor="middle" font-weight="700" font-size="14">prev</text><line class="ln spri" stroke-width="2" x1="671" y1="212" x2="671" y2="180"/><path class="ah pri" d="M671.0,172.0 L675.0,180.0 L667.0,180.0 Z"/><text class="tpri" x="671" y="230" text-anchor="middle" font-weight="700" font-size="14">cur</text><text class="tok" x="30" y="258" font-weight="700">Step 4: cur is null, so stop. prev (4) is the new head: 4 → 3 → 2 → 1 → null.</text></g>
+  <text class="m" x="30" y="282">Teal arrows are already reversed. O(n) time, O(1) extra space, no recursion.</text>
+</svg>

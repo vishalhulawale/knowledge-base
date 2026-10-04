@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 334" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">lowerBound: first index where a[i] &gt;= 7</title>
+  <desc id="d">Sorted array 2, 5, 7, 7, 7, 9, 12, 15, 18, 21 and target 7, with the predicate a[i] &gt;= 7 shown under each cell as F or T. The half-open range starts as lo 0, hi 10. mid 5 holds 9, true, so hi becomes 5. mid 2 holds 7, true, so hi becomes 2. mid 1 holds 5, false, so lo becomes 2. lo equals hi at 2, the first 7.</desc>
+  <style>.card{fill:#f8fafc;stroke:#e2e8f0}
+.h{fill:#0f172a;font-size:19px;font-weight:700}
+.t{fill:#334155;font-size:14px}
+.tb{fill:#334155;font-size:14px;font-weight:700}
+.lb{fill:#334155;font-size:15px;font-weight:600}
+.m{fill:#64748b;font-size:13px}
+.mono{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace}
+.box{fill:#ffffff;stroke:#cbd5e1}
+.pri{fill:#4f46e5}.spri{stroke:#4f46e5}.tpri{fill:#4f46e5}
+.tea{fill:#0ea5a4}.stea{stroke:#0ea5a4}.ttea{fill:#0f766e}
+.ok{fill:#16a34a}.sok{stroke:#16a34a}.tok{fill:#16a34a}
+.bad{fill:#dc2626}.sbad{stroke:#dc2626}.tbad{fill:#dc2626}
+.warn{fill:#d97706}.swarn{stroke:#d97706}.twarn{fill:#d97706}
+.smut{stroke:#94a3b8}.mut{fill:#94a3b8}
+.tint{fill:#4f46e5;fill-opacity:.14}.ttint{fill:#0ea5a4;fill-opacity:.16}
+.gtint{fill:#16a34a;fill-opacity:.16}.rtint{fill:#dc2626;fill-opacity:.14}.atint{fill:#d97706;fill-opacity:.16}
+.on{fill:#ffffff;font-size:14px;font-weight:700}
+.ln{fill:none;stroke-width:2}
+.ah{stroke:none}
+@media (prefers-color-scheme: dark){
+.card{fill:#1f2430;stroke:#334155}
+.h{fill:#f1f5f9}.t,.tb,.lb{fill:#e2e8f0}.m{fill:#94a3b8}
+.box{fill:#111827;stroke:#475569}
+.pri,.tint{fill:#818cf8}.spri{stroke:#818cf8}.tpri{fill:#818cf8}
+.tea,.ttint{fill:#2dd4bf}.stea{stroke:#2dd4bf}.ttea{fill:#5eead4}
+.ok,.gtint{fill:#4ade80}.sok{stroke:#4ade80}.tok{fill:#4ade80}
+.bad,.rtint{fill:#f87171}.sbad{stroke:#f87171}.tbad{fill:#f87171}
+.warn,.atint{fill:#fbbf24}.swarn{stroke:#fbbf24}.twarn{fill:#fbbf24}
+.smut{stroke:#64748b}.mut{fill:#64748b}
+.on{fill:#0f172a}
+}
+.fr{opacity:0;animation-duration:9.2s;animation-iteration-count:infinite;animation-timing-function:linear}
+@keyframes k0{0%,21.14%{opacity:1}21.74%,100%{opacity:0}}.f0{animation-name:k0}
+@keyframes k1{0%,21.74%{opacity:0}22.34%,42.88%{opacity:1}43.48%,100%{opacity:0}}.f1{animation-name:k1}
+@keyframes k2{0%,43.48%{opacity:0}44.08%,64.62%{opacity:1}65.22%,100%{opacity:0}}.f2{animation-name:k2}
+@keyframes k3{0%,65.22%{opacity:0}65.82%,99.40%{opacity:1}100%{opacity:0}}.f3{animation-name:k3}
+@media (prefers-reduced-motion: reduce){.fr{animation:none!important;opacity:0}.f3{opacity:1}}</style>
+  <rect class="card" x="1" y="1" width="798" height="332" rx="14"/>
+  <text class="h" x="28" y="40">lowerBound(a, 7): find the first T</text>
+  <text class="m" x="28" y="62">Half-open range [lo, hi): everything left of lo is F, everything from hi on is T.</text>
+  <text class="m" x="70" y="102" text-anchor="middle">0</text>
+  <text class="tbad" x="70" y="188" text-anchor="middle" font-weight="700" font-size="15">F</text>
+  <text class="m" x="138" y="102" text-anchor="middle">1</text>
+  <text class="tbad" x="138" y="188" text-anchor="middle" font-weight="700" font-size="15">F</text>
+  <text class="m" x="206" y="102" text-anchor="middle">2</text>
+  <text class="tok" x="206" y="188" text-anchor="middle" font-weight="700" font-size="15">T</text>
+  <text class="m" x="274" y="102" text-anchor="middle">3</text>
+  <text class="tok" x="274" y="188" text-anchor="middle" font-weight="700" font-size="15">T</text>
+  <text class="m" x="342" y="102" text-anchor="middle">4</text>
+  <text class="tok" x="342" y="188" text-anchor="middle" font-weight="700" font-size="15">T</text>
+  <text class="m" x="410" y="102" text-anchor="middle">5</text>
+  <text class="tok" x="410" y="188" text-anchor="middle" font-weight="700" font-size="15">T</text>
+  <text class="m" x="478" y="102" text-anchor="middle">6</text>
+  <text class="tok" x="478" y="188" text-anchor="middle" font-weight="700" font-size="15">T</text>
+  <text class="m" x="546" y="102" text-anchor="middle">7</text>
+  <text class="tok" x="546" y="188" text-anchor="middle" font-weight="700" font-size="15">T</text>
+  <text class="m" x="614" y="102" text-anchor="middle">8</text>
+  <text class="tok" x="614" y="188" text-anchor="middle" font-weight="700" font-size="15">T</text>
+  <text class="m" x="682" y="102" text-anchor="middle">9</text>
+  <text class="tok" x="682" y="188" text-anchor="middle" font-weight="700" font-size="15">T</text>
+  <text class="m" x="34" y="188"></text>
+  <text class="m" x="722" y="188"></text>
+  <g class="fr f0"><rect class="box" x="40" y="112" width="60" height="46" rx="8"/><text class="lb" x="70" y="142" text-anchor="middle">2</text><rect class="box" x="108" y="112" width="60" height="46" rx="8"/><text class="lb" x="138" y="142" text-anchor="middle">5</text><rect class="box" x="176" y="112" width="60" height="46" rx="8"/><text class="lb" x="206" y="142" text-anchor="middle">7</text><rect class="box" x="244" y="112" width="60" height="46" rx="8"/><text class="lb" x="274" y="142" text-anchor="middle">7</text><rect class="box" x="312" y="112" width="60" height="46" rx="8"/><text class="lb" x="342" y="142" text-anchor="middle">7</text><rect class="pri" x="380" y="112" width="60" height="46" rx="8"/><text class="on" x="410" y="142" text-anchor="middle">9</text><rect class="box" x="448" y="112" width="60" height="46" rx="8"/><text class="lb" x="478" y="142" text-anchor="middle">12</text><rect class="box" x="516" y="112" width="60" height="46" rx="8"/><text class="lb" x="546" y="142" text-anchor="middle">15</text><rect class="box" x="584" y="112" width="60" height="46" rx="8"/><text class="lb" x="614" y="142" text-anchor="middle">18</text><rect class="box" x="652" y="112" width="60" height="46" rx="8"/><text class="lb" x="682" y="142" text-anchor="middle">21</text><rect class="ln spri" x="37" y="109" width="678" height="52" rx="9" fill="none" stroke-width="2"/><line class="ln stea" stroke-width="2" x1="36" y1="242" x2="36" y2="216"/><path class="ah tea" d="M36.0,208.0 L40.0,216.0 L32.0,216.0 Z"/><text class="tb" x="36" y="260" text-anchor="middle">lo=0</text><line class="ln spri" stroke-width="2" x1="716" y1="242" x2="716" y2="216"/><path class="ah pri" d="M716.0,208.0 L720.0,216.0 L712.0,216.0 Z"/><text class="tb" x="716" y="260" text-anchor="middle">hi=10</text><text class="tb" x="40" y="290">mid = (0 + 10) &gt;&gt;&gt; 1 = 5, and a[5] = 9 ≥ 7 is T.</text><text class="t" x="40" y="312">The answer is mid or left of it, so hi = 5.</text></g>
+  <g class="fr f1"><rect class="box" x="40" y="112" width="60" height="46" rx="8"/><text class="lb" x="70" y="142" text-anchor="middle">2</text><rect class="box" x="108" y="112" width="60" height="46" rx="8"/><text class="lb" x="138" y="142" text-anchor="middle">5</text><rect class="pri" x="176" y="112" width="60" height="46" rx="8"/><text class="on" x="206" y="142" text-anchor="middle">7</text><rect class="box" x="244" y="112" width="60" height="46" rx="8"/><text class="lb" x="274" y="142" text-anchor="middle">7</text><rect class="box" x="312" y="112" width="60" height="46" rx="8"/><text class="lb" x="342" y="142" text-anchor="middle">7</text><rect class="card" x="380" y="112" width="60" height="46" rx="8"/><text class="m" x="410" y="142" text-anchor="middle">9</text><rect class="card" x="448" y="112" width="60" height="46" rx="8"/><text class="m" x="478" y="142" text-anchor="middle">12</text><rect class="card" x="516" y="112" width="60" height="46" rx="8"/><text class="m" x="546" y="142" text-anchor="middle">15</text><rect class="card" x="584" y="112" width="60" height="46" rx="8"/><text class="m" x="614" y="142" text-anchor="middle">18</text><rect class="card" x="652" y="112" width="60" height="46" rx="8"/><text class="m" x="682" y="142" text-anchor="middle">21</text><rect class="ln spri" x="37" y="109" width="338" height="52" rx="9" fill="none" stroke-width="2"/><line class="ln stea" stroke-width="2" x1="36" y1="242" x2="36" y2="216"/><path class="ah tea" d="M36.0,208.0 L40.0,216.0 L32.0,216.0 Z"/><text class="tb" x="36" y="260" text-anchor="middle">lo=0</text><line class="ln spri" stroke-width="2" x1="376" y1="242" x2="376" y2="216"/><path class="ah pri" d="M376.0,208.0 L380.0,216.0 L372.0,216.0 Z"/><text class="tb" x="376" y="260" text-anchor="middle">hi=5</text><text class="tb" x="40" y="290">mid = (0 + 5) &gt;&gt;&gt; 1 = 2, and a[2] = 7 ≥ 7 is T.</text><text class="t" x="40" y="312">The answer is mid or left of it, so hi = 2.</text></g>
+  <g class="fr f2"><rect class="box" x="40" y="112" width="60" height="46" rx="8"/><text class="lb" x="70" y="142" text-anchor="middle">2</text><rect class="pri" x="108" y="112" width="60" height="46" rx="8"/><text class="on" x="138" y="142" text-anchor="middle">5</text><rect class="card" x="176" y="112" width="60" height="46" rx="8"/><text class="m" x="206" y="142" text-anchor="middle">7</text><rect class="card" x="244" y="112" width="60" height="46" rx="8"/><text class="m" x="274" y="142" text-anchor="middle">7</text><rect class="card" x="312" y="112" width="60" height="46" rx="8"/><text class="m" x="342" y="142" text-anchor="middle">7</text><rect class="card" x="380" y="112" width="60" height="46" rx="8"/><text class="m" x="410" y="142" text-anchor="middle">9</text><rect class="card" x="448" y="112" width="60" height="46" rx="8"/><text class="m" x="478" y="142" text-anchor="middle">12</text><rect class="card" x="516" y="112" width="60" height="46" rx="8"/><text class="m" x="546" y="142" text-anchor="middle">15</text><rect class="card" x="584" y="112" width="60" height="46" rx="8"/><text class="m" x="614" y="142" text-anchor="middle">18</text><rect class="card" x="652" y="112" width="60" height="46" rx="8"/><text class="m" x="682" y="142" text-anchor="middle">21</text><rect class="ln spri" x="37" y="109" width="134" height="52" rx="9" fill="none" stroke-width="2"/><line class="ln stea" stroke-width="2" x1="36" y1="242" x2="36" y2="216"/><path class="ah tea" d="M36.0,208.0 L40.0,216.0 L32.0,216.0 Z"/><text class="tb" x="36" y="260" text-anchor="middle">lo=0</text><line class="ln spri" stroke-width="2" x1="172" y1="242" x2="172" y2="216"/><path class="ah pri" d="M172.0,208.0 L176.0,216.0 L168.0,216.0 Z"/><text class="tb" x="172" y="260" text-anchor="middle">hi=2</text><text class="tb" x="40" y="290">mid = (0 + 2) &gt;&gt;&gt; 1 = 1, and a[1] = 5 &lt; 7 is F.</text><text class="t" x="40" y="312">The answer is right of mid, so lo = 2.</text></g>
+  <g class="fr f3"><rect class="card" x="40" y="112" width="60" height="46" rx="8"/><text class="m" x="70" y="142" text-anchor="middle">2</text><rect class="card" x="108" y="112" width="60" height="46" rx="8"/><text class="m" x="138" y="142" text-anchor="middle">5</text><rect class="ok" x="176" y="112" width="60" height="46" rx="8"/><text class="on" x="206" y="142" text-anchor="middle">7</text><rect class="card" x="244" y="112" width="60" height="46" rx="8"/><text class="m" x="274" y="142" text-anchor="middle">7</text><rect class="card" x="312" y="112" width="60" height="46" rx="8"/><text class="m" x="342" y="142" text-anchor="middle">7</text><rect class="card" x="380" y="112" width="60" height="46" rx="8"/><text class="m" x="410" y="142" text-anchor="middle">9</text><rect class="card" x="448" y="112" width="60" height="46" rx="8"/><text class="m" x="478" y="142" text-anchor="middle">12</text><rect class="card" x="516" y="112" width="60" height="46" rx="8"/><text class="m" x="546" y="142" text-anchor="middle">15</text><rect class="card" x="584" y="112" width="60" height="46" rx="8"/><text class="m" x="614" y="142" text-anchor="middle">18</text><rect class="card" x="652" y="112" width="60" height="46" rx="8"/><text class="m" x="682" y="142" text-anchor="middle">21</text><line class="ln sok" stroke-width="2" x1="172" y1="242" x2="172" y2="216"/><path class="ah ok" d="M172.0,208.0 L176.0,216.0 L168.0,216.0 Z"/><text class="tb" x="172" y="260" text-anchor="middle">lo = hi = 2</text><text class="tok" x="40" y="290" font-weight="700">lo == hi: index 2 is the first 7.</text><text class="t" x="40" y="312">3 probes here; at most ⌈log₂ 11⌉ = 4 for 10 elements.</text></g>
+</svg>

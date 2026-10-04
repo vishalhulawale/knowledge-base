@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 318" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Why Dijkstra fails with a negative edge</title>
+  <desc id="d">Three nodes. Edges: 0 to 1 with weight 2, 0 to 2 with weight 5, and 2 to 1 with weight minus 4. Textbook Dijkstra pops node 1 at distance 2 and finalises it before exploring node 2, so the cheaper path 0, 2, 1 with cost 5 + (minus 4) = 1 is never used. Bellman-Ford relaxes every edge repeatedly and finds 1.</desc>
+  <style>.card{fill:#f8fafc;stroke:#e2e8f0}
+.h{fill:#0f172a;font-size:19px;font-weight:700}
+.t{fill:#334155;font-size:14px}
+.tb{fill:#334155;font-size:14px;font-weight:700}
+.lb{fill:#334155;font-size:15px;font-weight:600}
+.m{fill:#64748b;font-size:13px}
+.mono{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace}
+.box{fill:#ffffff;stroke:#cbd5e1}
+.pri{fill:#4f46e5}.spri{stroke:#4f46e5}.tpri{fill:#4f46e5}
+.tea{fill:#0ea5a4}.stea{stroke:#0ea5a4}.ttea{fill:#0f766e}
+.ok{fill:#16a34a}.sok{stroke:#16a34a}.tok{fill:#16a34a}
+.bad{fill:#dc2626}.sbad{stroke:#dc2626}.tbad{fill:#dc2626}
+.warn{fill:#d97706}.swarn{stroke:#d97706}.twarn{fill:#d97706}
+.smut{stroke:#94a3b8}.mut{fill:#94a3b8}
+.tint{fill:#4f46e5;fill-opacity:.14}.ttint{fill:#0ea5a4;fill-opacity:.16}
+.gtint{fill:#16a34a;fill-opacity:.16}.rtint{fill:#dc2626;fill-opacity:.14}.atint{fill:#d97706;fill-opacity:.16}
+.on{fill:#ffffff;font-size:14px;font-weight:700}
+.ln{fill:none;stroke-width:2}
+.ah{stroke:none}
+@media (prefers-color-scheme: dark){
+.card{fill:#1f2430;stroke:#334155}
+.h{fill:#f1f5f9}.t,.tb,.lb{fill:#e2e8f0}.m{fill:#94a3b8}
+.box{fill:#111827;stroke:#475569}
+.pri,.tint{fill:#818cf8}.spri{stroke:#818cf8}.tpri{fill:#818cf8}
+.tea,.ttint{fill:#2dd4bf}.stea{stroke:#2dd4bf}.ttea{fill:#5eead4}
+.ok,.gtint{fill:#4ade80}.sok{stroke:#4ade80}.tok{fill:#4ade80}
+.bad,.rtint{fill:#f87171}.sbad{stroke:#f87171}.tbad{fill:#f87171}
+.warn,.atint{fill:#fbbf24}.swarn{stroke:#fbbf24}.twarn{fill:#fbbf24}
+.smut{stroke:#64748b}.mut{fill:#64748b}
+.on{fill:#0f172a}
+}</style>
+  <rect class="card" x="1" y="1" width="798" height="316" rx="14"/>
+  <text class="h" x="28" y="40">Why Dijkstra fails with a negative edge</text>
+  <text class="m" x="28" y="62">Dijkstra assumes a node popped from the heap can't be improved later.</text>
+  <line class="ln smut" stroke-width="2" x1="112" y1="172" x2="267.362" y2="126.528"/><path class="ah mut" d="M276.0,124.0 L268.6,130.8 L266.1,122.2 Z"/>
+  <line class="ln smut" stroke-width="2" x1="112" y1="190" x2="267.451" y2="241.185"/><path class="ah mut" d="M276.0,244.0 L266.0,245.5 L268.9,236.9 Z"/>
+  <line class="ln sbad" stroke-width="2.5" x1="300" y1="226" x2="300" y2="154"/><path class="ah bad" d="M300.0,145.0 L304.5,154.0 L295.5,154.0 Z"/>
+  <text class="tb" x="186" y="136" text-anchor="middle">2</text>
+  <text class="tb" x="186" y="236" text-anchor="middle">5</text>
+  <text class="tbad" x="316" y="190" font-weight="700" font-size="16">−4</text>
+  <circle class="box" cx="90" cy="180" r="22"/>
+  <text class="lb" x="90" y="185" text-anchor="middle">0</text>
+  <circle class="box" cx="300" cy="120" r="22"/>
+  <text class="lb" x="300" y="125" text-anchor="middle">1</text>
+  <circle class="box" cx="300" cy="250" r="22"/>
+  <text class="lb" x="300" y="255" text-anchor="middle">2</text>
+  <text class="twarn" x="334" y="116" font-weight="700" font-size="14">settled at 2</text>
+  <rect class="rtint" x="420" y="86" width="352" height="92" rx="10"/>
+  <text class="tbad" x="434" y="108" font-weight="700" font-size="14">✗ Textbook Dijkstra</text>
+  <text class="t" x="434" y="130">Pop 0: dist[1] = 2, dist[2] = 5.</text>
+  <text class="t" x="434" y="150">Pop 1 (smallest, 2): finalised at 2.</text>
+  <text class="t" x="434" y="170">Pop 2: 5 − 4 = 1, but 1 is already final.</text>
+  <rect class="gtint" x="420" y="192" width="352" height="72" rx="10"/>
+  <text class="tok" x="434" y="214" font-weight="700" font-size="14">✓ Bellman-Ford</text>
+  <text class="t" x="434" y="236">Relaxes all edges V − 1 times:</text>
+  <text class="t" x="434" y="256">dist[1] improves from 2 to 1 (path 0 → 2 → 1).</text>
+  <text class="m" x="28" y="302">Measured on this graph: Dijkstra returned 2, Bellman-Ford returned the true distance 1.</text>
+</svg>

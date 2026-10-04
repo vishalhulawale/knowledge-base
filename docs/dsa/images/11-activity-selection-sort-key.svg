@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Activity selection: sort by end, not by start</title>
+  <desc id="d">Four intervals on a time axis from 0 to 10: [0,10], [1,2], [3,4] and [5,6]. Sorting by start picks [0,10] first, which blocks everything else, so only 1 interval is kept. Sorting by end picks [1,2], [3,4] and [5,6], keeping 3, which is optimal.</desc>
+  <style>.card{fill:#f8fafc;stroke:#e2e8f0}
+.h{fill:#0f172a;font-size:19px;font-weight:700}
+.t{fill:#334155;font-size:14px}
+.tb{fill:#334155;font-size:14px;font-weight:700}
+.lb{fill:#334155;font-size:15px;font-weight:600}
+.m{fill:#64748b;font-size:13px}
+.mono{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace}
+.box{fill:#ffffff;stroke:#cbd5e1}
+.pri{fill:#4f46e5}.spri{stroke:#4f46e5}.tpri{fill:#4f46e5}
+.tea{fill:#0ea5a4}.stea{stroke:#0ea5a4}.ttea{fill:#0f766e}
+.ok{fill:#16a34a}.sok{stroke:#16a34a}.tok{fill:#16a34a}
+.bad{fill:#dc2626}.sbad{stroke:#dc2626}.tbad{fill:#dc2626}
+.warn{fill:#d97706}.swarn{stroke:#d97706}.twarn{fill:#d97706}
+.smut{stroke:#94a3b8}.mut{fill:#94a3b8}
+.tint{fill:#4f46e5;fill-opacity:.14}.ttint{fill:#0ea5a4;fill-opacity:.16}
+.gtint{fill:#16a34a;fill-opacity:.16}.rtint{fill:#dc2626;fill-opacity:.14}.atint{fill:#d97706;fill-opacity:.16}
+.on{fill:#ffffff;font-size:14px;font-weight:700}
+.ln{fill:none;stroke-width:2}
+.ah{stroke:none}
+@media (prefers-color-scheme: dark){
+.card{fill:#1f2430;stroke:#334155}
+.h{fill:#f1f5f9}.t,.tb,.lb{fill:#e2e8f0}.m{fill:#94a3b8}
+.box{fill:#111827;stroke:#475569}
+.pri,.tint{fill:#818cf8}.spri{stroke:#818cf8}.tpri{fill:#818cf8}
+.tea,.ttint{fill:#2dd4bf}.stea{stroke:#2dd4bf}.ttea{fill:#5eead4}
+.ok,.gtint{fill:#4ade80}.sok{stroke:#4ade80}.tok{fill:#4ade80}
+.bad,.rtint{fill:#f87171}.sbad{stroke:#f87171}.tbad{fill:#f87171}
+.warn,.atint{fill:#fbbf24}.swarn{stroke:#fbbf24}.twarn{fill:#fbbf24}
+.smut{stroke:#64748b}.mut{fill:#64748b}
+.on{fill:#0f172a}
+}</style>
+  <rect class="card" x="1" y="1" width="798" height="358" rx="14"/>
+  <text class="h" x="28" y="40">Max non-overlapping intervals: the sort key is the algorithm</text>
+  <text class="m" x="28" y="62">Same four intervals, two greedy rules. Kept intervals are solid, skipped ones are faded.</text>
+  <rect class="rtint" x="28" y="82" width="360" height="226" rx="12"/><text class="tbad" x="44" y="106" font-weight="700" font-size="15">✗ Sort by start: keeps 1</text><rect class="bad" x="58" y="128" width="300" height="24" rx="6"/><text class="on" x="66" y="145" font-size="13">[0,10]</text><rect class="mut" x="88" y="162" width="30" height="24" rx="6" fill-opacity=".35"/><text class="t" x="124" y="179" font-size="13">[1,2]</text><rect class="mut" x="148" y="196" width="30" height="24" rx="6" fill-opacity=".35"/><text class="t" x="184" y="213" font-size="13">[3,4]</text><rect class="mut" x="208" y="230" width="30" height="24" rx="6" fill-opacity=".35"/><text class="t" x="244" y="247" font-size="13">[5,6]</text><line class="ln smut" x1="58" y1="268" x2="358" y2="268" stroke-width="1"/><text class="m" x="58" y="286" text-anchor="middle">0</text><text class="m" x="118" y="286" text-anchor="middle">2</text><text class="m" x="178" y="286" text-anchor="middle">4</text><text class="m" x="238" y="286" text-anchor="middle">6</text><text class="m" x="298" y="286" text-anchor="middle">8</text><text class="m" x="358" y="286" text-anchor="middle">10</text><text class="m" x="44" y="302"></text>
+  <rect class="gtint" x="412" y="82" width="360" height="226" rx="12"/><text class="tok" x="428" y="106" font-weight="700" font-size="15">✓ Sort by end: keeps 3</text><rect class="mut" x="442" y="128" width="300" height="24" rx="6" fill-opacity=".35"/><text class="t" x="450" y="145" font-size="13">[0,10]</text><rect class="ok" x="472" y="162" width="30" height="24" rx="6"/><text class="t" x="508" y="179" font-size="13">[1,2]</text><rect class="ok" x="532" y="196" width="30" height="24" rx="6"/><text class="t" x="568" y="213" font-size="13">[3,4]</text><rect class="ok" x="592" y="230" width="30" height="24" rx="6"/><text class="t" x="628" y="247" font-size="13">[5,6]</text><line class="ln smut" x1="442" y1="268" x2="742" y2="268" stroke-width="1"/><text class="m" x="442" y="286" text-anchor="middle">0</text><text class="m" x="502" y="286" text-anchor="middle">2</text><text class="m" x="562" y="286" text-anchor="middle">4</text><text class="m" x="622" y="286" text-anchor="middle">6</text><text class="m" x="682" y="286" text-anchor="middle">8</text><text class="m" x="742" y="286" text-anchor="middle">10</text><text class="m" x="428" y="302"></text>
+  <text class="m" x="28" y="330">Ending earliest leaves the most room for the rest: swapping an optimal schedule's first</text>
+  <text class="m" x="28" y="347">interval for the earliest-ending one never makes it worse (the exchange argument).</text>
+</svg>
