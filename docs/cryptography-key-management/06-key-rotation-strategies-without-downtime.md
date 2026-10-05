@@ -85,6 +85,9 @@ Measured with 10,000 AES-256-GCM records and a versioned keyring:
 | Retire v1 | Safe: reads keep working |
 | Retire v2 before migrating to v3 | `IllegalStateException: key version 2 retired`: data unreadable |
 
+![Bar chart of records still on key v1: 10,000 when v2 is added, 6,963 after lazy re-encryption on a 30 percent read sample, and 0 after a background job, at which point v1 can be retired](images/06-lazy-vs-background.svg){ loading=lazy }
+*Notice the orange bar: lazy migration stalls on cold data, so only the background job makes the zero that lets you retire the old key.*
+
 ### Signing keys and JWKS
 
 ```mermaid
@@ -100,6 +103,9 @@ sequenceDiagram
     IdP->>J: remove k1
 ```
 *Notice that the new key is published a full cache TTL before it's used, and the old key stays until every token signed with it has expired. Reversing either step causes signature-verification failures across all services.*
+
+![Animation along a rotation timeline: k2 is published in the JWKS at t0, the identity provider starts signing with k2 only after a cache TTL, k1 stays published until every k1 token has expired plus a TTL, and only then is removed](images/06-jwks-rotation.svg){ loading=lazy }
+*Watch the k1 bar end where the k1-token bar ends: the old key's lifetime is set by the tokens it signed, not by the calendar.*
 
 Measured: with both keys in the JWKS, a token signed with `k1` and one signed with `k2` both verified. After removing `k1` (once the maximum token lifetime had passed), `k1` was no longer available, which is correct then and an outage if done early.
 
