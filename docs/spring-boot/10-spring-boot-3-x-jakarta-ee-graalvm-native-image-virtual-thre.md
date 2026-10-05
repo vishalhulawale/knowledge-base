@@ -95,6 +95,9 @@ AOT is not only for native images. You can run AOT-processed code on a normal JV
 - **CDS / AppCDS** (Boot 3.3+): a class-data-sharing archive lets the JVM skip class loading and verification work. A solid startup improvement with almost no restrictions.
 - **CRaC** (Boot 3.2+): checkpoint a warmed-up JVM and restore it in milliseconds. Needs a CRaC-capable JDK and Linux, and you must be careful that the snapshot contains no secrets or open connections.
 
+![Illustrative throughput over the first 120 seconds: the native image serves within milliseconds at a flat 80 percent of the JVM's peak, while the JVM starts serving after about 2 seconds, warms up through JIT compilation, overtakes native around 30 seconds and reaches its peak by about a minute](images/10-jvm-vs-native-warmup.svg){ loading=lazy }
+*Notice where the lines cross: anything that lives for less than that, like a scale-to-zero function, is better off native; anything that runs for days is not.*
+
 ### Virtual threads
 
 A **platform thread** is a thin wrapper over an OS thread. It reserves around 1 MB of stack and is scheduled by the kernel. Tomcat's default pool is 200 threads, so 200 concurrent requests that are all waiting on a slow downstream fill the pool and the 201st request queues.

@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">JVM vs native image over the first two minutes</title>
+  <desc id="d">Illustrative throughput of one instance over the first 120 seconds after start, as a percentage of the JVM&#x27;s eventual peak. The native image serves requests within tens of milliseconds and runs at a steady level of about 80 percent from the start, because there is no JIT warm-up but also no profile-guided JIT optimisation unless PGO is used. The JVM starts serving after about 2 seconds, begins slower while the JIT compiles hot code, and passes the native image after roughly 30 seconds, reaching 100 percent by about a minute. Native wins for short-lived and scale-to-zero instances; the JVM wins for long-running services.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .s1{stroke:#4f46e5;stroke-width:2.5;fill:none}.s2{stroke:#0ea5a4;stroke-width:2.5;fill:none;stroke-dasharray:8 5}.gl{stroke:#e2e8f0;stroke-width:1}@media (prefers-color-scheme: dark){.s1{stroke:#6366f1}.s2{stroke:#0d9488}.gl{stroke:#334155}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Throughput after start (illustrative)</text>
+  <text class="sub" x="28" y="62">Share of the JVM&#x27;s peak throughput. Native: instant but flatter. JVM: slow start, higher peak.</text>
+  <line class="gl" x1="90" x2="650" y1="300.0" y2="300.0"/>
+  <text class="sm" x="82" y="304" text-anchor="end">0%</text>
+  <line class="gl" x1="90" x2="650" y1="200.0" y2="200.0"/>
+  <text class="sm" x="82" y="204" text-anchor="end">50%</text>
+  <line class="gl" x1="90" x2="650" y1="100.0" y2="100.0"/>
+  <text class="sm" x="82" y="104" text-anchor="end">100%</text>
+  <text class="sm" x="90" y="318" text-anchor="middle">0 s</text>
+  <text class="sm" x="230" y="318" text-anchor="middle">30 s</text>
+  <text class="sm" x="370" y="318" text-anchor="middle">60 s</text>
+  <text class="sm" x="510" y="318" text-anchor="middle">90 s</text>
+  <text class="sm" x="650" y="318" text-anchor="middle">120 s</text>
+  <polyline class="s1" points="90.0,300.0 99.3,300.0 100.3,250.0 136.7,200.0 183.3,164.0 230.0,140.0 300.0,116.0 370.0,102.0 650.0,100.0"/>
+  <polyline class="s2" points="90.0,300.0 90.5,140.0 650.0,140.0"/>
+  <text class="sm" x="658" y="104" font-weight="700">JVM</text>
+  <text class="sm" x="658" y="144" font-weight="700">native</text>
+  <text class="sm" x="127.333" y="244">JVM serving after ~2 s, JIT warming up</text>
+  <text class="sm" x="239.333" y="160">JVM overtakes native ~30 s</text>
+  <text class="tx" x="28" y="346">Scale-to-zero and serverless live in the first seconds (native wins); long-running services don&#x27;t.</text>
+  <text class="sub" x="28" y="370">Cheaper middle steps: CDS / AOT cache on the JVM, or CRaC / SnapStart restores of a warmed JVM.</text>
+</svg>
