@@ -43,6 +43,9 @@ flowchart TD
 ```
 *Notice that each object's child fields resolve independently, which is why `pharmacy` is called once per prescription unless batched with DataLoader.*
 
+![Animation of resolvers firing level by level for a member with three prescriptions: Query.member calls the Member API, name is a free property read, prescriptions calls the Rx API, and pharmacy calls the Pharmacy API once per prescription, so the upstream call counter reaches five](images/03-resolver-tree-walk.svg){ loading=lazy }
+*Watch the counter jump three times at level 3: that level's cost scales with the data, not with the query.*
+
 ### Execution strategies
 
 - **Queries:** `AsyncExecutionStrategy` (GraphQL Java default), so sibling fields resolve concurrently when DataFetchers return futures.
