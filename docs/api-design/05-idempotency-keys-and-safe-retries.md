@@ -51,6 +51,9 @@ sequenceDiagram
 ```
 *Notice that the retry gets the **original** response without re-running the business logic, and the downstream call carries the same key, so even a crash after calling the pharmacy can't create a second fill.*
 
+![Animation: a refill POST creates R1 but the 201 is lost and the client times out; without a key the retry creates a second refill R2, while with Idempotency-Key k-7f3 the server finds the completed key and replays the original 201](images/05-lost-response-retry.svg){ loading=lazy }
+*Watch the client side: it behaves identically in both lanes. Only the server's ability to recognise the key changes the outcome.*
+
 | Situation | Server response |
 |---|---|
 | First request with key K | Process; store fingerprint + result |
@@ -95,6 +98,9 @@ flowchart TD
 - **Honour `Retry-After`** on `429` and `503`.
 - **Retry budgets** at the service level stop retry storms: retries may add at most, say, 10% extra load.
 - Retry at **one layer** only. A mobile app, a BFF and an HTTP client library each retrying 3 times turns one failure into 27 requests.
+
+![A tree from one mobile app action: the app retries 3 times to the BFF, each BFF attempt retries 3 times through the client library, and each library attempt retries 3 times, giving 27 calls to the failing claims service](images/05-retry-amplification.svg){ loading=lazy }
+*Notice the shape: retries multiply per layer, and all 27 land on the one service that's already failing.*
 
 ## In practice: code & configuration
 
