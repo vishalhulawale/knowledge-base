@@ -127,6 +127,9 @@ For a per-member screen the normalised query with the right index is as fast as 
 | Storage | Row-oriented (PostgreSQL heap) | Column-oriented (Redshift, BigQuery, Snowflake, ClickHouse) |
 | History | Current state + audit tables | Slowly changing dimensions (SCD type 2) keep history |
 
+![A star schema with fact_claim in the centre holding foreign keys and the measures quantity, amount billed and amount paid, surrounded by dim_member, dim_drug, dim_pharmacy and dim_date](images/05-star-schema.svg){ loading=lazy }
+*Notice the shape: the fact table is narrow and huge, the dimensions are wide and small, so every report is one fact scan plus a few cheap joins.*
+
 Running heavy reports on the OLTP primary competes with transactions; send them to a replica or a warehouse fed by CDC (Debezium) or batch exports.
 
 ### Normalisation in microservices and document stores
