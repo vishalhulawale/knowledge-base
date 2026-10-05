@@ -10,7 +10,7 @@ tags: [react, P0]
     - **Controlled input:** React state is the source of truth (`value` + `onChange`). Easy to validate, format and derive UI from, but re-renders on every keystroke.
     - **Uncontrolled input:** the DOM holds the value (`defaultValue`, read via ref or `FormData` on submit). Fewer renders, simpler for large forms and file inputs, but less instant control.
     - Never switch an input between controlled and uncontrolled (`value` going from `undefined` to a string triggers a warning). Initialise with `""`, not `undefined`.
-    - **React 19 Actions:** pass a function to `<form action={fn}>`; `useActionState` gives result + pending state, `useFormStatus` reads the parent form's pending status, `useOptimistic` shows optimistic UI. Forms reset automatically after a successful action.
+    - **React 19 Actions:** pass a function to `<form action={fn}>`; `useActionState` gives result + pending state, `useFormStatus` reads the parent form's pending status, `useOptimistic` shows optimistic UI. Uncontrolled fields reset automatically once the action finishes, even if it returned validation errors, so return the submitted values in the state (or use `defaultValue`) if users shouldn't lose their input.
     - For complex forms, **React Hook Form** (uncontrolled by default, minimal re-renders) with **schema validation** (Zod/Yup) is the common choice. Always validate again on the server; client validation is UX, not security.
 
 ## Why it matters
@@ -85,7 +85,7 @@ sequenceDiagram
     A->>S: POST refill
     S-->>A: result or validation errors
     A-->>F: new state returned
-    Note over F: on success, uncontrolled fields reset automatically
+    Note over F: action finished: uncontrolled fields reset (even on validation errors)
 ```
 *Notice the action runs inside a transition: pending state, errors and form reset are handled by React instead of hand-written loading flags.*
 
