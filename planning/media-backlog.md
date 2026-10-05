@@ -75,7 +75,7 @@ Suggested pictures per page; ⏵ marks an animation.
 - [x] 05 Idempotency keys: ⏵ timeout then retry with the same key returning the stored response; concurrent duplicate gets 409
 - [x] 06 Security and rate limiting: ⏵ BOLA id swap; three authorisation levels (token bucket is already drawn on the System Design page)
 - [x] 07 OpenAPI: design-first pipeline (spec → lint → codegen → contract test)
-- [ ] 08 REST vs GraphQL vs gRPC: same screen as N REST calls vs one GraphQL query vs gRPC stream
+- [x] 08 REST vs GraphQL vs gRPC: same screen as N REST calls vs one GraphQL query vs gRPC stream
 
 ## Priority 2: thin pages (one illustration)
 

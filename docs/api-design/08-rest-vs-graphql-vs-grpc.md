@@ -63,6 +63,9 @@ sequenceDiagram
 ```
 *Notice where the aggregation happens. GraphQL and BFFs move the joining from the device (slow network, battery) to the data centre (fast network), and the internal calls can use whichever protocol suits services best.*
 
+![Animation on a 150 ms mobile link: REST without a BFF makes three dependent calls from the phone, about 450 ms plus unused fields, while one GraphQL or BFF call takes about 150 ms and the server fans out to three services in parallel in the data centre](images/08-round-trips.svg){ loading=lazy }
+*Notice where the three small teal blocks sit: the same three calls still happen, just on a network a hundred times faster.*
+
 ### REST in brief
 
 Covered in depth in [REST principles](01-rest-principles-resource-modelling-and-http-semantics.md). Its superpowers are **HTTP itself**: caching with `ETag`/CDNs, idempotent methods that infrastructure can retry, status codes every tool understands, and zero client tooling requirements. Its weakness for rich UIs is **over-fetching** (the claim resource has 40 fields; the list needs 3) and **under-fetching** (the screen needs 4 resources). Sparse fieldsets (`?fields=`), embedded resources (`?expand=`) and BFFs are REST's answers.
@@ -138,6 +141,9 @@ flowchart TD
     D -->|No| R2[REST: simplest thing that works]
 ```
 *Notice that the first question is about the consumer, not the technology. Many systems legitimately end up with all three, each at the boundary it suits.*
+
+![One system using all three styles: partners and public developers call REST with OpenAPI and webhooks, first-party web and mobile apps call a GraphQL layer or BFF, and both talk to internal services over gRPC](images/08-styles-by-boundary.svg){ loading=lazy }
+*Notice that no box offers a choice: each boundary has a different caller, and the caller picks the style.*
 
 ## In practice: code & configuration
 
