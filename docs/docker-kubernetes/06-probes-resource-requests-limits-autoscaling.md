@@ -39,6 +39,9 @@ stateDiagram-v2
 ```
 *Notice the different consequences: readiness failures only remove the pod from Service endpoints, while liveness failures kill and restart the container. That's why liveness must be cheap and local.*
 
+![Animation: the database goes down for 30 seconds; with the database check in liveness all three pods are restarted repeatedly and come back as cold JVMs after the database recovers, while with the check only in readiness the pods are just removed from endpoints and serve again within seconds without restarts](images/06-liveness-vs-readiness.svg){ loading=lazy }
+*Watch step 3 on the left: the database is already back, but the pods are still recovering from restarts the probe caused.*
+
 | Probe | Question | On failure | Typical check for Spring Boot |
 |---|---|---|---|
 | **startup** | Has the app finished starting? | Restart after `failureThreshold × periodSeconds` | `/actuator/health/liveness`, generous threshold (e.g. 30 × 2 s) |
@@ -74,6 +77,9 @@ Measured:
 | Allocate 10 MB chunks under a 100 MB memory limit | Killed after 90 MB: **`OOMKilled=true`, exit 137** |
 
 **CPU limits and Java:** CFS enforces the quota per 100 ms period. A multithreaded JVM (GC threads, Tomcat workers) can burn its whole quota in the first few milliseconds and then be paused for the rest of the period, so p99 latency spikes even at low average CPU. Many teams set a CPU **request** (for scheduling and fair sharing under contention) and **no CPU limit** for latency-sensitive services, while keeping **memory request = limit** for predictability. The JVM sizes its thread pools from the CPU limit (or from requests via `-XX:ActiveProcessorCount`), so set that explicitly if you remove limits.
+
+![Animation over two 100 ms periods: a container limited to 1 CPU runs 4 busy threads that use up the 100 ms quota in the first 25 ms of each period and are throttled for the remaining 75 ms, so 40 ms of work takes about 115 ms of wall-clock time](images/06-cfs-throttling.svg){ loading=lazy }
+*Notice the red blocks: the threads aren't slow, they're paused. That's why throttling shows up as p99 latency rather than high CPU.*
 
 **Memory:** the limit covers the whole container RSS: heap plus metaspace, threads, code cache and direct buffers. Size heap with `MaxRAMPercentage` around 70–75% ([containers page](01-containers-vs-vms-docker-images-layers-multi-stage-builds.md)).
 
