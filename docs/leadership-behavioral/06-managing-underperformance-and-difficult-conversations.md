@@ -59,6 +59,9 @@ flowchart TD
 | Private time and place, no rush | Agree concrete next steps and support | Keep the manager informed |
 | Check your emotions | Stay calm when they get defensive. Pause if needed | Document facts, not judgements |
 
+![Illustrative 30-minute conversation as four bars sized by time: the lead talks most in a 2-minute opening and 3-minute SBI, the engineer talks most during 15 minutes of asking and listening, and talk is shared in 10 minutes of agreeing next steps](images/06-conversation-talk-time.svg){ loading=lazy }
+*Notice the widest bar is mostly teal: the conversation exists to find the cause, and only the other person can tell you that.*
+
 ### Tech lead vs people manager
 
 - **Tech lead:** sets technical expectations, gives day-to-day feedback, provides support (pairing, scoping), shares observations and evidence with the manager.
