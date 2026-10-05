@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Certificate chain: why the server must send the intermediate</title>
+  <desc id="d">The trust chain: the leaf certificate for claims.local is signed by the intermediate KB Issuing CA, which is signed by the root KB Root CA. The client&#x27;s trust store contains only the root. Left, the server sends the leaf and the intermediate: the client builds the path leaf to intermediate to root and verification succeeds. Right, the server sends only the leaf: the client can&#x27;t find who signed it, the path is broken, and verification fails with unable to verify the first certificate, return code 21.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+  </style>
+  <defs><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Leaf + intermediate vs leaf only</text>
+  <text class="sub" x="28" y="62">The client trusts roots only. The server must supply every certificate in between.</text>
+  <line class="ln dash" x1="400" y1="84" x2="400" y2="320"/>
+  <text class="h2 okt" x="28" y="102">Server sends leaf + intermediate</text>
+  <rect class="bp" x="48" y="120" width="180" height="44" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="138" y="139" text-anchor="middle" font-weight="700">leaf: claims.local</text>
+  <text class="sm" x="138" y="156" text-anchor="middle">90 days</text>
+  <rect class="bp" x="48" y="196" width="180" height="44" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="138" y="215" text-anchor="middle" font-weight="700">KB Issuing CA</text>
+  <text class="sm" x="138" y="232" text-anchor="middle">intermediate (sent)</text>
+  <line class="lno" x1="138" y1="164" x2="138" y2="192" marker-end="url(#aro)"/>
+  <line class="lno" x1="138" y1="240" x2="138" y2="268" marker-end="url(#aro)"/>
+  <rect class="bt" x="48" y="272" width="180" height="44" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="138" y="291" text-anchor="middle" font-weight="700">KB Root CA</text>
+  <text class="sm" x="138" y="308" text-anchor="middle">in client trust store</text>
+  <text class="sm" x="242" y="146">server sends</text>
+  <text class="sm" x="242" y="296">client has</text>
+  <text class="h2 badt" x="420" y="102">Server sends leaf only</text>
+  <rect class="bp" x="440" y="120" width="180" height="44" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="530" y="139" text-anchor="middle" font-weight="700">leaf: claims.local</text>
+  <text class="sm" x="530" y="156" text-anchor="middle">90 days</text>
+  <rect class="bb" x="440" y="196" width="180" height="44" rx="10" stroke-width="1.5"/>
+  <text class="sm badt" x="530" y="223" text-anchor="middle">? signer not sent</text>
+  <line class="lnb dash" x1="530" y1="164" x2="530" y2="192" marker-end="url(#arb)"/>
+  <rect class="bt" x="440" y="272" width="180" height="44" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="530" y="291" text-anchor="middle" font-weight="700">KB Root CA</text>
+  <text class="sm" x="530" y="308" text-anchor="middle">in client trust store</text>
+  <text class="sm" x="634" y="146">server sends</text>
+  <text class="sm" x="634" y="296">client has</text>
+  <text class="tx okt" x="28" y="346">Verify return code: 0 (ok)</text>
+  <text class="tx badt" x="420" y="346">code 21: unable to verify the first certificate</text>
+  <text class="sub" x="28" y="380">Browsers may hide this by caching intermediates; Java and curl won&#x27;t. Test with openssl s_client.</text>
+</svg>

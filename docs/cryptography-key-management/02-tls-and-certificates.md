@@ -50,6 +50,9 @@ Measured: TLS 1.3 handshake with `Cipher is TLS_AES_256_GCM_SHA384`, `Server Tem
 | Certificate | Sent in the clear | Encrypted |
 | Status | Still common, acceptable with good config | Default for new systems |
 
+![Animation: TLS 1.2 needs ClientHello, ServerHello with certificate, client key exchange and Finished, and server Finished before the first request, two round trips; TLS 1.3 sends the key share in the ClientHello and the client's Finished travels with the first request, one round trip](images/02-tls12-vs-tls13.svg){ loading=lazy }
+*Notice the client's key share rides in the very first message in TLS 1.3. Guessing the key exchange up front is what removes a whole round trip.*
+
 Hybrid post-quantum key exchange (`X25519MLKEM768`) is already negotiated by modern browsers and CDNs with TLS 1.3, and OpenSSL 3.5 and recent JDKs support it.
 
 ### X.509 certificates
@@ -75,6 +78,9 @@ flowchart BT
     T["Client trust store<br/>(JDK cacerts / OS / custom truststore)"] -.->|"contains"| R
 ```
 *Notice that clients only trust roots. The server must send the leaf **and** the intermediates, so the client can build the path up to a root it already has.*
+
+![When the server sends the leaf and the intermediate, the client builds leaf to KB Issuing CA to KB Root CA and verification succeeds; when it sends only the leaf, the client can't find the signer and fails with return code 21](images/02-chain-missing-intermediate.svg){ loading=lazy }
+*Notice the root isn't sent by the server in either case: it has to already be in the client's trust store.*
 
 Measured validation results:
 
