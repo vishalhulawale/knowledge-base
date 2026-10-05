@@ -69,6 +69,9 @@ With the VPC CNI each pod consumes a VPC IP, attached to the node through ENIs. 
 
 Consequences: small instances run out of pod slots before CPU or memory (pods Pending with "Too many pods"), and subnets run out of IPs in big clusters. Fixes: **prefix delegation** (a /28 prefix per ENI slot, typically capped at 110 pods per node), larger subnets or secondary CIDRs with custom networking (100.64.0.0/10), and bigger instances. On AKS, traditional Azure CNI also consumes VNet IPs per pod (default max pods 30, configurable), while **Azure CNI Overlay** gives pods IPs from a private overlay CIDR, avoiding VNet exhaustion.
 
+![A t3.medium node with 3 ENIs of 6 IPs each: the first IP of every ENI belongs to the ENI, leaving 15 pod IPs, plus 2 host-network pods for a maximum of 17; an 18th pod stays Pending with Too many pods](images/08-vpc-cni-ip-budget.svg){ loading=lazy }
+*Notice the grey cells: one address per ENI is never available to pods, which is where the "minus 1" in the formula comes from.*
+
 ### Identity: humans vs pods
 
 ```mermaid
@@ -108,6 +111,9 @@ flowchart TD
     P -->|"Evicted"| EV["node pressure (memory/disk), ephemeral storage,<br/>QoS; check node conditions"]
 ```
 *Notice that every branch starts from the pod's status and its events. `kubectl describe` answers most "why" questions before you need logs or a shell.*
+
+![Animation on a 10-minute timeline: a container crashes on every start and the kubelet waits 10, 20, 40, 80 and 160 seconds before the next restarts, then 5 minutes at the cap](images/08-crashloop-backoff.svg){ loading=lazy }
+*Watch the gaps double: after a few crashes the pod spends almost all its time waiting, so the evidence lives in `logs --previous`, not in the current container.*
 
 **Reproduced scheduler messages** (pods stuck `Pending`):
 
