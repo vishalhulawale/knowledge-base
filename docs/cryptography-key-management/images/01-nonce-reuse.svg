@@ -1,0 +1,489 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Nonce reuse: the keystream cancels out</title>
+  <desc id="d">Two messages are encrypted with AES-GCM using the same key and the same nonce, so they are XORed with the same keystream. An attacker who captures both ciphertexts XORs them together; the keystream cancels and the result is plaintext 1 XOR plaintext 2. If the attacker knows or guesses plaintext 1, here PAY ALICE 0000100, XORing it in reveals plaintext 2, PAY MALLORY 9999999, without the key. With GCM the reuse also leaks the authentication subkey, allowing forged tags.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:16s infinite linear}
+    @keyframes q0{0%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .q0{animation-name:q0}
+    @keyframes q1{0%{opacity:0}13%{opacity:0}14%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .q1{animation-name:q1}
+    @keyframes q2{0%{opacity:0}27%{opacity:0}28%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .q2{animation-name:q2}
+    @keyframes q3{0%{opacity:0}43%{opacity:0}44%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .q3{animation-name:q3}
+    @keyframes q4{0%{opacity:0}59%{opacity:0}60%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .q4{animation-name:q4}
+    @keyframes q5{0%{opacity:0}75%{opacity:0}76%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .q5{animation-name:q5}
+    @keyframes l1{0%{opacity:0}13%{opacity:0}14%,27%{opacity:1}28%{opacity:0}100%{opacity:0}}
+    .l1{animation-name:l1}
+    @keyframes l2{0%{opacity:0}27%{opacity:0}28%,43%{opacity:1}44%{opacity:0}100%{opacity:0}}
+    .l2{animation-name:l2}
+    @keyframes l3{0%{opacity:0}43%{opacity:0}44%,59%{opacity:1}60%{opacity:0}100%{opacity:0}}
+    .l3{animation-name:l3}
+    @keyframes l4{0%{opacity:0}59%{opacity:0}60%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .l4{animation-name:l4}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="428" rx="14"/>
+  <text class="h" x="28" y="40">Same key, same nonce, two messages</text>
+  <text class="sub" x="28" y="62">Measured on the page: c1 ⊕ c2 == p1 ⊕ p2 → true; p2 recovered from a known p1.</text>
+  <text class="tx a q0" x="28" y="114" font-weight="700">keystream (N reused)</text>
+  <g class="a q0">
+  <rect class="mutf" x="222" y="96" width="29" height="26" rx="4"/>
+  <text class="on13" x="236.5" y="113.5" text-anchor="middle">29</text>
+  </g>
+  <g class="a q0">
+  <rect class="mutf" x="254" y="96" width="29" height="26" rx="4"/>
+  <text class="on13" x="268.5" y="113.5" text-anchor="middle">72</text>
+  </g>
+  <g class="a q0">
+  <rect class="mutf" x="286" y="96" width="29" height="26" rx="4"/>
+  <text class="on13" x="300.5" y="113.5" text-anchor="middle">bb</text>
+  </g>
+  <g class="a q0">
+  <rect class="mutf" x="318" y="96" width="29" height="26" rx="4"/>
+  <text class="on13" x="332.5" y="113.5" text-anchor="middle">04</text>
+  </g>
+  <g class="a q0">
+  <rect class="mutf" x="350" y="96" width="29" height="26" rx="4"/>
+  <text class="on13" x="364.5" y="113.5" text-anchor="middle">4d</text>
+  </g>
+  <g class="a q0">
+  <rect class="mutf" x="382" y="96" width="29" height="26" rx="4"/>
+  <text class="on13" x="396.5" y="113.5" text-anchor="middle">96</text>
+  </g>
+  <g class="a q0">
+  <rect class="mutf" x="414" y="96" width="29" height="26" rx="4"/>
+  <text class="on13" x="428.5" y="113.5" text-anchor="middle">df</text>
+  </g>
+  <g class="a q0">
+  <rect class="mutf" x="446" y="96" width="29" height="26" rx="4"/>
+  <text class="on13" x="460.5" y="113.5" text-anchor="middle">28</text>
+  </g>
+  <g class="a q0">
+  <rect class="mutf" x="478" y="96" width="29" height="26" rx="4"/>
+  <text class="on13" x="492.5" y="113.5" text-anchor="middle">71</text>
+  </g>
+  <g class="a q0">
+  <rect class="mutf" x="510" y="96" width="29" height="26" rx="4"/>
+  <text class="on13" x="524.5" y="113.5" text-anchor="middle">ba</text>
+  </g>
+  <g class="a q0">
+  <rect class="mutf" x="542" y="96" width="29" height="26" rx="4"/>
+  <text class="on13" x="556.5" y="113.5" text-anchor="middle">03</text>
+  </g>
+  <g class="a q0">
+  <rect class="mutf" x="574" y="96" width="29" height="26" rx="4"/>
+  <text class="on13" x="588.5" y="113.5" text-anchor="middle">4c</text>
+  </g>
+  <g class="a q0">
+  <rect class="mutf" x="606" y="96" width="29" height="26" rx="4"/>
+  <text class="on13" x="620.5" y="113.5" text-anchor="middle">95</text>
+  </g>
+  <g class="a q0">
+  <rect class="mutf" x="638" y="96" width="29" height="26" rx="4"/>
+  <text class="on13" x="652.5" y="113.5" text-anchor="middle">de</text>
+  </g>
+  <g class="a q0">
+  <rect class="mutf" x="670" y="96" width="29" height="26" rx="4"/>
+  <text class="on13" x="684.5" y="113.5" text-anchor="middle">27</text>
+  </g>
+  <g class="a q0">
+  <rect class="mutf" x="702" y="96" width="29" height="26" rx="4"/>
+  <text class="on13" x="716.5" y="113.5" text-anchor="middle">70</text>
+  </g>
+  <g class="a q0">
+  <rect class="mutf" x="734" y="96" width="29" height="26" rx="4"/>
+  <text class="on13" x="748.5" y="113.5" text-anchor="middle">b9</text>
+  </g>
+  <text class="tx a q1" x="28" y="150" font-weight="700">c1 = p1 ⊕ KS</text>
+  <g class="a q1">
+  <rect class="pri" x="222" y="132" width="29" height="26" rx="4"/>
+  <text class="on13" x="236.5" y="149.5" text-anchor="middle">79</text>
+  </g>
+  <g class="a q1">
+  <rect class="pri" x="254" y="132" width="29" height="26" rx="4"/>
+  <text class="on13" x="268.5" y="149.5" text-anchor="middle">33</text>
+  </g>
+  <g class="a q1">
+  <rect class="pri" x="286" y="132" width="29" height="26" rx="4"/>
+  <text class="on13" x="300.5" y="149.5" text-anchor="middle">e2</text>
+  </g>
+  <g class="a q1">
+  <rect class="pri" x="318" y="132" width="29" height="26" rx="4"/>
+  <text class="on13" x="332.5" y="149.5" text-anchor="middle">24</text>
+  </g>
+  <g class="a q1">
+  <rect class="pri" x="350" y="132" width="29" height="26" rx="4"/>
+  <text class="on13" x="364.5" y="149.5" text-anchor="middle">0c</text>
+  </g>
+  <g class="a q1">
+  <rect class="pri" x="382" y="132" width="29" height="26" rx="4"/>
+  <text class="on13" x="396.5" y="149.5" text-anchor="middle">da</text>
+  </g>
+  <g class="a q1">
+  <rect class="pri" x="414" y="132" width="29" height="26" rx="4"/>
+  <text class="on13" x="428.5" y="149.5" text-anchor="middle">96</text>
+  </g>
+  <g class="a q1">
+  <rect class="pri" x="446" y="132" width="29" height="26" rx="4"/>
+  <text class="on13" x="460.5" y="149.5" text-anchor="middle">6b</text>
+  </g>
+  <g class="a q1">
+  <rect class="pri" x="478" y="132" width="29" height="26" rx="4"/>
+  <text class="on13" x="492.5" y="149.5" text-anchor="middle">34</text>
+  </g>
+  <g class="a q1">
+  <rect class="pri" x="510" y="132" width="29" height="26" rx="4"/>
+  <text class="on13" x="524.5" y="149.5" text-anchor="middle">9a</text>
+  </g>
+  <g class="a q1">
+  <rect class="pri" x="542" y="132" width="29" height="26" rx="4"/>
+  <text class="on13" x="556.5" y="149.5" text-anchor="middle">33</text>
+  </g>
+  <g class="a q1">
+  <rect class="pri" x="574" y="132" width="29" height="26" rx="4"/>
+  <text class="on13" x="588.5" y="149.5" text-anchor="middle">7c</text>
+  </g>
+  <g class="a q1">
+  <rect class="pri" x="606" y="132" width="29" height="26" rx="4"/>
+  <text class="on13" x="620.5" y="149.5" text-anchor="middle">a5</text>
+  </g>
+  <g class="a q1">
+  <rect class="pri" x="638" y="132" width="29" height="26" rx="4"/>
+  <text class="on13" x="652.5" y="149.5" text-anchor="middle">ee</text>
+  </g>
+  <g class="a q1">
+  <rect class="pri" x="670" y="132" width="29" height="26" rx="4"/>
+  <text class="on13" x="684.5" y="149.5" text-anchor="middle">16</text>
+  </g>
+  <g class="a q1">
+  <rect class="pri" x="702" y="132" width="29" height="26" rx="4"/>
+  <text class="on13" x="716.5" y="149.5" text-anchor="middle">40</text>
+  </g>
+  <g class="a q1">
+  <rect class="pri" x="734" y="132" width="29" height="26" rx="4"/>
+  <text class="on13" x="748.5" y="149.5" text-anchor="middle">89</text>
+  </g>
+  <text class="tx a q1" x="28" y="186" font-weight="700">c2 = p2 ⊕ KS</text>
+  <g class="a q1">
+  <rect class="tea" x="222" y="168" width="29" height="26" rx="4"/>
+  <text class="on13" x="236.5" y="185.5" text-anchor="middle">79</text>
+  </g>
+  <g class="a q1">
+  <rect class="tea" x="254" y="168" width="29" height="26" rx="4"/>
+  <text class="on13" x="268.5" y="185.5" text-anchor="middle">33</text>
+  </g>
+  <g class="a q1">
+  <rect class="tea" x="286" y="168" width="29" height="26" rx="4"/>
+  <text class="on13" x="300.5" y="185.5" text-anchor="middle">e2</text>
+  </g>
+  <g class="a q1">
+  <rect class="tea" x="318" y="168" width="29" height="26" rx="4"/>
+  <text class="on13" x="332.5" y="185.5" text-anchor="middle">24</text>
+  </g>
+  <g class="a q1">
+  <rect class="tea" x="350" y="168" width="29" height="26" rx="4"/>
+  <text class="on13" x="364.5" y="185.5" text-anchor="middle">00</text>
+  </g>
+  <g class="a q1">
+  <rect class="tea" x="382" y="168" width="29" height="26" rx="4"/>
+  <text class="on13" x="396.5" y="185.5" text-anchor="middle">d7</text>
+  </g>
+  <g class="a q1">
+  <rect class="tea" x="414" y="168" width="29" height="26" rx="4"/>
+  <text class="on13" x="428.5" y="185.5" text-anchor="middle">93</text>
+  </g>
+  <g class="a q1">
+  <rect class="tea" x="446" y="168" width="29" height="26" rx="4"/>
+  <text class="on13" x="460.5" y="185.5" text-anchor="middle">64</text>
+  </g>
+  <g class="a q1">
+  <rect class="tea" x="478" y="168" width="29" height="26" rx="4"/>
+  <text class="on13" x="492.5" y="185.5" text-anchor="middle">3e</text>
+  </g>
+  <g class="a q1">
+  <rect class="tea" x="510" y="168" width="29" height="26" rx="4"/>
+  <text class="on13" x="524.5" y="185.5" text-anchor="middle">e8</text>
+  </g>
+  <g class="a q1">
+  <rect class="tea" x="542" y="168" width="29" height="26" rx="4"/>
+  <text class="on13" x="556.5" y="185.5" text-anchor="middle">5a</text>
+  </g>
+  <g class="a q1">
+  <rect class="tea" x="574" y="168" width="29" height="26" rx="4"/>
+  <text class="on13" x="588.5" y="185.5" text-anchor="middle">6c</text>
+  </g>
+  <g class="a q1">
+  <rect class="tea" x="606" y="168" width="29" height="26" rx="4"/>
+  <text class="on13" x="620.5" y="185.5" text-anchor="middle">ac</text>
+  </g>
+  <g class="a q1">
+  <rect class="tea" x="638" y="168" width="29" height="26" rx="4"/>
+  <text class="on13" x="652.5" y="185.5" text-anchor="middle">e7</text>
+  </g>
+  <g class="a q1">
+  <rect class="tea" x="670" y="168" width="29" height="26" rx="4"/>
+  <text class="on13" x="684.5" y="185.5" text-anchor="middle">1e</text>
+  </g>
+  <g class="a q1">
+  <rect class="tea" x="702" y="168" width="29" height="26" rx="4"/>
+  <text class="on13" x="716.5" y="185.5" text-anchor="middle">49</text>
+  </g>
+  <g class="a q1">
+  <rect class="tea" x="734" y="168" width="29" height="26" rx="4"/>
+  <text class="on13" x="748.5" y="185.5" text-anchor="middle">80</text>
+  </g>
+  <text class="tx a q2" x="28" y="236" font-weight="700">c1 ⊕ c2 = p1 ⊕ p2</text>
+  <g class="a q2">
+  <rect class="wrnf" x="222" y="218" width="29" height="26" rx="4"/>
+  <text class="on13" x="236.5" y="235.5" text-anchor="middle">00</text>
+  </g>
+  <g class="a q2">
+  <rect class="wrnf" x="254" y="218" width="29" height="26" rx="4"/>
+  <text class="on13" x="268.5" y="235.5" text-anchor="middle">00</text>
+  </g>
+  <g class="a q2">
+  <rect class="wrnf" x="286" y="218" width="29" height="26" rx="4"/>
+  <text class="on13" x="300.5" y="235.5" text-anchor="middle">00</text>
+  </g>
+  <g class="a q2">
+  <rect class="wrnf" x="318" y="218" width="29" height="26" rx="4"/>
+  <text class="on13" x="332.5" y="235.5" text-anchor="middle">00</text>
+  </g>
+  <g class="a q2">
+  <rect class="wrnf" x="350" y="218" width="29" height="26" rx="4"/>
+  <text class="on13" x="364.5" y="235.5" text-anchor="middle">0c</text>
+  </g>
+  <g class="a q2">
+  <rect class="wrnf" x="382" y="218" width="29" height="26" rx="4"/>
+  <text class="on13" x="396.5" y="235.5" text-anchor="middle">0d</text>
+  </g>
+  <g class="a q2">
+  <rect class="wrnf" x="414" y="218" width="29" height="26" rx="4"/>
+  <text class="on13" x="428.5" y="235.5" text-anchor="middle">05</text>
+  </g>
+  <g class="a q2">
+  <rect class="wrnf" x="446" y="218" width="29" height="26" rx="4"/>
+  <text class="on13" x="460.5" y="235.5" text-anchor="middle">0f</text>
+  </g>
+  <g class="a q2">
+  <rect class="wrnf" x="478" y="218" width="29" height="26" rx="4"/>
+  <text class="on13" x="492.5" y="235.5" text-anchor="middle">0a</text>
+  </g>
+  <g class="a q2">
+  <rect class="wrnf" x="510" y="218" width="29" height="26" rx="4"/>
+  <text class="on13" x="524.5" y="235.5" text-anchor="middle">72</text>
+  </g>
+  <g class="a q2">
+  <rect class="wrnf" x="542" y="218" width="29" height="26" rx="4"/>
+  <text class="on13" x="556.5" y="235.5" text-anchor="middle">69</text>
+  </g>
+  <g class="a q2">
+  <rect class="wrnf" x="574" y="218" width="29" height="26" rx="4"/>
+  <text class="on13" x="588.5" y="235.5" text-anchor="middle">10</text>
+  </g>
+  <g class="a q2">
+  <rect class="wrnf" x="606" y="218" width="29" height="26" rx="4"/>
+  <text class="on13" x="620.5" y="235.5" text-anchor="middle">09</text>
+  </g>
+  <g class="a q2">
+  <rect class="wrnf" x="638" y="218" width="29" height="26" rx="4"/>
+  <text class="on13" x="652.5" y="235.5" text-anchor="middle">09</text>
+  </g>
+  <g class="a q2">
+  <rect class="wrnf" x="670" y="218" width="29" height="26" rx="4"/>
+  <text class="on13" x="684.5" y="235.5" text-anchor="middle">08</text>
+  </g>
+  <g class="a q2">
+  <rect class="wrnf" x="702" y="218" width="29" height="26" rx="4"/>
+  <text class="on13" x="716.5" y="235.5" text-anchor="middle">09</text>
+  </g>
+  <g class="a q2">
+  <rect class="wrnf" x="734" y="218" width="29" height="26" rx="4"/>
+  <text class="on13" x="748.5" y="235.5" text-anchor="middle">09</text>
+  </g>
+  <text class="tx a q3" x="28" y="286" font-weight="700">known p1</text>
+  <g class="a q3">
+  <rect class="pri" x="222" y="268" width="29" height="26" rx="4"/>
+  <text class="on13" x="236.5" y="285.5" text-anchor="middle">P</text>
+  </g>
+  <g class="a q3">
+  <rect class="pri" x="254" y="268" width="29" height="26" rx="4"/>
+  <text class="on13" x="268.5" y="285.5" text-anchor="middle">A</text>
+  </g>
+  <g class="a q3">
+  <rect class="pri" x="286" y="268" width="29" height="26" rx="4"/>
+  <text class="on13" x="300.5" y="285.5" text-anchor="middle">Y</text>
+  </g>
+  <g class="a q3">
+  <rect class="pri" x="318" y="268" width="29" height="26" rx="4"/>
+  <text class="on13" x="332.5" y="285.5" text-anchor="middle">·</text>
+  </g>
+  <g class="a q3">
+  <rect class="pri" x="350" y="268" width="29" height="26" rx="4"/>
+  <text class="on13" x="364.5" y="285.5" text-anchor="middle">A</text>
+  </g>
+  <g class="a q3">
+  <rect class="pri" x="382" y="268" width="29" height="26" rx="4"/>
+  <text class="on13" x="396.5" y="285.5" text-anchor="middle">L</text>
+  </g>
+  <g class="a q3">
+  <rect class="pri" x="414" y="268" width="29" height="26" rx="4"/>
+  <text class="on13" x="428.5" y="285.5" text-anchor="middle">I</text>
+  </g>
+  <g class="a q3">
+  <rect class="pri" x="446" y="268" width="29" height="26" rx="4"/>
+  <text class="on13" x="460.5" y="285.5" text-anchor="middle">C</text>
+  </g>
+  <g class="a q3">
+  <rect class="pri" x="478" y="268" width="29" height="26" rx="4"/>
+  <text class="on13" x="492.5" y="285.5" text-anchor="middle">E</text>
+  </g>
+  <g class="a q3">
+  <rect class="pri" x="510" y="268" width="29" height="26" rx="4"/>
+  <text class="on13" x="524.5" y="285.5" text-anchor="middle">·</text>
+  </g>
+  <g class="a q3">
+  <rect class="pri" x="542" y="268" width="29" height="26" rx="4"/>
+  <text class="on13" x="556.5" y="285.5" text-anchor="middle">0</text>
+  </g>
+  <g class="a q3">
+  <rect class="pri" x="574" y="268" width="29" height="26" rx="4"/>
+  <text class="on13" x="588.5" y="285.5" text-anchor="middle">0</text>
+  </g>
+  <g class="a q3">
+  <rect class="pri" x="606" y="268" width="29" height="26" rx="4"/>
+  <text class="on13" x="620.5" y="285.5" text-anchor="middle">0</text>
+  </g>
+  <g class="a q3">
+  <rect class="pri" x="638" y="268" width="29" height="26" rx="4"/>
+  <text class="on13" x="652.5" y="285.5" text-anchor="middle">0</text>
+  </g>
+  <g class="a q3">
+  <rect class="pri" x="670" y="268" width="29" height="26" rx="4"/>
+  <text class="on13" x="684.5" y="285.5" text-anchor="middle">1</text>
+  </g>
+  <g class="a q3">
+  <rect class="pri" x="702" y="268" width="29" height="26" rx="4"/>
+  <text class="on13" x="716.5" y="285.5" text-anchor="middle">0</text>
+  </g>
+  <g class="a q3">
+  <rect class="pri" x="734" y="268" width="29" height="26" rx="4"/>
+  <text class="on13" x="748.5" y="285.5" text-anchor="middle">0</text>
+  </g>
+  <text class="tx a q4" x="28" y="322" font-weight="700">p2 recovered</text>
+  <g class="a q4">
+  <rect class="badf" x="222" y="304" width="29" height="26" rx="4"/>
+  <text class="on13" x="236.5" y="321.5" text-anchor="middle">P</text>
+  </g>
+  <g class="a q4">
+  <rect class="badf" x="254" y="304" width="29" height="26" rx="4"/>
+  <text class="on13" x="268.5" y="321.5" text-anchor="middle">A</text>
+  </g>
+  <g class="a q4">
+  <rect class="badf" x="286" y="304" width="29" height="26" rx="4"/>
+  <text class="on13" x="300.5" y="321.5" text-anchor="middle">Y</text>
+  </g>
+  <g class="a q4">
+  <rect class="badf" x="318" y="304" width="29" height="26" rx="4"/>
+  <text class="on13" x="332.5" y="321.5" text-anchor="middle">·</text>
+  </g>
+  <g class="a q4">
+  <rect class="badf" x="350" y="304" width="29" height="26" rx="4"/>
+  <text class="on13" x="364.5" y="321.5" text-anchor="middle">M</text>
+  </g>
+  <g class="a q4">
+  <rect class="badf" x="382" y="304" width="29" height="26" rx="4"/>
+  <text class="on13" x="396.5" y="321.5" text-anchor="middle">A</text>
+  </g>
+  <g class="a q4">
+  <rect class="badf" x="414" y="304" width="29" height="26" rx="4"/>
+  <text class="on13" x="428.5" y="321.5" text-anchor="middle">L</text>
+  </g>
+  <g class="a q4">
+  <rect class="badf" x="446" y="304" width="29" height="26" rx="4"/>
+  <text class="on13" x="460.5" y="321.5" text-anchor="middle">L</text>
+  </g>
+  <g class="a q4">
+  <rect class="badf" x="478" y="304" width="29" height="26" rx="4"/>
+  <text class="on13" x="492.5" y="321.5" text-anchor="middle">O</text>
+  </g>
+  <g class="a q4">
+  <rect class="badf" x="510" y="304" width="29" height="26" rx="4"/>
+  <text class="on13" x="524.5" y="321.5" text-anchor="middle">R</text>
+  </g>
+  <g class="a q4">
+  <rect class="badf" x="542" y="304" width="29" height="26" rx="4"/>
+  <text class="on13" x="556.5" y="321.5" text-anchor="middle">Y</text>
+  </g>
+  <g class="a q4">
+  <rect class="badf" x="574" y="304" width="29" height="26" rx="4"/>
+  <text class="on13" x="588.5" y="321.5" text-anchor="middle">·</text>
+  </g>
+  <g class="a q4">
+  <rect class="badf" x="606" y="304" width="29" height="26" rx="4"/>
+  <text class="on13" x="620.5" y="321.5" text-anchor="middle">9</text>
+  </g>
+  <g class="a q4">
+  <rect class="badf" x="638" y="304" width="29" height="26" rx="4"/>
+  <text class="on13" x="652.5" y="321.5" text-anchor="middle">9</text>
+  </g>
+  <g class="a q4">
+  <rect class="badf" x="670" y="304" width="29" height="26" rx="4"/>
+  <text class="on13" x="684.5" y="321.5" text-anchor="middle">9</text>
+  </g>
+  <g class="a q4">
+  <rect class="badf" x="702" y="304" width="29" height="26" rx="4"/>
+  <text class="on13" x="716.5" y="321.5" text-anchor="middle">9</text>
+  </g>
+  <g class="a q4">
+  <rect class="badf" x="734" y="304" width="29" height="26" rx="4"/>
+  <text class="on13" x="748.5" y="321.5" text-anchor="middle">9</text>
+  </g>
+  <text class="lbl a l1" x="28" y="384">1  Attacker sees only c1 and c2 on the wire</text>
+  <text class="lbl wrnt a l2" x="28" y="384">2  XOR them: the keystream disappears</text>
+  <text class="lbl wrnt a l3" x="28" y="384">3  Guess or know one plaintext (formats are predictable)</text>
+  <text class="lbl badt a l4" x="28" y="384">4  XOR again: the other plaintext, no key needed</text>
+  <text class="sub" x="28" y="412">Fix: a unique nonce per key (counter or 96 random bits), or a fresh data key per object (envelope encryption).</text>
+</svg>

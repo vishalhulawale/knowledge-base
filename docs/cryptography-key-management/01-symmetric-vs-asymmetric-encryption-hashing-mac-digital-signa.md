@@ -59,6 +59,9 @@ One key both encrypts and decrypts. AES is a 128-bit **block** cipher. The **mod
 | **ChaCha20-Poly1305** | AEAD stream cipher, fast without AES hardware | Default on mobile/ARM, in TLS 1.3 |
 | **AES-GCM-SIV / XChaCha20** | Nonce-misuse resistant / 192-bit random nonces | When nonce uniqueness is hard to guarantee |
 
+![Eight 16-byte blocks of a record encrypted two ways: under AES-ECB the three identical SSN blocks and two identical padding blocks produce identical ciphertext blocks, while under AES-GCM every ciphertext block is different](images/01-ecb-vs-gcm.svg){ loading=lazy }
+*Notice the matching teal cells in the ECB row: an attacker learns which fields repeat across records without touching the key.*
+
 **AEAD** = authenticated encryption with associated data: the ciphertext carries a tag (16 bytes for GCM, so a 38-byte plaintext became 54 bytes), and decryption fails unless the ciphertext **and** the associated data (unencrypted context such as a record id) match exactly. Measured:
 
 | Test | Result |
@@ -78,6 +81,9 @@ flowchart LR
     L --> R["Known P1 → recover P2.<br/>GCM also leaks the auth key → forgeries"]
 ```
 *Notice that the keystream depends only on the key and nonce. Reuse it once and the encryption cancels out. With GCM, reuse also exposes the authentication subkey, so an attacker can forge valid tags.*
+
+![Animation: two messages encrypted with the same key and nonce share a keystream; XORing the two ciphertexts cancels it to give p1 XOR p2, and XORing in the known p1 PAY ALICE 0000100 reveals p2 PAY MALLORY 99999 without the key](images/01-nonce-reuse.svg){ loading=lazy }
+*Watch the orange row: the leading zero bytes show where the two messages agree, before the attacker has even guessed anything.*
 
 Nonce rules for AES-GCM: unique per key (a counter, or 96 random bits), and rotate keys well before ~2³² messages with random nonces (NIST SP 800-38D's limit on invocations per key). [Envelope encryption](03-envelope-encryption-and-data-keys.md) sidesteps this by using a fresh data key per object.
 
