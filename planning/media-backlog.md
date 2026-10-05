@@ -83,7 +83,7 @@ Suggested pictures per page; ⏵ marks an animation.
 - [x] frontend-architecture/04 Design systems and component libraries
 - [x] graphql/01 GraphQL fundamentals vs REST
 - [x] graphql/03 Resolvers and execution model
-- [ ] javascript-typescript/05 Equality, coercion, immutability
+- [x] javascript-typescript/05 Equality, coercion, immutability
 - [ ] javascript-typescript/09 Output prediction and gotchas
 - [ ] leadership-behavioral/04 Mentoring and growing engineers
 - [ ] leadership-behavioral/05 Handling conflict and technical disagreements

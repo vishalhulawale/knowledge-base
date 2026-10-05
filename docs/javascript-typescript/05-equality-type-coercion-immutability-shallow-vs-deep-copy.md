@@ -49,6 +49,9 @@ flowchart TD
 
 - `SameValueZero` (used by `includes`, `Map`, `Set`): like `Object.is` but `+0` equals `-0`. So `[NaN].includes(NaN)` is true but `[NaN].indexOf(NaN)` is -1.
 
+![Animation tracing [] == ![] step by step: ![] becomes false, false becomes 0, the empty array becomes the empty string through ToPrimitive, the empty string becomes 0, and 0 == 0 is true](images/05-loose-equality-trace.svg){ loading=lazy }
+*Watch how many rules fire for one `==`: each line is a different coercion, which is why `===` is the default in every style guide.*
+
 ### Coercion rules
 
 - **ToPrimitive(obj, hint):** calls `obj[Symbol.toPrimitive](hint)` if defined; otherwise `valueOf()` then `toString()` (hint "number"/"default") or the reverse (hint "string"). Dates prefer string.

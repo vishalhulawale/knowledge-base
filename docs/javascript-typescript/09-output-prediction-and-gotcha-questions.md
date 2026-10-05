@@ -73,6 +73,9 @@ flowchart TD
 ```
 *Notice that `this` depends on the **call site**, not on where the function was defined, except for arrow functions, which use the enclosing scope's `this`.*
 
+![Five call sites for member.greet, which reads this.name: called as member.greet() it greets Asha; extracted and called plainly it throws a TypeError in strict mode; passed to setTimeout it runs with this as window or a Timeout object and greets the wrong name; bound or wrapped in an arrow it greets Asha](images/09-losing-this.svg){ loading=lazy }
+*Notice that the function is identical in every row: only the call site changes, and so does `this`.*
+
 ### Coercion rules you actually need
 
 - **`+`**: if either operand is a string (after converting objects to primitives), it concatenates. Otherwise it adds numbers. `[] + []` gives `""` and `[] + {}` gives `"[object Object]"`.
