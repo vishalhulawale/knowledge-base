@@ -37,6 +37,9 @@ flowchart TB
 ```
 *Notice how moving from **positions** ("cache" vs "don't cache") to **interests** (latency vs freshness) creates options that satisfy both. This is an illustrative example: confirm whether a disagreement like this actually happened before using it.*
 
+![Illustrative decision matrix: cache everything scores 9, no caching scores 8 and the hybrid of cached reference data with live patient data scores 11 across p95 latency, freshness, upstream load and operability](images/05-decision-matrix.svg){ loading=lazy }
+*Notice that neither original position wins: agreeing the criteria first is what makes the third option visible and gives everyone a reason to commit.*
+
 ### A disagreement playbook
 
 | Step | What you do | Phrases |
