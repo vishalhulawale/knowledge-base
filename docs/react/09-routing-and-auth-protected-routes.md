@@ -91,6 +91,9 @@ const router = createBrowserRouter([
 - **Errors** thrown in loaders/actions/rendering go to the route's `ErrorBoundary` (`useRouteError()`).
 - **Pending UI:** `useNavigation().state` (`idle`/`loading`/`submitting`), `useFetcher` for non-navigation mutations.
 
+![Animation for three nested routes needing 200, 300 and 250 ms of data: fetching in useEffect runs the requests one after another and finishes at 750 ms, while route loaders start all three on navigation and finish at 300 ms](images/09-loader-waterfall.svg){ loading=lazy }
+*Watch the red bars step down and to the right: each request waits for its parent component to render, while the green bars all start at zero.*
+
 ### Protecting routes
 
 ```mermaid

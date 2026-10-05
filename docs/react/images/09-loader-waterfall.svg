@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Fetch-on-render waterfall vs route loaders</title>
+  <desc id="d">Navigating to members 42 prescriptions, which matches three nested routes: AppLayout needing the current user in 200 milliseconds, MemberLayout needing the member in 300, and the Prescriptions leaf needing the list in 250. Top, each component fetches in useEffect after it renders, and children only render after their parent&#x27;s data arrives, so the requests run one after another and the page is complete at 750 milliseconds. Bottom, React Router loaders for all matched routes start together on navigation, so the page is ready at 300 milliseconds, the slowest single request. Illustrative timings.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:14s infinite linear}
+    @keyframes a0{0%{opacity:0}0%{opacity:0}1%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .a0{animation-name:a0}
+    @keyframes a1{0%{opacity:0}22%{opacity:0}23%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .a1{animation-name:a1}
+    @keyframes a2{0%{opacity:0}55%{opacity:0}56%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .a2{animation-name:a2}
+    @keyframes ad{0%{opacity:0}81.5%{opacity:0}82.5%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .ad{animation-name:ad}
+    @keyframes b0{0%{opacity:0}0%{opacity:0}1%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .b0{animation-name:b0}
+    @keyframes b1{0%{opacity:0}0%{opacity:0}1%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .b1{animation-name:b1}
+    @keyframes b2{0%{opacity:0}0%{opacity:0}1%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .b2{animation-name:b2}
+    @keyframes bd{0%{opacity:0}32%{opacity:0}33%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .bd{animation-name:bd}
+    @keyframes cur{0%{transform:translate(0px,0px)}88%{transform:translate(560px,0px)}100%{transform:translate(560px,0px)}}
+    .cur{animation:cur 14s infinite linear}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      .cur{transform:translate(0,0)}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">GET /members/42/prescriptions: three nested routes</text>
+  <text class="sub" x="28" y="62">Illustrative timings: user 200 ms, member 300 ms, prescriptions 250 ms.</text>
+  <line class="ln dash" x1="190.0" x2="190.0" y1="92" y2="330" style="stroke-width:1;opacity:.5"/>
+  <text class="sm" x="190" y="346" text-anchor="middle">0 ms</text>
+  <line class="ln dash" x1="330.0" x2="330.0" y1="92" y2="330" style="stroke-width:1;opacity:.5"/>
+  <text class="sm" x="330" y="346" text-anchor="middle">200 ms</text>
+  <line class="ln dash" x1="470.0" x2="470.0" y1="92" y2="330" style="stroke-width:1;opacity:.5"/>
+  <text class="sm" x="470" y="346" text-anchor="middle">400 ms</text>
+  <line class="ln dash" x1="610.0" x2="610.0" y1="92" y2="330" style="stroke-width:1;opacity:.5"/>
+  <text class="sm" x="610" y="346" text-anchor="middle">600 ms</text>
+  <line class="ln dash" x1="750.0" x2="750.0" y1="92" y2="330" style="stroke-width:1;opacity:.5"/>
+  <text class="sm" x="750" y="346" text-anchor="middle">800 ms</text>
+  <text class="h2 badt" x="28" y="108">useEffect fetch</text>
+  <g class="a a0">
+  <rect class="badf" x="190" y="120" width="138" height="24" rx="5"/>
+  <text class="on13" x="259" y="136.5" text-anchor="middle">AppLayout: /me</text>
+  </g>
+  <g class="a a1">
+  <rect class="badf" x="330" y="150" width="208" height="24" rx="5"/>
+  <text class="on13" x="434" y="166.5" text-anchor="middle">MemberLayout: member</text>
+  </g>
+  <g class="a a2">
+  <rect class="badf" x="540" y="180" width="173" height="24" rx="5"/>
+  <text class="on13" x="626.5" y="196.5" text-anchor="middle">Prescriptions: list</text>
+  </g>
+  <text class="lbl badt a ad" x="28" y="150">ready at 750 ms</text>
+  <text class="h2 okt" x="28" y="230">route loaders</text>
+  <g class="a b0">
+  <rect class="okf" x="190" y="242" width="138" height="24" rx="5"/>
+  <text class="on13" x="259" y="258.5" text-anchor="middle">AppLayout: /me</text>
+  </g>
+  <g class="a b1">
+  <rect class="okf" x="190" y="272" width="208" height="24" rx="5"/>
+  <text class="on13" x="294" y="288.5" text-anchor="middle">MemberLayout: member</text>
+  </g>
+  <g class="a b2">
+  <rect class="okf" x="190" y="302" width="173" height="24" rx="5"/>
+  <text class="on13" x="276.5" y="318.5" text-anchor="middle">Prescriptions: list</text>
+  </g>
+  <text class="lbl okt a bd" x="28" y="272">ready at 300 ms</text>
+  <g class="cur">
+  <line x1="190" x2="190" y1="92" y2="330" class="lnw" style="stroke-width:2"/>
+  </g>
+  <text class="tx" x="28" y="380">A child can&#x27;t fetch until its parent has data and renders, so requests queue up.</text>
+  <text class="sub" x="28" y="402">Loaders know every matched route up front, so they all fetch in parallel.</text>
+</svg>

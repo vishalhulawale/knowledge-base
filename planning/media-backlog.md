@@ -94,7 +94,7 @@ Suggested pictures per page; ⏵ marks an animation.
 - [x] leadership-behavioral/11 Failures, mistakes and lessons learned
 - [x] leadership-behavioral/12 Questions to ask, salary and role conversations
 - [x] postgresql-sql/05 Normalisation vs denormalisation
-- [ ] react/09 Routing and protected routes
+- [x] react/09 Routing and protected routes
 - [ ] spring-boot/02 Auto-configuration and starters
 - [ ] spring-boot/05 MVC request lifecycle, filters vs interceptors
 - [ ] spring-boot/10 Boot 3.x, Jakarta EE, GraalVM, virtual threads
