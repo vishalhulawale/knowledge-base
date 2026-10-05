@@ -62,7 +62,7 @@ Suggested pictures per page; ⏵ marks an animation.
 - [x] 01 Primitives: symmetric vs asymmetric key use; ⏵ AES-GCM nonce reuse leaking XOR of plaintexts
 - [x] 02 TLS: ⏵ TLS 1.3 handshake (1-RTT); certificate chain up to a trusted root
 - [x] 03 Envelope encryption: ⏵ DEK wrapped by KEK, encrypt and decrypt paths; KEK rotation re-wraps only DEKs
-- [ ] 04 Cloud KMS: key policy vs IAM policy evaluation; AWS / Azure / GCP key hierarchy side by side
+- [x] 04 Cloud KMS: key policy vs IAM policy evaluation; AWS / Azure / GCP key hierarchy side by side
 - [ ] 05 HSMs and BYOK/HYOK: who holds the key in KMS vs BYOK vs HYOK; key import wrapping flow
 - [ ] 06 Rotation: ⏵ overlap window (add new, switch writers, retire old); JWKS `kid` rotation
 - [ ] 07 Passwords and secrets: fast hash vs bcrypt/Argon2 guesses per second; ⏵ rehash on login upgrade

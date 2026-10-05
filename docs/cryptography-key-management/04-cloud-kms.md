@@ -81,6 +81,9 @@ flowchart TD
 ```
 *Notice that every KMS key has a key policy, and without it allowing access (directly or by delegating to IAM), even account administrators can't use the key. Explicit denies anywhere win.*
 
+![Animation: three Decrypt requests pass through the key policy, IAM policy and conditions checks; claims-api with tenant acme passes all three and is allowed, an administrator who is only a key administrator is denied at the key policy, and claims-api with tenant evil is denied by the encryption-context condition](images/04-kms-authz-walk.svg){ loading=lazy }
+*Notice request B: being an account administrator isn't enough. Only the key policy decides who may use the key.*
+
 - **Key policy:** the primary resource policy. Separate statements for **key administrators** (manage but not use) and **key users** (use but not manage).
 - **IAM policies:** effective only if the key policy delegates to the account (`"Principal": {"AWS": "arn:aws:iam::<acct>:root"}`).
 - **Grants:** programmatic, scoped and revocable delegation, used by AWS services (EBS attaching volumes) and for temporary access.
@@ -91,6 +94,9 @@ flowchart TD
 - **Automatic rotation** (symmetric customer-managed keys): new backing key material on a schedule (default 365 days, configurable 90–2,560 days), plus **on-demand rotation**. The key ID, ARN and policy stay the same, and **old material is retained**, so existing ciphertexts still decrypt and nothing needs re-encrypting.
 - Asymmetric, HMAC and imported keys: rotate manually by creating a new key and moving the alias ([rotation strategies](06-key-rotation-strategies-without-downtime.md)).
 - **Disable** (reversible) vs **ScheduleKeyDeletion** (7–30 days, irreversible after the window). Deleting a key makes every ciphertext under it unrecoverable, so alarm on `ScheduleKeyDeletion` events and use `Disable` first.
+
+![Key lifecycle: Enabled keys can be disabled and re-enabled; scheduling deletion moves a key to Pending deletion for 7 to 30 days; cancelling returns it to Disabled, not Enabled; after the window it is Deleted irreversibly; rotation adds new material to an Enabled key under the same id](images/04-key-lifecycle.svg){ loading=lazy }
+*Notice the cancel arrow lands on Disabled: a rescued key still needs an explicit Enable before anything can decrypt again.*
 - **Quotas:** shared request-per-second limits per account and Region per operation category (cryptographic operations in the thousands to tens of thousands per second, depending on Region and key type). Throttling returns `ThrottlingException`. Mitigate with data key caching, S3 bucket keys, and quota increases.
 
 ### Azure Key Vault and Managed HSM

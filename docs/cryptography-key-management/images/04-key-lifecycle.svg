@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">KMS key lifecycle</title>
+  <desc id="d">States of a customer-managed KMS key. Enabled keys can be used. Disable is reversible and is the safe first step when a key looks unused. ScheduleKeyDeletion moves the key to Pending deletion for 7 to 30 days; cancelling returns it to Disabled, not Enabled, so it must be re-enabled. When the waiting period ends the key is Deleted, and every ciphertext under it becomes permanently unrecoverable. Automatic rotation adds new key material to an Enabled key while keeping the old material, so the key id never changes.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+  </style>
+  <defs><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">Enabled → Disabled → Pending deletion → Deleted</text>
+  <text class="sub" x="28" y="62">Measured on the page: CancelKeyDeletion returned the key to Disabled.</text>
+  <rect class="bo" x="28" y="120" width="150" height="50" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="103" y="142" text-anchor="middle" font-weight="700">Enabled</text>
+  <text class="sm" x="103" y="159" text-anchor="middle">usable</text>
+  <rect class="bw" x="250" y="120" width="150" height="50" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="325" y="142" text-anchor="middle" font-weight="700">Disabled</text>
+  <text class="sm" x="325" y="159" text-anchor="middle">reversible</text>
+  <rect class="bb" x="472" y="120" width="150" height="50" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="547" y="142" text-anchor="middle" font-weight="700">Pending deletion</text>
+  <text class="sm" x="547" y="159" text-anchor="middle">7–30 days</text>
+  <rect class="bb" x="650" y="120" width="122" height="50" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="711" y="142" text-anchor="middle" font-weight="700">Deleted</text>
+  <text class="sm" x="711" y="159" text-anchor="middle">irreversible</text>
+  <line class="ln" x1="178" y1="138" x2="246" y2="138" marker-end="url(#ar)"/>
+  <text class="sm" x="212" y="128" text-anchor="middle">Disable</text>
+  <path class="lno" d="M 250 160 C 220 190, 200 190, 178 160" marker-end="url(#aro)"/>
+  <text class="sm okt" x="212" y="200" text-anchor="middle">Enable</text>
+  <line class="lnb" x1="400" y1="145" x2="468" y2="145" marker-end="url(#arb)"/>
+  <text class="sm badt" x="434" y="134" text-anchor="middle">Schedule</text>
+  <path class="lnw" d="M 472 160 C 440 200, 420 200, 400 162" marker-end="url(#arw)"/>
+  <text class="sm wrnt" x="434" y="212" text-anchor="middle">Cancel → Disabled</text>
+  <line class="lnb" x1="622" y1="145" x2="646" y2="145" marker-end="url(#arb)"/>
+  <path class="lnp" d="M 60 120 C 40 76, 150 76, 130 118" marker-end="url(#arp)"/>
+  <text class="sm prit" x="150" y="92">rotate: new material, same id</text>
+  <text class="tx badt" x="28" y="264">Deleting a key makes every ciphertext under it unrecoverable, backups included.</text>
+  <text class="tx" x="28" y="290">Alarm on ScheduleKeyDeletion in CloudTrail, disable first and watch for failed Decrypts during the window.</text>
+  <text class="sub" x="28" y="322">Azure Key Vault&#x27;s equivalent safety net is soft delete plus purge protection.</text>
+</svg>
