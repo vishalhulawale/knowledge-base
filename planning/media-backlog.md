@@ -96,7 +96,7 @@ Suggested pictures per page; ⏵ marks an animation.
 - [x] postgresql-sql/05 Normalisation vs denormalisation
 - [x] react/09 Routing and protected routes
 - [x] spring-boot/02 Auto-configuration and starters
-- [ ] spring-boot/05 MVC request lifecycle, filters vs interceptors
+- [x] spring-boot/05 MVC request lifecycle, filters vs interceptors
 - [ ] spring-boot/10 Boot 3.x, Jakarta EE, GraalVM, virtual threads
 
 Leadership pages are mostly narrative, so one picture may be enough there; add a second only where it shows something (a timeline, a decision ladder).

@@ -97,6 +97,9 @@ What makes interceptors different from filters is the `handler` argument. You ca
 !!! warning "postHandle is too late for REST responses"
     With `@ResponseBody` or `ResponseEntity`, the `HttpMessageConverter` writes and may commit the response **inside** the handler adapter, before `postHandle`. Adding a header in `postHandle` silently does nothing. Use **`ResponseBodyAdvice`** (declared on a `@ControllerAdvice`) to change the body or headers before they are written, or set headers in a filter before `chain.doFilter`.
 
+![Animation: with an interceptor, the controller's body is written and the response committed, so the header set in postHandle is ignored and the client gets no X-Trace; with a ResponseBodyAdvice, the header is set just before the converter writes, so the client receives X-Trace](images/05-posthandle-too-late.svg){ loading=lazy }
+*Notice the red COMMITTED step sits before postHandle: by the time the interceptor runs, the headers have already left.*
+
 ### The full sequence, including order
 
 ```mermaid

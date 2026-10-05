@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">postHandle is too late for REST</title>
+  <desc id="d">A REST controller returns a ResponseEntity. Top: an interceptor tries to add an X-Trace header in postHandle. But the HttpMessageConverter already wrote the JSON body inside the handler adapter, which committed the response: the status line and headers went out to the client. The header added in postHandle is silently ignored. Bottom: a ResponseBodyAdvice runs just before the converter writes, so the header is added while the response is still open and the client receives it.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:14s infinite linear}
+    @keyframes t0{0%{opacity:0}2%{opacity:0}3%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .t0{animation-name:t0}
+    @keyframes t1{0%{opacity:0}16%{opacity:0}17%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .t1{animation-name:t1}
+    @keyframes t2{0%{opacity:0}30%{opacity:0}31%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .t2{animation-name:t2}
+    @keyframes t3{0%{opacity:0}44%{opacity:0}45%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .t3{animation-name:t3}
+    @keyframes b0{0%{opacity:0}2%{opacity:0}3%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .b0{animation-name:b0}
+    @keyframes b1{0%{opacity:0}16%{opacity:0}17%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .b1{animation-name:b1}
+    @keyframes b2{0%{opacity:0}30%{opacity:0}31%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .b2{animation-name:b2}
+    @keyframes b3{0%{opacity:0}44%{opacity:0}45%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .b3{animation-name:b3}
+    @keyframes rt{0%{opacity:0}47%{opacity:0}48%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .rt{animation-name:rt}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="428" rx="14"/>
+  <text class="h" x="28" y="40">Adding X-Trace to a @ResponseBody response</text>
+  <text class="sub" x="28" y="62">Once the message converter writes the body, the headers are already on the wire.</text>
+  <text class="h2" x="28" y="100">HandlerInterceptor.postHandle</text>
+  <g class="a t0">
+  <rect class="mutf" x="28" y="114" width="116" height="32" rx="6"/>
+  <text class="on13" x="86" y="134.5" text-anchor="middle">preHandle</text>
+  </g>
+  <g class="a t1">
+  <rect class="mutf" x="152" y="114" width="116" height="32" rx="6"/>
+  <text class="on13" x="210" y="134.5" text-anchor="middle">controller</text>
+  </g>
+  <g class="a t2">
+  <rect class="badf" x="276" y="114" width="266" height="32" rx="6"/>
+  <text class="on13" x="409" y="134.5" text-anchor="middle">body written: COMMITTED</text>
+  </g>
+  <g class="a t3">
+  <rect class="wrnf" x="276" y="154" width="266" height="32" rx="6"/>
+  <text class="on13" x="409" y="174.5" text-anchor="middle">postHandle: setHeader ✕ ignored</text>
+  </g>
+  <text class="h2" x="28" y="240">ResponseBodyAdvice</text>
+  <g class="a b0">
+  <rect class="mutf" x="28" y="254" width="116" height="32" rx="6"/>
+  <text class="on13" x="86" y="274.5" text-anchor="middle">preHandle</text>
+  </g>
+  <g class="a b1">
+  <rect class="mutf" x="152" y="254" width="116" height="32" rx="6"/>
+  <text class="on13" x="210" y="274.5" text-anchor="middle">controller</text>
+  </g>
+  <g class="a b2">
+  <rect class="okf" x="276" y="254" width="266" height="32" rx="6"/>
+  <text class="on13" x="409" y="274.5" text-anchor="middle">ResponseBodyAdvice: setHeader ✓</text>
+  </g>
+  <g class="a b3">
+  <rect class="pri" x="276" y="294" width="266" height="32" rx="6"/>
+  <text class="on13" x="409" y="314.5" text-anchor="middle">converter writes body + headers</text>
+  </g>
+  <rect class="box a rt" x="560" y="104" width="212" height="96" rx="10" stroke-width="1.2"/>
+  <text class="sm a rt" x="572" y="126">client received</text>
+  <text class="tx a rt" style="font-family:'JetBrains Mono',ui-monospace,monospace" x="572" y="148">HTTP/1.1 200</text>
+  <text class="tx a rt" style="font-family:'JetBrains Mono',ui-monospace,monospace" x="572" y="168">Content-Type: json</text>
+  <text class="tx badt a rt" style="font-family:'JetBrains Mono',ui-monospace,monospace" x="572" y="188">(no X-Trace)</text>
+  <rect class="box a rt" x="560" y="244" width="212" height="96" rx="10" stroke-width="1.2"/>
+  <text class="sm a rt" x="572" y="266">client received</text>
+  <text class="tx a rt" style="font-family:'JetBrains Mono',ui-monospace,monospace" x="572" y="288">HTTP/1.1 200</text>
+  <text class="tx a rt" style="font-family:'JetBrains Mono',ui-monospace,monospace" x="572" y="308">Content-Type: json</text>
+  <text class="tx okt a rt" style="font-family:'JetBrains Mono',ui-monospace,monospace" x="572" y="328">X-Trace: 7f3a…</text>
+  <text class="tx" x="28" y="382">No exception, no log line: the setHeader call just does nothing on a committed response.</text>
+  <text class="sub" x="28" y="404">Use ResponseBodyAdvice, or set the header in a filter before chain.doFilter.</text>
+</svg>
