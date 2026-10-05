@@ -91,7 +91,7 @@ Suggested pictures per page; ⏵ marks an animation.
 - [x] leadership-behavioral/08 Production incidents and postmortems
 - [x] leadership-behavioral/09 Hiring and interviewing others
 - [x] leadership-behavioral/10 Driving engineering standards
-- [ ] leadership-behavioral/11 Failures, mistakes and lessons learned
+- [x] leadership-behavioral/11 Failures, mistakes and lessons learned
 - [ ] leadership-behavioral/12 Questions to ask, salary and role conversations
 - [ ] postgresql-sql/05 Normalisation vs denormalisation
 - [ ] react/09 Routing and protected routes

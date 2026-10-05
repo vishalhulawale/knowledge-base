@@ -66,6 +66,9 @@ flowchart LR
 ```
 *Notice the time split: about half on recovery, lesson and evidence. Interviewers want to see what you do **after** a mistake.*
 
+![Illustrative split of a two-minute failure answer: the weak answer spends most of its time on the situation and what went wrong and ends with a brief lesson, while the strong answer keeps the setup short and spends about 60 percent on recovery, lesson and evidence](images/11-failure-answer-split.svg){ loading=lazy }
+*Notice the strong bar's right half: recovery, lesson and evidence are where the signal is.*
+
 ### Weakness answers
 
 - **A real development area** relevant to the role, but not a core requirement (for a Lead role, don't say "I'm bad at communication").
