@@ -88,7 +88,7 @@ Suggested pictures per page; ⏵ marks an animation.
 - [x] leadership-behavioral/04 Mentoring and growing engineers
 - [x] leadership-behavioral/05 Handling conflict and technical disagreements
 - [x] leadership-behavioral/06 Managing underperformance
-- [ ] leadership-behavioral/08 Production incidents and postmortems
+- [x] leadership-behavioral/08 Production incidents and postmortems
 - [ ] leadership-behavioral/09 Hiring and interviewing others
 - [ ] leadership-behavioral/10 Driving engineering standards
 - [ ] leadership-behavioral/11 Failures, mistakes and lessons learned

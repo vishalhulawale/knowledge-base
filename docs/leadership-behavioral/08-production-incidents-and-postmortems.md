@@ -57,6 +57,9 @@ flowchart LR
 | Scribe | Timeline of events, decisions and commands |
 | Subject-matter experts | Pulled in as needed (DB, upstream team, security) |
 
+![Incident roles: the incident commander in the middle exchanges proposals and decisions with the ops lead and subject-matter experts, the comms lead updates the status page and executives every 15 to 30 minutes, and the scribe records a timeline that feeds the blameless postmortem](images/08-incident-roles.svg){ loading=lazy }
+*Notice that the commander has no arrow into the systems: coordinating and debugging are separate jobs, and an incident needs both.*
+
 **Severity example:**
 
 - **SEV1:** critical user-facing outage or data/security exposure. All hands, executive comms.
