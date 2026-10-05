@@ -82,6 +82,9 @@ flowchart TD
 ### Managing tech debt
 
 - **Classify it:** deliberate vs accidental, prudent vs reckless (Fowler's quadrant). Focus on debt that **slows delivery** or **causes incidents**.
+
+![Fowler's technical debt quadrant: reckless and deliberate debt is a culture problem to push back on, prudent and deliberate debt is fine when recorded with a payback date, reckless and inadvertent debt is a skills gap, and prudent and inadvertent debt is normal learning to refactor as you go](images/10-tech-debt-quadrant.svg){ loading=lazy }
+*Notice that only the left column is a problem with the team; the right column is debt taken on knowingly or learned about honestly.*
 - **Make it visible:** a debt register with impact (hours lost per sprint, incidents, risk) and an estimated cost to fix.
 - **Budget continuously:** a fixed share of capacity (15–20%), plus the "boy scout rule" in code you touch.
 - **Big items:** strangler-fig incremental replacement, not a big-bang rewrite. Tie them to business outcomes (faster feature delivery, compliance).
