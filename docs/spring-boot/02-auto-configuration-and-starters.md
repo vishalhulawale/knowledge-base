@@ -214,6 +214,9 @@ public class JacksonAutoConfiguration {
 
 The rule: **customise before you replace**. Replace only when you really want to own the bean.
 
+![Two ObjectMappers with the same NON_NULL setting: added through a customizer, Boot's layers for spring.jackson properties, the JavaTime, Kotlin and parameter-names modules and other customizers all still apply and LocalDate serialises; declared as your own bean, Boot backs off, every layer is lost and LocalDate throws InvalidDefinitionException](images/02-customise-vs-replace.svg){ loading=lazy }
+*Notice that both sides contain the one setting you wanted. The difference is everything Boot quietly added that the right-hand side lost.*
+
 ### Writing your own starter
 
 A typical platform-team starter: every service gets the same audit publisher without copy-paste. Third-party naming convention is `acme-spring-boot-starter` (module names starting with `spring-boot` are reserved for official ones).
