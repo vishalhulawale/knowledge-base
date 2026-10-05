@@ -81,7 +81,7 @@ Suggested pictures per page; ⏵ marks an animation.
 
 - [x] distributed-systems/01 Fallacies of distributed computing
 - [x] frontend-architecture/04 Design systems and component libraries
-- [ ] graphql/01 GraphQL fundamentals vs REST
+- [x] graphql/01 GraphQL fundamentals vs REST
 - [ ] graphql/03 Resolvers and execution model
 - [ ] javascript-typescript/05 Equality, coercion, immutability
 - [ ] javascript-typescript/09 Output prediction and gotchas

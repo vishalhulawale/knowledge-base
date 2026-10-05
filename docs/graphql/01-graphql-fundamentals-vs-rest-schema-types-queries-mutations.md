@@ -149,6 +149,9 @@ fragment RxSummary on Prescription { id drugName status }
 
 *Partial data + errors is normal in GraphQL. That's why field nullability is a design decision.*
 
+![A request error from a misspelled field fails validation, so nothing executes and the response has errors but no data key; a field error from a failing pharmacy resolver still returns the member and prescriptions with pharmacy null, plus an error whose path points at that field](images/01-request-vs-field-error.svg){ loading=lazy }
+*Notice the missing `data` key on the left: a client that only checks the HTTP status sees 200 in both cases.*
+
 ### GraphQL vs REST
 
 | Aspect | REST | GraphQL |
