@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Contract gates in CI</title>
+  <desc id="d">Two pull requests change the Refill API spec and pass through the same CI gates: Spectral lint, oasdiff breaking change check, code generation and build, and conformance tests. Pull request 1 adds an optional response field; every gate passes and it merges. Pull request 2 makes pharmacyId required and lowers the quantity maximum from 90 to 30; Spectral passes, but oasdiff reports request-property-became-required and request-property-max-decreased as errors and fails the build, so the change never reaches clients.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:16s infinite linear}
+    @keyframes l0{0%{opacity:0}1%{opacity:0}2%,48%{opacity:1}49%{opacity:0}100%{opacity:0}}
+    .l0{animation-name:l0}
+    @keyframes c00{0%{opacity:0}5%{opacity:0}6%,48%{opacity:1}49%{opacity:0}100%{opacity:0}}
+    .c00{animation-name:c00}
+    @keyframes c01{0%{opacity:0}11%{opacity:0}12%,48%{opacity:1}49%{opacity:0}100%{opacity:0}}
+    .c01{animation-name:c01}
+    @keyframes c02{0%{opacity:0}17%{opacity:0}18%,48%{opacity:1}49%{opacity:0}100%{opacity:0}}
+    .c02{animation-name:c02}
+    @keyframes c03{0%{opacity:0}23%{opacity:0}24%,48%{opacity:1}49%{opacity:0}100%{opacity:0}}
+    .c03{animation-name:c03}
+    @keyframes z0{0%{opacity:0}29%{opacity:0}30%,48%{opacity:1}49%{opacity:0}100%{opacity:0}}
+    .z0{animation-name:z0}
+    @keyframes l1{0%{opacity:0}49%{opacity:0}50%,96%{opacity:1}97%{opacity:0}100%{opacity:0}}
+    .l1{animation-name:l1}
+    @keyframes c10{0%{opacity:0}53%{opacity:0}54%,96%{opacity:1}97%{opacity:0}100%{opacity:0}}
+    .c10{animation-name:c10}
+    @keyframes c11{0%{opacity:0}59%{opacity:0}60%,96%{opacity:1}97%{opacity:0}100%{opacity:0}}
+    .c11{animation-name:c11}
+    @keyframes z1{0%{opacity:0}65%{opacity:0}66%,96%{opacity:1}97%{opacity:0}100%{opacity:0}}
+    .z1{animation-name:z1}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      .l0,.z0,.c00,.c01,.c02,.c03{opacity:0!important}
+    }
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Two spec changes through the same pipeline</text>
+  <text class="sub" x="28" y="62">Gates from the page&#x27;s real run: Spectral, oasdiff --fail-on ERR, codegen, conformance.</text>
+  <rect class="bm" x="150" y="100" width="140" height="40" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="220" y="125" text-anchor="middle" font-weight="700">Spectral lint</text>
+  <line class="ln" x1="290" y1="120" x2="302" y2="120" marker-end="url(#ar)"/>
+  <rect class="bm" x="306" y="100" width="140" height="40" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="376" y="125" text-anchor="middle" font-weight="700">oasdiff breaking</text>
+  <line class="ln" x1="446" y1="120" x2="458" y2="120" marker-end="url(#ar)"/>
+  <rect class="bm" x="462" y="100" width="140" height="40" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="532" y="125" text-anchor="middle" font-weight="700">codegen + build</text>
+  <line class="ln" x1="602" y1="120" x2="614" y2="120" marker-end="url(#ar)"/>
+  <rect class="bm" x="618" y="100" width="140" height="40" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="688" y="125" text-anchor="middle" font-weight="700">conformance</text>
+  <text class="lbl a l0" x="28" y="180">PR 1: add optional field note</text>
+  <g class="a c00">
+  <rect class="okf" x="150" y="196" width="140" height="28" rx="5"/>
+  <text class="on13" x="220" y="214.5" text-anchor="middle">pass ✓</text>
+  </g>
+  <g class="a c01">
+  <rect class="okf" x="306" y="196" width="140" height="28" rx="5"/>
+  <text class="on13" x="376" y="214.5" text-anchor="middle">pass ✓</text>
+  </g>
+  <g class="a c02">
+  <rect class="okf" x="462" y="196" width="140" height="28" rx="5"/>
+  <text class="on13" x="532" y="214.5" text-anchor="middle">pass ✓</text>
+  </g>
+  <g class="a c03">
+  <rect class="okf" x="618" y="196" width="140" height="28" rx="5"/>
+  <text class="on13" x="688" y="214.5" text-anchor="middle">pass ✓</text>
+  </g>
+  <text class="tx okt a z0" x="28" y="254">merged: additive change, clients unaffected</text>
+  <text class="lbl a l1" x="28" y="180">PR 2: pharmacyId required, max 90 → 30</text>
+  <g class="a c10">
+  <rect class="okf" x="150" y="196" width="140" height="28" rx="5"/>
+  <text class="on13" x="220" y="214.5" text-anchor="middle">pass ✓</text>
+  </g>
+  <g class="a c11">
+  <rect class="badf" x="306" y="196" width="140" height="28" rx="5"/>
+  <text class="on13" x="376" y="214.5" text-anchor="middle">✕ ERR</text>
+  </g>
+  <text class="tx badt a z1" x="28" y="254">build fails: request-property-became-required, request-property-max-decreased</text>
+  <text class="tx" x="28" y="308">Tools catch mechanical breaks. Removing an optional response field passed oasdiff in the same run;</text>
+  <text class="tx" x="28" y="328">only consumer-driven contract tests know that a client actually reads it.</text>
+</svg>

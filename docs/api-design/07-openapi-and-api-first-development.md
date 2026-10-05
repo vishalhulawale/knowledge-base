@@ -127,6 +127,9 @@ flowchart LR
 - **Clients:** typed clients for TypeScript (`typescript-fetch`, `openapi-typescript`), Java (`java` with RestClient/WebClient libraries) and others. Mobile and SPA teams get compile-time checking against the contract.
 - **Generated code is a build artefact:** regenerate in the build, don't hand-edit it, don't commit it (or commit and check it is up to date).
 
+![One openapi.yaml, reviewed and linted, generates the Spring server interface the controller implements, a TypeScript client, a Java client with docs, and a Prism mock server for the frontend](images/07-spec-artifacts.svg){ loading=lazy }
+*Notice every arrow points away from the spec: nothing is hand-written twice, so nothing can drift.*
+
 ### Code-first with springdoc
 
 `springdoc-openapi` reads Spring MVC mappings, Bean Validation constraints and annotations (`@Operation`, `@Schema`, `@ApiResponse`) and serves the spec at `/v3/api-docs` with Swagger UI at `/swagger-ui.html`. Version 2.x targets Spring Boot 3 (version 3.x targets Boot 4). In CI, start the app or use the Maven/Gradle plugin to export the spec, then lint and diff it like a hand-written one. Disable the UI and docs endpoints in production unless you mean to publish them.
@@ -142,6 +145,9 @@ flowchart LR
 | Mocking | Prism, WireMock with OpenAPI | Lets consumers build and test before the server exists |
 
 **Real run while writing this page:** Spectral's built-in `spectral:oas` ruleset flagged 5 warnings on the sample spec (missing `contact`, missing operation descriptions, tags not declared globally). `oasdiff breaking` on a revised spec reported `request-property-became-required` (new required `pharmacyId`) and `request-property-max-decreased` (quantity maximum 90 → 30) as **errors**, and exited non-zero with `--fail-on ERR`. It did **not** flag removing the optional response field `createdAt`, a reminder that tools catch the mechanical cases, while consumer-driven contract tests catch "a client actually reads that field".
+
+![Animation: a pull request adding an optional field passes Spectral, oasdiff, codegen and conformance and merges; a pull request making pharmacyId required and lowering the quantity maximum passes Spectral but fails oasdiff with request-property-became-required and request-property-max-decreased](images/07-ci-contract-gates.svg){ loading=lazy }
+*Watch PR 2 stop at the second gate: the breaking change is caught in review, before any client sees it.*
 
 ## In practice: code & configuration
 
