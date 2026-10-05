@@ -79,7 +79,7 @@ Suggested pictures per page; ⏵ marks an animation.
 
 ## Priority 2: thin pages (one illustration)
 
-- [ ] distributed-systems/01 Fallacies of distributed computing
+- [x] distributed-systems/01 Fallacies of distributed computing
 - [ ] frontend-architecture/04 Design systems and component libraries
 - [ ] graphql/01 GraphQL fundamentals vs REST
 - [ ] graphql/03 Resolvers and execution model

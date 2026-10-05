@@ -51,6 +51,9 @@ sequenceDiagram
 ```
 *Notice that A **can't distinguish** the three cases. Blindly retrying risks a double charge (cases 2 and 3), and not retrying risks a lost charge (case 1). The only safe answers are **idempotent operations with idempotency keys** and **state you can query** ("what's the status of payment X?").*
 
+![Animation of three lanes with a 2 second timeout: in lane 1 the request is lost and nothing is charged, in lane 2 the payment service charges at 3 seconds after the caller gave up, and in lane 3 the charge happens but the 200 is lost; in all three the caller sees the same timeout at 2 seconds](images/01-timeout-three-outcomes.svg){ loading=lazy }
+*Watch the red line at 2 s cut all three lanes identically: the caller's view is the same, while the payment side ends up in three different states.*
+
 ### Failure models
 
 | Model | Behaviour | Example | Typical handling |
