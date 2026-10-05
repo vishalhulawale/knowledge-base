@@ -66,6 +66,9 @@ flowchart TB
 | High recent attrition, "we need someone urgently" everywhere | Team health issues |
 | Pressure to accept immediately | A negotiation tactic. Ask for time |
 
+![Illustrative notes from four interviewers on the same three questions: they give four different answers to what success in six months looks like and to who decides designs, but agree on a one-week-in-six on-call rotation](images/12-interviewer-cross-check.svg){ loading=lazy }
+*Notice the amber rows: asking every interviewer the same core questions is how you find out the role isn't agreed yet.*
+
 ### Level and title conversations
 
 - **Ask for the career framework** or level expectations, and map your experience to it with evidence: team of 8–10, end-to-end service ownership, standards, hiring, mentoring.
