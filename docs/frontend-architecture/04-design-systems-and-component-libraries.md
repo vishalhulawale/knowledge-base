@@ -184,6 +184,9 @@ With independently deployed MFEs, the design system is a shared dependency with 
 
 A pragmatic setup: tokens delivered as CSS variables by the shell (one source of theme), `@mui/material`, Emotion and React shared as singletons with compatible ranges, and the in-house `@org/ui` wrappers either shared or bundled per MFE, with a policy such as "stay within one major of latest".
 
+![Three micro-frontends on one page: when each bundles its own @org/ui version the Submit buttons look different and the page loads three copies of the library and three CSS-in-JS runtimes; with shell-provided CSS variable tokens and a shared singleton all three buttons match and load once](images/04-mfe-design-system-drift.svg){ loading=lazy }
+*Notice the three different buttons in the top row: users see one product, so version drift between teams shows up as an inconsistent UI.*
+
 ## In practice: code & configuration
 
 ### Theme from tokens
