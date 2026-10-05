@@ -67,6 +67,12 @@ flowchart LR
 2. **Object level (API1, BOLA):** "May *this* member see *this* claim?" Check ownership or tenant on **every** access: `WHERE id = :id AND member_id = :caller`, or an authorisation bean (`@PreAuthorize("@claimAuth.canRead(authentication, #id)")`). Using unguessable ids (UUIDs) helps but is **not** authorisation.
 3. **Property level (API3):** "May they see `ssn`? May they set `status`?" Separate response DTOs per audience (member vs pharmacist vs admin) and request DTOs that only contain writable fields.
 
+![Three nested authorisation checks: function level asks whether a member may call PATCH on claims at all, object level asks whether this member may touch this claim, and property level asks which fields they may read or write](images/06-authz-levels.svg){ loading=lazy }
+*Notice that each inner ring is a separate question: passing the outer one tells you nothing about the inner ones.*
+
+![Animation: member M42 requests their own claim c-1001 and gets it; after editing the id to c-1002, an endpoint that only checks the token returns M77's claim with 200, while one that filters by the caller's member id returns 404](images/06-bola.svg){ loading=lazy }
+*Watch the left lane: the token was valid the whole time. BOLA is a missing WHERE clause, not a broken login.*
+
 ### Input handling
 
 - **Validate everything** at the boundary: types, lengths, ranges, formats, enums (Bean Validation `@Size`, `@Pattern`, `@Min`). Reject unknown fields on sensitive endpoints if you want strictness.

@@ -73,7 +73,7 @@ Suggested pictures per page; ⏵ marks an animation.
 - [x] 03 Pagination: ⏵ offset drift on insert vs keyset cursor; keyset without a tiebreaker (OFFSET cost is already drawn on the Spring Boot page)
 - [x] 04 Versioning: expand-and-contract API change; date-based version pinning (Stripe model)
 - [x] 05 Idempotency keys: ⏵ timeout then retry with the same key returning the stored response; concurrent duplicate gets 409
-- [ ] 06 Security and rate limiting: ⏵ token bucket refill; BOLA (object-level authz) check
+- [x] 06 Security and rate limiting: ⏵ BOLA id swap; three authorisation levels (token bucket is already drawn on the System Design page)
 - [ ] 07 OpenAPI: design-first pipeline (spec → lint → codegen → contract test)
 - [ ] 08 REST vs GraphQL vs gRPC: same screen as N REST calls vs one GraphQL query vs gRPC stream
 
