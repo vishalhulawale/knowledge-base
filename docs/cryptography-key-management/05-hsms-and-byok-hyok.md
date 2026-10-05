@@ -102,6 +102,9 @@ sequenceDiagram
 ```
 *Notice that the key material crosses the network only wrapped under a key whose private half lives in the cloud provider's HSM. The plaintext exists only inside two HSM boundaries.*
 
+![Animation: the key manager creates an EXTERNAL-origin KMS key and receives an RSA-3072 wrapping public key and import token; the customer HSM wraps 32 bytes of key material with RSA-OAEP into a 384-byte blob; ImportKeyMaterial sends the blob and token, and KMS unwraps it inside its HSMs](images/05-byok-import.svg){ loading=lazy }
+*Notice the only thing that ever crosses the network is the orange wrapped blob.*
+
 Reproduced with OpenSSL (the same steps AWS documents for manual import):
 
 | Step | Result |
@@ -151,6 +154,9 @@ sequenceDiagram
 | **BYOK** | Provider HSMs (copy) + your HSM (master) | Yes | Delete imported material (re-import later) | Low |
 | Dedicated cloud HSM (CloudHSM, Managed HSM) | Single-tenant HSM you control | Only via your users/policies | Your control | Medium (you run HA) |
 | **HYOK / XKS / EKM** | Outside the cloud | Only per request, via your system | Unplug instantly | **Highest**: your outage = cloud data outage |
+
+![Three custody models: native KMS keeps the key only in provider HSMs; BYOK keeps a master in your HSM and a wrapped-in copy at the provider; HYOK keeps the only copy in your HSM and the cloud holds a pointer that calls out for every operation](images/05-key-custody-models.svg){ loading=lazy }
+*Notice the HYOK arrow goes both ways on every request: that's the price of instant revocation.*
 
 ## In practice: code & configuration
 
