@@ -49,6 +49,9 @@ flowchart LR
 | Independence | Submit feedback before the debrief to avoid anchoring |
 | Decision | A hiring manager or committee, with clear bar and levelling criteria |
 
+![Two panel plans for four interviewers and six competencies: unplanned, coding and communication are each assessed three times while system design, debugging and ownership are never assessed; planned, each competency is owned by exactly one interviewer](images/09-panel-plan.svg){ loading=lazy }
+*Notice the red gaps on the left: an unplanned loop can end in a confident "hire" with no evidence on system design at all.*
+
 ### Designing good technical questions
 
 - **Coding:** a realistic problem (parse and aggregate events, implement an LRU or rate limiter, fix a bug in a small service), with tests, then extensions (concurrency, scale, edge cases). Look at reasoning, code quality, testing and communication, not trick knowledge.

@@ -89,7 +89,7 @@ Suggested pictures per page; ⏵ marks an animation.
 - [x] leadership-behavioral/05 Handling conflict and technical disagreements
 - [x] leadership-behavioral/06 Managing underperformance
 - [x] leadership-behavioral/08 Production incidents and postmortems
-- [ ] leadership-behavioral/09 Hiring and interviewing others
+- [x] leadership-behavioral/09 Hiring and interviewing others
 - [ ] leadership-behavioral/10 Driving engineering standards
 - [ ] leadership-behavioral/11 Failures, mistakes and lessons learned
 - [ ] leadership-behavioral/12 Questions to ask, salary and role conversations
