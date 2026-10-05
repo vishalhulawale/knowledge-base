@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">What a one-line change rebuilds and pushes</title>
+  <desc id="d">Two images of the same Spring Boot app after a one-line code change. The fat-jar image has a JDK base layer and one 23.6 MB jar layer; the change rebuilds the whole jar layer, so every deploy pushes and pulls 23.6 MB. The layered image has a JRE base plus dependencies (23.5 MB), spring-boot-loader (692 kB), snapshot-dependencies (4 kB) and application (69.6 kB) layers; only the application layer changes, so a deploy moves about 70 kB and the other layers come from cache.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .b{fill:#0f172a;font-size:14px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#4f46e5;font-weight:600}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.ok{fill:#16a34a}.bad{fill:#dc2626}.warn{fill:#d97706}.mut{fill:#94a3b8}
+    .pris{stroke:#4f46e5}.teas{stroke:#0ea5a4}.oks{stroke:#16a34a}.bads{stroke:#dc2626}.warns{stroke:#d97706}.muts{stroke:#94a3b8}
+    .prit{fill:#4f46e5}.teat{fill:#0f766e}.okt{fill:#16a34a}.badt{fill:#dc2626}.warnt{fill:#b45309}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .onm{fill:#ffffff;font-size:13px}
+    .okbg{fill:#16a34a;fill-opacity:.10;stroke:#16a34a;stroke-width:1.5}
+    .badbg{fill:#dc2626;fill-opacity:.08;stroke:#dc2626;stroke-width:1.5}
+    .pribg{fill:#4f46e5;fill-opacity:.10;stroke:#4f46e5;stroke-width:1.5}
+    .teabg{fill:#0ea5a4;fill-opacity:.12;stroke:#0ea5a4;stroke-width:1.5}
+    .line{stroke:#94a3b8;stroke-width:2;fill:none}
+    .ah{fill:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.b{fill:#f1f5f9}.lbl,.t,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .code{fill:#818cf8}.box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.ok{fill:#4ade80}.bad{fill:#f87171}.warn{fill:#fbbf24}.mut{fill:#64748b}
+      .pris{stroke:#818cf8}.teas{stroke:#2dd4bf}.oks{stroke:#4ade80}.bads{stroke:#f87171}.warns{stroke:#fbbf24}.muts{stroke:#64748b}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+      .on,.onm{fill:#0f172a}
+      .okbg{fill:#4ade80;stroke:#4ade80;fill-opacity:.12}.badbg{fill:#f87171;stroke:#f87171;fill-opacity:.10}
+      .pribg{fill:#818cf8;stroke:#818cf8;fill-opacity:.14}.teabg{fill:#2dd4bf;stroke:#2dd4bf;fill-opacity:.14}
+      .line{stroke:#64748b}.ah{fill:#64748b}
+    }
+    .a{opacity:0;animation:10s infinite steps(1,end)}
+    @keyframes ch{0%,6%{opacity:0}8%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes rb{0%,18%{opacity:0}20%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes ca{0%,28%{opacity:0}30%,94%{opacity:1}97%,100%{opacity:0}}
+    @keyframes pu{0%,40%{opacity:0}42%,94%{opacity:1}97%,100%{opacity:0}}
+.ch{animation-name:ch}.rb{animation-name:rb}.ca{animation-name:ca}.pu{animation-name:pu}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">One line of code changed: what gets rebuilt and pushed</text>
+  <text class="sub" x="28" y="62">Same Spring Boot 3.5 app, Docker 29 (BuildKit). Layers stack bottom-up; lower layers change less.</text>
+  <rect class="box" x="24" y="80" width="368" height="280" rx="10"/>
+  <text class="lbl" x="40" y="104">Fat jar (248 MB image)</text>
+  <rect class="box" x="408" y="80" width="368" height="280" rx="10"/>
+  <text class="lbl" x="424" y="104">Layered jar (95 MB image)</text>
+  <rect class="box" x="40" y="232" width="336" height="40" rx="7"/><text class="b" x="54" y="257.0">fat jar</text><text class="t" x="362" y="257.0" text-anchor="end">23.6 MB</text>
+  <rect class="box" x="40" y="280" width="336" height="40" rx="7"/><text class="b" x="54" y="305.0">eclipse-temurin:21-jdk</text><text class="t" x="362" y="305.0" text-anchor="end">base</text>
+  <rect class="box" x="424" y="116" width="336" height="30" rx="7"/><text class="b" x="438" y="136.0">application/</text><text class="t" x="746" y="136.0" text-anchor="end">69.6 kB</text>
+  <rect class="box" x="424" y="152" width="336" height="30" rx="7"/><text class="b" x="438" y="172.0">snapshot-dependencies/</text><text class="t" x="746" y="172.0" text-anchor="end">4 kB</text>
+  <rect class="box" x="424" y="188" width="336" height="30" rx="7"/><text class="b" x="438" y="208.0">spring-boot-loader/</text><text class="t" x="746" y="208.0" text-anchor="end">692 kB</text>
+  <rect class="box" x="424" y="224" width="336" height="40" rx="7"/><text class="b" x="438" y="249.0">dependencies/</text><text class="t" x="746" y="249.0" text-anchor="end">23.5 MB</text>
+  <rect class="box" x="424" y="280" width="336" height="40" rx="7"/><text class="b" x="438" y="305.0">temurin:21-jre-alpine</text><text class="t" x="746" y="305.0" text-anchor="end">base</text>
+  <g class="a rb">
+    <rect class="warn" x="40" y="232" width="336" height="40" rx="7"/><text class="on" x="54" y="257">fat jar: rebuilt</text><text class="on" x="362" y="257" text-anchor="end">23.6 MB</text>
+    <rect class="warn" x="424" y="116" width="336" height="30" rx="7"/><text class="on" x="438" y="136">application/: rebuilt</text><text class="on" x="746" y="136" text-anchor="end">69.6 kB</text>
+  </g>
+  <g class="a ca">
+    <text class="okt" x="40" y="344" font-size="13">base: cached</text>
+    <text class="okt" x="424" y="344" font-size="13">dependencies, loader, snapshot deps, base: cached</text>
+  </g>
+  <g class="a ch"><text class="warnt" x="40" y="132" font-size="14" font-weight="700">Code change →</text><text class="warnt" x="40" y="152" font-size="14" font-weight="700">whole jar changes</text></g>
+  <g class="a pu">
+    <text class="badt" x="28" y="388" font-size="15" font-weight="700">Each deploy: push and pull 23.6 MB per node</text>
+    <text class="okt" x="408" y="388" font-size="15" font-weight="700">Each deploy: about 70 kB</text>
+  </g>
+  <text class="sub" x="28" y="410">Unchanged layers are identified by digest, so registries and nodes reuse them.</text>
+</svg>

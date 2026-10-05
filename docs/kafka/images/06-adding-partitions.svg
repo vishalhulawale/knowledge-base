@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Adding partitions remaps keys</title>
+  <desc id="d">Key rx-7 hashes to 10 in this illustrative example. With 3 partitions, 10 mod 3 is 1, so its events go to P1, and P1 is lagging with APPROVED version 2 still unprocessed. The partition count is raised to 4. Now 10 mod 4 is 2, so the next event, CANCELLED version 3, lands on P2, whose consumer is up to date and applies it first. Later the P1 consumer applies the older APPROVED version 2. Without a version check the prescription goes backwards from CANCELLED to APPROVED. With a version check, version 2 is lower than 3, so it is ignored and the state stays CANCELLED.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .lane{fill:#ffffff;stroke:#cbd5e1}
+    .lanen{fill:#ffffff;stroke:#0ea5a4;stroke-width:2;stroke-dasharray:5 4}
+    .pri{fill:#4f46e5}.bad{fill:#dc2626}
+    .on{fill:#ffffff;font-size:13px;font-weight:700}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .code{fill:#0f172a;font-size:14px;font-weight:600;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .tealt{fill:#0f766e;font-size:14px;font-weight:700}
+    .badt{fill:#dc2626;font-size:14px;font-weight:700}
+    .okt{fill:#15803d;font-size:14px;font-weight:700}
+    .st1{fill:#334155;font-size:15px;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}.arw{fill:#64748b}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.code{fill:#f1f5f9}.lbl,.txt,.st1{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .lane,.box{fill:#111827;stroke:#475569}.lanen{fill:#111827;stroke:#2dd4bf}
+      .pri{fill:#818cf8}.bad{fill:#f87171}.on{fill:#0f172a}
+      .tealt{fill:#5eead4}.badt{fill:#f87171}.okt{fill:#4ade80}
+      .ln{stroke:#94a3b8}.arw{fill:#94a3b8}
+    }
+    /* 12 s loop: s0 0-18%, s1 18-38%, s2 38-58%, s3 58-95% */
+    .st{opacity:0;animation:12s infinite linear}
+    @keyframes k0{0%,18%{opacity:1}18.5%,95.5%{opacity:0}96%,100%{opacity:1}}
+    @keyframes k1{0%,18%{opacity:0}18.5%,38%{opacity:1}38.5%,100%{opacity:0}}
+    @keyframes k2{0%,38%{opacity:0}38.5%,58%{opacity:1}58.5%,100%{opacity:0}}
+    @keyframes k3{0%,58%{opacity:0}58.5%,95.5%{opacity:1}96%,100%{opacity:0}}
+    @keyframes k01{0%,38%{opacity:1}38.5%,95.5%{opacity:0}96%,100%{opacity:1}}
+    @keyframes k123{0%,18%{opacity:0}18.5%,95.5%{opacity:1}96%,100%{opacity:0}}
+    .s0{animation-name:k0}.s1{animation-name:k1}.s2{animation-name:k2}.s3{animation-name:k3}.s01{animation-name:k01}.s123{animation-name:k123}
+    @keyframes cv{0%,38%{opacity:0;transform:translateX(0)}39%{opacity:1;transform:translateX(0)}46%,48%{opacity:1;transform:translateX(194px)}54%{opacity:0;transform:translateX(274px)}100%{opacity:0;transform:translateX(274px)}}
+    @keyframes ap{0%,58%{opacity:1;transform:translateX(0)}64%{opacity:0;transform:translateX(80px)}95%{opacity:0;transform:translateX(80px)}96%,100%{opacity:1;transform:translateX(0)}}
+    .cv{animation:cv 12s infinite linear}.ap{animation:ap 12s infinite linear}
+    @media (prefers-reduced-motion: reduce){
+      .st,.cv,.ap{animation:none}
+      .st{opacity:0}.s3,.s123{opacity:1}
+      .cv,.ap{opacity:0}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">Adding partitions remaps keys</text>
+  <text class="code" x="28" y="66">murmur2("rx-7") = 10 (illustrative)</text>
+  <text class="tealt" x="350" y="66">10 % 3 = 1 → P1</text>
+  <text class="st s123 badt" x="500" y="66">10 % 4 = 2 → P2</text>
+
+  <!-- lanes -->
+  <text class="lbl" x="28" y="111">P0</text>
+  <text class="lbl" x="28" y="155">P1</text><text class="sub" x="56" y="155">lagging</text>
+  <text class="lbl" x="28" y="199">P2</text><text class="sub" x="56" y="199">up to date</text>
+  <rect class="lane" x="140" y="88" width="340" height="34" rx="8"/>
+  <rect class="lane" x="140" y="132" width="340" height="34" rx="8"/>
+  <rect class="lane" x="140" y="176" width="340" height="34" rx="8"/>
+  <g class="st s123">
+    <text class="lbl" x="28" y="243">P3</text><text class="sub" x="56" y="243">new</text>
+    <rect class="lanen" x="140" y="220" width="340" height="34" rx="8"/>
+  </g>
+  <!-- APPROVED v2 waiting on P1 -->
+  <g class="ap"><rect class="pri" x="340" y="136" width="132" height="26" rx="6"/><text class="on" x="406" y="154" text-anchor="middle">APPROVED v2</text></g>
+  <!-- CANCELLED v3 lands on P2 -->
+  <g class="cv"><rect class="bad" x="146" y="180" width="132" height="26" rx="6"/><text class="on" x="212" y="198" text-anchor="middle">CANCELLED v3</text></g>
+  <path class="ln" d="M484 171 H520"/><path class="arw" d="M518 165 L528 171 L518 177 Z"/>
+
+  <!-- state boxes -->
+  <text class="lbl" x="540" y="104">rx-7 state</text>
+  <rect class="box" x="540" y="114" width="232" height="60" rx="10"/>
+  <text class="sub" x="552" y="134">without version check</text>
+  <text class="st s01 st1" x="552" y="160">CREATED v1</text>
+  <text class="st s2 st1" x="552" y="160">CANCELLED v3</text>
+  <text class="st s3 badt" x="552" y="160">APPROVED v2 (backwards!)</text>
+  <rect class="box" x="540" y="186" width="232" height="60" rx="10"/>
+  <text class="sub" x="552" y="206">with version check</text>
+  <text class="st s01 st1" x="552" y="232">CREATED v1</text>
+  <text class="st s2 st1" x="552" y="232">CANCELLED v3</text>
+  <text class="st s3 okt" x="552" y="232">CANCELLED v3 (v2 ignored)</text>
+
+  <!-- narration -->
+  <g class="st s0"><text class="txt" x="28" y="292">1. P1 is behind: APPROVED v2 for rx-7 is still waiting there.</text><text class="txt" x="28" y="312">CREATED v1 was applied earlier.</text></g>
+  <g class="st s1"><text class="txt" x="28" y="292">2. Someone raises the partition count from 3 to 4 to "fix lag".</text><text class="txt" x="28" y="312">Existing records stay where they are. New rx-7 events now go to P2.</text></g>
+  <g class="st s2"><text class="txt" x="28" y="292">3. CANCELLED v3 lands on P2, whose consumer is up to date,</text><text class="txt" x="28" y="312">so it is applied before the older APPROVED v2.</text></g>
+  <g class="st s3"><text class="txt" x="28" y="292">4. P1 finally delivers APPROVED v2. Without a version check rx-7</text><text class="txt" x="28" y="312">goes back to APPROVED; with WHERE version &lt; :v it is ignored.</text></g>
+
+  <text class="sub" x="28" y="364">The hash value is made up for the example; real murmur2 output differs.</text>
+</svg>

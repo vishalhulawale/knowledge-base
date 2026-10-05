@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">A redelivered event with and without a dedupe table</title>
+  <desc id="d">Event evt-9, debit 50 dollars, is processed against an account with a balance of 200, leaving 150. The consumer crashes after the database commit but before the offset commit, so Kafka delivers evt-9 again. Left, without deduplication: the second attempt debits again and the balance drops to 100, a double debit. Right, with a processed_events table written in the same database transaction: the first attempt inserted evt-9, so the second attempt's insert conflicts, the handler skips the event and the balance stays 150.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .tbl{fill:#f1f5f9;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.bad{fill:#dc2626}.teal{fill:#0ea5a4}
+    .on{fill:#ffffff;font-size:13px;font-weight:700}
+    .big{fill:#0f172a;font-size:28px;font-weight:700}
+    .bigbad{fill:#dc2626;font-size:28px;font-weight:700}
+    .bigok{fill:#15803d;font-size:28px;font-weight:700}
+    .code{fill:#334155;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .badt{fill:#dc2626;font-size:14px;font-weight:700}
+    .okt{fill:#15803d;font-size:14px;font-weight:700}
+    .prit{fill:#4f46e5;font-size:13px;font-weight:700}
+    .sep{stroke:#e2e8f0;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.big{fill:#f1f5f9}.lbl,.txt,.code{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.tbl{fill:#1a2233;stroke:#475569}
+      .pri{fill:#818cf8}.bad{fill:#f87171}.teal{fill:#2dd4bf}.on{fill:#0f172a}
+      .bigbad,.badt{fill:#f87171}.bigok,.okt{fill:#4ade80}.prit{fill:#818cf8}
+      .sep{stroke:#334155}
+    }
+    /* 12 s loop: 0-10% before, 10-25% attempt 1 done, 25-45% crash, 45-95% attempt 2 */
+    .st{opacity:0;animation:12s infinite linear}
+    @keyframes a{0%,10%{opacity:1}10.5%,95.5%{opacity:0}96%,100%{opacity:1}}
+    @keyframes b{0%,10%{opacity:0}10.5%,45%{opacity:1}45.5%,100%{opacity:0}}
+    @keyframes c{0%,45%{opacity:0}45.5%,95.5%{opacity:1}96%,100%{opacity:0}}
+    @keyframes bc{0%,10%{opacity:0}10.5%,95.5%{opacity:1}96%,100%{opacity:0}}
+    @keyframes cr{0%,25%{opacity:0}25.5%,45%{opacity:1}45.5%,100%{opacity:0}}
+    @keyframes at1{0%,45%{opacity:1}45.5%,95.5%{opacity:0}96%,100%{opacity:1}}
+    @keyframes s0{0%,10%{opacity:1}10.5%,95.5%{opacity:0}96%,100%{opacity:1}}
+    @keyframes s1{0%,10%{opacity:0}10.5%,25%{opacity:1}25.5%,100%{opacity:0}}
+    .sa{animation-name:a}.sb{animation-name:b}.sc{animation-name:c}.sbc{animation-name:bc}.scr{animation-name:cr}.sat1{animation-name:at1}.ss0{animation-name:s0}.ss1{animation-name:s1}
+    @media (prefers-reduced-motion: reduce){
+      .st{animation:none;opacity:0}
+      .sc,.sbc{opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">Same event delivered twice</text>
+  <line class="sep" x1="400" y1="62" x2="400" y2="244"/>
+
+  <!-- ===== Without dedupe ===== -->
+  <text class="lbl" x="28" y="76">Without dedupe</text>
+  <rect class="pri" x="28" y="88" width="150" height="28" rx="6"/><text class="on" x="103" y="107" text-anchor="middle">evt-9 · debit $50</text>
+  <text class="st sat1 prit" x="190" y="107">attempt 1</text>
+  <text class="st sc prit" x="190" y="107">attempt 2 (redelivery)</text>
+  <rect class="box" x="28" y="130" width="352" height="110" rx="10"/>
+  <text class="sub" x="44" y="154">accounts.balance</text>
+  <text class="st sa big" x="44" y="196">$200</text>
+  <text class="st sb big" x="44" y="196">$150</text>
+  <text class="st sc bigbad" x="44" y="196">$100</text>
+  <text class="st sc badt" x="140" y="194">debited twice</text>
+  <text class="sub" x="44" y="226">UPDATE balance = balance − 50</text>
+
+  <!-- ===== With dedupe table ===== -->
+  <text class="lbl" x="424" y="76">With dedupe table (same DB tx)</text>
+  <rect class="pri" x="424" y="88" width="150" height="28" rx="6"/><text class="on" x="499" y="107" text-anchor="middle">evt-9 · debit $50</text>
+  <text class="st sat1 prit" x="586" y="107">attempt 1</text>
+  <text class="st sc prit" x="586" y="107">attempt 2 (redelivery)</text>
+  <rect class="box" x="424" y="130" width="348" height="110" rx="10"/>
+  <text class="sub" x="440" y="154">accounts.balance</text>
+  <text class="st sa big" x="440" y="196">$200</text>
+  <text class="st sbc bigok" x="440" y="196">$150</text>
+  <text class="sub" x="440" y="226">debit after the insert</text>
+  <!-- processed_events mini table -->
+  <rect class="tbl" x="612" y="142" width="148" height="84" rx="6"/>
+  <text class="sub" x="622" y="162">processed_events</text>
+  <text class="st sbc code" x="622" y="190">ledger, evt-9</text>
+  <text class="st sa sub" x="622" y="190">(empty)</text>
+
+  <!-- crash pill across both -->
+  <g class="st scr">
+    <rect class="bad" x="230" y="254" width="340" height="28" rx="14"/>
+    <text class="on" x="400" y="273" text-anchor="middle">crash after DB commit, before offset commit</text>
+  </g>
+  <!-- outcomes -->
+  <text class="st ss0 txt" x="28" y="306">Kafka delivers evt-9.</text>
+  <text class="st ss0 txt" x="424" y="306">Kafka delivers evt-9.</text>
+  <text class="st ss1 txt" x="28" y="306">Debit applied: $200 → $150.</text>
+  <text class="st ss1 txt" x="424" y="306">Insert evt-9 + debit, one commit.</text>
+  <text class="st sc badt" x="28" y="306">Debit runs again: $150 → $100.</text>
+  <g class="st sc"><text class="okt" x="424" y="306">Insert conflicts on (ledger, evt-9)</text><text class="okt" x="424" y="326">→ skip. Balance stays $150.</text></g>
+
+  <text class="sub" x="28" y="362">Offsets are committed after the DB transaction, so a crash in between always means a redelivery.</text>
+</svg>

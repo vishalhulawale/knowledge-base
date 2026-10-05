@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 386" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Compatibility modes and deploy order</title>
+  <desc id="d">Three panels compare compatibility modes between schema version 1 and version 2. BACKWARD, the default: a reader on v2 can read data written with v1, so consumers are upgraded first; allowed changes are deleting fields and adding fields with defaults. FORWARD: a reader on v1 can read data written with v2, so producers are upgraded first; allowed changes are adding fields and deleting fields with defaults. FULL: both directions work, so either side can deploy first; only fields with defaults can be added or deleted. Same-version reads always work. The transitive variants check against all earlier versions, not just the latest.</desc>
+  <defs>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="okf" d="M0 0 L10 5 L0 10 Z"/></marker>
+    <marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mutf" d="M0 0 L10 5 L0 10 Z"/></marker>
+  </defs>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .code{fill:#0f172a;font-size:16px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .wr{fill:#4f46e5}.rd{fill:#ffffff;stroke:#4f46e5;stroke-width:2}
+    .on{fill:#ffffff;font-size:13px;font-weight:700}
+    .rdt{fill:#4f46e5;font-size:13px;font-weight:700}
+    .ok{stroke:#16a34a;stroke-width:3;fill:none}
+    .mut{stroke:#cbd5e1;stroke-width:2;fill:none;stroke-dasharray:4 4}
+    .okf{fill:#16a34a}.mutf{fill:#cbd5e1}
+    .badge{fill:#0ea5a4}.bt{fill:#ffffff;font-size:13px;font-weight:700}
+    .sep{stroke:#e2e8f0;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.code{fill:#f1f5f9}.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .wr{fill:#818cf8}.rd{fill:#111827;stroke:#818cf8}
+      .on{fill:#0f172a}.rdt{fill:#818cf8}
+      .ok{stroke:#4ade80}.okf{fill:#4ade80}.mut{stroke:#475569}.mutf{fill:#475569}
+      .badge{fill:#2dd4bf}.bt{fill:#0f172a}.sep{stroke:#334155}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="384" rx="14"/>
+  <text class="h" x="28" y="40">Compatibility modes: who can read what, who deploys first</text>
+  <line class="sep" x1="272" y1="66" x2="272" y2="346"/>
+  <line class="sep" x1="528" y1="66" x2="528" y2="346"/>
+
+  <!-- BACKWARD (x0 = 28) -->
+  <text class="code" x="28" y="84">BACKWARD</text><text class="sub" x="122" y="84">(default)</text>
+  <text class="sub" x="28" y="104">new reader reads old data</text>
+  <rect class="wr" x="38" y="120" width="96" height="32" rx="6"/><text class="on" x="86" y="141" text-anchor="middle">data v1</text>
+  <rect class="wr" x="152" y="120" width="96" height="32" rx="6"/><text class="on" x="200" y="141" text-anchor="middle">data v2</text>
+  <rect class="rd" x="38" y="222" width="96" height="32" rx="6"/><text class="rdt" x="86" y="243" text-anchor="middle">reader v1</text>
+  <rect class="rd" x="152" y="222" width="96" height="32" rx="6"/><text class="rdt" x="200" y="243" text-anchor="middle">reader v2</text>
+  <path class="mut" d="M86 154 V216" marker-end="url(#am)"/><path class="mut" d="M200 154 V216" marker-end="url(#am)"/>
+  <path class="ok" d="M96 154 L188 216" marker-end="url(#ag)"/>
+  <rect class="badge" x="28" y="272" width="200" height="26" rx="13"/><text class="bt" x="128" y="290" text-anchor="middle">deploy consumers first</text>
+  <text class="txt" x="28" y="322">Delete fields; add fields</text>
+  <text class="txt" x="28" y="340">with defaults</text>
+
+  <!-- FORWARD (x0 = 284) -->
+  <text class="code" x="284" y="84">FORWARD</text>
+  <text class="sub" x="284" y="104">old reader reads new data</text>
+  <rect class="wr" x="294" y="120" width="96" height="32" rx="6"/><text class="on" x="342" y="141" text-anchor="middle">data v1</text>
+  <rect class="wr" x="408" y="120" width="96" height="32" rx="6"/><text class="on" x="456" y="141" text-anchor="middle">data v2</text>
+  <rect class="rd" x="294" y="222" width="96" height="32" rx="6"/><text class="rdt" x="342" y="243" text-anchor="middle">reader v1</text>
+  <rect class="rd" x="408" y="222" width="96" height="32" rx="6"/><text class="rdt" x="456" y="243" text-anchor="middle">reader v2</text>
+  <path class="mut" d="M342 154 V216" marker-end="url(#am)"/><path class="mut" d="M456 154 V216" marker-end="url(#am)"/>
+  <path class="ok" d="M446 154 L354 216" marker-end="url(#ag)"/>
+  <rect class="badge" x="284" y="272" width="200" height="26" rx="13"/><text class="bt" x="384" y="290" text-anchor="middle">deploy producers first</text>
+  <text class="txt" x="284" y="322">Add fields; delete fields</text>
+  <text class="txt" x="284" y="340">with defaults</text>
+
+  <!-- FULL (x0 = 540) -->
+  <text class="code" x="540" y="84">FULL</text>
+  <text class="sub" x="540" y="104">both directions</text>
+  <rect class="wr" x="550" y="120" width="96" height="32" rx="6"/><text class="on" x="598" y="141" text-anchor="middle">data v1</text>
+  <rect class="wr" x="664" y="120" width="96" height="32" rx="6"/><text class="on" x="712" y="141" text-anchor="middle">data v2</text>
+  <rect class="rd" x="550" y="222" width="96" height="32" rx="6"/><text class="rdt" x="598" y="243" text-anchor="middle">reader v1</text>
+  <rect class="rd" x="664" y="222" width="96" height="32" rx="6"/><text class="rdt" x="712" y="243" text-anchor="middle">reader v2</text>
+  <path class="mut" d="M598 154 V216" marker-end="url(#am)"/><path class="mut" d="M712 154 V216" marker-end="url(#am)"/>
+  <path class="ok" d="M608 154 L700 216" marker-end="url(#ag)"/>
+  <path class="ok" d="M702 154 L610 216" marker-end="url(#ag)"/>
+  <rect class="badge" x="540" y="272" width="200" height="26" rx="13"/><text class="bt" x="640" y="290" text-anchor="middle">deploy in any order</text>
+  <text class="txt" x="540" y="322">Add or delete only fields</text>
+  <text class="txt" x="540" y="340">with defaults</text>
+
+  <text class="sub" x="28" y="372">Green = guaranteed by the mode. *_TRANSITIVE checks against all earlier versions, not only the latest.</text>
+</svg>

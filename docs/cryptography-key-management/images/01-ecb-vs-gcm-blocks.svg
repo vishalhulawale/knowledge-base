@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 372" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">ECB leaks patterns, GCM does not</title>
+  <desc id="d">Three 16-byte plaintext blocks: SSN=123-45-6789!, the same SSN block again, and claim=C42;paid=Y. In ECB mode each block is encrypted independently, so both SSN blocks become the same ciphertext block ff39fd26b9245453 and the repetition is visible. In GCM mode with a unique nonce every block gets a different keystream, so all ciphertext blocks differ, and a 16-byte authentication tag is appended.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .mono{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:13px;fill:#334155}
+    .cb{fill:#4f46e5}.cbt{fill:#ffffff}
+    .tb{fill:#0ea5a4}
+    .dup{fill:none;stroke:#dc2626;stroke-width:3}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}.ok{fill:#16a34a;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .cb{fill:#818cf8}.cbt{fill:#0f172a}.tb{fill:#2dd4bf}
+      .dup{stroke:#f87171}.bad{fill:#f87171}.ok{fill:#4ade80}
+    }
+    /* 10 s loop: ECB blocks 8/16/24%, duplicate highlight 34%, GCM blocks 50/57/64%, tag 71% */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes e1{0%,7%{opacity:0}9%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes e2{0%,15%{opacity:0}17%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes e3{0%,23%{opacity:0}25%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes e4{0%,33%{opacity:0}35%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes g1{0%,49%{opacity:0}51%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes g2{0%,56%{opacity:0}58%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes g3{0%,63%{opacity:0}65%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes g4{0%,70%{opacity:0}72%,93%{opacity:1}97%,100%{opacity:0}}
+    .e1{animation-name:e1}.e2{animation-name:e2}.e3{animation-name:e3}.e4{animation-name:e4}
+    .g1{animation-name:g1}.g2{animation-name:g2}.g3{animation-name:g3}.g4{animation-name:g4}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="370" rx="14"/>
+  <text class="h" x="28" y="40">ECB vs GCM on repeated plaintext</text>
+  <text class="sub" x="28" y="62">AES works on 16-byte blocks. The mode decides whether equal blocks look equal.</text>
+
+  <!-- plaintext -->
+  <text class="lbl" x="28" y="112">Plaintext</text>
+  <text class="sub" x="28" y="130">3 × 16 bytes</text>
+  <rect class="box" x="180" y="92" width="150" height="40" rx="8"/><text class="mono" x="255" y="117" text-anchor="middle">SSN=123-45-6789!</text>
+  <rect class="box" x="340" y="92" width="150" height="40" rx="8"/><text class="mono" x="415" y="117" text-anchor="middle">SSN=123-45-6789!</text>
+  <rect class="box" x="500" y="92" width="150" height="40" rx="8"/><text class="mono" x="575" y="117" text-anchor="middle">claim=C42;paid=Y</text>
+
+  <!-- ECB -->
+  <text class="lbl" x="28" y="186">AES-ECB</text>
+  <text class="sub" x="28" y="204">blocks independent</text>
+  <g class="a e1"><rect class="cb" x="180" y="166" width="150" height="40" rx="8"/><text class="mono cbt" x="255" y="191" text-anchor="middle">ff39fd26b924…</text></g>
+  <g class="a e2"><rect class="cb" x="340" y="166" width="150" height="40" rx="8"/><text class="mono cbt" x="415" y="191" text-anchor="middle">ff39fd26b924…</text></g>
+  <g class="a e3"><rect class="cb" x="500" y="166" width="150" height="40" rx="8"/><text class="mono cbt" x="575" y="191" text-anchor="middle">5e07a1c93b6d…</text></g>
+  <g class="a e4">
+    <rect class="dup" x="176" y="162" width="318" height="48" rx="10"/>
+    <text class="bad" x="180" y="234">✗ Equal plaintext blocks → equal ciphertext blocks: the pattern leaks</text>
+  </g>
+
+  <!-- GCM -->
+  <text class="lbl" x="28" y="282">AES-GCM</text>
+  <text class="sub" x="28" y="300">unique nonce</text>
+  <g class="a g1"><rect class="cb" x="180" y="262" width="150" height="40" rx="8"/><text class="mono cbt" x="255" y="287" text-anchor="middle">3a9c0e71d45b…</text></g>
+  <g class="a g2"><rect class="cb" x="340" y="262" width="150" height="40" rx="8"/><text class="mono cbt" x="415" y="287" text-anchor="middle">c817f4290be6…</text></g>
+  <g class="a g3"><rect class="cb" x="500" y="262" width="150" height="40" rx="8"/><text class="mono cbt" x="575" y="287" text-anchor="middle">94e2b05d7a1f…</text></g>
+  <g class="a g4"><rect class="tb" x="660" y="262" width="112" height="40" rx="8"/><text class="mono cbt" x="716" y="287" text-anchor="middle">tag 16 B</text>
+    <text class="ok" x="180" y="328">✓ Every block differs, and the tag detects any change</text></g>
+
+  <text class="sub" x="28" y="356">The ECB block value was measured on this page; the other ciphertext bytes are illustrative.</text>
+</svg>

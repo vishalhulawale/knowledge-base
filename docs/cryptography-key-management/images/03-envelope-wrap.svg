@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 396" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Envelope encryption step by step</title>
+  <desc id="d">Step 1: the application calls GenerateDataKey; the KMS, where KEK v3 never leaves, returns a data key twice, as a plaintext DEK and as a DEK wrapped by KEK v3. Step 2: the application encrypts 1 MiB of data locally with AES-256-GCM using the plaintext DEK. Step 3: the plaintext DEK is erased from memory. Step 4: storage holds a header with the KEK id, the wrapped DEK and the nonce, next to the ciphertext and tag. Reading it back needs a KMS Decrypt call to unwrap the DEK.</desc>
+  <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ahp" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .txt{fill:#334155;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .kms{fill:#ffffff;stroke:#0ea5a4;stroke-width:2}
+    .mono{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:13px;fill:#334155}
+    .kek{fill:#0ea5a4}.dek{fill:#d97706}.wr{fill:#4f46e5}.ct{fill:#ffffff;font-size:13px;font-weight:700}
+    .cip{fill:#4f46e5;fill-opacity:.16;stroke:#4f46e5}
+    .plain{fill:#ffffff;stroke:#cbd5e1;stroke-dasharray:5 4}
+    .arr{stroke:#64748b;stroke-width:2;fill:none}.ahp{fill:#64748b}
+    .step{fill:#4f46e5;font-size:14px;font-weight:700}
+    .bad{fill:#dc2626;font-size:13px;font-weight:700}
+    .acc{fill:#0f766e;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box,.plain{fill:#111827;stroke:#475569}.kms{fill:#111827;stroke:#2dd4bf}
+      .kek{fill:#2dd4bf}.dek{fill:#fbbf24}.wr{fill:#818cf8}.ct{fill:#0f172a}
+      .cip{fill:#818cf8;stroke:#818cf8}
+      .arr{stroke:#94a3b8}.ahp{fill:#94a3b8}
+      .step{fill:#818cf8}.bad{fill:#f87171}.acc{fill:#5eead4}
+    }
+    /* 12 s loop: step1 8%, step2 28%, step3 48%, step4 64%; hold to 93% */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes k1{0%,7%{opacity:0}9%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes k2{0%,27%{opacity:0}29%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes k4{0%,63%{opacity:0}65%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes dk{0%,7%{opacity:0}9%,47%{opacity:1}50%,100%{opacity:0}}
+    @keyframes er{0%,48%{opacity:0}50%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes pl{0%,27%{opacity:1}29%,95%{opacity:0}99%,100%{opacity:1}}
+    @keyframes c1{0%,7%{opacity:0}9%,27%{opacity:1}29%,100%{opacity:0}}
+    @keyframes c2{0%,27%{opacity:0}29%,47%{opacity:1}49%,100%{opacity:0}}
+    @keyframes c3{0%,47%{opacity:0}49%,63%{opacity:1}65%,100%{opacity:0}}
+    @keyframes c0{0%,7%{opacity:1}9%,95%{opacity:0}99%,100%{opacity:1}}
+    .k1{animation-name:k1}.k2{animation-name:k2}.k4{animation-name:k4}.dk{animation-name:dk}.er{animation-name:er}
+    .pl{animation-name:pl;opacity:1}.c0{animation-name:c0;opacity:1}.c1{animation-name:c1}.c2{animation-name:c2}.c3{animation-name:c3}
+    @media (prefers-reduced-motion: reduce){.a{animation:none}.k1,.k2,.k4,.er{opacity:1}.dk,.pl,.c0,.c1,.c2,.c3{opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="394" rx="14"/>
+  <text class="h" x="28" y="40">Envelope encryption: the KEK wraps the DEK</text>
+  <text class="sub" x="28" y="62">Only a 32-byte key goes through the KMS; the data is encrypted locally.</text>
+
+  <!-- KMS -->
+  <rect class="kms" x="28" y="84" width="220" height="200" rx="12"/>
+  <text class="lbl" x="44" y="108">KMS / HSM</text>
+  <rect class="kek" x="44" y="122" width="188" height="40" rx="8"/>
+  <text class="ct" x="138" y="147" text-anchor="middle">KEK v3</text>
+  <text class="acc" x="44" y="186">never leaves the KMS</text>
+  <text class="sub" x="44" y="226">GenerateDataKey returns</text>
+  <text class="sub" x="44" y="244">the DEK twice: plaintext</text>
+  <text class="sub" x="44" y="262">and wrapped by KEK v3</text>
+
+  <path class="arr" d="M250,144 L276,144" marker-end="url(#ah)"/>
+
+  <!-- App -->
+  <rect class="box" x="280" y="84" width="232" height="200" rx="12"/>
+  <text class="lbl" x="296" y="108">Application</text>
+  <g class="a dk"><rect class="dek" x="296" y="122" width="96" height="40" rx="8"/><text class="ct" x="344" y="147" text-anchor="middle">DEK</text></g>
+  <g class="a er"><rect class="plain" x="296" y="122" width="96" height="40" rx="8"/><text class="bad" x="344" y="147" text-anchor="middle">erased</text></g>
+  <g class="a k1"><rect class="wr" x="400" y="122" width="96" height="40" rx="8"/><text class="ct" x="448" y="147" text-anchor="middle">wrapped</text></g>
+  <g class="a pl"><rect class="plain" x="296" y="184" width="200" height="44" rx="8"/><text class="txt" x="396" y="211" text-anchor="middle">plaintext data, 1 MiB</text></g>
+  <g class="a k2"><rect class="cip" x="296" y="184" width="200" height="44" rx="8"/><text class="txt" x="396" y="211" text-anchor="middle">AES-256-GCM, local</text></g>
+  <text class="sub" x="296" y="260">AES runs at GB/s in process</text>
+
+  <path class="arr" d="M514,206 L536,206" marker-end="url(#ah)"/>
+
+  <!-- Storage -->
+  <rect class="box" x="540" y="84" width="232" height="200" rx="12"/>
+  <text class="lbl" x="556" y="108">Stored envelope</text>
+  <g class="a k4">
+    <rect class="box" x="556" y="120" width="200" height="66" rx="8"/>
+    <text class="sub" x="568" y="140">header</text>
+    <text class="mono" x="568" y="160">kekId=v3, nonce</text>
+    <rect class="wr" x="568" y="166" width="92" height="16" rx="4"/>
+    <text class="sub" x="668" y="179">wrapped DEK</text>
+  </g>
+  <g class="a k2">
+    <rect class="cip" x="556" y="194" width="200" height="74" rx="8"/>
+    <text class="txt" x="656" y="226" text-anchor="middle">ciphertext + tag</text>
+    <text class="sub" x="656" y="246" text-anchor="middle">1 MiB</text>
+  </g>
+
+  <!-- captions -->
+  <text class="a c0 step" x="28" y="320">The app asks the KMS for a data key for keyId + encryption context.</text>
+  <text class="a c1 step" x="28" y="320">1. The KMS returns a plaintext DEK and the same DEK wrapped by KEK v3.</text>
+  <text class="a c2 step" x="28" y="320">2. The app encrypts the data locally with the plaintext DEK.</text>
+  <text class="a c3 step" x="28" y="320">3. The plaintext DEK is erased from memory.</text>
+  <text class="a k4 step" x="28" y="320">4. Stored: header with KEK id, wrapped DEK and nonce, next to the ciphertext.</text>
+  <text class="sub" x="28" y="350">To read it, the app sends the wrapped DEK and the same context to KMS Decrypt,</text>
+  <text class="sub" x="28" y="370">where IAM, key policy and context are checked and the call is audited.</text>
+</svg>

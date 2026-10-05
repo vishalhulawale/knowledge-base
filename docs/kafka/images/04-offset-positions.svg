@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 372" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Committed offset, position and lag</title>
+  <desc id="d">One partition seen by one consumer. Offsets 100 to 104 are processed and committed. 105 and 106 are processed but not yet committed. 107 to 109 were fetched in the current poll but not processed yet. 110 and 111 have not been fetched. The committed offset is 105, the next offset to read. The consumer's position, its next fetch, is 110. The log end offset is 112. Group lag as reported by kafka-consumer-groups is 112 minus 105, which is 7. The client metric records-lag-max is measured from the position, 112 minus 110, which is 2. If the consumer crashes now it restarts from 105 and processes 105 and 106 again.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .slot{fill:#ffffff;stroke:#cbd5e1}
+    .next{fill:none;stroke:#cbd5e1;stroke-dasharray:4 4}
+    .done{fill:#0ea5a4}.proc{fill:#4f46e5}
+    .fetch{fill:#ffffff;stroke:#d97706;stroke-width:2}
+    .on{fill:#ffffff;font-size:13px;font-weight:700}
+    .off{fill:#334155;font-size:13px;font-weight:600}
+    .tealt{fill:#0f766e;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-size:13px;font-weight:700}
+    .badt{fill:#dc2626;font-size:14px;font-weight:700}
+    .mk{fill:#334155}
+    .br{stroke:#64748b;stroke-width:1.5;fill:none}
+    .brp{stroke:#4f46e5;stroke-width:1.5;fill:none}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt,.off{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .slot{fill:#111827;stroke:#475569}.next{stroke:#475569}
+      .done{fill:#2dd4bf}.proc{fill:#818cf8}.fetch{fill:#111827;stroke:#fbbf24}
+      .on{fill:#0f172a}.tealt{fill:#5eead4}.prit{fill:#818cf8}.badt{fill:#f87171}
+      .mk{fill:#e2e8f0}.br{stroke:#94a3b8}.brp{stroke:#818cf8}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="370" rx="14"/>
+  <text class="h" x="28" y="40">Committed offset, position and lag</text>
+
+  <!-- lag brackets -->
+  <text class="lbl" x="515" y="76" text-anchor="middle">group lag = 112 − 105 = 7</text>
+  <path class="br" d="M340 92 V84 H690 V92"/>
+  <text class="prit" x="640" y="114" text-anchor="middle">records-lag-max = 2</text>
+  <path class="brp" d="M590 132 V124 H690 V132"/>
+
+  <!-- offsets 100..111, step 50 -->
+  <g>
+    <rect class="done" x="90" y="140" width="44" height="40" rx="6"/><text class="on" x="112" y="165" text-anchor="middle">100</text>
+    <rect class="done" x="140" y="140" width="44" height="40" rx="6"/><text class="on" x="162" y="165" text-anchor="middle">101</text>
+    <rect class="done" x="190" y="140" width="44" height="40" rx="6"/><text class="on" x="212" y="165" text-anchor="middle">102</text>
+    <rect class="done" x="240" y="140" width="44" height="40" rx="6"/><text class="on" x="262" y="165" text-anchor="middle">103</text>
+    <rect class="done" x="290" y="140" width="44" height="40" rx="6"/><text class="on" x="312" y="165" text-anchor="middle">104</text>
+    <rect class="proc" x="340" y="140" width="44" height="40" rx="6"/><text class="on" x="362" y="165" text-anchor="middle">105</text>
+    <rect class="proc" x="390" y="140" width="44" height="40" rx="6"/><text class="on" x="412" y="165" text-anchor="middle">106</text>
+    <rect class="fetch" x="440" y="140" width="44" height="40" rx="6"/><text class="off" x="462" y="165" text-anchor="middle">107</text>
+    <rect class="fetch" x="490" y="140" width="44" height="40" rx="6"/><text class="off" x="512" y="165" text-anchor="middle">108</text>
+    <rect class="fetch" x="540" y="140" width="44" height="40" rx="6"/><text class="off" x="562" y="165" text-anchor="middle">109</text>
+    <rect class="slot" x="590" y="140" width="44" height="40" rx="6"/><text class="off" x="612" y="165" text-anchor="middle">110</text>
+    <rect class="slot" x="640" y="140" width="44" height="40" rx="6"/><text class="off" x="662" y="165" text-anchor="middle">111</text>
+    <rect class="next" x="690" y="140" width="44" height="40" rx="6"/><text class="sub" x="712" y="165" text-anchor="middle">112</text>
+  </g>
+
+  <!-- pointers (each at the left edge of the offset it names) -->
+  <path class="mk" d="M340 186 L333 198 L347 198 Z"/>
+  <text class="tealt" x="340" y="216" text-anchor="middle">committed = 105</text>
+  <text class="sub" x="340" y="232" text-anchor="middle">next to read after restart</text>
+  <path class="mk" d="M590 186 L583 198 L597 198 Z"/>
+  <text class="prit" x="590" y="216" text-anchor="middle">position = 110</text>
+  <text class="sub" x="590" y="232" text-anchor="middle">next fetch</text>
+  <path class="mk" d="M690 186 L683 198 L697 198 Z"/>
+  <text class="lbl" x="712" y="254" text-anchor="middle">LEO = 112</text>
+  <path class="br" d="M690 200 V238"/>
+
+  <!-- legend -->
+  <rect class="done" x="28" y="276" width="18" height="18" rx="4"/><text class="txt" x="54" y="290">processed and committed</text>
+  <rect class="proc" x="250" y="276" width="18" height="18" rx="4"/><text class="txt" x="276" y="290">processed, not committed</text>
+  <rect class="fetch" x="476" y="276" width="18" height="18" rx="4"/><text class="txt" x="502" y="290">fetched, not processed</text>
+  <rect class="slot" x="28" y="304" width="18" height="18" rx="4"/><text class="txt" x="54" y="318">not fetched yet</text>
+  <rect class="next" x="250" y="304" width="18" height="18" rx="4"/><text class="txt" x="276" y="318">next offset to be written</text>
+
+  <text class="badt" x="28" y="352">Crash now → restart at 105, so 105 and 106 are processed twice (at-least-once).</text>
+</svg>

@@ -89,6 +89,9 @@ Measured validation results:
 | Java with a PKCS12 trust store containing `KB Root CA` | **HTTP 200 via TLSv1.3 TLS_AES_256_GCM_SHA384** |
 | Java connecting to `127.0.0.2` (not in the SAN) | `No subject alternative names matching IP address 127.0.0.2 found` |
 
+![Animation: the server sends the claims.local leaf and the KB Issuing CA intermediate, and the client checks each signature up to KB Root CA in its trust store, then the SAN and dates, giving verify return code 0; when the server sends only the leaf, the issuer can't be found and verification fails with code 21, unable to verify the first certificate](images/02-chain-validation.svg){ loading=lazy }
+*Notice that the root never travels: the client already has it. What the server must supply is the intermediate that links its leaf to that root.*
+
 Validation steps a client performs: build a path to a trust anchor, check each signature, validity dates, basic constraints and path length, key usage and EKU, name constraints, the **hostname against the SANs**, and (optionally) revocation status.
 
 ### Revocation
@@ -221,6 +224,9 @@ java -Djavax.net.debug=ssl:handshake -jar app.jar            # JSSE handshake tr
 - **Let's Encrypt / ACME** issues the majority of public web certificates for free with 90-day lifetimes, and has announced shorter options, driving full automation.
 - **Service meshes** (Istio, Linkerd, Cilium) give every workload an mTLS identity with automatic rotation (hours to days), removing certificate handling from application code.
 - **Enterprise PKI** at banks and healthcare organisations uses an offline root, HSM-protected issuing CAs (Thales Luna, Entrust), and CRL/OCSP infrastructure, the kind of environment CipherTrust integrates with.
+
+![Animation: a timeline where certificate v1 is valid for 90 days; at day 60, 30 days before expiry, cert-manager issues v2 with a new private key, updates the Secret and the app hot-reloads it, so v1 expiring at day 90 causes no outage](images/02-cert-renewal-timeline.svg){ loading=lazy }
+*Watch the overlap: renewal at day 60 leaves a 30-day buffer, so a failed renewal can be noticed and fixed long before v1 expires.*
 
 ## Trade-offs & production gotchas
 

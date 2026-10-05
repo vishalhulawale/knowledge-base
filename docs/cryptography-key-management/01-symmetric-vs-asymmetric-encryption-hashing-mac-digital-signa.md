@@ -59,6 +59,9 @@ One key both encrypts and decrypts. AES is a 128-bit **block** cipher. The **mod
 | **ChaCha20-Poly1305** | AEAD stream cipher, fast without AES hardware | Default on mobile/ARM, in TLS 1.3 |
 | **AES-GCM-SIV / XChaCha20** | Nonce-misuse resistant / 192-bit random nonces | When nonce uniqueness is hard to guarantee |
 
+![Animation: three 16-byte plaintext blocks, two of them both SSN=123-45-6789!; under AES-ECB the two equal blocks encrypt to the same ciphertext block ff39fd26b924…, while under AES-GCM with a unique nonce all blocks differ and a 16-byte tag is appended](images/01-ecb-vs-gcm-blocks.svg){ loading=lazy }
+*Notice the outlined pair: ECB turns equal plaintext blocks into equal ciphertext blocks, so structure shows through without any key.*
+
 **AEAD** = authenticated encryption with associated data: the ciphertext carries a tag (16 bytes for GCM, so a 38-byte plaintext became 54 bytes), and decryption fails unless the ciphertext **and** the associated data (unencrypted context such as a record id) match exactly. Measured:
 
 | Test | Result |
@@ -121,6 +124,9 @@ A hash isn't a MAC: anyone can recompute `SHA-256(message)` after tampering. `SH
 ### MACs and HMAC
 
 `HMAC(K, m) = H((K ⊕ opad) ‖ H((K ⊕ ipad) ‖ m))`: a keyed hash that's secure even with length-extendable hashes. Measured: changing `amount=125` to `amount=126` gave a completely different tag, at **318 MB/s** for HMAC-SHA256. Uses: webhook signatures (Stripe, GitHub `X-Hub-Signature-256`), JWT HS256, API request signing (AWS SigV4 is HMAC-based), cookie and session integrity. Verify with a **constant-time comparison** (`MessageDigest.isEqual`), never `Arrays.equals`/`String.equals`, which leak how many leading bytes matched through timing.
+
+![Animation: an attacker changes amount=125 to amount=126; with a plain SHA-256 hash the attacker recomputes the digest and the change is accepted, while HMAC-SHA256 and a digital signature both reject it because the attacker has neither the shared key nor the private key](images/01-tamper-hash-hmac-signature.svg){ loading=lazy }
+*Watch the hash column: without a key, anyone can recompute the digest. HMAC stops outsiders, and only a signature also stops other key holders.*
 
 ### Digital signatures
 

@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Log compaction</title>
+  <desc id="d">A compacted partition before and after cleaning. Before: offsets 0 to 9 hold A:1, B:1, A:2, C:1, B:2, A:3, a tombstone C:null, B:3, and in the active segment A:4 and D:1. After compaction of the closed segments, offsets 0 to 4 are removed and offsets 5, 6 and 7 (A:3, the C tombstone, B:3) remain with their original offsets. The active segment, A:4 and D:1, is untouched, so key A still appears twice. The tombstone is kept for delete.retention.ms, default 24 hours, and then removed as well.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .slot{fill:#ffffff;stroke:#cbd5e1}
+    .gap{fill:none;stroke:#cbd5e1;stroke-dasharray:4 4}
+    .pri{fill:#4f46e5}.old{fill:#94a3b8}.tomb{fill:#d97706}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .ont{fill:#ffffff;font-size:12px;font-weight:600}
+    .off{fill:#64748b;font-size:12px}
+    .br{stroke:#64748b;stroke-width:1.5;fill:none}
+    .tealt{fill:#0f766e;font-size:13px;font-weight:700}
+    .warnt{fill:#b45309;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub,.off{fill:#94a3b8}
+      .slot{fill:#111827;stroke:#475569}.gap{stroke:#475569}
+      .pri{fill:#818cf8}.old{fill:#64748b}.tomb{fill:#fbbf24}
+      .on,.ont{fill:#0f172a}
+      .br{stroke:#94a3b8}
+      .tealt{fill:#5eead4}.warnt{fill:#fbbf24}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Log compaction keeps at least the latest value per key</text>
+  <text class="sub" x="28" y="62">One partition of a topic with cleanup.policy=compact. Boxes show key:value, small numbers are offsets.</text>
+
+  <!-- BEFORE -->
+  <text class="lbl" x="28" y="122">Before</text>
+  <g>
+    <text class="off" x="140" y="94" text-anchor="middle">0</text><text class="off" x="206" y="94" text-anchor="middle">1</text><text class="off" x="272" y="94" text-anchor="middle">2</text><text class="off" x="338" y="94" text-anchor="middle">3</text><text class="off" x="404" y="94" text-anchor="middle">4</text><text class="off" x="470" y="94" text-anchor="middle">5</text><text class="off" x="536" y="94" text-anchor="middle">6</text><text class="off" x="602" y="94" text-anchor="middle">7</text><text class="off" x="668" y="94" text-anchor="middle">8</text><text class="off" x="734" y="94" text-anchor="middle">9</text>
+    <rect class="old" x="110" y="100" width="60" height="40" rx="8"/><text class="on" x="140" y="125" text-anchor="middle">A:1</text>
+    <rect class="old" x="176" y="100" width="60" height="40" rx="8"/><text class="on" x="206" y="125" text-anchor="middle">B:1</text>
+    <rect class="old" x="242" y="100" width="60" height="40" rx="8"/><text class="on" x="272" y="125" text-anchor="middle">A:2</text>
+    <rect class="old" x="308" y="100" width="60" height="40" rx="8"/><text class="on" x="338" y="125" text-anchor="middle">C:1</text>
+    <rect class="old" x="374" y="100" width="60" height="40" rx="8"/><text class="on" x="404" y="125" text-anchor="middle">B:2</text>
+    <rect class="pri" x="440" y="100" width="60" height="40" rx="8"/><text class="on" x="470" y="125" text-anchor="middle">A:3</text>
+    <rect class="tomb" x="506" y="100" width="60" height="40" rx="8"/><text class="ont" x="536" y="124" text-anchor="middle">C:null</text>
+    <rect class="pri" x="572" y="100" width="60" height="40" rx="8"/><text class="on" x="602" y="125" text-anchor="middle">B:3</text>
+    <rect class="pri" x="638" y="100" width="60" height="40" rx="8"/><text class="on" x="668" y="125" text-anchor="middle">A:4</text>
+    <rect class="pri" x="704" y="100" width="60" height="40" rx="8"/><text class="on" x="734" y="125" text-anchor="middle">D:1</text>
+  </g>
+  <!-- segment brackets -->
+  <path class="br" d="M112 150 V156 H630 V150"/>
+  <text class="sub" x="371" y="174" text-anchor="middle">closed segments: eligible for compaction</text>
+  <path class="br" d="M640 150 V156 H762 V150"/>
+  <text class="sub" x="701" y="174" text-anchor="middle">active segment</text>
+
+  <!-- AFTER -->
+  <text class="lbl" x="28" y="232">After</text>
+  <g>
+    <text class="off" x="140" y="204" text-anchor="middle">0</text><text class="off" x="206" y="204" text-anchor="middle">1</text><text class="off" x="272" y="204" text-anchor="middle">2</text><text class="off" x="338" y="204" text-anchor="middle">3</text><text class="off" x="404" y="204" text-anchor="middle">4</text><text class="off" x="470" y="204" text-anchor="middle">5</text><text class="off" x="536" y="204" text-anchor="middle">6</text><text class="off" x="602" y="204" text-anchor="middle">7</text><text class="off" x="668" y="204" text-anchor="middle">8</text><text class="off" x="734" y="204" text-anchor="middle">9</text>
+    <rect class="gap" x="110" y="210" width="60" height="40" rx="8"/>
+    <rect class="gap" x="176" y="210" width="60" height="40" rx="8"/>
+    <rect class="gap" x="242" y="210" width="60" height="40" rx="8"/>
+    <rect class="gap" x="308" y="210" width="60" height="40" rx="8"/>
+    <rect class="gap" x="374" y="210" width="60" height="40" rx="8"/>
+    <rect class="pri" x="440" y="210" width="60" height="40" rx="8"/><text class="on" x="470" y="235" text-anchor="middle">A:3</text>
+    <rect class="tomb" x="506" y="210" width="60" height="40" rx="8"/><text class="ont" x="536" y="234" text-anchor="middle">C:null</text>
+    <rect class="pri" x="572" y="210" width="60" height="40" rx="8"/><text class="on" x="602" y="235" text-anchor="middle">B:3</text>
+    <rect class="pri" x="638" y="210" width="60" height="40" rx="8"/><text class="on" x="668" y="235" text-anchor="middle">A:4</text>
+    <rect class="pri" x="704" y="210" width="60" height="40" rx="8"/><text class="on" x="734" y="235" text-anchor="middle">D:1</text>
+  </g>
+
+  <!-- notes -->
+  <text class="tealt" x="28" y="290">Offsets never change</text>
+  <text class="txt" x="28" y="310">Offsets 0–4 are gone, so the log has gaps.</text>
+  <text class="txt" x="28" y="330">Order of the remaining records is unchanged.</text>
+  <text class="tealt" x="420" y="290">"At least" the latest value</text>
+  <text class="txt" x="420" y="310">The active segment is never compacted,</text>
+  <text class="txt" x="420" y="330">so key A still appears at 5 and 8.</text>
+  <text class="warnt" x="28" y="364">Tombstone (null value)</text>
+  <text class="txt" x="210" y="364">C:1 removed; C:null kept for delete.retention.ms (24h).</text>
+</svg>

@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Shallow copy versus deep copy</title>
+  <desc id="d">An original Order has an id and an items field pointing to a mutable list. A shallow copy is a new Order object, but its items field points to the same list as the original, so adding an item through the copy also changes the original. A deep copy is a new Order whose items field points to its own new list, so changes stay separate.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .obj{fill:#ffffff;stroke:#4f46e5;stroke-width:2}
+    .objh{fill:#4f46e5}
+    .objt{fill:#fff;font-size:14px;font-weight:700}
+    .list{fill:#0ea5a4;fill-opacity:.12;stroke:#0ea5a4;stroke-width:2}
+    .listt{fill:#0f766e;font-size:13px;font-weight:700}
+    .ln{stroke:#334155;stroke-width:2;fill:none}
+    .ah{fill:#334155}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    .good{fill:#16a34a;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.mono{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .obj{fill:#111827;stroke:#818cf8}.objh{fill:#818cf8}.objt{fill:#0f172a}
+      .list{fill:#2dd4bf;stroke:#2dd4bf}.listt{fill:#5eead4}
+      .ln{stroke:#e2e8f0}.ah{fill:#e2e8f0}
+      .bad{fill:#f87171}.good{fill:#4ade80}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Copying an object with a mutable list</text>
+  <text class="sub" x="28" y="62">Prototype pitfall: a field-by-field copy shares the list instead of copying it.</text>
+
+  <!-- objects -->
+  <rect class="obj" x="28" y="84" width="210" height="96" rx="10"/>
+  <rect class="objh" x="28" y="84" width="210" height="30" rx="10"/><rect class="objh" x="28" y="100" width="210" height="14"/>
+  <text class="objt" x="44" y="105">Original Order</text>
+  <text class="mono" x="44" y="140">id = "O-1"</text>
+  <text class="mono" x="44" y="164">items = ●</text>
+
+  <rect class="obj" x="292" y="84" width="210" height="96" rx="10"/>
+  <rect class="objh" x="292" y="84" width="210" height="30" rx="10"/><rect class="objh" x="292" y="100" width="210" height="14"/>
+  <text class="objt" x="308" y="105">Shallow copy</text>
+  <text class="mono" x="308" y="140">id = "O-1"</text>
+  <text class="mono" x="308" y="164">items = ●</text>
+
+  <rect class="obj" x="562" y="84" width="210" height="96" rx="10"/>
+  <rect class="objh" x="562" y="84" width="210" height="30" rx="10"/><rect class="objh" x="562" y="100" width="210" height="14"/>
+  <text class="objt" x="578" y="105">Deep copy</text>
+  <text class="mono" x="578" y="140">id = "O-1"</text>
+  <text class="mono" x="578" y="164">items = ●</text>
+
+  <!-- lists -->
+  <rect class="list" x="150" y="236" width="262" height="76" rx="10"/>
+  <text class="listt" x="166" y="258">ArrayList (one object)</text>
+  <text class="mono" x="166" y="282">NDC123 × 30</text>
+  <text class="mono" x="166" y="302">NDC456 × 10   ← added via copy</text>
+
+  <rect class="list" x="562" y="236" width="210" height="76" rx="10"/>
+  <text class="listt" x="578" y="258">ArrayList (its own)</text>
+  <text class="mono" x="578" y="282">NDC123 × 30</text>
+
+  <!-- pointers -->
+  <path class="ln" d="M113 160 C 113 210 200 205 220 230"/><path class="ah" d="M214 232 L226 226 L226 240 Z" transform="rotate(10 220 233)"/>
+  <path class="ln" d="M375 160 C 375 210 320 205 300 230"/><path class="ah" d="M294 226 L306 232 L294 240 Z" transform="rotate(-10 300 233)"/>
+  <path class="ln" d="M645 160 V230"/><path class="ah" d="M639 228 L651 228 L645 238 Z"/>
+
+  <text class="bad" x="28" y="346">✗ Shallow: copy.items().add(…) also changes the original's list.</text>
+  <text class="good" x="28" y="370">✓ Deep: new list (new ArrayList&lt;&gt;(other.items)), so changes stay separate.</text>
+</svg>

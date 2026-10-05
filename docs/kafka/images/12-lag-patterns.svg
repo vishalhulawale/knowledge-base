@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Consumer lag patterns</title>
+  <desc id="d">Six small lag-over-time charts with their likely causes. All partitions rising steadily: too few consumers, a slow downstream or an input spike. One partition rising while the others stay flat: a stuck record or a hot key. Sawtooth spikes at deploy times: rebalances. Flat but high: the consumer keeps pace with input but has no spare capacity to catch up. Rising at exactly the produce rate with the committed offset frozen: the group has stopped, crashed or is stuck. Lag on retry topics while the main topic is fine: a downstream dependency is degraded.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .pan{fill:#ffffff;stroke:#e2e8f0}
+    .ax{stroke:#cbd5e1;stroke-width:1.5;fill:none}
+    .l1{stroke:#4f46e5;stroke-width:2.5;fill:none;stroke-linejoin:round}
+    .l2{stroke:#dc2626;stroke-width:2.5;fill:none;stroke-linejoin:round}
+    .l3{stroke:#d97706;stroke-width:2.5;fill:none;stroke-linejoin:round}
+    .dep{stroke:#94a3b8;stroke-width:1;stroke-dasharray:3 3}
+    .tiny{fill:#64748b;font-size:12px}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl{fill:#e2e8f0}.sub,.tiny{fill:#94a3b8}
+      .pan{fill:#111827;stroke:#334155}.ax{stroke:#475569}
+      .l1{stroke:#818cf8}.l2{stroke:#f87171}.l3{stroke:#fbbf24}.dep{stroke:#64748b}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Reading consumer lag charts</text>
+  <text class="sub" x="28" y="62">Each chart is lag over time. The shape points to the cause.</text>
+
+  <!-- panel 1: all rising -->
+  <rect class="pan" x="28" y="76" width="236" height="150" rx="10"/>
+  <text class="lbl" x="40" y="98">All partitions rising</text>
+  <path class="ax" d="M42 110 V168 H250"/>
+  <path class="l1" d="M44 162 L248 118"/><path class="l1" d="M44 165 L248 126"/><path class="l1" d="M44 166 L248 134"/>
+  <text class="sub" x="40" y="194">Too few consumers, slow</text>
+  <text class="sub" x="40" y="212">downstream or input spike</text>
+
+  <!-- panel 2: one partition -->
+  <rect class="pan" x="282" y="76" width="236" height="150" rx="10"/>
+  <text class="lbl" x="294" y="98">One partition rising</text>
+  <path class="ax" d="M296 110 V168 H504"/>
+  <path class="l1" d="M298 162 L502 160"/><path class="l1" d="M298 165 L502 164"/>
+  <path class="l2" d="M298 163 L380 160 L502 116"/>
+  <text class="sub" x="294" y="194">Stuck record (poison pill,</text>
+  <text class="sub" x="294" y="212">blocking retry) or hot key</text>
+
+  <!-- panel 3: sawtooth -->
+  <rect class="pan" x="536" y="76" width="236" height="150" rx="10"/>
+  <text class="lbl" x="548" y="98">Sawtooth at deploys</text>
+  <path class="ax" d="M550 110 V168 H758"/>
+  <line class="dep" x1="590" y1="110" x2="590" y2="168"/><line class="dep" x1="660" y1="110" x2="660" y2="168"/><line class="dep" x1="730" y1="110" x2="730" y2="168"/>
+  <path class="l1" d="M552 162 L590 162 L596 122 L620 160 L660 162 L666 120 L690 160 L730 162 L736 124 L756 158"/>
+  <text class="sub" x="548" y="194">Rebalances: use cooperative,</text>
+  <text class="sub" x="548" y="212">static membership or KIP-848</text>
+
+  <!-- panel 4: flat high -->
+  <rect class="pan" x="28" y="238" width="236" height="150" rx="10"/>
+  <text class="lbl" x="40" y="260">Flat but high</text>
+  <path class="ax" d="M42 272 V330 H250"/>
+  <path class="l1" d="M44 326 L80 284 L248 286"/>
+  <text class="sub" x="40" y="356">Keeps pace with input, no</text>
+  <text class="sub" x="40" y="374">spare capacity to catch up</text>
+
+  <!-- panel 5: frozen -->
+  <rect class="pan" x="282" y="238" width="236" height="150" rx="10"/>
+  <text class="lbl" x="294" y="260">Rising at the produce rate</text>
+  <path class="ax" d="M296 272 V330 H504"/>
+  <path class="l1" d="M298 326 L360 324"/><path class="l2" d="M360 324 L502 276"/>
+  <text class="tiny" x="364" y="314">commits stop</text>
+  <text class="sub" x="294" y="356">Group stopped, crashed or</text>
+  <text class="sub" x="294" y="374">stuck: committed offset frozen</text>
+
+  <!-- panel 6: retry topics -->
+  <rect class="pan" x="536" y="238" width="236" height="150" rx="10"/>
+  <text class="lbl" x="548" y="260">Lag on retry topics</text>
+  <path class="ax" d="M550 272 V330 H758"/>
+  <path class="l1" d="M552 326 L756 324"/><path class="l3" d="M552 325 L620 322 L756 282"/>
+  <text class="tiny" x="690" y="318">main</text><text class="tiny" x="680" y="292">-retry-*</text>
+  <text class="sub" x="548" y="356">A downstream dependency</text>
+  <text class="sub" x="548" y="374">is degraded</text>
+</svg>

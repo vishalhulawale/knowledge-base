@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 384" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Rotating a KEK: re-wrap versus re-encrypt</title>
+  <desc id="d">Two ways to move four stored objects from KEK v2 to KEK v3. On the left, only each object's small header is rewritten: the wrapped DEK is re-wrapped under v3 and the data ciphertext is untouched; measured on 2,000 one-MiB objects this took 24 ms and rewrote 67 bytes per object. On the right, every object's data is decrypted and re-encrypted with a new DEK, rewriting all of it; the same 2,000 objects took 3,167 ms and rewrote 2,000 MiB.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .v2{fill:#4f46e5}.v3{fill:#0ea5a4}.ct{fill:#ffffff;font-size:13px;font-weight:700}
+    .data{fill:#cbd5e1}.new{fill:#0ea5a4;fill-opacity:.55}
+    .big{fill:#0f172a;font-size:18px;font-weight:700}
+    .ok{fill:#16a34a;font-size:14px;font-weight:700}.warn{fill:#d97706;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.big{fill:#f1f5f9}.lbl{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .v2{fill:#818cf8}.v3{fill:#2dd4bf}.ct{fill:#0f172a}
+      .data{fill:#475569}.new{fill:#2dd4bf}
+      .ok{fill:#4ade80}.warn{fill:#fbbf24}
+    }
+    /* 10 s loop: left headers flip at 8/11/14/17%; right rows rewrite 10-27, 27-44, 44-61, 61-78% */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes h1{0%,7%{opacity:0}8%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes h2{0%,10%{opacity:0}11%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes h3{0%,13%{opacity:0}14%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes h4{0%,16%{opacity:0}17%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes rl{0%,19%{opacity:0}21%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes rr{0%,78%{opacity:0}80%,93%{opacity:1}97%,100%{opacity:0}}
+    .h1{animation-name:h1}.h2{animation-name:h2}.h3{animation-name:h3}.h4{animation-name:h4}.rl{animation-name:rl}.rr{animation-name:rr}
+    .sw{transform-box:fill-box;transform-origin:left center;transform:scaleX(0);animation:10s infinite linear}
+    @keyframes w1{0%,10%{transform:scaleX(0)}27%,95%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+    @keyframes w2{0%,27%{transform:scaleX(0)}44%,95%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+    @keyframes w3{0%,44%{transform:scaleX(0)}61%,95%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+    @keyframes w4{0%,61%{transform:scaleX(0)}78%,95%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+    @keyframes g1{0%,26%{opacity:0}27%,95%{opacity:1}100%{opacity:0}}
+    @keyframes g2{0%,43%{opacity:0}44%,95%{opacity:1}100%{opacity:0}}
+    @keyframes g3{0%,60%{opacity:0}61%,95%{opacity:1}100%{opacity:0}}
+    @keyframes g4{0%,77%{opacity:0}78%,95%{opacity:1}100%{opacity:0}}
+    .w1{animation-name:w1}.w2{animation-name:w2}.w3{animation-name:w3}.w4{animation-name:w4}
+    .g1{animation-name:g1}.g2{animation-name:g2}.g3{animation-name:g3}.g4{animation-name:g4}
+    @media (prefers-reduced-motion: reduce){.a,.sw{animation:none}.a{opacity:1}.sw{transform:scaleX(1)}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="382" rx="14"/>
+  <text class="h" x="28" y="40">KEK rotation: re-wrap, don't re-encrypt</text>
+  <text class="sub" x="28" y="62">Each row is one stored object: a small header with the wrapped DEK, then the data ciphertext.</text>
+
+  <text class="lbl" x="28" y="98">Re-wrap DEKs under KEK v3</text>
+  <text class="lbl" x="412" y="98">Decrypt + re-encrypt all data</text>
+
+  <!-- left rows -->
+  <g>
+    <rect class="v2" x="28" y="114" width="56" height="34" rx="6"/><text class="ct" x="56" y="136" text-anchor="middle">v2</text>
+    <rect class="v2" x="28" y="162" width="56" height="34" rx="6"/><text class="ct" x="56" y="184" text-anchor="middle">v2</text>
+    <rect class="v2" x="28" y="210" width="56" height="34" rx="6"/><text class="ct" x="56" y="232" text-anchor="middle">v2</text>
+    <rect class="v2" x="28" y="258" width="56" height="34" rx="6"/><text class="ct" x="56" y="280" text-anchor="middle">v2</text>
+  </g>
+  <g class="a h1"><rect class="v3" x="28" y="114" width="56" height="34" rx="6"/><text class="ct" x="56" y="136" text-anchor="middle">v3</text></g>
+  <g class="a h2"><rect class="v3" x="28" y="162" width="56" height="34" rx="6"/><text class="ct" x="56" y="184" text-anchor="middle">v3</text></g>
+  <g class="a h3"><rect class="v3" x="28" y="210" width="56" height="34" rx="6"/><text class="ct" x="56" y="232" text-anchor="middle">v3</text></g>
+  <g class="a h4"><rect class="v3" x="28" y="258" width="56" height="34" rx="6"/><text class="ct" x="56" y="280" text-anchor="middle">v3</text></g>
+  <rect class="data" x="92" y="114" width="290" height="34" rx="6"/>
+  <rect class="data" x="92" y="162" width="290" height="34" rx="6"/>
+  <rect class="data" x="92" y="210" width="290" height="34" rx="6"/>
+  <rect class="data" x="92" y="258" width="290" height="34" rx="6"/>
+  <text class="sub" x="237" y="136" text-anchor="middle">data unchanged</text>
+
+  <!-- right rows -->
+  <g>
+    <rect class="v2" x="412" y="114" width="56" height="34" rx="6"/><text class="ct" x="440" y="136" text-anchor="middle">v2</text>
+    <rect class="v2" x="412" y="162" width="56" height="34" rx="6"/><text class="ct" x="440" y="184" text-anchor="middle">v2</text>
+    <rect class="v2" x="412" y="210" width="56" height="34" rx="6"/><text class="ct" x="440" y="232" text-anchor="middle">v2</text>
+    <rect class="v2" x="412" y="258" width="56" height="34" rx="6"/><text class="ct" x="440" y="280" text-anchor="middle">v2</text>
+  </g>
+  <g class="a g1"><rect class="v3" x="412" y="114" width="56" height="34" rx="6"/><text class="ct" x="440" y="136" text-anchor="middle">v3</text></g>
+  <g class="a g2"><rect class="v3" x="412" y="162" width="56" height="34" rx="6"/><text class="ct" x="440" y="184" text-anchor="middle">v3</text></g>
+  <g class="a g3"><rect class="v3" x="412" y="210" width="56" height="34" rx="6"/><text class="ct" x="440" y="232" text-anchor="middle">v3</text></g>
+  <g class="a g4"><rect class="v3" x="412" y="258" width="56" height="34" rx="6"/><text class="ct" x="440" y="280" text-anchor="middle">v3</text></g>
+  <rect class="data" x="476" y="114" width="296" height="34" rx="6"/>
+  <rect class="data" x="476" y="162" width="296" height="34" rx="6"/>
+  <rect class="data" x="476" y="210" width="296" height="34" rx="6"/>
+  <rect class="data" x="476" y="258" width="296" height="34" rx="6"/>
+  <rect class="sw w1 new" x="476" y="114" width="296" height="34" rx="6"/>
+  <rect class="sw w2 new" x="476" y="162" width="296" height="34" rx="6"/>
+  <rect class="sw w3 new" x="476" y="210" width="296" height="34" rx="6"/>
+  <rect class="sw w4 new" x="476" y="258" width="296" height="34" rx="6"/>
+
+  <g class="a rl"><text class="big" x="28" y="330">24 ms</text><text class="ok" x="96" y="329">67 B rewritten per object</text></g>
+  <g class="a rr"><text class="big" x="412" y="330">3,167 ms</text><text class="warn" x="522" y="329">2,000 MiB rewritten</text></g>
+  <text class="sub" x="28" y="364">Measured on 2,000 × 1 MiB objects in memory; real storage I/O widens the gap further.</text>
+</svg>

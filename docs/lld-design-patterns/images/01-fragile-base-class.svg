@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Fragile base class: inheritance versus composition</title>
+  <desc id="d">Both sides call addAll with three elements a, b and c. Left, InstrumentedHashSet extends HashSet: its addAll adds 3 to addCount, then super.addAll calls this.add for each element, and because this is the subclass, its overridden add runs and increments addCount three more times, ending at 6 instead of 3. Right, InstrumentedSet wraps a Set: its addAll adds 3 and forwards to delegate.addAll; the delegate's own add calls stay inside the delegate and never reach the wrapper, so addCount ends at 3.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .code{fill:#ffffff;stroke:#cbd5e1}
+    .inner{fill:#0ea5a4;fill-opacity:.12;stroke:#0ea5a4;stroke-width:1.5;stroke-dasharray:5 4}
+    .innert{fill:#0f766e;font-size:13px;font-weight:600}
+    .badh{fill:#dc2626;font-size:15px;font-weight:700}
+    .goodh{fill:#16a34a;font-size:15px;font-weight:700}
+    .cnt{font-size:26px;font-weight:700}
+    .bad{fill:#dc2626}.good{fill:#16a34a}.neutral{fill:#0f172a}
+    .note{fill:#b45309;font-size:13px;font-weight:600}
+    .div{stroke:#e2e8f0;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.mono,.neutral{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .code{fill:#111827;stroke:#475569}
+      .inner{fill:#2dd4bf;stroke:#2dd4bf}.innert{fill:#5eead4}
+      .badh,.bad{fill:#f87171}.goodh,.good{fill:#4ade80}.note{fill:#fbbf24}
+      .div{stroke:#334155}
+    }
+    /* 10 s loop: the trace builds up line by line; the counter follows */
+    .a{opacity:0;animation:10s infinite linear}
+    .c0{opacity:1}
+    @keyframes l1{0%,8%{opacity:0}9%,95%{opacity:1}97%,100%{opacity:0}}.l1{animation-name:l1}
+  @keyframes l2{0%,20%{opacity:0}21%,95%{opacity:1}97%,100%{opacity:0}}.l2{animation-name:l2}
+  @keyframes l3{0%,30%{opacity:0}31%,95%{opacity:1}97%,100%{opacity:0}}.l3{animation-name:l3}
+  @keyframes l4{0%,42%{opacity:0}43%,95%{opacity:1}97%,100%{opacity:0}}.l4{animation-name:l4}
+  @keyframes l5{0%,54%{opacity:0}55%,95%{opacity:1}97%,100%{opacity:0}}.l5{animation-name:l5}
+  @keyframes l6{0%,64%{opacity:0}65%,95%{opacity:1}97%,100%{opacity:0}}.l6{animation-name:l6}
+  @keyframes r1{0%,8%{opacity:0}9%,95%{opacity:1}97%,100%{opacity:0}}.r1{animation-name:r1}
+  @keyframes r2{0%,20%{opacity:0}21%,95%{opacity:1}97%,100%{opacity:0}}.r2{animation-name:r2}
+  @keyframes r3{0%,30%{opacity:0}31%,95%{opacity:1}97%,100%{opacity:0}}.r3{animation-name:r3}
+  @keyframes r4{0%,64%{opacity:0}65%,95%{opacity:1}97%,100%{opacity:0}}.r4{animation-name:r4}
+  @keyframes c0{0%,8%{opacity:1}9%,96%{opacity:0}98%,100%{opacity:1}}.c0{animation-name:c0}
+  @keyframes c3{0%,8%{opacity:0}9%,30%{opacity:1}31%,100%{opacity:0}}.c3{animation-name:c3}
+  @keyframes c4{0%,30%{opacity:0}31%,42%{opacity:1}43%,100%{opacity:0}}.c4{animation-name:c4}
+  @keyframes c5{0%,42%{opacity:0}43%,54%{opacity:1}55%,100%{opacity:0}}.c5{animation-name:c5}
+  @keyframes c6{0%,54%{opacity:0}55%,95%{opacity:1}97%,100%{opacity:0}}.c6{animation-name:c6}
+  @keyframes k3{0%,8%{opacity:0}9%,95%{opacity:1}97%,100%{opacity:0}}.k3{animation-name:k3}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none;opacity:1}.c0,.c3,.c4,.c5{opacity:0}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">addAll(List.of(a, b, c)): why the count doubles</text>
+  <text class="sub" x="28" y="62">Same overrides on both sides. Only the relationship to HashSet differs.</text>
+  <line class="div" x1="400" y1="80" x2="400" y2="400"/>
+
+  <text class="badh" x="28" y="100">✗ extends HashSet</text>
+  <text class="sub" x="28" y="120">InstrumentedHashSet</text>
+  <rect class="code" x="28" y="138" width="352" height="152" rx="10"/>
+  <text class="mono a l1" x="44" y="168">addAll(c): addCount += 3</text>
+  <text class="mono a l2" x="44" y="194">super.addAll(c)</text>
+  <text class="mono a l3" x="60" y="220">→ this.add(a): addCount++</text>
+  <text class="mono a l4" x="60" y="246">→ this.add(b): addCount++</text>
+  <text class="mono a l5" x="60" y="272">→ this.add(c): addCount++</text>
+  <text class="note a l6" x="28" y="314">HashSet's addAll calls add(), and "this" is the</text>
+  <text class="note a l6" x="28" y="332">subclass, so the overridden add() counts again.</text>
+  <text class="sub" x="28" y="372">addCount</text>
+  <text class="cnt neutral a c0" x="100" y="376">0</text>
+  <text class="cnt bad a c3" x="100" y="376">3</text>
+  <text class="cnt bad a c4" x="100" y="376">4</text>
+  <text class="cnt bad a c5" x="100" y="376">5</text>
+  <text class="cnt bad a c6" x="100" y="376">6</text>
+  <text class="lbl bad a c6" x="134" y="374">expected 3</text>
+
+  <text class="goodh" x="420" y="100">✓ wraps a Set (composition)</text>
+  <text class="sub" x="420" y="120">InstrumentedSet</text>
+  <rect class="code" x="420" y="138" width="352" height="152" rx="10"/>
+  <text class="mono a r1" x="436" y="168">addAll(c): addCount += 3</text>
+  <text class="mono a r2" x="436" y="194">delegate.addAll(c)</text>
+  <g class="a r3">
+    <rect class="inner" x="448" y="208" width="308" height="70" rx="8"/>
+    <text class="innert" x="462" y="232">Inside the delegate HashSet:</text>
+    <text class="mono" x="462" y="256">add(a), add(b), add(c)</text>
+  </g>
+  <text class="note a r4" x="420" y="314">The delegate's add() calls run on the delegate</text>
+  <text class="note a r4" x="420" y="332">and never reach the wrapper.</text>
+  <text class="sub" x="420" y="372">addCount</text>
+  <text class="cnt neutral a c0" x="492" y="376">0</text>
+  <text class="cnt good a k3" x="492" y="376">3</text>
+</svg>

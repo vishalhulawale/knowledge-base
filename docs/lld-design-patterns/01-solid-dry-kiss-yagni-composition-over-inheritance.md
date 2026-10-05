@@ -54,6 +54,9 @@ A subtype must work anywhere the base type is expected, without surprises:
 - `ReadOnlyAccount extends Account` with `withdraw()` throwing.
 - Overriding `equals` in a subclass and breaking symmetry.
 
+![Animation: a resize method sets width 5 and height 4 and expects area 20; a Rectangle goes from 3 by 2 to 5 by 4 and passes, while a Square goes from 3 by 3 to 5 by 5 to 4 by 4 and ends with area 16](images/01-lsp-square-rectangle.svg){ loading=lazy }
+*Watch the square after `setWidth(5)`: it changes its height too. Code written against `Rectangle` can't expect that, so the substitution breaks.*
+
 Java's own `List.of(...)` throwing on `add` is a known compromise: the `List` contract marks mutators as *optional*.
 
 ### I: Interface Segregation
@@ -95,6 +98,9 @@ classDiagram
 - It's static: you can't change behaviour at runtime.
 - Single inheritance in Java.
 - Deep hierarchies hide behaviour.
+
+![Animation: addAll with three elements on a HashSet subclass counts 3, then HashSet's addAll calls the overridden add three more times and the count reaches 6; the forwarding wrapper counts 3 because the delegate's add calls never reach it](images/01-fragile-base-class.svg){ loading=lazy }
+*Notice that the overrides are identical on both sides. The subclass breaks only because of how `HashSet` happens to implement `addAll`, which is the fragile base class problem.*
 
 **When inheritance is fine:** a genuine is-a relationship, a base class **designed and documented for extension** (template method, or `abstract` with `protected` hooks), the same package or team, and sealed hierarchies for closed sets of variants.
 

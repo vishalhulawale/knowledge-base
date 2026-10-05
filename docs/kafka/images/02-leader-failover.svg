@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Partition leader failover</title>
+  <desc id="d">Five steps for partition orders-P0 with replication factor 3. One: broker 1 is leader, brokers 2 and 3 are in-sync followers, leader epoch 5, and clients talk to broker 1. Two: broker 1 crashes and stops heartbeating, and after broker.session.timeout.ms of 9 seconds the controller fences it. Three: the controller elects broker 2 from the ISR and bumps the leader epoch to 6; the ISR is now brokers 2 and 3 and clients refresh metadata and retry against broker 2. Four: broker 1 restarts as a follower, truncates any divergent records using the leader epoch and catches up. Five: broker 1 rejoins the ISR and preferred-leader election moves leadership back to it, with leader epoch 7.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .slot{fill:#ffffff;stroke:#cbd5e1}
+    .lead{fill:none;stroke:#4f46e5;stroke-width:3}
+    .down{fill:#fee2e2;stroke:#dc2626;stroke-width:2;stroke-dasharray:6 4}
+    .catch{fill:none;stroke:#d97706;stroke-width:2;stroke-dasharray:6 4}
+    .prit{fill:#4f46e5;font-size:14px;font-weight:700}
+    .badt{fill:#dc2626;font-size:14px;font-weight:700}
+    .warnt{fill:#b45309;font-size:14px;font-weight:700}
+    .okt{fill:#15803d;font-size:14px;font-weight:600}
+    .tealt{fill:#0f766e;font-size:14px;font-weight:700}
+    .ln{stroke:#4f46e5;stroke-width:2;fill:none}
+    .arw{fill:#4f46e5}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .slot{fill:#111827;stroke:#475569}
+      .lead{stroke:#818cf8}.down{fill:#3b1d24;stroke:#f87171}.catch{stroke:#fbbf24}
+      .prit{fill:#818cf8}.badt{fill:#f87171}.warnt{fill:#fbbf24}.okt{fill:#4ade80}.tealt{fill:#5eead4}
+      .ln{stroke:#818cf8}.arw{fill:#818cf8}
+    }
+    /* 12 s loop, five stages */
+    .st{opacity:0;animation:12s infinite linear}
+    @keyframes k0{0%,15%{opacity:1}15.5%,95.5%{opacity:0}96%,100%{opacity:1}}
+    @keyframes k1{0%,15.5%{opacity:0}16%,30%{opacity:1}30.5%,100%{opacity:0}}
+    @keyframes k2{0%,30.5%{opacity:0}31%,55%{opacity:1}55.5%,100%{opacity:0}}
+    @keyframes k3{0%,55.5%{opacity:0}56%,75%{opacity:1}75.5%,100%{opacity:0}}
+    @keyframes k4{0%,75.5%{opacity:0}76%,95.5%{opacity:1}96%,100%{opacity:0}}
+    @keyframes k01{0%,30%{opacity:1}30.5%,95.5%{opacity:0}96%,100%{opacity:1}}
+    @keyframes k12{0%,15.5%{opacity:0}16%,55%{opacity:1}55.5%,100%{opacity:0}}
+    @keyframes k23{0%,30.5%{opacity:0}31%,75%{opacity:1}75.5%,100%{opacity:0}}
+    @keyframes k04{0%,15%{opacity:1}15.5%,75.5%{opacity:0}76%,100%{opacity:1}}
+    @keyframes k014{0%,30%{opacity:1}30.5%,75.5%{opacity:0}76%,100%{opacity:1}}
+    .s0{animation-name:k0}.s1{animation-name:k1}.s2{animation-name:k2}.s3{animation-name:k3}.s4{animation-name:k4}
+    .s01{animation-name:k01}.s12{animation-name:k12}.s23{animation-name:k23}.s04{animation-name:k04}.s014{animation-name:k014}
+    @media (prefers-reduced-motion: reduce){
+      .st{animation:none;opacity:0}
+      .s2,.s12,.s23{opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">What happens when a partition leader's broker dies</text>
+  <text class="sub" x="28" y="62">Partition orders-P0, replication.factor=3, acks=all, min.insync.replicas=2.</text>
+
+  <!-- clients and arrows to the current leader -->
+  <rect class="slot" x="310" y="76" width="180" height="32" rx="8"/>
+  <text class="txt" x="400" y="97" text-anchor="middle">Producers / consumers</text>
+  <g class="st s04"><path class="ln" d="M330 108 L176 144"/><path class="arw" d="M172 138 L162 147 L175 150 Z"/></g>
+  <g class="st s23"><path class="ln" d="M400 108 V140"/><path class="arw" d="M394 138 L400 148 L406 138 Z"/></g>
+
+  <!-- brokers -->
+  <rect class="slot" x="60" y="150" width="200" height="96" rx="10"/>
+  <rect class="slot" x="300" y="150" width="200" height="96" rx="10"/>
+  <rect class="slot" x="540" y="150" width="200" height="96" rx="10"/>
+  <rect class="st s04 lead" x="60" y="150" width="200" height="96" rx="10"/>
+  <rect class="st s12 down" x="60" y="150" width="200" height="96" rx="10"/>
+  <rect class="st s3 catch" x="60" y="150" width="200" height="96" rx="10"/>
+  <rect class="st s23 lead" x="300" y="150" width="200" height="96" rx="10"/>
+  <text class="lbl" x="160" y="178" text-anchor="middle">Broker 1</text>
+  <text class="lbl" x="400" y="178" text-anchor="middle">Broker 2</text>
+  <text class="lbl" x="640" y="178" text-anchor="middle">Broker 3</text>
+  <text class="sub" x="160" y="230" text-anchor="middle">orders-P0 replica</text>
+  <text class="sub" x="400" y="230" text-anchor="middle">orders-P0 replica</text>
+  <text class="sub" x="640" y="230" text-anchor="middle">orders-P0 replica</text>
+  <!-- roles -->
+  <text class="st s04 prit" x="160" y="204" text-anchor="middle">Leader</text>
+  <text class="st s12 badt" x="160" y="204" text-anchor="middle">Down (fenced)</text>
+  <text class="st s3 warnt" x="160" y="204" text-anchor="middle">Follower, catching up</text>
+  <text class="st s014 okt" x="400" y="204" text-anchor="middle">Follower (in ISR)</text>
+  <text class="st s23 prit" x="400" y="204" text-anchor="middle">Leader</text>
+  <text class="okt" x="640" y="204" text-anchor="middle">Follower (in ISR)</text>
+
+  <!-- ISR + epoch -->
+  <text class="st s0 tealt" x="60" y="278">ISR {1, 2, 3}  ·  leader epoch 5</text>
+  <text class="st s1 tealt" x="60" y="278">ISR {1, 2, 3}  ·  leader epoch 5  ·  no live leader: produce and fetch fail</text>
+  <text class="st s2 tealt" x="60" y="278">ISR {2, 3}  ·  leader epoch 6  ·  writes continue (ISR 2 ≥ min ISR 2)</text>
+  <text class="st s3 tealt" x="60" y="278">ISR {2, 3}  ·  leader epoch 6</text>
+  <text class="st s4 tealt" x="60" y="278">ISR {1, 2, 3}  ·  leader epoch 7</text>
+
+  <!-- step narration -->
+  <g class="st s0"><text class="txt" x="60" y="310">1. Broker 1 leads orders-P0. Brokers 2 and 3 follow and are in the ISR.</text><text class="txt" x="60" y="330">Clients send produce and fetch requests to the leader.</text></g>
+  <g class="st s1"><text class="txt" x="60" y="310">2. Broker 1 crashes and stops heartbeating to the active controller.</text><text class="txt" x="60" y="330">After broker.session.timeout.ms (9s) the controller fences it.</text></g>
+  <g class="st s2"><text class="txt" x="60" y="310">3. The controller elects broker 2 from the ISR and bumps the leader epoch.</text><text class="txt" x="60" y="330">Clients get NOT_LEADER_OR_FOLLOWER, refresh metadata and retry.</text></g>
+  <g class="st s3"><text class="txt" x="60" y="310">4. Broker 1 restarts as a follower, truncates any divergent tail by</text><text class="txt" x="60" y="330">leader epoch (KIP-101), then catches up from broker 2.</text></g>
+  <g class="st s4"><text class="txt" x="60" y="310">5. Broker 1 rejoins the ISR. Preferred-leader election moves leadership</text><text class="txt" x="60" y="330">back to it (auto.leader.rebalance.enable=true by default).</text></g>
+
+  <text class="sub" x="28" y="364">Epoch numbers are illustrative. Every leader change bumps the epoch.</text>
+</svg>

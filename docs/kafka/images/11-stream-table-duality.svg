@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 330" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">KStream vs KTable</title>
+  <desc id="d">The same five records arrive in order: A:1, B:5, A:3, C:2 and B:null. Read as a KStream, every record is an independent event and all five are kept. Read as a KTable, each record upserts the latest value for its key: A becomes 1 then 3, B becomes 5, C becomes 2, and the null value for B is a tombstone that deletes B. The final table holds A=3 and C=2.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .slot{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tomb{fill:#d97706}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .cell{fill:#0f172a;font-size:15px;font-weight:700}
+    .del{fill:#dc2626;font-size:14px;font-weight:600}
+    .hd{fill:#64748b;font-size:13px;font-weight:700}
+    .row{fill:#ffffff;stroke:#cbd5e1}
+    .sep{stroke:#e2e8f0;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.cell{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub,.hd{fill:#94a3b8}
+      .slot,.row{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tomb{fill:#fbbf24}.on{fill:#0f172a}.del{fill:#f87171}
+      .sep{stroke:#334155}
+    }
+    /* 10 s loop: records at 10, 25, 40, 55, 70% */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes r10{0%,10%{opacity:0}11%,95%{opacity:1}96%,100%{opacity:0}}
+    @keyframes r25{0%,25%{opacity:0}26%,95%{opacity:1}96%,100%{opacity:0}}
+    @keyframes r40{0%,40%{opacity:0}41%,95%{opacity:1}96%,100%{opacity:0}}
+    @keyframes r55{0%,55%{opacity:0}56%,95%{opacity:1}96%,100%{opacity:0}}
+    @keyframes r70{0%,70%{opacity:0}71%,95%{opacity:1}96%,100%{opacity:0}}
+    @keyframes a1{0%,10%{opacity:0}11%,40%{opacity:1}41%,100%{opacity:0}}
+    @keyframes b5{0%,25%{opacity:0}26%,70%{opacity:1}71%,100%{opacity:0}}
+    .r10{animation-name:r10}.r25{animation-name:r25}.r40{animation-name:r40}.r55{animation-name:r55}.r70{animation-name:r70}
+    .a1{animation-name:a1}.b5{animation-name:b5}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none;opacity:1}.a1,.b5{opacity:0}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="328" rx="14"/>
+  <text class="h" x="28" y="40">Same records, two readings: KStream vs KTable</text>
+  <line class="sep" x1="430" y1="66" x2="430" y2="270"/>
+
+  <!-- stream -->
+  <text class="lbl" x="28" y="84">KStream: every record is an event</text>
+  <g>
+    <rect class="slot" x="28" y="100" width="70" height="40" rx="8"/><rect class="slot" x="106" y="100" width="70" height="40" rx="8"/><rect class="slot" x="184" y="100" width="70" height="40" rx="8"/><rect class="slot" x="262" y="100" width="70" height="40" rx="8"/><rect class="slot" x="340" y="100" width="70" height="40" rx="8"/>
+  </g>
+  <g class="a r10"><rect class="pri" x="28" y="100" width="70" height="40" rx="8"/><text class="on" x="63" y="125" text-anchor="middle">A:1</text></g>
+  <g class="a r25"><rect class="pri" x="106" y="100" width="70" height="40" rx="8"/><text class="on" x="141" y="125" text-anchor="middle">B:5</text></g>
+  <g class="a r40"><rect class="pri" x="184" y="100" width="70" height="40" rx="8"/><text class="on" x="219" y="125" text-anchor="middle">A:3</text></g>
+  <g class="a r55"><rect class="pri" x="262" y="100" width="70" height="40" rx="8"/><text class="on" x="297" y="125" text-anchor="middle">C:2</text></g>
+  <g class="a r70"><rect class="tomb" x="340" y="100" width="70" height="40" rx="8"/><text class="on" x="375" y="125" text-anchor="middle">B:null</text></g>
+  <text class="sub" x="28" y="162">arrival order →</text>
+  <text class="txt" x="28" y="200">Insert semantics: all five records count.</text>
+  <text class="txt" x="28" y="220">A filter or count sees A twice.</text>
+
+  <!-- table -->
+  <text class="lbl" x="454" y="84">KTable: latest value per key</text>
+  <text class="hd" x="470" y="110">KEY</text><text class="hd" x="570" y="110">VALUE</text>
+  <rect class="row" x="454" y="118" width="318" height="34" rx="6"/>
+  <rect class="row" x="454" y="158" width="318" height="34" rx="6"/>
+  <rect class="row" x="454" y="198" width="318" height="34" rx="6"/>
+  <text class="a r10 cell" x="470" y="141">A</text>
+  <text class="a a1 cell" x="570" y="141">1</text>
+  <text class="a r40 cell" x="570" y="141">3</text>
+  <text class="a r25 cell" x="470" y="181">B</text>
+  <text class="a b5 cell" x="570" y="181">5</text>
+  <text class="a r70 del" x="570" y="181">deleted (tombstone)</text>
+  <text class="a r55 cell" x="470" y="221">C</text>
+  <text class="a r55 cell" x="570" y="221">2</text>
+  <text class="txt" x="454" y="258">Upsert semantics: final state A=3, C=2.</text>
+
+  <text class="sub" x="28" y="306">Orange = null value: deletes the key in a KTable, just another event in a KStream.</text>
+</svg>

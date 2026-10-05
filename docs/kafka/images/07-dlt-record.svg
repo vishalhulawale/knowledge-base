@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Anatomy of a dead-letter record</title>
+  <desc id="d">A record that failed at topic orders, partition 3, offset 100 is published by DeadLetterPublishingRecoverer to orders-dlt on the same partition number, 3, so the dead-letter topic needs at least as many partitions as the source. The dead-letter record keeps the original key and value and adds diagnostic headers: kafka_dlt-original-topic orders, kafka_dlt-original-partition 3, kafka_dlt-original-offset 100, kafka_dlt-original-timestamp, kafka_dlt-original-consumer-group fulfilment, kafka_dlt-exception-fqcn, kafka_dlt-exception-message and kafka_dlt-exception-stacktrace.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .slot{fill:#ffffff;stroke:#cbd5e1}
+    .rec{fill:#ffffff;stroke:#4f46e5;stroke-width:2}
+    .pri{fill:#4f46e5}.bad{fill:#dc2626}
+    .on{fill:#ffffff;font-size:13px;font-weight:700}
+    .hk{fill:#0f766e;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .hv{fill:#334155;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .sec{fill:#64748b;font-size:12px;font-weight:700;letter-spacing:.06em}
+    .row{fill:#f1f5f9}
+    .prit{fill:#4f46e5;font-size:14px;font-weight:700}
+    .badt{fill:#dc2626;font-size:14px;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}.arw{fill:#64748b}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt,.hv{fill:#e2e8f0}.sub,.sec{fill:#94a3b8}
+      .slot{fill:#111827;stroke:#475569}.rec{fill:#111827;stroke:#818cf8}
+      .pri{fill:#818cf8}.bad{fill:#f87171}.on{fill:#0f172a}
+      .hk{fill:#5eead4}.row{fill:#273042}
+      .prit{fill:#818cf8}.badt{fill:#f87171}
+      .ln{stroke:#94a3b8}.arw{fill:#94a3b8}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">What lands in the dead-letter topic</text>
+
+  <!-- source topic -->
+  <text class="lbl" x="28" y="78">orders</text>
+  <rect class="slot" x="28" y="88" width="130" height="26" rx="5"/><text class="sub" x="38" y="106">P0</text>
+  <rect class="slot" x="28" y="118" width="130" height="26" rx="5"/><text class="sub" x="38" y="136">P1</text>
+  <rect class="slot" x="28" y="148" width="130" height="26" rx="5"/><text class="sub" x="38" y="166">P2</text>
+  <rect class="slot" x="28" y="178" width="130" height="26" rx="5"/><text class="sub" x="38" y="196">P3</text>
+  <rect class="bad" x="92" y="181" width="60" height="20" rx="4"/><text class="on" x="122" y="196" text-anchor="middle">100</text>
+  <text class="badt" x="28" y="226">retries exhausted</text>
+
+  <!-- dlt topic -->
+  <text class="lbl" x="28" y="262">orders-dlt</text>
+  <rect class="slot" x="28" y="272" width="130" height="26" rx="5"/><text class="sub" x="38" y="290">P0</text>
+  <rect class="slot" x="28" y="302" width="130" height="26" rx="5"/><text class="sub" x="38" y="320">P1</text>
+  <rect class="slot" x="28" y="332" width="130" height="26" rx="5"/><text class="sub" x="38" y="350">P2</text>
+  <rect class="slot" x="28" y="362" width="130" height="26" rx="5"/><text class="sub" x="38" y="380">P3</text>
+  <rect class="pri" x="92" y="365" width="60" height="20" rx="4"/><text class="on" x="122" y="380" text-anchor="middle">DLT</text>
+  <path class="ln" d="M164 191 C 210 191, 210 375, 164 375"/><path class="arw" d="M168 369 L158 375 L168 381 Z"/>
+  <text class="prit" x="214" y="270">same</text>
+  <text class="prit" x="214" y="288">partition</text>
+  <text class="prit" x="214" y="306">number</text>
+
+  <!-- record anatomy -->
+  <rect class="rec" x="320" y="62" width="452" height="320" rx="12"/>
+  <text class="sec" x="338" y="88">KEY</text>
+  <text class="hv" x="420" y="88">ord-42  (unchanged)</text>
+  <text class="sec" x="338" y="114">VALUE</text>
+  <text class="hv" x="420" y="114">original payload bytes</text>
+  <text class="sec" x="338" y="144">HEADERS ADDED</text>
+  <rect class="row" x="332" y="154" width="428" height="24" rx="4"/>
+  <text class="hk" x="340" y="171">kafka_dlt-original-topic</text><text class="hv" x="752" y="171" text-anchor="end">orders</text>
+  <text class="hk" x="340" y="197">kafka_dlt-original-partition</text><text class="hv" x="752" y="197" text-anchor="end">3</text>
+  <rect class="row" x="332" y="206" width="428" height="24" rx="4"/>
+  <text class="hk" x="340" y="223">kafka_dlt-original-offset</text><text class="hv" x="752" y="223" text-anchor="end">100</text>
+  <text class="hk" x="340" y="249">kafka_dlt-original-timestamp</text><text class="hv" x="752" y="249" text-anchor="end">…</text>
+  <rect class="row" x="332" y="258" width="428" height="24" rx="4"/>
+  <text class="hk" x="340" y="275">kafka_dlt-original-consumer-group</text><text class="hv" x="752" y="275" text-anchor="end">fulfilment</text>
+  <text class="hk" x="340" y="301">kafka_dlt-exception-fqcn</text><text class="hv" x="752" y="301" text-anchor="end">…Exception</text>
+  <rect class="row" x="332" y="310" width="428" height="24" rx="4"/>
+  <text class="hk" x="340" y="327">kafka_dlt-exception-message</text><text class="hv" x="752" y="327" text-anchor="end">…</text>
+  <text class="hk" x="340" y="353">kafka_dlt-exception-stacktrace</text><text class="hv" x="752" y="353" text-anchor="end">…</text>
+  <text class="sub" x="338" y="374">@RetryableTopic DLTs use ORIGINAL_* / EXCEPTION_* instead.</text>
+</svg>

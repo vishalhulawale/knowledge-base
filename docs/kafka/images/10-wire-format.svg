@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Schema Registry wire format</title>
+  <desc id="d">The bytes of a record value written by a Schema Registry serializer. Avro: one magic byte 0x00, then a 4-byte big-endian schema ID, here 00 00 00 2A which is 42, then the Avro binary data, which has no field names. Protobuf: the same magic byte and schema ID, then message-index bytes saying which message in the .proto file was used, then the Protobuf data. The consumer reads the ID, fetches schema 42 from the registry once and caches it, then decodes the data with that writer schema.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .mg{fill:#64748b}.id{fill:#d97706}.pl{fill:#4f46e5}.mi{fill:#0ea5a4}
+    .on{fill:#ffffff;font-size:14px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .onp{fill:#ffffff;font-size:14px;font-weight:600}
+    .mgt{fill:#475569;font-size:13px;font-weight:700}
+    .idt{fill:#b45309;font-size:13px;font-weight:700}
+    .plt{fill:#4f46e5;font-size:13px;font-weight:700}
+    .mit{fill:#0f766e;font-size:13px;font-weight:700}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}.arw{fill:#64748b}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .mg{fill:#94a3b8}.id{fill:#fbbf24}.pl{fill:#818cf8}.mi{fill:#2dd4bf}
+      .on,.onp{fill:#0f172a}
+      .mgt{fill:#cbd5e1}.idt{fill:#fbbf24}.plt{fill:#818cf8}.mit{fill:#5eead4}
+      .box{fill:#111827;stroke:#475569}
+      .ln{stroke:#94a3b8}.arw{fill:#94a3b8}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">What a registry-serialized record value looks like</text>
+  <text class="sub" x="28" y="62">The prefix sits inside the record value, not in a Kafka header (the default wire format).</text>
+
+  <!-- Avro row -->
+  <text class="lbl" x="28" y="124">Avro</text>
+  <text class="mgt" x="155" y="94" text-anchor="middle">magic</text>
+  <text class="idt" x="300" y="94" text-anchor="middle">schema ID (4 bytes)</text>
+  <text class="plt" x="580" y="94" text-anchor="middle">Avro binary data</text>
+  <rect class="mg" x="120" y="102" width="70" height="36" rx="6"/><text class="on" x="155" y="125" text-anchor="middle">00</text>
+  <rect class="id" x="196" y="102" width="50" height="36" rx="6"/><text class="on" x="221" y="125" text-anchor="middle">00</text>
+  <rect class="id" x="250" y="102" width="50" height="36" rx="6"/><text class="on" x="275" y="125" text-anchor="middle">00</text>
+  <rect class="id" x="304" y="102" width="50" height="36" rx="6"/><text class="on" x="329" y="125" text-anchor="middle">00</text>
+  <rect class="id" x="358" y="102" width="50" height="36" rx="6"/><text class="on" x="383" y="125" text-anchor="middle">2A</text>
+  <rect class="pl" x="414" y="102" width="340" height="36" rx="6"/><text class="onp" x="584" y="125" text-anchor="middle">field values only, no names</text>
+  <text class="sub" x="302" y="158" text-anchor="middle">big-endian: 0x2A = schema 42</text>
+
+  <!-- Protobuf row -->
+  <text class="lbl" x="28" y="224">Protobuf</text>
+  <text class="mit" x="460" y="194" text-anchor="middle">message index</text>
+  <text class="plt" x="634" y="194" text-anchor="middle">Protobuf data</text>
+  <rect class="mg" x="120" y="202" width="70" height="36" rx="6"/><text class="on" x="155" y="225" text-anchor="middle">00</text>
+  <rect class="id" x="196" y="202" width="50" height="36" rx="6"/><text class="on" x="221" y="225" text-anchor="middle">00</text>
+  <rect class="id" x="250" y="202" width="50" height="36" rx="6"/><text class="on" x="275" y="225" text-anchor="middle">00</text>
+  <rect class="id" x="304" y="202" width="50" height="36" rx="6"/><text class="on" x="329" y="225" text-anchor="middle">00</text>
+  <rect class="id" x="358" y="202" width="50" height="36" rx="6"/><text class="on" x="383" y="225" text-anchor="middle">2A</text>
+  <rect class="mi" x="414" y="202" width="92" height="36" rx="6"/><text class="onp" x="460" y="225" text-anchor="middle">which msg</text>
+  <rect class="pl" x="512" y="202" width="242" height="36" rx="6"/><text class="onp" x="633" y="225" text-anchor="middle">field-numbered data</text>
+
+  <!-- lookup -->
+  <rect class="box" x="28" y="282" width="150" height="40" rx="8"/><text class="txt" x="103" y="307" text-anchor="middle">Consumer reads 42</text>
+  <path class="ln" d="M180 302 H226"/><path class="arw" d="M224 296 L234 302 L224 308 Z"/>
+  <rect class="box" x="236" y="282" width="220" height="40" rx="8"/><text class="txt" x="346" y="307" text-anchor="middle">Registry: get schema 42</text>
+  <path class="ln" d="M458 302 H504"/><path class="arw" d="M502 296 L512 302 L502 308 Z"/>
+  <rect class="box" x="514" y="282" width="240" height="40" rx="8"/><text class="txt" x="634" y="307" text-anchor="middle">Decode with writer schema</text>
+  <text class="sub" x="346" y="342" text-anchor="middle">once per ID, then cached</text>
+  <text class="sub" x="28" y="366">5 bytes of overhead for Avro instead of the full schema in every message.</text>
+</svg>

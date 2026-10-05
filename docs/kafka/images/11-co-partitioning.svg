@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 372" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Co-partitioning for a stream-table join</title>
+  <desc id="d">Left, claims re-keyed by providerId, 3 partitions. Right, the providers table keyed by providerId, 3 partitions. Kafka Streams creates one task per partition number: task 0 reads partition 0 of both topics, task 1 reads partition 1 of both, task 2 reads partition 2 of both. A claim for provider p-7 and the provider record p-7 both hash to partition 1, so task 1 finds the match in its local store. If the claims stayed keyed by claimId, or the partition counts or partitioners differed, matching keys would land in different tasks and the join would silently miss.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .part{fill:#ffffff;stroke:#cbd5e1}
+    .task{fill:#ffffff;stroke:#4f46e5;stroke-width:2}
+    .hit{fill:#ffffff;stroke:#16a34a;stroke-width:3}
+    .pri{fill:#4f46e5}.teal{fill:#0ea5a4}
+    .on{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-size:14px;font-weight:700}
+    .okt{fill:#15803d;font-size:14px;font-weight:700}
+    .ln{stroke:#94a3b8;stroke-width:2;fill:none}
+    .lnok{stroke:#16a34a;stroke-width:2.5;fill:none}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .part{fill:#111827;stroke:#475569}.task{fill:#111827;stroke:#818cf8}.hit{fill:#111827;stroke:#4ade80}
+      .pri{fill:#818cf8}.teal{fill:#2dd4bf}.on{fill:#0f172a}
+      .prit{fill:#818cf8}.okt{fill:#4ade80}
+      .ln{stroke:#64748b}.lnok{stroke:#4ade80}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="370" rx="14"/>
+  <text class="h" x="28" y="40">Co-partitioning: partition N of both topics → task N</text>
+
+  <!-- claims -->
+  <text class="lbl" x="28" y="80">claims (key = providerId)</text>
+  <rect class="part" x="28" y="94" width="200" height="50" rx="8"/><text class="sub" x="40" y="124">P0</text>
+  <rect class="part" x="28" y="160" width="200" height="50" rx="8"/><text class="sub" x="40" y="190">P1</text>
+  <rect class="part" x="28" y="226" width="200" height="50" rx="8"/><text class="sub" x="40" y="256">P2</text>
+  <rect class="pri" x="76" y="172" width="140" height="26" rx="6"/><text class="on" x="146" y="190" text-anchor="middle">claim c-31, p-7</text>
+
+  <!-- providers -->
+  <text class="lbl" x="572" y="80">providers (key = providerId)</text>
+  <rect class="part" x="572" y="94" width="200" height="50" rx="8"/><text class="sub" x="584" y="124">P0</text>
+  <rect class="part" x="572" y="160" width="200" height="50" rx="8"/><text class="sub" x="584" y="190">P1</text>
+  <rect class="part" x="572" y="226" width="200" height="50" rx="8"/><text class="sub" x="584" y="256">P2</text>
+  <rect class="teal" x="620" y="172" width="140" height="26" rx="6"/><text class="on" x="690" y="190" text-anchor="middle">provider p-7</text>
+
+  <!-- tasks -->
+  <rect class="task" x="320" y="98" width="160" height="42" rx="8"/><text class="prit" x="400" y="124" text-anchor="middle">task 0</text>
+  <rect class="hit" x="320" y="164" width="160" height="42" rx="8"/><text class="okt" x="400" y="190" text-anchor="middle">task 1: join p-7</text>
+  <rect class="task" x="320" y="230" width="160" height="42" rx="8"/><text class="prit" x="400" y="256" text-anchor="middle">task 2</text>
+  <path class="ln" d="M230 119 H318"/><path class="ln" d="M570 119 H482"/>
+  <path class="lnok" d="M230 185 H318"/><path class="lnok" d="M570 185 H482"/>
+  <path class="ln" d="M230 251 H318"/><path class="ln" d="M570 251 H482"/>
+
+  <text class="txt" x="28" y="310">Both sides need the same key, the same partition count and the same partitioner.</text>
+  <text class="txt" x="28" y="330">A count mismatch fails at startup; a different key or partitioner silently misses.</text>
+  <text class="sub" x="28" y="356">A GlobalKTable avoids this: every instance holds a full copy of the table.</text>
+</svg>

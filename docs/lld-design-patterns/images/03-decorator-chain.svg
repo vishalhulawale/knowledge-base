@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Decorator chain for pricing</title>
+  <desc id="d">The client calls priceOf on a TimedPricing decorator, which wraps CachingPricing, which wraps the PbmSoapPricingAdapter that calls the vendor's LegacyPbmSoapPort. On the first call the cache misses, so the request travels through every layer to the SOAP service and the price comes back through each layer, filling the cache. On the second call for the same NDC the cache hits and the answer returns from CachingPricing without reaching the adapter. TimedPricing, the outermost layer, times both calls, including the cache hit.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .client{fill:#ffffff;stroke:#64748b;stroke-width:2}
+    .l1{fill:#4f46e5;fill-opacity:.08;stroke:#4f46e5;stroke-width:2}
+    .l2{fill:#0ea5a4;fill-opacity:.10;stroke:#0ea5a4;stroke-width:2}
+    .l3{fill:#d97706;fill-opacity:.10;stroke:#d97706;stroke-width:2}
+    .vend{fill:#ffffff;stroke:#64748b;stroke-width:2;stroke-dasharray:6 4}
+    .t1{fill:#4f46e5;font-size:13px;font-weight:700}
+    .t2{fill:#0f766e;font-size:13px;font-weight:700}
+    .t3{fill:#b45309;font-size:13px;font-weight:700}
+    .req{fill:#4f46e5}.resp{fill:#16a34a}
+    .miss{fill:#dc2626;font-size:13px;font-weight:700}
+    .hit{fill:#16a34a;font-size:13px;font-weight:700}
+    .track{stroke:#cbd5e1;stroke-width:1.5;stroke-dasharray:3 5}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.mono{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .client,.vend{fill:#111827;stroke:#94a3b8}
+      .l1{fill:#818cf8;stroke:#818cf8}.l2{fill:#2dd4bf;stroke:#2dd4bf}.l3{fill:#fbbf24;stroke:#fbbf24}
+      .t1{fill:#818cf8}.t2{fill:#5eead4}.t3{fill:#fbbf24}
+      .req{fill:#818cf8}.resp{fill:#4ade80}
+      .miss{fill:#f87171}.hit{fill:#4ade80}.track{stroke:#475569}
+    }
+    /* 10 s loop. Call 1 (miss): request 4-20%, response 22-38%. Call 2 (hit): request 52-60%, response 62-70%. */
+    .rq{animation:rq 10s infinite linear}
+    .rs{animation:rs 10s infinite linear}
+    @keyframes rq{0%{transform:translateX(124px);opacity:0}4%{transform:translateX(124px);opacity:1}20%{transform:translateX(700px);opacity:1}21%{transform:translateX(700px);opacity:0}50%{transform:translateX(124px);opacity:0}52%{transform:translateX(124px);opacity:1}60%{transform:translateX(330px);opacity:1}61%,100%{transform:translateX(330px);opacity:0}}
+    @keyframes rs{0%,21%{transform:translateX(700px);opacity:0}22%{transform:translateX(700px);opacity:1}38%{transform:translateX(124px);opacity:1}39%{transform:translateX(124px);opacity:0}61%{transform:translateX(330px);opacity:0}62%{transform:translateX(330px);opacity:1}70%{transform:translateX(124px);opacity:1}71%,100%{transform:translateX(124px);opacity:0}}
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes c1{0%,3%{opacity:0}5%,46%{opacity:1}48%,100%{opacity:0}}
+    @keyframes c2{0%,50%{opacity:0}52%,95%{opacity:1}97%,100%{opacity:0}}
+    @keyframes ms{0%,10%{opacity:0}12%,46%{opacity:1}48%,100%{opacity:0}}
+    @keyframes ht{0%,57%{opacity:0}59%,95%{opacity:1}97%,100%{opacity:0}}
+    .c1{animation-name:c1}.c2{animation-name:c2}.ms{animation-name:ms}.ht{animation-name:ht}
+    @media (prefers-reduced-motion: reduce){.rq,.rs{animation:none;opacity:0}.a{animation:none;opacity:1}.c1,.ms{opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Timed(Caching(Adapter)): one concern per layer</text>
+  <text class="sub" x="28" y="62">All three layers implement PricingPort, so the client can't tell how many wrappers there are.</text>
+
+  <text class="a c1 lbl" x="28" y="96">Call 1: priceOf(NDC123), cache empty</text>
+  <text class="a c2 lbl" x="28" y="96">Call 2: priceOf(NDC123) again</text>
+
+  <rect class="client" x="28" y="160" width="96" height="76" rx="10"/>
+  <text class="lbl" x="76" y="203" text-anchor="middle">Client</text>
+
+  <rect class="l1" x="140" y="112" width="500" height="172" rx="14"/>
+  <text class="t1" x="154" y="132">TimedPricing</text>
+  <rect class="l2" x="168" y="140" width="452" height="128" rx="12"/>
+  <text class="t2" x="182" y="160">CachingPricing</text>
+  <rect class="l3" x="352" y="168" width="248" height="82" rx="10"/>
+  <text class="t3" x="366" y="188">PbmSoapPricingAdapter</text>
+  <text class="sub" x="366" y="240">vendor model → Money</text>
+
+  <rect class="vend" x="662" y="160" width="110" height="76" rx="10"/>
+  <text class="lbl" x="717" y="192" text-anchor="middle">SOAP</text>
+  <text class="sub" x="717" y="212" text-anchor="middle">vendor API</text>
+
+  <line class="track" x1="124" y1="204" x2="700" y2="204"/>
+  <line class="track" x1="124" y1="222" x2="700" y2="222"/>
+  <text class="a ms miss" x="182" y="262">miss: ask next layer</text>
+  <text class="a ht hit" x="182" y="262">hit: return cached Money</text>
+
+  <g class="rq"><circle class="req" cx="0" cy="204" r="7"/></g>
+  <g class="rs"><circle class="resp" cx="0" cy="222" r="7"/></g>
+
+  <circle class="req" cx="36" cy="318" r="6"/><text class="sub" x="48" y="323">request</text>
+  <circle class="resp" cx="126" cy="318" r="6"/><text class="sub" x="138" y="323">response</text>
+  <text class="txt" x="28" y="356">The outer timer records both calls, including the fast cache hit: it measures what callers see.</text>
+  <text class="txt" x="28" y="378">Swap the order, Caching(Timed(Adapter)), and only cache misses would be timed.</text>
+</svg>

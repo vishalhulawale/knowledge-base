@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 370" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Commit before vs after processing</title>
+  <desc id="d">Two consumers poll records 100 to 109 and crash at the same moment. Left: the consumer commits offset 110 before processing, crashes, restarts at 110, and records 100 to 109 are never processed, which is at-most-once and means data loss. Right: the consumer processes records 100 to 109 first, crashes before committing, restarts at 100 and processes them again, which is at-least-once and means duplicates that an idempotent consumer makes harmless.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .num{fill:#4f46e5}.on{fill:#ffffff;font-size:13px;font-weight:700}
+    .bad{fill:#dc2626}.pill{fill:#ffffff;font-size:13px;font-weight:700}
+    .badt{fill:#dc2626;font-size:15px;font-weight:700}
+    .warnt{fill:#b45309;font-size:15px;font-weight:700}
+    .ln{stroke:#94a3b8;stroke-width:2}
+    .sep{stroke:#e2e8f0;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .num{fill:#818cf8}.on,.pill{fill:#0f172a}
+      .bad{fill:#f87171}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+      .ln{stroke:#64748b}.sep{stroke:#334155}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="368" rx="14"/>
+  <text class="h" x="28" y="40">Same crash, different commit order</text>
+  <line class="sep" x1="400" y1="62" x2="400" y2="330"/>
+
+  <!-- left: commit first -->
+  <text class="lbl" x="28" y="80">Commit, then process</text>
+  <line class="ln" x1="42" y1="104" x2="42" y2="260"/>
+  <circle class="num" cx="42" cy="114" r="11"/><text class="on" x="42" y="119" text-anchor="middle">1</text>
+  <rect class="box" x="64" y="97" width="300" height="34" rx="8"/><text class="txt" x="78" y="119">poll → records 100–109</text>
+  <circle class="num" cx="42" cy="164" r="11"/><text class="on" x="42" y="169" text-anchor="middle">2</text>
+  <rect class="box" x="64" y="147" width="300" height="34" rx="8"/><text class="txt" x="78" y="169">commit offset 110</text>
+  <rect class="bad" x="64" y="197" width="190" height="24" rx="12"/><text class="pill" x="159" y="214" text-anchor="middle">crash before processing</text>
+  <circle class="num" cx="42" cy="254" r="11"/><text class="on" x="42" y="259" text-anchor="middle">3</text>
+  <rect class="box" x="64" y="237" width="300" height="34" rx="8"/><text class="txt" x="78" y="259">restart → resume at 110</text>
+  <text class="badt" x="28" y="304">At-most-once: 100–109 are lost</text>
+  <text class="sub" x="28" y="324">They were never processed and won't be re-read.</text>
+
+  <!-- right: process first -->
+  <text class="lbl" x="424" y="80">Process, then commit</text>
+  <line class="ln" x1="438" y1="104" x2="438" y2="260"/>
+  <circle class="num" cx="438" cy="114" r="11"/><text class="on" x="438" y="119" text-anchor="middle">1</text>
+  <rect class="box" x="460" y="97" width="300" height="34" rx="8"/><text class="txt" x="474" y="119">poll → records 100–109</text>
+  <circle class="num" cx="438" cy="164" r="11"/><text class="on" x="438" y="169" text-anchor="middle">2</text>
+  <rect class="box" x="460" y="147" width="300" height="34" rx="8"/><text class="txt" x="474" y="169">process 100–109 (DB writes)</text>
+  <rect class="bad" x="460" y="197" width="170" height="24" rx="12"/><text class="pill" x="545" y="214" text-anchor="middle">crash before commit</text>
+  <circle class="num" cx="438" cy="254" r="11"/><text class="on" x="438" y="259" text-anchor="middle">3</text>
+  <rect class="box" x="460" y="237" width="300" height="34" rx="8"/><text class="txt" x="474" y="259">restart → resume at 100</text>
+  <text class="warnt" x="424" y="304">At-least-once: 100–109 run twice</text>
+  <text class="sub" x="424" y="324">An idempotent consumer makes the replay harmless.</text>
+
+  <text class="sub" x="28" y="356">The committed offset is the next offset to read, so 110 means "100–109 are done".</text>
+</svg>

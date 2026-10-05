@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 362" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Eager vs cooperative rebalancing</title>
+  <desc id="d">A topic with six partitions is consumed by C1, which owns P0 to P2, and C2, which owns P3 to P5, when a new consumer C3 joins. Left, eager rebalancing: every consumer revokes all of its partitions and stops, then a new assignment gives C1 P0 and P1, C2 P2 and P3, and C3 P4 and P5. Right, cooperative sticky rebalancing: in the first round only P2 and P5 are revoked while C1 and C2 keep processing their other partitions; in the second round P2 and P5 are assigned to C3.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .slot{fill:#ffffff;stroke:#cbd5e1}
+    .new{fill:#ffffff;stroke:#0ea5a4;stroke-width:2;stroke-dasharray:5 4}
+    .pri{fill:#4f46e5}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .bad{fill:#dc2626}.ok{fill:#16a34a}.mut{fill:#94a3b8}
+    .pill{fill:#ffffff;font-size:12px;font-weight:700}
+    .badt{fill:#dc2626;font-size:14px;font-weight:600}
+    .okt{fill:#15803d;font-size:14px;font-weight:600}
+    .sep{stroke:#e2e8f0;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .slot{fill:#111827;stroke:#475569}.new{fill:#111827;stroke:#2dd4bf}
+      .pri{fill:#818cf8}.on,.pill{fill:#0f172a}
+      .bad{fill:#f87171}.ok{fill:#4ade80}.mut{fill:#64748b}
+      .badt{fill:#f87171}.okt{fill:#4ade80}.sep{stroke:#334155}
+    }
+    /* 12 s loop: 0-15% C3 joins, 15-45% revoke, 45-55% move, 55-92% new assignment */
+    @keyframes dim{0%,15%{opacity:1}18%,45%{opacity:.3}55%,100%{opacity:1}}
+    .dim{animation:dim 12s infinite linear}
+    @keyframes e2{0%,45%{transform:translate(0,0)}55%,92%{transform:translate(120px,-72px)}96%,100%{transform:translate(0,0)}}
+    @keyframes e3{0%,45%{transform:translate(0,0)}55%,92%{transform:translate(0,36px)}96%,100%{transform:translate(0,0)}}
+    @keyframes e45{0%,45%{transform:translate(0,0)}55%,92%{transform:translate(120px,-36px)}96%,100%{transform:translate(0,0)}}
+    @keyframes c2{0%,45%{transform:translate(0,0)}55%,92%{transform:translate(240px,-72px)}96%,100%{transform:translate(0,0)}}
+    .me2{animation:e2 12s infinite linear}.me3{animation:e3 12s infinite linear}.me45{animation:e45 12s infinite linear}
+    .mc2{animation:c2 12s infinite linear}.mc5{animation:e45 12s infinite linear}
+    .st{opacity:0;animation:12s infinite linear}
+    @keyframes k0{0%,15%{opacity:1}16%,95%{opacity:0}96%,100%{opacity:1}}
+    @keyframes k1{0%,15%{opacity:0}16%,50%{opacity:1}51%,100%{opacity:0}}
+    @keyframes k2{0%,50%{opacity:0}51%,95%{opacity:1}96%,100%{opacity:0}}
+    .s0{animation-name:k0}.s1{animation-name:k1}.s2{animation-name:k2}
+    @media (prefers-reduced-motion: reduce){
+      .dim,.st{animation:none}.dim{opacity:.3}
+      .st{opacity:0}.s1{opacity:1}
+      .me2,.me3,.me45,.mc2,.mc5{animation:none}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="360" rx="14"/>
+  <text class="h" x="28" y="40">C3 joins: eager vs cooperative rebalancing</text>
+  <line class="sep" x1="400" y1="62" x2="400" y2="324"/>
+
+  <!-- ===== Eager ===== -->
+  <text class="lbl" x="38" y="78">Eager (e.g. RangeAssignor)</text>
+  <rect class="slot" x="38" y="90" width="100" height="32" rx="8"/><text class="txt" x="88" y="111" text-anchor="middle">C1</text>
+  <rect class="slot" x="158" y="90" width="100" height="32" rx="8"/><text class="txt" x="208" y="111" text-anchor="middle">C2</text>
+  <rect class="new" x="278" y="90" width="100" height="32" rx="8"/><text class="txt" x="328" y="111" text-anchor="middle">C3 (new)</text>
+  <g class="dim">
+    <g><rect class="pri" x="66" y="134" width="44" height="30" rx="6"/><text class="on" x="88" y="154" text-anchor="middle">P0</text></g>
+    <g><rect class="pri" x="66" y="170" width="44" height="30" rx="6"/><text class="on" x="88" y="190" text-anchor="middle">P1</text></g>
+    <g class="me2"><rect class="pri" x="66" y="206" width="44" height="30" rx="6"/><text class="on" x="88" y="226" text-anchor="middle">P2</text></g>
+    <g class="me3"><rect class="pri" x="186" y="134" width="44" height="30" rx="6"/><text class="on" x="208" y="154" text-anchor="middle">P3</text></g>
+    <g class="me45"><rect class="pri" x="186" y="170" width="44" height="30" rx="6"/><text class="on" x="208" y="190" text-anchor="middle">P4</text></g>
+    <g class="me45"><rect class="pri" x="186" y="206" width="44" height="30" rx="6"/><text class="on" x="208" y="226" text-anchor="middle">P5</text></g>
+  </g>
+  <g class="st s1">
+    <rect class="bad" x="53" y="248" width="70" height="22" rx="11"/><text class="pill" x="88" y="263" text-anchor="middle">stopped</text>
+    <rect class="bad" x="173" y="248" width="70" height="22" rx="11"/><text class="pill" x="208" y="263" text-anchor="middle">stopped</text>
+    <rect class="mut" x="293" y="248" width="70" height="22" rx="11"/><text class="pill" x="328" y="263" text-anchor="middle">waiting</text>
+  </g>
+  <text class="st s0 txt" x="38" y="300">C3 sends JoinGroup.</text>
+  <g class="st s1"><text class="badt" x="38" y="300">Everyone revokes every partition</text><text class="badt" x="38" y="320">and stops, even C1's P0 and P1.</text></g>
+  <text class="st s2 txt" x="38" y="300">New assignment, then all resume.</text>
+
+  <!-- ===== Cooperative ===== -->
+  <text class="lbl" x="422" y="78">Cooperative sticky (KIP-429)</text>
+  <rect class="slot" x="422" y="90" width="100" height="32" rx="8"/><text class="txt" x="472" y="111" text-anchor="middle">C1</text>
+  <rect class="slot" x="542" y="90" width="100" height="32" rx="8"/><text class="txt" x="592" y="111" text-anchor="middle">C2</text>
+  <rect class="new" x="662" y="90" width="100" height="32" rx="8"/><text class="txt" x="712" y="111" text-anchor="middle">C3 (new)</text>
+  <g><rect class="pri" x="450" y="134" width="44" height="30" rx="6"/><text class="on" x="472" y="154" text-anchor="middle">P0</text></g>
+  <g><rect class="pri" x="450" y="170" width="44" height="30" rx="6"/><text class="on" x="472" y="190" text-anchor="middle">P1</text></g>
+  <g class="mc2"><g class="dim"><rect class="pri" x="450" y="206" width="44" height="30" rx="6"/><text class="on" x="472" y="226" text-anchor="middle">P2</text></g></g>
+  <g><rect class="pri" x="570" y="134" width="44" height="30" rx="6"/><text class="on" x="592" y="154" text-anchor="middle">P3</text></g>
+  <g><rect class="pri" x="570" y="170" width="44" height="30" rx="6"/><text class="on" x="592" y="190" text-anchor="middle">P4</text></g>
+  <g class="mc5"><g class="dim"><rect class="pri" x="570" y="206" width="44" height="30" rx="6"/><text class="on" x="592" y="226" text-anchor="middle">P5</text></g></g>
+  <g class="st s1">
+    <rect class="ok" x="430" y="248" width="84" height="22" rx="11"/><text class="pill" x="472" y="263" text-anchor="middle">processing</text>
+    <rect class="ok" x="550" y="248" width="84" height="22" rx="11"/><text class="pill" x="592" y="263" text-anchor="middle">processing</text>
+    <rect class="mut" x="677" y="248" width="70" height="22" rx="11"/><text class="pill" x="712" y="263" text-anchor="middle">waiting</text>
+  </g>
+  <text class="st s0 txt" x="422" y="300">C3 sends JoinGroup.</text>
+  <g class="st s1"><text class="okt" x="422" y="300">Round 1: only P2 and P5 are revoked.</text><text class="okt" x="422" y="320">C1 and C2 keep processing the rest.</text></g>
+  <text class="st s2 txt" x="422" y="300">Round 2: P2 and P5 are assigned to C3.</text>
+
+  <text class="sub" x="28" y="348">KIP-848 (group.protocol=consumer) is also incremental, with the assignment computed on the broker.</text>
+</svg>

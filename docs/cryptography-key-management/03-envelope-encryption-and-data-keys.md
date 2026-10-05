@@ -38,6 +38,9 @@ flowchart LR
 
 **Decryption** is the reverse: read the header, call `Decrypt(wrappedDek, context)` (KMS checks IAM, key policy, key state and context), get the plaintext DEK, decrypt locally, erase the DEK.
 
+![Animation: the application gets a data key from the KMS as a plaintext DEK and a DEK wrapped by KEK v3, encrypts 1 MiB of data locally with AES-256-GCM, erases the plaintext DEK, and stores a header with the KEK id, wrapped DEK and nonce next to the ciphertext](images/03-envelope-wrap.svg){ loading=lazy }
+*Watch the plaintext DEK: it exists only while the data is being encrypted. What's stored can be read only by someone allowed to call KMS Decrypt.*
+
 ### Why not just call KMS Encrypt on the data?
 
 | Concern | Direct KMS encryption | Envelope encryption |
@@ -100,6 +103,9 @@ Measured on 2,000 × 1 MiB objects:
 |---|---|---|
 | Re-wrap each DEK under the new KEK | **24 ms** | 67 B per object |
 | Decrypt and re-encrypt all data with new DEKs | **3,167 ms** | 2,000 MiB |
+
+![Animation: four stored objects move from KEK v2 to v3; on the left only each small header is re-wrapped and the data is untouched (24 ms, 67 B per object), on the right every object's data is rewritten one after another (3,167 ms, 2,000 MiB)](images/03-rewrap-vs-reencrypt.svg){ loading=lazy }
+*Notice how little moves on the left: rotation by re-wrapping touches only headers, so its cost doesn't grow with the size of the data.*
 
 With a real KMS, each `ReEncrypt` is a network call (milliseconds), so you parallelise and respect quotas. It's still trivial compared with rewriting the data. Often you don't even need to re-wrap: **AWS KMS automatic rotation** keeps all previous key material under the same key ID, so old wrapped DEKs remain decryptable and new ones use the new material ([rotation strategies](06-key-rotation-strategies-without-downtime.md)). Measured caveat: old KEK versions must be **kept** for unrotated data (`[kek-v1, kek-v2, kek-v3]` all held). Destroying v1 made its envelopes unrecoverable (`InvalidKeyException`).
 

@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 372" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">AckMode RECORD vs BATCH</title>
+  <desc id="d">One poll returns offsets 200 to 204 and the listener processes them in turn. With AckMode RECORD the container commits after each record, so the committed offset moves to 201, 202 and 203. With AckMode BATCH, the default, it commits only after the whole batch, so the committed offset stays at 200. The consumer crashes while processing 203. On restart, RECORD resumes at 203, so nothing already finished is repeated. BATCH resumes at 200, so 200, 201 and 202 are processed a second time.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .code{fill:#0f172a;font-size:15px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .slot{fill:#ffffff;stroke:#cbd5e1}
+    .off{fill:#334155;font-size:13px;font-weight:600}
+    .done{fill:#0ea5a4}
+    .busy{fill:none;stroke:#d97706;stroke-width:3}
+    .dead{fill:none;stroke:#dc2626;stroke-width:3}
+    .on{fill:#ffffff;font-size:13px;font-weight:700}
+    .mk{fill:#4f46e5}.prit{fill:#4f46e5;font-size:13px;font-weight:700}
+    .bad{fill:#dc2626}.pill{fill:#ffffff;font-size:13px;font-weight:700}
+    .badt{fill:#dc2626;font-size:14px;font-weight:700}
+    .okt{fill:#15803d;font-size:14px;font-weight:700}
+    .br{stroke:#dc2626;stroke-width:2;fill:none}
+    .sep{stroke:#e2e8f0;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.code{fill:#f1f5f9}.lbl,.txt,.off{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .slot{fill:#111827;stroke:#475569}
+      .done{fill:#2dd4bf}.busy{stroke:#fbbf24}.dead{stroke:#f87171}
+      .on,.pill{fill:#0f172a}.mk{fill:#818cf8}.prit{fill:#818cf8}
+      .bad{fill:#f87171}.badt{fill:#f87171}.okt{fill:#4ade80}.br{stroke:#f87171}
+      .sep{stroke:#334155}
+    }
+    /* 12 s loop: 200 done at 10%, 201 at 20%, 202 at 30%, 203 busy 30-40%, crash at 40% */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes d0{0%,10%{opacity:0}11%,95%{opacity:1}96%,100%{opacity:0}}
+    @keyframes d1{0%,20%{opacity:0}21%,95%{opacity:1}96%,100%{opacity:0}}
+    @keyframes d2{0%,30%{opacity:0}31%,95%{opacity:1}96%,100%{opacity:0}}
+    @keyframes b0{0%,1%{opacity:0}2%,10%{opacity:1}11%,100%{opacity:0}}
+    @keyframes b1{0%,10%{opacity:0}11%,20%{opacity:1}21%,100%{opacity:0}}
+    @keyframes b2{0%,20%{opacity:0}21%,30%{opacity:1}31%,100%{opacity:0}}
+    @keyframes b3{0%,30%{opacity:0}31%,40%{opacity:1}41%,100%{opacity:0}}
+    @keyframes x3{0%,40%{opacity:0}41%,95%{opacity:1}96%,100%{opacity:0}}
+    @keyframes rp{0%,46%{opacity:0}48%,95%{opacity:1}96%,100%{opacity:0}}
+    .d0{animation-name:d0}.d1{animation-name:d1}.d2{animation-name:d2}
+    .b0{animation-name:b0}.b1{animation-name:b1}.b2{animation-name:b2}.b3{animation-name:b3}
+    .x3{animation-name:x3}.rp{animation-name:rp}
+    @keyframes cm{0%,10%{transform:translateX(0)}11%,20%{transform:translateX(60px)}21%,30%{transform:translateX(120px)}31%,95%{transform:translateX(180px)}96%,100%{transform:translateX(0)}}
+    .cm{animation:cm 12s infinite linear}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none;opacity:1}.b0,.b1,.b2,.b3{opacity:0}
+      .cm{animation:none;transform:translateX(180px)}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="370" rx="14"/>
+  <text class="h" x="28" y="40">When the container commits: RECORD vs BATCH</text>
+  <text class="sub" x="28" y="62">One poll returned offsets 200–204. The consumer crashes while processing 203.</text>
+
+  <!-- ===== RECORD ===== -->
+  <text class="code" x="28" y="116">RECORD</text>
+  <text class="sub" x="28" y="134">commit after</text>
+  <text class="sub" x="28" y="150">each record</text>
+  <g>
+    <rect class="slot" x="200" y="94" width="52" height="36" rx="6"/><rect class="slot" x="260" y="94" width="52" height="36" rx="6"/><rect class="slot" x="320" y="94" width="52" height="36" rx="6"/><rect class="slot" x="380" y="94" width="52" height="36" rx="6"/><rect class="slot" x="440" y="94" width="52" height="36" rx="6"/>
+    <rect class="a d0 done" x="200" y="94" width="52" height="36" rx="6"/><rect class="a d1 done" x="260" y="94" width="52" height="36" rx="6"/><rect class="a d2 done" x="320" y="94" width="52" height="36" rx="6"/>
+    <rect class="a b0 busy" x="200" y="94" width="52" height="36" rx="6"/><rect class="a b1 busy" x="260" y="94" width="52" height="36" rx="6"/><rect class="a b2 busy" x="320" y="94" width="52" height="36" rx="6"/><rect class="a b3 busy" x="380" y="94" width="52" height="36" rx="6"/>
+    <rect class="a x3 dead" x="380" y="94" width="52" height="36" rx="6"/>
+    <text class="off" x="226" y="117" text-anchor="middle">200</text><text class="off" x="286" y="117" text-anchor="middle">201</text><text class="off" x="346" y="117" text-anchor="middle">202</text><text class="off" x="406" y="117" text-anchor="middle">203</text><text class="off" x="466" y="117" text-anchor="middle">204</text>
+  </g>
+  <g class="cm">
+    <path class="mk" d="M200 136 L193 148 L207 148 Z"/>
+    <text class="prit" x="200" y="166" text-anchor="middle">committed</text>
+  </g>
+  <g class="a rp">
+    <text class="okt" x="530" y="108">Crash → restart at 203.</text>
+    <text class="txt" x="530" y="128">Only the record that was in</text>
+    <text class="txt" x="530" y="146">progress runs again.</text>
+  </g>
+
+  <line class="sep" x1="28" y1="186" x2="772" y2="186"/>
+
+  <!-- ===== BATCH ===== -->
+  <text class="code" x="28" y="230">BATCH</text>
+  <text class="sub" x="28" y="248">(default) commit</text>
+  <text class="sub" x="28" y="264">after the whole poll</text>
+  <g>
+    <rect class="slot" x="200" y="208" width="52" height="36" rx="6"/><rect class="slot" x="260" y="208" width="52" height="36" rx="6"/><rect class="slot" x="320" y="208" width="52" height="36" rx="6"/><rect class="slot" x="380" y="208" width="52" height="36" rx="6"/><rect class="slot" x="440" y="208" width="52" height="36" rx="6"/>
+    <rect class="a d0 done" x="200" y="208" width="52" height="36" rx="6"/><rect class="a d1 done" x="260" y="208" width="52" height="36" rx="6"/><rect class="a d2 done" x="320" y="208" width="52" height="36" rx="6"/>
+    <rect class="a b0 busy" x="200" y="208" width="52" height="36" rx="6"/><rect class="a b1 busy" x="260" y="208" width="52" height="36" rx="6"/><rect class="a b2 busy" x="320" y="208" width="52" height="36" rx="6"/><rect class="a b3 busy" x="380" y="208" width="52" height="36" rx="6"/>
+    <rect class="a x3 dead" x="380" y="208" width="52" height="36" rx="6"/>
+    <text class="off" x="226" y="231" text-anchor="middle">200</text><text class="off" x="286" y="231" text-anchor="middle">201</text><text class="off" x="346" y="231" text-anchor="middle">202</text><text class="off" x="406" y="231" text-anchor="middle">203</text><text class="off" x="466" y="231" text-anchor="middle">204</text>
+  </g>
+  <path class="mk" d="M200 250 L193 262 L207 262 Z"/>
+  <text class="prit" x="200" y="280" text-anchor="middle">committed</text>
+  <g class="a rp">
+    <path class="br" d="M202 292 V298 H370 V292"/>
+    <text class="badt" x="286" y="316" text-anchor="middle">processed twice</text>
+    <text class="badt" x="530" y="222">Crash → restart at 200.</text>
+    <text class="txt" x="530" y="242">200, 201 and 202 are</text>
+    <text class="txt" x="530" y="260">processed a second time.</text>
+  </g>
+
+
+  <text class="sub" x="28" y="356">Teal = finished, amber = in progress, red = crashed. Either way the listener must be idempotent.</text>
+</svg>

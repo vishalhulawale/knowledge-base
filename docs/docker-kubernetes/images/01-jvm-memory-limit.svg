@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">JVM heap inside a 512 MB container limit</title>
+  <desc id="d">Three bars against a 512 MB container memory limit. With the JVM default MaxRAMPercentage of 25 percent the max heap is 123 MB. With MaxRAMPercentage=75 it is 371 MB, leaving the rest of the limit for metaspace, thread stacks, code cache, direct buffers and GC overhead. With a fixed -Xmx above the limit the JVM starts anyway, and the kernel OOM-kills the container with exit code 137 when real usage crosses 512 MB.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .t{fill:#334155;font-size:14px}
+    .b{fill:#0f172a;font-size:14px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#4f46e5;font-weight:600}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#334155}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.ok{fill:#16a34a}.bad{fill:#dc2626}.warn{fill:#d97706}.mut{fill:#94a3b8}
+    .pris{stroke:#4f46e5}.teas{stroke:#0ea5a4}.oks{stroke:#16a34a}.bads{stroke:#dc2626}.warns{stroke:#d97706}.muts{stroke:#94a3b8}
+    .prit{fill:#4f46e5}.teat{fill:#0f766e}.okt{fill:#16a34a}.badt{fill:#dc2626}.warnt{fill:#b45309}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .onm{fill:#ffffff;font-size:13px}
+    .okbg{fill:#16a34a;fill-opacity:.10;stroke:#16a34a;stroke-width:1.5}
+    .badbg{fill:#dc2626;fill-opacity:.08;stroke:#dc2626;stroke-width:1.5}
+    .pribg{fill:#4f46e5;fill-opacity:.10;stroke:#4f46e5;stroke-width:1.5}
+    .teabg{fill:#0ea5a4;fill-opacity:.12;stroke:#0ea5a4;stroke-width:1.5}
+    .line{stroke:#94a3b8;stroke-width:2;fill:none}
+    .ah{fill:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.b{fill:#f1f5f9}.lbl,.t,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .code{fill:#818cf8}.box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.ok{fill:#4ade80}.bad{fill:#f87171}.warn{fill:#fbbf24}.mut{fill:#64748b}
+      .pris{stroke:#818cf8}.teas{stroke:#2dd4bf}.oks{stroke:#4ade80}.bads{stroke:#f87171}.warns{stroke:#fbbf24}.muts{stroke:#64748b}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.warnt{fill:#fbbf24}
+      .on,.onm{fill:#0f172a}
+      .okbg{fill:#4ade80;stroke:#4ade80;fill-opacity:.12}.badbg{fill:#f87171;stroke:#f87171;fill-opacity:.10}
+      .pribg{fill:#818cf8;stroke:#818cf8;fill-opacity:.14}.teabg{fill:#2dd4bf;stroke:#2dd4bf;fill-opacity:.14}
+      .line{stroke:#64748b}.ah{fill:#64748b}
+    }
+
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">JVM memory inside a 512 MB container limit</text>
+  <text class="sub" x="28" y="62">The limit covers the whole process, not just the heap. Measured with --memory=512m.</text>
+  <line class="bads" x1="750" y1="80" x2="750" y2="292" stroke-width="2" stroke-dasharray="6 4"/>
+  <text class="badt" x="750" y="306" text-anchor="middle" font-size="13" font-weight="700">limit 512 MB</text>
+  <text class="lbl" x="28" y="112">default (25 %)</text>
+  <rect class="box" x="150" y="92" width="600" height="32" rx="6"/>
+  <rect class="pri" x="150" y="92" width="144" height="32" rx="6"/><text class="on" x="160" y="113">heap 123 MB</text>
+  <text class="sub" x="304" y="113">most of the limit unused by the heap</text>
+  <text class="lbl" x="28" y="172">MaxRAM 75 %</text>
+  <rect class="box" x="150" y="152" width="600" height="32" rx="6"/>
+  <rect class="pri" x="150" y="152" width="435" height="32" rx="6"/><text class="on" x="160" y="173">heap 371 MB</text>
+  <rect class="tea" x="585" y="152" width="165" height="32" rx="6" fill-opacity=".35"/>
+  <text class="b" x="593" y="173">non-heap room</text>
+  <text class="sub" x="150" y="204">metaspace, thread stacks, code cache, direct buffers, GC overhead</text>
+  <text class="lbl" x="28" y="252">-Xmx too big</text>
+  <rect class="box" x="150" y="232" width="600" height="32" rx="6"/>
+  <rect class="pri" x="150" y="232" width="600" height="32" rx="6"/><text class="on" x="160" y="253">heap allowed to grow past the limit</text>
+  <rect class="badbg" x="750" y="232" width="34" height="32" rx="6" stroke-dasharray="4 3"/>
+  <text class="badt" x="28" y="334" font-size="14" font-weight="700">Real usage crosses 512 MB → kernel OOM kill: exit 137, OOMKilled: true, no Java OutOfMemoryError.</text>
+  <text class="sub" x="28" y="358">Typical: MaxRAMPercentage 70–80 % for heap-heavy services, lower with lots of off-heap memory.</text>
+</svg>

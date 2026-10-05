@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 352" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">When the producer gets its ack</title>
+  <desc id="d">Three timelines with the same three stages: request sent, leader appended, all in-sync replicas have the record. With acks=0 the producer counts the send as done immediately, so the record may be lost silently and no offset comes back. With acks=1 the ack comes after the leader appends, so the record is lost if the leader dies before followers copy it. With acks=all the ack comes only after every in-sync replica has the record, which is safe while the ISR is at least min.insync.replicas. Waiting longer means higher latency.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .code{fill:#0f172a;font-size:15px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .trk{stroke:#4f46e5;stroke-width:3}
+    .after{stroke:#cbd5e1;stroke-width:3;stroke-dasharray:5 5}
+    .dot{fill:#ffffff;stroke:#4f46e5;stroke-width:2}
+    .ghost{fill:#ffffff;stroke:#cbd5e1;stroke-width:2}
+    .ack{fill:#16a34a}
+    .on{fill:#ffffff;font-size:13px;font-weight:700}
+    .badt{fill:#dc2626;font-size:14px;font-weight:600}
+    .warnt{fill:#b45309;font-size:14px;font-weight:600}
+    .okt{fill:#15803d;font-size:14px;font-weight:600}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}.arw{fill:#64748b}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.code{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .trk{stroke:#818cf8}.after{stroke:#475569}
+      .dot{fill:#111827;stroke:#818cf8}.ghost{fill:#111827;stroke:#475569}
+      .ack{fill:#4ade80}.on{fill:#0f172a}
+      .badt{fill:#f87171}.warnt{fill:#fbbf24}.okt{fill:#4ade80}
+      .ln{stroke:#94a3b8}.arw{fill:#94a3b8}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="350" rx="14"/>
+  <text class="h" x="28" y="40">When does the producer get its ack?</text>
+
+  <!-- column headings -->
+  <text class="sub" x="200" y="78" text-anchor="middle">request sent</text>
+  <text class="sub" x="350" y="78" text-anchor="middle">leader appended</text>
+  <text class="sub" x="500" y="70" text-anchor="middle">all ISR members</text>
+  <text class="sub" x="500" y="86" text-anchor="middle">have the record</text>
+  <text class="lbl" x="580" y="78">Risk</text>
+
+  <!-- acks=0 -->
+  <text class="code" x="28" y="128">acks=0</text>
+  <line class="after" x1="200" y1="123" x2="500" y2="123"/>
+  <circle class="ghost" cx="350" cy="123" r="7"/><circle class="ghost" cx="500" cy="123" r="7"/>
+  <rect class="ack" x="176" y="111" width="48" height="24" rx="12"/><text class="on" x="200" y="128" text-anchor="middle">done</text>
+  <text class="badt" x="580" y="120">May be lost silently</text>
+  <text class="sub" x="580" y="138">no retries, no offset returned</text>
+
+  <!-- acks=1 -->
+  <text class="code" x="28" y="198">acks=1</text>
+  <line class="trk" x1="200" y1="193" x2="350" y2="193"/>
+  <line class="after" x1="350" y1="193" x2="500" y2="193"/>
+  <circle class="dot" cx="200" cy="193" r="7"/><circle class="ghost" cx="500" cy="193" r="7"/>
+  <rect class="ack" x="326" y="181" width="48" height="24" rx="12"/><text class="on" x="350" y="198" text-anchor="middle">ack</text>
+  <text class="warnt" x="580" y="190">Lost if the leader dies</text>
+  <text class="sub" x="580" y="208">before followers copy it</text>
+
+  <!-- acks=all -->
+  <text class="code" x="28" y="268">acks=all</text>
+  <text class="sub" x="28" y="286">default since 3.0</text>
+  <line class="trk" x1="200" y1="263" x2="500" y2="263"/>
+  <circle class="dot" cx="200" cy="263" r="7"/><circle class="dot" cx="350" cy="263" r="7"/>
+  <rect class="ack" x="476" y="251" width="48" height="24" rx="12"/><text class="on" x="500" y="268" text-anchor="middle">ack</text>
+  <text class="okt" x="580" y="260">Safe while ISR ≥</text>
+  <text class="sub" x="580" y="278">min.insync.replicas</text>
+
+  <path class="ln" d="M200 312 H490"/><path class="arw" d="M488 306 L498 312 L488 318 Z"/>
+  <text class="sub" x="200" y="332">producer waits longer, latency goes up</text>
+</svg>

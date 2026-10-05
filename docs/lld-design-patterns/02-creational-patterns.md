@@ -45,6 +45,9 @@ Thread-safe options:
 | Double-checked locking | Yes | Only with **`volatile`** | Without `volatile`, another thread can see a partially constructed object |
 | `synchronized getInstance()` | Yes | Yes | Contention on every call |
 
+![Animation: thread A allocates the singleton and publishes the reference before the constructor's writes are visible; thread B sees a non-null instance, skips the lock and reads a null field; a volatile field prevents this](images/02-dcl-without-volatile.svg){ loading=lazy }
+*Watch thread B: it never takes the lock, so nothing orders its read after thread A's constructor. `volatile` adds that ordering.*
+
 **Pitfalls:**
 
 - One instance per **classloader** (app servers, tests).
@@ -120,6 +123,9 @@ Create objects by copying a configured instance. It's useful when construction i
 - **Avoid `Cloneable`:** `clone()` is protected and shallow by default, bypasses constructors, and conflicts with `final` fields (Effective Java, Item 13).
 - **Prefer:** copy constructors (`new Order(Order other)`), copy factories, Lombok `toBuilder()`, or **immutable records + `withX`** methods (copy-on-write).
 - Watch **deep vs shallow** copies of mutable fields (lists, dates).
+
+![An original order and its shallow copy both point to the same item list, so an item added through the copy appears in the original; a deep copy points to its own list](images/02-shallow-vs-deep-copy.svg){ loading=lazy }
+*Notice the two arrows into one list on the left. That shared list is what `clone()` gives you by default.*
 
 ## In practice: code & configuration
 

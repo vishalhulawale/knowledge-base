@@ -59,6 +59,9 @@ flowchart LR
 - Java I/O: `new BufferedReader(new InputStreamReader(new FileInputStream(f), UTF_8))`.
 - Modern alternatives: Resilience4j `Decorators.ofSupplier(...)`, Spring AOP, or functional composition (`Function.andThen`).
 
+![Animation: a client calls TimedPricing, which wraps CachingPricing, which wraps the SOAP adapter; the first call misses the cache and travels to the vendor API and back, the second call returns from the cache layer](images/03-decorator-chain.svg){ loading=lazy }
+*Watch the second call turn back at the caching layer. The timer outside it still records that call, which is why the order of decorators matters.*
+
 ### Proxy, and how Spring uses it
 
 ```mermaid

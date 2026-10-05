@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 372" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Transaction markers and read_committed</title>
+  <desc id="d">One partition holds records from three transactions. Offset 0 a1, 1 b1, 2 a2, 3 b2, 4 the commit marker for transaction A, 5 the abort marker for transaction B, 6 c1 and 7 c2 from transaction C, which is still open. The last stable offset is 6, the first offset of the open transaction, and the high watermark is 8. A read_uncommitted consumer, the default, receives a1, b1, a2, b2, c1 and c2, including the aborted records. A read_committed consumer receives only a1 and a2, skips the aborted b1 and b2, and can't read past the last stable offset until transaction C finishes. Markers take up offsets but are never delivered to the application.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .code{fill:#0f172a;font-size:14px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .off{fill:#64748b;font-size:12px}
+    .ta{fill:#4f46e5}.tb{fill:#dc2626}.tc{fill:#0ea5a4}
+    .mkr{fill:#e2e8f0;stroke:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .mt{fill:#334155;font-size:13px}
+    .dot{fill:#16a34a}.hol{fill:none;stroke:#94a3b8;stroke-width:2}
+    .x{stroke:#dc2626;stroke-width:2.5;stroke-linecap:round}
+    .dash{stroke:#94a3b8;stroke-width:2;stroke-linecap:round}
+    .vl{stroke:#0f766e;stroke-width:2;stroke-dasharray:5 4}
+    .vh{stroke:#64748b;stroke-width:2;stroke-dasharray:5 4}
+    .tealt{fill:#0f766e;font-size:13px;font-weight:700}
+    .mutt{fill:#475569;font-size:13px;font-weight:700}
+    .lg{fill:#334155;font-size:13px}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.code{fill:#f1f5f9}.lbl,.txt,.mt,.lg{fill:#e2e8f0}.sub,.off{fill:#94a3b8}
+      .ta{fill:#818cf8}.tb{fill:#f87171}.tc{fill:#2dd4bf}
+      .mkr{fill:#334155;stroke:#64748b}
+      .on{fill:#0f172a}
+      .dot{fill:#4ade80}.hol{stroke:#64748b}.x{stroke:#f87171}.dash{stroke:#64748b}
+      .vl{stroke:#5eead4}.vh{stroke:#94a3b8}.tealt{fill:#5eead4}.mutt{fill:#cbd5e1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="370" rx="14"/>
+  <text class="h" x="28" y="40">Transaction markers, LSO and read_committed</text>
+
+  <!-- LSO / HW lines (x = left edge of offset 6 / offset 8) -->
+  <line class="vl" x1="610" y1="76" x2="610" y2="256"/>
+  <text class="tealt" x="610" y="70" text-anchor="middle">LSO = 6</text>
+  <line class="vh" x1="742" y1="76" x2="742" y2="256"/>
+  <text class="mutt" x="742" y="70" text-anchor="middle">HW = 8</text>
+
+  <text class="lbl" x="28" y="128">Partition</text>
+  <!-- offsets: x = 216 + i*66, width 60 -->
+  <g>
+    <text class="off" x="246" y="98" text-anchor="middle">0</text><text class="off" x="312" y="98" text-anchor="middle">1</text><text class="off" x="378" y="98" text-anchor="middle">2</text><text class="off" x="444" y="98" text-anchor="middle">3</text><text class="off" x="510" y="98" text-anchor="middle">4</text><text class="off" x="576" y="98" text-anchor="middle">5</text><text class="off" x="642" y="98" text-anchor="middle">6</text><text class="off" x="708" y="98" text-anchor="middle">7</text>
+    <rect class="ta" x="216" y="104" width="60" height="44" rx="8"/><text class="on" x="246" y="131" text-anchor="middle">a1</text>
+    <rect class="tb" x="282" y="104" width="60" height="44" rx="8"/><text class="on" x="312" y="131" text-anchor="middle">b1</text>
+    <rect class="ta" x="348" y="104" width="60" height="44" rx="8"/><text class="on" x="378" y="131" text-anchor="middle">a2</text>
+    <rect class="tb" x="414" y="104" width="60" height="44" rx="8"/><text class="on" x="444" y="131" text-anchor="middle">b2</text>
+    <rect class="mkr" x="480" y="104" width="60" height="44" rx="8"/><text class="mt" x="510" y="122" text-anchor="middle">commit</text><text class="mt" x="510" y="139" text-anchor="middle">A</text>
+    <rect class="mkr" x="546" y="104" width="60" height="44" rx="8"/><text class="mt" x="576" y="122" text-anchor="middle">abort</text><text class="mt" x="576" y="139" text-anchor="middle">B</text>
+    <rect class="tc" x="612" y="104" width="60" height="44" rx="8"/><text class="on" x="642" y="131" text-anchor="middle">c1</text>
+    <rect class="tc" x="678" y="104" width="60" height="44" rx="8"/><text class="on" x="708" y="131" text-anchor="middle">c2</text>
+  </g>
+
+  <!-- read_uncommitted row -->
+  <text class="code" x="28" y="190">read_uncommitted</text>
+  <text class="sub" x="28" y="206">(default)</text>
+  <circle class="dot" cx="246" cy="186" r="8"/><circle class="dot" cx="312" cy="186" r="8"/><circle class="dot" cx="378" cy="186" r="8"/><circle class="dot" cx="444" cy="186" r="8"/>
+  <line class="dash" x1="503" y1="186" x2="517" y2="186"/><line class="dash" x1="569" y1="186" x2="583" y2="186"/>
+  <circle class="dot" cx="642" cy="186" r="8"/><circle class="dot" cx="708" cy="186" r="8"/>
+
+  <!-- read_committed row -->
+  <text class="code" x="28" y="240">read_committed</text>
+  <circle class="dot" cx="246" cy="236" r="8"/>
+  <path class="x" d="M306 230 l12 12 M318 230 l-12 12"/>
+  <circle class="dot" cx="378" cy="236" r="8"/>
+  <path class="x" d="M438 230 l12 12 M450 230 l-12 12"/>
+  <line class="dash" x1="503" y1="236" x2="517" y2="236"/><line class="dash" x1="569" y1="236" x2="583" y2="236"/>
+  <circle class="hol" cx="642" cy="236" r="7"/><circle class="hol" cx="708" cy="236" r="7"/>
+
+  <!-- legend -->
+  <circle class="dot" cx="36" cy="285" r="7"/><text class="lg" x="50" y="290">delivered to the app</text>
+  <path class="x" d="M200 279 l11 11 M211 279 l-11 11"/><text class="lg" x="220" y="290">skipped (aborted)</text>
+  <circle class="hol" cx="364" cy="285" r="6"/><text class="lg" x="378" y="290">not readable yet (at or past LSO)</text>
+  <line class="dash" x1="470" y1="315" x2="484" y2="315"/><text class="lg" x="492" y="320">marker, never delivered</text>
+  <rect class="ta" x="28" y="308" width="14" height="14" rx="3"/><text class="lg" x="48" y="320">Tx A committed</text>
+  <rect class="tb" x="170" y="308" width="14" height="14" rx="3"/><text class="lg" x="190" y="320">Tx B aborted</text>
+  <rect class="tc" x="300" y="308" width="14" height="14" rx="3"/><text class="lg" x="320" y="320">Tx C still open</text>
+  <text class="sub" x="28" y="352">LSO = first offset of the oldest open transaction. Markers use offsets, so offsets aren't consecutive.</text>
+</svg>

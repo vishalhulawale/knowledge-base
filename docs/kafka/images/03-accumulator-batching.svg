@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Producer batching in the RecordAccumulator</title>
+  <desc id="d">The producer keeps one batch per partition in the RecordAccumulator. Partition 0 receives records quickly; its batch fills to batch.size and is handed to the background sender thread straight away, which sends a ProduceRequest to the partition leader. Partition 1 receives a single record; its batch is not full, so it waits until linger.ms expires and is then sent anyway. Partition 2 has no records and nothing is sent.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .slot{fill:#ffffff;stroke:#cbd5e1}
+    .lane{fill:none;stroke:#94a3b8;stroke-dasharray:4 4}
+    .pri{fill:#4f46e5}.teal{fill:#0ea5a4}
+    .tbg{fill:#e2e8f0}.tfg{fill:#d97706}
+    .prit{fill:#4f46e5;font-size:13px;font-weight:700}
+    .warnt{fill:#b45309;font-size:13px;font-weight:700}
+    .tealt{fill:#0f766e;font-size:13px;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .arw{fill:#64748b}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .slot{fill:#111827;stroke:#475569}.lane{stroke:#64748b}
+      .pri{fill:#818cf8}.teal{fill:#2dd4bf}
+      .tbg{fill:#334155}.tfg{fill:#fbbf24}
+      .prit{fill:#818cf8}.warnt{fill:#fbbf24}.tealt{fill:#5eead4}
+      .ln{stroke:#94a3b8}.arw{fill:#94a3b8}
+    }
+    /* 10 s loop */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes r1{0%,5%{opacity:0}6%,96%{opacity:1}97%,100%{opacity:0}}
+    @keyframes r2{0%,10%{opacity:0}11%,96%{opacity:1}97%,100%{opacity:0}}
+    @keyframes r3{0%,15%{opacity:0}16%,96%{opacity:1}97%,100%{opacity:0}}
+    @keyframes r4{0%,20%{opacity:0}21%,96%{opacity:1}97%,100%{opacity:0}}
+    @keyframes r5{0%,8%{opacity:0}9%,96%{opacity:1}97%,100%{opacity:0}}
+    .r1{animation-name:r1}.r2{animation-name:r2}.r3{animation-name:r3}.r4{animation-name:r4}.r5{animation-name:r5}
+    @keyframes m0{0%,24%{transform:translateX(0);opacity:1}32%{transform:translateX(270px);opacity:1}35%,95%{transform:translateX(270px);opacity:0}96%,100%{transform:translateX(0);opacity:0}}
+    @keyframes m1{0%,50%{transform:translateX(0);opacity:1}58%{transform:translateX(270px);opacity:1}61%,95%{transform:translateX(270px);opacity:0}96%,100%{transform:translateX(0);opacity:0}}
+    .b0{animation:m0 10s infinite linear}.b1{animation:m1 10s infinite linear}
+    @keyframes lab0{0%,21%{opacity:0}22%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes lab1{0%,49%{opacity:0}50%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes req0{0%,31%{opacity:0}33%,42%{opacity:1}45%,100%{opacity:0}}
+    @keyframes req1{0%,57%{opacity:0}59%,68%{opacity:1}71%,100%{opacity:0}}
+    .l0{animation-name:lab0}.l1{animation-name:lab1}.q0{animation-name:req0}.q1{animation-name:req1}
+    @keyframes tm{0%,8%{transform:scaleX(0)}50%,92%{transform:scaleX(1)}96%,100%{transform:scaleX(0)}}
+    .tm{transform-box:fill-box;transform-origin:left center;animation:tm 10s infinite linear}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none;opacity:1}.q0,.q1{opacity:0}
+      .b0,.b1{animation:none}
+      .tm{animation:none;transform:scaleX(1)}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">RecordAccumulator: one batch per partition</text>
+  <text class="sub" x="28" y="62">A batch is sent when it reaches batch.size or when linger.ms expires, whichever comes first.</text>
+
+  <!-- left: caller -->
+  <text class="lbl" x="28" y="96">send()</text>
+  <text class="sub" x="28" y="114">caller thread:</text>
+  <text class="sub" x="28" y="130">serialize,</text>
+  <text class="sub" x="28" y="146">pick partition</text>
+
+  <!-- lanes -->
+  <text class="lbl" x="150" y="128">P0</text>
+  <text class="lbl" x="150" y="218">P1</text>
+  <text class="lbl" x="150" y="308">P2</text>
+  <rect class="lane" x="214" y="100" width="206" height="44" rx="8"/>
+  <rect class="lane" x="214" y="190" width="206" height="44" rx="8"/>
+  <rect class="lane" x="214" y="280" width="206" height="44" rx="8"/>
+
+  <!-- P0 batch: fills up fast -->
+  <g class="b0">
+    <rect class="a r1 pri" x="220" y="106" width="44" height="32" rx="6"/>
+    <rect class="a r2 pri" x="270" y="106" width="44" height="32" rx="6"/>
+    <rect class="a r3 pri" x="320" y="106" width="44" height="32" rx="6"/>
+    <rect class="a r4 pri" x="370" y="106" width="44" height="32" rx="6"/>
+  </g>
+  <text class="a l0 prit" x="214" y="164">full: batch.size reached → send now</text>
+
+  <!-- P1 batch: one record, waits for linger.ms -->
+  <g class="b1">
+    <rect class="a r5 teal" x="220" y="196" width="44" height="32" rx="6"/>
+  </g>
+  <rect class="tbg" x="214" y="242" width="206" height="6" rx="3"/>
+  <rect class="tm tfg" x="214" y="242" width="206" height="6" rx="3"/>
+  <text class="sub" x="214" y="266">linger.ms timer</text>
+  <text class="a l1 warnt" x="320" y="266">expired → send</text>
+
+  <text class="sub" x="214" y="344">no records, nothing to send</text>
+
+  <!-- sender + broker -->
+  <rect class="slot" x="480" y="100" width="130" height="224" rx="10"/>
+  <text class="lbl" x="545" y="200" text-anchor="middle">Sender</text>
+  <text class="lbl" x="545" y="220" text-anchor="middle">thread</text>
+  <text class="sub" x="545" y="240" text-anchor="middle">(background)</text>
+  <path class="ln" d="M612 212 H648"/><path class="arw" d="M646 206 L656 212 L646 218 Z"/>
+  <rect class="slot" x="660" y="160" width="112" height="104" rx="10"/>
+  <text class="lbl" x="716" y="206" text-anchor="middle">Partition</text>
+  <text class="lbl" x="716" y="226" text-anchor="middle">leaders</text>
+  <text class="a q0 prit" x="716" y="150" text-anchor="middle">ProduceRequest</text>
+  <text class="a q1 tealt" x="716" y="150" text-anchor="middle">ProduceRequest</text>
+
+  <text class="sub" x="28" y="380">Slowed down for clarity. Defaults: batch.size 16 KB per partition, linger.ms 5 ms (Kafka 4.0).</text>
+</svg>

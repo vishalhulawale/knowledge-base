@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Queue vs log: what happens after a read</title>
+  <desc id="d">Left: a queue holds messages m1 to m6. A single consumer takes and acknowledges messages one by one, and each acknowledged message is removed, so it can't be read again. Right: a Kafka partition holds offsets 0 to 5. Two consumer groups, payment and analytics, each have their own offset pointer. Payment advances to offset 4 and analytics only to offset 2, while every record stays in the log until retention removes it.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .slot{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.teal{fill:#0ea5a4}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .tealt{fill:#0f766e;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-size:13px;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .arw{fill:#64748b}
+    .sep{stroke:#e2e8f0;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .slot{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.teal{fill:#2dd4bf}.on{fill:#0f172a}
+      .tealt{fill:#5eead4}.prit{fill:#818cf8}
+      .ln{stroke:#94a3b8}.arw{fill:#94a3b8}.sep{stroke:#334155}
+    }
+    /* 10 s loop: four reads at 10%, 25%, 40%, 55%; hold the end state, then reset */
+    .q{animation:10s infinite linear}
+    @keyframes d1{0%,10%{opacity:1}13%,92%{opacity:0}96%,100%{opacity:1}}
+    @keyframes d2{0%,25%{opacity:1}28%,92%{opacity:0}96%,100%{opacity:1}}
+    @keyframes d3{0%,40%{opacity:1}43%,92%{opacity:0}96%,100%{opacity:1}}
+    @keyframes d4{0%,55%{opacity:1}58%,92%{opacity:0}96%,100%{opacity:1}}
+    .q1{animation-name:d1}.q2{animation-name:d2}.q3{animation-name:d3}.q4{animation-name:d4}
+    @keyframes pa{0%,10%{transform:translateX(0)}13%,25%{transform:translateX(54px)}28%,40%{transform:translateX(108px)}43%,55%{transform:translateX(162px)}58%,92%{transform:translateX(216px)}96%,100%{transform:translateX(0)}}
+    @keyframes pb{0%,25%{transform:translateX(0)}28%,55%{transform:translateX(54px)}58%,92%{transform:translateX(108px)}96%,100%{transform:translateX(0)}}
+    .ga{animation:pa 10s infinite linear}.gb{animation:pb 10s infinite linear}
+    @media (prefers-reduced-motion: reduce){
+      .q{animation:none;opacity:0}
+      .ga{animation:none;transform:translateX(216px)}
+      .gb{animation:none;transform:translateX(108px)}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="338" rx="14"/>
+  <text class="h" x="28" y="40">Queue vs log: what happens after a read</text>
+  <line class="sep" x1="400" y1="66" x2="400" y2="290"/>
+
+  <!-- Queue -->
+  <text class="lbl" x="40" y="92">Queue (RabbitMQ, SQS)</text>
+  <g>
+    <rect class="slot" x="40" y="110" width="46" height="44" rx="8"/><rect class="slot" x="94" y="110" width="46" height="44" rx="8"/><rect class="slot" x="148" y="110" width="46" height="44" rx="8"/><rect class="slot" x="202" y="110" width="46" height="44" rx="8"/><rect class="slot" x="256" y="110" width="46" height="44" rx="8"/><rect class="slot" x="310" y="110" width="46" height="44" rx="8"/>
+  </g>
+  <g class="q q1"><rect class="teal" x="40" y="110" width="46" height="44" rx="8"/><text class="on" x="63" y="137" text-anchor="middle">m1</text></g>
+  <g class="q q2"><rect class="teal" x="94" y="110" width="46" height="44" rx="8"/><text class="on" x="117" y="137" text-anchor="middle">m2</text></g>
+  <g class="q q3"><rect class="teal" x="148" y="110" width="46" height="44" rx="8"/><text class="on" x="171" y="137" text-anchor="middle">m3</text></g>
+  <g class="q q4"><rect class="teal" x="202" y="110" width="46" height="44" rx="8"/><text class="on" x="225" y="137" text-anchor="middle">m4</text></g>
+  <g><rect class="teal" x="256" y="110" width="46" height="44" rx="8"/><text class="on" x="279" y="137" text-anchor="middle">m5</text></g>
+  <g><rect class="teal" x="310" y="110" width="46" height="44" rx="8"/><text class="on" x="333" y="137" text-anchor="middle">m6</text></g>
+  <path class="ln" d="M63 160 V196"/><path class="arw" d="M57 192 L63 202 L69 192 Z"/>
+  <rect class="slot" x="28" y="204" width="150" height="36" rx="8"/>
+  <text class="txt" x="103" y="227" text-anchor="middle">Consumer (ack)</text>
+  <text class="txt" x="40" y="266">An acked message is removed.</text>
+  <text class="txt" x="40" y="286">No one can read it again.</text>
+
+  <!-- Log -->
+  <text class="lbl" x="436" y="92">Log (Kafka partition)</text>
+  <g>
+    <rect class="pri" x="436" y="110" width="46" height="44" rx="8"/><text class="on" x="459" y="137" text-anchor="middle">0</text>
+    <rect class="pri" x="490" y="110" width="46" height="44" rx="8"/><text class="on" x="513" y="137" text-anchor="middle">1</text>
+    <rect class="pri" x="544" y="110" width="46" height="44" rx="8"/><text class="on" x="567" y="137" text-anchor="middle">2</text>
+    <rect class="pri" x="598" y="110" width="46" height="44" rx="8"/><text class="on" x="621" y="137" text-anchor="middle">3</text>
+    <rect class="pri" x="652" y="110" width="46" height="44" rx="8"/><text class="on" x="675" y="137" text-anchor="middle">4</text>
+    <rect class="pri" x="706" y="110" width="46" height="44" rx="8"/><text class="on" x="729" y="137" text-anchor="middle">5</text>
+  </g>
+  <!-- group pointers: sit under the next offset to read -->
+  <g class="ga">
+    <path class="teal" d="M459 160 L452 172 L466 172 Z"/>
+    <text class="tealt" x="459" y="190" text-anchor="middle">payment</text>
+  </g>
+  <g class="gb">
+    <path class="pri" d="M459 202 L452 214 L466 214 Z"/>
+    <text class="prit" x="459" y="232" text-anchor="middle">analytics</text>
+  </g>
+  <text class="txt" x="436" y="266">Records stay until retention deletes them.</text>
+  <text class="txt" x="436" y="286">Each group has its own offset and can rewind.</text>
+
+  <text class="sub" x="28" y="322">Triangles mark each group's next offset. Records go by retention or compaction, never on read.</text>
+</svg>

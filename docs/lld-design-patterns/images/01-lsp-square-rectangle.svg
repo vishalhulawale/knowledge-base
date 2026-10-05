@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Square extends Rectangle breaks Liskov substitution</title>
+  <desc id="d">A client method resize takes a Rectangle, calls setWidth(5) then setHeight(4), and expects area 20. Given a Rectangle that starts 3 by 2, it becomes 5 by 2 and then 5 by 4, area 20. Given a Square that starts 3 by 3, setWidth(5) also sets the height, making 5 by 5, and setHeight(4) also sets the width, making 4 by 4, area 16, so the client's expectation fails.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .code{fill:#ffffff;stroke:#cbd5e1}
+    .shp{fill:#4f46e5;fill-opacity:.25;stroke:#4f46e5;stroke-width:2}
+    .shp2{fill:#d97706;fill-opacity:.25;stroke:#d97706;stroke-width:2}
+    .dim{fill:#334155;font-size:14px;font-weight:600}
+    .good{fill:#16a34a;font-size:16px;font-weight:700}
+    .bad{fill:#dc2626;font-size:16px;font-weight:700}
+    .step{fill:#4f46e5;font-size:14px;font-weight:700}
+    .div{stroke:#e2e8f0;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.mono{fill:#f1f5f9}.lbl,.dim{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .code{fill:#111827;stroke:#475569}
+      .shp{fill:#818cf8;stroke:#818cf8}.shp2{fill:#fbbf24;stroke:#fbbf24}
+      .good{fill:#4ade80}.bad{fill:#f87171}.step{fill:#818cf8}.div{stroke:#334155}
+    }
+    /* 10 s loop: start 0-20%, after setWidth(5) 20-50%, after setHeight(4) 50-95% */
+    .a{opacity:0;animation:10s infinite steps(1,end)}
+    @keyframes s0{0%{opacity:1}20%,96%{opacity:0}97%,100%{opacity:1}}
+    @keyframes s1{0%{opacity:0}20%{opacity:1}50%,100%{opacity:0}}
+    @keyframes s2{0%{opacity:0}50%{opacity:1}96%,100%{opacity:0}}
+    @keyframes res{0%{opacity:0}56%{opacity:1}96%,100%{opacity:0}}
+    .s0{animation-name:s0}.s1{animation-name:s1}.s2{animation-name:s2}.res{animation-name:res}
+    @media (prefers-reduced-motion: reduce){.a{animation:none}.s2,.res{opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Liskov violation: a Square where a Rectangle is expected</text>
+  <rect class="code" x="28" y="56" width="744" height="86" rx="10"/>
+  <text class="mono" x="44" y="78">void resize(Rectangle r) {</text>
+  <text class="mono" x="64" y="96">r.setWidth(5); r.setHeight(4);</text>
+  <text class="mono" x="64" y="114">assert r.area() == 20;   // Rectangle's contract: width and height are independent</text>
+  <text class="mono" x="44" y="132">}</text>
+  <line class="div" x1="400" y1="150" x2="400" y2="356"/>
+  <text class="lbl" x="28" y="170">resize(new Rectangle(3, 2))</text>
+  <g class="a s0"><rect class="shp" x="28" y="186" width="66" height="44" rx="3"/><text class="dim" x="104" y="213.0">3 × 2</text></g>
+  <g class="a s1"><rect class="shp" x="28" y="186" width="110" height="44" rx="3"/><text class="dim" x="148" y="213.0">5 × 2</text></g>
+  <g class="a s2"><rect class="shp" x="28" y="186" width="110" height="88" rx="3"/><text class="dim" x="148" y="235.0">5 × 4</text></g>
+  <g class="a res"><text class="good" x="28" y="342">area() = 20 ✓</text></g>
+  <text class="lbl" x="420" y="170">resize(new Square(3))</text>
+  <g class="a s0"><rect class="shp2" x="420" y="186" width="66" height="66" rx="3"/><text class="dim" x="496" y="224.0">3 × 3</text></g>
+  <g class="a s1"><rect class="shp2" x="420" y="186" width="110" height="110" rx="3"/><text class="dim" x="540" y="246.0">5 × 5</text></g>
+  <g class="a s2"><rect class="shp2" x="420" y="186" width="88" height="88" rx="3"/><text class="dim" x="518" y="235.0">4 × 4</text></g>
+  <g class="a res"><text class="bad" x="420" y="342">area() = 16 ✗ assertion fails</text></g>
+  <g class="a s0"><text class="step" x="28" y="378">Start</text></g>
+  <g class="a s1"><text class="step" x="28" y="378">After r.setWidth(5)</text></g>
+  <g class="a s2"><text class="step" x="28" y="378">After r.setHeight(4)</text></g>
+  <text class="sub" x="420" y="378">Square's setters change both sides to stay square.</text>
+</svg>

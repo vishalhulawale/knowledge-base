@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Double-checked locking without volatile</title>
+  <desc id="d">Thread A runs instance = new ConfigRegistry() inside the lock. Step 1 allocates the object, whose values field is still null. Step 2 the reference is published to the instance field before the constructor's writes are visible, which the Java memory model allows without volatile. Thread B then checks instance, sees it is not null, skips the lock and returns it. B calls value("x") and finds values still null. Only afterwards does step 3, the constructor's write of values, become visible. With a volatile field, B sees either null or a fully built object.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;fill:#0f172a}
+    .lane{fill:#ffffff;stroke:#cbd5e1}
+    .ta{fill:#4f46e5;font-size:15px;font-weight:700}
+    .tb{fill:#0f766e;font-size:15px;font-weight:700}
+    .heap{fill:#ffffff;stroke:#cbd5e1}
+    .fld{fill:#ffffff;stroke:#64748b;stroke-width:1.5}
+    .halfo{fill:#d97706;fill-opacity:.15;stroke:#d97706;stroke-width:2;stroke-dasharray:6 4}
+    .fullo{fill:#4f46e5;fill-opacity:.15;stroke:#4f46e5;stroke-width:2}
+    .ptrl{stroke:#334155;stroke-width:2;fill:none}
+    .ptrh{fill:#334155}
+    .bad{fill:#dc2626;font-size:14px;font-weight:700}
+    .good{fill:#16a34a;font-size:14px;font-weight:700}
+    .warn{fill:#b45309;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.mono{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .lane,.heap,.fld{fill:#111827;stroke:#475569}
+      .ta{fill:#818cf8}.tb{fill:#5eead4}
+      .halfo{fill:#fbbf24;stroke:#fbbf24}.fullo{fill:#818cf8;stroke:#818cf8}
+      .ptrl{stroke:#e2e8f0}.ptrh{fill:#e2e8f0}
+      .bad{fill:#f87171}.good{fill:#4ade80}.warn{fill:#fbbf24}
+    }
+    /* 10 s loop: A1 6%, A2 20%, B checks 36%, B uses 50%, A3 64%, fix note 78% */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes a1{0%,6%{opacity:0}7%,95%{opacity:1}97%,100%{opacity:0}}.a1{animation-name:a1}
+  @keyframes a2{0%,20%{opacity:0}21%,95%{opacity:1}97%,100%{opacity:0}}.a2{animation-name:a2}
+  @keyframes b1{0%,36%{opacity:0}37%,95%{opacity:1}97%,100%{opacity:0}}.b1{animation-name:b1}
+  @keyframes b2{0%,50%{opacity:0}51%,95%{opacity:1}97%,100%{opacity:0}}.b2{animation-name:b2}
+  @keyframes a3{0%,64%{opacity:0}65%,95%{opacity:1}97%,100%{opacity:0}}.a3{animation-name:a3}
+  @keyframes fx{0%,78%{opacity:0}79%,95%{opacity:1}97%,100%{opacity:0}}.fx{animation-name:fx}
+  @keyframes obj{0%,6%{opacity:0}7%,95%{opacity:1}97%,100%{opacity:0}}.obj{animation-name:obj}
+  @keyframes ptr{0%,20%{opacity:0}21%,95%{opacity:1}97%,100%{opacity:0}}.ptr{animation-name:ptr}
+  @keyframes half{0%,6%{opacity:0}7%,64%{opacity:1}65%,100%{opacity:0}}.half{animation-name:half}
+  @keyframes full{0%,64%{opacity:0}65%,95%{opacity:1}97%,100%{opacity:0}}.full{animation-name:full}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.full,.a3{opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Double-checked locking without volatile</text>
+  <text class="sub" x="28" y="62">Creating an object and publishing its reference are not one atomic step.</text>
+
+  <rect class="lane" x="28" y="80" width="490" height="128" rx="10"/>
+  <text class="ta" x="44" y="104">Thread A (holds the lock)</text>
+  <text class="mono a a1" x="44" y="132">1. allocate ConfigRegistry (values = null)</text>
+  <text class="mono a a2" x="44" y="156">2. instance = reference   ← published early</text>
+  <text class="mono a a3" x="44" y="180">3. constructor's values = load() visible</text>
+
+  <rect class="lane" x="28" y="220" width="490" height="104" rx="10"/>
+  <text class="tb" x="44" y="244">Thread B (no lock yet)</text>
+  <text class="mono a b1" x="44" y="272">if (instance == null) → false, return it</text>
+  <text class="bad a b2" x="44" y="300">✗ value("x") reads values = null: NPE</text>
+
+  <rect class="heap" x="540" y="80" width="232" height="244" rx="10"/>
+  <text class="lbl" x="556" y="104">Heap</text>
+  <rect class="fld" x="556" y="118" width="200" height="34" rx="6"/>
+  <text class="mono" x="568" y="140">static instance</text>
+  <g class="a ptr"><path class="ptrl" d="M656 152 V198"/><path class="ptrh" d="M650 196 L662 196 L656 208 Z"/></g>
+  <g class="a obj">
+    <g class="a half"><rect class="halfo" x="556" y="210" width="200" height="96" rx="8"/>
+      <text class="lbl" x="572" y="238">ConfigRegistry</text>
+      <text class="mono" x="572" y="264">values = null</text>
+      <text class="warn" x="572" y="290">half-built</text></g>
+    <g class="a full"><rect class="fullo" x="556" y="210" width="200" height="96" rx="8"/>
+      <text class="lbl" x="572" y="238">ConfigRegistry</text>
+      <text class="mono" x="572" y="264">values = {…}</text>
+      <text class="sub" x="572" y="290">fully built</text></g>
+  </g>
+
+  <g class="a fx">
+    <text class="good" x="28" y="358">✓ private static volatile ConfigRegistry instance;</text>
+    <text class="txt" x="28" y="380">With volatile, B sees either null (and takes the lock) or a fully built object.</text>
+  </g>
+  <text class="sub" x="28" y="404">Simplified view of the Java memory model: the reference can become visible before the constructor's writes.</text>
+</svg>

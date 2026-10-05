@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Blocking vs non-blocking retries</title>
+  <desc id="d">Offsets 100 to 105 on one partition, where 100 hits a transient timeout. Top, blocking retry with DefaultErrorHandler: 100 fails, waits 1 second, fails again, waits 2 seconds, then succeeds; offsets 101 to 105 wait the whole time and are processed afterwards, so the completion order is 100 to 105 and ordering is kept but the partition stalls. Bottom, non-blocking retry with retry topics: 100 is republished to orders-retry-1000 and the consumer moves on, so 101 to 105 complete first and 100 completes last after its delay; the partition keeps flowing but ordering is lost.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .slot{fill:#ffffff;stroke:#cbd5e1}
+    .lane{fill:none;stroke:#d97706;stroke-width:2;stroke-dasharray:5 4}
+    .pri{fill:#4f46e5}.bad{fill:#dc2626}.teal{fill:#0ea5a4}
+    .on{fill:#ffffff;font-size:13px;font-weight:700}
+    .fail{fill:none;stroke:#dc2626;stroke-width:3}
+    .badt{fill:#dc2626;font-size:14px;font-weight:600}
+    .okt{fill:#15803d;font-size:14px;font-weight:600}
+    .warnt{fill:#b45309;font-size:13px;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}.arw{fill:#64748b}
+    .sep{stroke:#e2e8f0;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .slot{fill:#111827;stroke:#475569}.lane{stroke:#fbbf24}
+      .pri{fill:#818cf8}.bad{fill:#f87171}.teal{fill:#2dd4bf}.on{fill:#0f172a}
+      .fail{stroke:#f87171}
+      .badt{fill:#f87171}.okt{fill:#4ade80}.warnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.arw{fill:#94a3b8}.sep{stroke:#334155}
+    }
+    /* 12 s loop */
+    .a{animation:12s infinite linear}
+    /* input chips vanish when processed; output chips appear at the same moment */
+    @keyframes g46{0%,46%{opacity:1}47%,95%{opacity:0}96%,100%{opacity:1}}
+    @keyframes g52{0%,52%{opacity:1}53%,95%{opacity:0}96%,100%{opacity:1}}
+    @keyframes g56{0%,56%{opacity:1}57%,95%{opacity:0}96%,100%{opacity:1}}
+    @keyframes g60{0%,60%{opacity:1}61%,95%{opacity:0}96%,100%{opacity:1}}
+    @keyframes g64{0%,64%{opacity:1}65%,95%{opacity:0}96%,100%{opacity:1}}
+    @keyframes g68{0%,68%{opacity:1}69%,95%{opacity:0}96%,100%{opacity:1}}
+    @keyframes g20{0%,20%{opacity:1}21%,95%{opacity:0}96%,100%{opacity:1}}
+    @keyframes g24{0%,24%{opacity:1}25%,95%{opacity:0}96%,100%{opacity:1}}
+    @keyframes g28{0%,28%{opacity:1}29%,95%{opacity:0}96%,100%{opacity:1}}
+    @keyframes g32{0%,32%{opacity:1}33%,95%{opacity:0}96%,100%{opacity:1}}
+    @keyframes g36{0%,36%{opacity:1}37%,95%{opacity:0}96%,100%{opacity:1}}
+    @keyframes h46{0%,46%{opacity:0}47%,95%{opacity:1}96%,100%{opacity:0}}
+    @keyframes h52{0%,52%{opacity:0}53%,95%{opacity:1}96%,100%{opacity:0}}
+    @keyframes h56{0%,56%{opacity:0}57%,95%{opacity:1}96%,100%{opacity:0}}
+    @keyframes h60{0%,60%{opacity:0}61%,95%{opacity:1}96%,100%{opacity:0}}
+    @keyframes h64{0%,64%{opacity:0}65%,95%{opacity:1}96%,100%{opacity:0}}
+    @keyframes h68{0%,68%{opacity:0}69%,95%{opacity:1}96%,100%{opacity:0}}
+    @keyframes h20{0%,20%{opacity:0}21%,95%{opacity:1}96%,100%{opacity:0}}
+    @keyframes h24{0%,24%{opacity:0}25%,95%{opacity:1}96%,100%{opacity:0}}
+    @keyframes h28{0%,28%{opacity:0}29%,95%{opacity:1}96%,100%{opacity:0}}
+    @keyframes h32{0%,32%{opacity:0}33%,95%{opacity:1}96%,100%{opacity:0}}
+    @keyframes h36{0%,36%{opacity:0}37%,95%{opacity:1}96%,100%{opacity:0}}
+    @keyframes h62{0%,62%{opacity:0}63%,95%{opacity:1}96%,100%{opacity:0}}
+    .g46{animation-name:g46}.g52{animation-name:g52}.g56{animation-name:g56}.g60{animation-name:g60}.g64{animation-name:g64}.g68{animation-name:g68}
+    .g20{animation-name:g20}.g24{animation-name:g24}.g28{animation-name:g28}.g32{animation-name:g32}.g36{animation-name:g36}
+    .h46{animation-name:h46}.h52{animation-name:h52}.h56{animation-name:h56}.h60{animation-name:h60}.h64{animation-name:h64}.h68{animation-name:h68}
+    .h20{animation-name:h20}.h24{animation-name:h24}.h28{animation-name:h28}.h32{animation-name:h32}.h36{animation-name:h36}.h62{animation-name:h62}
+    /* failures and waiting */
+    @keyframes fl{0%,8%{opacity:0}9%,14%{opacity:1}15%,24%{opacity:0}25%,30%{opacity:1}31%,100%{opacity:0}}
+    .fl{animation-name:fl}
+    @keyframes wt{0%,8%{opacity:1}10%,44%{opacity:.4}47%,100%{opacity:1}}
+    .wt{animation-name:wt}
+    @keyframes mv{0%,9%{transform:translate(0,0)}15%,60%{transform:translate(0,58px);opacity:1}62%,95%{transform:translate(0,58px);opacity:0}96%,100%{transform:translate(0,0);opacity:1}}
+    .mv{animation-name:mv}
+    @keyframes fb{0%,8%{opacity:0}9%,14%{opacity:1}15%,100%{opacity:0}}
+    .fb{animation-name:fb}
+    .st{opacity:0}
+    @keyframes t1{0%,8%{opacity:0}9%,24%{opacity:1}25%,100%{opacity:0}}
+    @keyframes t2{0%,24%{opacity:0}25%,44%{opacity:1}45%,100%{opacity:0}}
+    @keyframes t3{0%,44%{opacity:0}45%,95%{opacity:1}96%,100%{opacity:0}}
+    @keyframes u1{0%,9%{opacity:0}10%,60%{opacity:1}61%,100%{opacity:0}}
+    @keyframes u2{0%,60%{opacity:0}61%,95%{opacity:1}96%,100%{opacity:0}}
+    .t1{animation-name:t1}.t2{animation-name:t2}.t3{animation-name:t3}.u1{animation-name:u1}.u2{animation-name:u2}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none}
+      .g46,.g52,.g56,.g60,.g64,.g68,.g20,.g24,.g28,.g32,.g36,.fl,.fb{opacity:0}
+      .h46,.h52,.h56,.h60,.h64,.h68,.h20,.h24,.h28,.h32,.h36,.h62{opacity:1}
+      .mv{opacity:0}
+      .st{opacity:0}.t3,.u2{opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Offset 100 fails: blocking vs non-blocking retry</text>
+
+  <!-- ===== Blocking ===== -->
+  <text class="lbl" x="28" y="76">Blocking (DefaultErrorHandler)</text>
+  <text class="sub" x="460" y="76">completion order</text>
+  <!-- input -->
+  <g class="a g46"><rect class="pri" x="40" y="88" width="50" height="32" rx="6"/><text class="on" x="65" y="109" text-anchor="middle">100</text></g>
+  <rect class="a fl fail" x="40" y="88" width="50" height="32" rx="6"/>
+  <g class="a wt">
+    <g class="a g52"><rect class="pri" x="96" y="88" width="50" height="32" rx="6"/><text class="on" x="121" y="109" text-anchor="middle">101</text></g>
+    <g class="a g56"><rect class="pri" x="152" y="88" width="50" height="32" rx="6"/><text class="on" x="177" y="109" text-anchor="middle">102</text></g>
+    <g class="a g60"><rect class="pri" x="208" y="88" width="50" height="32" rx="6"/><text class="on" x="233" y="109" text-anchor="middle">103</text></g>
+    <g class="a g64"><rect class="pri" x="264" y="88" width="50" height="32" rx="6"/><text class="on" x="289" y="109" text-anchor="middle">104</text></g>
+    <g class="a g68"><rect class="pri" x="320" y="88" width="50" height="32" rx="6"/><text class="on" x="345" y="109" text-anchor="middle">105</text></g>
+  </g>
+  <path class="ln" d="M390 104 H436"/><path class="arw" d="M434 98 L444 104 L434 110 Z"/>
+  <!-- output -->
+  <g>
+    <rect class="slot" x="460" y="88" width="46" height="32" rx="6"/><rect class="slot" x="512" y="88" width="46" height="32" rx="6"/><rect class="slot" x="564" y="88" width="46" height="32" rx="6"/><rect class="slot" x="616" y="88" width="46" height="32" rx="6"/><rect class="slot" x="668" y="88" width="46" height="32" rx="6"/><rect class="slot" x="720" y="88" width="46" height="32" rx="6"/>
+  </g>
+  <g class="a h46 st"><rect class="teal" x="460" y="88" width="46" height="32" rx="6"/><text class="on" x="483" y="109" text-anchor="middle">100</text></g>
+  <g class="a h52 st"><rect class="teal" x="512" y="88" width="46" height="32" rx="6"/><text class="on" x="535" y="109" text-anchor="middle">101</text></g>
+  <g class="a h56 st"><rect class="teal" x="564" y="88" width="46" height="32" rx="6"/><text class="on" x="587" y="109" text-anchor="middle">102</text></g>
+  <g class="a h60 st"><rect class="teal" x="616" y="88" width="46" height="32" rx="6"/><text class="on" x="639" y="109" text-anchor="middle">103</text></g>
+  <g class="a h64 st"><rect class="teal" x="668" y="88" width="46" height="32" rx="6"/><text class="on" x="691" y="109" text-anchor="middle">104</text></g>
+  <g class="a h68 st"><rect class="teal" x="720" y="88" width="46" height="32" rx="6"/><text class="on" x="743" y="109" text-anchor="middle">105</text></g>
+  <!-- narration -->
+  <text class="a t1 st badt" x="40" y="146">100 times out → back off 1s. 101–105 wait.</text>
+  <text class="a t2 st badt" x="40" y="146">Retry fails again → back off 2s. Still waiting.</text>
+  <text class="a t3 st okt" x="40" y="146">Retry succeeds, then 101–105. Order kept, but the partition stalled.</text>
+
+  <line class="sep" x1="28" y1="170" x2="772" y2="170"/>
+
+  <!-- ===== Non-blocking ===== -->
+  <text class="lbl" x="28" y="200">Non-blocking (retry topics, @RetryableTopic)</text>
+  <text class="sub" x="460" y="226">completion order</text>
+  <g class="a mv"><rect class="pri" x="40" y="236" width="50" height="32" rx="6"/><text class="on" x="65" y="257" text-anchor="middle">100</text></g>
+  <rect class="a fb fail" x="40" y="236" width="50" height="32" rx="6"/>
+  <g class="a g20"><rect class="pri" x="96" y="236" width="50" height="32" rx="6"/><text class="on" x="121" y="257" text-anchor="middle">101</text></g>
+  <g class="a g24"><rect class="pri" x="152" y="236" width="50" height="32" rx="6"/><text class="on" x="177" y="257" text-anchor="middle">102</text></g>
+  <g class="a g28"><rect class="pri" x="208" y="236" width="50" height="32" rx="6"/><text class="on" x="233" y="257" text-anchor="middle">103</text></g>
+  <g class="a g32"><rect class="pri" x="264" y="236" width="50" height="32" rx="6"/><text class="on" x="289" y="257" text-anchor="middle">104</text></g>
+  <g class="a g36"><rect class="pri" x="320" y="236" width="50" height="32" rx="6"/><text class="on" x="345" y="257" text-anchor="middle">105</text></g>
+  <rect class="lane" x="34" y="288" width="342" height="44" rx="8"/>
+  <text class="warnt" x="100" y="315">orders-retry-1000</text>
+  <text class="sub" x="240" y="315">(delay ≥ 1s)</text>
+  <path class="ln" d="M390 252 H436"/><path class="arw" d="M434 246 L444 252 L434 258 Z"/>
+  <g>
+    <rect class="slot" x="460" y="236" width="46" height="32" rx="6"/><rect class="slot" x="512" y="236" width="46" height="32" rx="6"/><rect class="slot" x="564" y="236" width="46" height="32" rx="6"/><rect class="slot" x="616" y="236" width="46" height="32" rx="6"/><rect class="slot" x="668" y="236" width="46" height="32" rx="6"/><rect class="slot" x="720" y="236" width="46" height="32" rx="6"/>
+  </g>
+  <g class="a h20 st"><rect class="teal" x="460" y="236" width="46" height="32" rx="6"/><text class="on" x="483" y="257" text-anchor="middle">101</text></g>
+  <g class="a h24 st"><rect class="teal" x="512" y="236" width="46" height="32" rx="6"/><text class="on" x="535" y="257" text-anchor="middle">102</text></g>
+  <g class="a h28 st"><rect class="teal" x="564" y="236" width="46" height="32" rx="6"/><text class="on" x="587" y="257" text-anchor="middle">103</text></g>
+  <g class="a h32 st"><rect class="teal" x="616" y="236" width="46" height="32" rx="6"/><text class="on" x="639" y="257" text-anchor="middle">104</text></g>
+  <g class="a h36 st"><rect class="teal" x="668" y="236" width="46" height="32" rx="6"/><text class="on" x="691" y="257" text-anchor="middle">105</text></g>
+  <g class="a h62 st"><rect class="bad" x="720" y="236" width="46" height="32" rx="6"/><text class="on" x="743" y="257" text-anchor="middle">100</text></g>
+  <text class="a u1 st okt" x="40" y="358">100 is republished to the retry topic; 101–105 keep flowing.</text>
+  <text class="a u2 st badt" x="40" y="358">100 is retried after its delay and completes last: order lost.</text>
+  <text class="sub" x="40" y="382">Time is compressed. Backoff and retry delays are example values.</text>
+</svg>

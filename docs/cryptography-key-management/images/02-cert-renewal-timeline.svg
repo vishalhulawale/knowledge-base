@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 330" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Automated certificate renewal before expiry</title>
+  <desc id="d">A timeline in days. Certificate v1 is valid for 90 days (duration 2160h). With renewBefore 720h, cert-manager renews 30 days early, at day 60: it issues certificate v2 with a new private key (rotationPolicy Always), updates the claims-api-tls Secret, and the app hot-reloads it (reload-on-update). From day 60 the server serves v2, so v1 expiring at day 90 causes no outage.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .txt{fill:#334155;font-size:13px}
+    .axis{stroke:#cbd5e1;stroke-width:2}
+    .b1{fill:#4f46e5}.b2{fill:#0ea5a4}.bt{fill:#ffffff;font-size:13px;font-weight:700}
+    .cur{stroke:#d97706;stroke-width:2.5}.curt{fill:#d97706;font-size:13px;font-weight:700}
+    .mk{stroke:#64748b;stroke-width:1.5;stroke-dasharray:4 4}
+    .ok{fill:#16a34a;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .axis{stroke:#475569}.mk{stroke:#94a3b8}
+      .b1{fill:#818cf8}.b2{fill:#2dd4bf}.bt{fill:#0f172a}
+      .cur{stroke:#fbbf24}.curt{fill:#fbbf24}.ok{fill:#4ade80}
+    }
+    /* 10 s loop: cursor walks day 0 -> 150 over 0-85%; renewal at day 60 (34%); v1 expiry at day 90 (51%) */
+    @keyframes cur{0%{transform:translateX(0)}85%,95%{transform:translateX(680px)}100%{transform:translateX(680px)}}
+    @keyframes cf{0%,95%{opacity:1}99%,100%{opacity:0}}
+    .curg{animation:cur 10s infinite linear,cf 10s infinite linear}
+    @keyframes v1{0%,34%{opacity:1}36%,96%{opacity:.35}100%{opacity:1}}
+    @keyframes v2{0%,33%{opacity:0}35%,95%{opacity:1}99%,100%{opacity:0}}
+    @keyframes e2{0%,50%{opacity:0}52%,95%{opacity:1}99%,100%{opacity:0}}
+    .v1{animation:v1 10s infinite linear}.v2{animation:v2 10s infinite linear;opacity:0}.e2{animation:e2 10s infinite linear;opacity:0}
+    @media (prefers-reduced-motion: reduce){.curg,.v1,.v2,.e2{animation:none}.curg{transform:translateX(340px)}.v1{opacity:.35}.v2,.e2{opacity:1}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="328" rx="14"/>
+  <text class="h" x="28" y="40">Renew early, rotate the key, never expire</text>
+  <text class="sub" x="28" y="62">cert-manager Certificate from this page: duration 2160h (90 days), renewBefore 720h (30 days).</text>
+
+  <!-- day markers -->
+  <line class="mk" x1="352" y1="92" x2="352" y2="214"/>
+  <line class="mk" x1="488" y1="92" x2="488" y2="214"/>
+
+  <!-- bars: x = 80 + day * 4.533 -->
+  <g class="v1"><rect class="b1" x="80" y="104" width="408" height="38" rx="8"/>
+    <text class="bt" x="96" y="128">v1 certificate · valid 90 days</text></g>
+  <g class="v2"><rect class="b2" x="352" y="156" width="408" height="38" rx="8"/>
+    <text class="bt" x="368" y="180">v2 · new private key · 90 days</text></g>
+
+  <line class="axis" x1="80" y1="216" x2="760" y2="216"/>
+  <text class="sub" x="80" y="236" text-anchor="middle">day 0</text>
+  <text class="sub" x="216" y="236" text-anchor="middle">30</text>
+  <text class="sub" x="352" y="236" text-anchor="middle">60</text>
+  <text class="sub" x="488" y="236" text-anchor="middle">90</text>
+  <text class="sub" x="624" y="236" text-anchor="middle">120</text>
+  <text class="sub" x="760" y="236" text-anchor="middle">150</text>
+
+  <g class="curg">
+    <line class="cur" x1="80" y1="86" x2="80" y2="214"/>
+    <text class="curt" x="80" y="82" text-anchor="middle">now</text>
+  </g>
+
+  <g class="v2">
+    <text class="lbl" x="28" y="270">Day 60: renewal (30 days early)</text>
+    <text class="txt" x="28" y="290">new key + certificate (rotationPolicy: Always), Secret updated,</text>
+    <text class="txt" x="28" y="308">app hot-reloads it (reload-on-update)</text>
+  </g>
+  <g class="e2">
+    <text class="ok" x="772" y="270" text-anchor="end">Day 90: v1 expires</text>
+    <text class="txt" x="772" y="290" text-anchor="end">nothing serves it any more,</text>
+    <text class="txt" x="772" y="308" text-anchor="end">so no outage</text>
+  </g>
+</svg>

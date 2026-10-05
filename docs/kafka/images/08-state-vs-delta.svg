@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 270" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Delta events vs state events under duplicates</title>
+  <desc id="d">Starting from a balance of 100. Left, a delta event "add 20": applied once the balance is 120, applied twice by a duplicate it becomes 140, which is wrong. Right, a state event "balance = 120": applied once or twice the balance is 120, because setting state is naturally idempotent.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .okb{fill:#ffffff;stroke:#16a34a;stroke-width:2}
+    .badb{fill:#ffffff;stroke:#dc2626;stroke-width:2}
+    .pri{fill:#4f46e5}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .num{fill:#0f172a;font-size:20px;font-weight:700}
+    .numbad{fill:#dc2626;font-size:20px;font-weight:700}
+    .numok{fill:#15803d;font-size:20px;font-weight:700}
+    .badt{fill:#dc2626;font-size:14px;font-weight:700}
+    .okt{fill:#15803d;font-size:14px;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}.arw{fill:#64748b}
+    .sep{stroke:#e2e8f0;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.num{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.okb{fill:#111827;stroke:#4ade80}.badb{fill:#111827;stroke:#f87171}
+      .pri{fill:#818cf8}.on{fill:#0f172a}
+      .numbad,.badt{fill:#f87171}.numok,.okt{fill:#4ade80}
+      .ln{stroke:#94a3b8}.arw{fill:#94a3b8}.sep{stroke:#334155}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="268" rx="14"/>
+  <text class="h" x="28" y="40">Why state events survive duplicates</text>
+  <line class="sep" x1="400" y1="62" x2="400" y2="236"/>
+
+  <!-- delta -->
+  <text class="lbl" x="28" y="80">Delta event</text>
+  <rect class="pri" x="140" y="62" width="70" height="26" rx="6"/><text class="on" x="175" y="80" text-anchor="middle">+20</text>
+  <rect class="box" x="28" y="110" width="80" height="50" rx="8"/><text class="sub" x="68" y="128" text-anchor="middle">start</text><text class="num" x="68" y="151" text-anchor="middle">100</text>
+  <path class="ln" d="M110 135 H130"/><path class="arw" d="M128 129 L138 135 L128 141 Z"/>
+  <rect class="okb" x="140" y="110" width="100" height="50" rx="8"/><text class="sub" x="190" y="128" text-anchor="middle">once</text><text class="numok" x="190" y="151" text-anchor="middle">120</text>
+  <path class="ln" d="M242 135 H262"/><path class="arw" d="M260 129 L270 135 L260 141 Z"/>
+  <rect class="badb" x="272" y="110" width="108" height="50" rx="8"/><text class="sub" x="326" y="128" text-anchor="middle">twice</text><text class="numbad" x="326" y="151" text-anchor="middle">140</text>
+  <text class="badt" x="28" y="196">Each copy adds again: wrong total.</text>
+  <text class="sub" x="28" y="218">Needs a dedupe table or version check.</text>
+
+  <!-- state -->
+  <text class="lbl" x="424" y="80">State event</text>
+  <rect class="pri" x="536" y="62" width="140" height="26" rx="6"/><text class="on" x="606" y="80" text-anchor="middle">balance = 120</text>
+  <rect class="box" x="424" y="110" width="80" height="50" rx="8"/><text class="sub" x="464" y="128" text-anchor="middle">start</text><text class="num" x="464" y="151" text-anchor="middle">100</text>
+  <path class="ln" d="M506 135 H526"/><path class="arw" d="M524 129 L534 135 L524 141 Z"/>
+  <rect class="okb" x="536" y="110" width="100" height="50" rx="8"/><text class="sub" x="586" y="128" text-anchor="middle">once</text><text class="numok" x="586" y="151" text-anchor="middle">120</text>
+  <path class="ln" d="M638 135 H658"/><path class="arw" d="M656 129 L666 135 L656 141 Z"/>
+  <rect class="okb" x="668" y="110" width="104" height="50" rx="8"/><text class="sub" x="720" y="128" text-anchor="middle">twice</text><text class="numok" x="720" y="151" text-anchor="middle">120</text>
+  <text class="okt" x="424" y="196">Setting state twice changes nothing.</text>
+  <text class="sub" x="424" y="218">Naturally idempotent: no extra store.</text>
+
+  <text class="sub" x="28" y="254">State events work when consumers only need the current value, not the history of changes.</text>
+</svg>

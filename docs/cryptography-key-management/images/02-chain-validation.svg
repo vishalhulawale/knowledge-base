@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 404" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Building a certificate chain to a trusted root</title>
+  <desc id="d">First run: the server sends the leaf certificate for claims.local and the KB Issuing CA intermediate. The client verifies that the intermediate signed the leaf, that KB Root CA signed the intermediate, that the root is in its trust store, and that the SAN includes claims.local and the dates are valid, giving Verify return code 0 (ok). Second run: the server sends only the leaf. The client cannot find the issuer KB Issuing CA, which was not sent and is not in the trust store, so the path cannot be built: Verify return code 21, unable to verify the first certificate.</desc>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ahp" d="M0,0 L10,5 L0,10 z"/></marker>
+    <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ahpr" d="M0,0 L10,5 L0,10 z"/></marker>
+  </defs>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .txt{fill:#334155;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .ghost{fill:none;stroke:#cbd5e1;stroke-dasharray:6 4}
+    .ts{fill:#0ea5a4;fill-opacity:.1;stroke:#0ea5a4;stroke-width:1.5}
+    .tst{fill:#0f766e;font-size:13px;font-weight:700}
+    .arr{stroke:#64748b;stroke-width:2;fill:none}.ahp{fill:#64748b}
+    .arrr{stroke:#dc2626;stroke-width:2;fill:none;stroke-dasharray:5 4}.ahpr{fill:#dc2626}
+    .ok{fill:#16a34a;font-size:13px;font-weight:700}.bad{fill:#dc2626;font-size:13px;font-weight:700}
+    .mono{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:13px}
+    .phase{fill:#4f46e5;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.ghost{stroke:#475569}
+      .ts{fill:#2dd4bf;stroke:#2dd4bf}.tst{fill:#5eead4}
+      .arr{stroke:#94a3b8}.ahp{fill:#94a3b8}.arrr{stroke:#f87171}.ahpr{fill:#f87171}
+      .ok{fill:#4ade80}.bad{fill:#f87171}.phase{fill:#818cf8}
+    }
+    /* 12 s loop: run 1 full chain (0-46%), run 2 leaf only (50-93%) */
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes p1{0%,46%{opacity:1}50%,95%{opacity:0}99%,100%{opacity:1}}
+    @keyframes p2{0%,46%{opacity:0}50%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes c1{0%,5%{opacity:0}7%,46%{opacity:1}50%,100%{opacity:0}}
+    @keyframes c2{0%,11%{opacity:0}13%,46%{opacity:1}50%,100%{opacity:0}}
+    @keyframes c3{0%,17%{opacity:0}19%,46%{opacity:1}50%,100%{opacity:0}}
+    @keyframes c4{0%,23%{opacity:0}25%,46%{opacity:1}50%,100%{opacity:0}}
+    @keyframes c5{0%,29%{opacity:0}31%,46%{opacity:1}50%,100%{opacity:0}}
+    @keyframes d1{0%,55%{opacity:0}57%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes d2{0%,62%{opacity:0}64%,93%{opacity:1}97%,100%{opacity:0}}
+    .p1{animation-name:p1;opacity:1}.p2{animation-name:p2}
+    .c1{animation-name:c1}.c2{animation-name:c2}.c3{animation-name:c3}.c4{animation-name:c4}.c5{animation-name:c5}
+    .d1{animation-name:d1}.d2{animation-name:d2}
+    @media (prefers-reduced-motion: reduce){.a{animation:none}.p1,.c1,.c2,.c3,.c4,.c5{opacity:1}.p2,.d1,.d2{opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="402" rx="14"/>
+  <text class="h" x="28" y="40">Chain validation: leaf → intermediate → trusted root</text>
+  <text class="a p1 phase" x="28" y="64">Run 1: server sends leaf + intermediate</text>
+  <text class="a p2 phase" x="28" y="64">Run 2: server sends the leaf only</text>
+
+  <text class="sub" x="40" y="96">Sent by the server</text>
+  <!-- intermediate -->
+  <g class="a p1">
+    <rect class="box" x="40" y="106" width="270" height="64" rx="10"/>
+    <text class="lbl" x="56" y="132">Intermediate: KB Issuing CA</text>
+    <text class="sub" x="56" y="154">issuer: KB Root CA · CA:TRUE</text>
+    <path class="arr" d="M175,236 L175,174" marker-end="url(#ah)"/>
+    <text class="sub" x="185" y="208">signed by</text>
+    <path class="arr" d="M312,138 L446,138" marker-end="url(#ah)"/>
+    <text class="sub" x="379" y="128" text-anchor="middle">signed by</text>
+  </g>
+  <g class="a p2">
+    <rect class="ghost" x="40" y="106" width="270" height="64" rx="10"/>
+    <text class="sub" x="175" y="143" text-anchor="middle">intermediate not sent</text>
+    <path class="arrr" d="M175,236 L175,174" marker-end="url(#ahr)"/>
+    <text class="bad" x="185" y="208">issuer?</text>
+  </g>
+  <!-- leaf -->
+  <rect class="box" x="40" y="240" width="270" height="64" rx="10"/>
+  <text class="lbl" x="56" y="266">Leaf: claims.local</text>
+  <text class="sub" x="56" y="288">issuer: KB Issuing CA · 90 days</text>
+
+  <!-- trust store -->
+  <rect class="ts" x="436" y="82" width="336" height="100" rx="12"/>
+  <text class="tst" x="452" y="102">Client trust store</text>
+  <rect class="box" x="452" y="110" width="250" height="60" rx="10"/>
+  <text class="lbl" x="468" y="134">Root: KB Root CA</text>
+  <text class="sub" x="468" y="156">self-signed · kept offline</text>
+
+  <!-- checks -->
+  <text class="a c1 ok" x="436" y="220">✓ intermediate's signature on the leaf</text>
+  <text class="a c2 ok" x="436" y="242">✓ root's signature on the intermediate</text>
+  <text class="a c3 ok" x="436" y="264">✓ root found in the trust store</text>
+  <text class="a c4 ok" x="436" y="286">✓ SAN has claims.local, dates valid</text>
+  <text class="a c5 ok mono" x="436" y="316">Verify return code: 0 (ok)</text>
+
+  <text class="a d1 bad" x="436" y="220">✗ issuer KB Issuing CA not sent</text>
+  <text class="a d1 txt" x="436" y="242">and not in the trust store, so no</text>
+  <text class="a d1 txt" x="436" y="260">path to a trusted root</text>
+  <text class="a d2 bad mono" x="436" y="292">Verify return code: 21</text>
+  <text class="a d2 bad mono" x="436" y="312">(unable to verify the first</text>
+  <text class="a d2 bad mono" x="436" y="330">certificate)</text>
+
+  <text class="sub" x="28" y="364">Clients trust only roots, so the server must send the leaf and its intermediates.</text>
+  <text class="sub" x="28" y="384">Results as measured with OpenSSL 3 on this page.</text>
+</svg>

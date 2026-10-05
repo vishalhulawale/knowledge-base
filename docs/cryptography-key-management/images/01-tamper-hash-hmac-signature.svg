@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 404" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Tampering against a hash, an HMAC and a signature</title>
+  <desc id="d">An attacker changes amount=125 to amount=126 in transit. With a plain SHA-256 hash, the attacker recomputes the digest over the new message, the receiver's check passes and the tampering is accepted. With HMAC-SHA256 the attacker doesn't have the shared key K, so the receiver's recomputed tag doesn't match and the message is rejected, although anyone holding K could create tags. With a digital signature the attacker doesn't have the private key, verification with the public key fails and the message is rejected; only the signer can sign, which gives non-repudiation.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .sub{fill:#64748b;font-size:13px}
+    .txt{fill:#334155;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .mono{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,'DejaVu Sans Mono',monospace}
+    .msg{font-size:16px;fill:#334155}.tam{font-size:16px;fill:#dc2626;font-weight:700}
+    .badc{fill:#dc2626}.okc{fill:#16a34a}.ct{fill:#ffffff;font-size:14px;font-weight:700}
+    .warn{fill:#dc2626;font-size:13px;font-weight:700}
+    .acc{fill:#0f766e;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt,.msg{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .tam,.warn{fill:#f87171}.badc{fill:#f87171}.okc{fill:#4ade80}.ct{fill:#0f172a}.acc{fill:#5eead4}
+    }
+    /* 10 s loop: tamper at 10%, attempt 25%, receiver check 45%, verdict 62%; hold */
+    .a{opacity:0;animation:10s infinite linear}
+    @keyframes m0{0%,9%{opacity:1}11%,95%{opacity:0}99%,100%{opacity:1}}
+    @keyframes m1{0%,9%{opacity:0}11%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s1{0%,24%{opacity:0}26%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s2{0%,44%{opacity:0}46%,93%{opacity:1}97%,100%{opacity:0}}
+    @keyframes s3{0%,61%{opacity:0}63%,93%{opacity:1}97%,100%{opacity:0}}
+    .m0{animation-name:m0;opacity:1}.m1{animation-name:m1}.s1{animation-name:s1}.s2{animation-name:s2}.s3{animation-name:s3}
+    @media (prefers-reduced-motion: reduce){.a{animation:none;opacity:1}.m0{opacity:0}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="402" rx="14"/>
+  <text class="h" x="28" y="40">Who can forge? Hash vs HMAC vs signature</text>
+  <text class="sub" x="28" y="62">The same tampering, checked three ways.</text>
+
+  <rect class="box" x="28" y="78" width="744" height="40" rx="8"/>
+  <text class="lbl" x="44" y="103">Message in transit</text>
+  <text class="a m0 mono msg" x="210" y="104">amount=125</text>
+  <text class="a m1 mono tam" x="210" y="104">amount=126</text>
+  <text class="a m1 warn" x="340" y="103">← attacker edits it</text>
+
+  <!-- column headers -->
+  <rect class="box" x="28" y="134" width="240" height="52" rx="10"/>
+  <text class="lbl" x="44" y="156">SHA-256 hash</text><text class="sub" x="44" y="176">key: none</text>
+  <rect class="box" x="280" y="134" width="240" height="52" rx="10"/>
+  <text class="lbl" x="296" y="156">HMAC-SHA256</text><text class="sub" x="296" y="176">key: shared secret K</text>
+  <rect class="box" x="532" y="134" width="240" height="52" rx="10"/>
+  <text class="lbl" x="548" y="156">Digital signature</text><text class="sub" x="548" y="176">private signs, public verifies</text>
+
+  <g class="a s1">
+    <text class="sub" x="28" y="212">Attacker</text>
+    <text class="txt" x="44" y="232">recomputes the digest</text>
+    <text class="mono txt" x="44" y="250">SHA-256(amount=126)</text>
+    <text class="txt" x="296" y="232">has no K, so can only</text>
+    <text class="txt" x="296" y="250">keep the old tag</text>
+    <text class="txt" x="548" y="232">has no private key, so</text>
+    <text class="txt" x="548" y="250">can only keep the old sig</text>
+  </g>
+  <g class="a s2">
+    <text class="sub" x="28" y="278">Receiver</text>
+    <text class="txt" x="44" y="298">digest matches the</text>
+    <text class="txt" x="44" y="316">message it received</text>
+    <text class="mono txt" x="296" y="298">HMAC(K, msg) ≠ tag</text>
+    <text class="sub" x="296" y="316">compared in constant time</text>
+    <text class="mono txt" x="548" y="298">Verify(pub, msg, sig)</text>
+    <text class="txt" x="548" y="316">fails</text>
+  </g>
+  <g class="a s3">
+    <rect class="badc" x="44" y="330" width="208" height="30" rx="15"/><text class="ct" x="148" y="350" text-anchor="middle">✗ tampering accepted</text>
+    <rect class="okc" x="296" y="330" width="208" height="30" rx="15"/><text class="ct" x="400" y="350" text-anchor="middle">✓ rejected</text>
+    <rect class="okc" x="548" y="330" width="208" height="30" rx="15"/><text class="ct" x="652" y="350" text-anchor="middle">✓ rejected</text>
+    <text class="sub" x="44" y="380">integrity only vs accidents</text>
+    <text class="sub" x="296" y="380">but any K holder can create tags</text>
+    <text class="acc" x="548" y="380">only the signer can sign</text>
+  </g>
+</svg>

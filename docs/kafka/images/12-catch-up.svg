@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 372" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Catching up after a consumer outage</title>
+  <desc id="d">A lag chart over time with a constant input rate. Lag is zero until the consumer goes down. During the outage lag rises at the input rate. After the consumer comes back, lag drains at the consumer rate minus the input rate. A consumer with twice the input rate drains the backlog in the same time the outage lasted. A consumer at 1.25 times the input rate drains it four times more slowly and is still behind at the end of the chart.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .ax{stroke:#94a3b8;stroke-width:1.5;fill:none}
+    .band{fill:#fee2e2}
+    .bandt{fill:#dc2626;font-size:13px;font-weight:700}
+    .base{stroke:#4f46e5;stroke-width:3;fill:none;stroke-linejoin:round}
+    .fast{stroke:#16a34a;stroke-width:3;fill:none;stroke-linejoin:round}
+    .slow{stroke:#d97706;stroke-width:3;fill:none;stroke-linejoin:round}
+    .okt{fill:#15803d;font-size:14px;font-weight:700}
+    .warnt{fill:#b45309;font-size:14px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .ax{stroke:#64748b}.band{fill:#3b1d24}.bandt{fill:#f87171}
+      .base{stroke:#818cf8}.fast{stroke:#4ade80}.slow{stroke:#fbbf24}
+      .okt{fill:#4ade80}.warnt{fill:#fbbf24}
+    }
+    /* 10 s loop: rise drawn 0-40%, recovery drawn 40-75%, hold, fade */
+    .dr{stroke-dasharray:1;stroke-dashoffset:1}
+    @keyframes p1{0%{stroke-dashoffset:1;opacity:1}40%,92%{stroke-dashoffset:0;opacity:1}96%,100%{stroke-dashoffset:0;opacity:0}}
+    @keyframes p2{0%,40%{stroke-dashoffset:1;opacity:1}75%,92%{stroke-dashoffset:0;opacity:1}96%,100%{stroke-dashoffset:0;opacity:0}}
+    @keyframes lb{0%,75%{opacity:0}78%,92%{opacity:1}96%,100%{opacity:0}}
+    .d1{animation:p1 10s infinite linear}.d2{animation:p2 10s infinite linear}.lb{opacity:0;animation:lb 10s infinite linear}
+    @media (prefers-reduced-motion: reduce){
+      .d1,.d2{animation:none;stroke-dashoffset:0}
+      .lb{animation:none;opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="370" rx="14"/>
+  <text class="h" x="28" y="40">Catching up after an outage needs headroom</text>
+  <text class="sub" x="28" y="62">Input rate stays constant the whole time.</text>
+
+  <!-- outage band t=2..4 -->
+  <rect class="band" x="220" y="96" width="120" height="184"/>
+  <text class="bandt" x="280" y="114" text-anchor="middle">consumer down</text>
+  <!-- axes -->
+  <path class="ax" d="M100 90 V280 H720"/>
+  <text class="sub" x="92" y="104" text-anchor="end">lag</text>
+  <text class="sub" x="720" y="300" text-anchor="end">time →</text>
+
+  <path class="base dr d1" pathLength="1" d="M100 280 L220 280 L340 128"/>
+  <path class="fast dr d2" pathLength="1" d="M340 128 L460 280 L700 280"/>
+  <path class="slow dr d2" pathLength="1" d="M340 128 L700 242"/>
+
+  <g class="lb">
+    <text class="okt" x="472" y="270">2× input: caught up in the outage's length</text>
+    <text class="warnt" x="520" y="212">1.25× input: still behind</text>
+  </g>
+
+  <text class="txt" x="28" y="330">Lag grows at the input rate while the consumer is down, and drains at</text>
+  <text class="txt" x="28" y="350">(consumer rate − input rate) afterwards. Plan for about 2× normal throughput.</text>
+</svg>

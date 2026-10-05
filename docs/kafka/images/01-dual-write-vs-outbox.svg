@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Dual write vs transactional outbox</title>
+  <desc id="d">Left, dual write: the service writes to the database and sends to Kafka as two separate steps. Case one: the database commits but the send fails, so the order is saved and the event is lost. Case two: the send succeeds but the database transaction rolls back, so an event is published for an order that was never saved. Right, transactional outbox: the order row and the outbox row are written in one database transaction, so both commit or neither does. A relay, either a poller or Debezium CDC, then publishes the outbox row to Kafka. The relay is at-least-once, so consumers deduplicate on eventId.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .txt{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .okb{fill:#ffffff;stroke:#16a34a;stroke-width:2}
+    .badb{fill:#ffffff;stroke:#dc2626;stroke-width:2}
+    .txb{fill:none;stroke:#0ea5a4;stroke-width:2;stroke-dasharray:6 4}
+    .ok{fill:#16a34a}.bad{fill:#dc2626}
+    .okt{fill:#16a34a;font-size:14px;font-weight:700}
+    .badt{fill:#dc2626;font-size:14px;font-weight:700}
+    .tealt{fill:#0f766e;font-size:13px;font-weight:700}
+    .mk{stroke:#ffffff;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .arw{fill:#64748b}
+    .sep{stroke:#e2e8f0;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.txt{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .okb{fill:#111827;stroke:#4ade80}.badb{fill:#111827;stroke:#f87171}
+      .txb{stroke:#2dd4bf}
+      .ok{fill:#4ade80}.bad{fill:#f87171}
+      .okt{fill:#4ade80}.badt{fill:#f87171}.tealt{fill:#5eead4}
+      .mk{stroke:#0f172a}
+      .ln{stroke:#94a3b8}.arw{fill:#94a3b8}.sep{stroke:#334155}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">Dual write vs transactional outbox</text>
+  <line class="sep" x1="400" y1="62" x2="400" y2="330"/>
+
+  <!-- Dual write -->
+  <text class="badt" x="28" y="80">Dual write: no shared transaction</text>
+
+  <text class="lbl" x="28" y="112">Case 1: commit, then send fails</text>
+  <rect class="okb" x="28" y="124" width="150" height="38" rx="8"/>
+  <text class="txt" x="94" y="148" text-anchor="middle">DB commit</text>
+  <circle class="ok" cx="160" cy="143" r="9"/><path class="mk" d="M155 143 l3.5 3.5 l6 -7"/>
+  <path class="ln" d="M180 143 H206"/><path class="arw" d="M204 137 L214 143 L204 149 Z"/>
+  <rect class="badb" x="216" y="124" width="150" height="38" rx="8"/>
+  <text class="txt" x="282" y="148" text-anchor="middle">Kafka send</text>
+  <circle class="bad" cx="348" cy="143" r="9"/><path class="mk" d="M344 139 l8 8 M352 139 l-8 8"/>
+  <text class="badt" x="28" y="186">Order saved, event lost.</text>
+
+  <text class="lbl" x="28" y="226">Case 2: send succeeds, tx rolls back</text>
+  <rect class="okb" x="28" y="238" width="150" height="38" rx="8"/>
+  <text class="txt" x="94" y="262" text-anchor="middle">Kafka send</text>
+  <circle class="ok" cx="160" cy="257" r="9"/><path class="mk" d="M155 257 l3.5 3.5 l6 -7"/>
+  <path class="ln" d="M180 257 H206"/><path class="arw" d="M204 251 L214 257 L204 263 Z"/>
+  <rect class="badb" x="216" y="238" width="150" height="38" rx="8"/>
+  <text class="txt" x="282" y="262" text-anchor="middle">DB rollback</text>
+  <circle class="bad" cx="348" cy="257" r="9"/><path class="mk" d="M344 253 l8 8 M352 253 l-8 8"/>
+  <text class="badt" x="28" y="300">Event for an order that</text>
+  <text class="badt" x="28" y="318">was never saved.</text>
+
+  <!-- Outbox -->
+  <text class="okt" x="424" y="80">Outbox: one DB transaction</text>
+  <rect class="txb" x="424" y="96" width="348" height="92" rx="10"/>
+  <text class="tealt" x="436" y="116">single DB transaction</text>
+  <rect class="box" x="436" y="128" width="150" height="40" rx="8"/>
+  <text class="txt" x="511" y="153" text-anchor="middle">orders row</text>
+  <rect class="box" x="608" y="128" width="150" height="40" rx="8"/>
+  <text class="txt" x="683" y="153" text-anchor="middle">outbox row</text>
+  <text class="sub" x="760" y="116" text-anchor="end">both commit, or neither</text>
+  <path class="ln" d="M598 190 V230"/><path class="arw" d="M592 226 L598 236 L604 226 Z"/>
+  <rect class="box" x="478" y="238" width="240" height="40" rx="8"/>
+  <text class="txt" x="598" y="263" text-anchor="middle">Relay: poller or Debezium CDC</text>
+  <path class="ln" d="M598 280 V298"/><path class="arw" d="M592 294 L598 304 L604 294 Z"/>
+  <rect class="okb" x="538" y="306" width="120" height="34" rx="8"/>
+  <text class="txt" x="598" y="328" text-anchor="middle">Kafka</text>
+  <text class="tealt" x="424" y="328">at-least-once</text>
+
+  <text class="sub" x="28" y="364">The relay may publish a row twice after a crash, so consumers still dedupe on eventId.</text>
+</svg>
