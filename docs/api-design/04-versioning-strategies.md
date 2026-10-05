@@ -56,6 +56,9 @@ flowchart TD
 
 **Expand and contract** is the API equivalent of a zero-downtime database migration: add the new shape, support both, migrate clients, then remove the old shape once usage reaches zero.
 
+![Animation: the response gains amountMinor 1999 next to amount 19.99, clients switch to amountMinor one by one while amount is marked deprecated, and once no client reads amount it is removed](images/04-expand-contract.svg){ loading=lazy }
+*Watch the client column: the old field disappears only after the last row has turned teal.*
+
 ### Where to put the version
 
 | Strategy | Example | Pros | Cons |
@@ -104,6 +107,9 @@ A version you can't remove is a version you maintain forever. A deprecation proc
 3. **Measure** who still calls the old version (by client id, API key or consumer team) and contact them directly.
 4. **Brownouts** (optional): fail a small percentage of old-version calls for short windows before the sunset date, so forgotten clients surface early.
 5. **Remove:** respond `410 Gone` with a problem body pointing to the migration guide, then delete the code.
+
+![Illustrative curve of v1's share of traffic falling from 100 percent at the announcement through owner outreach and brownouts to zero, when v1 starts answering 410 Gone](images/04-deprecation-sunset.svg){ loading=lazy }
+*Notice the long tail after month 3: the last few percent are the forgotten clients that brownouts are designed to flush out.*
 
 ### Versioning in the wider platform
 
