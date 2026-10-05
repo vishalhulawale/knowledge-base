@@ -45,6 +45,9 @@ flowchart LR
 | Sponsoring | They're ready for more scope | Recommend them to own a micro-frontend or to present a design to the architects |
 | Teaching through structure | Team-wide gaps | Brown-bags, guilds, written standards, review checklists |
 
+![Stacked area chart of a lead's time with one engineer over 12 months: mentoring falls from 70 to 5 percent, coaching peaks around month 6, and sponsoring grows from 5 to 70 percent](images/04-mentor-coach-sponsor.svg){ loading=lazy }
+*Notice the orange band growing: the end state of good mentoring is giving the stage away, not explaining more.*
+
 ### A lightweight growth plan
 
 ```yaml

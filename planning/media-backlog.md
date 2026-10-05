@@ -85,7 +85,7 @@ Suggested pictures per page; ⏵ marks an animation.
 - [x] graphql/03 Resolvers and execution model
 - [x] javascript-typescript/05 Equality, coercion, immutability
 - [x] javascript-typescript/09 Output prediction and gotchas
-- [ ] leadership-behavioral/04 Mentoring and growing engineers
+- [x] leadership-behavioral/04 Mentoring and growing engineers
 - [ ] leadership-behavioral/05 Handling conflict and technical disagreements
 - [ ] leadership-behavioral/06 Managing underperformance
 - [ ] leadership-behavioral/08 Production incidents and postmortems
