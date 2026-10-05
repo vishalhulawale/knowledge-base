@@ -4,6 +4,8 @@ Researched pages that still need illustrations or animations, per the *Media* se
 
 Tick a page off once its SVGs are in `docs/<topic>/images/` and embedded.
 
+**Status (2026-10-05): complete.** All 67 pages below are ticked: 117 new SVGs, every researched page now has at least two illustrations, and all pass the overlap, overflow, dark-mode and reduced-motion checks.
+
 ## Summary
 
 | Status | Topics |
