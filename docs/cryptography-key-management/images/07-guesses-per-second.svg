@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Password hash guesses per second on one core</title>
+  <desc id="d">Guesses per second per CPU core, derived from the page&#x27;s measured timings, on a logarithmic scale. Salted SHA-256: 3.25 million per second. PBKDF2 with 310,000 iterations: about 3.4 per second (294 ms each). bcrypt cost 10: about 13 per second; cost 12: about 3.3; cost 14: about 0.8. Argon2id with 19 MiB: about 20 per second, but each guess also needs 19 MiB of memory, which limits GPU parallelism. Every slow algorithm is about a million times slower to attack than plain SHA-256.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .bar{fill:#dc2626}.bar2{fill:#4f46e5}.bar3{fill:#16a34a}.gl{stroke:#e2e8f0;stroke-width:1}@media (prefers-color-scheme: dark){.bar2{fill:#6366f1}.bar{fill:#f87171}.gl{stroke:#334155}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Attacker guesses per second, one CPU core</text>
+  <text class="sub" x="28" y="62">From the page&#x27;s measured per-hash times. Log scale: each gridline is 10×.</text>
+  <line class="gl" x1="190.0" x2="190.0" y1="92" y2="320"/>
+  <text class="sm" x="190" y="338" text-anchor="middle">0.1</text>
+  <line class="gl" x1="250.0" x2="250.0" y1="92" y2="320"/>
+  <text class="sm" x="250" y="338" text-anchor="middle">1</text>
+  <line class="gl" x1="310.0" x2="310.0" y1="92" y2="320"/>
+  <text class="sm" x="310" y="338" text-anchor="middle">10</text>
+  <line class="gl" x1="370.0" x2="370.0" y1="92" y2="320"/>
+  <text class="sm" x="370" y="338" text-anchor="middle">100</text>
+  <line class="gl" x1="430.0" x2="430.0" y1="92" y2="320"/>
+  <text class="sm" x="430" y="338" text-anchor="middle">1k</text>
+  <line class="gl" x1="490.0" x2="490.0" y1="92" y2="320"/>
+  <text class="sm" x="490" y="338" text-anchor="middle">10k</text>
+  <line class="gl" x1="550.0" x2="550.0" y1="92" y2="320"/>
+  <text class="sm" x="550" y="338" text-anchor="middle">100k</text>
+  <line class="gl" x1="610.0" x2="610.0" y1="92" y2="320"/>
+  <text class="sm" x="610" y="338" text-anchor="middle">1M</text>
+  <line class="gl" x1="670.0" x2="670.0" y1="92" y2="320"/>
+  <text class="sm" x="670" y="338" text-anchor="middle">10M</text>
+  <text class="tx" x="178" y="114" text-anchor="end" font-weight="700">SHA-256 (salted)</text>
+  <rect class="bar" x="190" y="100" width="450.713" height="22" rx="4"/>
+  <text class="sm" x="648.713" y="116" font-weight="700">3.25 M/s</text>
+  <text class="tx" x="178" y="151" text-anchor="end" font-weight="700">Argon2id 19 MiB</text>
+  <rect class="bar3" x="190" y="137" width="138.062" height="22" rx="4"/>
+  <text class="sm" x="336.062" y="153" font-weight="700">~20/s + 19 MiB each</text>
+  <text class="tx" x="178" y="188" text-anchor="end" font-weight="700">bcrypt cost 10</text>
+  <rect class="bar2" x="190" y="174" width="126.811" height="22" rx="4"/>
+  <text class="sm" x="324.811" y="190" font-weight="700">~13/s</text>
+  <text class="tx" x="178" y="225" text-anchor="end" font-weight="700">bcrypt cost 12</text>
+  <rect class="bar2" x="190" y="211" width="91.3727" height="22" rx="4"/>
+  <text class="sm" x="289.373" y="227" font-weight="700">~3.3/s</text>
+  <text class="tx" x="178" y="262" text-anchor="end" font-weight="700">PBKDF2 310k</text>
+  <rect class="bar2" x="190" y="248" width="91.8992" height="22" rx="4"/>
+  <text class="sm" x="289.899" y="264" font-weight="700">~3.4/s</text>
+  <text class="tx" x="178" y="299" text-anchor="end" font-weight="700">bcrypt cost 14</text>
+  <rect class="bar2" x="190" y="285" width="55.3361" height="22" rx="4"/>
+  <text class="sm" x="253.336" y="301" font-weight="700">~0.8/s</text>
+  <text class="tx" x="28" y="370">Your cost per login is the attacker&#x27;s cost per guess. Tune to ~50–300 ms and rate-limit the login endpoint.</text>
+  <text class="sub" x="28" y="390">GPUs make SHA-256 billions/s; memory-hard Argon2id is what keeps GPU rigs from scaling.</text>
+</svg>

@@ -51,6 +51,9 @@ Requirements for password storage:
 
 Each step of bcrypt cost doubles the time (77 → 300 → 1,196 ms for 10 → 12 → 14). Tune to your login rate and hardware: an endpoint doing 300 ms of CPU per login is also a **denial-of-service** vector, so pair it with rate limiting.
 
+![Log-scale bar chart of attacker guesses per second on one core, derived from the measured timings: salted SHA-256 3.25 million, Argon2id about 20 plus 19 MiB each, bcrypt cost 10 about 13, cost 12 about 3.3, PBKDF2 310k about 3.4 and bcrypt cost 14 about 0.8](images/07-guesses-per-second.svg){ loading=lazy }
+*Notice the red bar is about six gridlines longer than the rest: a million times more guesses for the same hardware.*
+
 ### Salt, pepper and stored format
 
 ```text
@@ -82,6 +85,9 @@ sequenceDiagram
 *Notice that you can only re-hash when you have the plaintext, which is during a successful login. For accounts that never log in, wrap the old hash (bcrypt(sha256_hash)) or force a reset.*
 
 Measured with `PasswordEncoderFactories.createDelegatingPasswordEncoder()`: new hashes are `{bcrypt}$2a$...`, a legacy `{sha256}` hash still matched, `upgradeEncoding()` returned **true** for it and **false** for the bcrypt hash. Spring Security's `DaoAuthenticationProvider` calls `UserDetailsPasswordService.updatePassword` automatically when this happens.
+
+![Animation: alice logs in with a legacy sha256 hash; the delegating encoder verifies it with SHA-256, upgradeEncoding returns true, the password is re-hashed with bcrypt cost 12 and stored; the next login verifies with bcrypt and needs no upgrade](images/07-rehash-on-login.svg){ loading=lazy }
+*Watch the stored value flip from orange to green at step 4: that's the one moment the plaintext is available to re-hash.*
 
 ### Secrets management
 

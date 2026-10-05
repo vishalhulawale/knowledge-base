@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Rehash on login</title>
+  <desc id="d">A user whose stored hash is a legacy salted SHA-256 logs in. The delegating encoder reads the sha256 prefix, verifies the password with the old algorithm, and because upgradeEncoding returns true it immediately re-hashes the plaintext it now has with bcrypt cost 12 and stores the new hash. The next login is verified with bcrypt and needs no upgrade. Accounts that never log in keep the old hash, so they need a wrapped hash or a forced reset.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:14s infinite linear}
+    @keyframes h0{0%,55%{opacity:1}56%{opacity:0}100%{opacity:0}}
+    .h0{animation-name:h0}
+    @keyframes h1{0%{opacity:0}55%{opacity:0}56%,99%{opacity:1}100%{opacity:0}100%{opacity:0}}
+    .h1{animation-name:h1}
+    @keyframes s0{0%{opacity:0}3%{opacity:0}4%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .s0{animation-name:s0}
+    @keyframes s1{0%{opacity:0}17%{opacity:0}18%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .s1{animation-name:s1}
+    @keyframes s2{0%{opacity:0}31%{opacity:0}32%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .s2{animation-name:s2}
+    @keyframes s3{0%{opacity:0}45%{opacity:0}46%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .s3{animation-name:s3}
+    @keyframes s4{0%{opacity:0}69%{opacity:0}70%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .s4{animation-name:s4}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      .h0{opacity:0!important}
+    }
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Legacy {sha256} hash → {bcrypt} on the next successful login</text>
+  <text class="sub" x="28" y="62">Spring Security DelegatingPasswordEncoder + UserDetailsPasswordService. Measured on the page.</text>
+  <rect class="box" x="28" y="100" width="150" height="44" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="103" y="127" text-anchor="middle" font-weight="700">login(alice, pw)</text>
+  <rect class="bp" x="196" y="100" width="280" height="44" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="336" y="127" text-anchor="middle" font-weight="700">DelegatingPasswordEncoder</text>
+  <rect class="box" x="512" y="96" width="260" height="52" rx="10" stroke-width="1.5"/>
+  <text class="sm" x="524" y="116">users.password_hash</text>
+  <text class="lbl wrnt a h0" x="524" y="138">{sha256}5f4d…</text>
+  <text class="lbl okt a h1" x="524" y="138">{bcrypt}$2a$12$Aa…</text>
+  <line class="ln" x1="178" y1="122" x2="192" y2="122" marker-end="url(#ar)"/>
+  <text class="tx a s0" x="28" y="192">1  load hash, prefix {sha256} → SHA-256 encoder</text>
+  <text class="tx a s1" x="28" y="218">2  matches(pw, hash) → true</text>
+  <text class="tx a s2" x="28" y="244">3  upgradeEncoding(hash) → true: not the current algorithm</text>
+  <text class="tx a s3" x="28" y="270">4  encode(pw) with bcrypt 12, UPDATE users (only now is pw known)</text>
+  <text class="tx okt a s4" x="28" y="296">5  next login: {bcrypt} → matches, upgradeEncoding → false</text>
+  <text class="sub" x="28" y="346">Inactive accounts never log in, so they never upgrade: wrap the old hash (bcrypt(sha256)) or force a reset.</text>
+  <text class="sub" x="28" y="366">Measured: upgradeEncoding returned true for the {sha256} hash and false for the {bcrypt} one.</text>
+</svg>

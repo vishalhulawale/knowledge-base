@@ -65,7 +65,7 @@ Suggested pictures per page; ⏵ marks an animation.
 - [x] 04 Cloud KMS: key policy vs IAM policy evaluation; AWS / Azure / GCP key hierarchy side by side
 - [x] 05 HSMs and BYOK/HYOK: who holds the key in KMS vs BYOK vs HYOK; key import wrapping flow
 - [x] 06 Rotation: ⏵ overlap window (add new, switch writers, retire old); JWKS `kid` rotation
-- [ ] 07 Passwords and secrets: fast hash vs bcrypt/Argon2 guesses per second; ⏵ rehash on login upgrade
+- [x] 07 Passwords and secrets: fast hash vs bcrypt/Argon2 guesses per second; ⏵ rehash on login upgrade
 
 ### API Design (P0)
 - [ ] 01 REST and HTTP semantics: ⏵ lost update vs `If-Match` / ETag 412; safe vs idempotent methods
