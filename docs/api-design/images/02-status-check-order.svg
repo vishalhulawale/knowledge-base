@@ -1,0 +1,176 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Which check fails first decides the status code</title>
+  <desc id="d">Four requests to PATCH a prescription go through the same checks in order: parse, authenticate, authorise, validate, then check state. Request A has an expired token and stops at authentication with 401. Request B is another member&#x27;s prescription; revealing that it exists would leak information, so it stops at authorisation with 404. Request C sends refills minus 2 and stops at validation with 422. Request D carries a stale If-Match version and stops at the state check with 412.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:18s infinite linear}
+    @keyframes l0{0%{opacity:0}1%{opacity:0}2%,24%{opacity:1}25%{opacity:0}100%{opacity:0}}
+    .l0{animation-name:l0}
+    @keyframes c00{0%{opacity:0}4%{opacity:0}5%,24%{opacity:1}25%{opacity:0}100%{opacity:0}}
+    .c00{animation-name:c00}
+    @keyframes c01{0%{opacity:0}7%{opacity:0}8%,24%{opacity:1}25%{opacity:0}100%{opacity:0}}
+    .c01{animation-name:c01}
+    @keyframes z0{0%{opacity:0}10%{opacity:0}11%,24%{opacity:1}25%{opacity:0}100%{opacity:0}}
+    .z0{animation-name:z0}
+    @keyframes l1{0%{opacity:0}25%{opacity:0}26%,48%{opacity:1}49%{opacity:0}100%{opacity:0}}
+    .l1{animation-name:l1}
+    @keyframes c10{0%{opacity:0}28%{opacity:0}29%,48%{opacity:1}49%{opacity:0}100%{opacity:0}}
+    .c10{animation-name:c10}
+    @keyframes c11{0%{opacity:0}31%{opacity:0}32%,48%{opacity:1}49%{opacity:0}100%{opacity:0}}
+    .c11{animation-name:c11}
+    @keyframes c12{0%{opacity:0}34%{opacity:0}35%,48%{opacity:1}49%{opacity:0}100%{opacity:0}}
+    .c12{animation-name:c12}
+    @keyframes z1{0%{opacity:0}37%{opacity:0}38%,48%{opacity:1}49%{opacity:0}100%{opacity:0}}
+    .z1{animation-name:z1}
+    @keyframes l2{0%{opacity:0}49%{opacity:0}50%,72%{opacity:1}73%{opacity:0}100%{opacity:0}}
+    .l2{animation-name:l2}
+    @keyframes c20{0%{opacity:0}52%{opacity:0}53%,72%{opacity:1}73%{opacity:0}100%{opacity:0}}
+    .c20{animation-name:c20}
+    @keyframes c21{0%{opacity:0}55%{opacity:0}56%,72%{opacity:1}73%{opacity:0}100%{opacity:0}}
+    .c21{animation-name:c21}
+    @keyframes c22{0%{opacity:0}58%{opacity:0}59%,72%{opacity:1}73%{opacity:0}100%{opacity:0}}
+    .c22{animation-name:c22}
+    @keyframes c23{0%{opacity:0}61%{opacity:0}62%,72%{opacity:1}73%{opacity:0}100%{opacity:0}}
+    .c23{animation-name:c23}
+    @keyframes z2{0%{opacity:0}64%{opacity:0}65%,72%{opacity:1}73%{opacity:0}100%{opacity:0}}
+    .z2{animation-name:z2}
+    @keyframes l3{0%{opacity:0}73%{opacity:0}74%,96%{opacity:1}97%{opacity:0}100%{opacity:0}}
+    .l3{animation-name:l3}
+    @keyframes c30{0%{opacity:0}76%{opacity:0}77%,96%{opacity:1}97%{opacity:0}100%{opacity:0}}
+    .c30{animation-name:c30}
+    @keyframes c31{0%{opacity:0}79%{opacity:0}80%,96%{opacity:1}97%{opacity:0}100%{opacity:0}}
+    .c31{animation-name:c31}
+    @keyframes c32{0%{opacity:0}82%{opacity:0}83%,96%{opacity:1}97%{opacity:0}100%{opacity:0}}
+    .c32{animation-name:c32}
+    @keyframes c33{0%{opacity:0}85%{opacity:0}86%,96%{opacity:1}97%{opacity:0}100%{opacity:0}}
+    .c33{animation-name:c33}
+    @keyframes c34{0%{opacity:0}88%{opacity:0}89%,96%{opacity:1}97%{opacity:0}100%{opacity:0}}
+    .c34{animation-name:c34}
+    @keyframes z3{0%{opacity:0}91%{opacity:0}92%,96%{opacity:1}97%{opacity:0}100%{opacity:0}}
+    .z3{animation-name:z3}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      .l1,.l2,.l3,.z1,.z2,.z3,.c10,.c11,.c12,.c13,.c14,.c20,.c21,.c22,.c23,.c24,.c30,.c31,.c32,.c33,.c34{opacity:0!important}
+    }
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">PATCH /prescriptions/rx_9f2</text>
+  <text class="sub" x="28" y="62">Checks run in this order; the first failure picks the code.</text>
+  <rect class="bm" x="150" y="100" width="114" height="40" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="207" y="125" text-anchor="middle" font-weight="700">parse</text>
+  <line class="ln" x1="264" y1="120" x2="274" y2="120" marker-end="url(#ar)"/>
+  <rect class="bm" x="276" y="100" width="114" height="40" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="333" y="125" text-anchor="middle" font-weight="700">authN</text>
+  <line class="ln" x1="390" y1="120" x2="400" y2="120" marker-end="url(#ar)"/>
+  <rect class="bm" x="402" y="100" width="114" height="40" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="459" y="125" text-anchor="middle" font-weight="700">authZ</text>
+  <line class="ln" x1="516" y1="120" x2="526" y2="120" marker-end="url(#ar)"/>
+  <rect class="bm" x="528" y="100" width="114" height="40" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="585" y="125" text-anchor="middle" font-weight="700">validate</text>
+  <line class="ln" x1="642" y1="120" x2="652" y2="120" marker-end="url(#ar)"/>
+  <rect class="bm" x="654" y="100" width="114" height="40" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="711" y="125" text-anchor="middle" font-weight="700">state</text>
+  <text class="lbl a l0" x="28" y="194">A  expired token</text>
+  <g class="a c00">
+  <rect class="okf" x="150" y="150" width="114" height="26" rx="5"/>
+  <text class="on13" x="207" y="167.5" text-anchor="middle">✓</text>
+  </g>
+  <g class="a c01">
+  <rect class="badf" x="276" y="150" width="114" height="26" rx="5"/>
+  <text class="on13" x="333" y="167.5" text-anchor="middle">✕ stop</text>
+  </g>
+  <text class="h2 badt a z0" x="28" y="226">→ 401 + WWW-Authenticate</text>
+  <text class="lbl a l1" x="28" y="194">B  someone else&#x27;s rx</text>
+  <g class="a c10">
+  <rect class="okf" x="150" y="150" width="114" height="26" rx="5"/>
+  <text class="on13" x="207" y="167.5" text-anchor="middle">✓</text>
+  </g>
+  <g class="a c11">
+  <rect class="okf" x="276" y="150" width="114" height="26" rx="5"/>
+  <text class="on13" x="333" y="167.5" text-anchor="middle">✓</text>
+  </g>
+  <g class="a c12">
+  <rect class="badf" x="402" y="150" width="114" height="26" rx="5"/>
+  <text class="on13" x="459" y="167.5" text-anchor="middle">✕ stop</text>
+  </g>
+  <text class="h2 badt a z1" x="28" y="226">→ 404 (hide existence)</text>
+  <text class="lbl a l2" x="28" y="194">C  refills: -2</text>
+  <g class="a c20">
+  <rect class="okf" x="150" y="150" width="114" height="26" rx="5"/>
+  <text class="on13" x="207" y="167.5" text-anchor="middle">✓</text>
+  </g>
+  <g class="a c21">
+  <rect class="okf" x="276" y="150" width="114" height="26" rx="5"/>
+  <text class="on13" x="333" y="167.5" text-anchor="middle">✓</text>
+  </g>
+  <g class="a c22">
+  <rect class="okf" x="402" y="150" width="114" height="26" rx="5"/>
+  <text class="on13" x="459" y="167.5" text-anchor="middle">✓</text>
+  </g>
+  <g class="a c23">
+  <rect class="badf" x="528" y="150" width="114" height="26" rx="5"/>
+  <text class="on13" x="585" y="167.5" text-anchor="middle">✕ stop</text>
+  </g>
+  <text class="h2 badt a z2" x="28" y="226">→ 422 with field errors</text>
+  <text class="lbl a l3" x="28" y="194">D  If-Match: &quot;v6&quot; (now v7)</text>
+  <g class="a c30">
+  <rect class="okf" x="150" y="150" width="114" height="26" rx="5"/>
+  <text class="on13" x="207" y="167.5" text-anchor="middle">✓</text>
+  </g>
+  <g class="a c31">
+  <rect class="okf" x="276" y="150" width="114" height="26" rx="5"/>
+  <text class="on13" x="333" y="167.5" text-anchor="middle">✓</text>
+  </g>
+  <g class="a c32">
+  <rect class="okf" x="402" y="150" width="114" height="26" rx="5"/>
+  <text class="on13" x="459" y="167.5" text-anchor="middle">✓</text>
+  </g>
+  <g class="a c33">
+  <rect class="okf" x="528" y="150" width="114" height="26" rx="5"/>
+  <text class="on13" x="585" y="167.5" text-anchor="middle">✓</text>
+  </g>
+  <g class="a c34">
+  <rect class="badf" x="654" y="150" width="114" height="26" rx="5"/>
+  <text class="on13" x="711" y="167.5" text-anchor="middle">✕ stop</text>
+  </g>
+  <text class="h2 badt a z3" x="28" y="226">→ 412 Precondition Failed</text>
+  <text class="tx" x="28" y="280">Order matters for security too: validating the body before authorising would tell a stranger</text>
+  <text class="tx" x="28" y="300">which of their guesses about someone else&#x27;s prescription are well-formed.</text>
+  <text class="sub" x="28" y="336">409 = other state conflicts (already shipped, duplicate key); 503/504/502 = our side or an upstream.</text>
+</svg>

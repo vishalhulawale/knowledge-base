@@ -95,6 +95,9 @@ flowchart TD
 ```
 *Notice the order: parse, authenticate, authorise, validate, check state. Following this order also stops you leaking information, for example validating a body before checking the caller may even see the resource.*
 
+![Animation: four PATCH requests pass through parse, authentication, authorisation, validation and state checks; an expired token stops at authentication with 401, another member's prescription stops at authorisation with 404, refills of minus 2 stops at validation with 422, and a stale If-Match stops at the state check with 412](images/02-status-check-order.svg){ loading=lazy }
+*Watch where each request turns red: the status code is just the name of the first check that failed.*
+
 - **400 vs 422.** Many APIs use `400` for all validation errors and that is acceptable if consistent. The precise split is: `400` when the request can't be understood (malformed JSON, `"refills": "abc"`), `422` when it is understood but breaks rules (`refills: -2`, end date before start date). Spring's default for `@Valid` failures is `400`.
 - **401 vs 403.** `401` means "who are you?" (no or bad credentials) and must include `WWW-Authenticate: Bearer …`. `403` means "I know who you are, and no".
 - **403 vs 404.** If revealing that a resource exists is itself a leak (another member's prescription, an admin endpoint), return `404`. GitHub does this for private repositories.
@@ -132,6 +135,9 @@ Content-Type: application/problem+json
 | `detail` | Explanation of **this** occurrence | Human-readable, no secrets |
 | `instance` | URI for this occurrence | Often the request path or an error id |
 | *extensions* | Your own members | `code`, `errors[]`, `traceId`, `retryAfter`, `balance` |
+
+![An annotated 422 problem+json body: type is the stable id clients switch on, title is the same for every occurrence, status copies the HTTP status, detail describes this occurrence, instance names the request, and the code, traceId and errors extensions carry a short code, a log correlation id and per-field JSON pointers](images/02-problem-details.svg){ loading=lazy }
+*Notice the purple and teal lines: those are what client code reads. Everything in black is for humans.*
 
 RFC 9457 also clarifies that clients must **ignore unknown extensions**, encourages registering common problem types, and suggests how to report multiple problems of the same type (an array in an extension such as `errors` with JSON pointers).
 
