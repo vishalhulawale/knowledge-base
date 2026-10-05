@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Envelope encryption: what goes where</title>
+  <desc id="d">Encrypt: the application asks KMS for a data key for its KEK and context; KMS returns the plaintext DEK and a copy wrapped by the KEK. The application encrypts the data locally with AES-GCM using the DEK, stores the ciphertext with a header holding the wrapped DEK and the KEK id, and erases the plaintext DEK. Decrypt: the application sends only the wrapped DEK and the same context to KMS, which checks permissions and returns the plaintext DEK; the application decrypts locally. The KEK never leaves KMS and the bulk data never goes to KMS.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:16s infinite linear}
+    @keyframes s0{0%{opacity:0}1%{opacity:0}2%,12%{opacity:1}13%{opacity:0}100%{opacity:0}}
+    .s0{animation-name:s0}
+    @keyframes s1{0%{opacity:0}11%{opacity:0}12%,22%{opacity:1}23%{opacity:0}100%{opacity:0}}
+    .s1{animation-name:s1}
+    @keyframes s2{0%{opacity:0}21%{opacity:0}22%,32%{opacity:1}33%{opacity:0}100%{opacity:0}}
+    .s2{animation-name:s2}
+    @keyframes s3{0%{opacity:0}31%{opacity:0}32%,48%{opacity:1}49%{opacity:0}100%{opacity:0}}
+    .s3{animation-name:s3}
+    @keyframes s4{0%{opacity:0}51%{opacity:0}52%,62%{opacity:1}63%{opacity:0}100%{opacity:0}}
+    .s4{animation-name:s4}
+    @keyframes s5{0%{opacity:0}63%{opacity:0}64%,74%{opacity:1}75%{opacity:0}100%{opacity:0}}
+    .s5{animation-name:s5}
+    @keyframes s6{0%{opacity:0}75%{opacity:0}76%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .s6{animation-name:s6}
+    @keyframes ct{0%{opacity:0}33%{opacity:0}34%,97%{opacity:1}98%{opacity:0}100%{opacity:0}}
+    .ct{animation-name:ct}
+    @keyframes dk{0%{opacity:0}12%{opacity:0}13%,34%{opacity:1}35%{opacity:0}64%{opacity:0}65%,84%{opacity:1}85%{opacity:0}100%{opacity:0}}
+    .dk{animation-name:dk}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      .s0,.s1,.s2,.s4,.s5,.s6,.dk{opacity:0!important}
+    }
+  </style>
+  <defs><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="438" rx="14"/>
+  <text class="h" x="28" y="40">Encrypt, then decrypt, a 1 MiB claim document</text>
+  <text class="sub" x="28" y="62">Only 32-byte keys cross the KMS boundary. The data stays with the app.</text>
+  <rect class="bm" x="560" y="90" width="212" height="230" rx="12" stroke-width="1"/>
+  <text class="lbl" x="576" y="114">KMS / HSM boundary</text>
+  <rect class="bp" x="586" y="140" width="160" height="44" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="666" y="159" text-anchor="middle" font-weight="700">KEK v3</text>
+  <text class="sm" x="666" y="176" text-anchor="middle">never leaves</text>
+  <rect class="box" x="28" y="140" width="180" height="44" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="118" y="167" text-anchor="middle" font-weight="700">Application</text>
+  <rect class="box" x="28" y="262" width="180" height="52" rx="10" stroke-width="1.5"/>
+  <text class="tx" x="118" y="285" text-anchor="middle" font-weight="700">Storage</text>
+  <text class="sm" x="118" y="302" text-anchor="middle">header + ciphertext</text>
+  <line class="lnp a s0" x1="210" y1="156" x2="582" y2="156" marker-end="url(#arp)"/>
+  <text class="lbl a s0" x="28" y="350">1  GenerateDataKey(kek, ctx) →</text>
+  <line class="lnp a s1" x1="582" y1="172" x2="212" y2="172" marker-end="url(#arp)"/>
+  <text class="lbl a s1" x="28" y="350">2  ← DEK + DEK wrapped by KEK</text>
+  <g class="a s2">
+  <rect class="tea" x="236" y="140" width="200" height="30" rx="6"/>
+  <text class="on13" x="336" y="159.5" text-anchor="middle">AES-GCM, in app memory</text>
+  </g>
+  <text class="lbl a s2" x="28" y="350">3  AES-GCM encrypt 1 MiB locally with DEK</text>
+  <line class="lnw a s3" x1="118" y1="186" x2="118" y2="258" marker-end="url(#arw)"/>
+  <text class="lbl a s3" x="28" y="350">4  store {kekId, wrapped DEK, nonce} + ciphertext; erase DEK</text>
+  <line class="lnp a s4" x1="210" y1="156" x2="582" y2="156" marker-end="url(#arp)"/>
+  <text class="lbl a s4" x="28" y="350">5  read header → Decrypt(wrapped DEK, ctx) →</text>
+  <line class="lnp a s5" x1="582" y1="172" x2="212" y2="172" marker-end="url(#arp)"/>
+  <text class="lbl a s5" x="28" y="350">6  ← DEK (after IAM, key policy, context check)</text>
+  <g class="a s6">
+  <rect class="tea" x="236" y="140" width="200" height="30" rx="6"/>
+  <text class="on13" x="336" y="159.5" text-anchor="middle">AES-GCM, in app memory</text>
+  </g>
+  <text class="lbl a s6" x="28" y="350">7  AES-GCM decrypt locally; erase DEK</text>
+  <g class="a ct">
+  <rect class="wrnf" x="236" y="270" width="300" height="36" rx="6"/>
+  <text class="on13" x="386" y="292.5" text-anchor="middle">ciphertext 1 MiB + 67-byte header</text>
+  </g>
+  <g class="a dk">
+  <rect class="badf" x="236" y="196" width="150" height="32" rx="6"/>
+  <text class="on13" x="311" y="216.5" text-anchor="middle">plaintext DEK</text>
+  </g>
+  <text class="sub" x="28" y="384">Measured on the page: KMS Encrypt is capped at 4 KB; local AES runs at GB/s; the header is all KMS ever sees.</text>
+  <text class="sub" x="28" y="404">The context (tenant, table, id) must match on decrypt, and CloudTrail logs it for every Decrypt call.</text>
+</svg>

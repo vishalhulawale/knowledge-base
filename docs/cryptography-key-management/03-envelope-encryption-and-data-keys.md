@@ -36,6 +36,9 @@ flowchart LR
 ```
 *Notice that the KMS only ever handles 32-byte keys, and the bulk data never travels to it. Whoever reads the storage still needs KMS permission to unwrap the DEK, which is where access control and audit happen.*
 
+![Animation: the application asks KMS for a data key and gets the plaintext DEK plus a wrapped copy, encrypts 1 MiB locally with AES-GCM, stores the ciphertext with a 67-byte header and erases the DEK; to decrypt it sends only the wrapped DEK and context to KMS, gets the DEK back and decrypts locally](images/03-envelope-flow.svg){ loading=lazy }
+*Watch the red plaintext DEK: it exists only for the moment of each local operation, and the 1 MiB of data never crosses into the KMS box.*
+
 **Decryption** is the reverse: read the header, call `Decrypt(wrappedDek, context)` (KMS checks IAM, key policy, key state and context), get the plaintext DEK, decrypt locally, erase the DEK.
 
 ### Why not just call KMS Encrypt on the data?
@@ -100,6 +103,9 @@ Measured on 2,000 × 1 MiB objects:
 |---|---|---|
 | Re-wrap each DEK under the new KEK | **24 ms** | 67 B per object |
 | Decrypt and re-encrypt all data with new DEKs | **3,167 ms** | 2,000 MiB |
+
+![Bar chart: rotating the KEK over 2,000 one-mebibyte objects took 24 ms by re-wrapping the data keys, rewriting 67 bytes each, and 3,167 ms by decrypting and re-encrypting the data, rewriting 2,000 MiB](images/03-rewrap-vs-reencrypt.svg){ loading=lazy }
+*Notice the green bar is barely visible: rotation cost scales with the number of keys, not the amount of data.*
 
 With a real KMS, each `ReEncrypt` is a network call (milliseconds), so you parallelise and respect quotas. It's still trivial compared with rewriting the data. Often you don't even need to re-wrap: **AWS KMS automatic rotation** keeps all previous key material under the same key ID, so old wrapped DEKs remain decryptable and new ones use the new material ([rotation strategies](06-key-rotation-strategies-without-downtime.md)). Measured caveat: old KEK versions must be **kept** for unrotated data (`[kek-v1, kek-v2, kek-v3]` all held). Destroying v1 made its envelopes unrecoverable (`InvalidKeyException`).
 
