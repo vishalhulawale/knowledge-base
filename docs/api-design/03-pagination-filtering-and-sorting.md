@@ -45,6 +45,9 @@ flowchart LR
 
 **Why offset drifts:** you read page 1 (rows 1–20). Someone inserts a new claim at the top. Page 2 is now rows 21–40 *of the new ordering*, so the old row 20 appears again. Deletes cause the opposite: a row is skipped.
 
+![Animation: a client reads claims 9 to 6 as page 1, claim 10 is inserted at the top, and offset 4 then returns claims 6 to 3, repeating claim 6, while a keyset cursor asking for claims older than 6 returns 5, 4, 3 and 2 with no duplicate](images/03-offset-drift.svg){ loading=lazy }
+*Watch the red claim 6: the offset counted positions, and the insert shifted every position by one.*
+
 ### Keyset pagination done right
 
 1. **Order by the sort column plus a unique tiebreaker:** `ORDER BY created_at DESC, id DESC`.
@@ -71,6 +74,9 @@ LIMIT 21;
 
 !!! warning "Gotcha: build the cursor from the *same* row"
     The cursor must hold the `created_at` **and** the `id` of the last row. Mixing the timestamp of one row with the id of another silently skips or repeats rows. Write a test that pages through a dataset with many equal timestamps and asserts every id appears exactly once.
+
+![Six claims where 104, 103 and 102 share the timestamp 10:00: a cursor on created_at alone asks for times before 10:00 and skips 103 and 102, while a cursor on created_at and id asks for rows before the pair 10:00, 104 and returns 103, 102 and 101](images/03-keyset-tiebreaker.svg){ loading=lazy }
+*Notice the two red rows: they weren't deleted, the cursor simply couldn't say "after 104 but still at 10:00".*
 
 ### Response shapes
 

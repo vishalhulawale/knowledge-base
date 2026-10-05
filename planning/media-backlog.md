@@ -70,7 +70,7 @@ Suggested pictures per page; ⏵ marks an animation.
 ### API Design (P0)
 - [x] 01 REST and HTTP semantics: ⏵ lost update vs `If-Match` / ETag 412; safe vs idempotent methods
 - [x] 02 Status codes and errors: decision tree for 400/401/403/404/409/422; Problem Details anatomy
-- [ ] 03 Pagination: ⏵ offset skipping rows on insert vs keyset stable cursor
+- [x] 03 Pagination: ⏵ offset drift on insert vs keyset cursor; keyset without a tiebreaker (OFFSET cost is already drawn on the Spring Boot page)
 - [ ] 04 Versioning: expand-and-contract API change; date-based version pinning (Stripe model)
 - [ ] 05 Idempotency keys: ⏵ timeout then retry with the same key returning the stored response; concurrent duplicate gets 409
 - [ ] 06 Security and rate limiting: ⏵ token bucket refill; BOLA (object-level authz) check

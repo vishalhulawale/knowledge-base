@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Keyset cursor without a tiebreaker</title>
+  <desc id="d">Six claims, three of which share the same created_at timestamp 10:00. Pages of 3, newest first. Page 1 ends with claim 104 at 10:00. With a cursor on created_at alone, page 2 asks for created_at strictly less than 10:00, which skips claims 103 and 102 that also have 10:00. With a cursor on created_at and id, page 2 asks for rows less than the pair 10:00, 104, which returns 103 and 102 and then 101 at 09:00. Nothing is skipped.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">Equal timestamps at a page boundary</text>
+  <text class="sub" x="28" y="62">Pages of 3. Claims 104, 103 and 102 share created_at 10:00.</text>
+  <text class="lbl badt" x="28" y="102">cursor: created_at &lt; 10:00</text>
+  <rect class="pri" x="28" y="116" width="220" height="28" rx="5"/>
+  <text class="on13" x="138" y="134.5" text-anchor="middle">claim 106 · 10:05</text>
+  <rect class="pri" x="28" y="150" width="220" height="28" rx="5"/>
+  <text class="on13" x="138" y="168.5" text-anchor="middle">claim 105 · 10:02</text>
+  <rect class="pri" x="28" y="184" width="220" height="28" rx="5"/>
+  <text class="on13" x="138" y="202.5" text-anchor="middle">claim 104 · 10:00</text>
+  <text class="sm" x="258" y="203">← end of page 1</text>
+  <rect class="badf" x="28" y="218" width="220" height="28" rx="5"/>
+  <text class="on13" x="138" y="236.5" text-anchor="middle">claim 103 · 10:00</text>
+  <text class="sm badt" x="258" y="237">skipped ✕</text>
+  <rect class="badf" x="28" y="252" width="220" height="28" rx="5"/>
+  <text class="on13" x="138" y="270.5" text-anchor="middle">claim 102 · 10:00</text>
+  <text class="sm badt" x="258" y="271">skipped ✕</text>
+  <rect class="tea" x="28" y="286" width="220" height="28" rx="5"/>
+  <text class="on13" x="138" y="304.5" text-anchor="middle">claim 101 · 09:00</text>
+  <text class="tx badt" x="28" y="344">page 2 = 101 only: 2 rows lost</text>
+  <text class="lbl okt" x="420" y="102">cursor: (created_at, id) &lt; (10:00, 104)</text>
+  <rect class="pri" x="420" y="116" width="220" height="28" rx="5"/>
+  <text class="on13" x="530" y="134.5" text-anchor="middle">claim 106 · 10:05</text>
+  <rect class="pri" x="420" y="150" width="220" height="28" rx="5"/>
+  <text class="on13" x="530" y="168.5" text-anchor="middle">claim 105 · 10:02</text>
+  <rect class="pri" x="420" y="184" width="220" height="28" rx="5"/>
+  <text class="on13" x="530" y="202.5" text-anchor="middle">claim 104 · 10:00</text>
+  <text class="sm" x="650" y="203">← end of page 1</text>
+  <rect class="tea" x="420" y="218" width="220" height="28" rx="5"/>
+  <text class="on13" x="530" y="236.5" text-anchor="middle">claim 103 · 10:00</text>
+  <rect class="tea" x="420" y="252" width="220" height="28" rx="5"/>
+  <text class="on13" x="530" y="270.5" text-anchor="middle">claim 102 · 10:00</text>
+  <rect class="tea" x="420" y="286" width="220" height="28" rx="5"/>
+  <text class="on13" x="530" y="304.5" text-anchor="middle">claim 101 · 09:00</text>
+  <text class="tx okt" x="420" y="344">page 2 = 103, 102, 101 ✓</text>
+  <line class="ln dash" x1="400" y1="92" x2="400" y2="330"/>
+  <text class="sub" x="28" y="370">Order by a unique tiebreaker (id) and build the cursor from the same row&#x27;s created_at and id.</text>
+</svg>
