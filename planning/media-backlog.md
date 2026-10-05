@@ -68,7 +68,7 @@ Suggested pictures per page; ⏵ marks an animation.
 - [x] 07 Passwords and secrets: fast hash vs bcrypt/Argon2 guesses per second; ⏵ rehash on login upgrade
 
 ### API Design (P0)
-- [ ] 01 REST and HTTP semantics: ⏵ lost update vs `If-Match` / ETag 412; safe vs idempotent methods
+- [x] 01 REST and HTTP semantics: ⏵ lost update vs `If-Match` / ETag 412; safe vs idempotent methods
 - [ ] 02 Status codes and errors: decision tree for 400/401/403/404/409/422; Problem Details anatomy
 - [ ] 03 Pagination: ⏵ offset skipping rows on insert vs keyset stable cursor
 - [ ] 04 Versioning: expand-and-contract API change; date-based version pinning (Stripe model)

@@ -81,6 +81,9 @@ flowchart LR
 - **Idempotent** means sending the request N times has the same **effect on server state** as sending it once. The *response* can differ: the first `DELETE` returns `204`, the second may return `404`. Idempotency is what lets clients, proxies and libraries **retry automatically** after a timeout.
 - `POST` is the general "do something" method. It is not idempotent, which is why creates need an **idempotency key** (see [Idempotency keys & safe retries](05-idempotency-keys-and-safe-retries.md)).
 
+![HTTP methods grouped by property: GET, HEAD and OPTIONS are safe and idempotent; PUT and DELETE are idempotent but not safe; POST and PATCH are not idempotent, so retrying them needs an Idempotency-Key](images/01-safe-idempotent.svg){ loading=lazy }
+*Notice that "safe" sits inside "idempotent": every safe method can be retried, but not every retryable method is safe to call casually.*
+
 ### PUT vs PATCH vs POST for create
 
 - **`POST /prescriptions`**: the server picks the id. Returns `201 Created` with a `Location: /prescriptions/rx_9f2` header and usually the body.
@@ -89,6 +92,9 @@ flowchart LR
 - **`PATCH`** sends only the change. Two standard formats:
     - **JSON Merge Patch** (`application/merge-patch+json`, RFC 7396): send a partial document; `null` means "remove". Simple, but you can't set a field to `null` and can't edit array elements.
     - **JSON Patch** (`application/json-patch+json`, RFC 6902): a list of operations (`add`, `remove`, `replace`, `move`, `copy`, `test`). Precise, supports a `test` op as a guard, more verbose.
+
+![Animation: a client that only knows the dose sends dose 20 mg; with PUT the drug, refills, pharmacy and notes are wiped and only dose remains, while with a merge PATCH only the dose changes](images/01-put-vs-patch.svg){ loading=lazy }
+*Watch the left column turn red: PUT did exactly what it promises, replace the resource with the body. The bug is in using it from a client that doesn't know the whole resource.*
 
 ### Conditional requests: stopping lost updates
 
