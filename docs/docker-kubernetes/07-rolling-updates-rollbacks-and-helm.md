@@ -58,6 +58,9 @@ shop:1.1=4/4  shop:1.0=0
 
 With **Recreate**: `1.1=4/4` → `1.1=4/0` (all terminating) → `1.3=0/4` → `1.3=4/4`. There's a window with **no** ready pods.
 
+![Animation: with RollingUpdate, maxSurge 1 and maxUnavailable 0, one v1.1 pod is added and a v1.0 pod is removed only after it is Ready, so at least four pods are always Ready; with Recreate all four v1.0 pods terminate first and there is a window with no Ready pods before four v1.1 pods come up](images/07-rolling-vs-recreate.svg){ loading=lazy }
+*Watch the Ready counter: it never drops below 4 at the top, and sits at 0 for a while at the bottom.*
+
 ### When a rollout gets stuck
 
 ```mermaid
@@ -88,6 +91,9 @@ Measured with a release whose pods never became ready (`progressDeadlineSeconds:
 | `kubectl rollout undo` | New ReplicaSet scaled to 0, back to `shop:1.3` with 4 replicas |
 
 That's why `maxUnavailable: 0` plus readiness probes is the safety net, and `rollout status` with a timeout in CI turns a silent stall into a failed pipeline.
+
+![A stalled rollout from the page's measurement: the four shop 1.3 pods stay Ready and serving, the single 1.4 surge pod never becomes Ready, the Deployment reports Available True and Progressing False with ProgressDeadlineExceeded, and rollout status exits 1](images/07-stalled-rollout.svg){ loading=lazy }
+*Notice the two conditions side by side: users see no outage, but the pipeline must still fail, because nothing rolls back on its own.*
 
 ### How rollback actually works
 

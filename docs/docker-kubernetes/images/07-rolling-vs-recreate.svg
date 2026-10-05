@@ -1,0 +1,305 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Rolling update vs Recreate</title>
+  <desc id="d">Four replicas move from version 1.0 to 1.1. Top, RollingUpdate with maxSurge 1 and maxUnavailable 0: one 1.1 pod is added (five pods), and only when it is Ready is one 1.0 pod removed; this repeats four times, so at least four Ready pods serve traffic throughout. Bottom, Recreate: all four 1.0 pods are terminated first, there is a window with no Ready pod at all, then four 1.1 pods start and become Ready.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .sm{fill:#64748b;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub,.sm{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:16s infinite linear}
+    @keyframes r0{0%{opacity:0}0.1%{opacity:0}0.3%,6.80769%{opacity:1}7.00769%{opacity:0}100%{opacity:0}}
+    .r0{animation-name:r0}
+    @keyframes r1{0%{opacity:0}7.40769%{opacity:0}7.60769%,14.1154%{opacity:1}14.3154%{opacity:0}100%{opacity:0}}
+    .r1{animation-name:r1}
+    @keyframes r2{0%{opacity:0}14.7154%{opacity:0}14.9154%,21.4231%{opacity:1}21.6231%{opacity:0}100%{opacity:0}}
+    .r2{animation-name:r2}
+    @keyframes r3{0%{opacity:0}22.0231%{opacity:0}22.2231%,28.7308%{opacity:1}28.9308%{opacity:0}100%{opacity:0}}
+    .r3{animation-name:r3}
+    @keyframes r4{0%{opacity:0}29.3308%{opacity:0}29.5308%,36.0385%{opacity:1}36.2385%{opacity:0}100%{opacity:0}}
+    .r4{animation-name:r4}
+    @keyframes r5{0%{opacity:0}36.6385%{opacity:0}36.8385%,43.3462%{opacity:1}43.5462%{opacity:0}100%{opacity:0}}
+    .r5{animation-name:r5}
+    @keyframes r6{0%{opacity:0}43.9462%{opacity:0}44.1462%,50.6538%{opacity:1}50.8538%{opacity:0}100%{opacity:0}}
+    .r6{animation-name:r6}
+    @keyframes r7{0%{opacity:0}51.2538%{opacity:0}51.4538%,57.9615%{opacity:1}58.1615%{opacity:0}100%{opacity:0}}
+    .r7{animation-name:r7}
+    @keyframes r8{0%{opacity:0}58.5615%{opacity:0}58.7615%,65.2692%{opacity:1}65.4692%{opacity:0}100%{opacity:0}}
+    .r8{animation-name:r8}
+    @keyframes r9{0%{opacity:0}65.8692%{opacity:0}66.0692%,72.5769%{opacity:1}72.7769%{opacity:0}100%{opacity:0}}
+    .r9{animation-name:r9}
+    @keyframes r10{0%{opacity:0}73.1769%{opacity:0}73.3769%,79.8846%{opacity:1}80.0846%{opacity:0}100%{opacity:0}}
+    .r10{animation-name:r10}
+    @keyframes r11{0%{opacity:0}80.4846%{opacity:0}80.6846%,87.1923%{opacity:1}87.3923%{opacity:0}100%{opacity:0}}
+    .r11{animation-name:r11}
+    @keyframes r12{0%{opacity:0}87.7923%{opacity:0}87.9923%,99%{opacity:1}99.2%{opacity:0}100%{opacity:0}}
+    .r12{animation-name:r12}
+    @keyframes c0{0%{opacity:0}0.4%{opacity:0}0.6%,19.4%{opacity:1}19.6%{opacity:0}100%{opacity:0}}
+    .c0{animation-name:c0}
+    @keyframes c1{0%{opacity:0}20.4%{opacity:0}20.6%,41.4%{opacity:1}41.6%{opacity:0}100%{opacity:0}}
+    .c1{animation-name:c1}
+    @keyframes c2{0%{opacity:0}42.4%{opacity:0}42.6%,69.4%{opacity:1}69.6%{opacity:0}100%{opacity:0}}
+    .c2{animation-name:c2}
+    @keyframes c3{0%{opacity:0}70.4%{opacity:0}70.6%,98.4%{opacity:1}98.6%{opacity:0}100%{opacity:0}}
+    .c3{animation-name:c3}
+    @keyframes gap{0%{opacity:0}19%{opacity:0}20%,70%{opacity:1}71%{opacity:0}100%{opacity:0}}
+    .gap{animation-name:gap}
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important}
+      .a{opacity:1}
+      .rmh{opacity:0!important}
+      
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="428" rx="14"/>
+  <text class="h" x="28" y="40">4 replicas, v1.0 → v1.1</text>
+  <text class="sub" x="28" y="62">Blue = v1.0 Ready, teal = v1.1 Ready, amber = v1.1 starting, grey = terminating.</text>
+  <g class="a r0">
+  <rect class="pri" x="236" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="269" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="pri" x="306" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="339" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="pri" x="376" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="409" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="pri" x="446" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="479" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="wrnf" x="516" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="549" y="133.5" text-anchor="middle">1.1…</text>
+  <text class="tx okt" x="600" y="160" font-weight="700">Ready: 4</text>
+  </g>
+  <g class="a r1">
+  <rect class="pri" x="236" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="269" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="pri" x="306" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="339" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="pri" x="376" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="409" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="pri" x="446" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="479" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="tea" x="516" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="549" y="133.5" text-anchor="middle">1.1</text>
+  <text class="tx okt" x="600" y="160" font-weight="700">Ready: 5</text>
+  </g>
+  <g class="a r2">
+  <rect class="pri" x="236" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="269" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="pri" x="306" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="339" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="pri" x="376" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="409" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="tea" x="446" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="479" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="mutf" x="516" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="549" y="133.5" text-anchor="middle">1.0 ✕</text>
+  <text class="tx okt" x="600" y="160" font-weight="700">Ready: 4</text>
+  </g>
+  <g class="a r3">
+  <rect class="pri" x="236" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="269" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="pri" x="306" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="339" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="pri" x="376" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="409" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="tea" x="446" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="479" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="wrnf" x="516" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="549" y="133.5" text-anchor="middle">1.1…</text>
+  <text class="tx okt" x="600" y="160" font-weight="700">Ready: 4</text>
+  </g>
+  <g class="a r4">
+  <rect class="pri" x="236" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="269" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="pri" x="306" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="339" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="pri" x="376" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="409" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="tea" x="446" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="479" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="tea" x="516" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="549" y="133.5" text-anchor="middle">1.1</text>
+  <text class="tx okt" x="600" y="160" font-weight="700">Ready: 5</text>
+  </g>
+  <g class="a r5">
+  <rect class="pri" x="236" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="269" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="pri" x="306" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="339" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="tea" x="376" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="409" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="tea" x="446" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="479" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="mutf" x="516" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="549" y="133.5" text-anchor="middle">1.0 ✕</text>
+  <text class="tx okt" x="600" y="160" font-weight="700">Ready: 4</text>
+  </g>
+  <g class="a r6">
+  <rect class="pri" x="236" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="269" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="pri" x="306" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="339" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="tea" x="376" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="409" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="tea" x="446" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="479" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="wrnf" x="516" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="549" y="133.5" text-anchor="middle">1.1…</text>
+  <text class="tx okt" x="600" y="160" font-weight="700">Ready: 4</text>
+  </g>
+  <g class="a r7">
+  <rect class="pri" x="236" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="269" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="pri" x="306" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="339" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="tea" x="376" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="409" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="tea" x="446" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="479" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="tea" x="516" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="549" y="133.5" text-anchor="middle">1.1</text>
+  <text class="tx okt" x="600" y="160" font-weight="700">Ready: 5</text>
+  </g>
+  <g class="a r8">
+  <rect class="pri" x="236" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="269" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="tea" x="306" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="339" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="tea" x="376" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="409" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="tea" x="446" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="479" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="mutf" x="516" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="549" y="133.5" text-anchor="middle">1.0 ✕</text>
+  <text class="tx okt" x="600" y="160" font-weight="700">Ready: 4</text>
+  </g>
+  <g class="a r9">
+  <rect class="pri" x="236" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="269" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="tea" x="306" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="339" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="tea" x="376" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="409" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="tea" x="446" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="479" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="wrnf" x="516" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="549" y="133.5" text-anchor="middle">1.1…</text>
+  <text class="tx okt" x="600" y="160" font-weight="700">Ready: 4</text>
+  </g>
+  <g class="a r10">
+  <rect class="pri" x="236" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="269" y="133.5" text-anchor="middle">1.0</text>
+  <rect class="tea" x="306" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="339" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="tea" x="376" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="409" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="tea" x="446" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="479" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="tea" x="516" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="549" y="133.5" text-anchor="middle">1.1</text>
+  <text class="tx okt" x="600" y="160" font-weight="700">Ready: 5</text>
+  </g>
+  <g class="a r11">
+  <rect class="tea" x="236" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="269" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="tea" x="306" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="339" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="tea" x="376" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="409" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="tea" x="446" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="479" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="mutf" x="516" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="549" y="133.5" text-anchor="middle">1.0 ✕</text>
+  <text class="tx okt" x="600" y="160" font-weight="700">Ready: 4</text>
+  </g>
+  <g class="a r12">
+  <rect class="tea" x="236" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="269" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="tea" x="306" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="339" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="tea" x="376" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="409" y="133.5" text-anchor="middle">1.1</text>
+  <rect class="tea" x="446" y="112" width="66" height="34" rx="6"/>
+  <text class="on13" x="479" y="133.5" text-anchor="middle">1.1</text>
+  <text class="tx okt" x="600" y="160" font-weight="700">Ready: 4</text>
+  </g>
+  <text class="h2" x="28" y="120">RollingUpdate</text>
+  <text class="sm" x="28" y="140">maxSurge 1, maxUnav. 0</text>
+  <g class="a c0">
+  <rect class="pri" x="236" y="232" width="66" height="34" rx="6"/>
+  <text class="on13" x="269" y="253.5" text-anchor="middle">1.0</text>
+  <rect class="pri" x="306" y="232" width="66" height="34" rx="6"/>
+  <text class="on13" x="339" y="253.5" text-anchor="middle">1.0</text>
+  <rect class="pri" x="376" y="232" width="66" height="34" rx="6"/>
+  <text class="on13" x="409" y="253.5" text-anchor="middle">1.0</text>
+  <rect class="pri" x="446" y="232" width="66" height="34" rx="6"/>
+  <text class="on13" x="479" y="253.5" text-anchor="middle">1.0</text>
+  <text class="tx okt" x="600" y="280" font-weight="700">Ready: 4</text>
+  </g>
+  <g class="a c1">
+  <rect class="mutf" x="236" y="232" width="66" height="34" rx="6"/>
+  <text class="on13" x="269" y="253.5" text-anchor="middle">1.0 ✕</text>
+  <rect class="mutf" x="306" y="232" width="66" height="34" rx="6"/>
+  <text class="on13" x="339" y="253.5" text-anchor="middle">1.0 ✕</text>
+  <rect class="mutf" x="376" y="232" width="66" height="34" rx="6"/>
+  <text class="on13" x="409" y="253.5" text-anchor="middle">1.0 ✕</text>
+  <rect class="mutf" x="446" y="232" width="66" height="34" rx="6"/>
+  <text class="on13" x="479" y="253.5" text-anchor="middle">1.0 ✕</text>
+  <text class="tx badt" x="600" y="280" font-weight="700">Ready: 0</text>
+  </g>
+  <g class="a c2">
+  <rect class="wrnf" x="236" y="232" width="66" height="34" rx="6"/>
+  <text class="on13" x="269" y="253.5" text-anchor="middle">1.1…</text>
+  <rect class="wrnf" x="306" y="232" width="66" height="34" rx="6"/>
+  <text class="on13" x="339" y="253.5" text-anchor="middle">1.1…</text>
+  <rect class="wrnf" x="376" y="232" width="66" height="34" rx="6"/>
+  <text class="on13" x="409" y="253.5" text-anchor="middle">1.1…</text>
+  <rect class="wrnf" x="446" y="232" width="66" height="34" rx="6"/>
+  <text class="on13" x="479" y="253.5" text-anchor="middle">1.1…</text>
+  <text class="tx badt" x="600" y="280" font-weight="700">Ready: 0</text>
+  </g>
+  <g class="a c3">
+  <rect class="tea" x="236" y="232" width="66" height="34" rx="6"/>
+  <text class="on13" x="269" y="253.5" text-anchor="middle">1.1</text>
+  <rect class="tea" x="306" y="232" width="66" height="34" rx="6"/>
+  <text class="on13" x="339" y="253.5" text-anchor="middle">1.1</text>
+  <rect class="tea" x="376" y="232" width="66" height="34" rx="6"/>
+  <text class="on13" x="409" y="253.5" text-anchor="middle">1.1</text>
+  <rect class="tea" x="446" y="232" width="66" height="34" rx="6"/>
+  <text class="on13" x="479" y="253.5" text-anchor="middle">1.1</text>
+  <text class="tx okt" x="600" y="280" font-weight="700">Ready: 4</text>
+  </g>
+  <text class="h2" x="28" y="240">Recreate</text>
+  <text class="sm" x="28" y="260">all old pods go first</text>
+  <text class="tx badt a gap" x="236" y="300">No Ready pods: every request fails during this window</text>
+  <text class="tx" x="28" y="352">Progress is gated on readiness: an old pod is removed only after a new one is Ready.</text>
+  <text class="sub" x="28" y="376">A readiness probe that passes before the app is warm defeats the safety net.</text>
+  <text class="sub" x="28" y="396">Use Recreate only when two versions can&#x27;t run side by side (schema locks, RWO volumes).</text>
+</svg>

@@ -55,7 +55,7 @@ Suggested pictures per page; ⏵ marks an animation.
 - [x] 04 Networking: ⏵ request path internet → LB → Ingress → Service → pod; NetworkPolicy default deny
 - [x] 05 Config and volumes: ConfigMap as env (frozen) vs mounted (refreshes); PV/PVC/StorageClass binding
 - [x] 06 Probes and autoscaling: ⏵ liveness restart storm vs readiness removing from endpoints; CPU throttling at limit
-- [ ] 07 Rollouts and Helm: ⏵ rolling update with `maxSurge` / `maxUnavailable`; rollback as ReplicaSet scale swap
+- [x] 07 Rollouts and Helm: ⏵ rolling update with `maxSurge` / `maxUnavailable`; rollback as ReplicaSet scale swap
 - [ ] 08 EKS/AKS and troubleshooting: VPC CNI IP budget per node; CrashLoopBackOff back-off timeline
 
 ### Cryptography & Key Management (P0)
