@@ -341,3 +341,142 @@
 .doc-reading .md-typeset .mermaid {
   overflow-x: auto;
 }
+
+/* Diagram zoom (extra.js): zoom buttons over each Mermaid diagram, shown on hover or focus
+   (always on touch screens), drag to pan when zoomed, and a full-screen view. */
+.md-typeset .doc-zoom {
+  position: relative;
+  margin: 1em 0;
+  border-radius: var(--doc-radius);
+}
+
+.md-typeset .doc-zoom__viewport {
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.md-typeset .doc-zoom .mermaid {
+  margin: 0;
+  transform-origin: 0 0;
+}
+
+.doc-zoom--zoomed .doc-zoom__viewport {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  outline: 1px solid var(--doc-card-border);
+  outline-offset: -1px;
+}
+
+.doc-zoom--zoomed .doc-zoom__viewport:active {
+  cursor: grabbing;
+}
+
+.doc-zoom__bar {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  z-index: 1;
+  display: flex;
+  gap: 0.15rem;
+  padding: 0.15rem;
+  border: 1px solid var(--doc-card-border);
+  border-radius: 999px;
+  background: var(--md-default-bg-color);
+  box-shadow: var(--doc-card-shadow);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.doc-zoom:hover .doc-zoom__bar,
+.doc-zoom:focus-within .doc-zoom__bar,
+.doc-zoom--zoomed .doc-zoom__bar,
+.doc-zoom--full .doc-zoom__bar {
+  opacity: 1;
+}
+
+/* Touch screens have no hover, so the buttons sit in a row under the diagram instead of over it. */
+@media (hover: none) {
+  .md-typeset .doc-zoom {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .doc-zoom__bar {
+    position: static;
+    order: 1;
+    align-self: flex-end;
+    margin-top: 0.3rem;
+    box-shadow: none;
+    opacity: 1;
+  }
+
+  .doc-zoom--full .doc-zoom__bar {
+    position: absolute;
+  }
+}
+
+.md-typeset .doc-zoom__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.6rem;
+  height: 1.6rem;
+  padding: 0 0.3rem;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--md-default-fg-color--light);
+  font: 600 0.62rem/1 var(--doc-ui-font);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.md-typeset .doc-zoom__btn:hover,
+.md-typeset .doc-zoom__btn:focus-visible {
+  background: var(--md-default-fg-color--lightest);
+  color: var(--md-default-fg-color);
+}
+
+.md-typeset .doc-zoom__btn svg {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+.md-typeset .doc-zoom__level {
+  min-width: 2.6rem;
+}
+
+.md-typeset .doc-zoom--full {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  margin: 0;
+  border-radius: 0;
+  background: var(--md-default-bg-color);
+}
+
+.doc-zoom--full .doc-zoom__viewport {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.doc-zoom--full .mermaid {
+  flex: 1;
+}
+
+.doc-zoom-open,
+.doc-zoom-open body {
+  overflow: hidden;
+}
+
+@media print {
+  .doc-zoom__bar {
+    display: none;
+  }
+}

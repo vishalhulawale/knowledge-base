@@ -128,6 +128,185 @@ function renderLastUpdated() {
   el.replaceChildren("Last updated on ", time);
 }
 
+// Diagram zoom: every Mermaid diagram gets zoom in/out, reset and full-screen buttons.
+// Ctrl/Cmd + scroll (or a trackpad pinch) zooms at the pointer; when zoomed, drag pans and
+// two fingers pinch. The theme renders each diagram later, into a closed shadow root on a
+// div.mermaid, so the whole element is scaled and moved rather than the SVG inside it.
+const ZOOM_MIN = 0.25;
+const ZOOM_MAX = 8;
+const ZOOM_STEP = 1.25;
+const zoomIcon = (paths) =>
+  '<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" ' +
+  `stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">${paths}</svg>`;
+const ZOOM_ICONS = {
+  in: zoomIcon('<circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6"/><path d="M8 11h6"/>'),
+  out: zoomIcon('<circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M8 11h6"/>'),
+  full: zoomIcon(
+    '<path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/>' +
+      '<path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/>'
+  ),
+  close: zoomIcon('<path d="M18 6 6 18"/><path d="m6 6 12 12"/>')
+};
+
+function zoomButton(label, html, onClick) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "doc-zoom__btn";
+  button.title = label;
+  button.setAttribute("aria-label", label);
+  button.innerHTML = html;
+  button.addEventListener("click", onClick);
+  return button;
+}
+
+function enhanceDiagram(diagram) {
+  const box = document.createElement("div");
+  box.className = "doc-zoom";
+  const viewport = document.createElement("div");
+  viewport.className = "doc-zoom__viewport";
+  diagram.before(box);
+  viewport.append(diagram);
+
+  let scale = 1;
+  let x = 0;
+  let y = 0;
+  let placeholder = null;
+  const pointers = new Map();
+  let pinch = null;
+
+  const isFull = () => box.classList.contains("doc-zoom--full");
+  // Keeps the diagram inside its frame on the page; full screen pans freely.
+  const clamp = (offset, frame, content) => Math.min(Math.max(offset, Math.min(0, frame - content)), Math.max(0, frame - content));
+  const apply = () => {
+    if (!isFull()) {
+      // Zoomed in on the page, the frame grows with the diagram, up to 75% of the screen.
+      const height = diagram.offsetHeight * scale;
+      viewport.style.height = scale > 1 ? `${Math.min(height, innerHeight * 0.75)}px` : "";
+      x = clamp(x, viewport.clientWidth, diagram.offsetWidth * scale);
+      y = clamp(y, viewport.clientHeight, height);
+    }
+    const moved = scale !== 1 || x !== 0 || y !== 0;
+    diagram.style.transform = moved ? `translate(${x}px, ${y}px) scale(${scale})` : "";
+    box.classList.toggle("doc-zoom--zoomed", moved);
+    reset.textContent = `${Math.round(scale * 100)}%`;
+  };
+  // Zoom by `factor`, keeping the point (px, py) of the viewport still.
+  const zoomAt = (factor, px, py) => {
+    const next = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, scale * factor));
+    x = px - ((px - x) * next) / scale;
+    y = py - ((py - y) * next) / scale;
+    scale = next;
+    apply();
+  };
+  const zoomCentre = (factor) => zoomAt(factor, viewport.clientWidth / 2, viewport.clientHeight / 2);
+  const resetZoom = () => {
+    scale = 1;
+    x = 0;
+    y = 0;
+    apply();
+  };
+  const onKey = (event) => {
+    if (event.key === "Escape") setFull(false);
+  };
+  const setFull = (on) => {
+    if (on === isFull()) return;
+    if (on) {
+      placeholder = document.createElement("div");
+      placeholder.style.height = `${box.offsetHeight}px`;
+      box.before(placeholder);
+      document.addEventListener("keydown", onKey);
+    } else {
+      placeholder?.remove();
+      placeholder = null;
+      document.removeEventListener("keydown", onKey);
+    }
+    box.classList.toggle("doc-zoom--full", on);
+    document.documentElement.classList.toggle("doc-zoom-open", on);
+    full.innerHTML = on ? ZOOM_ICONS.close : ZOOM_ICONS.full;
+    full.title = on ? "Exit full screen (Esc)" : "Full screen";
+    full.setAttribute("aria-label", full.title);
+    resetZoom();
+    if (on) full.focus();
+  };
+
+  const reset = zoomButton("Reset zoom", "100%", resetZoom);
+  reset.classList.add("doc-zoom__level");
+  const full = zoomButton("Full screen", ZOOM_ICONS.full, () => setFull(!isFull()));
+  const bar = document.createElement("div");
+  bar.className = "doc-zoom__bar";
+  bar.append(
+    zoomButton("Zoom out", ZOOM_ICONS.out, () => zoomCentre(1 / ZOOM_STEP)),
+    reset,
+    zoomButton("Zoom in", ZOOM_ICONS.in, () => zoomCentre(ZOOM_STEP)),
+    full
+  );
+  box.append(bar, viewport);
+
+  const local = (event) => {
+    const rect = viewport.getBoundingClientRect();
+    return [event.clientX - rect.left, event.clientY - rect.top];
+  };
+  viewport.addEventListener(
+    "wheel",
+    (event) => {
+      if (!(event.ctrlKey || event.metaKey || isFull())) return;
+      event.preventDefault();
+      zoomAt(Math.exp(-event.deltaY * 0.002), ...local(event));
+    },
+    { passive: false }
+  );
+  viewport.addEventListener("dblclick", resetZoom);
+  viewport.addEventListener("pointerdown", (event) => {
+    // At 100% outside full screen, leave touches to the page so it still scrolls.
+    if (!isFull() && !box.classList.contains("doc-zoom--zoomed")) return;
+    viewport.setPointerCapture(event.pointerId);
+    pointers.set(event.pointerId, local(event));
+  });
+  viewport.addEventListener("pointermove", (event) => {
+    if (!pointers.has(event.pointerId)) return;
+    const [px, py] = local(event);
+    const [lx, ly] = pointers.get(event.pointerId);
+    pointers.set(event.pointerId, [px, py]);
+    if (pointers.size === 1) {
+      x += px - lx;
+      y += py - ly;
+      apply();
+      return;
+    }
+    const [[ax, ay], [bx, by]] = [...pointers.values()];
+    const distance = Math.hypot(ax - bx, ay - by);
+    const mid = [(ax + bx) / 2, (ay + by) / 2];
+    if (pinch) {
+      x += mid[0] - pinch.mid[0];
+      y += mid[1] - pinch.mid[1];
+      zoomAt(distance / pinch.distance, ...mid);
+    }
+    pinch = { distance, mid };
+  });
+  const release = (event) => {
+    pointers.delete(event.pointerId);
+    pinch = null;
+  };
+  viewport.addEventListener("pointerup", release);
+  viewport.addEventListener("pointercancel", release);
+}
+
+function enhanceDiagrams(root) {
+  root.querySelectorAll(".md-typeset div.mermaid").forEach((diagram) => {
+    if (!diagram.parentElement.classList.contains("doc-zoom__viewport")) enhanceDiagram(diagram);
+  });
+}
+
+// Diagrams render after the page loads, so watch for them as well as running on each page.
+let diagramScan = 0;
+new MutationObserver(() => {
+  cancelAnimationFrame(diagramScan);
+  diagramScan = requestAnimationFrame(() => enhanceDiagrams(document));
+}).observe(document.body, {
+  childList: true,
+  subtree: true
+});
+
 // Apply the stored mode before the first render to avoid a flash of the sidebars.
 document.documentElement.classList.toggle("doc-reading", readingModeStored());
 
@@ -136,4 +315,6 @@ document$.subscribe(() => {
   renderLearningProgress(document);
   addReadingToggle();
   renderLastUpdated();
+  enhanceDiagrams(document);
+  document.documentElement.classList.remove("doc-zoom-open");
 });

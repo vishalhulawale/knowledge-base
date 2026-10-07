@@ -64,3 +64,7 @@ hide:
 ## Reading mode
 
 Tap the book icon in the header, next to the light/dark switch, to hide the tabs, sidebars and breadcrumbs and read one larger, centred column, which suits a tablet. Tap it again to exit. The choice is remembered on that device.
+
+## Zooming diagrams
+
+Hover over a diagram (on a tablet, use the buttons under it) to zoom in and out or open it full screen. Ctrl or ⌘ + scroll, or a trackpad pinch, zooms where the pointer is. When zoomed, drag to move around, and double-click or tap the percentage to reset. Press Esc to leave full screen.

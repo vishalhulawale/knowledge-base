@@ -41,8 +41,8 @@ The site shares one theme with the NeuroTrade docs ([vishalhulawale/neuro-trade]
 | Deployment-time stamp | Same `DOCS_BUILD_TIME` command (`deploy.yml` here, `docs.yml` there) |
 
 What the shared files do:
-- `extra.css`: the Figtree + Source Serif 4 font pairing, indigo/teal palette, home hero, cards, tables, admonitions, `P0`–`P3` badges and reading mode.
-- `extra.js`: the reading-mode button in the header (hides tabs, sidebars and breadcrumbs; remembered per device under `docs.readingMode`), badges for inline `` `P0` ``–`` `P3` ``, an optional `doc-progress` checklist bar, and the "Last updated on" footer.
+- `extra.css`: the Figtree + Source Serif 4 font pairing, indigo/teal palette, home hero, cards, tables, admonitions, `P0`–`P3` badges, reading mode and diagram zoom controls.
+- `extra.js`: the reading-mode button in the header (hides tabs, sidebars and breadcrumbs; remembered per device under `docs.readingMode`), badges for inline `` `P0` ``–`` `P3` ``, an optional `doc-progress` checklist bar, zoom controls on Mermaid diagrams (buttons, Ctrl/⌘ + scroll, drag to pan, pinch, full screen with Esc to close), and the "Last updated on" footer.
 - `build-info.js`: holds `null`; the deploy workflow overwrites it with the deployment time. Don't commit a stamped copy.
 
 Check the two repos are in sync (with neuro-trade checked out next to this repo):
