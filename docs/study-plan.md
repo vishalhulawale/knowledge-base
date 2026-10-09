@@ -1,6 +1,6 @@
 # Study Plan
 
-All 44 topics by priority. ★ counts show how many subtopics tie to resume claims.
+All 44 core topics by priority, plus the 9-topic Forward Deployed Engineer track. ★ counts show how many subtopics tie to resume claims.
 
 ## P0 — must master
 
@@ -67,3 +67,19 @@ Ranked by expected interview payoff. Each is either asked in almost every Senior
 | [Service Mesh & Cloud-Native Platform](service-mesh-cloud-native/index.md) | 2 | 0 |
 | [Agile Delivery & Estimation](agile-delivery/index.md) | 3 | 2 |
 | [Compliance & Data Privacy](compliance-privacy/index.md) | 3 | 1 |
+
+## Forward Deployed Engineer track
+
+For FDE roles (OpenAI, Anthropic, Palantir, Google, Databricks and others): engineers who embed with customers and take a product from demo to production. It builds on GenAI, System Design and Leadership and covers what FDE loops add: decomposition, customer discovery, practical coding, applied LLM engineering and deployment in customer environments. 58 subtopics across 9 topics.
+
+| Topic | Priority | Subtopics | ★ |
+|---|---|---|---|
+| [FDE Role & Interview Loop](fde-role-interview-loop/index.md) | P0 | 5 | 1 |
+| [Problem Decomposition & Scoping](fde-decomposition-scoping/index.md) | P0 | 6 | 1 |
+| [Customer Discovery & Stakeholder Management](fde-customer-discovery/index.md) | P0 | 7 | 3 |
+| [Practical Coding for FDE](fde-practical-coding/index.md) | P0 | 7 | 3 |
+| [Data Integration & Pipelines](fde-data-integration/index.md) | P1 | 6 | 2 |
+| [Applied LLM Engineering for Deployments](fde-applied-llm/index.md) | P0 | 8 | 2 |
+| [Enterprise Deployment Environments](fde-enterprise-deployment/index.md) | P1 | 7 | 7 |
+| [FDE System Design](fde-system-design/index.md) | P0 | 7 | 2 |
+| [FDE Behavioral, Take-Home & Deep Dive](fde-behavioral-take-home/index.md) | P0 | 5 | 4 |

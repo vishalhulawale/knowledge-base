@@ -24,7 +24,7 @@ hide:
 
     ---
 
-    All 44 topics by priority, with how many subtopics tie to resume claims.
+    All 44 core topics by priority and the Forward Deployed Engineer track, with how many subtopics tie to resume claims.
 
 -   :lucide-coffee:{ .lg } **[Core Java](core-java/index.md)**
 
@@ -43,6 +43,12 @@ hide:
     ---
 
     The STAR story bank for behavioural rounds.
+
+-   :lucide-rocket:{ .lg } **[Forward Deployed Engineer](fde-role-interview-loop/index.md)**
+
+    ---
+
+    The FDE track: decomposition, customer discovery, practical coding and shipping AI inside customer systems.
 
 </div>
 

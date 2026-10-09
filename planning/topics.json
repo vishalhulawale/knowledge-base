@@ -2145,6 +2145,426 @@
           "status": "todo"
         }
       ]
+    },
+    {
+      "num": 45,
+      "title": "FDE Role & Interview Loop",
+      "slug": "fde-role-interview-loop",
+      "priority": "P0",
+      "subtopics": [
+        {
+          "title": "What an FDE is: Palantir origins (Echo/Delta), FDE vs SWE vs solutions engineer vs consultant",
+          "slug": "01-what-an-fde-is-palantir-origins-fde-vs-swe-vs-solutions-engi",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "The AI-lab FDE model: OpenAI, Anthropic, Google, Databricks, Scale & services-led growth",
+          "slug": "02-the-ai-lab-fde-model-openai-anthropic-google-databricks-scal",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "The FDE interview loop mapped: screens, take-home, practical coding, decomposition, learning, customer simulation, behavioral",
+          "slug": "03-the-fde-interview-loop-mapped-screens-take-home-practical-co",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Positioning a consulting & services background (Publicis Sapient, Deloitte) for FDE",
+          "slug": "04-positioning-a-consulting-and-services-background-for-fde",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "\"Why FDE, why this company\", travel, level & compensation conversations",
+          "slug": "05-why-fde-why-this-company-travel-level-and-compensation-conve",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 46,
+      "title": "Problem Decomposition & Scoping",
+      "slug": "fde-decomposition-scoping",
+      "priority": "P0",
+      "subtopics": [
+        {
+          "title": "Framework for ambiguous prompts: users, decisions, data, constraints, success metrics",
+          "slug": "01-framework-for-ambiguous-prompts-users-decisions-data-constra",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "From vague business goal to data & object model (ontology thinking)",
+          "slug": "02-from-vague-business-goal-to-data-and-object-model",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Decomposing into a working, extensible MVP in a live pairing session",
+          "slug": "03-decomposing-into-a-working-extensible-mvp-in-a-live-pairing",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Prioritisation, trade-off calls & cutting scope under time pressure",
+          "slug": "04-prioritisation-trade-off-calls-and-cutting-scope-under-time",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Worked decomposition prompts: scheduling, logistics, marketplace, operations dashboard",
+          "slug": "05-worked-decomposition-prompts-scheduling-logistics-marketplac",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "The learning round: picking up an unfamiliar API, language or library fast",
+          "slug": "06-the-learning-round-picking-up-an-unfamiliar-api-language-or",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 47,
+      "title": "Customer Discovery & Stakeholder Management",
+      "slug": "fde-customer-discovery",
+      "priority": "P0",
+      "subtopics": [
+        {
+          "title": "Discovery interviews: workflow mapping, hidden constraints, restating the real need",
+          "slug": "01-discovery-interviews-workflow-mapping-hidden-constraints-res",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Writing the scope brief: success criteria, assumptions, out of scope",
+          "slug": "02-writing-the-scope-brief-success-criteria-assumptions-out-of",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Pilot → proof of concept → production: time-boxing, exit criteria, measuring business impact",
+          "slug": "03-pilot-to-proof-of-concept-to-production-time-boxing-exit-cri",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Saying no & managing scope creep without losing trust",
+          "slug": "04-saying-no-and-managing-scope-creep-without-losing-trust",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Talking to executives vs engineers: demos, executive pitch, status updates",
+          "slug": "05-talking-to-executives-vs-engineers-demos-executive-pitch-sta",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Customer simulation round: role-play scenarios & how they are scored",
+          "slug": "06-customer-simulation-round-role-play-scenarios-and-how-they-a",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Field feedback to product & research; codifying repeatable deployment patterns",
+          "slug": "07-field-feedback-to-product-and-research-codifying-repeatable",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 48,
+      "title": "Practical Coding for FDE",
+      "slug": "fde-practical-coding",
+      "priority": "P0",
+      "subtopics": [
+        {
+          "title": "Practical coding round format: narrating, edge cases first, using AI tools in the round",
+          "slug": "01-practical-coding-round-format-narrating-edge-cases-first-usi",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Third-party API integration: auth, pagination, rate limits, retries with backoff",
+          "slug": "02-third-party-api-integration-auth-pagination-rate-limits-retr",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Webhooks: signature verification, idempotent consumers, duplicate & out-of-order delivery",
+          "slug": "03-webhooks-signature-verification-idempotent-consumers-duplica",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Debugging & reading an unfamiliar codebase fast",
+          "slug": "04-debugging-and-reading-an-unfamiliar-codebase-fast",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Refactoring & extending messy code without breaking its tests",
+          "slug": "05-refactoring-and-extending-messy-code-without-breaking-its-te",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Python fluency for FDE: scripting, data wrangling, FastAPI services",
+          "slug": "06-python-fluency-for-fde-scripting-data-wrangling-fastapi-serv",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Rapid full-stack prototyping: TypeScript service plus React UI for a demo",
+          "slug": "07-rapid-full-stack-prototyping-typescript-service-plus-react-u",
+          "resume": true,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 49,
+      "title": "Data Integration & Pipelines",
+      "slug": "fde-data-integration",
+      "priority": "P1",
+      "subtopics": [
+        {
+          "title": "Integrating with legacy systems of record: databases, files/SFTP, SOAP/REST, CDC",
+          "slug": "01-integrating-with-legacy-systems-of-record-databases-files-sf",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "ETL vs ELT, batch vs streaming, orchestration (Airflow, Dagster) & dbt",
+          "slug": "02-etl-vs-elt-batch-vs-streaming-orchestration-and-dbt",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "SQL for take-homes: multi-table joins, window functions, NULL handling, deduplication",
+          "slug": "03-sql-for-take-homes-multi-table-joins-window-functions-null-h",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Data quality, schema drift, idempotent loads & backfills",
+          "slug": "04-data-quality-schema-drift-idempotent-loads-and-backfills",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Semantic layer & ontology: modelling the customer's domain (Foundry-style)",
+          "slug": "05-semantic-layer-and-ontology-modelling-the-customer-s-domain",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Spark/PySpark & lakehouse basics (Databricks)",
+          "slug": "06-spark-pyspark-and-lakehouse-basics",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 50,
+      "title": "Applied LLM Engineering for Deployments",
+      "slug": "fde-applied-llm",
+      "priority": "P0",
+      "subtopics": [
+        {
+          "title": "Model selection & routing: quality vs latency vs cost across providers",
+          "slug": "01-model-selection-and-routing-quality-vs-latency-vs-cost-acros",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Production prompt engineering, structured outputs & prompt caching",
+          "slug": "02-production-prompt-engineering-structured-outputs-and-prompt",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Production RAG: chunking, hybrid search, reranking, permission-aware retrieval",
+          "slug": "03-production-rag-chunking-hybrid-search-reranking-permission-a",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Agents in production: tool use, MCP servers, sub-agents, skills, human-in-the-loop",
+          "slug": "04-agents-in-production-tool-use-mcp-servers-sub-agents-skills",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Evals: golden datasets, LLM-as-judge, retrieval vs answer metrics, regression tests in CI",
+          "slug": "05-evals-golden-datasets-llm-as-judge-retrieval-vs-answer-metri",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Guardrails: prompt injection, PII/PHI redaction, grounding checks, audit logging",
+          "slug": "06-guardrails-prompt-injection-pii-phi-redaction-grounding-chec",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "LLM observability, latency budgets & token cost control",
+          "slug": "07-llm-observability-latency-budgets-and-token-cost-control",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Prompting vs RAG vs fine-tuning: choosing the right lever",
+          "slug": "08-prompting-vs-rag-vs-fine-tuning-choosing-the-right-lever",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 51,
+      "title": "Enterprise Deployment Environments",
+      "slug": "fde-enterprise-deployment",
+      "priority": "P1",
+      "subtopics": [
+        {
+          "title": "Deployment models: hosted API vs customer VPC vs on-prem & air-gapped",
+          "slug": "01-deployment-models-hosted-api-vs-customer-vpc-vs-on-prem-and",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Enterprise identity: SSO (SAML/OIDC), SCIM, RBAC & permission propagation",
+          "slug": "02-enterprise-identity-sso-scim-rbac-and-permission-propagation",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Network & data constraints: private endpoints, proxies, egress allowlists, data residency",
+          "slug": "03-network-and-data-constraints-private-endpoints-proxies-egres",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Security reviews & compliance questionnaires: SOC 2, HIPAA, GDPR, DPAs",
+          "slug": "04-security-reviews-and-compliance-questionnaires-soc-2-hipaa-g",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Packaging & delivery into a customer account: Docker, Helm, Terraform",
+          "slug": "05-packaging-and-delivery-into-a-customer-account-docker-helm-t",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Cloud AI platforms: Amazon Bedrock, Azure OpenAI, Vertex AI",
+          "slug": "06-cloud-ai-platforms-amazon-bedrock-azure-openai-vertex-ai",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Production rollout, monitoring, on-call & handoff to the customer's team",
+          "slug": "07-production-rollout-monitoring-on-call-and-handoff-to-the-cus",
+          "resume": true,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 52,
+      "title": "FDE System Design",
+      "slug": "fde-system-design",
+      "priority": "P0",
+      "subtopics": [
+        {
+          "title": "FDE system design framework: customer context, deployment constraint, rollout plan",
+          "slug": "01-fde-system-design-framework-customer-context-deployment-cons",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Case: enterprise knowledge assistant (RAG over internal docs with access control)",
+          "slug": "02-case-enterprise-knowledge-assistant",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Case: agentic workflow automation with human approval (claims or ticket triage)",
+          "slug": "03-case-agentic-workflow-automation-with-human-approval",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Case: document extraction pipeline (forms, invoices) with evals",
+          "slug": "04-case-document-extraction-pipeline-with-evals",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Case: customer-support agent with escalation & handoff",
+          "slug": "05-case-customer-support-agent-with-escalation-and-handoff",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Case: unifying siloed systems into an operational dashboard",
+          "slug": "06-case-unifying-siloed-systems-into-an-operational-dashboard",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Defending trade-offs: build vs buy, latency vs cost, cloud vs on-prem",
+          "slug": "07-defending-trade-offs-build-vs-buy-latency-vs-cost-cloud-vs-o",
+          "resume": false,
+          "status": "todo"
+        }
+      ]
+    },
+    {
+      "num": 53,
+      "title": "FDE Behavioral, Take-Home & Deep Dive",
+      "slug": "fde-behavioral-take-home",
+      "priority": "P0",
+      "subtopics": [
+        {
+          "title": "FDE story bank: ambiguity, no-docs systems, scope pushback, client conflict, quick fix vs proper fix",
+          "slug": "01-fde-story-bank-ambiguity-no-docs-systems-scope-pushback-clie",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Owning a customer outcome end to end",
+          "slug": "02-owning-a-customer-outcome-end-to-end",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Recovering trust after a failed delivery or incident",
+          "slug": "03-recovering-trust-after-a-failed-delivery-or-incident",
+          "resume": true,
+          "status": "todo"
+        },
+        {
+          "title": "Take-home project: building, writing up & presenting it",
+          "slug": "04-take-home-project-building-writing-up-and-presenting-it",
+          "resume": false,
+          "status": "todo"
+        },
+        {
+          "title": "Project deep dive: defending every line of the resume",
+          "slug": "05-project-deep-dive-defending-every-line-of-the-resume",
+          "resume": true,
+          "status": "todo"
+        }
+      ]
     }
   ]
 }

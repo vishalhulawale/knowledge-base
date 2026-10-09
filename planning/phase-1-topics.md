@@ -79,3 +79,35 @@ Depth: **Expert** = can go deep on internals and design trade-offs · **Working*
 - Resume says **9+ years**; aligned target level is Senior/Lead. Tell me if you're also targeting Staff/Architect, which would raise System Design depth further.
 - Share a target job description (or company type: product vs services) to re-weight DSA and cloud priorities.
 - Topics 20–23 can be dropped or folded into others if time is short.
+
+## F. Forward Deployed Engineer (FDE) track (added 2026-10-09)
+
+A separate track for FDE roles: engineers who embed with customers and take a product (today, mostly LLM-based) from demo to production inside the customer's systems. The track builds on the core topics above (GenAI, System Design, Leadership, AWS) and covers only what FDE loops add.
+
+### What the research found
+- **Origin:** Palantir's Forward Deployed Software Engineers, split into Echo (deployment strategists who find the problem) and Delta (engineers who build it). In 2025–26 the AI labs (OpenAI, Anthropic, Google Cloud, Databricks, Scale, Cognition) and AWS adopted the model; LinkedIn reported FDE roles grew about 42× between 2023 and 2025.
+- **Job descriptions** ask for 4–8+ years of customer-facing engineering; ownership of discovery, scoping, design, build and production rollout; production LLM work (RAG, agents, MCP servers, sub-agents, skills, evals); Python and JavaScript/TypeScript; deploying into customer VPC or on-prem environments; feeding field learnings back to product and research; 25–50% travel.
+- **Interview loop** (4–6 rounds over 3–5 weeks, varies by company): recruiter screen (why FDE, travel) → technical screen (defend your past work) → take-home with presentation → practical coding (refactor, debug, extend, API integration; not LeetCode) → decomposition (vague business goal to a working, extensible model) → learning round (Palantir: pick up unfamiliar docs or an API fast) → customer simulation (live discovery with a stakeholder hiding a constraint) → AI system design → behavioral (ambiguity, scope creep, client conflict, recovering trust).
+- **Scoring:** technical depth, real-world deployment thinking and client-facing communication weigh about equally. Waiting for guidance and staying silent while coding are common failure modes.
+
+### Topics
+
+| # | Topic | Why it matters | Priority | Depth |
+|---|---|---|---|---|
+| 45 | FDE role & interview loop | Know the role, the companies and the round types; position a services background (Publicis Sapient, Deloitte) | P0 | Working |
+| 46 | Problem decomposition & scoping | The decomposition and learning rounds are near universal in FDE loops | P0 | Expert |
+| 47 | Customer discovery & stakeholder management | Customer simulation round; scope briefs, pilots, saying no | P0 | Expert |
+| 48 | Practical coding for FDE | Practical round: API integration, webhooks, debugging and refactoring unfamiliar code, Python | P0 | Expert |
+| 49 | Data integration & pipelines | Most deployments start by connecting siloed systems of record; SQL/ETL take-homes | P1 | Working |
+| 50 | Applied LLM engineering for deployments | Production RAG, agents, MCP, evals, guardrails and cost (beyond topic 36 basics) | P0 | Expert |
+| 51 | Enterprise deployment environments | VPC/on-prem, SSO, network limits, security reviews, Bedrock/Azure OpenAI/Vertex | P1 | Working |
+| 52 | FDE system design | AI- and deployment-focused design round with worked cases | P0 | Expert |
+| 53 | FDE behavioral, take-home & deep dive | FDE-specific STAR stories, take-home presentation, resume deep dive | P0 | Expert |
+
+Subtopics: `planning/phase-2-subtopics.md` → Forward Deployed Engineer track.
+
+### Sources
+- Interview loop guides: [Exponent FDE loop](https://www.tryexponent.com/courses/forward-deployed-engineering/intro-fde-interviews/fde-loop), [Exponent: Palantir](https://www.tryexponent.com/guides/palantir-forward-deployed-engineer-interview), [OpenAI](https://www.tryexponent.com/guides/openai-forward-deployed-engineer-interview), [Google](https://www.tryexponent.com/guides/google-forward-deployed-engineer-interview), [Databricks](https://www.tryexponent.com/guides/databricks-forward-deployed-engineer-interview), [Cognition](https://www.tryexponent.com/guides/cognition-forward-deployed-engineer-interview); [Educative: the four interview rounds](https://www.educative.io/courses/forward-deployed-engineer/the-four-interview-rounds); [The FDE interview has six rounds](https://medium.com/@shivanathd/the-forward-deployed-engineer-interview-has-six-rounds-365df0544e2c); [igotanoffer: OpenAI FDE](https://igotanoffer.com/en/advice/openai-forward-deployed-engineer-interview); [Dataford FDE guide](https://dataford.io/roles/forward-deployed-engineer); [FDE Academy questions](https://fde.academy/blog/forward-deployed-engineer-interview-questions).
+- Job descriptions: [OpenAI FDE (London)](https://openai.com/careers/forward-deployed-engineer-london/), [Anthropic FDE](https://job-boards.greenhouse.io/anthropic/jobs/5302966008), [Anthropic FDE, Applied AI](https://www.anthropic.com/careers/jobs/5012991008), [Palantir FDSE](https://jobs.lever.co/palantir/bf718bd3-b2ef-451e-8033-cb4d2d9c094b).
+- Role and model: [PostHog FDE handbook](https://posthog.com/handbook/forward-deployed-engineering/how-we-work), [a16z: Services-led growth](https://a16z.com/services-led-growth/), [Palantir blog: Deployment Strategist](https://blog.palantir.com/a-day-in-the-life-of-a-palantir-deployment-strategist-951cb59a5a96), [MarkTechPost: What is an FDE](https://www.marktechpost.com/2026/05/20/what-is-a-forward-deployed-engineer-the-ai-role-openai-anthropic-and-google-are-hiring-in-2026/), [Wikipedia](https://en.wikipedia.org/wiki/Forward_Deployed_Engineer).
+- Most loop details come from prep sites and candidate reports, not the companies; confirm the format with the recruiter.

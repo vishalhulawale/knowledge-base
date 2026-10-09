@@ -426,3 +426,22 @@ nav:
           - "Driving Engineering Standards & Technical Decisions": leadership-behavioral/10-driving-engineering-standards-and-technical-decisions.md
           - "Failures, Mistakes & Lessons Learned": leadership-behavioral/11-failures-mistakes-and-lessons-learned.md
           - "Questions to Ask the Interviewer; Salary/Role Conversations": leadership-behavioral/12-questions-to-ask-the-interviewer-salary-role-conversations.md
+  - "FDE":
+      - "FDE Role & Interview Loop":
+          - Overview: fde-role-interview-loop/index.md
+      - "Problem Decomposition & Scoping":
+          - Overview: fde-decomposition-scoping/index.md
+      - "Customer Discovery & Stakeholder Management":
+          - Overview: fde-customer-discovery/index.md
+      - "Practical Coding for FDE":
+          - Overview: fde-practical-coding/index.md
+      - "Data Integration & Pipelines":
+          - Overview: fde-data-integration/index.md
+      - "Applied LLM Engineering for Deployments":
+          - Overview: fde-applied-llm/index.md
+      - "Enterprise Deployment Environments":
+          - Overview: fde-enterprise-deployment/index.md
+      - "FDE System Design":
+          - Overview: fde-system-design/index.md
+      - "FDE Behavioral, Take-Home & Deep Dive":
+          - Overview: fde-behavioral-take-home/index.md

@@ -395,3 +395,81 @@ Order within each topic: fundamentals → advanced → senior/architecture.
 1. HIPAA & PHI handling ★
 2. PCI-DSS, GDPR & PII
 3. Audit logging & data retention
+
+## Forward Deployed Engineer track
+
+### 45 FDE Role & Interview Loop
+1. What an FDE is: Palantir origins (Echo/Delta), FDE vs SWE vs solutions engineer vs consultant
+2. The AI-lab FDE model: OpenAI, Anthropic, Google, Databricks, Scale & services-led growth
+3. The FDE interview loop mapped: screens, take-home, practical coding, decomposition, learning, customer simulation, behavioral
+4. Positioning a consulting & services background (Publicis Sapient, Deloitte) for FDE ★
+5. "Why FDE, why this company", travel, level & compensation conversations
+
+### 46 Problem Decomposition & Scoping
+1. Framework for ambiguous prompts: users, decisions, data, constraints, success metrics
+2. From vague business goal to data & object model (ontology thinking)
+3. Decomposing into a working, extensible MVP in a live pairing session
+4. Prioritisation, trade-off calls & cutting scope under time pressure ★
+5. Worked decomposition prompts: scheduling, logistics, marketplace, operations dashboard
+6. The learning round: picking up an unfamiliar API, language or library fast
+
+### 47 Customer Discovery & Stakeholder Management
+1. Discovery interviews: workflow mapping, hidden constraints, restating the real need
+2. Writing the scope brief: success criteria, assumptions, out of scope ★
+3. Pilot → proof of concept → production: time-boxing, exit criteria, measuring business impact
+4. Saying no & managing scope creep without losing trust ★
+5. Talking to executives vs engineers: demos, executive pitch, status updates ★
+6. Customer simulation round: role-play scenarios & how they are scored
+7. Field feedback to product & research; codifying repeatable deployment patterns
+
+### 48 Practical Coding for FDE
+1. Practical coding round format: narrating, edge cases first, using AI tools in the round
+2. Third-party API integration: auth, pagination, rate limits, retries with backoff ★
+3. Webhooks: signature verification, idempotent consumers, duplicate & out-of-order delivery ★
+4. Debugging & reading an unfamiliar codebase fast
+5. Refactoring & extending messy code without breaking its tests
+6. Python fluency for FDE: scripting, data wrangling, FastAPI services
+7. Rapid full-stack prototyping: TypeScript service plus React UI for a demo ★
+
+### 49 Data Integration & Pipelines
+1. Integrating with legacy systems of record: databases, files/SFTP, SOAP/REST, CDC ★
+2. ETL vs ELT, batch vs streaming, orchestration (Airflow, Dagster) & dbt
+3. SQL for take-homes: multi-table joins, window functions, NULL handling, deduplication
+4. Data quality, schema drift, idempotent loads & backfills ★
+5. Semantic layer & ontology: modelling the customer's domain (Foundry-style)
+6. Spark/PySpark & lakehouse basics (Databricks)
+
+### 50 Applied LLM Engineering for Deployments
+1. Model selection & routing: quality vs latency vs cost across providers
+2. Production prompt engineering, structured outputs & prompt caching
+3. Production RAG: chunking, hybrid search, reranking, permission-aware retrieval
+4. Agents in production: tool use, MCP servers, sub-agents, skills, human-in-the-loop
+5. Evals: golden datasets, LLM-as-judge, retrieval vs answer metrics, regression tests in CI
+6. Guardrails: prompt injection, PII/PHI redaction, grounding checks, audit logging ★
+7. LLM observability, latency budgets & token cost control ★
+8. Prompting vs RAG vs fine-tuning: choosing the right lever
+
+### 51 Enterprise Deployment Environments
+1. Deployment models: hosted API vs customer VPC vs on-prem & air-gapped ★
+2. Enterprise identity: SSO (SAML/OIDC), SCIM, RBAC & permission propagation ★
+3. Network & data constraints: private endpoints, proxies, egress allowlists, data residency ★
+4. Security reviews & compliance questionnaires: SOC 2, HIPAA, GDPR, DPAs ★
+5. Packaging & delivery into a customer account: Docker, Helm, Terraform ★
+6. Cloud AI platforms: Amazon Bedrock, Azure OpenAI, Vertex AI ★
+7. Production rollout, monitoring, on-call & handoff to the customer's team ★
+
+### 52 FDE System Design
+1. FDE system design framework: customer context, deployment constraint, rollout plan
+2. Case: enterprise knowledge assistant (RAG over internal docs with access control)
+3. Case: agentic workflow automation with human approval (claims or ticket triage) ★
+4. Case: document extraction pipeline (forms, invoices) with evals
+5. Case: customer-support agent with escalation & handoff
+6. Case: unifying siloed systems into an operational dashboard ★
+7. Defending trade-offs: build vs buy, latency vs cost, cloud vs on-prem
+
+### 53 FDE Behavioral, Take-Home & Deep Dive
+1. FDE story bank: ambiguity, no-docs systems, scope pushback, client conflict, quick fix vs proper fix ★
+2. Owning a customer outcome end to end ★
+3. Recovering trust after a failed delivery or incident ★
+4. Take-home project: building, writing up & presenting it
+5. Project deep dive: defending every line of the resume ★
