@@ -2238,43 +2238,43 @@
           "title": "Discovery interviews: workflow mapping, hidden constraints, restating the real need",
           "slug": "01-discovery-interviews-workflow-mapping-hidden-constraints-res",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Writing the scope brief: success criteria, assumptions, out of scope",
           "slug": "02-writing-the-scope-brief-success-criteria-assumptions-out-of",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Pilot → proof of concept → production: time-boxing, exit criteria, measuring business impact",
           "slug": "03-pilot-to-proof-of-concept-to-production-time-boxing-exit-cri",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Saying no & managing scope creep without losing trust",
           "slug": "04-saying-no-and-managing-scope-creep-without-losing-trust",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Talking to executives vs engineers: demos, executive pitch, status updates",
           "slug": "05-talking-to-executives-vs-engineers-demos-executive-pitch-sta",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Customer simulation round: role-play scenarios & how they are scored",
           "slug": "06-customer-simulation-round-role-play-scenarios-and-how-they-a",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Field feedback to product & research; codifying repeatable deployment patterns",
           "slug": "07-field-feedback-to-product-and-research-codifying-repeatable",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },

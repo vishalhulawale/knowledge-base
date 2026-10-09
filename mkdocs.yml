@@ -444,6 +444,13 @@ nav:
           - "The Learning Round: Picking Up an Unfamiliar API, Language or Library Fast": fde-decomposition-scoping/06-the-learning-round-picking-up-an-unfamiliar-api-language-or.md
       - "Customer Discovery & Stakeholder Management":
           - Overview: fde-customer-discovery/index.md
+          - "Discovery Interviews: Workflow Mapping, Hidden Constraints, Restating the Real Need": fde-customer-discovery/01-discovery-interviews-workflow-mapping-hidden-constraints-res.md
+          - "Writing the Scope Brief: Success Criteria, Assumptions, Out of Scope": fde-customer-discovery/02-writing-the-scope-brief-success-criteria-assumptions-out-of.md
+          - "Pilot \u2192 Proof of Concept \u2192 Production: Time-Boxing, Exit Criteria, Measuring Business Impact": fde-customer-discovery/03-pilot-to-proof-of-concept-to-production-time-boxing-exit-cri.md
+          - "Saying No & Managing Scope Creep Without Losing Trust": fde-customer-discovery/04-saying-no-and-managing-scope-creep-without-losing-trust.md
+          - "Talking to Executives vs Engineers: Demos, Executive Pitch, Status Updates": fde-customer-discovery/05-talking-to-executives-vs-engineers-demos-executive-pitch-sta.md
+          - "Customer Simulation Round: Role-Play Scenarios & How They Are Scored": fde-customer-discovery/06-customer-simulation-round-role-play-scenarios-and-how-they-a.md
+          - "Field Feedback to Product & Research; Codifying Repeatable Deployment Patterns": fde-customer-discovery/07-field-feedback-to-product-and-research-codifying-repeatable.md
       - "Practical Coding for FDE":
           - Overview: fde-practical-coding/index.md
       - "Data Integration & Pipelines":
