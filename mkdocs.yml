@@ -429,6 +429,11 @@ nav:
   - "FDE":
       - "FDE Role & Interview Loop":
           - Overview: fde-role-interview-loop/index.md
+          - "What an FDE Is: Palantir Origins (Echo/Delta), FDE vs SWE vs Solutions Engineer vs Consultant": fde-role-interview-loop/01-what-an-fde-is-palantir-origins-fde-vs-swe-vs-solutions-engi.md
+          - "The AI-Lab FDE Model: OpenAI, Anthropic, Google, Databricks, Scale & Services-Led Growth": fde-role-interview-loop/02-the-ai-lab-fde-model-openai-anthropic-google-databricks-scal.md
+          - "The FDE Interview Loop Mapped: Screens, Take-Home, Practical Coding, Decomposition, Learning, Customer Simulation, Behavioral": fde-role-interview-loop/03-the-fde-interview-loop-mapped-screens-take-home-practical-co.md
+          - "Positioning a Consulting & Services Background (Publicis Sapient, Deloitte) for FDE": fde-role-interview-loop/04-positioning-a-consulting-and-services-background-for-fde.md
+          - "\\\"Why FDE, Why This Company\\\", Travel, Level & Compensation Conversations": fde-role-interview-loop/05-why-fde-why-this-company-travel-level-and-compensation-conve.md
       - "Problem Decomposition & Scoping":
           - Overview: fde-decomposition-scoping/index.md
       - "Customer Discovery & Stakeholder Management":
