@@ -436,6 +436,12 @@ nav:
           - "\\\"Why FDE, Why This Company\\\", Travel, Level & Compensation Conversations": fde-role-interview-loop/05-why-fde-why-this-company-travel-level-and-compensation-conve.md
       - "Problem Decomposition & Scoping":
           - Overview: fde-decomposition-scoping/index.md
+          - "Framework for Ambiguous Prompts: Users, Decisions, Data, Constraints, Success Metrics": fde-decomposition-scoping/01-framework-for-ambiguous-prompts-users-decisions-data-constra.md
+          - "From Vague Business Goal to Data & Object Model (Ontology Thinking)": fde-decomposition-scoping/02-from-vague-business-goal-to-data-and-object-model.md
+          - "Decomposing into a Working, Extensible MVP in a Live Pairing Session": fde-decomposition-scoping/03-decomposing-into-a-working-extensible-mvp-in-a-live-pairing.md
+          - "Prioritisation, Trade-off Calls & Cutting Scope Under Time Pressure": fde-decomposition-scoping/04-prioritisation-trade-off-calls-and-cutting-scope-under-time.md
+          - "Worked Decomposition Prompts: Scheduling, Logistics, Marketplace, Operations Dashboard": fde-decomposition-scoping/05-worked-decomposition-prompts-scheduling-logistics-marketplac.md
+          - "The Learning Round: Picking Up an Unfamiliar API, Language or Library Fast": fde-decomposition-scoping/06-the-learning-round-picking-up-an-unfamiliar-api-language-or.md
       - "Customer Discovery & Stakeholder Management":
           - Overview: fde-customer-discovery/index.md
       - "Practical Coding for FDE":

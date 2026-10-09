@@ -2194,37 +2194,37 @@
           "title": "Framework for ambiguous prompts: users, decisions, data, constraints, success metrics",
           "slug": "01-framework-for-ambiguous-prompts-users-decisions-data-constra",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "From vague business goal to data & object model (ontology thinking)",
           "slug": "02-from-vague-business-goal-to-data-and-object-model",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Decomposing into a working, extensible MVP in a live pairing session",
           "slug": "03-decomposing-into-a-working-extensible-mvp-in-a-live-pairing",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Prioritisation, trade-off calls & cutting scope under time pressure",
           "slug": "04-prioritisation-trade-off-calls-and-cutting-scope-under-time",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Worked decomposition prompts: scheduling, logistics, marketplace, operations dashboard",
           "slug": "05-worked-decomposition-prompts-scheduling-logistics-marketplac",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "The learning round: picking up an unfamiliar API, language or library fast",
           "slug": "06-the-learning-round-picking-up-an-unfamiliar-api-language-or",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
