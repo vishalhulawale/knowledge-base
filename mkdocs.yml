@@ -464,6 +464,14 @@ nav:
           - Overview: fde-data-integration/index.md
       - "Applied LLM Engineering for Deployments":
           - Overview: fde-applied-llm/index.md
+          - "Model Selection & Routing: Quality vs Latency vs Cost Across Providers": fde-applied-llm/01-model-selection-and-routing-quality-vs-latency-vs-cost-acros.md
+          - "Production Prompt Engineering, Structured Outputs & Prompt Caching": fde-applied-llm/02-production-prompt-engineering-structured-outputs-and-prompt.md
+          - "Production RAG: Chunking, Hybrid Search, Reranking, Permission-Aware Retrieval": fde-applied-llm/03-production-rag-chunking-hybrid-search-reranking-permission-a.md
+          - "Agents in Production: Tool Use, MCP Servers, Sub-agents, Skills, Human-in-the-Loop": fde-applied-llm/04-agents-in-production-tool-use-mcp-servers-sub-agents-skills.md
+          - "Evals: Golden Datasets, LLM-as-Judge, Retrieval vs Answer Metrics, Regression Tests in CI": fde-applied-llm/05-evals-golden-datasets-llm-as-judge-retrieval-vs-answer-metri.md
+          - "Guardrails: Prompt Injection, PII/PHI Redaction, Grounding Checks, Audit Logging": fde-applied-llm/06-guardrails-prompt-injection-pii-phi-redaction-grounding-chec.md
+          - "LLM Observability, Latency Budgets & Token Cost Control": fde-applied-llm/07-llm-observability-latency-budgets-and-token-cost-control.md
+          - "Prompting vs RAG vs Fine-Tuning: Choosing the Right Lever": fde-applied-llm/08-prompting-vs-rag-vs-fine-tuning-choosing-the-right-lever.md
       - "Enterprise Deployment Environments":
           - Overview: fde-enterprise-deployment/index.md
       - "FDE System Design":

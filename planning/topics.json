@@ -2382,49 +2382,49 @@
           "title": "Model selection & routing: quality vs latency vs cost across providers",
           "slug": "01-model-selection-and-routing-quality-vs-latency-vs-cost-acros",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Production prompt engineering, structured outputs & prompt caching",
           "slug": "02-production-prompt-engineering-structured-outputs-and-prompt",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Production RAG: chunking, hybrid search, reranking, permission-aware retrieval",
           "slug": "03-production-rag-chunking-hybrid-search-reranking-permission-a",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Agents in production: tool use, MCP servers, sub-agents, skills, human-in-the-loop",
           "slug": "04-agents-in-production-tool-use-mcp-servers-sub-agents-skills",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Evals: golden datasets, LLM-as-judge, retrieval vs answer metrics, regression tests in CI",
           "slug": "05-evals-golden-datasets-llm-as-judge-retrieval-vs-answer-metri",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Guardrails: prompt injection, PII/PHI redaction, grounding checks, audit logging",
           "slug": "06-guardrails-prompt-injection-pii-phi-redaction-grounding-chec",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "LLM observability, latency budgets & token cost control",
           "slug": "07-llm-observability-latency-budgets-and-token-cost-control",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Prompting vs RAG vs fine-tuning: choosing the right lever",
           "slug": "08-prompting-vs-rag-vs-fine-tuning-choosing-the-right-lever",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
