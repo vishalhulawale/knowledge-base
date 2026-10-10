@@ -70,6 +70,9 @@ flowchart LR
 | Multi-arch | Graviton/ARM node groups are common | `docker buildx` for `linux/amd64,linux/arm64` |
 | No runtime downloads | No-egress subnets | Bake models, tokenizers and packages into the image (see [Network constraints](03-network-and-data-constraints-private-endpoints-proxies-egres.md)) |
 
+![Animation: two rows over illustrative days. Deploy by tag: staging pulls tag 2.7.1 and runs digest sha256:4f1c; the tag is then rebuilt and re-pushed as sha256:9b2e; prod pulls 2.7.1 and runs 9b2e, so both clusters report 2.7.1 but run different code. Deploy by digest: both clusters run sha256:4f1c, and the rebuild arrives only as a reviewed values change.](images/05-tag-vs-digest.svg){ loading=lazy }
+*Watch the tag row: nothing failed, yet staging and prod now run different bytes under the same version label.*
+
 For an AI product, model weights are a packaging decision too. Small models (rerankers, embedding models, PII detectors) usually go **in the image or a separate OCI artefact** pulled by an init container; large open-weight LLMs live on a volume or object store and are served by a dedicated inference server (vLLM, NIM) the customer may operate separately.
 
 ### A customer-installable Helm chart
@@ -116,6 +119,9 @@ sequenceDiagram
 *Notice that the customer owns every control here: the trust policy, the external ID condition, the session length, the Kubernetes RBAC and the audit trail.*
 
 The **external ID** solves the *confused deputy* problem: without it, anyone who learns the role ARN and can make your pipeline assume roles on their behalf (for example, another customer entering a victim's role ARN in your onboarding form) could trick you into acting in someone else's account. The vendor generates a unique external ID per customer and the customer puts it in the trust policy condition.
+
+![Two panels. Without an external ID, malicious customer B enters customer A's role ARN, the vendor pipeline assumes A's role because A's trust policy trusts the vendor deploy role, and the vendor ends up acting in A's account for B. With a unique per-customer external ID, the pipeline sends B's ID, A's trust policy requires A's ID, and STS denies the call.](images/05-confused-deputy.svg){ loading=lazy }
+*The trust policy is identical in both panels; only the per-customer external ID condition turns step 3 from a tick into a cross.*
 
 ### Air-gapped bundles
 

@@ -82,6 +82,9 @@ Model *choice* (quality vs latency vs cost, routing and fallbacks) is covered in
 | Guardrails | Bedrock Guardrails | Content filters / Content Safety, Prompt Shields | Model safety settings, Model Armor |
 | Agents | Bedrock Agents, AgentCore | Foundry Agent Service | ADK, Agent Runtime, Agent Gateway |
 
+![Three nested processing scopes: one region inside a geography or Azure Data Zone inside global. Outward buys capacity and price; inward keeps processing where the privacy team agreed. A table maps them to Bedrock in-region IDs, geographic and global inference profiles; Azure Regional, Data Zone and Global deployments; and Vertex AI regional endpoints, per-model residency table and global endpoint.](images/06-residency-scopes.svg){ loading=lazy }
+*Read the table by row: the same residency decision has a different name on each platform, so ask for it by scope, not by product term.*
+
 ### Choosing between them
 
 The short answer is usually **"the one the customer's cloud runs"**. Then check:
@@ -198,6 +201,9 @@ A cross-region inference profile routes your request to a foundation model in an
 ```
 
 `Converse` and `ConverseStream` are authorised by the `bedrock:InvokeModel` and `bedrock:InvokeModelWithResponseStream` actions. Customers with region-restricting SCPs must allow every destination region of the profile (and the "unspecified" region for global profiles), which is a common cause of `AccessDeniedException` in a correctly written app.
+
+![Animation: an app in eu-central-1 calls a Bedrock eu. geographic inference profile while an organisation SCP allows only eu-central-1. A request routed to eu-central-1 succeeds; a request routed to eu-west-1 for capacity is denied with AccessDeniedException; after the SCP allows every destination region of the profile, the eu-west-1 route succeeds. Regions are illustrative.](images/06-scp-denied.svg){ loading=lazy }
+*The app code never changes; whether a call fails depends only on which region the profile picks.*
 
 ### Pre-launch platform checklist
 
