@@ -45,6 +45,9 @@ flowchart LR
 ```
 *Notice that only one box on the path is the model. The FDE's job is everything in the middle, which is why AI-lab interviews test deployment thinking as much as LLM knowledge.*
 
+![A bar split into the model at about 20 percent or less and everything else at about 80 percent, with six unweighted parts of the deployment gap underneath](images/02-deployment-gap.svg){ loading=lazy }
+*The model is a fifth of the bar; the FDE's job is the rest.*
+
 ### Company by company (as of October 2026)
 
 All facts come from company announcements and job postings unless marked; loop details are in [The FDE interview loop mapped](03-the-fde-interview-loop-mapped-screens-take-home-practical-co.md).
@@ -88,6 +91,9 @@ flowchart LR
 *Notice the two flywheels: revenue (usage pays for more deployment) and product (learnings reduce the cost of the next deployment). If the product loop breaks, the business turns into a low-margin consultancy.*
 
 Jarvis has described this shift in OpenAI's own work: with tools such as Codex, the custom share of a project fell from about 90% to about 50%, and engagements usually start with a two-day visit. He has also said OpenAI's internal FDE group stays relatively small and focused on insight for product and research, while the Deployment Company grows to serve customers (reported August 2026).
+
+![Animation: two bars grow in turn, showing custom work falling from about 90 percent of a project to about 50 percent once patterns are productised and AI coding tools are used](images/02-custom-share.svg){ loading=lazy }
+*Watch the orange shrink: that's services-led growth turning into software margins.*
 
 ### Why the labs built separate deployment companies in 2026
 

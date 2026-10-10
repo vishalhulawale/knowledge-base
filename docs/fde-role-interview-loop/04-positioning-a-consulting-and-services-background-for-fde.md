@@ -43,6 +43,9 @@ flowchart LR
 ```
 *Notice that each doubt maps to a specific kind of story, not to a general claim. Prepare at least one story per box before any FDE loop.*
 
+![Three rows from hiring-manager doubt to removing evidence to resume source: ownership, code quality and client pushback, with the pushback story still to confirm](images/04-three-doubts.svg){ loading=lazy }
+*The amber box is the story to prepare before your first loop.*
+
 ### The consulting-to-FDE translation
 
 Services work and FDE work share most activities; the difference is the stance. The table shows how the same activity reads in each world.
@@ -90,6 +93,9 @@ flowchart TB
     R6 --> F2
 ```
 *Notice that every FDE competency except production LLM work has at least one resume source. That missing box is the gap to close before interviewing (see "Gaps" below).*
+
+![Grid of eight FDE competencies against Metasys, CCKM, ConvergeHealth and Meteor; every row has evidence except production LLM work, highlighted as the gap](images/04-competency-coverage.svg){ loading=lazy }
+*The red row is the one to close with a real, deployed project.*
 
 | FDE competency | Resume evidence (verbatim facts) | Story to prepare *[confirm details]* |
 |---|---|---|

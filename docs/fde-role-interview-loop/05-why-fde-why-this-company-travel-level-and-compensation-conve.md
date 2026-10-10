@@ -31,6 +31,9 @@ flowchart LR
 ```
 *Notice that the answer moves from your history to the future and then proves itself with a story. Interviewers trust "I've done the hard parts and liked them" more than "I think I'd like it".*
 
+![Two four-part formulas: why FDE (past pull, forward pull, costs understood, one story) and why this company (product surface, customers' problem, my evidence, dated research)](images/05-answer-formulas.svg){ loading=lazy }
+*If you can swap in another company's name and the answer still works, rewrite it.*
+
 Good themes for the past pull, from the resume:
 
 - Owning an **integration layer** between 5 upstream systems: understanding each system's constraints and making them work together.
@@ -84,6 +87,9 @@ flowchart TB
     C --> P
 ```
 *Notice that every branch is resolved in the first conversation. The worst outcome is agreeing vaguely and renegotiating at offer stage.*
+
+![Two rows of 52 weekly squares: 25 percent travel as one week in four, about 13 weeks away, and 50 percent as two on, two off, about 26 weeks away](images/05-travel-weeks.svg){ loading=lazy }
+*Half the year away is what 50% means; decide before the recruiter call, not at offer stage.*
 
 ### Level
 

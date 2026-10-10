@@ -75,6 +75,9 @@ flowchart TB
 ```
 *Notice that the Delta is the bridge in both directions: towards the customer through the Echo, and towards the platform through the Devs. AI-lab FDE roles usually merge the Echo and Delta jobs into one person.*
 
+![Two grids of capabilities against customers: a product SWE owns one capability row across all customers; an FDE owns one customer column across all capabilities](images/01-scope-grid.svg){ loading=lazy }
+*Read the row as Devs and the column as Deltas: same matrix, opposite cut.*
+
 **Why this matters for you:** most AI-lab FDE postings describe a combined Echo + Delta: you do discovery and stakeholder work *and* write the production code. Palantir still separates the titles. When you read a job description, work out which half it leans to.
 
 ### The Palantir job description, in its own words
@@ -95,6 +98,9 @@ Palantir's FDSE postings (on its Lever job board) describe the role as being lik
 | Typical failure | Builds the wrong thing for real users | Becomes a free consultancy, or builds one-off code that can't be maintained | Overpromises in the demo | Designs without owning the build | Recommendations never implemented | Scope disputes |
 
 Sources disagree at the edges (some SAs code a lot; some "FDE" jobs are really SE jobs), so the table is a working model, not a law. One useful test from a practitioner write-up: **an FDE covering fifteen accounts is really a solutions engineer**. Another from an Accenture FDE posting: "This is not a support role and it is not an advisory role. FDEs are senior technical practitioners who own outcomes end-to-end."
+
+![Timeline from pre-sale to feeding the product, with bars showing where the solutions engineer, solutions architect, consultant, professional-services engineer and FDE each stop; only the FDE bar runs through operation and back to product](images/01-ownership-span.svg){ loading=lazy }
+*Watch where each bar ends: only the FDE's runs past go-live.*
 
 ### What FDEs are evaluated on
 

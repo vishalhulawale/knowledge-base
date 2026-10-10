@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 392" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Why FDE and why this company</title>
+  <desc id="d">Two answer formulas shown as four chips each. Why FDE: past pull (for example owning the five-upstream integration layer), forward pull (own outcomes and shape a product), costs understood (travel, ambiguity, context switching) and one story (STAR with numbers and a result). Why this company: product surface (for example agents, MCP, evals tooling), the customers' problem (for example pilots stuck at security review), my evidence (OAuth2, PingFederate and Active Directory in healthcare) and dated research (a launch or posting from this quarter). If the answer would work for any company it is too generic.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="390" rx="14"/>
+  <text class="h" x="28" y="40">Two answers you will give in every loop</text><text class="sub" x="28" y="62">Each part is one or two sentences; together they take about 60–90 seconds.</text><text class="h2" x="28" y="100">Why FDE?</text><rect class="bp" x="28" y="112" width="170" height="36" rx="18" stroke-width="1.5"/><text class="sm" x="113" y="135" text-anchor="middle" font-weight="700">Past pull</text><line class="ln" x1="200" y1="130" x2="216" y2="130" marker-end="url(#ar)"/><text class="sub" x="32" y="170">Owning the 5-upstream</text><text class="sub" x="32" y="187">integration layer</text><rect class="bp" x="218" y="112" width="170" height="36" rx="18" stroke-width="1.5"/><text class="sm" x="303" y="135" text-anchor="middle" font-weight="700">Forward pull</text><line class="ln" x1="390" y1="130" x2="406" y2="130" marker-end="url(#ar)"/><text class="sub" x="222" y="170">Own outcomes and</text><text class="sub" x="222" y="187">shape a product</text><rect class="bp" x="408" y="112" width="170" height="36" rx="18" stroke-width="1.5"/><text class="sm" x="493" y="135" text-anchor="middle" font-weight="700">Costs understood</text><line class="ln" x1="580" y1="130" x2="596" y2="130" marker-end="url(#ar)"/><text class="sub" x="412" y="170">Travel, ambiguity,</text><text class="sub" x="412" y="187">context switching</text><rect class="bp" x="598" y="112" width="170" height="36" rx="18" stroke-width="1.5"/><text class="sm" x="683" y="135" text-anchor="middle" font-weight="700">One story</text><text class="sub" x="602" y="170">STAR, with numbers</text><text class="sub" x="602" y="187">and a result</text><text class="h2" x="28" y="230">Why this company?</text><rect class="bt" x="28" y="242" width="170" height="36" rx="18" stroke-width="1.5"/><text class="sm" x="113" y="265" text-anchor="middle" font-weight="700">Product surface</text><line class="ln" x1="200" y1="260" x2="216" y2="260" marker-end="url(#ar)"/><text class="sub" x="32" y="300">e.g. agents, MCP,</text><text class="sub" x="32" y="317">evals tooling</text><rect class="bt" x="218" y="242" width="170" height="36" rx="18" stroke-width="1.5"/><text class="sm" x="303" y="265" text-anchor="middle" font-weight="700">Customers' problem</text><line class="ln" x1="390" y1="260" x2="406" y2="260" marker-end="url(#ar)"/><text class="sub" x="222" y="300">e.g. pilots stuck at</text><text class="sub" x="222" y="317">security review</text><rect class="bt" x="408" y="242" width="170" height="36" rx="18" stroke-width="1.5"/><text class="sm" x="493" y="265" text-anchor="middle" font-weight="700">My evidence</text><line class="ln" x1="580" y1="260" x2="596" y2="260" marker-end="url(#ar)"/><text class="sub" x="412" y="300">OAuth2, PingFederate,</text><text class="sub" x="412" y="317">AD in healthcare</text><rect class="bt" x="598" y="242" width="170" height="36" rx="18" stroke-width="1.5"/><text class="sm" x="683" y="265" text-anchor="middle" font-weight="700">Dated research</text><text class="sub" x="602" y="300">A launch or posting</text><text class="sub" x="602" y="317">from this quarter</text><text class="sm" x="28" y="372">Test: if the answer would work for any company, it is too generic. Never "it's the hottest job".</text>
+</svg>

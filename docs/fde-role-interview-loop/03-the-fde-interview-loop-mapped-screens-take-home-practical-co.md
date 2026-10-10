@@ -38,6 +38,9 @@ flowchart LR
 ```
 *Notice that the onsite is a menu, not a fixed sequence. The take-home is optional at some companies and replaces a coding screen at others. Ask which boxes your loop contains.*
 
+![Five-week timeline: recruiter screen and technical screen in weeks 1-2, optional take-home in weeks 2-3, a one-to-two-day onsite in week 4 drawn from a menu of six rounds, and the decision in week 5](images/03-loop-timeline.svg){ loading=lazy }
+*Ask the recruiter which of the six onsite boxes your loop contains.*
+
 ### Round by round
 
 #### 1. Recruiter screen (≈30 minutes)
@@ -156,6 +159,9 @@ flowchart TB
     TH --> CC
 ```
 *Notice that most rounds feed more than one signal, and the take-home feeds all three. A brilliant coding round can't rescue a weak customer simulation, because nothing else gives the panel the communication signal.*
+
+![Matrix of seven rounds against technical depth, deployment thinking and customer communication; only decomposition, customer simulation, behavioral and the take-home feed communication](images/03-signal-matrix.svg){ loading=lazy }
+*Look down the right-hand column: few rounds carry the communication signal, so each one counts.*
 
 Behaviours interviewers consistently reward across rounds:
 

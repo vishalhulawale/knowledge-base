@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 356" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Custom share of a deployment</title>
+  <desc id="d">Animation: two bars grow one after the other. The first, earlier engagements, is 90 percent custom work and 10 percent reused. The second, with productised patterns and AI coding tools such as Codex, is 50 percent custom and 50 percent reused. A note explains that each deployment leaves connectors, evals and templates behind so the next needs less, and that custom work earns consultancy margins while reusable product earns software margins. The percentages are a reported estimate from OpenAI's Colin Jarvis.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .g1,.g2{transform-box:fill-box;transform-origin:0 50%}
+    .g1{animation:g1 12s infinite ease-out}.g2{animation:g2 12s infinite ease-out}
+    .l1,.l2,.l3{animation:12s infinite linear}.l1{animation-name:l1}.l2{animation-name:l2}.l3{animation-name:l3}
+    @keyframes g1{0%{transform:scaleX(0)}18%,100%{transform:scaleX(1)}}
+    @keyframes g2{0%,30%{transform:scaleX(0)}50%,100%{transform:scaleX(1)}}
+    @keyframes l1{0%,17.99%{opacity:0}18%,95.99%{opacity:1}96%,100%{opacity:0}}@keyframes l2{0%,49.99%{opacity:0}50%,95.99%{opacity:1}96%,100%{opacity:0}}@keyframes l3{0%,59.99%{opacity:0}60%,95.99%{opacity:1}96%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){.g1,.g2,.l1,.l2,.l3{animation:none;opacity:1;transform:none}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="354" rx="14"/>
+  <text class="h" x="28" y="40">Services-led growth works when the custom share falls</text><text class="sub" x="28" y="62">Share of a deployment project that is custom work, as reported by OpenAI's Colin Jarvis.</text><text class="lbl" x="28" y="126">Earlier engagements</text><rect class="box" x="250" y="100" width="520" height="40" rx="8"/><g class="g1"><rect class="wrnf" x="250" y="100" width="468" height="40" rx="8"/><rect class="tea" x="720" y="100" width="50" height="40" rx="8"/></g><g class="l1"><text class="on" x="262" y="126">Custom 90%</text><text class="sub" x="770" y="158" text-anchor="end">Reused 10%</text></g><text class="lbl" x="28" y="206">With productised patterns</text><text class="sub" x="28" y="226">and AI coding tools (Codex)</text><rect class="box" x="250" y="180" width="520" height="40" rx="8"/><g class="g2"><rect class="wrnf" x="250" y="180" width="260" height="40" rx="8"/><rect class="tea" x="512" y="180" width="258" height="40" rx="8"/></g><g class="l2"><text class="on" x="262" y="206">Custom 50%</text><text class="on" x="758" y="206" text-anchor="end">Reused 50%</text></g><g class="l3"><path class="lnt" d="M 600 146 L 600 176" marker-end="url(#art)"/><text class="sm" x="430" y="284">Each deployment leaves connectors, evals</text><text class="sm" x="430" y="302">and templates, so the next needs less.</text></g><text class="sm" x="28" y="284">Custom work costs consultancy margins;</text><text class="sm" x="28" y="302">reusable product earns software margins.</text><text class="sub" x="28" y="334">Percentages are a reported estimate, not audited figures.</text>
+</svg>
