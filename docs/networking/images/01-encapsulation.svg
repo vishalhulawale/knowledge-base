@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 392" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Encapsulation down the TCP/IP stack</title>
+  <desc id="d">An HTTP request travelling down the TCP/IP stack on the sender. At the application layer it is just data (the HTTP message). The transport layer adds a 20-byte TCP header, making a segment. The network layer adds a 20-byte IPv4 header, making a packet. The link layer adds a 14-byte Ethernet header and a 4-byte frame check sequence trailer, making a frame. The receiver strips the headers in reverse order. With a 1,500-byte Ethernet MTU, one segment can carry at most 1,460 bytes of data (the MSS) when neither header has options. Header sizes are the minimums; options, IPv6 (40 bytes) or VLAN tags make them larger.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnb{stroke:#dc2626;stroke-width:3;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnb{stroke:#f87171}.ah{fill:#94a3b8}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes r0{0%,1%{opacity:0}3%,90%{opacity:1}94%,100%{opacity:0}}
+    @keyframes r1{0%,14%{opacity:0}17%,90%{opacity:1}94%,100%{opacity:0}}
+    @keyframes r2{0%,28%{opacity:0}31%,90%{opacity:1}94%,100%{opacity:0}}
+    @keyframes r3{0%,42%{opacity:0}45%,90%{opacity:1}94%,100%{opacity:0}}
+    @keyframes r4{0%,58%{opacity:0}61%,90%{opacity:1}94%,100%{opacity:0}}
+    .r0{animation-name:r0}.r1{animation-name:r1}.r2{animation-name:r2}.r3{animation-name:r3}.r4{animation-name:r4}
+    @media (prefers-reduced-motion: reduce){ .a{animation:none;opacity:1} }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="390" rx="14"/>
+  <text class="h" x="28" y="40">Encapsulation: each layer wraps the one above</text>
+  <text class="sub" x="28" y="62">Sender side, one HTTP request over TCP and IPv4 on Ethernet. Minimum header sizes.</text>
+  <text class="lbl" x="28" y="110">Application (L7)</text>
+  <text class="sub" x="28" y="128">HTTP, gRPC, DNS</text>
+  <g class="a r0">
+    <rect class="bo" x="440" y="92" width="200" height="40" rx="4" stroke-width="1.5"/><text class="tx okt" x="540" y="117" text-anchor="middle">GET /members/42 …</text>
+    <text class="tx" x="712" y="117" font-style="italic">message</text>
+  </g>
+  <text class="lbl" x="28" y="168">Transport (L4)</text>
+  <text class="sub" x="28" y="186">TCP, UDP, QUIC</text>
+  <g class="a r1">
+    <rect class="bp" x="360" y="150" width="80" height="40" rx="4" stroke-width="1.5"/><text class="tx prit" x="400" y="175" text-anchor="middle">TCP 20 B</text>
+    <rect class="bo" x="440" y="150" width="200" height="40" rx="4" stroke-width="1.5"/><text class="tx okt" x="540" y="175" text-anchor="middle">GET /members/42 …</text>
+    <text class="tx" x="712" y="175" font-style="italic">segment</text>
+    <path class="ln" d="M190 136 L190 146" marker-end="url(#ar)"/>
+  </g>
+  <text class="lbl" x="28" y="226">Internet (L3)</text>
+  <text class="sub" x="28" y="244">IPv4, IPv6, ICMP</text>
+  <g class="a r2">
+    <rect class="bt" x="280" y="208" width="80" height="40" rx="4" stroke-width="1.5"/><text class="tx teat" x="320" y="233" text-anchor="middle">IP 20 B</text>
+    <rect class="bp" x="360" y="208" width="80" height="40" rx="4" stroke-width="1.5"/><text class="tx prit" x="400" y="233" text-anchor="middle">TCP</text>
+    <rect class="bo" x="440" y="208" width="200" height="40" rx="4" stroke-width="1.5"/><text class="tx okt" x="540" y="233" text-anchor="middle">GET /members/42 …</text>
+    <text class="tx" x="712" y="233" font-style="italic">packet</text>
+    <path class="ln" d="M190 194 L190 204" marker-end="url(#ar)"/>
+  </g>
+  <text class="lbl" x="28" y="284">Link (L2)</text>
+  <text class="sub" x="28" y="302">Ethernet, Wi-Fi</text>
+  <g class="a r3">
+    <rect class="bw" x="200" y="266" width="80" height="40" rx="4" stroke-width="1.5"/><text class="tx wrnt" x="240" y="291" text-anchor="middle">Eth 14 B</text>
+    <rect class="bt" x="280" y="266" width="80" height="40" rx="4" stroke-width="1.5"/><text class="tx teat" x="320" y="291" text-anchor="middle">IP</text>
+    <rect class="bp" x="360" y="266" width="80" height="40" rx="4" stroke-width="1.5"/><text class="tx prit" x="400" y="291" text-anchor="middle">TCP</text>
+    <rect class="bo" x="440" y="266" width="200" height="40" rx="4" stroke-width="1.5"/><text class="tx okt" x="540" y="291" text-anchor="middle">GET /members/42 …</text>
+    <rect class="bw" x="640" y="266" width="56" height="40" rx="4" stroke-width="1.5"/><text class="tx wrnt" x="668" y="291" text-anchor="middle">FCS</text>
+    <text class="tx" x="712" y="291" font-style="italic">frame</text>
+    <path class="ln" d="M190 252 L190 262" marker-end="url(#ar)"/>
+  </g>
+  <g class="a r4">
+    <text class="tx" x="28" y="340">MTU 1,500 B (Ethernet payload) − 20 B IP − 20 B TCP = <tspan class="prit">MSS 1,460 B</tspan> of data per segment.</text>
+    <text class="sub" x="28" y="364">The receiver strips headers bottom-up: frame → packet → segment → bytes handed to the app.</text>
+  </g>
+</svg>
