@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Kubernetes ndots:5 and an external name</title>
+  <desc id="d">A comparison of how a pod in the payments namespace on an EKS cluster in us-east-1 looks up api.stripe.com. On the left, with the default ndots:5, the name has only two dots, so the stub resolver first appends each of the four search domains (payments.svc.cluster.local, svc.cluster.local, cluster.local and ec2.internal). Each expansion is queried for A and AAAA and returns NXDOMAIN: eight wasted queries. Only queries nine and ten, for the name as written, succeed. On the right, writing the name with a trailing dot, or setting ndots to 2, sends the real name first and it resolves in two queries. Short cluster names such as orders and orders.payments still use the search list. Simplified: glibc may stop early or send A and AAAA in parallel.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;font-size:12.5px;fill:#334155}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#94a3b8;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lno{stroke:#16a34a;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    .hl{fill:none;stroke:#4f46e5;stroke-width:3}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#64748b}.lnp{stroke:#818cf8}.lno{stroke:#4ade80}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+      .hl{stroke:#818cf8}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">One external lookup from a pod: ndots:5 vs a trailing dot</text>
+  <text class="sub" x="28" y="62">Pod in namespace payments, EKS in us-east-1, looking up api.stripe.com (2 dots, fewer than 5).</text>
+  <rect class="box" x="28" y="80" width="470" height="236" rx="10" stroke-width="1.5"/>
+  <text class="lbl" x="42" y="106">Default: ndots:5, search list first</text>
+  <rect class="bb" x="38" y="122" width="450" height="28" rx="6"/>
+  <text class="sub" x="48" y="141">1-2</text>
+  <text class="mono" x="88" y="141">api.stripe.com.payments.svc.cluster.local</text>
+  <text class="badt" x="478" y="141" text-anchor="end" font-size="13">NXDOMAIN</text>
+  <rect class="bb" x="38" y="158" width="450" height="28" rx="6"/>
+  <text class="sub" x="48" y="177">3-4</text>
+  <text class="mono" x="88" y="177">api.stripe.com.svc.cluster.local</text>
+  <text class="badt" x="478" y="177" text-anchor="end" font-size="13">NXDOMAIN</text>
+  <rect class="bb" x="38" y="194" width="450" height="28" rx="6"/>
+  <text class="sub" x="48" y="213">5-6</text>
+  <text class="mono" x="88" y="213">api.stripe.com.cluster.local</text>
+  <text class="badt" x="478" y="213" text-anchor="end" font-size="13">NXDOMAIN</text>
+  <rect class="bb" x="38" y="230" width="450" height="28" rx="6"/>
+  <text class="sub" x="48" y="249">7-8</text>
+  <text class="mono" x="88" y="249">api.stripe.com.ec2.internal</text>
+  <text class="badt" x="478" y="249" text-anchor="end" font-size="13">NXDOMAIN</text>
+  <rect class="bo" x="38" y="266" width="450" height="28" rx="6"/>
+  <text class="sub" x="48" y="285">9-10</text>
+  <text class="mono" x="88" y="285">api.stripe.com</text>
+  <text class="okt" x="478" y="285" text-anchor="end" font-size="13">NOERROR</text>
+  <text class="badt" x="28" y="342" font-size="14">10 queries (A + AAAA each), 8 of them wasted</text>
+  <rect class="box" x="516" y="80" width="256" height="236" rx="10" stroke-width="1.5"/>
+  <text class="lbl" x="530" y="106">Trailing dot, or ndots:2</text>
+  <rect class="bo" x="526" y="122" width="236" height="28" rx="6"/>
+  <text class="sub" x="536" y="141">1-2</text>
+  <text class="mono" x="568" y="141">api.stripe.com.</text>
+  <text class="okt" x="752" y="141" text-anchor="end" font-size="13">NOERROR</text>
+  <text class="tx" x="530" y="178">The name is treated as absolute,</text>
+  <text class="tx" x="530" y="198">so it goes out as written.</text>
+  <text class="tx" x="530" y="238">Cluster names still work:</text>
+  <text class="tx" x="530" y="258">orders, orders.payments use</text>
+  <text class="tx" x="530" y="278">the search list (fewer dots</text>
+  <text class="tx" x="530" y="298">than ndots).</text>
+  <text class="okt" x="516" y="342" font-size="14">2 queries</text>
+  <text class="sub" x="28" y="382">Simplified: glibc may send A and AAAA in parallel; NodeLocal DNSCache makes the NXDOMAINs cheaper, not fewer.</text>
+</svg>

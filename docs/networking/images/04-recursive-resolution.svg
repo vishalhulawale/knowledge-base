@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Recursive DNS resolution, then a cache hit</title>
+  <desc id="d">An animation of a DNS lookup for www.example.com with empty caches. The app's stub resolver sends one recursive query to the recursive resolver. The resolver asks a root server, which returns a referral to the .com name servers with glue addresses; it asks a .com TLD server, which returns a referral to ns1.example.com; it asks the example.com authoritative server, which answers with the A record 192.0.2.10 and a TTL of 300 seconds. The resolver stores the .com delegation, the example.com delegation and the answer in its cache and returns the answer to the app. A second lookup a little later is answered straight from the resolver's cache in one round trip. Simplified to one server per level; the address 192.0.2.10 is a documentation address.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;font-size:12.5px;fill:#334155}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#94a3b8;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lno{stroke:#16a34a;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    .hl{fill:none;stroke:#4f46e5;stroke-width:3}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#64748b}.lnp{stroke:#818cf8}.lno{stroke:#4ade80}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+      .hl{stroke:#818cf8}
+    }
+    .a{opacity:0;animation:16s infinite linear}
+    .dot{opacity:0;animation:16s infinite linear}
+    @keyframes ce0{0%,22%{opacity:0}22.5%{opacity:1}97%{opacity:1}97.5%,100%{opacity:0}}
+    @keyframes ce1{0%,34%{opacity:0}34.5%{opacity:1}97%{opacity:1}97.5%,100%{opacity:0}}
+    @keyframes ce2{0%,46%{opacity:0}46.5%{opacity:1}97%{opacity:1}97.5%,100%{opacity:0}}
+    @keyframes hit{0%,66%{opacity:0}66.5%{opacity:1}80%{opacity:1}80.5%,100%{opacity:0}}
+    @keyframes sh0{0%,10%{opacity:0}10.5%{opacity:1}22%{opacity:1}22.5%,100%{opacity:0}}
+    @keyframes sh1{0%,22%{opacity:0}22.5%{opacity:1}34%{opacity:1}34.5%,100%{opacity:0}}
+    @keyframes sh2{0%,34%{opacity:0}34.5%{opacity:1}46%{opacity:1}46.5%,100%{opacity:0}}
+    @keyframes d0{0%,1%{opacity:0;transform:translate(0,0)}1.3%{opacity:1;transform:translate(0,0)}9%{opacity:1;transform:translate(110px,0px)}9.3%,100%{opacity:0;transform:translate(110px,0px)}}
+    @keyframes q0{0%,10.5%{opacity:0;transform:translate(0,0)}10.8%{opacity:1;transform:translate(0,0)}15.5%{opacity:1;transform:translate(120px,-82px)}15.8%,100%{opacity:0;transform:translate(120px,-82px)}}
+    @keyframes r0{0%,16%{opacity:0;transform:translate(0,0)}16.3%{opacity:1;transform:translate(0,0)}21%{opacity:1;transform:translate(-120px,82px)}21.3%,100%{opacity:0;transform:translate(-120px,82px)}}
+    @keyframes q1{0%,22.5%{opacity:0;transform:translate(0,0)}22.8%{opacity:1;transform:translate(0,0)}27.5%{opacity:1;transform:translate(120px,6px)}27.8%,100%{opacity:0;transform:translate(120px,6px)}}
+    @keyframes r1{0%,28%{opacity:0;transform:translate(0,0)}28.3%{opacity:1;transform:translate(0,0)}33%{opacity:1;transform:translate(-120px,-6px)}33.3%,100%{opacity:0;transform:translate(-120px,-6px)}}
+    @keyframes q2{0%,34.5%{opacity:0;transform:translate(0,0)}34.8%{opacity:1;transform:translate(0,0)}39.5%{opacity:1;transform:translate(120px,94px)}39.8%,100%{opacity:0;transform:translate(120px,94px)}}
+    @keyframes r2{0%,40%{opacity:0;transform:translate(0,0)}40.3%{opacity:1;transform:translate(0,0)}45%{opacity:1;transform:translate(-120px,-94px)}45.3%,100%{opacity:0;transform:translate(-120px,-94px)}}
+    @keyframes d1{0%,47%{opacity:0;transform:translate(0,0)}47.3%{opacity:1;transform:translate(0,0)}56%{opacity:1;transform:translate(-110px,0px)}56.3%,100%{opacity:0;transform:translate(-110px,0px)}}
+    @keyframes d2{0%,59%{opacity:0;transform:translate(0,0)}59.3%{opacity:1;transform:translate(0,0)}66%{opacity:1;transform:translate(110px,0px)}66.3%,100%{opacity:0;transform:translate(110px,0px)}}
+    @keyframes d3{0%,70%{opacity:0;transform:translate(0,0)}70.3%{opacity:1;transform:translate(0,0)}78%{opacity:1;transform:translate(-110px,0px)}78.3%,100%{opacity:0;transform:translate(-110px,0px)}}
+    @keyframes c0{0%,9.5%{opacity:1}10%,100%{opacity:0}}
+    @keyframes c1{0%,10%{opacity:0}10.5%,21.5%{opacity:1}22%,100%{opacity:0}}
+    @keyframes c2{0%,22%{opacity:0}22.5%,33.5%{opacity:1}34%,100%{opacity:0}}
+    @keyframes c3{0%,34%{opacity:0}34.5%,45.5%{opacity:1}46%,100%{opacity:0}}
+    @keyframes c4{0%,46%{opacity:0}46.5%,57.5%{opacity:1}58%,100%{opacity:0}}
+    @keyframes c5{0%,58%{opacity:0}58.5%,81.5%{opacity:1}82%,100%{opacity:0}}
+    @keyframes c6{0%,82%{opacity:0}82.5%,99%{opacity:1}100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .a,.dot{animation:none}.a{opacity:1}.dot{opacity:0}.cap{opacity:0}.c4{opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="428" rx="14"/>
+  <text class="h" x="28" y="40">Resolving www.example.com: the walk, then the cache</text>
+  <text class="sub" x="28" y="62">The app asks once; the recursive resolver does the walk and caches each answer for its TTL.</text>
+  <line class="ln" x1="180" y1="187.0" x2="290" y2="187.0"/>
+  <line class="ln" x1="180" y1="203.0" x2="290" y2="203.0"/>
+  <line class="ln" x1="480" y1="195.0" x2="600" y2="113.0"/>
+  <line class="ln" x1="480" y1="195.0" x2="600" y2="201.0"/>
+  <line class="ln" x1="480" y1="195.0" x2="600" y2="289.0"/>
+  <rect class="box" x="30" y="160" width="150" height="70" rx="10" stroke-width="1.5"/>
+  <text class="lbl" x="105.0" y="190" text-anchor="middle">App</text>
+  <text class="sub" x="105.0" y="210" text-anchor="middle">stub resolver</text>
+  <rect class="bp" x="290" y="160" width="190" height="70" rx="10" stroke-width="1.5"/>
+  <text class="lbl" x="385.0" y="190" text-anchor="middle">Recursive resolver</text>
+  <text class="sub" x="385.0" y="210" text-anchor="middle">CoreDNS, VPC .2, 8.8.8.8</text>
+  <rect class="box" x="600" y="84" width="172" height="58" rx="10" stroke-width="1.5"/>
+  <text class="lbl" x="686.0" y="108" text-anchor="middle">Root server (.)</text>
+  <text class="sub" x="686.0" y="128" text-anchor="middle">returns a referral</text>
+  <rect class="box" x="600" y="172" width="172" height="58" rx="10" stroke-width="1.5"/>
+  <text class="lbl" x="686.0" y="196" text-anchor="middle">.com TLD server</text>
+  <text class="sub" x="686.0" y="216" text-anchor="middle">returns a referral</text>
+  <rect class="box" x="600" y="260" width="172" height="58" rx="10" stroke-width="1.5"/>
+  <text class="lbl" x="686.0" y="284" text-anchor="middle">example.com</text>
+  <text class="sub" x="686.0" y="304" text-anchor="middle">authoritative: answers</text>
+  <rect class="box" x="290" y="252" width="190" height="100" rx="10" stroke-width="1.5"/>
+  <text class="sub" x="302" y="272">Resolver cache</text>
+  <g class="a" style="animation-name:ce0"><text class="mono" x="302" y="294">com. NS</text><text class="sub" x="468" y="294" text-anchor="end">TTL 2 d</text></g>
+  <g class="a" style="animation-name:ce1"><text class="mono" x="302" y="316">example.com. NS</text><text class="sub" x="468" y="316" text-anchor="end">TTL 1 d</text></g>
+  <g class="a" style="animation-name:ce2"><text class="mono" x="302" y="338">www  A 192.0.2.10</text><text class="sub" x="468" y="338" text-anchor="end">300 s</text></g>
+  <g class="a" style="animation-name:hit"><rect class="hl" x="295" y="325" width="180" height="22" rx="5"/><text class="okt" x="385.0" y="372" text-anchor="middle" font-size="14">cache hit</text></g>
+  <rect class="hl a" style="animation-name:sh0" x="600" y="84" width="172" height="58" rx="10"/>
+  <rect class="hl a" style="animation-name:sh1" x="600" y="172" width="172" height="58" rx="10"/>
+  <rect class="hl a" style="animation-name:sh2" x="600" y="260" width="172" height="58" rx="10"/>
+  <g class="a cap c0" style="animation-name:c0"><text class="lbl" x="28" y="392">1. The app's stub resolver sends one recursive query (RD flag) to the resolver</text></g>
+  <g class="a cap c1" style="animation-name:c1"><text class="lbl" x="28" y="392">2. Root: “not mine; ask the .com servers” (a referral, with glue IP addresses)</text></g>
+  <g class="a cap c2" style="animation-name:c2"><text class="lbl" x="28" y="392">3. .com TLD: “ask ns1.example.com” (another referral)</text></g>
+  <g class="a cap c3" style="animation-name:c3"><text class="lbl" x="28" y="392">4. Authoritative server: A 192.0.2.10, TTL 300 s, AA flag set</text></g>
+  <g class="a cap c4" style="animation-name:c4"><text class="lbl" x="28" y="392">5. The resolver caches every answer and replies to the app</text></g>
+  <g class="a cap c5" style="animation-name:c5"><text class="lbl" x="28" y="392">6. The next lookup within 300 s is answered from the cache: one round trip</text></g>
+  <g class="a cap c6" style="animation-name:c6"><text class="lbl" x="28" y="392">When a TTL runs out, the walk restarts from the closest level still cached</text></g>
+  <text class="sub" x="28" y="416">Simplified: one server per level; QNAME minimisation and the stub&apos;s own cache are not shown.</text>
+  <circle class="dot pri" style="animation-name:d0" cx="180" cy="187.0" r="7"/>
+  <circle class="dot pri" style="animation-name:q0" cx="480" cy="195.0" r="7"/>
+  <circle class="dot tea" style="animation-name:r0" cx="600" cy="113.0" r="7"/>
+  <circle class="dot pri" style="animation-name:q1" cx="480" cy="195.0" r="7"/>
+  <circle class="dot tea" style="animation-name:r1" cx="600" cy="201.0" r="7"/>
+  <circle class="dot pri" style="animation-name:q2" cx="480" cy="195.0" r="7"/>
+  <circle class="dot okf" style="animation-name:r2" cx="600" cy="289.0" r="7"/>
+  <circle class="dot okf" style="animation-name:d1" cx="290" cy="203.0" r="7"/>
+  <circle class="dot pri" style="animation-name:d2" cx="180" cy="187.0" r="7"/>
+  <circle class="dot okf" style="animation-name:d3" cx="290" cy="203.0" r="7"/>
+</svg>

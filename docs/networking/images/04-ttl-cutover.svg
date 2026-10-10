@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">DNS change: when each layer actually switches</title>
+  <desc id="d">An animated timeline of what happens after a DNS record is changed from the old IP 10.0.1.15 (blue) to the new IP 10.0.2.27 (green) at time zero, with a record TTL of 60 seconds. A cursor sweeps across time. The authoritative server answers with the new IP immediately. A recursive resolver that cached the record just before the change keeps returning the old IP for up to 60 seconds. A JVM with networkaddress.cache.ttl of 30 seconds that looked the name up just before the resolver refreshed sees the new IP only after up to 90 seconds. A JVM with networkaddress.cache.ttl of -1 never switches until it restarts. A service with pooled connections opened before the change keeps talking to the old IP until each connection is recycled, at up to 30 minutes with a HikariCP max-lifetime of 30 minutes. Times are worst cases; the time axis is broken between 2 minutes and 30 minutes.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;font-size:12.5px;fill:#334155}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#94a3b8;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lno{stroke:#16a34a;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    .hl{fill:none;stroke:#4f46e5;stroke-width:3}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#64748b}.lnp{stroke:#818cf8}.lno{stroke:#4ade80}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+      .hl{stroke:#818cf8}
+    }
+    .cursor{stroke:#d97706;stroke-width:2.5;animation:cur 14s infinite linear}
+    @media (prefers-color-scheme: dark){.cursor{stroke:#fbbf24}}
+    .a{opacity:0;animation:14s infinite linear}
+    .grow{transform-box:fill-box;transform-origin:0 50%;transform:scaleX(0);animation:14s infinite linear}
+    @keyframes g0{0%,12.4%{transform:scaleX(0)}78%,98%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+    @keyframes g1{0%,37.3%{transform:scaleX(0)}78%,98%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+    @keyframes l1{0%,37.3%{opacity:0}38.3%,98%{opacity:1}100%{opacity:0}}
+    @keyframes g2{0%,49.7%{transform:scaleX(0)}78%,98%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+    @keyframes l2{0%,49.7%{opacity:0}50.7%,98%{opacity:1}100%{opacity:0}}
+    @keyframes nv{0%,74%{opacity:0}75%,98%{opacity:1}100%{opacity:0}}
+    @keyframes g4{0%,73.7%{transform:scaleX(0)}78%,98%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+    @keyframes l4{0%,73.7%{opacity:0}74.7%,98%{opacity:1}100%{opacity:0}}
+    @keyframes cur{0%{transform:translateX(0);opacity:1}78%{transform:translateX(540px);opacity:1}79%,100%{transform:translateX(540px);opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .a,.grow,.cursor{animation:none}.a{opacity:1}.grow{transform:none}.cursor{opacity:0}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="428" rx="14"/>
+  <text class="h" x="28" y="40">A DNS change is not one moment: each layer switches later</text>
+  <text class="sub" x="28" y="62">Record changed at t = 0 with TTL 60 s. Worst case per layer.</text>
+  <rect class="pri" x="28" y="76" width="16" height="12" rx="3"/><text class="tx" x="50" y="87">old IP 10.0.1.15</text>
+  <rect class="okf" x="190" y="76" width="16" height="12" rx="3"/><text class="tx" x="212" y="87">new IP 10.0.2.27</text>
+  <text class="lbl" x="28" y="124">Authoritative record</text>
+  <text class="sub" x="28" y="142">changed at t = 0</text>
+  <rect class="pri" x="230.0" y="112" width="86" height="24" rx="5"/>
+  <rect class="okf grow" style="animation-name:g0" x="316" y="112" width="454" height="24" rx="5"/>
+  <text class="lbl" x="28" y="174">Recursive resolver</text>
+  <text class="sub" x="28" y="192">cached it, TTL 60 s</text>
+  <rect class="pri" x="230.0" y="162" width="258" height="24" rx="5"/>
+  <rect class="okf grow" style="animation-name:g1" x="488" y="162" width="282" height="24" rx="5"/>
+  <g class="a" style="animation-name:l1"><text class="okt" x="494" y="158" font-size="13" text-anchor="start">switches at 60 s</text></g>
+  <text class="lbl" x="28" y="224">JVM, cache.ttl = 30</text>
+  <text class="sub" x="28" y="242">on top of the resolver</text>
+  <rect class="pri" x="230.0" y="212" width="344" height="24" rx="5"/>
+  <rect class="okf grow" style="animation-name:g2" x="574" y="212" width="196" height="24" rx="5"/>
+  <g class="a" style="animation-name:l2"><text class="okt" x="580" y="208" font-size="13" text-anchor="start">switches at 90 s</text></g>
+  <text class="lbl" x="28" y="274">JVM, cache.ttl = -1</text>
+  <text class="sub" x="28" y="292">caches forever</text>
+  <rect class="pri" x="230.0" y="262" width="540.0" height="24" rx="5"/>
+  <g class="a" style="animation-name:nv"><text class="on" x="760.0" y="279" text-anchor="end">still the old IP: needs a restart</text></g>
+  <text class="lbl" x="28" y="324">Pooled connections</text>
+  <text class="sub" x="28" y="342">max-lifetime 30 min</text>
+  <rect class="pri" x="230.0" y="312" width="510" height="24" rx="5"/>
+  <rect class="okf grow" style="animation-name:g4" x="740" y="312" width="30" height="24" rx="5"/>
+  <g class="a" style="animation-name:l4"><text class="okt" x="734" y="308" font-size="13" text-anchor="end">switches at 30 min</text></g>
+  <line class="ln" x1="230.0" y1="366" x2="660.0" y2="366"/>
+  <line class="ln" x1="680.0" y1="366" x2="770.0" y2="366"/>
+  <text class="sub" x="670.0" y="371" text-anchor="middle">//</text>
+  <line class="ln" x1="316" y1="361" x2="316" y2="371"/>
+  <text class="sub" x="316" y="388" text-anchor="middle">0</text>
+  <line class="ln" x1="488" y1="361" x2="488" y2="371"/>
+  <text class="sub" x="488" y="388" text-anchor="middle">60 s</text>
+  <line class="ln" x1="574" y1="361" x2="574" y2="371"/>
+  <text class="sub" x="574" y="388" text-anchor="middle">90 s</text>
+  <line class="ln" x1="660" y1="361" x2="660" y2="371"/>
+  <text class="sub" x="660" y="388" text-anchor="middle">2 min</text>
+  <line class="ln" x1="740.0" y1="361" x2="740.0" y2="371"/>
+  <text class="sub" x="740.0" y="388" text-anchor="middle">30 min</text>
+  <line class="ln dash" x1="316" y1="100" x2="316" y2="366"/>
+  <line class="cursor" x1="230.0" y1="100" x2="230.0" y2="366"/>
+  <text class="sub" x="28" y="420">Lower the TTL one old-TTL period before a cut-over, keep the JVM cache short, and recycle pooled connections.</text>
+</svg>
