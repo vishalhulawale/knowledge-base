@@ -47,6 +47,9 @@ sequenceDiagram
 ```
 *Notice that the endpoint does almost nothing: verify, store, acknowledge. The duplicate gets a 200 too, otherwise the provider keeps retrying it. The business change and the "processed" flag commit together in the worker.*
 
+![Animation: working inline, a 12-second handler outlasts the provider's 10-second timeout so the retried event ships the order twice; with verify, store and acknowledge, the retry hits the inbox's unique event id, returns 200 duplicate, and the worker applies the event once](images/03-duplicate-delivery.svg){ loading=lazy }
+*A slow handler doesn't just slow things down: it manufactures duplicates.*
+
 What providers generally do (check each provider's docs):
 
 - **Retry on failure:** non-2xx responses and timeouts trigger retries with backoff, sometimes for days (Stripe documents retries for up to three days in live mode). Some providers don't retry automatically: GitHub's docs say failed deliveries aren't redelivered automatically and you redeliver them yourself.
@@ -114,6 +117,9 @@ stateDiagram-v2
     end note
 ```
 *Notice that there's no arrow from `succeeded` back to `processing`. A late event that would move the state backwards is a no-op, which makes the consumer tolerant of reordering even without version numbers.*
+
+![Animation: evt_2 (succeeded, v2) arrives before evt_1 (processing, v1); last-write-wins overwrites the payment back to processing, while the version-guarded upsert ignores the stale event and keeps succeeded](images/03-out-of-order.svg){ loading=lazy }
+*The WHERE clause on the version turns a late event into a no-op.*
 
 Re-fetching is often the most practical answer in a round: "Because ordering isn't guaranteed, I'll use the event as a trigger and fetch the current payment from the API." Mention its cost (an API call per event, which needs the [rate-limit handling](02-third-party-api-integration-auth-pagination-rate-limits-retr.md) from the previous page).
 

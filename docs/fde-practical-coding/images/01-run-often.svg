@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 366" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Run often versus big bang</title>
+  <desc id="d">Animation: a 45-minute timeline with two lanes. In the thin-slice lane, check marks appear as the code is run after each small step, starting at minute 6 with the happy path; one run at minute 18 fails on a duplicate row and the next run passes. In the big-bang lane, a typing bar grows for 41 minutes with nothing run, and the first run at minute 42 shows five errors with three minutes left. Timings are illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:15s infinite linear}
+    @keyframes r0{0%,14.3233%{opacity:0}14.3333%,96.99%{opacity:1}97%,100%{opacity:0}}.r0{animation-name:r0}
+    @keyframes r1{0%,21.8789%{opacity:0}21.8889%,96.99%{opacity:1}97%,100%{opacity:0}}.r1{animation-name:r1}
+    @keyframes r2{0%,29.4344%{opacity:0}29.4444%,96.99%{opacity:1}97%,100%{opacity:0}}.r2{animation-name:r2}
+    @keyframes r3{0%,36.99%{opacity:0}37%,96.99%{opacity:1}97%,100%{opacity:0}}.r3{animation-name:r3}
+    @keyframes r4{0%,44.5456%{opacity:0}44.5556%,96.99%{opacity:1}97%,100%{opacity:0}}.r4{animation-name:r4}
+    @keyframes r5{0%,52.1011%{opacity:0}52.1111%,96.99%{opacity:1}97%,100%{opacity:0}}.r5{animation-name:r5}
+    @keyframes r6{0%,59.6567%{opacity:0}59.6667%,96.99%{opacity:1}97%,100%{opacity:0}}.r6{animation-name:r6}
+    @keyframes r7{0%,67.2122%{opacity:0}67.2222%,96.99%{opacity:1}97%,100%{opacity:0}}.r7{animation-name:r7}
+    @keyframes r8{0%,74.7678%{opacity:0}74.7778%,96.99%{opacity:1}97%,100%{opacity:0}}.r8{animation-name:r8}
+    @keyframes r9{0%,80.4344%{opacity:0}80.4444%,96.99%{opacity:1}97%,100%{opacity:0}}.r9{animation-name:r9}
+    @keyframes r10{0%,86.1011%{opacity:0}86.1111%,96.99%{opacity:1}97%,100%{opacity:0}}.r10{animation-name:r10}
+    @keyframes f1{0%,14.3233%{opacity:0}14.3333%,96.99%{opacity:1}97%,100%{opacity:0}}.f1{animation-name:f1}
+    @keyframes fx{0%,36.99%{opacity:0}37%,96.99%{opacity:1}97%,100%{opacity:0}}.fx{animation-name:fx}
+    .grow{transform-box:fill-box;transform-origin:0 50%;animation:grow 15s infinite linear}
+    @keyframes grow{0%,3%{transform:scaleX(0)}80.4%,100%{transform:scaleX(1)}}
+    @keyframes bb{0%,82.3233%{opacity:0}82.3333%,96.99%{opacity:1}97%,100%{opacity:0}}.bb{animation-name:bb}
+    .ph{animation:play 15s infinite linear}
+    @keyframes play{0%,3%{transform:translateX(0)}88%,100%{transform:translateX(562.5px)}}
+    @media (prefers-reduced-motion: reduce){.k,.grow,.ph{animation:none;opacity:1;transform:none}.ph{opacity:0}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="364" rx="14"/>
+  <text class="h" x="28" y="40">Run after every small step, or once at the end</text><text class="sub" x="28" y="62">Same 45 minutes of work. Illustrative timings; the page's target is something running by minute 25.</text><line class="grid" x1="190" y1="84" x2="190" y2="262"/><text class="sub" x="190" y="282" text-anchor="middle">0</text><line class="grid" x1="252.5" y1="84" x2="252.5" y2="262"/><text class="sub" x="252.5" y="282" text-anchor="middle">5</text><line class="grid" x1="315" y1="84" x2="315" y2="262"/><text class="sub" x="315" y="282" text-anchor="middle">10</text><line class="grid" x1="377.5" y1="84" x2="377.5" y2="262"/><text class="sub" x="377.5" y="282" text-anchor="middle">15</text><line class="grid" x1="440" y1="84" x2="440" y2="262"/><text class="sub" x="440" y="282" text-anchor="middle">20</text><line class="grid" x1="502.5" y1="84" x2="502.5" y2="262"/><text class="sub" x="502.5" y="282" text-anchor="middle">25</text><line class="grid" x1="565" y1="84" x2="565" y2="262"/><text class="sub" x="565" y="282" text-anchor="middle">30</text><line class="grid" x1="627.5" y1="84" x2="627.5" y2="262"/><text class="sub" x="627.5" y="282" text-anchor="middle">35</text><line class="grid" x1="690" y1="84" x2="690" y2="262"/><text class="sub" x="690" y="282" text-anchor="middle">40</text><line class="grid" x1="752.5" y1="84" x2="752.5" y2="262"/><text class="sub" x="752.5" y="282" text-anchor="middle">45</text><text class="sub" x="752.5" y="300" text-anchor="end">minutes</text><text class="lbl" x="28" y="128">Thin slice,</text><text class="lbl" x="28" y="148">run often</text><text class="lbl" x="28" y="218">Big bang</text><rect class="bm" x="190" y="112" width="562.5" height="40" rx="6"/><rect class="bm" x="190" y="198" width="562.5" height="40" rx="6"/><g class="k r0"><circle class="okf" cx="265.0" cy="132" r="9"/><text class="on13" x="265" y="137" text-anchor="middle">✓</text></g><g class="k r1"><circle class="okf" cx="315.0" cy="132" r="9"/><text class="on13" x="315" y="137" text-anchor="middle">✓</text></g><g class="k r2"><circle class="okf" cx="365.0" cy="132" r="9"/><text class="on13" x="365" y="137" text-anchor="middle">✓</text></g><g class="k r3"><circle class="badf" cx="415.0" cy="132" r="9"/><text class="on13" x="415" y="137" text-anchor="middle">✗</text></g><g class="k r4"><circle class="okf" cx="465.0" cy="132" r="9"/><text class="on13" x="465" y="137" text-anchor="middle">✓</text></g><g class="k r5"><circle class="okf" cx="515.0" cy="132" r="9"/><text class="on13" x="515" y="137" text-anchor="middle">✓</text></g><g class="k r6"><circle class="okf" cx="565.0" cy="132" r="9"/><text class="on13" x="565" y="137" text-anchor="middle">✓</text></g><g class="k r7"><circle class="okf" cx="615.0" cy="132" r="9"/><text class="on13" x="615" y="137" text-anchor="middle">✓</text></g><g class="k r8"><circle class="okf" cx="665.0" cy="132" r="9"/><text class="on13" x="665" y="137" text-anchor="middle">✓</text></g><g class="k r9"><circle class="okf" cx="702.5" cy="132" r="9"/><text class="on13" x="702.5" y="137" text-anchor="middle">✓</text></g><g class="k r10"><circle class="okf" cx="740.0" cy="132" r="9"/><text class="on13" x="740" y="137" text-anchor="middle">✓</text></g><g class="k f1"><text class="okt" x="265" y="104" text-anchor="middle" style="font-size:12px">first run: happy path</text></g><g class="k fx"><text class="badt" x="415" y="170" text-anchor="middle" style="font-size:12px">dup row found, fixed next run</text></g><rect class="mutf grow" x="190.0" y="208" width="512.5" height="20" rx="4"/><text class="on13" x="202.5" y="222">typing… nothing has run yet</text><g class="k bb"><circle class="badf" cx="715.0" cy="218" r="11"/><text class="on13" x="715" y="223" text-anchor="middle">✗</text><text class="badt" x="701" y="254" text-anchor="end" style="font-size:13px">first run: 5 errors, 3 min left</text></g><line class="ph lnp" x1="190.0" y1="88" x2="190.0" y2="262"/><text class="sm" x="28" y="326">Every run is a checkpoint you can narrate and demo. If time runs out after any of them,</text><text class="sm" x="28" y="344">you still have working code; the big-bang path has nothing until the very end.</text>
+</svg>

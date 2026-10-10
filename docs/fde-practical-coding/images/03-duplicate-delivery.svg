@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 416" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Duplicate webhook delivery</title>
+  <desc id="d">Animation: two rows play out step by step. Working inline: event evt_1 arrives, the handler ships the order and takes 12 seconds, the provider times out at 10 seconds and retries, and the second delivery ships again, so the customer is shipped twice. Verify, store and acknowledge: evt_1's signature is verified, it is inserted into the inbox and a 200 returns in 50 milliseconds; a network blip makes the provider retry; the insert conflicts on the event id and returns 200 duplicate; the worker applies the event once. Timings are illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:14s infinite linear}
+    @keyframes s0{0%,3.99%{opacity:0}4%,96.99%{opacity:1}97%,100%{opacity:0}}.s0{animation-name:s0}
+    @keyframes s1{0%,23.99%{opacity:0}24%,96.99%{opacity:1}97%,100%{opacity:0}}.s1{animation-name:s1}
+    @keyframes s2{0%,43.99%{opacity:0}44%,96.99%{opacity:1}97%,100%{opacity:0}}.s2{animation-name:s2}
+    @keyframes s3{0%,63.99%{opacity:0}64%,96.99%{opacity:1}97%,100%{opacity:0}}.s3{animation-name:s3}
+    @keyframes s4{0%,3.99%{opacity:0}4%,96.99%{opacity:1}97%,100%{opacity:0}}.s4{animation-name:s4}
+    @keyframes s5{0%,23.99%{opacity:0}24%,96.99%{opacity:1}97%,100%{opacity:0}}.s5{animation-name:s5}
+    @keyframes s6{0%,43.99%{opacity:0}44%,96.99%{opacity:1}97%,100%{opacity:0}}.s6{animation-name:s6}
+    @keyframes s7{0%,63.99%{opacity:0}64%,96.99%{opacity:1}97%,100%{opacity:0}}.s7{animation-name:s7}
+    @keyframes o1{0%,83.99%{opacity:0}84%,96.99%{opacity:1}97%,100%{opacity:0}}.o1{animation-name:o1}
+    @media (prefers-reduced-motion: reduce){.k{animation:none;opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="414" rx="14"/>
+  <text class="h" x="28" y="40">Slow handlers turn retries into duplicate side effects</text><text class="sub" x="28" y="62">Illustrative: the provider gives up after 10 s and retries the same event.</text><text class="lbl" x="28" y="98">Work inline</text><rect class="bb" x="28" y="110" width="744" height="92" rx="10" stroke-width="1.2"/><text class="lbl" x="28" y="238">Verify, store, ack</text><rect class="bo" x="28" y="250" width="744" height="92" rx="10" stroke-width="1.2"/><g class="k s0"><rect class="box" x="44" y="128" width="170" height="56" rx="8"/><text class="sm" x="54" y="152">evt_1 arrives</text></g><g class="k s1"><rect class="box" x="226" y="128" width="170" height="56" rx="8"/><text class="sm" x="236" y="152">ship order… 12 s</text></g><g class="k s2"><rect class="box" x="408" y="128" width="170" height="56" rx="8"/><text class="sm" x="418" y="152">10 s: provider times</text><text class="sm" x="418" y="170">out, retries</text></g><g class="k s3"><rect class="box" x="590" y="128" width="170" height="56" rx="8"/><text class="sm" x="600" y="152">evt_1 again → ship</text><text class="sm" x="600" y="170">again</text></g><g class="k s4"><rect class="box" x="44" y="268" width="170" height="56" rx="8"/><text class="sm" x="54" y="292">evt_1: verify</text><text class="sm" x="54" y="310">signature</text></g><g class="k s5"><rect class="box" x="226" y="268" width="170" height="56" rx="8"/><text class="sm" x="236" y="292">INSERT inbox → 200 in</text><text class="sm" x="236" y="310">50 ms</text></g><g class="k s6"><rect class="box" x="408" y="268" width="170" height="56" rx="8"/><text class="sm" x="418" y="292">network blip: provider</text><text class="sm" x="418" y="310">retries</text></g><g class="k s7"><rect class="box" x="590" y="268" width="170" height="56" rx="8"/><text class="sm" x="600" y="292">INSERT conflicts → 200</text><text class="sm" x="600" y="310">duplicate</text></g><g class="k o1"><text class="badt" x="772" y="98" text-anchor="end" style="font-size:14px">customer shipped twice</text><text class="okt" x="772" y="238" text-anchor="end" style="font-size:14px">worker applies evt_1 once</text></g><text class="sm" x="28" y="376">A duplicate is a success response, not an error: return 2xx or the provider keeps retrying.</text><text class="sm" x="28" y="394">The inbox table's unique event_id is the dedupe key; the worker marks it processed in the same transaction.</text>
+</svg>

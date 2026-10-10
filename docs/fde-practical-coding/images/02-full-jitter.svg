@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 444" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Backoff with and without jitter</title>
+  <desc id="d">Animation: two histograms of retry requests per quarter second fill from left to right over eight seconds. Twenty clients hit a 503 at time zero and keep failing. Without jitter they all retry at 0.5, 1.5, 3.5 and 7.5 seconds, making four spikes of 20 requests that exceed the server's capacity line. With full jitter, each wait is random between zero and the capped exponential, so the same retries spread out with a peak of 13. Simulated data.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:14s infinite linear}
+    @keyframes b0{0%,2.99%{opacity:0}3%,96.99%{opacity:1}97%,100%{opacity:0}}.b0{animation-name:b0}
+    @keyframes b1{0%,5.59%{opacity:0}5.6%,96.99%{opacity:1}97%,100%{opacity:0}}.b1{animation-name:b1}
+    @keyframes b2{0%,8.19%{opacity:0}8.2%,96.99%{opacity:1}97%,100%{opacity:0}}.b2{animation-name:b2}
+    @keyframes b3{0%,10.79%{opacity:0}10.8%,96.99%{opacity:1}97%,100%{opacity:0}}.b3{animation-name:b3}
+    @keyframes b4{0%,13.39%{opacity:0}13.4%,96.99%{opacity:1}97%,100%{opacity:0}}.b4{animation-name:b4}
+    @keyframes b5{0%,15.99%{opacity:0}16%,96.99%{opacity:1}97%,100%{opacity:0}}.b5{animation-name:b5}
+    @keyframes b6{0%,18.59%{opacity:0}18.6%,96.99%{opacity:1}97%,100%{opacity:0}}.b6{animation-name:b6}
+    @keyframes b7{0%,21.19%{opacity:0}21.2%,96.99%{opacity:1}97%,100%{opacity:0}}.b7{animation-name:b7}
+    @keyframes b8{0%,23.79%{opacity:0}23.8%,96.99%{opacity:1}97%,100%{opacity:0}}.b8{animation-name:b8}
+    @keyframes b9{0%,26.39%{opacity:0}26.4%,96.99%{opacity:1}97%,100%{opacity:0}}.b9{animation-name:b9}
+    @keyframes b10{0%,28.99%{opacity:0}29%,96.99%{opacity:1}97%,100%{opacity:0}}.b10{animation-name:b10}
+    @keyframes b11{0%,31.59%{opacity:0}31.6%,96.99%{opacity:1}97%,100%{opacity:0}}.b11{animation-name:b11}
+    @keyframes b12{0%,34.19%{opacity:0}34.2%,96.99%{opacity:1}97%,100%{opacity:0}}.b12{animation-name:b12}
+    @keyframes b13{0%,36.79%{opacity:0}36.8%,96.99%{opacity:1}97%,100%{opacity:0}}.b13{animation-name:b13}
+    @keyframes b14{0%,39.39%{opacity:0}39.4%,96.99%{opacity:1}97%,100%{opacity:0}}.b14{animation-name:b14}
+    @keyframes b15{0%,41.99%{opacity:0}42%,96.99%{opacity:1}97%,100%{opacity:0}}.b15{animation-name:b15}
+    @keyframes b16{0%,44.59%{opacity:0}44.6%,96.99%{opacity:1}97%,100%{opacity:0}}.b16{animation-name:b16}
+    @keyframes b17{0%,47.19%{opacity:0}47.2%,96.99%{opacity:1}97%,100%{opacity:0}}.b17{animation-name:b17}
+    @keyframes b18{0%,49.79%{opacity:0}49.8%,96.99%{opacity:1}97%,100%{opacity:0}}.b18{animation-name:b18}
+    @keyframes b19{0%,52.39%{opacity:0}52.4%,96.99%{opacity:1}97%,100%{opacity:0}}.b19{animation-name:b19}
+    @keyframes b20{0%,54.99%{opacity:0}55%,96.99%{opacity:1}97%,100%{opacity:0}}.b20{animation-name:b20}
+    @keyframes b21{0%,57.59%{opacity:0}57.6%,96.99%{opacity:1}97%,100%{opacity:0}}.b21{animation-name:b21}
+    @keyframes b22{0%,60.19%{opacity:0}60.2%,96.99%{opacity:1}97%,100%{opacity:0}}.b22{animation-name:b22}
+    @keyframes b23{0%,62.79%{opacity:0}62.8%,96.99%{opacity:1}97%,100%{opacity:0}}.b23{animation-name:b23}
+    @keyframes b24{0%,65.39%{opacity:0}65.4%,96.99%{opacity:1}97%,100%{opacity:0}}.b24{animation-name:b24}
+    @keyframes b25{0%,67.99%{opacity:0}68%,96.99%{opacity:1}97%,100%{opacity:0}}.b25{animation-name:b25}
+    @keyframes b26{0%,70.59%{opacity:0}70.6%,96.99%{opacity:1}97%,100%{opacity:0}}.b26{animation-name:b26}
+    @keyframes b27{0%,73.19%{opacity:0}73.2%,96.99%{opacity:1}97%,100%{opacity:0}}.b27{animation-name:b27}
+    @keyframes b28{0%,75.79%{opacity:0}75.8%,96.99%{opacity:1}97%,100%{opacity:0}}.b28{animation-name:b28}
+    @keyframes b29{0%,78.39%{opacity:0}78.4%,96.99%{opacity:1}97%,100%{opacity:0}}.b29{animation-name:b29}
+    @keyframes b30{0%,80.99%{opacity:0}81%,96.99%{opacity:1}97%,100%{opacity:0}}.b30{animation-name:b30}
+    @keyframes b31{0%,83.59%{opacity:0}83.6%,96.99%{opacity:1}97%,100%{opacity:0}}.b31{animation-name:b31}
+    @media (prefers-reduced-motion: reduce){.k{animation:none;opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="442" rx="14"/>
+  <text class="h" x="28" y="40">Why backoff needs jitter</text><text class="sub" x="28" y="62">20 clients hit a 503 at t = 0 and keep failing. Retry requests per 0.25 s; simulated.</text><text class="lbl" x="28" y="88">No jitter: base × 2ⁿ</text><line class="ln" x1="90" y1="200" x2="730" y2="200"/><line class="lnw dash" x1="90" y1="170" x2="730" y2="170"/><text class="wrnt" x="736" y="174" style="font-size:12px">server</text><text class="wrnt" x="736" y="188" style="font-size:12px">capacity</text><g class="k b2"><rect class="badf" x="132" y="100" width="16" height="100" rx="2"/></g><g class="k b6"><rect class="badf" x="212" y="100" width="16" height="100" rx="2"/></g><g class="k b14"><rect class="badf" x="372" y="100" width="16" height="100" rx="2"/></g><g class="k b30"><rect class="badf" x="692" y="100" width="16" height="100" rx="2"/></g><text class="sub" x="90" y="218" text-anchor="middle">0s</text><text class="sub" x="250" y="218" text-anchor="middle">2s</text><text class="sub" x="410" y="218" text-anchor="middle">4s</text><text class="sub" x="570" y="218" text-anchor="middle">6s</text><text class="sub" x="730" y="218" text-anchor="middle">8s</text><text class="badt" x="28" y="196" style="font-size:13px">peak 20</text><text class="lbl" x="28" y="248">Full jitter: random(0, base × 2ⁿ)</text><line class="ln" x1="90" y1="360" x2="730" y2="360"/><line class="lnw dash" x1="90" y1="330" x2="730" y2="330"/><text class="wrnt" x="736" y="334" style="font-size:12px">server</text><text class="wrnt" x="736" y="348" style="font-size:12px">capacity</text><g class="k b0"><rect class="tea" x="92" y="300" width="16" height="60" rx="2"/></g><g class="k b1"><rect class="tea" x="112" y="295" width="16" height="65" rx="2"/></g><g class="k b2"><rect class="tea" x="132" y="310" width="16" height="50" rx="2"/></g><g class="k b3"><rect class="tea" x="152" y="320" width="16" height="40" rx="2"/></g><g class="k b4"><rect class="tea" x="172" y="350" width="16" height="10" rx="2"/></g><g class="k b5"><rect class="tea" x="192" y="330" width="16" height="30" rx="2"/></g><g class="k b6"><rect class="tea" x="212" y="350" width="16" height="10" rx="2"/></g><g class="k b7"><rect class="tea" x="232" y="350" width="16" height="10" rx="2"/></g><g class="k b8"><rect class="tea" x="252" y="340" width="16" height="20" rx="2"/></g><g class="k b9"><rect class="tea" x="272" y="345" width="16" height="15" rx="2"/></g><g class="k b10"><rect class="tea" x="292" y="355" width="16" height="5" rx="2"/></g><g class="k b11"><rect class="tea" x="312" y="345" width="16" height="15" rx="2"/></g><g class="k b12"><rect class="tea" x="332" y="350" width="16" height="10" rx="2"/></g><g class="k b13"><rect class="tea" x="352" y="350" width="16" height="10" rx="2"/></g><g class="k b14"><rect class="tea" x="372" y="355" width="16" height="5" rx="2"/></g><g class="k b15"><rect class="tea" x="392" y="355" width="16" height="5" rx="2"/></g><g class="k b16"><rect class="tea" x="412" y="345" width="16" height="15" rx="2"/></g><g class="k b18"><rect class="tea" x="452" y="350" width="16" height="10" rx="2"/></g><g class="k b19"><rect class="tea" x="472" y="355" width="16" height="5" rx="2"/></g><g class="k b20"><rect class="tea" x="492" y="355" width="16" height="5" rx="2"/></g><g class="k b24"><rect class="tea" x="572" y="355" width="16" height="5" rx="2"/></g><text class="sub" x="90" y="378" text-anchor="middle">0s</text><text class="sub" x="250" y="378" text-anchor="middle">2s</text><text class="sub" x="410" y="378" text-anchor="middle">4s</text><text class="sub" x="570" y="378" text-anchor="middle">6s</text><text class="sub" x="730" y="378" text-anchor="middle">8s</text><text class="teat" x="28" y="356" style="font-size:13px">peak 13</text><text class="sm" x="28" y="400">Without jitter every client retries at 0.5 s, 1.5 s, 3.5 s and 7.5 s: four synchronised waves that</text><text class="sm" x="28" y="418">knock the recovering server over again. Full jitter spreads the same retries out (AWS Architecture Blog).</text>
+</svg>

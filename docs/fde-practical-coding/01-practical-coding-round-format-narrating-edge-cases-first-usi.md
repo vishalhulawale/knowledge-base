@@ -64,6 +64,9 @@ flowchart LR
 ```
 *Notice the self-loop on the working slice: you run the code after every small step. Something should execute by minute 25, even if it only handles the happy path.*
 
+![Animation: on a 45-minute timeline, the thin-slice lane gains a check mark each time the code is run, with one failure fixed on the next run, while the big-bang lane types for 41 minutes and first runs at minute 42 with five errors](images/01-run-often.svg){ loading=lazy }
+*Every check mark is a moment you could stop and still demo working code.*
+
 ### Clarify: the five questions
 
 Before typing, restate the task in one sentence and ask the questions that change the code:
@@ -109,6 +112,9 @@ The fastest seniority signal is naming the inputs that break code **before** you
 | Security | Untrusted input, secrets in logs, signature checks |
 
 You won't test all of them. Pick the five that matter for this task, say why you picked them, and write them down. That's the visible thinking interviewers listen for.
+
+![Ten edge-case categories with five highlighted for customer_totals and linked to the six pytest ids: empty, decimal, duplicate, refund, bad-rows and whitespace; the refund test comes from a clarifying question about business rules](images/01-edge-case-picker.svg){ loading=lazy }
+*Five categories and one question become six tests before the function body exists.*
 
 ### Using AI tools in the round
 

@@ -105,7 +105,13 @@ flowchart TD
 ```
 *Notice the three exits: success, fail fast for non-retryable errors, and give up when attempts or the total deadline run out. A retry loop without the third exit is an outage amplifier.*
 
+![Bar chart of the capped exponential wait for each retry with one sampled jittered wait per bar, the first three used by the page's client, beside three exit boxes: success, fail fast and give up](images/02-backoff-envelope.svg){ loading=lazy }
+*Retry-After from the server replaces the sampled dot; the deadline caps the total.*
+
 The usual formula is capped exponential backoff, `min(cap, base × 2^attempt)`. The AWS Architecture Blog's analysis of backoff and jitter showed that without jitter, clients retry in synchronised waves; **full jitter** (`random(0, min(cap, base × 2^attempt))`) spreads them out and reduced both total work and completion time in their simulation. The [retries page](../distributed-systems/05-retries-backoff-jitter-timeouts.md) covers equal and decorrelated jitter, retry budgets and why you retry at one layer only.
+
+![Animation: histograms of retry requests from 20 failing clients; without jitter they form four spikes of 20 above the server's capacity line, with full jitter the same retries spread out under a much lower peak](images/02-full-jitter.svg){ loading=lazy }
+*Same number of retries; only the timing changes, and that is what lets the server recover.*
 
 Should a **POST** be retried? Only if it's safe: the API supports an **idempotency key** and you send the same key on every retry of the same logical operation (Stripe-style; details on the [idempotency keys page](../api-design/05-idempotency-keys-and-safe-retries.md)). A timeout leaves the outcome unknown, and the key lets the server replay the stored result instead of acting twice.
 
