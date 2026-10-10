@@ -86,16 +86,16 @@ The server sends its **leaf** certificate plus the **intermediate** CA certifica
 ```mermaid
 flowchart TD
     A["Certificate message: leaf + intermediates"] --> B{"Path to a trusted root?"}
-    B -- no --> X1["Fail: PKIX path building failed / unknown CA"]
-    B -- yes --> C{"Signatures valid and dates current?"}
-    C -- no --> X2["Fail: certificate expired or bad signature"]
-    C -- yes --> D{"Hostname matches a SAN entry?"}
-    D -- no --> X3["Fail: hostname mismatch"]
-    D -- yes --> E{"Key usage, EKU, basicConstraints, revocation OK?"}
-    E -- no --> X4["Fail: revoked or wrong usage"]
-    E -- yes --> F{"CertificateVerify signature over transcript valid?"}
-    F -- no --> X5["Fail: handshake aborted"]
-    F -- yes --> OK["Server authenticated"]
+    B -->|no| X1["Fail: PKIX path building failed / unknown CA"]
+    B -->|yes| C{"Signatures valid and dates current?"}
+    C -->|no| X2["Fail: certificate expired or bad signature"]
+    C -->|yes| D{"Hostname matches a SAN entry?"}
+    D -->|no| X3["Fail: hostname mismatch"]
+    D -->|yes| E{"Key usage, EKU, basicConstraints, revocation OK?"}
+    E -->|no| X4["Fail: revoked or wrong usage"]
+    E -->|yes| F{"CertificateVerify signature over transcript valid?"}
+    F -->|no| X5["Fail: handshake aborted"]
+    F -->|yes| OK["Server authenticated"]
 ```
 *Notice that the chain only says whose key it is; `CertificateVerify` is what proves the server actually holds that key in this handshake.*
 
@@ -129,10 +129,10 @@ In mutual TLS the server also sends `CertificateRequest`, and the client returns
 
 ```mermaid
 flowchart LR
-    U["Browser"] -- "TLS 1.3 public cert" --> LB["ALB / API gateway / CDN"]
-    LB -- "re-encrypt: TLS to internal CA" --> IN["Ingress or sidecar"]
-    IN -- "mTLS between workloads" --> SVC["Spring Boot service"]
-    LB -. "passthrough alternative: L4, no inspection" .-> SVC
+    U["Browser"] -->|"TLS 1.3, public cert"| LB["ALB / API gateway / CDN"]
+    LB -->|"re-encrypt: TLS, internal CA"| ING["Ingress or sidecar"]
+    ING -->|"mTLS between workloads"| SVC["Spring Boot service"]
+    LB -.->|"passthrough alternative: L4, no inspection"| SVC
 ```
 *Notice that each hop is a separate TLS session with its own certificate and trust store. "Encrypted in transit" in a compliance audit means every hop, not only the internet-facing one.*
 
