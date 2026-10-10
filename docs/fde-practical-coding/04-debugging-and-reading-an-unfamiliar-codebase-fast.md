@@ -47,6 +47,9 @@ flowchart TD
 
 **2. Read the error.** The message usually tells you more than you think. Read the whole assertion diff; pytest shows exactly which keys differ.
 
+![A Python traceback read bottom-up, with the ValueError on the last line and the failing frame above it, beside a Java stack trace read top-down to its last Caused by line](images/04-tracebacks.svg){ loading=lazy }
+*Red is the exception, amber is the deepest frame in your own code.*
+
 **3. Minimise.** Shrink the input until removing anything makes the bug disappear. One row instead of 500; one field instead of 20.
 
 **4. Hypothesise.** Say a *specific*, *testable* cause: "I think the first row is being skipped", not "something's wrong with the loop".
@@ -94,6 +97,9 @@ ValueError: invalid literal for int() with base 10: 'two'
 | `git log -S`, `git blame` | Who changed this line and why | `git log -S "seconds" -p`, `git blame -L 10,20 file.py` |
 
 `git bisect run` is underused and impressive in a multi-commit exercise. Given a good and a bad commit and a command that exits non-zero on failure, git finds the first bad commit in about log₂(N) steps:
+
+![Animation: git bisect halves a range of 16 commits in four tests, c7 good, c11 bad, c9 good, c10 good, and lands on c11 as the first bad commit](images/04-git-bisect.svg){ loading=lazy }
+*Four tests for sixteen commits: log₂ of the range, whoever wrote the bug.*
 
 ```bash
 git bisect start HEAD HEAD~4          # bad, then good

@@ -60,6 +60,9 @@ def kind(event):
 
 FDEs write lots of scripts: backfills, one-off migrations, data cleanups, health checks. A script someone else will run (at 2 a.m., from cron, in a pipeline) needs more than a happy path:
 
+![Animation: memory while processing a 4 GB CSV; reading it all climbs to the pod limit and is OOMKilled, while streaming rows with csv.DictReader stays flat](images/06-streaming-memory.svg){ loading=lazy }
+*Generators keep memory flat however big the customer's file gets.*
+
 | Concern | Practice |
 |---|---|
 | Entry point | `def main(argv: list[str] \| None = None) -> int` and `sys.exit(main())`, so tests can call `main([...])` |
@@ -89,6 +92,9 @@ pandas essentials for a round:
 - **Joins:** `merge(..., how="left", validate="many_to_one", indicator=True)`. `validate` raises `MergeError` if the "one" side has duplicate keys (which would silently multiply rows); `indicator` adds `_merge` so you can list orphans.
 - **Aggregation:** named aggregation, `groupby([...], as_index=False).agg(revenue=("amount", "sum"))`.
 - **Assignment:** `df.loc[mask, "col"] = value`, never `df[mask]["col"] = value`.
+
+![Three visits left-joined to a clinics table that lists C2 twice return four rows and a missing name; validate many_to_one raises and indicator flags the orphan](images/06-merge-explosion.svg){ loading=lazy }
+*Three visits in, four rows out: the duplicate key on the 'one' side did it.*
 
 !!! warning "pandas 3.0 changed defaults"
     pandas 3.0 (January 2026) made **Copy-on-Write** the only mode: any indexing result behaves as a copy, so **chained assignment never updates the original** and emits a `ChainedAssignmentError` warning (the old `SettingWithCopyWarning` is gone). It also introduced a dedicated **string dtype** by default (`pd.Series(["x"]).dtype` prints `str`), which breaks code that checks `dtype == object`. If the sandbox has pandas 2.x, behaviour differs; check `pd.__version__`.

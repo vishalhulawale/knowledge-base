@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 352" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Walking skeleton prototype plan</title>
+  <desc id="d">Animation: an eight-hour timeline with three layers, UI in React, API in Hono, and data from seed data that later becomes the customer API. In the first hour thin teal lines run through all three layers: end to end, ugly but working. Thicker indigo blocks then deepen the UI, API and data where the demo story needs them. The final hour, in amber, makes all three layers demo-able. Hours are illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .g{transform-box:fill-box;transform-origin:0 50%;animation:14s infinite ease-out}
+    @keyframes g0{0%,5%{transform:scaleX(0)}15%,100%{transform:scaleX(1)}}.g0{animation-name:g0}
+    @keyframes g1{0%,5%{transform:scaleX(0)}15%,100%{transform:scaleX(1)}}.g1{animation-name:g1}
+    @keyframes g2{0%,5%{transform:scaleX(0)}15%,100%{transform:scaleX(1)}}.g2{animation-name:g2}
+    @keyframes g3{0%,30%{transform:scaleX(0)}40%,100%{transform:scaleX(1)}}.g3{animation-name:g3}
+    @keyframes g4{0%,30%{transform:scaleX(0)}40%,100%{transform:scaleX(1)}}.g4{animation-name:g4}
+    @keyframes g5{0%,45%{transform:scaleX(0)}55%,100%{transform:scaleX(1)}}.g5{animation-name:g5}
+    @keyframes g6{0%,55%{transform:scaleX(0)}65%,100%{transform:scaleX(1)}}.g6{animation-name:g6}
+    @keyframes g7{0%,60%{transform:scaleX(0)}70%,100%{transform:scaleX(1)}}.g7{animation-name:g7}
+    @keyframes g8{0%,75%{transform:scaleX(0)}85%,100%{transform:scaleX(1)}}.g8{animation-name:g8}
+    @keyframes g9{0%,75%{transform:scaleX(0)}85%,100%{transform:scaleX(1)}}.g9{animation-name:g9}
+    @keyframes g10{0%,75%{transform:scaleX(0)}85%,100%{transform:scaleX(1)}}.g10{animation-name:g10}
+    @media (prefers-reduced-motion: reduce){.g{animation:none;transform:none}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="350" rx="14"/>
+  <text class="h" x="28" y="40">Walking skeleton first, then deepen what the demo story needs</text><text class="sub" x="28" y="62">A one-day prototype for one user, one workflow, one decision. Hours are illustrative.</text><line class="grid" x1="190" y1="86" x2="190" y2="262"/><text class="sub" x="190" y="282" text-anchor="middle">0h</text><line class="grid" x1="256" y1="86" x2="256" y2="262"/><text class="sub" x="256" y="282" text-anchor="middle">1h</text><line class="grid" x1="322" y1="86" x2="322" y2="262"/><text class="sub" x="322" y="282" text-anchor="middle">2h</text><line class="grid" x1="388" y1="86" x2="388" y2="262"/><text class="sub" x="388" y="282" text-anchor="middle">3h</text><line class="grid" x1="454" y1="86" x2="454" y2="262"/><text class="sub" x="454" y="282" text-anchor="middle">4h</text><line class="grid" x1="520" y1="86" x2="520" y2="262"/><text class="sub" x="520" y="282" text-anchor="middle">5h</text><line class="grid" x1="586" y1="86" x2="586" y2="262"/><text class="sub" x="586" y="282" text-anchor="middle">6h</text><line class="grid" x1="652" y1="86" x2="652" y2="262"/><text class="sub" x="652" y="282" text-anchor="middle">7h</text><line class="grid" x1="718" y1="86" x2="718" y2="262"/><text class="sub" x="718" y="282" text-anchor="middle">8h</text><text class="lbl" x="28" y="122">UI (React)</text><text class="lbl" x="28" y="174">API (Hono)</text><text class="lbl" x="28" y="226">Data (seed → API)</text><rect class="tea g g0" x="192" y="112.0" width="62" height="8" rx="4"/><rect class="tea g g1" x="192" y="164.0" width="62" height="8" rx="4"/><rect class="tea g g2" x="192" y="216.0" width="62" height="8" rx="4"/><rect class="pri g g3" x="258" y="101.0" width="194" height="30" rx="4"/><rect class="pri g g4" x="258" y="153.0" width="128" height="30" rx="4"/><rect class="pri g g5" x="390" y="205.0" width="128" height="30" rx="4"/><rect class="pri g g6" x="456" y="101.0" width="194" height="30" rx="4"/><rect class="pri g g7" x="522" y="153.0" width="128" height="30" rx="4"/><rect class="wrnf g g8" x="654" y="101.0" width="62" height="30" rx="4"/><rect class="wrnf g g9" x="654" y="153.0" width="62" height="30" rx="4"/><rect class="wrnf g g10" x="654" y="205.0" width="62" height="30" rx="4"/><text class="teat" x="194" y="98" style="font-size:12px">end to end, ugly, working</text><text class="wrnt" x="656" y="98" style="font-size:12px">demo-able</text><text class="sm" x="28" y="312">Hour 1: a thin line through every layer proves the path works. Then thicken only what the story</text><text class="sm" x="28" y="330">needs. The last hour goes on states, seed data, a recording and a "what's real vs stubbed" slide.</text>
+</svg>

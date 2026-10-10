@@ -63,6 +63,9 @@ flowchart LR
 ```
 *Notice that the skeleton is end to end before any feature work starts, and the last hour is reserved for making it demo-able, not for one more feature.*
 
+![Animation: an eight-hour plan where thin lines run through UI, API and data in hour one, then thicker blocks deepen the parts the story needs, and the last hour makes all three demo-able](images/07-walking-skeleton.svg){ loading=lazy }
+*Thin and complete first; thick only where the demo story needs it.*
+
 ### Choosing the stack
 
 | Option | Strengths | Weaknesses | Pick when |
@@ -90,6 +93,9 @@ flowchart LR
     SCHEMA -.-> API
 ```
 *Notice the two dotted dependencies on the shared schema: client and server import the same zod definitions, so a field rename breaks the type check instead of the demo. The `ShipmentSource` seam is where real data and AI features plug in later.*
+
+![A shared zod schema imported by both the React client, which parses responses, and the Node API, which validates requests; renaming a field breaks the type check on both sides](images/07-shared-schema.svg){ loading=lazy }
+*A rename fails the build, not the demo.*
 
 Four design choices carry most of the value:
 

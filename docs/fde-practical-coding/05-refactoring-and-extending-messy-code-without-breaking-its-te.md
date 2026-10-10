@@ -62,11 +62,17 @@ flowchart LR
 ```
 *Notice the undo arrow. When a step breaks tests, you revert it rather than debug forward; small steps make reverting cheap. The feature is only added once the code makes it easy.*
 
+![Animation: refactoring steps appear as commits; one step turns tests red and is reverted with git restore, and the final step adds the new country as one rules-table row, test-first](images/05-commit-rhythm.svg){ loading=lazy }
+*The red step costs one revert, not twenty minutes of debugging forward.*
+
 ### Characterisation tests and golden masters
 
 A **characterisation test** asserts what the code actually does, not what it should do. Feathers' recipe: call the code, write an assertion you know will fail, let the failure tell you the real value, and make that the expected value.
 
 A **golden master** (also called a snapshot or approval test) does the same at scale:
+
+![An input grid with boundary values feeds the legacy function once to record golden outputs, then every refactor step re-runs the grid; a recorded quirk, free US express shipping over $100, is flagged as bug or feature](images/05-golden-master.svg){ loading=lazy }
+*The recording catches quirks you'd otherwise 'fix' by accident.*
 
 1. Generate a grid of inputs that covers **boundaries on both sides** of every threshold you can see in the code (99.99, 100, 100.01), every branch value (each country), and every flag combination.
 2. Run the current code on all of them and **record the outputs** to a file.
