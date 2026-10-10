@@ -462,6 +462,12 @@ nav:
           - "Rapid Full-Stack Prototyping: TypeScript Service plus React UI for a Demo": fde-practical-coding/07-rapid-full-stack-prototyping-typescript-service-plus-react-u.md
       - "Data Integration & Pipelines":
           - Overview: fde-data-integration/index.md
+          - "Integrating with Legacy Systems of Record: Databases, Files/SFTP, SOAP/REST, CDC": fde-data-integration/01-integrating-with-legacy-systems-of-record-databases-files-sf.md
+          - "ETL vs ELT, Batch vs Streaming, Orchestration (Airflow, Dagster) & dbt": fde-data-integration/02-etl-vs-elt-batch-vs-streaming-orchestration-and-dbt.md
+          - "SQL for Take-Homes: Multi-Table Joins, Window Functions, NULL Handling, Deduplication": fde-data-integration/03-sql-for-take-homes-multi-table-joins-window-functions-null-h.md
+          - "Data Quality, Schema Drift, Idempotent Loads & Backfills": fde-data-integration/04-data-quality-schema-drift-idempotent-loads-and-backfills.md
+          - "Semantic Layer & Ontology: Modelling the Customer's Domain (Foundry-Style)": fde-data-integration/05-semantic-layer-and-ontology-modelling-the-customer-s-domain.md
+          - "Spark/PySpark & Lakehouse Basics (Databricks)": fde-data-integration/06-spark-pyspark-and-lakehouse-basics.md
       - "Applied LLM Engineering for Deployments":
           - Overview: fde-applied-llm/index.md
           - "Model Selection & Routing: Quality vs Latency vs Cost Across Providers": fde-applied-llm/01-model-selection-and-routing-quality-vs-latency-vs-cost-acros.md

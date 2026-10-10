@@ -2338,37 +2338,37 @@
           "title": "Integrating with legacy systems of record: databases, files/SFTP, SOAP/REST, CDC",
           "slug": "01-integrating-with-legacy-systems-of-record-databases-files-sf",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "ETL vs ELT, batch vs streaming, orchestration (Airflow, Dagster) & dbt",
           "slug": "02-etl-vs-elt-batch-vs-streaming-orchestration-and-dbt",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "SQL for take-homes: multi-table joins, window functions, NULL handling, deduplication",
           "slug": "03-sql-for-take-homes-multi-table-joins-window-functions-null-h",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Data quality, schema drift, idempotent loads & backfills",
           "slug": "04-data-quality-schema-drift-idempotent-loads-and-backfills",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Semantic layer & ontology: modelling the customer's domain (Foundry-style)",
           "slug": "05-semantic-layer-and-ontology-modelling-the-customer-s-domain",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Spark/PySpark & lakehouse basics (Databricks)",
           "slug": "06-spark-pyspark-and-lakehouse-basics",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
