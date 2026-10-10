@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 372" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Watermelon status versus honest status</title>
+  <desc id="d">Left: a watermelon slice, green rind and red flesh, for a status report that says schedule, scope and quality are all green while in reality eval accuracy is 71 percent against an 85 percent target and the security review has not started. Right: an honest one-page status: amber and worsening; the metric; the top risk with a mitigation (review kickoff booked Monday); the decision needed (extend the eval set by one week, by Friday); and the next step. Numbers are illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="370" rx="14"/>
+  <text class="h" x="28" y="40">Watermelon status: green outside, red inside</text><text class="sub" x="28" y="62">Executives forgive bad news early; they don't forgive a surprise at the decision meeting.</text><path class="okf" d="M 60 120 A 110 110 0 0 0 280 120 Z"/><path class="badf" d="M 72 120 A 98 98 0 0 0 268 120 Z"/><ellipse class="card" cx="130" cy="150" rx="4" ry="7" stroke-width="0"/><ellipse class="card" cx="170" cy="170" rx="4" ry="7" stroke-width="0"/><ellipse class="card" cx="210" cy="150" rx="4" ry="7" stroke-width="0"/><ellipse class="card" cx="150" cy="190" rx="4" ry="7" stroke-width="0"/><ellipse class="card" cx="195" cy="195" rx="4" ry="7" stroke-width="0"/><text class="sm" x="60" y="262">Report says: Schedule G · Scope G · Quality G</text><text class="sm" x="60" y="281">Reality: eval accuracy 71% vs 85% target;</text><text class="sm" x="60" y="300">security review not started</text><rect class="bw" x="400" y="86" width="372" height="236" rx="10" stroke-width="1.5"/><text class="wrnt" x="416" y="112" style="font-size:15px">Honest one-pager</text><text class="sm" x="416" y="142" font-weight="700">Status</text><text class="sm" x="540" y="142">Amber, worsening ↓</text><text class="sm" x="416" y="171" font-weight="700">Metric</text><text class="sm" x="540" y="171">eval accuracy 71% (target 85%)</text><text class="sm" x="416" y="200" font-weight="700">Top risk</text><text class="sm" x="540" y="200">security review not started</text><text class="sm" x="416" y="229" font-weight="700">Mitigation</text><text class="sm" x="540" y="229">review kickoff booked Mon</text><text class="sm" x="416" y="258" font-weight="700">Decision needed</text><text class="sm" x="540" y="258">extend eval set by 1 week? by Fri</text><text class="sm" x="416" y="287" font-weight="700">Next</text><text class="sm" x="540" y="287">re-run evals on 300 new cases</text><text class="sub" x="28" y="352">Status with a trend, the metric, top risks with mitigations, decisions needed. Numbers illustrative.</text>
+</svg>

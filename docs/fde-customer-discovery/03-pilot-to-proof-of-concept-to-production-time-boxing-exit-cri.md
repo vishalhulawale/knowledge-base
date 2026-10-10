@@ -56,6 +56,9 @@ stateDiagram-v2
 ```
 *Notice that every stage has an explicit exit to "Stopped", and "extend" can only happen once. A pilot without these exits is how teams end up supporting a half-built system for a year.*
 
+![Demo, POC, pilot and production with their question and length, go arrows between them, stop arrows to a Stopped bar, an extend-once loop on the pilot, and a production-readiness track starting at the POC](images/03-stage-gates.svg){ loading=lazy }
+*The teal track under the stages is what stops pilot purgatory.*
+
 ### Time-boxing
 
 A time-box forces a decision. Vendor and presales practice suggests a fixed end date (often 4–8 weeks for a POC), a **midpoint review** and hard stop rules: "if success criteria aren't trending by midpoint, pause and reassess; if the customer's resource commitments aren't met, stop" ([Rework](https://resources.rework.com/vi/libraries/saas-growth/poc-pilot-programs)).
@@ -112,6 +115,9 @@ flowchart LR
     D --> R["Report: effect, confidence,<br/>cost per task, caveats"]
 ```
 *Notice that the impact is the pilot group's change minus the comparison group's change. A plain before/after comparison would credit the tool for a quiet month or blame it for a busy one.*
+
+![Animation: a line chart where the pilot group falls from 50 to 28 hours a day and the comparison group drifts to 44, so the effect is about 16, not the naive 22](images/03-comparison-group.svg){ loading=lazy }
+*Subtract the purple line's drift before claiming the teal line's drop.*
 
 ### LLM-specific stage design
 

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 372" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Customer simulation timeline</title>
+  <desc id="d">A 60-minute timeline: open (0 to 3 minutes), discovery of workflow, pain and impact (3 to 20), constraint sweep and first restatement (20 to 25), options and a first slice (25 to 40), pushback and curveballs (40 to 50) and the close (last 10). Diamonds mark restatements every few minutes during discovery. A dashed line at minute 30 says propose by about here. Notes give the key move for each phase, such as asking what would make this a non-starter, and closing with problem, first step, out of scope, owners and what did I miss.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="370" rx="14"/>
+  <text class="h" x="28" y="40">A 60-minute customer simulation, minute by minute</text><text class="sub" x="28" y="62">Scale the timings to your slot. Diamonds: restate what you heard every few minutes.</text><rect class="mutf" x="41" y="120" width="34" height="44" rx="6"/><rect class="pri" x="77" y="120" width="202" height="44" rx="6"/><text class="on13" x="178" y="147" text-anchor="middle">Discover</text><rect class="wrnf" x="281" y="120" width="58" height="44" rx="6"/><text class="on13" x="310" y="147" text-anchor="middle">Sweep</text><rect class="tea" x="341" y="120" width="178" height="44" rx="6"/><text class="on13" x="430" y="147" text-anchor="middle">Options + first slice</text><rect class="badf" x="521" y="120" width="118" height="44" rx="6"/><text class="on13" x="580" y="147" text-anchor="middle">Pushback</text><rect class="okf" x="641" y="120" width="118" height="44" rx="6"/><text class="on13" x="700" y="147" text-anchor="middle">Close</text><path class="wrnf" d="M136,96 l7,8 l-7,8 l-7,-8 z"/><path class="wrnf" d="M208,96 l7,8 l-7,8 l-7,-8 z"/><path class="wrnf" d="M280,96 l7,8 l-7,8 l-7,-8 z"/><path class="wrnf" d="M328,96 l7,8 l-7,8 l-7,-8 z"/><path class="wrnf" d="M424,96 l7,8 l-7,8 l-7,-8 z"/><text class="sub" x="40" y="186" text-anchor="middle">0</text><text class="sub" x="160" y="186" text-anchor="middle">10</text><text class="sub" x="280" y="186" text-anchor="middle">20</text><text class="sub" x="400" y="186" text-anchor="middle">30</text><text class="sub" x="520" y="186" text-anchor="middle">40</text><text class="sub" x="640" y="186" text-anchor="middle">50</text><text class="sub" x="760" y="186" text-anchor="middle">60</text><line class="lnp dash" x1="400" y1="88" x2="400" y2="172"/><text class="prit" x="406" y="88" style="font-size:13px">propose by about here</text><text class="sm" x="28" y="220" font-weight="700">0–3</text><text class="sm" x="96" y="220">Rapport, agenda, time, "may I ask first?"</text><text class="sm" x="28" y="244" font-weight="700">20–25</text><text class="sm" x="96" y="244">Constraint sweep: "What would make this a non-starter?"</text><text class="sm" x="28" y="268" font-weight="700">25–40</text><text class="sm" x="96" y="268">Options A/B/C; recommend the smallest step that tests the riskiest bit</text><text class="sm" x="28" y="292" font-weight="700">40–50</text><text class="sm" x="96" y="292">Curveballs: hidden constraint, price on the spot; re-scope, don't argue</text><text class="sm" x="28" y="316" font-weight="700">Last 10</text><text class="sm" x="96" y="316">Close: problem, first step, out of scope, owners, "What did I miss?"</text><text class="sub" x="28" y="352">Discovery that never reaches a proposal fails the judgement and scoping rows.</text>
+</svg>

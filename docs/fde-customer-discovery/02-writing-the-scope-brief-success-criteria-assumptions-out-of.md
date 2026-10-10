@@ -66,6 +66,9 @@ stateDiagram-v2
 ```
 *Notice that the brief stays alive after sign-off. Every accepted change or broken assumption produces a new version, so the decision meeting judges the plan everyone last agreed, not the first draft.*
 
+![A one-page scope brief with eleven sections; success criteria, out of scope and assumptions are highlighted with worked examples](images/02-brief-anatomy.svg){ loading=lazy }
+*The orange callout is the section that saves you in week 5.*
+
 ### Writing success criteria
 
 Good criteria tie to a business outcome, are measurable, and are agreed with the people who'll judge them ([Presales Collective](https://www.presalescollective.com/post/part-3-dont-derail-the-proof-of-concept)). Practitioners note the trap: teams obsess over criteria and forget to make sure they can actually **measure** the result.
@@ -91,6 +94,9 @@ Rules of thumb:
 ### Assumptions
 
 An assumption is something the plan relies on that you haven't verified. Write each one so it can be proven false:
+
+![Animation: on a week 0 to 8 timeline, assumption A3 is signed with an agreed if-false consequence, falls due in week 1, fails in week 2, and brief v1.1 applies the agreed slip the same day](images/02-assumption-breaks.svg){ loading=lazy }
+*Because the consequence was agreed in week 0, week 2 is a re-plan, not an argument.*
 
 | Assumption | Owner | Validate by | If false |
 |---|---|---|---|

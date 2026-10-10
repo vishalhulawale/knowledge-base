@@ -90,6 +90,9 @@ flowchart LR
 ```
 *Notice that not everything should climb to the top. A playbook is enough for work that varies a lot between customers. A product feature is right only when demand is broad and the shape has stabilised.*
 
+![Five rising steps from bespoke to notes, playbook, reusable component and product feature, with the rule of three bracketing the first three](images/07-codification-ladder.svg){ loading=lazy }
+*Stop at the step the pattern deserves.*
+
 **What FDE teams typically codify:**
 
 | Artifact | Saves | Example |
@@ -121,6 +124,9 @@ Forks feel fastest and cost the most: every product upgrade has to be merged int
 - **Repeat issues:** the same problem raised by several deployments that isn't yet addressed.
 - **Feedback outcomes:** items raised vs decided vs shipped, and median time to decision.
 - **Engagement length and FDE hours per deployment** trending down for comparable scope.
+
+![Animation: five bars grow showing FDE hours for the same connector falling from 80 to 70, 45, 20 and 6 hours as it moves up the codification ladder](images/07-hours-per-deployment.svg){ loading=lazy }
+*The drop after deployment 3 is the rule of three paying off.*
 
 ## In practice: code & configuration
 

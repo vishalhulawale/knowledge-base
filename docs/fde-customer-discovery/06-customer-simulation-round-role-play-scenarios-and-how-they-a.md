@@ -47,6 +47,9 @@ No company publishes its rubric. The table below combines what prep sites and ca
 | **Composure and empathy** | Calm under pushback or frustration; acknowledges feelings; doesn't get defensive | Argues, over-apologises or freezes |
 | **Close** | Summarises problem, proposal, out of scope, open questions, next steps | Ends abruptly, or with "any questions?" |
 
+![Dot plot of the nine rubric rows for two candidates: one who proposed a chatbot in minute 4 scores low everywhere but technical judgement; one who asked first scores 4 or 5 on every row](images/06-scoring-profile.svg){ loading=lazy }
+*Strong technical judgement alone doesn't pass this round.*
+
 !!! question "Interview angle"
     Prep sites also warn about the opposite failure: asking so many questions that you seem to need excessive guidance, or never committing to a proposal. The scored behaviour is **disciplined curiosity followed by a decision**.
 
@@ -61,6 +64,9 @@ flowchart LR
     E --> F["Last 5-10 min<br/>Close: summary, out of scope,<br/>next steps with owners"]
 ```
 *Notice that you propose something by around the midpoint. Discovery that never reaches a proposal fails the "technical judgement" and "scoping" rows, so keep an eye on the clock. Scale the timings to the actual length.*
+
+![Sixty-minute timeline of a customer simulation: open, discover, constraint sweep, options, pushback and close, with restatement markers and a line at minute 30 marking when to propose](images/06-simulation-clock.svg){ loading=lazy }
+*Cross the dashed line with a proposal on the table.*
 
 **Opening (example):** "Thanks for making time. My aim today is to understand how things work today and where it hurts, and then sketch a first step we could take together. Is there anything you need from this call? Do we have the full hour?"
 

@@ -62,6 +62,9 @@ flowchart TD
 ```
 *Notice two things: "understand" comes before any answer, and every path ends with the sponsor's decision written down. The FDE frames the options; the owner of the outcome chooses.*
 
+![Animation: four small asks arrive; in the top row each is appended and the bar runs past the time-box, in the bottom row the buffer takes two and the other two each replace a Could item](images/04-scope-creep.svg){ loading=lazy }
+*Same four asks; only the bottom row still ends inside the time-box.*
+
 ### The five kinds of no
 
 Most "no"s aren't refusals. They're trade-offs, deferrals or redirections.
@@ -75,6 +78,9 @@ Most "no"s aren't refusals. They're trade-offs, deferrals or redirections.
 | **No, because** | "We can't auto-approve denials. Your policy and the regulator require a clinician to sign each one. Here's what we can do instead." | Safety, compliance, ethics or technical impossibility |
 
 The only true "no" without options is the last row, and even that comes with an alternative.
+
+![Five labelled kinds of no, from yes-and to no-because, each with a one-line script](images/04-five-noes.svg){ loading=lazy }
+*Four of the five keep the conversation going.*
 
 ### Principles from negotiation
 

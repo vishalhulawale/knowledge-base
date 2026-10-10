@@ -50,6 +50,9 @@ flowchart TD
 ```
 *Notice that the executive can stop reading after the top box and still know the recommendation, or after the second row and know why. Detail is there only for whoever asks. The figures are illustrative.*
 
+![A pyramid with the recommendation on top, three supporting points and data underneath, beside a Situation-Complication-Question-Answer strip](images/05-pyramid.svg){ loading=lazy }
+*Read only the top line: you should already know the ask.*
+
 ### Translating technology into business terms
 
 Climb the "so what?" ladder until you reach something the executive measures:
@@ -120,6 +123,9 @@ A weekly customer status note has five parts:
 5. **Next week.**
 
 Engineers get a different note: tickets, blockers, interface changes, environments and incidents. The danger in both is the **watermelon report**: green on the outside, red inside. Report the real state early; amber with a plan beats red with a surprise.
+
+![A watermelon slice for an all-green report hiding red metrics, beside an honest amber one-pager with trend, metric, risk, mitigation and the decision needed](images/05-watermelon.svg){ loading=lazy }
+*Amber with a plan beats red with a surprise.*
 
 ## In practice: code & configuration
 

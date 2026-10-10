@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 398" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Hours per deployment falling</title>
+  <desc id="d">Animation: five bars grow one after another showing FDE hours spent on the same SharePoint connector across five deployments: 80 hours built by hand, 70 hours with notes and a snippet, 45 hours once a template is made, 20 hours with a reusable connector, and 6 hours when it is a configurable product feature. The numbers are illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .bar{transform-box:fill-box;transform-origin:50% 100%;animation:14s infinite ease-out}
+    .lb{opacity:0;animation:14s infinite linear}
+    @keyframes b0{0%,4%{transform:scaleY(0)}12%,100%{transform:scaleY(1)}}.b0{animation-name:b0}
+    @keyframes l0{0%,11.99%{opacity:0}12%,96.99%{opacity:1}97%,100%{opacity:0}}.l0{animation-name:l0}
+    @keyframes b1{0%,18%{transform:scaleY(0)}26%,100%{transform:scaleY(1)}}.b1{animation-name:b1}
+    @keyframes l1{0%,25.99%{opacity:0}26%,96.99%{opacity:1}97%,100%{opacity:0}}.l1{animation-name:l1}
+    @keyframes b2{0%,32%{transform:scaleY(0)}40%,100%{transform:scaleY(1)}}.b2{animation-name:b2}
+    @keyframes l2{0%,39.99%{opacity:0}40%,96.99%{opacity:1}97%,100%{opacity:0}}.l2{animation-name:l2}
+    @keyframes b3{0%,46%{transform:scaleY(0)}54%,100%{transform:scaleY(1)}}.b3{animation-name:b3}
+    @keyframes l3{0%,53.99%{opacity:0}54%,96.99%{opacity:1}97%,100%{opacity:0}}.l3{animation-name:l3}
+    @keyframes b4{0%,60%{transform:scaleY(0)}68%,100%{transform:scaleY(1)}}.b4{animation-name:b4}
+    @keyframes l4{0%,67.99%{opacity:0}68%,96.99%{opacity:1}97%,100%{opacity:0}}.l4{animation-name:l4}
+    @media (prefers-reduced-motion: reduce){.bar,.lb{animation:none;opacity:1;transform:none}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="396" rx="14"/>
+  <text class="h" x="28" y="40">FDE hours for the same connector, deployment by deployment</text><text class="sub" x="28" y="62">Illustrative: a SharePoint connector as the pattern climbs the ladder.</text><rect class="bar b0 wrnf" x="60" y="92.0" width="90" height="208.0" rx="6"/><g class="lb l0"><text class="lbl" x="105" y="82" text-anchor="middle">80 h</text></g><text class="sm" x="105" y="322" text-anchor="middle" font-weight="700">Deployment 1</text><text class="sub" x="105" y="340" text-anchor="middle">built by hand</text><rect class="bar b1 wrnf" x="200" y="118.0" width="90" height="182.0" rx="6"/><g class="lb l1"><text class="lbl" x="245" y="108" text-anchor="middle">70 h</text></g><text class="sm" x="245" y="322" text-anchor="middle" font-weight="700">Deployment 2</text><text class="sub" x="245" y="340" text-anchor="middle">noted, snippet</text><rect class="bar b2 tea" x="340" y="183.0" width="90" height="117.0" rx="6"/><g class="lb l2"><text class="lbl" x="385" y="173" text-anchor="middle">45 h</text></g><text class="sm" x="385" y="322" text-anchor="middle" font-weight="700">Deployment 3</text><text class="sub" x="385" y="340" text-anchor="middle">template made</text><rect class="bar b3 tea" x="480" y="248.0" width="90" height="52.0" rx="6"/><g class="lb l3"><text class="lbl" x="525" y="238" text-anchor="middle">20 h</text></g><text class="sm" x="525" y="322" text-anchor="middle" font-weight="700">Deployment 4</text><text class="sub" x="525" y="340" text-anchor="middle">reusable connector</text><rect class="bar b4 tea" x="620" y="284.4" width="90" height="15.600000000000001" rx="6"/><g class="lb l4"><text class="lbl" x="665" y="274.4" text-anchor="middle">6 h</text></g><text class="sm" x="665" y="322" text-anchor="middle" font-weight="700">Deployment 5</text><text class="sub" x="665" y="340" text-anchor="middle">product feature: config</text><line class="ln" x1="40" y1="300" x2="770" y2="300"/><text class="sm" x="28" y="378">Track time to first value and reuse rate per deployment; both should improve as patterns climb.</text>
+</svg>

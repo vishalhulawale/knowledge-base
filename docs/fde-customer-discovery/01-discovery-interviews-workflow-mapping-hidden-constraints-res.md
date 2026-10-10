@@ -30,6 +30,9 @@ Both failure causes ("unclear value", "doesn't fit the workflow") are discovery 
 
 Customers arrive with **solution-shaped requests**: "a chatbot for our support team", "a RAG over our policy PDFs", "an agent that does claims". Each one contains a guess about the cause of a pain they haven't fully described. Treat it as a hypothesis to test, not a spec.
 
+![An iceberg: the request 'we need a chatbot' above the waterline; workflow, pain, workarounds and sign-off below it, and a side panel of hidden constraints](images/01-iceberg.svg){ loading=lazy }
+*Discovery is the part under the dashed line.*
+
 | What they say | What it usually hides | What to ask |
 |---|---|---|
 | "We need a chatbot." | Agents spend too long finding answers, or customers can't self-serve, or ticket volume spiked after a change | "What happens today when a customer asks that? Walk me through the last one." |
@@ -146,6 +149,9 @@ flowchart TD
     S -->|"Confirmed"| B["Scope brief and pilot plan"]
 ```
 *Notice the loop from "Restate" back to "Interviews". A correction during playback is the process working, not failing. Only a confirmed restatement turns into a [scope brief](02-writing-the-scope-brief-success-criteria-assumptions-out-of.md).*
+
+![Four bars of rising relative cost to fix the same misunderstanding: in the call, in the scope brief, after a two-week build and after the pilot](images/01-cost-of-correction.svg){ loading=lazy }
+*The left bar is why you restate before you solve.*
 
 ## In practice: code & configuration
 

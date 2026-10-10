@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 326" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">An assumption breaks mid-pilot</title>
+  <desc id="d">Animation: a timeline from week 0 to week 8 with the version 1.0 decision meeting at week 8. At week 0 brief version 1.0 is signed with assumption A3, 500 de-identified cases by week 1 owned by the data lead, and an agreed consequence if false: the pilot slips day-for-day and the sponsor is told. At week 1 A3 is due and checked in writing; the de-identification job is stuck in review. At week 2 A3 is false, only 200 cases have arrived, and the sponsor is told the same day. Brief version 1.1 applies the agreed slip and the sponsor signs it, so there is no argument and no surprise.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .p{opacity:0;animation:14s infinite linear}
+    @keyframes p0{0%,24.99%{opacity:1}25%,100%{opacity:0}}.p0{animation-name:p0}
+    @keyframes p1{0%,24.99%{opacity:0}25%,49.99%{opacity:1}50%,100%{opacity:0}}.p1{animation-name:p1}
+    @keyframes p2{0%,49.99%{opacity:0}50%,74.99%{opacity:1}75%,100%{opacity:0}}.p2{animation-name:p2}
+    @keyframes p3{0%,74.99%{opacity:0}75%,100%{opacity:1}}.p3{animation-name:p3}
+    @media (prefers-reduced-motion: reduce){.p{animation:none;opacity:0}.p3{opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="324" rx="14"/>
+  <text class="h" x="28" y="40">When an assumption breaks, the plan changes, not the trust</text><text class="sub" x="28" y="62">Everyone agreed the "if false" consequence up front, so week 2 is a re-plan, not a surprise.</text><line class="ln" x1="60" y1="140" x2="740" y2="140"/><circle class="box" cx="60" cy="140" r="5" stroke-width="1.5"/><text class="sub" x="60" y="166" text-anchor="middle">wk 0</text><circle class="box" cx="145" cy="140" r="5" stroke-width="1.5"/><text class="sub" x="145" y="166" text-anchor="middle">wk 1</text><circle class="box" cx="230" cy="140" r="5" stroke-width="1.5"/><text class="sub" x="230" y="166" text-anchor="middle">wk 2</text><circle class="box" cx="315" cy="140" r="5" stroke-width="1.5"/><text class="sub" x="315" y="166" text-anchor="middle">wk 3</text><circle class="box" cx="400" cy="140" r="5" stroke-width="1.5"/><text class="sub" x="400" y="166" text-anchor="middle">wk 4</text><circle class="box" cx="485" cy="140" r="5" stroke-width="1.5"/><text class="sub" x="485" y="166" text-anchor="middle">wk 5</text><circle class="box" cx="570" cy="140" r="5" stroke-width="1.5"/><text class="sub" x="570" y="166" text-anchor="middle">wk 6</text><circle class="box" cx="655" cy="140" r="5" stroke-width="1.5"/><text class="sub" x="655" y="166" text-anchor="middle">wk 7</text><circle class="box" cx="740" cy="140" r="5" stroke-width="1.5"/><text class="sub" x="740" y="166" text-anchor="middle">wk 8</text><rect class="bp" x="678" y="92" width="112" height="28" rx="14"/><text class="prit" x="740" y="111" text-anchor="middle" style="font-size:13px">v1.0 decision</text><g class="p p0"><circle class="okf" cx="60" cy="140" r="11"/><rect class="bm" x="28" y="196" width="744" height="76" rx="8"/><text class="sm" x="44" y="226" font-weight="600">Week 0: brief v1.0 signed. Assumption A3: 500 de-identified cases by week 1 (owner: data lead).</text><text class="sm" x="44" y="252">Agreed if false: the pilot slips day-for-day and the sponsor is told.</text></g><g class="p p1"><circle class="wrnf" cx="145" cy="140" r="11"/><rect class="bm" x="28" y="196" width="744" height="76" rx="8"/><text class="sm" x="44" y="226" font-weight="600">Week 1: A3 is due. You check on the day, in writing, rather than waiting for it to slip.</text><text class="sm" x="44" y="252">Data lead says the de-identification job is stuck in review.</text></g><g class="p p2"><circle class="badf" cx="230" cy="140" r="11"/><rect class="bm" x="28" y="196" width="744" height="76" rx="8"/><text class="sm" x="44" y="226" font-weight="600">Week 2: A3 is false. Only 200 cases have arrived.</text><text class="sm" x="44" y="252">You escalate to the sponsor the same day and point at the agreed consequence.</text><text class="badt" x="230" y="120" text-anchor="middle" style="font-size:13px">A3 false</text></g><g class="p p3"><circle class="okf" cx="230" cy="140" r="11"/><rect class="bm" x="28" y="196" width="744" height="76" rx="8"/><text class="sm" x="44" y="226" font-weight="600">Brief v1.1: the plan slips by the days lost, as agreed; the sponsor signs the new version.</text><text class="sm" x="44" y="252">Change log updated. No argument, no surprise: the consequence was decided in week 0.</text><text class="okt" x="230" y="120" text-anchor="middle" style="font-size:13px">v1.1</text></g><text class="sub" x="28" y="304">Assumptions are risks with an owner, a validation date and an agreed consequence.</text>
+</svg>

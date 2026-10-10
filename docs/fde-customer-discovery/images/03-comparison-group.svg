@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 372" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Pilot versus comparison group</title>
+  <desc id="d">Animation: a line chart of staff-hours per day spent chasing incomplete requests from week minus 2 to week 8. Both groups start at 50. After the pilot starts at week 0, the pilot group falls to 28 and the comparison group drifts down to 44. The naive before-and-after change is minus 22, the comparison group changed by minus 6, so the effect attributable to the tool is about minus 16 hours a day. Numbers are illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .draw{stroke-dasharray:100;animation:draw 13s infinite linear}
+    @keyframes draw{0%{stroke-dashoffset:100}45%,100%{stroke-dashoffset:0}}
+    .lab,.ann{opacity:0;animation:13s infinite linear}.lab{animation-name:lab}.ann{animation-name:ann}
+    @keyframes lab{0%,44.99%{opacity:0}45%,96.99%{opacity:1}97%,100%{opacity:0}}@keyframes ann{0%,54.99%{opacity:0}55%,96.99%{opacity:1}97%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){.draw{animation:none;stroke-dashoffset:0}.lab,.ann{animation:none;opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="370" rx="14"/>
+  <text class="h" x="28" y="40">Measure impact against a comparison group</text><text class="sub" x="28" y="62">Staff-hours per day chasing incomplete requests. Illustrative numbers.</text><line class="grid" x1="80" y1="290" x2="700" y2="290"/><text class="sub" x="72" y="294" text-anchor="end">0</text><line class="grid" x1="80" y1="222" x2="700" y2="222"/><text class="sub" x="72" y="226" text-anchor="end">20</text><line class="grid" x1="80" y1="154" x2="700" y2="154"/><text class="sub" x="72" y="158" text-anchor="end">40</text><line class="grid" x1="80" y1="86" x2="700" y2="86"/><text class="sub" x="72" y="90" text-anchor="end">60</text><text class="sub" x="90" y="312" text-anchor="middle">-2</text><text class="sub" x="150" y="312" text-anchor="middle">-1</text><text class="sub" x="210" y="312" text-anchor="middle">0</text><text class="sub" x="270" y="312" text-anchor="middle">1</text><text class="sub" x="330" y="312" text-anchor="middle">2</text><text class="sub" x="390" y="312" text-anchor="middle">3</text><text class="sub" x="450" y="312" text-anchor="middle">4</text><text class="sub" x="510" y="312" text-anchor="middle">5</text><text class="sub" x="570" y="312" text-anchor="middle">6</text><text class="sub" x="630" y="312" text-anchor="middle">7</text><text class="sub" x="690" y="312" text-anchor="middle">8</text><text class="sub" x="700" y="330" text-anchor="end">week</text><line class="ln dash" x1="210" y1="82" x2="210" y2="290"/><text class="sub" x="216" y="94">pilot starts</text><path class="lnp draw" d="M 90 120.0 L 150 120.0 L 210 120.0 L 270 123.4 L 330 126.8 L 390 130.2 L 450 133.6 L 510 133.6 L 570 137.0 L 630 137.0 L 690 140.4" pathLength="100"/><path class="lnt draw" d="M 90 120.0 L 150 120.0 L 210 120.0 L 270 126.8 L 330 140.4 L 390 154.0 L 450 167.6 L 510 177.8 L 570 184.6 L 630 191.4 L 690 194.8" pathLength="100"/><g class="lab"><text class="teat" x="570" y="206.6" text-anchor="middle" style="font-size:13px">pilot group → 28</text><text class="prit" x="570" y="123.6" text-anchor="middle" style="font-size:13px">comparison group → 44</text></g><g class="ann"><rect class="box" x="140" y="212" width="302" height="76" rx="8"/><text class="sm" x="154" y="234">Naive before/after: 50 → 28 = −22</text><text class="sm" x="154" y="254">Comparison drifted: 50 → 44 = −6</text><text class="teat" x="154" y="278" style="font-size:15px">Effect ≈ −22 − (−6) = −16 h/day</text></g><text class="sm" x="28" y="352">Without the comparison group, a quieter month would be credited to the tool.</text>
+</svg>
