@@ -49,6 +49,9 @@ flowchart LR
 ```
 *Notice that nothing is silently dropped. Breaking drift stops early; bad rows are kept with a reason; table-level failures hold back publishing so users see stale-but-right data instead of fresh-but-wrong.*
 
+![Checks on arrival, after transform and at output, each with its failure action: breaking drift stops, bad rows go to quarantine, a failed reconciliation blocks publishing](images/04-quality-checkpoints.svg){ loading=lazy }
+*Stale-but-right beats fresh-but-wrong.*
+
 **Block or warn?** Block when the error would produce a wrong decision (duplicate keys inflating revenue, missing a whole day). Warn when the impact is limited and visible (a few rows quarantined, a new optional column). Write the rule down with the customer.
 
 ### Data contracts
@@ -71,6 +74,9 @@ The safest structural defence is **schema-on-read in the raw layer**: land the p
 ### Idempotency
 
 Retries, reruns and backfills all repeat work. An idempotent load makes repetition harmless. The general principle is covered in [idempotency and idempotency keys](../distributed-systems/04-idempotency-and-idempotency-keys.md); for loads the options are:
+
+![Animation: a retried append load duplicates Tuesday's three rows into six, while a delete-and-insert of the day's partition in one transaction leaves the same three rows](images/04-idempotent-load.svg){ loading=lazy }
+*The trust test: run it twice and compare.*
 
 | Pattern | How | Good for | Watch out |
 |---|---|---|---|

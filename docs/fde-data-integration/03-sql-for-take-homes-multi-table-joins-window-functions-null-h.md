@@ -57,6 +57,9 @@ flowchart LR
 ```
 *Notice the two child tables are independent of each other. Any time a query touches two one-to-many paths from the same parent, aggregate each path first.*
 
+![Animation: joining a member's 2 fills and 3 prescriptions first gives 6 rows and a doubled total; aggregating each child to member grain first gives 1 correct row](images/03-join-fan-out.svg){ loading=lazy }
+*Two one-to-many paths from one parent: aggregate each before you join.*
+
 ### NULL semantics you will be tested on
 
 | Expression | Result | Why it bites |
@@ -69,6 +72,9 @@ flowchart LR
 | `x NOT IN (subquery with a NULL)` | Never true | Use `NOT EXISTS` |
 | `ORDER BY email` (ascending) | NULLs last in PostgreSQL | Use `NULLS FIRST/LAST` explicitly |
 | `LEFT JOIN b ... WHERE b.status = 'PAID'` | Drops unmatched rows | Put the filter in `ON` |
+
+![Five NULL traps with their surprising results and safe rewrites: NULL equality, NOT IN with a NULL, a WHERE filter after a LEFT JOIN, COUNT star after a LEFT JOIN, and AVG skipping NULLs](images/03-null-traps.svg){ loading=lazy }
+*Each red cell is a correct-looking query that returns the wrong answer.*
 
 ### Window functions: the parts that trip people
 

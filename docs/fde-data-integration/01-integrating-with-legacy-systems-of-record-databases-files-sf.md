@@ -55,6 +55,9 @@ flowchart LR
 ```
 *Notice every path ends in the same raw landing zone. Patterns differ in how they read; everything after landing is shared and replayable.*
 
+![Four integration patterns from least to most invasive, files, APIs, database pulls and log-based CDC, with freshness, delete handling and source load for each, all landing raw in one zone](images/01-integration-patterns.svg){ loading=lazy }
+*Further right means fresher data and more access to negotiate.*
+
 | Pattern | Freshness | Sees deletes? | Load on source | Typical blocker | Use when |
 |---|---|---|---|---|---|
 | Files / SFTP | Hours to daily | Only via full snapshots or delete files | None | Partial files, re-sent files, format changes | Vendor or mainframe exports; customer won't open DB access |
@@ -112,6 +115,9 @@ sequenceDiagram
     Note over PG,DZ: if the connector stops, the slot keeps all WAL from the last confirmed LSN
 ```
 *Notice the last step: the slot only advances when Debezium confirms. A connector that is down for a weekend can fill the customer's disk. That is the operational risk you must raise with the DBA.*
+
+![Animation: after a CDC connector crashes on Friday evening, retained WAL for its replication slot grows over the weekend until the customer's database disk fills on Monday morning](images/01-slot-disk.svg){ loading=lazy }
+*Agree the slot-lag alert and the WAL cap with the DBA before go-live.*
 
 Key facts to know for PostgreSQL:
 

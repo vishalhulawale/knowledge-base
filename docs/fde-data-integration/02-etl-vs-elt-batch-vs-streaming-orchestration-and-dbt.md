@@ -33,6 +33,9 @@ flowchart LR
 ```
 *Notice the dashed arrow: in ELT the raw copy lives next to the models, so a logic fix is a rerun, not a re-extract.*
 
+![ETL transforms in a separate engine before loading; ELT loads raw data first and transforms with SQL in the warehouse, so a logic fix is a rerun from raw](images/02-etl-vs-elt.svg){ loading=lazy }
+*The dashed arrow is the replay you get for free with ELT.*
+
 | Aspect | ETL | ELT |
 |---|---|---|
 | Where transforms run | Separate engine before the target | Inside the warehouse / lakehouse |
@@ -86,6 +89,9 @@ flowchart TB
     end
 ```
 *Notice what the boxes are. In Airflow they are steps you run; in Dagster they are tables you want to exist, so "which partitions of clean_fills are missing or stale?" is a built-in question.*
+
+![An Airflow DAG of four task steps beside Dagster assets raw_fills, clean_fills and member_spend with a grid of daily partitions, one of them failed](images/02-airflow-vs-dagster.svg){ loading=lazy }
+*Steps you run versus tables you want to exist.*
 
 | | Airflow 3.x | Dagster |
 |---|---|---|

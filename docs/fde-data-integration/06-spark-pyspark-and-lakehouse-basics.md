@@ -34,6 +34,9 @@ flowchart TB
 ```
 *Notice the shuffle arrows. Everything inside one executor is cheap; anything that crosses them (joins, groupBy, distinct) writes to disk and the network.*
 
+![Animation: three executors hold mixed keys A, B and C; groupBy sends rows across disk and network so each executor ends up with one key](images/06-shuffle.svg){ loading=lazy }
+*Everything that crosses between executors is the expensive part.*
+
 - **Lazy evaluation:** `filter`, `select`, `join`, `groupBy` build a plan. Nothing runs until an action.
 - **Job → stages → tasks:** each action is a job; stages are split at shuffle boundaries; each stage runs one task per partition.
 - **Narrow vs wide:** `filter`, `withColumn`, `select` are narrow (each output partition depends on one input partition). `groupBy`, `join`, `distinct`, `orderBy` are wide (shuffle).
@@ -79,6 +82,9 @@ flowchart LR
     R["Reader at version 1<br/>time travel"] --> LOG
 ```
 *Notice that readers go through the log, not the folder. A commit is one atomic log entry, which is what gives ACID writes on object storage and lets you read any earlier version until old files are vacuumed.*
+
+![A _delta_log folder with three commits beside the Parquet data files; a MERGE removed part-b, which only version 0 still reads until VACUUM](images/06-delta-log.svg){ loading=lazy }
+*The log, not the folder, decides what the table contains.*
 
 | Feature | What it gives you |
 |---|---|

@@ -91,6 +91,9 @@ flowchart LR
 ```
 *Notice the review queue. In healthcare and banking a wrong merge (two patients become one) is worse than a missed match, so medium-confidence pairs go to a person.*
 
+![A member appears as M1 in claims and C9 in the CRM; a crosswalk maps both to E-1001 and survivorship rules pick each attribute from the best source](images/05-golden-record.svg){ loading=lazy }
+*One rule per attribute, and NULL never wins.*
+
 Matching approaches, from simple to sophisticated: deterministic rules on strong identifiers (national ID, MRN plus DOB); normalised exact matches (email, phone); fuzzy matching (Jaro-Winkler on names, address normalisation); probabilistic or ML scoring (Fellegi-Sunter, libraries such as Splink). Start deterministic, measure precision with the business, add fuzziness only where it pays.
 
 ### The Foundry Ontology, in integration terms
@@ -114,6 +117,9 @@ Foundry's **Ontology SDK (OSDK)** generates typed clients (TypeScript first) fro
 ### Metrics defined once: dbt MetricFlow
 
 MetricFlow builds a semantic graph from YAML: **semantic models** (one per dbt model) declare **entities** (join keys: primary, foreign, unique, natural), **dimensions** (categorical or time) and **measures** (aggregations); **metrics** (simple, ratio, cumulative, derived) build on them. MetricFlow then generates the SQL, including joins via entities, for any requested metric and dimension combination.
+
+![Before: two dashboards with their own SQL report 41,200 and 57,900 active members; after: one metric definition feeds finance, ops and an agent tool, which all show 38,750](images/05-metrics-once.svg){ loading=lazy }
+*Define it once, reference it everywhere.*
 
 ## In practice: code & configuration
 
