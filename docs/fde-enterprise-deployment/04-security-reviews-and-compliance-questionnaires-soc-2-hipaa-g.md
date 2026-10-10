@@ -53,6 +53,9 @@ Ways to make it faster:
 - **Scope it to the deployment model.** In a customer-VPC install many controls (network, storage encryption, logging, backups, access) are the customer's; say so explicitly. In hosted mode, they're yours. The answers differ (see [Deployment models](01-deployment-models-hosted-api-vs-customer-vpc-vs-on-prem-and.md)).
 - **Hold a live session** with their reviewers to walk through the data flow. One hour of conversation often replaces three rounds of written follow-ups.
 
+![Animation: a time cursor sweeps 16 illustrative weeks for two scenarios. When the review starts after the demo, the six-week pilot finishes and waits while the review runs from week 6 to week 14, so go-live is around week 14. When the review starts in week one it runs alongside the pilot and go-live is around week 8.](images/04-review-timeline.svg){ loading=lazy }
+*The review takes just as long in both rows; starting it in parallel is what removes the wait.*
+
 ### Standard questionnaires
 
 | Questionnaire | From | Notes |
@@ -80,6 +83,9 @@ Question counts vary by version and source; check the current edition before quo
 - **The chain must be complete.** If your hosted product calls a model API, the model provider must have signed a BAA with you **for the specific endpoints and features you use**: major providers limit BAA coverage to eligible services (for example, AWS lists HIPAA-eligible services, and model providers scope BAAs to particular APIs and zero-retention settings). In a customer-VPC deployment using the customer's own Bedrock or Azure OpenAI, the customer's BAA with their cloud provider covers inference, which is a strong argument for that model.
 - **No certification:** HHS does not certify vendors. Say "we sign BAAs and operate controls mapped to the Security Rule, evidenced in our SOC 2 Type II", never "HIPAA certified".
 - **Rule changes:** HHS proposed a major Security Rule update in January 2025 (mandatory MFA, encryption, asset inventories); as of October 2026 the regulatory agenda reportedly moved final action to around July 2027 *[verify]*. The current rule remains in force.
+
+![Two panels. Hosted product: the covered entity signs a BAA with your product, the business associate, which signs a BAA with its cloud or model provider for eligible APIs only; a new fallback model or embeddings API without a BAA breaks the chain. Customer-VPC deployment: your software runs in the payer's cloud account beside Bedrock or Azure OpenAI, and inference sits under the payer's own BAA with its cloud provider. Terms include purpose-limited use, Security Rule safeguards, breach reporting within 60 days, flow-down and return or destruction of PHI.](images/04-baa-chain.svg){ loading=lazy }
+*The red box is the common way the chain breaks after approval: a new provider added without its own BAA.*
 
 ### GDPR, DPAs and transfers
 

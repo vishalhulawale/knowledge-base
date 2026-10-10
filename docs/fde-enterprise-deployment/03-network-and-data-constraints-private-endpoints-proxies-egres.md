@@ -72,6 +72,9 @@ Three points interviewers probe:
 - **DNS is where it breaks.** Hybrid networks forward DNS from on-prem to the cloud; if the private zone isn't linked or forwarded, clients resolve the public IP and the firewall drops them. `nslookup` from inside the pod is the first debugging step.
 - **Vendor-hosted APIs can be private too.** A SaaS vendor can publish a PrivateLink *endpoint service* (behind a Network Load Balancer) so the customer reaches the hosted API without internet. Many AI vendors and data platforms offer this for enterprise tiers.
 
+![Animation: two rows for a pod resolving bedrock-runtime.eu-central-1.amazonaws.com. Without the private zone linked, DNS returns a public IP, there is no internet route, the firewall drops the traffic and the connection times out. With private DNS on the endpoint and the zone linked, the name resolves to the endpoint's private IP, the endpoint security group and policy allow the app, and Bedrock responds without NAT. IPs are illustrative.](images/03-dns-two-answers.svg){ loading=lazy }
+*Watch the second column: the same hostname gets a public or a private answer, and everything after it follows from that.*
+
 ### Corporate proxies
 
 Most enterprises force outbound HTTP(S) through an explicit proxy. Your application must:
@@ -109,6 +112,9 @@ Build it by running the product in a test namespace with all egress denied and l
     - **Google Vertex AI / Gemini Enterprise Agent Platform:** regional endpoints versus the `global` endpoint; check the generative AI security-controls table per model for data-residency support.
 3. **In access:** who can see the data: your support engineers (from which countries?), the model provider (abuse monitoring), sub-processors. Remote support from outside the region can be a transfer under GDPR.
 4. **In transit:** routes stay on the provider's backbone with private endpoints, but "processing in region" is still a contractual statement, not a network one.
+
+![Inside a dashed approved-region boundary: stored data (databases, vector index, object storage, logs and traces, backups, eval datasets), processing (Bedrock geographic eu. profile, Azure Data Zone EU or Regional, Vertex AI regional endpoint) and access (in-region support, customer-approved recorded sessions, named sub-processors). Red arrows show copies that leave: traces with full prompts to a US observability SaaS, production samples on a laptop, a global inference profile, and support access from outside the EU.](images/03-residency-copies.svg){ loading=lazy }
+*The leaks on the right are side copies (traces, eval samples, support access), not the main database.*
 
 ## In practice: code & configuration
 

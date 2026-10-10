@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Security review start date</title>
+  <desc id="d">Animation: a time cursor sweeps across 16 weeks for two scenarios with the same pilot and review lengths. When the security review starts after the demo, the six-week pilot finishes and then waits while the review runs from week 6 to week 14, so go-live is around week 14. When the review starts in week one it runs alongside the pilot and finishes at week 8, so go-live is around week 8. Weeks are illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .g{transform-box:fill-box;transform-origin:0 50%;animation:15s infinite linear}
+    .k{opacity:0;animation:15s infinite linear}
+    .cur{animation:cur 15s infinite linear}
+    @keyframes cur{0%,5%{transform:translateX(0)}80%,100%{transform:translateX(576px)}}
+    @keyframes g0{0%,5.00%{transform:scaleX(0)}33.12%,100%{transform:scaleX(1)}}.g0{animation-name:g0}
+    @keyframes g1{0%,33.12%{transform:scaleX(0)}70.62%,100%{transform:scaleX(1)}}.g1{animation-name:g1}
+    @keyframes wait{0%,33.115%{opacity:0}33.125%,96.99%{opacity:1}97%,100%{opacity:0}}.wait{animation-name:wait}
+    @keyframes live0{0%,70.615%{opacity:0}70.625%,96.99%{opacity:1}97%,100%{opacity:0}}.live0{animation-name:live0}
+    @keyframes g2{0%,5.00%{transform:scaleX(0)}33.12%,100%{transform:scaleX(1)}}.g2{animation-name:g2}
+    @keyframes g3{0%,5.00%{transform:scaleX(0)}42.50%,100%{transform:scaleX(1)}}.g3{animation-name:g3}
+    @keyframes live1{0%,42.49%{opacity:0}42.5%,96.99%{opacity:1}97%,100%{opacity:0}}.live1{animation-name:live1}
+    @media (prefers-reduced-motion: reduce){.g,.k{animation:none;opacity:1;transform:none}.cur{animation:none;opacity:0}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">Start the security review in week one</text><text class="sub" x="28" y="62">Same pilot, same review length; only the start date differs. Weeks are illustrative.</text><line class="grid" x1="180" y1="96" x2="180" y2="290"/><text class="sub" x="180" y="308" text-anchor="middle">wk 0</text><line class="grid" x1="252" y1="96" x2="252" y2="290"/><text class="sub" x="252" y="308" text-anchor="middle">wk 2</text><line class="grid" x1="324" y1="96" x2="324" y2="290"/><text class="sub" x="324" y="308" text-anchor="middle">wk 4</text><line class="grid" x1="396" y1="96" x2="396" y2="290"/><text class="sub" x="396" y="308" text-anchor="middle">wk 6</text><line class="grid" x1="468" y1="96" x2="468" y2="290"/><text class="sub" x="468" y="308" text-anchor="middle">wk 8</text><line class="grid" x1="540" y1="96" x2="540" y2="290"/><text class="sub" x="540" y="308" text-anchor="middle">wk 10</text><line class="grid" x1="612" y1="96" x2="612" y2="290"/><text class="sub" x="612" y="308" text-anchor="middle">wk 12</text><line class="grid" x1="684" y1="96" x2="684" y2="290"/><text class="sub" x="684" y="308" text-anchor="middle">wk 14</text><line class="grid" x1="756" y1="96" x2="756" y2="290"/><text class="sub" x="756" y="308" text-anchor="middle">wk 16</text><text class="lbl" x="28" y="100">Review starts after the demo</text><text class="sm" x="28" y="128">Pilot</text><rect class="bm" x="180" y="112" width="216" height="22" rx="4"/><rect class="pri g g0" x="180" y="112" width="216" height="22" rx="4"/><text class="sm" x="28" y="158">Security review</text><rect class="bm" x="396" y="142" width="288" height="22" rx="4"/><rect class="wrnf g g1" x="396" y="142" width="288" height="22" rx="4"/><g class="k wait"><line class="lnb dash" x1="402" y1="123" x2="684" y2="123"/><text class="badt" x="406" y="117" style="font-size:12px">pilot done, waiting for approval</text></g><g class="k live0"><line class="lno" x1="684" y1="106" x2="684" y2="172"/><circle class="okf" cx="684" cy="106" r="5"/><text class="okt" x="674" y="100" text-anchor="end" style="font-size:13px">go-live ≈ week 14</text></g><text class="lbl" x="28" y="200">Review starts in week one</text><text class="sm" x="28" y="228">Pilot</text><rect class="bm" x="180" y="212" width="216" height="22" rx="4"/><rect class="pri g g2" x="180" y="212" width="216" height="22" rx="4"/><text class="sm" x="28" y="258">Security review</text><rect class="bm" x="180" y="242" width="288" height="22" rx="4"/><rect class="wrnf g g3" x="180" y="242" width="288" height="22" rx="4"/><g class="k live1"><line class="lno" x1="468" y1="206" x2="468" y2="272"/><circle class="okf" cx="468" cy="206" r="5"/><text class="okt" x="458" y="200" text-anchor="end" style="font-size:13px">go-live ≈ week 8</text></g><g class="cur"><line class="lnp" x1="180" y1="88" x2="180" y2="292" stroke-dasharray="3 3"/></g><text class="sm" x="28" y="340">Ask for their process, questionnaire and reviewer names on day one; send the trust package before</text><text class="sm" x="28" y="359">they ask; one live data-flow session often replaces three rounds of written follow-ups.</text>
+</svg>
