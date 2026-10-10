@@ -453,6 +453,13 @@ nav:
           - "Field Feedback to Product & Research; Codifying Repeatable Deployment Patterns": fde-customer-discovery/07-field-feedback-to-product-and-research-codifying-repeatable.md
       - "Practical Coding for FDE":
           - Overview: fde-practical-coding/index.md
+          - "Practical Coding Round Format: Narrating, Edge Cases First, Using AI Tools in the Round": fde-practical-coding/01-practical-coding-round-format-narrating-edge-cases-first-usi.md
+          - "Third-Party API Integration: Auth, Pagination, Rate Limits, Retries with Backoff": fde-practical-coding/02-third-party-api-integration-auth-pagination-rate-limits-retr.md
+          - "Webhooks: Signature Verification, Idempotent Consumers, Duplicate & Out-of-Order Delivery": fde-practical-coding/03-webhooks-signature-verification-idempotent-consumers-duplica.md
+          - "Debugging & Reading an Unfamiliar Codebase Fast": fde-practical-coding/04-debugging-and-reading-an-unfamiliar-codebase-fast.md
+          - "Refactoring & Extending Messy Code Without Breaking Its Tests": fde-practical-coding/05-refactoring-and-extending-messy-code-without-breaking-its-te.md
+          - "Python Fluency for FDE: Scripting, Data Wrangling, FastAPI Services": fde-practical-coding/06-python-fluency-for-fde-scripting-data-wrangling-fastapi-serv.md
+          - "Rapid Full-Stack Prototyping: TypeScript Service plus React UI for a Demo": fde-practical-coding/07-rapid-full-stack-prototyping-typescript-service-plus-react-u.md
       - "Data Integration & Pipelines":
           - Overview: fde-data-integration/index.md
       - "Applied LLM Engineering for Deployments":

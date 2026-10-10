@@ -2288,43 +2288,43 @@
           "title": "Practical coding round format: narrating, edge cases first, using AI tools in the round",
           "slug": "01-practical-coding-round-format-narrating-edge-cases-first-usi",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Third-party API integration: auth, pagination, rate limits, retries with backoff",
           "slug": "02-third-party-api-integration-auth-pagination-rate-limits-retr",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Webhooks: signature verification, idempotent consumers, duplicate & out-of-order delivery",
           "slug": "03-webhooks-signature-verification-idempotent-consumers-duplica",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Debugging & reading an unfamiliar codebase fast",
           "slug": "04-debugging-and-reading-an-unfamiliar-codebase-fast",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Refactoring & extending messy code without breaking its tests",
           "slug": "05-refactoring-and-extending-messy-code-without-breaking-its-te",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Python fluency for FDE: scripting, data wrangling, FastAPI services",
           "slug": "06-python-fluency-for-fde-scripting-data-wrangling-fastapi-serv",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Rapid full-stack prototyping: TypeScript service plus React UI for a demo",
           "slug": "07-rapid-full-stack-prototyping-typescript-service-plus-react-u",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
