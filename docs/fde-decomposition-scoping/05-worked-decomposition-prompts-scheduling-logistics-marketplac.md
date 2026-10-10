@@ -46,9 +46,15 @@ flowchart TD
 
 A **hard constraint** makes an option invalid (nurse lacks ICU skill, van over capacity, room double-booked). A **soft preference** makes a valid option better or worse (same zone, higher rating, shorter distance). Filter first, then rank what's left. Putting a hard constraint into a score (a big negative weight) means it can be outweighed, which is how systems end up sending an unqualified nurse to an ICU shift.
 
+![Forty nurses pass a yes-or-no filter for licence, availability and hours cap, leaving nine; a soft score on distance, preference and fairness ranks the top three offers](images/05-filter-then-score.svg){ loading=lazy }
+*Red stage removes, teal stage ranks; never the other way round.*
+
 ## In practice: code & configuration
 
 The most common bug across scheduling, logistics windows and dashboards is **interval logic**. Get it right once and reuse it.
+
+![Animation: appointment B slides past a fixed 10:00-11:00 appointment A through five positions; both comparisons are evaluated each time, and the back-to-back 11:00-12:00 slot does not overlap](images/05-interval-overlap.svg){ loading=lazy }
+*Watch the last position: touching intervals don't overlap with half-open ranges.*
 
 === "❌ Common mistake"
     ```python

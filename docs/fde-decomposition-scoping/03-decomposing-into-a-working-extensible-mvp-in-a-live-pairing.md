@@ -66,6 +66,9 @@ flowchart TB
 ```
 *Notice that the vertical path shows the interviewer a working behaviour after each slice. The horizontal path only shows value when the last layer is done, which may be never in 45 minutes.*
 
+![Animation: two grids fill one cell at a time; horizontal layers finish data and logic but have no output when time runs out, while vertical slices finish two whole features that can be demoed](images/03-slices-vs-layers.svg){ loading=lazy }
+*Same six cells of effort: zero demos versus two.*
+
 ### Where to put seams (and where not to)
 
 Michael Feathers defines a **seam** as a place where you can change behaviour without editing in that place. In a decomposition round, three seams cover most twists:
@@ -255,6 +258,9 @@ classDiagram
     DaysOfCoverPolicy ..> ReorderSuggestion : creates
 ```
 *Notice there are exactly two seams. A CSV or ERP source and an ML forecast policy each become one new class; `reorder_report` never changes.*
+
+![reorder_report in the centre fed by two Protocol seams, StockSource and ReorderPolicy, with current and future implementations, and an output seam below](images/03-seams.svg){ loading=lazy }
+*Dashed boxes are where the interviewer's twists will land.*
 
 ### Typical twists and where they land
 

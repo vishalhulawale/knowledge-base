@@ -72,6 +72,9 @@ stateDiagram-v2
 ```
 *Notice that "Cleaning" exists because the real world has it: a discharged bed is not free. Missing states like this are a classic sign of a model built from a database schema rather than from users' language. Each arrow is an action that should emit an event.*
 
+![Animation: bed 4B moves from Available to Occupied to Cleaning and back to Available; each action appends an event to a log, and turnaround time is derived from two events](images/02-bed-lifecycle.svg){ loading=lazy }
+*State answers 'is it free now?'; the growing log answers everything else.*
+
 | Approach | Strength | Weakness | Use when |
 |---|---|---|---|
 | State only (current status fields) | Simple, fast reads | No history, metrics impossible, no audit | Throwaway prototypes |
@@ -85,6 +88,9 @@ In a 45-minute round, **state plus an append-only event list** is the sweet spot
 - **Grain:** one row per what? A `BedRequest` is one per admission request, not one per patient. Getting grain wrong breaks metrics (counting patients when you meant requests).
 - **Identity across systems:** the EHR calls it MRN, the bed board calls it `pt_id`. Say how you'd map them (a crosswalk table, a master patient index) and that this is usually the hardest part of real deployments; see [data integration](../fde-data-integration/index.md).
 - **Time:** store timestamps with time zones; decide whether "requested_at" is when the doctor ordered or when the request reached the bed desk. Definitions matter for metrics.
+
+![Three systems hold the same patient under different IDs (MRN, pt_id, billing account); a crosswalk table maps them to one patient_key that feeds a single Patient object](images/02-crosswalk.svg){ loading=lazy }
+*Join through IDs in the crosswalk, never through names.*
 
 ## In practice: code & configuration
 

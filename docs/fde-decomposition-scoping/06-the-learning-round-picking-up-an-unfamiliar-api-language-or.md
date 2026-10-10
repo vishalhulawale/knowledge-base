@@ -34,6 +34,9 @@ flowchart LR
 ```
 *Notice that building only happens on confirmed facts. A surprise sends you back to orienting, which is cheap; building on a wrong assumption is expensive.*
 
+![Animation: the loop Orient, Hypothesise, Probe, Build, Confirm is highlighted step by step for a paginated API, with a dashed surprise arrow from Probe back to Orient](images/06-learning-loop.svg){ loading=lazy }
+*The dashed arrow is cheap; building on a guess is not.*
+
 ### Step 1: Orient (3–5 minutes, out loud)
 
 Don't read docs top to bottom. Find their **shape**. The Diátaxis framework (Daniele Procida) splits documentation into four kinds; knowing which you're looking at tells you how to use it:
@@ -127,6 +130,9 @@ The [Python topic](../python/index.md) and [core Java](../core-java/index.md) pa
 ### Learning tests: pin down what the library actually does
 
 Clean Code's chapter on boundaries describes **learning tests** (credited to Jim Newkirk): small tests you write to explore a third-party API, which then keep verifying your understanding when the library is upgraded. In a learning round they're also visible proof of how you learn.
+
+![Input a, a, b, a: the SQL-style expectation a 3, b 1 is struck through; groupby actually yields a 2, b 1, a 1, pinned by a one-line learning test, and sorting first fixes it](images/06-groupby-surprise.svg){ loading=lazy }
+*One assert turns a silent bug into a visible fact about the library.*
 
 === "❌ Common mistake"
     ```python

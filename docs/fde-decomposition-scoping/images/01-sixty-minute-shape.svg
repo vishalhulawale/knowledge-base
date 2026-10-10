@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 306" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Sixty-minute decomposition round</title>
+  <desc id="d">Animation: a playhead moves along a 60-minute timeline split into five segments: frame (minutes 0 to 8), model (8 to 15), walking skeleton then core logic (15 to 40), the interviewer's twist (40 to 52) and wrap-up (52 to 60). Triangles mark check-ins every 10 minutes. A caption below changes with the playhead: a 6 to 10 line problem frame; types and relationships for the chosen decision; running code with real output; the twist landing as a small change; and a spoken summary of what is cut, risks and next steps.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .ph{animation:play 15s infinite linear}
+    @keyframes play{0%{transform:translateX(0)}96%,100%{transform:translateX(720px)}}
+    .c{opacity:0;animation:15s infinite linear}
+    @keyframes c0{0%,12.79%{opacity:1}12.8%,100%{opacity:0}}.c0{animation-name:c0}
+    @keyframes c1{0%,12.79%{opacity:0}12.8%,23.99%{opacity:1}24%,100%{opacity:0}}.c1{animation-name:c1}
+    @keyframes c2{0%,23.99%{opacity:0}24%,63.99%{opacity:1}64%,100%{opacity:0}}.c2{animation-name:c2}
+    @keyframes c3{0%,63.99%{opacity:0}64%,83.19%{opacity:1}83.2%,100%{opacity:0}}.c3{animation-name:c3}
+    @keyframes c4{0%,83.19%{opacity:0}83.2%,100%{opacity:1}}.c4{animation-name:c4}
+    @media (prefers-reduced-motion: reduce){.ph,.c{animation:none}.ph{transform:translateX(360px)}.c{opacity:0}.c2{opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="304" rx="14"/>
+  <text class="h" x="28" y="40">The 60-minute decomposition round</text><text class="sub" x="28" y="62">Check in with the interviewer about every 10 minutes (triangles).</text><rect class="pri" x="41" y="110" width="94" height="44" rx="6"/><text class="on13" x="88" y="137" text-anchor="middle">Frame</text><rect class="tea" x="137" y="110" width="82" height="44" rx="6"/><text class="on13" x="178" y="137" text-anchor="middle">Model</text><rect class="okf" x="221" y="110" width="298" height="44" rx="6"/><text class="on13" x="370" y="137" text-anchor="middle">Skeleton, then core logic</text><rect class="wrnf" x="521" y="110" width="142" height="44" rx="6"/><text class="on13" x="592" y="137" text-anchor="middle">Twist</text><rect class="mutf" x="665" y="110" width="94" height="44" rx="6"/><text class="on13" x="712" y="137" text-anchor="middle">Wrap-up</text><text class="sub" x="40" y="178" text-anchor="middle">0</text><text class="sub" x="160" y="178" text-anchor="middle">10</text><path class="tea" d="M153,92 L167,92 L160,104 z"/><text class="sub" x="280" y="178" text-anchor="middle">20</text><path class="tea" d="M273,92 L287,92 L280,104 z"/><text class="sub" x="400" y="178" text-anchor="middle">30</text><path class="tea" d="M393,92 L407,92 L400,104 z"/><text class="sub" x="520" y="178" text-anchor="middle">40</text><path class="tea" d="M513,92 L527,92 L520,104 z"/><text class="sub" x="640" y="178" text-anchor="middle">50</text><path class="tea" d="M633,92 L647,92 L640,104 z"/><text class="sub" x="760" y="178" text-anchor="middle">60</text><text class="sub" x="760" y="196" text-anchor="end">minutes</text><g class="ph"><line class="lnb" x1="40" y1="100" x2="40" y2="164" style="stroke-width:3"/></g><g class="c c0"><rect class="bm" x="28" y="214" width="744" height="40" rx="8"/><text class="sm" x="44" y="239">Minutes 0–8: U-D-D-C-S questions; a 6–10 line problem frame and assumptions on screen</text></g><g class="c c1"><rect class="bm" x="28" y="214" width="744" height="40" rx="8"/><text class="sm" x="44" y="239">Minutes 8–15: object model for the chosen decision: types and relationships</text></g><g class="c c2"><rect class="bm" x="28" y="214" width="744" height="40" rx="8"/><text class="sm" x="44" y="239">Minutes 15–40: walking skeleton, then the core logic, running with real output</text></g><g class="c c3"><rect class="bm" x="28" y="214" width="744" height="40" rx="8"/><text class="sm" x="44" y="239">Minutes 40–52: the interviewer's twist lands as a small change, not a rewrite</text></g><g class="c c4"><rect class="bm" x="28" y="214" width="744" height="40" rx="8"/><text class="sm" x="44" y="239">Minutes 52–60: spoken summary: what's cut, risks, next steps</text></g><text class="sub" x="28" y="286">If framing runs past ~10 minutes, commit anyway; if nothing runs by minute 30, simplify.</text>
+</svg>

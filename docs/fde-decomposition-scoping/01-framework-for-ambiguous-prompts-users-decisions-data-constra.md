@@ -37,6 +37,9 @@ flowchart LR
 ```
 *Notice that the arrow runs from users to decisions to data, not from data to features. The dashed loop is normal: if the success metric needs data nobody has, you revisit the data lens instead of pretending.*
 
+![Five boxes Users, Decisions, Data, Constraints, Success, with the question and the output for each; Decisions is highlighted as the hinge and a dashed arrow loops from Success back to Data](images/01-uddcs-chain.svg){ loading=lazy }
+*Every later line of code should trace back to the highlighted box.*
+
 **1. Users: who acts on the output?**
 Name 2–4 user types, then pick one primary user for v1. In a 911 prompt the candidates are call-takers, dispatchers, paramedics, district commanders and the city budget office. They make very different decisions. Ask: "I see dispatchers and commanders as the main users. Dispatchers make the minute-by-minute call. Shall I focus there?"
 
@@ -98,6 +101,9 @@ Then say: "If travel is 70% of the time, I'll focus on unit posting first. Call 
 | 52–60 | Wrap-up: what's cut, risks, next steps | Spoken summary |
 
 The [prioritisation page](04-prioritisation-trade-off-calls-and-cutting-scope-under-time.md) covers how to cut when this slips.
+
+![Animation: a playhead moves across a 60-minute bar split into frame, model, skeleton and core logic, twist and wrap-up, with check-ins every 10 minutes and the expected on-screen output for each phase](images/01-sixty-minute-shape.svg){ loading=lazy }
+*The green block is the longest: most of the hour is running code, not framing.*
 
 ### The interviewer is a stakeholder, not an examiner
 

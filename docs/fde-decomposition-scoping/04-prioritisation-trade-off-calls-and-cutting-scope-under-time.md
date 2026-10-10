@@ -34,6 +34,9 @@ flowchart LR
 ```
 *Notice that in an interview the time box is absolute. The only levers left are scope and depth, so the skill is choosing which to pull.*
 
+![Traditional triangle with fixed features versus the inverted time-boxed triangle with fixed time, cost and quality, above a MoSCoW bar with Must at most 60 percent of effort](images/04-fix-time-flex-scope.svg){ loading=lazy }
+*Only the bottom vertex of the right triangle moves; that's your scope.*
+
 The Agile Business Consortium's DSDM guidance applies MoSCoW inside each timebox:
 
 | Priority | Meaning | In a 45-minute build | On a 6-week pilot |
@@ -108,6 +111,9 @@ Jeff Bezos' shareholder letters split decisions into **one-way doors** (conseque
 
 - **Two-way doors** (decide in seconds): data structure, store, heuristic, output format, naming.
 - **One-way-ish doors** (ask or think for a minute): the unit of decision (per order vs per route), object identity, who the primary user is. Changing these late means a rewrite.
+
+![Two panels: two-way doors decided in seconds (data structure, store, heuristic, output format, naming) and one-way-ish doors worth a question (unit of decision, object identity, primary user)](images/04-reversibility.svg){ loading=lazy }
+*Spend your clarifying questions on the right-hand panel.*
 
 ### Time checks
 
