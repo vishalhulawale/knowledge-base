@@ -184,3 +184,15 @@ Mock-interview results and revision schedule, updated by the `learn-topic` skill
 | 2026-10-10 | Applied LLM: 06 Guardrails ★ | — (studied, mock skipped) | Confirm: PHI controls you owned on OptumRx (masking, log scrubbing, audits); how audit logging worked | 2026-10-11 |
 | 2026-10-10 | Applied LLM: 07 Observability & cost ★ | — (studied, mock skipped) | Confirm: Redis hit-rate/latency numbers; SLOs, p95 targets and monitoring stack on Meteor | 2026-10-11 |
 | 2026-10-10 | Applied LLM: 08 Prompting vs RAG vs fine-tuning | — (studied, mock skipped) | Confirm: whether you trained/tuned AWS Personalize or only integrated campaigns | 2026-10-11 |
+| 2026-10-10 | FDE System Design: 01 Framework | — (studied, mock skipped) | Confirm: a Meteor design decision forced by PHI or PingFederate/AD. Practise: 7-step spine timed at 45 min | 2026-10-11 |
+| 2026-10-10 | FDE System Design: 02 Knowledge assistant | — (studied, mock skipped) | Confirm: whether Data Asset Explorer trimmed search results by entitlement. Practise: ACL pre-filter + removal window answer | 2026-10-11 |
+| 2026-10-10 | FDE System Design: 03 Agentic workflow + approval ★ | — (studied, mock skipped) | Confirm: Kafka flows, retry stages, DLQ review; any human approval step on Meteor; CCKM gated key deletion | 2026-10-11 |
+| 2026-10-10 | FDE System Design: 04 Document extraction | — (studied, mock skipped) | Confirm: ConvergeHealth S3→SQS/SNS→Lambda shape; any OCR/document AI exposure. Practise: STP vs error curve | 2026-10-11 |
+| 2026-10-10 | FDE System Design: 05 Support agent + handoff | — (studied, mock skipped) | Confirm: how Meteor members reached support; member operations exposed by the GraphQL layer | 2026-10-11 |
+| 2026-10-10 | FDE System Design: 06 Operational dashboard ★ | — (studied, mock skipped) | Confirm: 5 upstream domains and ID reconciliation; Redis TTLs per data type; consumer idempotency key | 2026-10-11 |
+| 2026-10-10 | FDE System Design: 07 Defending trade-offs | — (studied, mock skipped) | Confirm: a build-vs-buy decision you were part of; customer reasons for HSM-backed keys at CCKM | 2026-10-11 |
+| 2026-10-10 | FDE Behavioral: 01 Story bank ★ | — (studied, mock skipped) | Fill: 6–8 stories across the 5 types; conflict column needs a real story (or say it's internal-customer) | 2026-10-11 |
+| 2026-10-10 | FDE Behavioral: 02 Owning an outcome ★ | — (studied, mock skipped) | Confirm: user-facing outcome + number for the GraphQL service; a blocker you cleared; after-go-live iteration | 2026-10-11 |
+| 2026-10-10 | FDE Behavioral: 03 Recovering trust ★ | — (studied, mock skipped) | Confirm: one real incident (timing of first message, your contributing cause) and one at-risk delivery date | 2026-10-11 |
+| 2026-10-10 | FDE Behavioral: 04 Take-home | — (studied, mock skipped) | Build: reusable take-home skeleton (service + UI + eval harness + Makefile); decide preferred stack | 2026-10-11 |
+| 2026-10-10 | FDE Behavioral: 05 Resume deep dive ★ | — (studied, mock skipped) | Fill every [confirm] in the audit tables; decide which skills to keep, group or drop; rehearse flagship deep dive | 2026-10-11 |
