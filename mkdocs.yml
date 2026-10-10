@@ -400,6 +400,12 @@ nav:
           - "Case Studies: Parking Lot, LRU Cache, Rate Limiter, Elevator, Splitwise, Library System": lld-design-patterns/07-case-studies-parking-lot-lru-cache-rate-limiter-elevator-spl.md
       - "Performance Engineering":
           - Overview: performance-engineering/index.md
+          - "Performance Methodology: Measure, Profile, Fix, Verify": performance-engineering/01-performance-methodology-measure-profile-fix-verify.md
+          - "JVM Profiling (JFR, async-profiler, VisualVM)": performance-engineering/02-jvm-profiling.md
+          - "Memory Leaks & GC Tuning in Practice": performance-engineering/03-memory-leaks-and-gc-tuning-in-practice.md
+          - "Database & Query Performance": performance-engineering/04-database-and-query-performance.md
+          - "Load Testing (JMeter, Gatling, k6) & Capacity Planning": performance-engineering/05-load-testing-and-capacity-planning.md
+          - "Latency: Percentiles & Tail Latency": performance-engineering/06-latency-percentiles-tail-latency.md
       - "Networking & Web Fundamentals":
           - Overview: networking/index.md
   - "Coding (DSA)":

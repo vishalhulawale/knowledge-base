@@ -1630,37 +1630,37 @@
           "title": "Performance methodology: measure, profile, fix, verify",
           "slug": "01-performance-methodology-measure-profile-fix-verify",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "JVM profiling (JFR, async-profiler, VisualVM)",
           "slug": "02-jvm-profiling",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Memory leaks & GC tuning in practice",
           "slug": "03-memory-leaks-and-gc-tuning-in-practice",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Database & query performance",
           "slug": "04-database-and-query-performance",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Load testing (JMeter, Gatling, k6) & capacity planning",
           "slug": "05-load-testing-and-capacity-planning",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Latency: percentiles, tail latency",
           "slug": "06-latency-percentiles-tail-latency",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
