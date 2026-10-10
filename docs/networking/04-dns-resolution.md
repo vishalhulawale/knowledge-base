@@ -19,7 +19,7 @@ Every network call starts with a name. Before ARPANET switched to DNS, every hos
 
 It shows up in interviews in three ways:
 
-- **"What happens when you type a URL"**: DNS is step one; see [the full walk-through](06-what-happens-when-you-type-a-url.md).
+- **"What happens when you type a URL"**: DNS is step one; the full walk-through is the "What happens when you type a URL" page (coming soon).
 - **Failover and load balancing**: blue/green cut-overs, RDS Multi-AZ failover and multi-region active/passive all move traffic by changing DNS answers, and caches decide how fast that really happens.
 - **Debugging**: "it works on my laptop but not in the pod", 5-second latency spikes, a DNS change that "didn't take", a database failover that took 30 minutes for one service. These are DNS caching and resolver-configuration problems.
 

@@ -408,6 +408,11 @@ nav:
           - "Latency: Percentiles & Tail Latency": performance-engineering/06-latency-percentiles-tail-latency.md
       - "Networking & Web Fundamentals":
           - Overview: networking/index.md
+          - "OSI/TCP-IP, TCP vs UDP": networking/01-osi-tcp-ip-tcp-vs-udp.md
+          - "HTTP/1.1 vs HTTP/2 vs HTTP/3": networking/02-http-1-1-vs-http-2-vs-http-3.md
+          - "TLS handshake": networking/03-tls-handshake.md
+          - "DNS Resolution": networking/04-dns-resolution.md
+          - "Load Balancers (L4 vs L7), Reverse Proxies & CDNs": networking/05-load-balancers-reverse-proxies-and-cdns.md
   - "Coding (DSA)":
       - "Data Structures & Algorithms":
           - Overview: dsa/index.md

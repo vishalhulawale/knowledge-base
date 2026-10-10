@@ -1674,31 +1674,31 @@
           "title": "OSI/TCP-IP, TCP vs UDP",
           "slug": "01-osi-tcp-ip-tcp-vs-udp",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "HTTP/1.1 vs HTTP/2 vs HTTP/3",
           "slug": "02-http-1-1-vs-http-2-vs-http-3",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "TLS handshake",
           "slug": "03-tls-handshake",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "DNS resolution",
           "slug": "04-dns-resolution",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Load balancers (L4 vs L7), reverse proxies & CDNs",
           "slug": "05-load-balancers-reverse-proxies-and-cdns",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "\"What happens when you type a URL\"",
