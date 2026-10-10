@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Keep-alive timeout race between a load balancer and a backend</title>
+  <desc id="d">Two timelines of one pooled, idle keep-alive connection between a load balancer and a backend. Top, wrong: the backend's keep-alive timeout is 5 seconds and the load balancer's idle timeout is 60 seconds. After 5 idle seconds the backend closes the connection, but the load balancer still thinks it is open; a new request sent on it at that moment hits a closed socket and the client receives 502 Bad Gateway. Bottom, right: the backend's keep-alive is 75 seconds, longer than the load balancer's 60 seconds, so the load balancer is always the side that closes an idle connection and never sends a request on a connection the backend has already closed. Numbers are examples; the AWS ALB default idle timeout is 60 seconds.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}.mutt{fill:#94a3b8;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}.lnm{stroke:#cbd5e1;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .thick{stroke-width:5}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}.mutt{fill:#64748b}
+      .ln{stroke:#94a3b8}.lnm{stroke:#475569}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="428" rx="14"/>
+  <text class="h" x="28" y="40">Who closes the idle connection first?</text>
+  <text class="sub" x="28" y="62">One pooled LB→backend keep-alive connection, idle after its last request at t = 0 s.</text>
+  <text class="h2" x="28" y="104">Wrong: backend keep-alive 5 s &lt; LB idle timeout 60 s</text>
+  <text class="tx" x="28" y="142" font-weight="700">LB</text>
+  <text class="tx" x="28" y="184" font-weight="700">Backend</text>
+  <line class="ln" x1="140" y1="138" x2="760" y2="138"/>
+  <line class="ln" x1="140" y1="180" x2="760" y2="180"/>
+  <text class="sub" x="140.0" y="206" text-anchor="middle">0 s</text>
+  <text class="sub" x="295.0" y="206" text-anchor="middle">20 s</text>
+  <text class="sub" x="450.0" y="206" text-anchor="middle">40 s</text>
+  <text class="sub" x="605.0" y="206" text-anchor="middle">60 s</text>
+  <text class="sub" x="760.0" y="206" text-anchor="middle">80 s</text>
+  <rect class="okf" x="140.0" y="174" width="38.8" height="12" rx="3"/>
+  <rect class="mutf" x="178.8" y="174" width="581.2" height="12" rx="3" opacity="0.5"/>
+  <rect class="wrnf" x="140.0" y="132" width="465.0" height="12" rx="3" opacity="0.85"/>
+  <line class="lnb" x1="178.8" y1="176" x2="178.8" y2="144" marker-end="url(#arb)"/>
+  <text class="tx badt" x="186.8" y="168" font-size="13">FIN at 5 s</text>
+  <text class="tx badt" x="295.0" y="126" font-size="13">LB still thinks the connection is open until 60 s</text>
+  <text class="tx badt" x="279.5" y="168" font-size="13">next request reuses it → RST → 502 to client</text>
+  <text class="h2" x="28" y="254">Right: backend keep-alive 75 s &gt; LB idle timeout 60 s</text>
+  <text class="tx" x="28" y="292" font-weight="700">LB</text>
+  <text class="tx" x="28" y="334" font-weight="700">Backend</text>
+  <line class="ln" x1="140" y1="288" x2="760" y2="288"/>
+  <line class="ln" x1="140" y1="330" x2="760" y2="330"/>
+  <text class="sub" x="140.0" y="356" text-anchor="middle">0 s</text>
+  <text class="sub" x="295.0" y="356" text-anchor="middle">20 s</text>
+  <text class="sub" x="450.0" y="356" text-anchor="middle">40 s</text>
+  <text class="sub" x="605.0" y="356" text-anchor="middle">60 s</text>
+  <text class="sub" x="760.0" y="356" text-anchor="middle">80 s</text>
+  <rect class="okf" x="140.0" y="324" width="465.0" height="12" rx="3"/>
+  <rect class="mutf" x="605.0" y="324" width="116.2" height="12" rx="3" opacity="0.35"/>
+  <line class="lno dash" x1="721.2" y1="320" x2="721.2" y2="340"/>
+  <text class="sub" x="721.2" y="372" text-anchor="middle">backend limit 75 s</text>
+  <rect class="okf" x="140.0" y="282" width="465.0" height="12" rx="3"/>
+  <line class="lno" x1="605.0" y1="294" x2="605.0" y2="322" marker-end="url(#aro)"/>
+  <text class="tx okt" x="613.0" y="312" font-size="13">LB closes first at 60 s</text>
+  <text class="tx okt" x="171.0" y="312" font-size="13">new requests open a fresh connection: no 502</text>
+  <text class="sub" x="28" y="396">Rule: backend keep-alive timeout &gt; LB idle timeout (AWS ALB default: 60 s).</text>
+  <text class="sub" x="28" y="414">Bars: green = open on that side, amber = LB believes open but backend has closed, grey = closed.</text>
+</svg>

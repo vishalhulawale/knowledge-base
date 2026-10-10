@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">0-RTT early data replay</title>
+  <desc id="d">Two rows show why 0-RTT early data is replayable. In the top row a client resumes a TLS 1.3 session and sends POST /payments as early data. An on-path attacker records the first flight. The server processes the payment, then the attacker resends the recorded bytes and, because nothing marks the early data as already used, the server processes the same payment a second time. In the bottom row the server only accepts early data for an idempotent GET, rejects a ticket it has already seen, and would answer a non-idempotent request with 425 Too Early so the client resends it after the full handshake; the replayed flight is refused. The attacker cannot read or change the data, only resend it. Simplified: real servers combine single-use tickets, a freshness window and per-request policy.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes m1{0%,4%{opacity:1;transform:translate(0,0)}20%{opacity:1;transform:translate(430px,0)}22%,100%{opacity:0;transform:translate(430px,0)}}
+    @keyframes cp{0%,10%{opacity:0}13%,92%{opacity:1}95%,100%{opacity:0}}
+    @keyframes ok1{0%,21%{opacity:0}23%,92%{opacity:1}95%,100%{opacity:0}}
+    @keyframes m2{0%,44%{opacity:0;transform:translate(0,0)}46%{opacity:1;transform:translate(0,0)}62%{opacity:1;transform:translate(100px,-26px)}64%,100%{opacity:0;transform:translate(100px,-26px)}}
+    @keyframes ok2{0%,63%{opacity:0}65%,92%{opacity:1}95%,100%{opacity:0}}
+    .m1{animation:m1 12s infinite linear}.m2{animation:m2 12s infinite linear}
+    .cp{animation-name:cp}.ok1{animation-name:ok1}.ok2{animation-name:ok2}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none;opacity:1}.m1,.m2{animation:none;opacity:0}
+    }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="468" rx="14"/>
+  <text class="h" x="28" y="40">0-RTT early data can be replayed</text>
+  <text class="sub" x="28" y="62">The attacker cannot decrypt or change the flight, only send the same bytes again.</text>
+  <text class="lbl badt" x="28" y="96">Unsafe: POST accepted as early data</text>
+  <rect class="box" x="28" y="114" width="140" height="46" rx="8" stroke-width="1.5"/><text class="tx" x="98" y="142" text-anchor="middle" font-weight="700">Client</text>
+  <rect class="box" x="618" y="114" width="154" height="46" rx="8" stroke-width="1.5"/><text class="tx" x="695" y="142" text-anchor="middle" font-weight="700">Server</text>
+  <rect class="bb" x="300" y="170" width="150" height="40" rx="8" stroke-width="1.5"/><text class="sm badt" x="375" y="195" text-anchor="middle">On-path attacker</text>
+  <line class="ln dash" x1="170" y1="137" x2="612" y2="137" marker-end="url(#ar)"/>
+  <line class="lnb dash" x1="375" y1="139" x2="375" y2="168" stroke-width="1.5"/>
+  <line class="lnb dash" x1="452" y1="184" x2="612" y2="154" stroke-width="1.5" marker-end="url(#arb)"/><text class="sub" x="470" y="214">replay later</text>
+  <g class="m1"><rect class="bw" x="176" y="126" width="120" height="22" rx="5" stroke-width="1.5"/><text class="sm" x="236" y="141" text-anchor="middle">POST /payments</text></g>
+  <g class="a cp"><rect class="bw" x="315" y="215" width="120" height="22" rx="5" stroke-width="1.5"/><text class="sm" x="375" y="230" text-anchor="middle">recorded copy</text></g>
+  <g class="m2"><rect class="bw" x="456" y="178" width="120" height="22" rx="5" stroke-width="1.5"/><text class="sm" x="516" y="193" text-anchor="middle">POST /payments</text></g>
+  <g class="a ok1"><text class="sm okt" x="618" y="192">1st: payment processed</text></g>
+  <g class="a ok2"><text class="sm badt" x="618" y="210">2nd: processed again</text><text class="sm badt" x="618" y="226">double payment</text></g>
+  <text class="lbl okt" x="28" y="286">Safe: GET only, single-use tickets, 425 Too Early</text>
+  <rect class="box" x="28" y="304" width="140" height="46" rx="8" stroke-width="1.5"/><text class="tx" x="98" y="332" text-anchor="middle" font-weight="700">Client</text>
+  <rect class="box" x="618" y="304" width="154" height="46" rx="8" stroke-width="1.5"/><text class="tx" x="695" y="332" text-anchor="middle" font-weight="700">Server</text>
+  <rect class="bb" x="300" y="360" width="150" height="40" rx="8" stroke-width="1.5"/><text class="sm badt" x="375" y="385" text-anchor="middle">On-path attacker</text>
+  <line class="ln dash" x1="170" y1="327" x2="612" y2="327" marker-end="url(#ar)"/>
+  <line class="lnb dash" x1="375" y1="329" x2="375" y2="358" stroke-width="1.5"/>
+  <line class="lnb dash" x1="452" y1="374" x2="612" y2="344" stroke-width="1.5" marker-end="url(#arb)"/><text class="sub" x="470" y="404">replay later</text>
+  <g class="m1"><rect class="bw" x="176" y="316" width="120" height="22" rx="5" stroke-width="1.5"/><text class="sm" x="236" y="331" text-anchor="middle">GET /formulary</text></g>
+  <g class="a cp"><rect class="bw" x="315" y="405" width="120" height="22" rx="5" stroke-width="1.5"/><text class="sm" x="375" y="420" text-anchor="middle">recorded copy</text></g>
+  <g class="m2"><rect class="bw" x="456" y="368" width="120" height="22" rx="5" stroke-width="1.5"/><text class="sm" x="516" y="383" text-anchor="middle">GET /formulary</text></g>
+  <g class="a ok1"><text class="sm okt" x="618" y="382">1st: answered</text></g>
+  <g class="a ok2"><text class="sm okt" x="618" y="400">replay: ticket already</text><text class="sm okt" x="618" y="416">used, early data refused</text></g>
+</svg>

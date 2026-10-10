@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">TLS 1.2 vs TLS 1.3 vs 0-RTT round trips</title>
+  <desc id="d">Three side-by-side timelines between a client and a server, each starting after the TCP connection is open. In TLS 1.2 the client sends ClientHello, the server answers with ServerHello, its certificate and key exchange, the client sends its key exchange and Finished, and the server sends Finished; only then, after two round trips, does the first HTTP request leave the client. In TLS 1.3 the client guesses the key exchange group and sends a key share in ClientHello; the server replies with its key share, the encrypted certificate and Finished in one flight, so the client sends its Finished together with the first request after one round trip. With TLS 1.3 resumption and 0-RTT, the client sends the request as early data inside the first flight, protected by a pre-shared key from an earlier session, so no round trip is spent before the request. The arrows appear one round-trip leg at a time so the three columns can be compared. Simplified: TCP and DNS round trips are not shown.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .a{opacity:0;animation:14s infinite linear}
+    @keyframes l0{0%,4%{opacity:0}6%,90%{opacity:1}94%,100%{opacity:0}}
+    .l0{animation-name:l0}
+    @keyframes l1{0%,16%{opacity:0}18%,90%{opacity:1}94%,100%{opacity:0}}
+    .l1{animation-name:l1}
+    @keyframes l2{0%,28%{opacity:0}30%,90%{opacity:1}94%,100%{opacity:0}}
+    .l2{animation-name:l2}
+    @keyframes l3{0%,40%{opacity:0}42%,90%{opacity:1}94%,100%{opacity:0}}
+    .l3{animation-name:l3}
+    @keyframes l4{0%,52%{opacity:0}54%,90%{opacity:1}94%,100%{opacity:0}}
+    .l4{animation-name:l4}
+    @keyframes l5{0%,64%{opacity:0}66%,90%{opacity:1}94%,100%{opacity:0}}
+    .l5{animation-name:l5}
+    @media (prefers-reduced-motion: reduce){ .a{animation:none;opacity:1} }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="518" rx="14"/>
+  <text class="h" x="28" y="40">Round trips before the first request byte</text>
+  <text class="sub" x="28" y="62">TCP is already connected. Indigo = handshake, braces = encrypted, amber = 0-RTT early data, green = HTTP.</text>
+  <rect class="box" x="20" y="80" width="244" height="400" rx="10" stroke-width="1.2"/>
+  <text class="h2" x="142" y="104" text-anchor="middle">TLS 1.2 full handshake</text>
+  <text class="sub" x="48" y="128" text-anchor="middle">Client</text><text class="sub" x="238" y="128" text-anchor="middle">Server</text>
+  <line class="ln" x1="48" y1="136" x2="48" y2="430"/><line class="ln" x1="238" y1="136" x2="238" y2="430"/>
+  <g class="a l0"><text class="sm" x="143.0" y="164" text-anchor="middle">ClientHello</text><line class="lnp" x1="48" y1="170" x2="234" y2="192" marker-end="url(#arp)"/></g>
+  <g class="a l1"><text class="sm" x="143.0" y="203" text-anchor="middle">ServerHello, Certificate,</text><text class="sm" x="143.0" y="217" text-anchor="middle">ServerKeyExchange, Done</text><line class="lnp" x1="238" y1="222" x2="52" y2="244" marker-end="url(#arp)"/></g>
+  <g class="a l2"><text class="sm" x="143.0" y="255" text-anchor="middle">ClientKeyExchange,</text><text class="sm" x="143.0" y="269" text-anchor="middle">ChangeCipherSpec, Finished</text><line class="lnp" x1="48" y1="274" x2="234" y2="296" marker-end="url(#arp)"/></g>
+  <g class="a l3"><text class="sm" x="143.0" y="312" text-anchor="middle">ChangeCipherSpec, Finished</text><line class="lnp" x1="238" y1="318" x2="52" y2="340" marker-end="url(#arp)"/></g>
+  <g class="a l4"><text class="sm" x="143.0" y="356" text-anchor="middle">GET /claims</text><line class="lno" x1="48" y1="362" x2="234" y2="384" marker-end="url(#aro)"/></g>
+  <g class="a l5"><text class="sm" x="143.0" y="400" text-anchor="middle">200 OK</text><line class="lno" x1="238" y1="406" x2="52" y2="428" marker-end="url(#aro)"/></g>
+  <g class="a l4"><text class="badt" x="142" y="460" text-anchor="middle" font-size="14">2 RTT before the request</text></g>
+  <rect class="box" x="276" y="80" width="244" height="400" rx="10" stroke-width="1.2"/>
+  <text class="h2" x="398" y="104" text-anchor="middle">TLS 1.3 full handshake</text>
+  <text class="sub" x="304" y="128" text-anchor="middle">Client</text><text class="sub" x="494" y="128" text-anchor="middle">Server</text>
+  <line class="ln" x1="304" y1="136" x2="304" y2="430"/><line class="ln" x1="494" y1="136" x2="494" y2="430"/>
+  <g class="a l0"><text class="sm" x="399.0" y="164" text-anchor="middle">ClientHello + key_share</text><line class="lnp" x1="304" y1="170" x2="490" y2="192" marker-end="url(#arp)"/></g>
+  <g class="a l1"><text class="sm" x="399.0" y="203" text-anchor="middle">ServerHello + key_share,</text><text class="sm" x="399.0" y="217" text-anchor="middle">{EE, Cert, CertVerify, Fin}</text><line class="lnp" x1="494" y1="222" x2="308" y2="244" marker-end="url(#arp)"/></g>
+  <g class="a l2"><text class="sm" x="399.0" y="260" text-anchor="middle">{Finished} + GET /claims</text><line class="lno" x1="304" y1="266" x2="490" y2="288" marker-end="url(#aro)"/></g>
+  <g class="a l3"><text class="sm" x="399.0" y="304" text-anchor="middle">200 OK</text><line class="lno" x1="494" y1="310" x2="308" y2="332" marker-end="url(#aro)"/></g>
+  <g class="a l2"><text class="wrnt" x="398" y="460" text-anchor="middle" font-size="14">1 RTT before the request</text></g>
+  <rect class="box" x="532" y="80" width="244" height="400" rx="10" stroke-width="1.2"/>
+  <text class="h2" x="654" y="104" text-anchor="middle">TLS 1.3 resumption + 0-RTT</text>
+  <text class="sub" x="560" y="128" text-anchor="middle">Client</text><text class="sub" x="750" y="128" text-anchor="middle">Server</text>
+  <line class="ln" x1="560" y1="136" x2="560" y2="430"/><line class="ln" x1="750" y1="136" x2="750" y2="430"/>
+  <g class="a l0"><text class="sm" x="655.0" y="151" text-anchor="middle">ClientHello + PSK +</text><text class="sm" x="655.0" y="165" text-anchor="middle">early data: GET /claims</text><line class="lnw" x1="560" y1="170" x2="746" y2="192" marker-end="url(#arw)"/></g>
+  <g class="a l1"><text class="sm" x="655.0" y="203" text-anchor="middle">ServerHello, {EE, Fin},</text><text class="sm" x="655.0" y="217" text-anchor="middle">200 OK</text><line class="lno" x1="750" y1="222" x2="564" y2="244" marker-end="url(#aro)"/></g>
+  <g class="a l2"><text class="sm" x="655.0" y="260" text-anchor="middle">{EndOfEarlyData, Finished}</text><line class="lnp" x1="560" y1="266" x2="746" y2="288" marker-end="url(#arp)"/></g>
+  <g class="a l0"><text class="okt" x="654" y="460" text-anchor="middle" font-size="14">0 RTT: request in flight 1</text></g>
+  <text class="sub" x="28" y="504">0-RTT needs a ticket from an earlier session and is replayable, so servers accept it only for safe, idempotent requests.</text>
+</svg>
