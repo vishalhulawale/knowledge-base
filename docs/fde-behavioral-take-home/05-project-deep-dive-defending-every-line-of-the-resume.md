@@ -33,6 +33,9 @@ flowchart TD
 ```
 *Notice that levels 3 and 4 are where unprepared candidates stall: decisions need reasons and rejected alternatives, and failures need specifics. Prepare those for every major line.*
 
+![Animation: six levels of a deep dive on the GraphQL Consumer Service line appear in turn, from what it did to architecture, a decision, failures and numbers, and reflection](images/05-drill-down.svg){ loading=lazy }
+*Levels 3 and 4 need reasons and numbers you've prepared.*
+
 ### The deep-dive presentation structure (about 5 minutes)
 
 | Part | Time | Content |
@@ -91,6 +94,9 @@ The claims below are verbatim from the resume. For each: the probes you should e
 | "Contributed to the migration of a legacy monolithic application to microservices" | Your part, strangler approach, data migration | Your specific contribution *[confirm]* | Medium |
 
 **Skills section:** every listed item is a potential probe. Python, RabbitMQ, Azure/AKS, Jenkins, Hibernate/JPA, PostgreSQL/MySQL, DynamoDB, Redux, React Query, Material UI, Storybook. For each, know where you used it and at what depth. Consider grouping into "production experience" and "working knowledge" so the claim matches the reality *[confirm]*.
+
+![Scatter of resume claims by how likely they are to be picked and how much detail they need, with the GraphQL integration layer, Kafka retry and DLQ, OAuth2 and AD, Redis, HSMs, Personalize and the React app in the prepare-first quadrant](images/05-resume-risk.svg){ loading=lazy }
+*A judgement call: prepare the red dots before anything else.*
 
 ### Numbers: know them, source them, label estimates
 

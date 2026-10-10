@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">The ownership loop</title>
+  <desc id="d">Animation: six steps in a loop highlighted in turn: define the outcome with metric, baseline and target; unblock things you don't control such as the security review and a data feed; ship a thin first version; drive adoption by sitting with users and moving the feature into their screen; measure with their data and a comparison team; and hand over with runbooks and an owner. A dashed arrow from measure back to ship is labelled metric not moving.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:15s infinite linear}
+    @keyframes n0{0%,15.99%{opacity:1}16%,100%{opacity:0}}.n0{animation-name:n0}
+    @keyframes n1{0%,15.99%{opacity:0}16%,31.99%{opacity:1}32%,100%{opacity:0}}.n1{animation-name:n1}
+    @keyframes n2{0%,31.99%{opacity:0}32%,47.99%{opacity:1}48%,100%{opacity:0}}.n2{animation-name:n2}
+    @keyframes n3{0%,47.99%{opacity:0}48%,63.99%{opacity:1}64%,100%{opacity:0}}.n3{animation-name:n3}
+    @keyframes n4{0%,63.99%{opacity:0}64%,79.99%{opacity:1}80%,100%{opacity:0}}.n4{animation-name:n4}
+    @keyframes n5{0%,79.99%{opacity:0}80%,100%{opacity:1}}.n5{animation-name:n5}
+    @media (prefers-reduced-motion: reduce){.k{animation:none;opacity:0}.n4{opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">The ownership loop</text><text class="sub" x="28" y="62">Measure → fix → ship again is where ownership shows. Handover ends it.</text><line class="ln" x1="283.301" y1="91" x2="304.086" y2="133" marker-end="url(#ar)"/><line class="ln" x1="352.583" y1="167" x2="352.583" y2="251" marker-end="url(#ar)"/><line class="ln" x1="309.282" y1="286" x2="288.497" y2="328" marker-end="url(#ar)"/><line class="ln" x1="196.699" y1="329" x2="175.914" y2="287" marker-end="url(#ar)"/><line class="ln" x1="127.417" y1="253" x2="127.417" y2="169" marker-end="url(#ar)"/><path class="lnw dash" d="M 137.416697508023 257.00000000000006 Q 240 210 342.58330249197707 293.0" marker-end="url(#arw)"/><text class="wrnt" x="236" y="214" text-anchor="middle" style="font-size:12px">metric not moving</text><rect class="box" x="178" y="62" width="124" height="36" rx="18" stroke-width="1.5"/><text class="sm" x="240" y="85" text-anchor="middle" font-weight="700">Define outcome</text><g class="k n0"><rect class="tea" x="178" y="62" width="124" height="36" rx="18"/><text class="on13" x="240" y="85" text-anchor="middle">Define outcome</text><rect class="bt" x="430" y="130" width="342" height="120" rx="10"/><text class="teat" x="446" y="158" style="font-size:15px">Define outcome</text><text class="sm" x="446" y="188">Metric, baseline, target, agreed with</text><text class="sm" x="446" y="208">the sponsor</text></g><rect class="box" x="290.583" y="127" width="124" height="36" rx="18" stroke-width="1.5"/><text class="sm" x="352.583" y="150" text-anchor="middle" font-weight="700">Unblock</text><g class="k n1"><rect class="tea" x="290.583" y="127" width="124" height="36" rx="18"/><text class="on13" x="352.583" y="150" text-anchor="middle">Unblock</text><rect class="bt" x="430" y="130" width="342" height="120" rx="10"/><text class="teat" x="446" y="158" style="font-size:15px">Unblock</text><text class="sm" x="446" y="188">Security review booked week 1; data feed</text><text class="sm" x="446" y="208">issue escalated with impact</text></g><rect class="box" x="290.583" y="257" width="124" height="36" rx="18" stroke-width="1.5"/><text class="sm" x="352.583" y="280" text-anchor="middle" font-weight="700">Ship</text><g class="k n2"><rect class="tea" x="290.583" y="257" width="124" height="36" rx="18"/><text class="on13" x="352.583" y="280" text-anchor="middle">Ship</text><rect class="bt" x="430" y="130" width="342" height="120" rx="10"/><text class="teat" x="446" y="158" style="font-size:15px">Ship</text><text class="sm" x="446" y="188">Thin v1 to one team</text></g><rect class="box" x="178" y="322" width="124" height="36" rx="18" stroke-width="1.5"/><text class="sm" x="240" y="345" text-anchor="middle" font-weight="700">Drive adoption</text><g class="k n3"><rect class="tea" x="178" y="322" width="124" height="36" rx="18"/><text class="on13" x="240" y="345" text-anchor="middle">Drive adoption</text><rect class="bt" x="430" y="130" width="342" height="120" rx="10"/><text class="teat" x="446" y="158" style="font-size:15px">Drive adoption</text><text class="sm" x="446" y="188">Sit with users; move feature into their</text><text class="sm" x="446" y="208">screen; champions</text></g><rect class="box" x="65.4167" y="257" width="124" height="36" rx="18" stroke-width="1.5"/><text class="sm" x="127.417" y="280" text-anchor="middle" font-weight="700">Measure</text><g class="k n4"><rect class="tea" x="65.4167" y="257" width="124" height="36" rx="18"/><text class="on13" x="127.417" y="280" text-anchor="middle">Measure</text><rect class="bt" x="430" y="130" width="342" height="120" rx="10"/><text class="teat" x="446" y="158" style="font-size:15px">Measure</text><text class="sm" x="446" y="188">Their data, a comparison team; metric</text><text class="sm" x="446" y="208">flat? find out why</text></g><rect class="box" x="65.4167" y="127" width="124" height="36" rx="18" stroke-width="1.5"/><text class="sm" x="127.417" y="150" text-anchor="middle" font-weight="700">Hand over</text><g class="k n5"><rect class="tea" x="65.4167" y="127" width="124" height="36" rx="18"/><text class="on13" x="127.417" y="150" text-anchor="middle">Hand over</text><rect class="bt" x="430" y="130" width="342" height="120" rx="10"/><text class="teat" x="446" y="158" style="font-size:15px">Hand over</text><text class="sm" x="446" y="188">Runbooks, owner, their team builds the</text><text class="sm" x="446" y="208">next use case</text></g>
+</svg>

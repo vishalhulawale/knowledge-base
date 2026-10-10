@@ -30,6 +30,9 @@ The weak answer describes a feature delivered on time. The strong answer describ
 | Owner's question | "Is it done?" | "Is it working for them, and how do we know?" |
 | When it ends | At release | When the metric moves, or you've learned why it won't, and someone owns it going forward |
 
+![Triage time stays flat at 11 minutes after version 1 ships, then falls to 6 minutes after an adoption fix: the release is the output, the drop is the outcome](images/02-output-vs-outcome.svg){ loading=lazy }
+*The story interviewers want lives between the two dashed lines.*
+
 ### The ownership loop
 
 ```mermaid
@@ -43,6 +46,9 @@ flowchart LR
     M -->|"metric moved"| H["Hand over<br/>runbooks, owner,<br/>next use case"]
 ```
 *Notice the loop from Measure back to Ship. Ownership shows most clearly when the first version didn't move the metric and you kept going.*
+
+![Animation: the ownership loop highlights define outcome, unblock, ship, drive adoption, measure and hand over in turn, with a dashed path from measure back to ship when the metric isn't moving](images/02-ownership-loop.svg){ loading=lazy }
+*Ownership shows most clearly on the dashed arrow.*
 
 Each stage maps to a page in this track: [discovery](../fde-customer-discovery/01-discovery-interviews-workflow-mapping-hidden-constraints-res.md), [scope brief](../fde-customer-discovery/02-writing-the-scope-brief-success-criteria-assumptions-out-of.md), [pilots and impact](../fde-customer-discovery/03-pilot-to-proof-of-concept-to-production-time-boxing-exit-cri.md), [rollout and handoff](../fde-enterprise-deployment/07-production-rollout-monitoring-on-call-and-handoff-to-the-cus.md).
 

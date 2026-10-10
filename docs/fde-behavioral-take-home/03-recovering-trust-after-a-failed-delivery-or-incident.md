@@ -36,6 +36,9 @@ David Maister's trust equation (from *The Trusted Advisor*) is a useful lens:
 
 The practical rule from the [saying-no page](../fde-customer-discovery/04-saying-no-and-managing-scope-creep-without-losing-trust.md) applies doubly here: people forgive bad news delivered early; they don't forgive surprises.
 
+![The trust equation: credibility, reliability and intimacy over self-orientation, with what each means after a failure](images/03-trust-equation.svg){ loading=lazy }
+*Defensiveness grows the denominator faster than any fix grows the top.*
+
 ### The recovery sequence
 
 ```mermaid
@@ -48,6 +51,9 @@ flowchart LR
     S --> R["Rebuild<br/>small commitments,<br/>kept on time"]
 ```
 *Notice that "tell" comes before "mitigate" is finished. Waiting until you have the full answer is the most common way to turn an incident into a trust problem.*
+
+![Animation: two timelines for the same incident; telling early with updates every half hour versus waiting for the root cause until the customer's team notices and escalates](images/03-incident-comms.svg){ loading=lazy }
+*Same fix, same time; only one path keeps the customer's trust.*
 
 **The first hour (an incident):**
 

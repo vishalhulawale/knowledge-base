@@ -49,6 +49,9 @@ A 2–3 minute answer: 20–30 seconds of Situation and Task, about 90 seconds o
 
 Map real experience to the five types. The resume facts below are verbatim; the details are yours to fill in.
 
+![A grid of resume sources against the five FDE story types, with totals per type showing client conflict as the thinnest column](images/01-coverage-matrix.svg){ loading=lazy }
+*Fill the thin column honestly before the loop, not during it.*
+
 | Resume source | Ambiguity | No-docs system | Scope pushback | Client conflict | Quick vs proper |
 |---|---|---|---|---|---|
 | OptumRx Meteor: GraphQL Consumer Service between **5 upstream systems** | ✓ | ✓ (upstream contracts) | ✓ | ✓ (upstream teams) | ✓ |
@@ -105,6 +108,9 @@ Interviewers drill down two to four levels. Prepare these for every story:
 3. "Who disagreed, and how did you handle them?"
 4. "How do you know it worked?" (the number, and where it came from)
 5. "What would you do differently as an FDE at our company?"
+
+![Six rising steps of follow-up questions: the story, why that option, what it cost, who disagreed, how you know it worked, and how you'd do it as their FDE](images/01-follow-up-ladder.svg){ loading=lazy }
+*Write one sentence per rung for every story.*
 
 The fifth one is FDE-specific: translate the story into their world. "As an FDE I'd have owned the discovery directly with the customer rather than through the client product owner, and I'd have fed the integration pattern back to the product team."
 

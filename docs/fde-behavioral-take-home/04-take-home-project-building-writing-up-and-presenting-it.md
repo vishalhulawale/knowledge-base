@@ -45,6 +45,9 @@ flowchart LR
 ```
 *Notice that write-up and presentation together are a quarter of the time. Candidates who spend 95% coding hand in something reviewers can't easily understand or run.*
 
+![Time split for a take-home: frame 10 percent, skeleton 15, core 35, evals and tests 15, write-up 15 and presentation prep 10, with what the README, eval and demo contain](images/04-takehome-time.svg){ loading=lazy }
+*A quarter of the time on communication is part of the job, not overhead.*
+
 If the brief says "about 4 hours", treat it as a real limit: reviewers calibrate against it, and many teams explicitly ask you not to exceed it. If you go over, say so in the README and say what you'd have cut.
 
 ### Scoping: one user, one workflow, one decision
@@ -128,6 +131,9 @@ SME labels, monitoring (cost, latency, no-answer rate), deployment in the custom
 | 9–10 | What you'd ask the customer next |
 
 Then Q&A, which is often longer than the presentation and where most of the scoring happens. Typical questions: "Why this chunking?", "What happens with 10,000 documents?", "How would you add permissions?", "What would you cut if you had half the time?", "Walk me through this function", "What did the AI tool write?". Answer briefly, admit limits, and connect back to the user.
+
+![A 10-minute presentation timeline: user and problem, live demo, how it works, evals, limits and next steps, with an example opening line](images/04-presentation-plan.svg){ loading=lazy }
+*Open with the user's problem and the demo, not the framework.*
 
 ### Wrong vs right: opening the presentation
 
