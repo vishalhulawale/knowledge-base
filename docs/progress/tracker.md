@@ -145,3 +145,21 @@ Mock-interview results and revision schedule, updated by the `learn-topic` skill
 | 2026-10-02 | Leadership: 10 Standards & decisions ★ | — (studied, mock skipped) | Confirm: standards pain/results; significant decision; debt trade-off | 2026-10-03 |
 | 2026-10-02 | Leadership: 11 Failures | — (studied, mock skipped) | Prepare: 2 real failures (different types), 1 weakness with progress | 2026-10-03 |
 | 2026-10-02 | Leadership: 12 Questions & salary | — (studied, mock skipped) | Prepare: tailored questions per company; researched comp range (private) | 2026-10-03 |
+| 2026-10-10 | FDE Role: 01 What an FDE is | — (studied, mock skipped) | Confirm: any GenAI work/PoC; what you fed back to platform from the GraphQL layer | 2026-10-11 |
+| 2026-10-10 | FDE Role: 02 AI-lab FDE model | — (studied, mock skipped) | Confirm: Python depth; a security-review/identity story (PingFederate/AD); build an MCP server + evals | 2026-10-11 |
+| 2026-10-10 | FDE Role: 03 Interview loop mapped | — (studied, mock skipped) | Practise: Python practical coding; how fast you learned HSMs/3 KMS APIs; LLM add-on design for Meteor | 2026-10-11 |
+| 2026-10-10 | FDE Role: 04 Positioning a services background ★ | — (studied, mock skipped) | Confirm: client pushback story; post-go-live ownership; ConvergeHealth as a Deloitte product; direct customer contact | 2026-10-11 |
+| 2026-10-10 | FDE Role: 05 Why FDE, travel, level, comp | — (studied, mock skipped) | Decide: target companies, travel %/relocation from Pune, target level and comp range (private) | 2026-10-11 |
+| 2026-10-10 | Decomposition: 01 U-D-D-C-S framework | — (studied, mock skipped) | Confirm: a vague request you reframed into a scoped feature with a metric | 2026-10-11 |
+| 2026-10-10 | Decomposition: 02 Object model / ontology | — (studied, mock skipped) | Confirm: entity with different IDs across upstreams; entities in the Meteor schema | 2026-10-11 |
+| 2026-10-10 | Decomposition: 03 Live MVP | — (studied, mock skipped) | Practise: 45-min skeleton-first drill in Python; confirm a design reworked after a requirement change | 2026-10-11 |
+| 2026-10-10 | Decomposition: 04 Prioritisation & cutting scope ★ | — (studied, mock skipped) | Confirm: a real descoping-before-release story (STAR); MoSCoW or priority order used | 2026-10-11 |
+| 2026-10-10 | Decomposition: 05 Worked prompts | — (studied, mock skipped) | Practise: one archetype a day on a 45-min timer; interval overlap from memory | 2026-10-11 |
+| 2026-10-10 | Decomposition: 06 Learning round | — (studied, mock skipped) | Confirm: KMS/HSM ramp-up story (what surprised you, time to first call) | 2026-10-11 |
+| 2026-10-10 | Customer: 01 Discovery interviews | — (studied, mock skipped) | Confirm: a request that changed after questioning; your role in requirement sessions | 2026-10-11 |
+| 2026-10-10 | Customer: 02 Scope brief ★ | — (studied, mock skipped) | Confirm: format you used for scope/assumptions; who owned the SOW; a scope change after sign-off | 2026-10-11 |
+| 2026-10-10 | Customer: 03 Pilot → production | — (studied, mock skipped) | Confirm: any prototype a client evaluated; a launch with disputed metrics | 2026-10-11 |
+| 2026-10-10 | Customer: 04 Saying no ★ | — (studied, mock skipped) | Confirm: saying-no, redirect and late-constraint stories; a yes you regretted | 2026-10-11 |
+| 2026-10-10 | Customer: 05 Execs vs engineers ★ | — (studied, mock skipped) | Prepare: 30-s exec + 2-min engineer pitch of the GraphQL layer; confirm exec exposure, a demo that broke | 2026-10-11 |
+| 2026-10-10 | Customer: 06 Customer simulation round | — (studied, mock skipped) | Practise: one timed role-play with a friend + self-score sheet | 2026-10-11 |
+| 2026-10-10 | Customer: 07 Field feedback & codifying | — (studied, mock skipped) | Confirm: a time repeated work became a shared library/standard; postmortem format | 2026-10-11 |
