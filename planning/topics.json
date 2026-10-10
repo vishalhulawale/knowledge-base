@@ -2438,43 +2438,43 @@
           "title": "Deployment models: hosted API vs customer VPC vs on-prem & air-gapped",
           "slug": "01-deployment-models-hosted-api-vs-customer-vpc-vs-on-prem-and",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Enterprise identity: SSO (SAML/OIDC), SCIM, RBAC & permission propagation",
           "slug": "02-enterprise-identity-sso-scim-rbac-and-permission-propagation",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Network & data constraints: private endpoints, proxies, egress allowlists, data residency",
           "slug": "03-network-and-data-constraints-private-endpoints-proxies-egres",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Security reviews & compliance questionnaires: SOC 2, HIPAA, GDPR, DPAs",
           "slug": "04-security-reviews-and-compliance-questionnaires-soc-2-hipaa-g",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Packaging & delivery into a customer account: Docker, Helm, Terraform",
           "slug": "05-packaging-and-delivery-into-a-customer-account-docker-helm-t",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Cloud AI platforms: Amazon Bedrock, Azure OpenAI, Vertex AI",
           "slug": "06-cloud-ai-platforms-amazon-bedrock-azure-openai-vertex-ai",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Production rollout, monitoring, on-call & handoff to the customer's team",
           "slug": "07-production-rollout-monitoring-on-call-and-handoff-to-the-cus",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },

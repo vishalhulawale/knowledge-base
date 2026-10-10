@@ -480,6 +480,13 @@ nav:
           - "Prompting vs RAG vs Fine-Tuning: Choosing the Right Lever": fde-applied-llm/08-prompting-vs-rag-vs-fine-tuning-choosing-the-right-lever.md
       - "Enterprise Deployment Environments":
           - Overview: fde-enterprise-deployment/index.md
+          - "Deployment Models: Hosted API vs Customer VPC vs On-Prem & Air-Gapped": fde-enterprise-deployment/01-deployment-models-hosted-api-vs-customer-vpc-vs-on-prem-and.md
+          - "Enterprise Identity: SSO (SAML/OIDC), SCIM, RBAC & Permission Propagation": fde-enterprise-deployment/02-enterprise-identity-sso-scim-rbac-and-permission-propagation.md
+          - "Network & Data Constraints: Private Endpoints, Proxies, Egress Allowlists, Data Residency": fde-enterprise-deployment/03-network-and-data-constraints-private-endpoints-proxies-egres.md
+          - "Security Reviews & Compliance Questionnaires: SOC 2, HIPAA, GDPR, DPAs": fde-enterprise-deployment/04-security-reviews-and-compliance-questionnaires-soc-2-hipaa-g.md
+          - "Packaging & Delivery into a Customer Account: Docker, Helm, Terraform": fde-enterprise-deployment/05-packaging-and-delivery-into-a-customer-account-docker-helm-t.md
+          - "Cloud AI Platforms: Amazon Bedrock, Azure OpenAI, Vertex AI": fde-enterprise-deployment/06-cloud-ai-platforms-amazon-bedrock-azure-openai-vertex-ai.md
+          - "Production Rollout, Monitoring, On-Call & Handoff to the Customer's Team": fde-enterprise-deployment/07-production-rollout-monitoring-on-call-and-handoff-to-the-cus.md
       - "FDE System Design":
           - Overview: fde-system-design/index.md
       - "FDE Behavioral, Take-Home & Deep Dive":
