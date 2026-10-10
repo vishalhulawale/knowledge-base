@@ -2538,31 +2538,31 @@
           "title": "FDE story bank: ambiguity, no-docs systems, scope pushback, client conflict, quick fix vs proper fix",
           "slug": "01-fde-story-bank-ambiguity-no-docs-systems-scope-pushback-clie",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Owning a customer outcome end to end",
           "slug": "02-owning-a-customer-outcome-end-to-end",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Recovering trust after a failed delivery or incident",
           "slug": "03-recovering-trust-after-a-failed-delivery-or-incident",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Take-home project: building, writing up & presenting it",
           "slug": "04-take-home-project-building-writing-up-and-presenting-it",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Project deep dive: defending every line of the resume",
           "slug": "05-project-deep-dive-defending-every-line-of-the-resume",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         }
       ]
     }

@@ -498,3 +498,8 @@ nav:
           - "Defending Trade-offs: Build vs Buy, Latency vs Cost, Cloud vs On-Prem": fde-system-design/07-defending-trade-offs-build-vs-buy-latency-vs-cost-cloud-vs-o.md
       - "FDE Behavioral, Take-Home & Deep Dive":
           - Overview: fde-behavioral-take-home/index.md
+          - "FDE Story Bank: Ambiguity, No-Docs Systems, Scope Pushback, Client Conflict, Quick Fix vs Proper Fix": fde-behavioral-take-home/01-fde-story-bank-ambiguity-no-docs-systems-scope-pushback-clie.md
+          - "Owning a Customer Outcome End to End": fde-behavioral-take-home/02-owning-a-customer-outcome-end-to-end.md
+          - "Recovering Trust After a Failed Delivery or Incident": fde-behavioral-take-home/03-recovering-trust-after-a-failed-delivery-or-incident.md
+          - "Take-Home Project: Building, Writing Up & Presenting It": fde-behavioral-take-home/04-take-home-project-building-writing-up-and-presenting-it.md
+          - "Project Deep Dive: Defending Every Line of the Resume": fde-behavioral-take-home/05-project-deep-dive-defending-every-line-of-the-resume.md
