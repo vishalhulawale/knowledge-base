@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Head-of-line blocking: HTTP/2 over TCP vs HTTP/3 over QUIC</title>
+  <desc id="d">Three responses, A, B and C, are downloaded at the same time over one connection. In the top panel, HTTP/2 runs over TCP, which delivers one ordered byte stream. One packet carrying data for B is lost, so TCP holds back every byte behind it and all three progress bars stop until the retransmission arrives about one round trip later; then all three resume and finish together. In the bottom panel, HTTP/3 runs over QUIC, which orders each stream separately. The same loss stops only B; A and C keep downloading and finish earlier, while B finishes at the same time as it did over TCP. Simplified: equal-sized responses, one loss, and a stall of roughly one round trip.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.wrnf{fill:#d97706}.badf{fill:#dc2626}
+    .badt{fill:#dc2626;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .sep{stroke:#e2e8f0;stroke-width:1.5}
+    .x{stroke:#dc2626;stroke-width:3;stroke-linecap:round}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.wrnf{fill:#fbbf24}.badf{fill:#f87171}
+      .badt{fill:#f87171}.okt{fill:#4ade80}
+      .sep{stroke:#334155}
+      .x{stroke:#f87171}
+    }
+    .bar{transform-box:fill-box;transform-origin:0 50%;transform:scaleX(0);animation:12s infinite linear}
+    .tcp{animation-name:tcp}.qf{animation-name:qf}
+    @keyframes tcp{0%{transform:scaleX(0)}20%{transform:scaleX(.32)}45%{transform:scaleX(.32)}87.5%,100%{transform:scaleX(1)}}
+    @keyframes qf{0%{transform:scaleX(0)}62.5%,100%{transform:scaleX(1)}}
+    .ph{opacity:0;animation:12s infinite steps(1,end)}
+    .pa{animation-name:pa}.pb{animation-name:pb}.pc{animation-name:pc}
+    @keyframes pa{0%{opacity:1}20%,100%{opacity:0}}
+    @keyframes pb{0%{opacity:0}20%{opacity:1}45%,100%{opacity:0}}
+    @keyframes pc{0%{opacity:0}45%{opacity:1}100%{opacity:1}}
+    @media (prefers-reduced-motion: reduce){
+      .bar,.ph{animation:none}
+      .tcp{transform:scaleX(.32)}.qf{transform:scaleX(.64)}
+      .pa,.pc{opacity:0}.pb{opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">One lost packet: who has to wait?</text>
+  <text class="sub" x="28" y="62">Three responses (A, B, C) share one connection. A packet carrying part of B is lost.</text>
+
+  <!-- Panel 1: HTTP/2 over TCP -->
+  <text class="h2" x="28" y="100">HTTP/2 over TCP</text>
+  <text class="sub" x="28" y="120">one ordered byte stream</text>
+  <rect class="pri" x="28" y="134" width="16" height="16" rx="3"/><rect class="tea" x="48" y="134" width="16" height="16" rx="3"/><rect class="wrnf" x="68" y="134" width="16" height="16" rx="3"/><rect class="pri" x="88" y="134" width="16" height="16" rx="3"/><rect class="tea" x="108" y="134" width="16" height="16" rx="3"/><rect class="wrnf" x="128" y="134" width="16" height="16" rx="3"/>
+  <g class="ph pb"><line class="x" x1="106" y1="132" x2="126" y2="152"/><line class="x" x1="126" y1="132" x2="106" y2="152"/></g>
+  <text class="sub" x="28" y="168">packets on the wire</text>
+
+  <text class="tx" x="258" y="107" text-anchor="end">A  app.js</text>
+  <text class="tx" x="258" y="137" text-anchor="end">B  styles.css</text>
+  <text class="tx" x="258" y="167" text-anchor="end">C  logo.png</text>
+  <rect class="box" x="270" y="92" width="420" height="20" rx="5"/>
+  <rect class="box" x="270" y="122" width="420" height="20" rx="5"/>
+  <rect class="box" x="270" y="152" width="420" height="20" rx="5"/>
+  <rect class="pri bar tcp" x="270" y="92" width="420" height="20" rx="5"/>
+  <rect class="tea bar tcp" x="270" y="122" width="420" height="20" rx="5"/>
+  <rect class="wrnf bar tcp" x="270" y="152" width="420" height="20" rx="5"/>
+  <g class="ph pb"><text class="badt" x="702" y="107" font-size="13">waiting</text><text class="badt" x="702" y="137" font-size="13">lost</text><text class="badt" x="702" y="167" font-size="13">waiting</text></g>
+
+  <g class="ph pa"><text class="tx" x="28" y="196">Frames from A, B and C interleave on one TCP connection.</text></g>
+  <g class="ph pb"><text class="tx badt" x="28" y="196">TCP must deliver bytes in order: A and C stall behind B's missing packet.</text></g>
+  <g class="ph pc"><text class="tx" x="28" y="196">The retransmission arrives about one round trip later; all three resume.</text></g>
+
+  <line class="sep" x1="28" y1="212" x2="772" y2="212"/>
+
+  <!-- Panel 2: HTTP/3 over QUIC -->
+  <text class="h2" x="28" y="242">HTTP/3 over QUIC</text>
+  <text class="sub" x="28" y="262">per-stream ordering</text>
+  <rect class="pri" x="28" y="276" width="16" height="16" rx="3"/><rect class="tea" x="48" y="276" width="16" height="16" rx="3"/><rect class="wrnf" x="68" y="276" width="16" height="16" rx="3"/><rect class="pri" x="88" y="276" width="16" height="16" rx="3"/><rect class="tea" x="108" y="276" width="16" height="16" rx="3"/><rect class="wrnf" x="128" y="276" width="16" height="16" rx="3"/>
+  <g class="ph pb"><line class="x" x1="106" y1="274" x2="126" y2="294"/><line class="x" x1="126" y1="274" x2="106" y2="294"/></g>
+  <text class="sub" x="28" y="310">packets on the wire</text>
+
+  <text class="tx" x="258" y="249" text-anchor="end">A  app.js</text>
+  <text class="tx" x="258" y="279" text-anchor="end">B  styles.css</text>
+  <text class="tx" x="258" y="309" text-anchor="end">C  logo.png</text>
+  <rect class="box" x="270" y="234" width="420" height="20" rx="5"/>
+  <rect class="box" x="270" y="264" width="420" height="20" rx="5"/>
+  <rect class="box" x="270" y="294" width="420" height="20" rx="5"/>
+  <rect class="pri bar qf" x="270" y="234" width="420" height="20" rx="5"/>
+  <rect class="tea bar tcp" x="270" y="264" width="420" height="20" rx="5"/>
+  <rect class="wrnf bar qf" x="270" y="294" width="420" height="20" rx="5"/>
+  <g class="ph pb"><text class="okt" x="702" y="249" font-size="13">flowing</text><text class="badt" x="702" y="279" font-size="13">lost</text><text class="okt" x="702" y="309" font-size="13">flowing</text></g>
+
+  <g class="ph pa"><text class="tx" x="28" y="340">The same frames, but QUIC tracks ordering per stream.</text></g>
+  <g class="ph pb"><text class="tx okt" x="28" y="340">Only B waits for its retransmission; A and C keep being delivered.</text></g>
+  <g class="ph pc"><text class="tx" x="28" y="340">A and C finish earlier; B finishes at the same time as over TCP.</text></g>
+
+  <text class="sub" x="28" y="380">Simplified: equal-sized responses, a single loss, and a stall of about one round trip (RTT).</text>
+</svg>

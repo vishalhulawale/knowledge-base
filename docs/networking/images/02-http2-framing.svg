@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 456" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">HTTP/1.1 connections vs HTTP/2 binary framing</title>
+  <desc id="d">Top: with HTTP/1.1 each TCP connection carries one request and its response at a time, so a browser opens several connections per origin (commonly six) and the next request on a connection waits for the previous response to finish. Middle: with HTTP/2 a single TCP connection carries many streams at once. Each request and response is split into frames, HEADERS frames and DATA frames, tagged with a stream identifier; frames from streams 1, 3 and 5 are interleaved on the wire and reassembled per stream by the receiver. Bottom: every HTTP/2 frame starts with a 9-byte header made of a 24-bit length, an 8-bit type, an 8-bit flags field, one reserved bit and a 31-bit stream identifier, followed by the payload.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .tx{fill:#334155;font-size:14px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .pipe{fill:#eef2ff;stroke:#4f46e5;stroke-width:1.5}
+    .fh{fill:#ffffff;stroke:#64748b;stroke-width:1.5}
+    .wait{stroke:#94a3b8;stroke-width:2;stroke-dasharray:4 4}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on13{fill:#0f172a}
+      .ln{stroke:#94a3b8}
+      .pipe{fill:#1e1b4b;stroke:#818cf8}
+      .fh{fill:#111827;stroke:#94a3b8}
+      .wait{stroke:#64748b}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="454" rx="14"/>
+  <text class="h" x="28" y="40">From text messages on many connections to frames on one</text>
+
+  <!-- HTTP/1.1 -->
+  <text class="h2" x="28" y="76">HTTP/1.1: one exchange at a time per connection</text>
+  <text class="sub" x="28" y="102">TCP conn 1</text>
+  <text class="sub" x="28" y="132">TCP conn 2</text>
+  <text class="sub" x="28" y="162">TCP conn 3</text>
+  <rect class="pri" x="120" y="88" width="70" height="20" rx="4"/><text class="on13" x="155" y="103" text-anchor="middle">GET /a</text>
+  <rect class="box" x="194" y="88" width="190" height="20" rx="4"/><text class="tx" x="289" y="103" text-anchor="middle" font-size="13">response a</text>
+  <line class="wait" x1="388" y1="98" x2="420" y2="98"/>
+  <rect class="pri" x="424" y="88" width="70" height="20" rx="4"/><text class="on13" x="459" y="103" text-anchor="middle">GET /d</text>
+  <rect class="box" x="498" y="88" width="120" height="20" rx="4"/><text class="tx" x="558" y="103" text-anchor="middle" font-size="13">response d</text>
+  <rect class="tea" x="120" y="118" width="70" height="20" rx="4"/><text class="on13" x="155" y="133" text-anchor="middle">GET /b</text>
+  <rect class="box" x="194" y="118" width="110" height="20" rx="4"/><text class="tx" x="249" y="133" text-anchor="middle" font-size="13">response b</text>
+  <rect class="wrnf" x="120" y="148" width="70" height="20" rx="4"/><text class="on13" x="155" y="163" text-anchor="middle">GET /c</text>
+  <rect class="box" x="194" y="148" width="150" height="20" rx="4"/><text class="tx" x="269" y="163" text-anchor="middle" font-size="13">response c</text>
+  <text class="sub" x="636" y="103">/d waits for a</text>
+  <text class="sub" x="380" y="148">… up to ~6 connections</text>
+  <text class="sub" x="380" y="164">per origin in browsers</text>
+
+  <!-- HTTP/2 -->
+  <text class="h2" x="28" y="206">HTTP/2: many streams, one TCP connection</text>
+  <rect class="pri" x="28" y="218" width="14" height="14" rx="3"/><text class="sub" x="48" y="230">stream 1</text>
+  <rect class="tea" x="118" y="218" width="14" height="14" rx="3"/><text class="sub" x="138" y="230">stream 3</text>
+  <rect class="wrnf" x="208" y="218" width="14" height="14" rx="3"/><text class="sub" x="228" y="230">stream 5</text>
+  <text class="sub" x="310" y="230">H = HEADERS frame, D = DATA frame (client streams use odd IDs)</text>
+  <rect class="pipe" x="28" y="244" width="744" height="44" rx="22"/>
+  <rect class="pri" x="56" y="254" width="54" height="24" rx="4"/><text class="on13" x="83" y="271" text-anchor="middle">H 1</text>
+  <rect class="tea" x="116" y="254" width="54" height="24" rx="4"/><text class="on13" x="143" y="271" text-anchor="middle">H 3</text>
+  <rect class="wrnf" x="176" y="254" width="54" height="24" rx="4"/><text class="on13" x="203" y="271" text-anchor="middle">H 5</text>
+  <rect class="tea" x="236" y="254" width="54" height="24" rx="4"/><text class="on13" x="263" y="271" text-anchor="middle">D 3</text>
+  <rect class="pri" x="296" y="254" width="54" height="24" rx="4"/><text class="on13" x="323" y="271" text-anchor="middle">D 1</text>
+  <rect class="wrnf" x="356" y="254" width="54" height="24" rx="4"/><text class="on13" x="383" y="271" text-anchor="middle">D 5</text>
+  <rect class="pri" x="416" y="254" width="54" height="24" rx="4"/><text class="on13" x="443" y="271" text-anchor="middle">D 1</text>
+  <rect class="tea" x="476" y="254" width="54" height="24" rx="4"/><text class="on13" x="503" y="271" text-anchor="middle">D 3</text>
+  <rect class="pri" x="536" y="254" width="54" height="24" rx="4"/><text class="on13" x="563" y="271" text-anchor="middle">D 1</text>
+  <rect class="wrnf" x="596" y="254" width="54" height="24" rx="4"/><text class="on13" x="623" y="271" text-anchor="middle">D 5</text>
+  <path class="ln" d="M672 266 H748" marker-end="url(#ar)"/>
+  <text class="sub" x="28" y="310">Frames interleave freely; the receiver reassembles each stream by its ID. A slow response no longer blocks the others,</text>
+  <text class="sub" x="28" y="328">but every frame still rides the same ordered TCP byte stream.</text>
+
+  <!-- Frame header -->
+  <text class="h2" x="28" y="364">Every frame: a 9-byte header, then the payload</text>
+  <rect class="fh" x="28" y="378" width="180" height="34" rx="4"/><text class="tx" x="118" y="400" text-anchor="middle">Length (24 bits)</text>
+  <rect class="fh" x="208" y="378" width="100" height="34" rx="4"/><text class="tx" x="258" y="400" text-anchor="middle">Type (8)</text>
+  <rect class="fh" x="308" y="378" width="100" height="34" rx="4"/><text class="tx" x="358" y="400" text-anchor="middle">Flags (8)</text>
+  <rect class="fh" x="408" y="378" width="30" height="34" rx="4"/><text class="tx" x="423" y="400" text-anchor="middle">R</text>
+  <rect class="fh" x="438" y="378" width="190" height="34" rx="4"/><text class="tx" x="533" y="400" text-anchor="middle">Stream ID (31 bits)</text>
+  <rect class="mutf" x="628" y="378" width="144" height="34" rx="4"/><text class="on13" x="700" y="400" text-anchor="middle">Payload</text>
+  <text class="sub" x="28" y="432">Frame types include DATA, HEADERS, SETTINGS, WINDOW_UPDATE, RST_STREAM, PING and GOAWAY.</text>
+  <text class="sub" x="28" y="448">Stream ID 0 means the connection itself (SETTINGS, PING, GOAWAY).</text>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path fill="#64748b" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+</svg>
