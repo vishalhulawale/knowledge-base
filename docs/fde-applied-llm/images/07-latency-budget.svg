@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 372" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Latency budget breakdown</title>
+  <desc id="d">A stacked bar of a 3-second p95 budget: auth 50 ms, query rewrite 350 ms, hybrid retrieval 120 ms, rerank 200 ms, time to first token 600 ms, generating about 150 tokens 1,500 ms and grounding and PHI checks 150 ms, about 2.97 seconds in total. Levers: stream, cap output, cut or parallelise the rewrite, cache the prefix, and use a smaller model or lower effort where evals allow.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="370" rx="14"/>
+  <text class="h" x="28" y="40">A 3-second p95 budget, split across the request</text><text class="sub" x="28" y="62">From the page's example: total ≈ 2.97 s. Generation is half the budget.</text><rect class="mutf" x="29" y="96" width="10.4" height="46" rx="4"/><line class="grid" x1="34.2" y1="144" x2="34.2" y2="156"/><text class="sub" x="34.2" y="168" text-anchor="middle">Auth 50</text><rect class="wrnf" x="41.4" y="96" width="84.8" height="46" rx="4"/><text class="on13" x="48.4" y="117">Rewrite</text><text class="on13" x="48.4" y="134">350 ms</text><rect class="tea" x="128.2" y="96" width="27.76" height="46" rx="4"/><line class="grid" x1="142.08" y1="144" x2="142.08" y2="156"/><text class="sub" x="142.08" y="168" text-anchor="middle">Retrieve 120</text><rect class="tea" x="157.96" y="96" width="47.6" height="46" rx="4"/><line class="grid" x1="181.76" y1="144" x2="181.76" y2="174"/><text class="sub" x="181.76" y="186" text-anchor="middle">Rerank 200</text><rect class="pri" x="207.56" y="96" width="146.8" height="46" rx="4"/><text class="on13" x="214.56" y="117">TTFT</text><text class="on13" x="214.56" y="134">600 ms</text><rect class="pri" x="356.36" y="96" width="370" height="46" rx="4"/><text class="on13" x="363.36" y="117">Generate ~150 tok</text><text class="on13" x="363.36" y="134">1500 ms</text><rect class="mutf" x="728.36" y="96" width="35.2" height="46" rx="4"/><line class="grid" x1="745.96" y1="144" x2="745.96" y2="156"/><text class="sub" x="745.96" y="168" text-anchor="middle">Checks 150</text><line class="lnb dash" x1="772" y1="86" x2="772" y2="152"/><text class="badt" x="772" y="82" text-anchor="end" style="font-size:12px">3.0 s</text><text class="sm" x="28" y="220" font-weight="700">Stream</text><text class="sm" x="260" y="220">perceived latency ≈ TTFT</text><text class="sm" x="28" y="244" font-weight="700">Cap output</text><text class="sm" x="260" y="244">decode time falls linearly</text><text class="sm" x="28" y="268" font-weight="700">Cut or parallelise rewrite</text><text class="sm" x="260" y="268">saves up to 350 ms</text><text class="sm" x="28" y="292" font-weight="700">Cache the prefix</text><text class="sm" x="260" y="292">lower TTFT</text><text class="sm" x="28" y="316" font-weight="700">Smaller model / lower effort</text><text class="sm" x="260" y="316">for steps that pass evals</text><text class="sub" x="28" y="352">Quote percentiles: LLM latency has long tails (queueing, long outputs, retries).</text>
+</svg>

@@ -113,9 +113,15 @@ Because agents are non-deterministic, run several **trials** per task:
 - **pass^k:** all k trials succeed (fits customer-facing consistency).
 - With a 75% per-trial success rate: pass@3 ≈ 98%, pass^3 ≈ 42%. The same system looks excellent or poor depending on which you report, so choose the one that matches how users experience it.
 
+![Line chart for a 75 percent agent: pass at k rises to 98 percent at k = 3 while pass power k falls to 42 percent](images/05-pass-k.svg){ loading=lazy }
+*Same agent, opposite stories; report the one that matches how it's used.*
+
 ### Statistics: how many cases is enough?
 
 Small eval sets have wide confidence intervals. With 46/50 passing, the 95% Wilson interval is roughly 81%–97%; with 460/500 it's 89%–94%. So a change from 92% to 90% on 50 cases is noise. Practical implications: grow the suite for decisions that matter; compare systems on the same cases (paired comparison); run repeated trials for non-deterministic systems; and treat safety cases as individual must-pass tests, not an average.
+
+![Pass rates with 95 percent Wilson intervals: 46 of 50 spans about 81 to 97 percent, 89 and 91 of 100 overlap almost entirely, 910 of 1000 is narrow](images/05-confidence-intervals.svg){ loading=lazy }
+*Two points on 100 cases is inside the noise; look at the per-case diff.*
 
 ## In practice: code & configuration
 

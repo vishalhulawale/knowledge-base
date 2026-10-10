@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 382" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Agent input tokens by turn</title>
+  <desc id="d">Animation: bars of input tokens per turn grow from 4,000 at turn 1 to 17,500 at turn 10 because each turn resends the history, while a red line of cumulative input tokens curves up to about 107 thousand: roughly quadratic growth. Levers: cache the stable prefix, clear old tool results, compact history, use sub-agents for big reads, and cap turns. Illustrative numbers.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .bar{transform-box:fill-box;transform-origin:50% 100%;animation:14s infinite ease-out}
+    @keyframes b0{0%,4%{transform:scaleY(0)}9%,100%{transform:scaleY(1)}}.b0{animation-name:b0}
+    @keyframes b1{0%,11%{transform:scaleY(0)}16%,100%{transform:scaleY(1)}}.b1{animation-name:b1}
+    @keyframes b2{0%,18%{transform:scaleY(0)}23%,100%{transform:scaleY(1)}}.b2{animation-name:b2}
+    @keyframes b3{0%,25%{transform:scaleY(0)}30%,100%{transform:scaleY(1)}}.b3{animation-name:b3}
+    @keyframes b4{0%,32%{transform:scaleY(0)}37%,100%{transform:scaleY(1)}}.b4{animation-name:b4}
+    @keyframes b5{0%,39%{transform:scaleY(0)}44%,100%{transform:scaleY(1)}}.b5{animation-name:b5}
+    @keyframes b6{0%,46%{transform:scaleY(0)}51%,100%{transform:scaleY(1)}}.b6{animation-name:b6}
+    @keyframes b7{0%,53%{transform:scaleY(0)}58%,100%{transform:scaleY(1)}}.b7{animation-name:b7}
+    @keyframes b8{0%,60%{transform:scaleY(0)}65%,100%{transform:scaleY(1)}}.b8{animation-name:b8}
+    @keyframes b9{0%,67%{transform:scaleY(0)}72%,100%{transform:scaleY(1)}}.b9{animation-name:b9}
+    .draw{stroke-dasharray:100;animation:dr 14s infinite linear}
+    @keyframes dr{0%,4%{stroke-dashoffset:100}75%,100%{stroke-dashoffset:0}}
+    @media (prefers-reduced-motion: reduce){.bar,.draw{animation:none;transform:none;stroke-dashoffset:0}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="380" rx="14"/>
+  <text class="h" x="28" y="40">Agent cost grows roughly quadratically with turns</text><text class="sub" x="28" y="62">Each turn resends the whole history. Illustrative: 4K-token prefix, +1.5K tokens per turn.</text><line class="grid" x1="80" y1="300" x2="740" y2="300"/><text class="sub" x="72" y="304" text-anchor="end">0K</text><line class="grid" x1="80" y1="256.522" x2="740" y2="256.522"/><text class="sub" x="72" y="260.522" text-anchor="end">25K</text><line class="grid" x1="80" y1="213.043" x2="740" y2="213.043"/><text class="sub" x="72" y="217.043" text-anchor="end">50K</text><line class="grid" x1="80" y1="169.565" x2="740" y2="169.565"/><text class="sub" x="72" y="173.565" text-anchor="end">75K</text><line class="grid" x1="80" y1="126.087" x2="740" y2="126.087"/><text class="sub" x="72" y="130.087" text-anchor="end">100K</text><rect class="tea bar b0" x="98" y="293.04347826086956" width="44" height="6.956521739130437" rx="3"/><text class="sub" x="120" y="318" text-anchor="middle">1</text><rect class="tea bar b1" x="158" y="290.4347826086956" width="44" height="9.565217391304373" rx="3"/><text class="sub" x="180" y="318" text-anchor="middle">2</text><rect class="tea bar b2" x="218" y="287.82608695652175" width="44" height="12.173913043478251" rx="3"/><text class="sub" x="240" y="318" text-anchor="middle">3</text><rect class="tea bar b3" x="278" y="285.2173913043478" width="44" height="14.782608695652186" rx="3"/><text class="sub" x="300" y="318" text-anchor="middle">4</text><rect class="tea bar b4" x="338" y="282.60869565217394" width="44" height="17.391304347826065" rx="3"/><text class="sub" x="360" y="318" text-anchor="middle">5</text><rect class="tea bar b5" x="398" y="280.0" width="44" height="20.0" rx="3"/><text class="sub" x="420" y="318" text-anchor="middle">6</text><rect class="tea bar b6" x="458" y="277.39130434782606" width="44" height="22.608695652173935" rx="3"/><text class="sub" x="480" y="318" text-anchor="middle">7</text><rect class="tea bar b7" x="518" y="274.7826086956522" width="44" height="25.217391304347814" rx="3"/><text class="sub" x="540" y="318" text-anchor="middle">8</text><rect class="tea bar b8" x="578" y="272.17391304347825" width="44" height="27.82608695652175" rx="3"/><text class="sub" x="600" y="318" text-anchor="middle">9</text><rect class="tea bar b9" x="638" y="269.5652173913044" width="44" height="30.434782608695627" rx="3"/><text class="sub" x="660" y="318" text-anchor="middle">10</text><path class="lnb draw" d="M 120.0 293.0 L 180.0 283.5 L 240.0 271.3 L 300.0 256.5 L 360.0 239.1 L 420.0 219.1 L 480.0 196.5 L 540.0 171.3 L 600.0 143.5 L 660.0 113.0" pathLength="100"/><text class="badt" x="660" y="103.043" text-anchor="end" style="font-size:13px">cumulative 107K</text><text class="teat" x="660" y="261.565" text-anchor="middle" style="font-size:12px">per turn</text><text class="sub" x="740" y="336" text-anchor="end">turn</text><text class="sm" x="28" y="362">Levers: cache the stable prefix, clear old tool results, compact history, hand big reads to sub-agents, cap turns.</text>
+</svg>

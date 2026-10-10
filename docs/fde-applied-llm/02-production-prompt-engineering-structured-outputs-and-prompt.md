@@ -68,6 +68,9 @@ There are three levels of format control:
 
 The same idea applies to **tool calls**: a tool definition with `strict: true` (Anthropic and OpenAI) guarantees the arguments match the tool's input schema.
 
+![Five layers after the model: constrained decoding, business validation, evidence check, refusal and truncation checks, and a human queue](images/02-validation-layers.svg){ loading=lazy }
+*Promise 'never malformed', not 'never wrong'.*
+
 | Provider | Response format | Strict tool arguments | SDK helper |
 |---|---|---|---|
 | Anthropic Messages API | `output_config: {format: {type: "json_schema", schema: {...}}}` (the older `output_format` request parameter is deprecated) | `strict: true` on the tool definition | `client.messages.parse(..., output_format=PydanticModel)` → `response.parsed_output` |
@@ -120,6 +123,9 @@ sequenceDiagram
     API-->>App: answer B, faster TTFT, usage shows cache read
 ```
 *Notice that the second request only pays full price for the new suffix; if anything in the prefix had changed, even one character, request 2 would be another miss and write.*
+
+![Animation: request 1 writes the cache, request 2 hits it on the same prefix, request 3 puts a timestamp first and misses](images/02-caching-prefix.svg){ loading=lazy }
+*One volatile token at the front turns every request into a miss.*
 
 **Silent cache killers** (check these first when the hit rate is low): a timestamp or request ID in the system prompt; tools listed in a non-deterministic order; JSON serialised without sorted keys; per-user data placed before the shared documents; switching model or effort level mid-conversation; editing earlier turns of history instead of appending.
 

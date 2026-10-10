@@ -63,6 +63,9 @@ sequenceDiagram
 ```
 *Notice that the model only proposes; every authorisation, approval and execution decision sits in the host's code, and errors flow back to the model as data it can recover from.*
 
+![Animation: the loop of model proposes, host validates, policy and approval, execute with the user's token, result back, with a turn, cost and time budget](images/04-agent-loop.svg){ loading=lazy }
+*Every box except the first is your code.*
+
 Key loop mechanics (vendor-neutral):
 
 - The model returns **tool calls** (Anthropic: `tool_use` content blocks with `stop_reason: "tool_use"`; OpenAI Responses: `function_call` output items with a `call_id`; Gemini: function calls). You execute and return results (`tool_result` with the matching `tool_use_id`; `function_call_output` with the `call_id`).
@@ -98,6 +101,9 @@ flowchart LR
     S2 --> API["Customer REST API<br/>(user's token)"]
 ```
 *Notice that each server wraps one system and the host holds one client per server; the remote server calls the customer API with the end user's authorisation, not a shared super-user key.*
+
+![A host with three MCP clients connected to claims-mcp and docs-mcp over Streamable HTTP with OAuth and to a local-files server over stdio, each wrapping one system](images/04-mcp-topology.svg){ loading=lazy }
+*One server per system of record; any MCP-capable host can reuse it.*
 
 - **Primitives:** **tools** (model-invoked actions), **resources** (read-only data the app can attach as context), **prompts** (user-invoked templates). Clients can also offer servers **sampling** (ask the host's model) and **elicitation** (ask the user for input).
 - **Transports:** **stdio** for local servers run as a subprocess; **Streamable HTTP** for remote servers (replaced the older HTTP+SSE transport in 2025).

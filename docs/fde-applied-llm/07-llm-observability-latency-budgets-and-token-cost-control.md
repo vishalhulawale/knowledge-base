@@ -67,6 +67,9 @@ flowchart LR
 ```
 *Notice that generation is half the budget, so capping output length and streaming matter more than shaving retrieval; the query-rewrite step is a candidate to cut or run in parallel.*
 
+![A 3-second p95 budget split into auth, query rewrite, retrieval, rerank, time to first token, generation and checks, about 2.97 seconds, with the levers that shrink it](images/07-latency-budget.svg){ loading=lazy }
+*Generation is the biggest block, so shape the output first.*
+
 Techniques, by impact:
 
 | Technique | Effect |
@@ -94,6 +97,9 @@ Where cost hides:
 - **Output:** output tokens cost several times input tokens; verbose answers and reasoning tokens add up.
 - **Retries and escalations:** failed calls still bill for tokens processed.
 - **Evals and judges:** a nightly 1,000-case suite with judges is a real line item.
+
+![Animation: input tokens per turn grow linearly while cumulative input tokens curve up to about 107 thousand over ten turns](images/07-agent-tokens.svg){ loading=lazy }
+*Linear per turn, quadratic in total.*
 
 **Attribution:** tag every call with tenant, route, feature and model; aggregate daily; show cost per task and per tenant. This is what finance and the customer's sponsor ask for, and it tells you which lever to pull.
 

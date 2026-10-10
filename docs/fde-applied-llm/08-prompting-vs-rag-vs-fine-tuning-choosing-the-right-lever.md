@@ -38,6 +38,9 @@ Choosing wrong is expensive. Fine-tuning a model on a policy manual that changes
 
 The clean mental model: **context levers change what the model sees; weight levers change how the model behaves.** Knowledge belongs in context; behaviour can go in weights.
 
+![Six rising steps in order of cost: prompt and examples, structured outputs, long context or RAG, tools, decomposition and routing, fine-tuning or distillation](images/08-lever-ladder.svg){ loading=lazy }
+*Climb only when the same eval set says the rung below isn't enough.*
+
 ### The decision flow
 
 ```mermaid
@@ -56,6 +59,9 @@ flowchart TD
     Q4 -->|"no"| G["Collect data from production,<br/>keep prompting + routing"]
 ```
 *Notice that fine-tuning is reachable only after the prompt is fixed and only for behaviour or efficiency problems with enough labelled data; knowledge problems always route to context or tools.*
+
+![Four symptom-to-lever quadrants: knowledge to context, live data to tools, format to structured outputs, narrow behaviour or cost at scale to fine-tuning](images/08-diagnose-lever.svg){ loading=lazy }
+*Name the symptom and the lever follows.*
 
 ### Long context vs RAG
 

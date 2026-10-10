@@ -42,6 +42,9 @@ Two non-obvious points interviewers like:
 - **Output tokens dominate latency** (they're generated one by one) and usually cost 4–8× input tokens per token. Shortening output often beats switching model.
 - **Reasoning effort is a model selection knob.** Current models from Anthropic, OpenAI and Google expose effort or thinking controls. Before building a multi-model cascade, test the stronger model at *lower* effort: one model is simpler to operate and keeps one prompt cache.
 
+![Cost per completed task, split into model tokens and human fixes: small model only $0.452, strong model only $0.095, cascade $0.083, with illustrative numbers](images/01-cost-per-task.svg){ loading=lazy }
+*The cheapest request can be the most expensive task.*
+
 ### The model landscape (as of October 2026)
 
 Prices and names change every few months. Treat this table as the *shape* of the market, and check the providers' model pages before a customer conversation.
@@ -97,6 +100,9 @@ flowchart LR
     FB --> OUT
 ```
 *Notice the two different arrows out of a tier: escalation is a quality decision (the answer was not good enough), fallback is an availability decision (the call failed). Mixing them up is a common design bug.*
+
+![A request goes to a small model; a solid arrow escalates to a strong model when a check fails, and dashed arrows fall back to another region or provider on 429, 5xx or timeout](images/01-escalation-fallback.svg){ loading=lazy }
+*Quality failures escalate; availability failures fall back.*
 
 | Pattern | How it works | Good for | Watch out for |
 |---|---|---|---|

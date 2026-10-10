@@ -82,6 +82,9 @@ Running both and fusing the ranked lists covers each one's blind spots. **Recipr
 
 A document ranked 1st by one retriever and 5th by the other beats one ranked 1st by one retriever and absent from the other. Elasticsearch, OpenSearch, Azure AI Search, MongoDB Atlas and Weaviate support RRF natively. The alternative, weighted score blending, needs score normalisation and tuning per corpus.
 
+![Four documents with BM25 and vector ranks fused by reciprocal rank fusion with k = 60; the exact-code match and the paraphrase match both stay near the top](images/03-rrf.svg){ loading=lazy }
+*Fusion uses ranks, so BM25 and vector scores never need to be comparable.*
+
 ### Reranking
 
 Retrievers use **bi-encoders**: query and document are embedded separately, which is fast but coarse. A **cross-encoder reranker** reads the query and each candidate together and outputs a relevance score: much more accurate, too slow for the whole corpus, ideal for the top 50–150 candidates. Hosted rerank APIs exist from several vendors, and open-source cross-encoders can run in the customer's VPC. An LLM can also rerank (listwise), at higher cost and latency.
@@ -117,6 +120,9 @@ sequenceDiagram
     App-->>User: answer + links to source docs
 ```
 *Notice that the filter is applied inside the index query, so unauthorised chunks never reach the application, the prompt, the logs or the model.*
+
+![Animation: post-filtering a nurse's top 5 strikes out three HR chunks after they were retrieved, leaving two; pre-filtering returns five permitted clinical chunks](images/03-permission-filter.svg){ loading=lazy }
+*Filter before ranking, or unauthorised text has already left the index.*
 
 Design decisions:
 
