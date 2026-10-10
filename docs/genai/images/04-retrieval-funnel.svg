@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 540" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">RAG retrieval funnel: filter, hybrid search, fusion, rerank, prompt</title>
+  <desc id="d">An animated funnel showing how one question is narrowed down to a handful of sources. The corpus holds 120,000 chunks. A metadata and access-control filter keeps only the 9,000 chunks this user may see for this plan. Two searches then run in parallel over the filtered set: dense vector search returns its top 50 chunks by meaning, and BM25 keyword search returns its top 50 by exact terms, such as the form code PA-2291. Reciprocal rank fusion merges the two lists into about 30 unique chunks, rewarding chunks that rank well in both. A cross-encoder reranker reads each question and chunk pair and keeps the best 5. Finally the 5 chunks are placed in the prompt as numbered sources and the model answers with citations such as [1] and [3]. The stages appear one after another. The numbers are illustrative, not a benchmark.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:14px;font-weight:600}
+    .tx{fill:#334155;font-size:13px}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .on{fill:#ffffff;font-size:13px;font-weight:700}
+    .mutf{fill:#94a3b8}.wrnf{fill:#d97706}.pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.mix{fill:#6366f1}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .bo{fill:#f0fdf4;stroke:#16a34a}
+    .ln{stroke:#94a3b8;stroke-width:1.5;fill:none;stroke-dasharray:4 4}
+    .ah{fill:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .on{fill:#0f172a}
+      .mutf{fill:#64748b}.wrnf{fill:#fbbf24}.pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.mix{fill:#a5b4fc}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.wrnt{fill:#fbbf24}
+      .bo{fill:#052e16;stroke:#4ade80}
+      .ln{stroke:#64748b}.ah{fill:#64748b}
+    }
+    .a{opacity:0;animation:14s infinite linear}
+    @keyframes l0{0%,3%{opacity:0}5%,90%{opacity:1}94%,100%{opacity:0}}
+    @keyframes l1{0%,14%{opacity:0}16%,90%{opacity:1}94%,100%{opacity:0}}
+    @keyframes l2{0%,26%{opacity:0}28%,90%{opacity:1}94%,100%{opacity:0}}
+    @keyframes l3{0%,40%{opacity:0}42%,90%{opacity:1}94%,100%{opacity:0}}
+    @keyframes l4{0%,53%{opacity:0}55%,90%{opacity:1}94%,100%{opacity:0}}
+    @keyframes l5{0%,66%{opacity:0}68%,90%{opacity:1}94%,100%{opacity:0}}
+    .l0{animation-name:l0}.l1{animation-name:l1}.l2{animation-name:l2}.l3{animation-name:l3}.l4{animation-name:l4}.l5{animation-name:l5}
+    @media (prefers-reduced-motion: reduce){ .a{animation:none;opacity:1} }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="538" rx="14"/>
+  <text class="h" x="28" y="40">From 120,000 chunks to 5 cited sources</text>
+  <text class="sub" x="28" y="62">Question: "Does drug X need prior authorization on the Gold plan?" Illustrative numbers.</text>
+
+  <!-- stage 0: corpus -->
+  <g class="a l0">
+    <text class="lbl" x="28" y="98">1. Corpus</text>
+    <rect class="mutf" x="220" y="82" width="552" height="26" rx="6"/>
+    <text class="on" x="496" y="100" text-anchor="middle">120,000 chunks (all tenants, all plans)</text>
+  </g>
+  <!-- stage 1: filter -->
+  <g class="a l1">
+    <path class="ln" d="M400,110 L400,126" marker-end="url(#ar)"/>
+    <text class="lbl" x="28" y="148">2. Metadata + ACL filter</text>
+    <text class="sub" x="28" y="166">tenant, plan = Gold, user groups</text>
+    <rect class="wrnf" x="300" y="132" width="200" height="26" rx="6"/>
+    <text class="on" x="400" y="150" text-anchor="middle">9,000 allowed chunks</text>
+  </g>
+  <!-- stage 2: hybrid -->
+  <g class="a l2">
+    <path class="ln" d="M370,160 L300,186" marker-end="url(#ar)"/>
+    <path class="ln" d="M430,160 L500,186" marker-end="url(#ar)"/>
+    <text class="lbl" x="28" y="210">3. Hybrid search</text>
+    <text class="sub" x="28" y="228">two retrievers, in parallel</text>
+    <rect class="pri" x="220" y="192" width="170" height="26" rx="6"/>
+    <text class="on" x="305" y="210" text-anchor="middle">Dense: top 50</text>
+    <rect class="tea" x="410" y="192" width="170" height="26" rx="6"/>
+    <text class="on" x="495" y="210" text-anchor="middle">BM25: top 50</text>
+    <text class="sm" x="305" y="236" text-anchor="middle">c17 · c4 · c88 · c9 …</text>
+    <text class="sm" x="495" y="236" text-anchor="middle">c4 · c203 (PA-2291) · c17 …</text>
+    <text class="prit" x="600" y="204" font-size="12">meaning, paraphrase</text>
+    <text class="teat" x="600" y="220" font-size="12">exact codes, names</text>
+  </g>
+  <!-- stage 3: RRF -->
+  <g class="a l3">
+    <path class="ln" d="M305,242 L360,264" marker-end="url(#ar)"/>
+    <path class="ln" d="M495,242 L440,264" marker-end="url(#ar)"/>
+    <text class="lbl" x="28" y="288">4. Reciprocal rank fusion</text>
+    <text class="sub" x="28" y="306">score = Σ 1 / (60 + rank)</text>
+    <rect class="mix" x="290" y="270" width="220" height="26" rx="6"/>
+    <text class="on" x="400" y="288" text-anchor="middle">~30 unique, re-ranked</text>
+    <text class="sm" x="400" y="314" text-anchor="middle">c4 (high in both) · c17 · c203 · c88 · c9 …</text>
+  </g>
+  <!-- stage 4: rerank -->
+  <g class="a l4">
+    <path class="ln" d="M400,320 L400,340" marker-end="url(#ar)"/>
+    <text class="lbl" x="28" y="362">5. Cross-encoder rerank</text>
+    <text class="sub" x="28" y="380">reads (question, chunk) pairs</text>
+    <rect class="okf" x="330" y="346" width="140" height="26" rx="6"/>
+    <text class="on" x="400" y="364" text-anchor="middle">top 5</text>
+    <text class="sm" x="400" y="390" text-anchor="middle">c4 · c203 · c17 · c51 · c9</text>
+  </g>
+  <!-- stage 5: prompt -->
+  <g class="a l5">
+    <path class="ln" d="M400,396 L400,414" marker-end="url(#ar)"/>
+    <text class="lbl" x="28" y="440">6. Augment + generate</text>
+    <text class="sub" x="28" y="458">sources numbered, citations required</text>
+    <rect class="bo" x="220" y="420" width="552" height="66" rx="8" stroke-width="1.4"/>
+    <text class="tx" x="236" y="442">&lt;source id="1" doc="Gold formulary §3.2"&gt; … &lt;/source&gt; … &lt;source id="5"&gt;</text>
+    <text class="tx" x="236" y="462">"Yes. Drug X needs prior authorization on Gold [1]; submit form PA-2291 [3]."</text>
+    <text class="okt" x="236" y="480" font-size="12">Grounded, cited, and only from chunks this user may see</text>
+  </g>
+  <text class="sub" x="28" y="520">Each stage trades recall for precision: cheap and wide first, expensive and narrow last.</text>
+</svg>

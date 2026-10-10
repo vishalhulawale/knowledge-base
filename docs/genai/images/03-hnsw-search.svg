@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">HNSW search: coarse hops on top, fine hops at the bottom</title>
+  <desc id="d">Animation of a search in an HNSW (hierarchical navigable small world) graph with three layers. The top layer holds a few nodes with long links, the middle layer more nodes, and the bottom layer every vector with short links. The query, a red star, is at the same position on every layer. The search enters at the fixed entry point on the top layer and greedily hops to whichever neighbour is closer to the query: two long hops on the top layer. When no neighbour is closer it drops to the same node one layer down and continues with shorter hops, then drops to the bottom layer, where it keeps a candidate list of size ef_search and returns the closest k nodes, shown in green. Only about a dozen nodes are visited instead of every vector. Parameter values are pgvector defaults: m 16, ef_construction 64, ef_search 40. Simplified: real graphs have up to m links per node per layer and millions of nodes.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}.lnm{stroke:#cbd5e1;stroke-width:1.2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnm{stroke:#475569}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .a{opacity:0;animation:14s infinite linear}
+    @keyframes s0{0%,6%{opacity:0}8%,90%{opacity:1}94%,100%{opacity:0}}
+    .s0{animation-name:s0}
+    @keyframes s1{0%,15%{opacity:0}17%,90%{opacity:1}94%,100%{opacity:0}}
+    .s1{animation-name:s1}
+    @keyframes s2{0%,24%{opacity:0}26%,90%{opacity:1}94%,100%{opacity:0}}
+    .s2{animation-name:s2}
+    @keyframes s3{0%,33%{opacity:0}35%,90%{opacity:1}94%,100%{opacity:0}}
+    .s3{animation-name:s3}
+    @keyframes s4{0%,42%{opacity:0}44%,90%{opacity:1}94%,100%{opacity:0}}
+    .s4{animation-name:s4}
+    @keyframes s5{0%,51%{opacity:0}53%,90%{opacity:1}94%,100%{opacity:0}}
+    .s5{animation-name:s5}
+    @keyframes s6{0%,60%{opacity:0}62%,90%{opacity:1}94%,100%{opacity:0}}
+    .s6{animation-name:s6}
+    @keyframes s7{0%,69%{opacity:0}71%,90%{opacity:1}94%,100%{opacity:0}}
+    .s7{animation-name:s7}
+    @keyframes s8{0%,78%{opacity:0}80%,90%{opacity:1}94%,100%{opacity:0}}
+    .s8{animation-name:s8}
+    @media (prefers-reduced-motion: reduce){ .a{animation:none;opacity:1} }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="518" rx="14"/>
+  <text class="h" x="28" y="40">HNSW: zoom in layer by layer instead of scanning everything</text>
+  <text class="sub" x="28" y="62">Greedy hop to the neighbour closest to the query; drop a layer when no neighbour is closer.</text>
+  <rect class="box" x="20" y="84" width="610" height="66" rx="10" stroke-width="1.2"/>
+  <text class="sub" x="34" y="102">Layer 2 (few nodes, long links)</text>
+  <line class="lnm" x1="80" y1="125" x2="300" y2="122"/>
+  <line class="lnm" x1="300" y1="122" x2="520" y2="128"/>
+  <line class="lnm" x1="80" y1="125" x2="520" y2="128"/>
+  <circle class="mutf" cx="80" cy="125" r="6"/>
+  <circle class="mutf" cx="300" cy="122" r="6"/>
+  <circle class="mutf" cx="520" cy="128" r="6"/>
+  <polygon class="badf" points="600.0,108.0 602.4,113.7 608.6,114.2 603.9,118.3 605.3,124.3 600.0,121.0 594.7,124.3 596.1,118.3 591.4,114.2 597.6,113.7"/>
+  <rect class="box" x="20" y="184" width="610" height="86" rx="10" stroke-width="1.2"/>
+  <text class="sub" x="34" y="202">Layer 1</text>
+  <line class="lnm" x1="80" y1="235" x2="190" y2="225"/>
+  <line class="lnm" x1="190" y1="225" x2="300" y2="240"/>
+  <line class="lnm" x1="300" y1="240" x2="420" y2="228"/>
+  <line class="lnm" x1="420" y1="228" x2="520" y2="235"/>
+  <circle class="mutf" cx="80" cy="235" r="6"/>
+  <circle class="mutf" cx="190" cy="225" r="6"/>
+  <circle class="mutf" cx="300" cy="240" r="6"/>
+  <circle class="mutf" cx="420" cy="228" r="6"/>
+  <circle class="mutf" cx="520" cy="235" r="6"/>
+  <polygon class="badf" points="600.0,218.0 602.4,223.7 608.6,224.2 603.9,228.3 605.3,234.3 600.0,231.1 594.7,234.3 596.1,228.3 591.4,224.2 597.6,223.7"/>
+  <rect class="box" x="20" y="304" width="610" height="126" rx="10" stroke-width="1.2"/>
+  <text class="sub" x="34" y="322">Layer 0 (every vector)</text>
+  <line class="lnm" x1="72" y1="403" x2="112" y2="385"/>
+  <line class="lnm" x1="112" y1="385" x2="140" y2="395"/>
+  <line class="lnm" x1="140" y1="395" x2="179" y2="367"/>
+  <line class="lnm" x1="179" y1="367" x2="215" y2="401"/>
+  <line class="lnm" x1="215" y1="401" x2="258" y2="346"/>
+  <line class="lnm" x1="258" y1="346" x2="303" y2="370"/>
+  <line class="lnm" x1="303" y1="370" x2="335" y2="349"/>
+  <line class="lnm" x1="335" y1="349" x2="379" y2="347"/>
+  <line class="lnm" x1="379" y1="347" x2="407" y2="403"/>
+  <line class="lnm" x1="407" y1="403" x2="443" y2="380"/>
+  <line class="lnm" x1="443" y1="380" x2="492" y2="347"/>
+  <line class="lnm" x1="492" y1="347" x2="525" y2="346"/>
+  <line class="lnm" x1="525" y1="346" x2="560" y2="362"/>
+  <line class="lnm" x1="560" y1="362" x2="598" y2="378"/>
+  <line class="lnm" x1="72" y1="403" x2="140" y2="395"/>
+  <line class="lnm" x1="112" y1="385" x2="179" y2="367"/>
+  <line class="lnm" x1="140" y1="395" x2="215" y2="401"/>
+  <line class="lnm" x1="179" y1="367" x2="258" y2="346"/>
+  <line class="lnm" x1="215" y1="401" x2="303" y2="370"/>
+  <line class="lnm" x1="258" y1="346" x2="335" y2="349"/>
+  <line class="lnm" x1="303" y1="370" x2="379" y2="347"/>
+  <line class="lnm" x1="335" y1="349" x2="407" y2="403"/>
+  <line class="lnm" x1="379" y1="347" x2="443" y2="380"/>
+  <line class="lnm" x1="407" y1="403" x2="492" y2="347"/>
+  <line class="lnm" x1="443" y1="380" x2="525" y2="346"/>
+  <line class="lnm" x1="492" y1="347" x2="560" y2="362"/>
+  <line class="lnm" x1="525" y1="346" x2="598" y2="378"/>
+  <circle class="mutf" cx="72" cy="403" r="6"/>
+  <circle class="mutf" cx="112" cy="385" r="6"/>
+  <circle class="mutf" cx="140" cy="395" r="6"/>
+  <circle class="mutf" cx="179" cy="367" r="6"/>
+  <circle class="mutf" cx="215" cy="401" r="6"/>
+  <circle class="mutf" cx="258" cy="346" r="6"/>
+  <circle class="mutf" cx="303" cy="370" r="6"/>
+  <circle class="mutf" cx="335" cy="349" r="6"/>
+  <circle class="mutf" cx="379" cy="347" r="6"/>
+  <circle class="mutf" cx="407" cy="403" r="6"/>
+  <circle class="mutf" cx="443" cy="380" r="6"/>
+  <circle class="mutf" cx="492" cy="347" r="6"/>
+  <circle class="mutf" cx="525" cy="346" r="6"/>
+  <circle class="mutf" cx="560" cy="362" r="6"/>
+  <circle class="mutf" cx="598" cy="378" r="6"/>
+  <polygon class="badf" points="600.0,358.0 602.4,363.7 608.6,364.2 603.9,368.3 605.3,374.3 600.0,371.1 594.7,374.3 596.1,368.3 591.4,364.2 597.6,363.7"/>
+  <g class="a s0"><circle class="pri" cx="80" cy="125" r="9"/><text class="prit" x="80" y="111" text-anchor="middle" font-size="12">entry point</text></g>
+  <g class="a s1"><line class="lnp" x1="80" y1="125" x2="300" y2="122" marker-end="url(#arp)"/><circle class="pri" cx="300" cy="122" r="7"/></g>
+  <g class="a s2"><line class="lnp" x1="300" y1="122" x2="520" y2="128" marker-end="url(#arp)"/><circle class="pri" cx="520" cy="128" r="7"/></g>
+  <g class="a s3"><line class="lnw dash" x1="520" y1="128" x2="520" y2="235" marker-end="url(#arw)"/><circle class="pri" cx="520" cy="235" r="7"/></g>
+  <g class="a s5"><line class="lnw dash" x1="520" y1="235" x2="525" y2="346" marker-end="url(#arw)"/><circle class="pri" cx="525" cy="346" r="7"/></g>
+  <g class="a s6"><line class="lnp" x1="525" y1="346" x2="598" y2="378" marker-end="url(#arp)"/><circle class="pri" cx="598" cy="378" r="7"/></g>
+  <g class="a s7"><circle class="okf" cx="598" cy="378" r="8"/><circle class="okf" cx="560" cy="362" r="8"/><circle class="okf" cx="525" cy="346" r="8"/><circle class="okf" cx="492" cy="347" r="8"/><text class="okt" x="600" y="452" text-anchor="middle" font-size="13">top-k returned</text></g>
+  <rect class="bp" x="644" y="84" width="136" height="346" rx="10" stroke-width="1.2"/>
+  <text class="prit" x="712" y="110" text-anchor="middle" font-size="14">Build knobs</text>
+  <text class="sm" x="712" y="132" text-anchor="middle">m = 16</text>
+  <text class="sm" x="712" y="148" text-anchor="middle">links per node</text>
+  <text class="sm" x="712" y="172" text-anchor="middle">ef_construction</text>
+  <text class="sm" x="712" y="188" text-anchor="middle">= 64 candidates</text>
+  <text class="prit" x="712" y="222" text-anchor="middle" font-size="14">Query knob</text>
+  <text class="sm" x="712" y="244" text-anchor="middle">ef_search = 40</text>
+  <text class="sm" x="712" y="260" text-anchor="middle">higher = better</text>
+  <text class="sm" x="712" y="276" text-anchor="middle">recall, slower</text>
+  <text class="prit" x="712" y="310" text-anchor="middle" font-size="14">Cost</text>
+  <text class="sm" x="712" y="332" text-anchor="middle">visits ~log N</text>
+  <text class="sm" x="712" y="348" text-anchor="middle">nodes; whole</text>
+  <text class="sm" x="712" y="364" text-anchor="middle">graph in RAM</text>
+  <text class="sub" x="712" y="410" text-anchor="middle">pgvector defaults</text>
+  <g class="a s8"><text class="tx" x="28" y="480">Visited about a dozen nodes, not all of them: that is why it is <tspan class="wrnt">approximate</tspan>.</text>
+  <text class="sub" x="28" y="500">A greedy path can miss the true nearest neighbour; raising ef_search widens the candidate list.</text></g>
+</svg>

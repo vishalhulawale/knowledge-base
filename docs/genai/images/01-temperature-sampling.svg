@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Temperature reshapes the next-token distribution</title>
+  <desc id="d">The model has produced the prompt "The prior authorization request was" and scores five candidate next tokens with logits: approved 3.0, denied 2.2, pending 1.6, escalated 0.6 and purple minus 1.0. Softmax with temperature T divides every logit by T before normalising. The animation cycles through three temperatures. At 0.2 the distribution is sharp: approved 98.1 percent, denied 1.8 percent, the rest near zero, so sampling almost always returns approved. At 1.0, the model's own distribution, approved is 55.4, denied 24.9, pending 13.7, escalated 5.0 and purple 1.0 percent. At 1.8 it is flatter: approved 40.4, denied 25.9, pending 18.6, escalated 10.7 and purple 4.4 percent, so the nonsense token purple is picked about once in 23 draws. The ranking never changes; only how much probability the lower-ranked tokens get. The logits are invented for illustration.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes f0{0%{opacity:0}3%,30%{opacity:1}33%,100%{opacity:0}}
+    @keyframes f1{0%,33%{opacity:0}36%,63%{opacity:1}66%,100%{opacity:0}}
+    @keyframes f2{0%,66%{opacity:0}69%,97%{opacity:1}100%{opacity:0}}
+    .f0{animation-name:f0}.f1{animation-name:f1}.f2{animation-name:f2}
+    @media (prefers-reduced-motion: reduce){ .a{animation:none;opacity:0} .f1{opacity:1} }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="468" rx="14"/>
+  <text class="h" x="28" y="40">Temperature: same logits, different odds</text>
+  <text class="sub" x="28" y="62">p(token) = softmax(logit / T). Prompt so far: "The prior authorization request was ..."</text>
+  <text class="lbl" x="40" y="150">approved</text>
+  <text class="sub" x="160" y="150">logit +3.0</text>
+  <rect class="bm" x="240" y="134" width="440" height="22" rx="5" stroke-width="1"/>
+  <text class="lbl" x="40" y="202">denied</text>
+  <text class="sub" x="160" y="202">logit +2.2</text>
+  <rect class="bm" x="240" y="186" width="440" height="22" rx="5" stroke-width="1"/>
+  <text class="lbl" x="40" y="254">pending</text>
+  <text class="sub" x="160" y="254">logit +1.6</text>
+  <rect class="bm" x="240" y="238" width="440" height="22" rx="5" stroke-width="1"/>
+  <text class="lbl" x="40" y="306">escalated</text>
+  <text class="sub" x="160" y="306">logit +0.6</text>
+  <rect class="bm" x="240" y="290" width="440" height="22" rx="5" stroke-width="1"/>
+  <text class="lbl" x="40" y="358">purple</text>
+  <text class="sub" x="160" y="358">logit -1.0</text>
+  <rect class="bm" x="240" y="342" width="440" height="22" rx="5" stroke-width="1"/>
+  <g class="a f0">
+    <text class="okt" x="28" y="104" font-size="16">Low temperature (0.2): nearly greedy, same answer every run</text>
+    <rect class="okf" x="240" y="134" width="431.7" height="22" rx="5"/>
+    <text class="tx" x="681.7" y="150" font-weight="600">98.1%</text>
+    <rect class="pri" x="240" y="186" width="7.9" height="22" rx="5"/>
+    <text class="tx" x="257.9" y="202" font-weight="600">1.8%</text>
+    <rect class="pri" x="240" y="238" width="1.5" height="22" rx="5"/>
+    <text class="tx" x="251.5" y="254" font-weight="600">0.1%</text>
+    <rect class="pri" x="240" y="290" width="1.5" height="22" rx="5"/>
+    <text class="tx" x="251.5" y="306" font-weight="600">0.0%</text>
+    <rect class="badf" x="240" y="342" width="1.5" height="22" rx="5"/>
+    <text class="tx" x="251.5" y="358" font-weight="600">0.0%</text>
+  </g>
+  <g class="a f1">
+    <text class="prit" x="28" y="104" font-size="16">Temperature 1.0: the model's own distribution</text>
+    <rect class="okf" x="240" y="134" width="243.8" height="22" rx="5"/>
+    <text class="tx" x="493.8" y="150" font-weight="600">55.4%</text>
+    <rect class="pri" x="240" y="186" width="109.5" height="22" rx="5"/>
+    <text class="tx" x="359.5" y="202" font-weight="600">24.9%</text>
+    <rect class="pri" x="240" y="238" width="60.1" height="22" rx="5"/>
+    <text class="tx" x="310.1" y="254" font-weight="600">13.7%</text>
+    <rect class="pri" x="240" y="290" width="22.1" height="22" rx="5"/>
+    <text class="tx" x="272.1" y="306" font-weight="600">5.0%</text>
+    <rect class="badf" x="240" y="342" width="4.5" height="22" rx="5"/>
+    <text class="tx" x="254.5" y="358" font-weight="600">1.0%</text>
+  </g>
+  <g class="a f2">
+    <text class="badt" x="28" y="104" font-size="16">High temperature (1.8): flatter, unlikely tokens get real odds</text>
+    <rect class="okf" x="240" y="134" width="178.0" height="22" rx="5"/>
+    <text class="tx" x="428.0" y="150" font-weight="600">40.4%</text>
+    <rect class="pri" x="240" y="186" width="114.1" height="22" rx="5"/>
+    <text class="tx" x="364.1" y="202" font-weight="600">25.9%</text>
+    <rect class="pri" x="240" y="238" width="81.8" height="22" rx="5"/>
+    <text class="tx" x="331.8" y="254" font-weight="600">18.6%</text>
+    <rect class="pri" x="240" y="290" width="46.9" height="22" rx="5"/>
+    <text class="tx" x="296.9" y="306" font-weight="600">10.7%</text>
+    <rect class="badf" x="240" y="342" width="19.3" height="22" rx="5"/>
+    <text class="tx" x="269.3" y="358" font-weight="600">4.4%</text>
+  </g>
+  <text class="sub" x="28" y="412">Green = top token, red = nonsense token. Ranking never changes; T only moves probability mass between ranks.</text>
+  <text class="sub" x="28" y="436">T = 0 means greedy (always the top token), but that still is not a determinism guarantee on hosted APIs.</text>
+  <text class="sub" x="28" y="456">Logits are invented for illustration; percentages are the exact softmax of those logits.</text>
+</svg>

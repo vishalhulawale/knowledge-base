@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">How the context window fills up</title>
+  <desc id="d">A horizontal bar represents a 200K-token context window. Segments are added one at a time: an 8K system prompt and 12K of tool definitions that are resent on every request, 60K of retrieved documents, then three conversation turns of 30K each, and finally a 16K reservation for the output, because max_tokens shares the same window. When a fourth 30K turn arrives, the input fills the window exactly and the output reservation spills 16K past the end, shown in red: the request is rejected or the answer is cut off. In the last frame, compaction replaces the three old turns with a 10K summary, so turn four and the output reservation fit with room to spare. The numbers are simplified; current Claude models have a 1M-token window, but the arithmetic is the same.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+    .a{opacity:0;animation:16s infinite linear}
+    @keyframes sy{0%,1%{opacity:0}3%,93%{opacity:1}95%,100%{opacity:0}}
+    .sy{animation-name:sy}
+    @keyframes dc{0%,11%{opacity:0}13%,93%{opacity:1}95%,100%{opacity:0}}
+    .dc{animation-name:dc}
+    @keyframes ta{0%,20%{opacity:0}22%,68%{opacity:1}70%,100%{opacity:0}}
+    .ta{animation-name:ta}
+    @keyframes tb{0%,28%{opacity:0}30%,68%{opacity:1}70%,100%{opacity:0}}
+    .tb{animation-name:tb}
+    @keyframes tc{0%,36%{opacity:0}38%,68%{opacity:1}70%,100%{opacity:0}}
+    .tc{animation-name:tc}
+    @keyframes rs{0%,44%{opacity:0}46%,54%{opacity:1}56%,100%{opacity:0}}
+    .rs{animation-name:rs}
+    @keyframes ov{0%,56%{opacity:0}58%,68%{opacity:1}70%,100%{opacity:0}}
+    .ov{animation-name:ov}
+    @keyframes cp{0%,70%{opacity:0}72%,94%{opacity:1}96%,100%{opacity:0}}
+    .cp{animation-name:cp}
+    @keyframes c1{0%,1%{opacity:0}3%,18%{opacity:1}20%,100%{opacity:0}}
+    .c1{animation-name:c1}
+    @keyframes c2{0%,20%{opacity:0}22%,42%{opacity:1}44%,100%{opacity:0}}
+    .c2{animation-name:c2}
+    @keyframes c3{0%,44%{opacity:0}46%,54%{opacity:1}56%,100%{opacity:0}}
+    .c3{animation-name:c3}
+    @keyframes c4{0%,56%{opacity:0}58%,68%{opacity:1}70%,100%{opacity:0}}
+    .c4{animation-name:c4}
+    @keyframes c5{0%,70%{opacity:0}72%,94%{opacity:1}96%,100%{opacity:0}}
+    .c5{animation-name:c5}
+    @media (prefers-reduced-motion: reduce){ .a{animation:none;opacity:0} .sy,.dc,.ta,.tb,.tc,.ov,.c4{opacity:1} }
+    .win{fill:none;stroke:#0f172a;stroke-width:2.5}
+    @media (prefers-color-scheme: dark){.win{stroke:#f1f5f9}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">The context window is one shared budget</text>
+  <text class="sub" x="28" y="62">Everything the model reads plus everything it writes this turn must fit. Illustrative 200K-token window.</text>
+  <text class="sub" x="40" y="142">0</text>
+  <text class="sub" x="700.0" y="142" text-anchor="middle">200K limit</text>
+  <g class="a sy"><rect class="bp" x="40.0" y="150" width="26.4" height="56" rx="4" stroke-width="1.5"/><rect class="bt" x="66.4" y="150" width="39.6" height="56" rx="4" stroke-width="1.5"/></g>
+  <g class="a dc"><rect class="bw" x="106.0" y="150" width="198.0" height="56" rx="4" stroke-width="1.5"/><text class="sm" x="205.0" y="183" text-anchor="middle" font-weight="600">retrieved docs 60K</text></g>
+  <g class="a ta"><rect class="bm" x="304.0" y="150" width="99.0" height="56" rx="4" stroke-width="1.5"/><text class="sm" x="353.5" y="183" text-anchor="middle" font-weight="600">turn 1 30K</text></g>
+  <g class="a tb"><rect class="bm" x="403.0" y="150" width="99.0" height="56" rx="4" stroke-width="1.5"/><text class="sm" x="452.5" y="183" text-anchor="middle" font-weight="600">turn 2 30K</text></g>
+  <g class="a tc"><rect class="bm" x="502.0" y="150" width="99.0" height="56" rx="4" stroke-width="1.5"/><text class="sm" x="551.5" y="183" text-anchor="middle" font-weight="600">turn 3 30K</text></g>
+  <g class="a rs"><rect class="bo" x="601.0" y="150" width="52.8" height="56" rx="4" stroke-width="1.5" stroke-dasharray="5 4"/><text class="sm" x="627.4" y="183" text-anchor="middle" font-weight="600">out</text></g>
+  <g class="a ov"><rect class="bm" x="601.0" y="150" width="99.0" height="56" rx="4" stroke-width="1.5"/><text class="sm" x="650.5" y="183" text-anchor="middle" font-weight="600">turn 4 30K</text><rect class="bb" x="700.0" y="150" width="52.8" height="56" rx="4" stroke-width="1.5" stroke-dasharray="5 4"/><text class="sm" x="726.4" y="183" text-anchor="middle" font-weight="600">out</text><text class="badt" x="700.0" y="232" font-size="13" text-anchor="middle">16K past the limit</text></g>
+  <g class="a cp"><rect class="bt" x="304.0" y="150" width="33.0" height="56" rx="4" stroke-width="1.5"/><rect class="bm" x="337.0" y="150" width="99.0" height="56" rx="4" stroke-width="1.5"/><text class="sm" x="386.5" y="183" text-anchor="middle" font-weight="600">turn 4 30K</text><rect class="bo" x="436.0" y="150" width="52.8" height="56" rx="4" stroke-width="1.5" stroke-dasharray="5 4"/><text class="sm" x="462.4" y="183" text-anchor="middle" font-weight="600">out</text><text class="teat" x="320.5" y="232" font-size="13" text-anchor="middle">summary 10K</text><text class="okt" x="594.4" y="183" font-size="13" text-anchor="middle">64K free</text></g>
+  <g class="a c1"><text class="prit" x="28" y="120" font-size="15">1. System prompt (8K) and tool definitions (12K) are resent on every request</text></g>
+  <g class="a c2"><text class="tx" x="28" y="120" font-size="15">2. Retrieved documents and every conversation turn accumulate</text></g>
+  <g class="a c3"><text class="okt" x="28" y="120" font-size="15">3. Reserve room for the answer: max_tokens shares the same window</text></g>
+  <g class="a c4"><text class="badt" x="28" y="120" font-size="15">4. Turn 4 arrives: input + output no longer fit (400 error or truncated answer)</text></g>
+  <g class="a c5"><text class="teat" x="28" y="120" font-size="15">5. Compaction: old turns become a short summary, and everything fits again</text></g>
+  <rect class="win" x="40" y="150" width="660.0" height="56" rx="4"/>
+  <line class="ln" x1="700.0" y1="144" x2="700.0" y2="214" stroke-dasharray="4 3"/>
+  <rect class="bp" x="28" y="262" width="16" height="16" rx="3" stroke-width="1.5"/><text class="sm" x="50" y="275">system prompt</text>
+  <rect class="bt" x="155.8" y="262" width="16" height="16" rx="3" stroke-width="1.5"/><text class="sm" x="177.8" y="275">tools / summary</text>
+  <rect class="bw" x="296.8" y="262" width="16" height="16" rx="3" stroke-width="1.5"/><text class="sm" x="318.8" y="275">retrieved docs</text>
+  <rect class="bm" x="431.2" y="262" width="16" height="16" rx="3" stroke-width="1.5"/><text class="sm" x="453.2" y="275">conversation turns</text>
+  <rect class="bo" x="592.0" y="262" width="16" height="16" rx="3" stroke-width="1.5"/><text class="sm" x="614.0" y="275">output (max_tokens)</text>
+  <rect class="bb" x="759.4" y="262" width="16" height="16" rx="3" stroke-width="1.5"/><text class="sm" x="781.4" y="275">overflow</text>
+  <text class="tx" x="28" y="316">Long before the hard limit, quality drops: facts buried mid-context are recalled less reliably</text>
+  <text class="tx" x="28" y="336">("lost in the middle", "context rot"). Curate what goes in; a bigger window is not a free pass.</text>
+  <text class="sub" x="28" y="372">Simplified numbers. Current Claude models have a 1M-token window and up to 128K output tokens; the arithmetic is the same.</text>
+</svg>

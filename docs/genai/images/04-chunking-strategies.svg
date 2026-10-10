@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Fixed-size chunking vs structure-aware chunking with context</title>
+  <desc id="d">The same policy section is chunked two ways. The source section has the heading 3.2 Prior authorization under the Gold plan, a paragraph, and a small table listing drug X as requiring prior authorization and drug Y as not. On the left, a fixed 200-token splitter cuts the table in half: chunk 2 contains only the row "Drug X: PA required: Yes" without the heading, so a retriever cannot tell which plan or section it belongs to, and chunk 3 starts mid-row. On the right, a structure-aware splitter keeps the paragraph and the whole table as separate chunks along heading boundaries, and prefixes each chunk with its context, "Gold plan, section 3.2 Prior authorization", before embedding. Simplified: real chunks are longer.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .tx{fill:#334155;font-size:13px}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bo{fill:#f0fdf4;stroke:#16a34a}.bp{fill:#eef2ff;stroke:#4f46e5}
+    .badt{fill:#dc2626;font-weight:700}.okt{fill:#16a34a;font-weight:700}.prit{fill:#4f46e5;font-weight:700}
+    .cut{stroke:#dc2626;stroke-width:2;stroke-dasharray:6 4}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .bb{fill:#450a0a;stroke:#f87171}.bo{fill:#052e16;stroke:#4ade80}.bp{fill:#1e1b4b;stroke:#818cf8}
+      .badt{fill:#f87171}.okt{fill:#4ade80}.prit{fill:#818cf8}
+      .cut{stroke:#f87171}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="468" rx="14"/>
+  <text class="h" x="28" y="40">Same section, two chunking strategies</text>
+  <text class="sub" x="28" y="62">Source: Gold plan formulary › 3.2 Prior authorization (a paragraph, then a table)</text>
+
+  <!-- left: fixed size -->
+  <text class="h2" x="28" y="96">Fixed 200-token split</text>
+  <rect class="box" x="28" y="108" width="356" height="62" rx="8"/>
+  <text class="sm" x="40" y="128">Chunk 1</text>
+  <text class="tx" x="40" y="146">## 3.2 Prior authorization. Some drugs on the</text>
+  <text class="tx" x="40" y="162">Gold plan need approval before dispensing …</text>
+  <line class="cut" x1="28" y1="180" x2="384" y2="180"/>
+  <rect class="bb" x="28" y="190" width="356" height="62" rx="8"/>
+  <text class="sm" x="40" y="210">Chunk 2</text>
+  <text class="tx" x="40" y="228">| Drug X | PA required: Yes | Form PA-2291 |</text>
+  <text class="tx" x="40" y="244">| Drug Y | PA requ</text>
+  <line class="cut" x1="28" y1="262" x2="384" y2="262"/>
+  <rect class="bb" x="28" y="272" width="356" height="46" rx="8"/>
+  <text class="sm" x="40" y="292">Chunk 3</text>
+  <text class="tx" x="40" y="308">ired: No | — | … next section starts …</text>
+  <text class="badt" x="28" y="346" font-size="13">✗ Chunk 2 has no heading: which plan? which section?</text>
+  <text class="badt" x="28" y="366" font-size="13">✗ Table row split across chunks 2 and 3</text>
+  <text class="badt" x="28" y="386" font-size="13">✗ Unrelated text mixed in: noisy embedding</text>
+
+  <!-- right: structure-aware -->
+  <text class="h2" x="416" y="96">Structure-aware + context prefix</text>
+  <rect class="bo" x="416" y="108" width="356" height="78" rx="8"/>
+  <text class="sm" x="428" y="128">Chunk A (paragraph)</text>
+  <text class="prit" x="428" y="146" font-size="12">[Gold plan › 3.2 Prior authorization]</text>
+  <text class="tx" x="428" y="164">Some drugs on the Gold plan need approval</text>
+  <text class="tx" x="428" y="180">before dispensing …</text>
+  <rect class="bo" x="416" y="198" width="356" height="94" rx="8"/>
+  <text class="sm" x="428" y="218">Chunk B (whole table)</text>
+  <text class="prit" x="428" y="236" font-size="12">[Gold plan › 3.2 Prior authorization]</text>
+  <text class="tx" x="428" y="254">| Drug X | PA required: Yes | Form PA-2291 |</text>
+  <text class="tx" x="428" y="270">| Drug Y | PA required: No  | —            |</text>
+  <text class="sm" x="428" y="286">metadata: plan=Gold, section=3.2, version=2026-07</text>
+  <text class="okt" x="416" y="346" font-size="13">✓ Split on headings, never inside a table row</text>
+  <text class="okt" x="416" y="366" font-size="13">✓ Context prefix travels with the chunk</text>
+  <text class="okt" x="416" y="386" font-size="13">✓ Metadata enables filters (plan, version)</text>
+
+  <text class="sub" x="28" y="430">The retriever only ever sees one chunk at a time. If the chunk does not say what it is about,</text>
+  <text class="sub" x="28" y="448">no embedding model can recover it. Contextual Retrieval automates the prefix with an LLM.</text>
+</svg>

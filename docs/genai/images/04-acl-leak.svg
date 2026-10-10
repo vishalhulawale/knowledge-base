@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Unfiltered retrieval leaks another tenant's data; filtering inside the query does not</title>
+  <desc id="d">Two animated rows show the same question from a user of tenant A. In the top row, the vector search runs over the whole index with no access filter. Its top 5 results include two chunks belonging to tenant B, shown in red. All five chunks go into the prompt, and the model's answer quotes tenant B's negotiated rate, leaking it to the wrong customer. In the bottom row, the tenant and group filter is part of the search query itself, so the index only returns tenant A chunks the user's groups allow. All five chunks are tenant A's and the answer cites only them. The lesson is that the model cannot be trusted to ignore data it has been shown, so authorization must happen before retrieval results reach the prompt.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:15px;font-weight:700}
+    .tx{fill:#334155;font-size:13px}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .okf{fill:#16a34a}.badf{fill:#dc2626}.pri{fill:#4f46e5}
+    .on{fill:#ffffff;font-size:12px;font-weight:700}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .badt{fill:#dc2626;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}.ah{fill:#64748b}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .okf{fill:#4ade80}.badf{fill:#f87171}.pri{fill:#818cf8}
+      .on{fill:#0f172a}
+      .bb{fill:#450a0a;stroke:#f87171}.bo{fill:#052e16;stroke:#4ade80}
+      .badt{fill:#f87171}.okt{fill:#4ade80}
+      .ln{stroke:#94a3b8}.ah{fill:#94a3b8}
+    }
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes s0{0%,3%{opacity:0}6%,90%{opacity:1}94%,100%{opacity:0}}
+    @keyframes s1{0%,18%{opacity:0}21%,90%{opacity:1}94%,100%{opacity:0}}
+    @keyframes s2{0%,36%{opacity:0}39%,90%{opacity:1}94%,100%{opacity:0}}
+    @keyframes s3{0%,54%{opacity:0}57%,90%{opacity:1}94%,100%{opacity:0}}
+    .s0{animation-name:s0}.s1{animation-name:s1}.s2{animation-name:s2}.s3{animation-name:s3}
+    @media (prefers-reduced-motion: reduce){ .a{animation:none;opacity:1} }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="458" rx="14"/>
+  <text class="h" x="28" y="40">Authorization belongs in the retrieval query</text>
+  <text class="sub" x="28" y="62">A user of tenant A asks: "What rate do we pay for courier deliveries?"</text>
+
+  <!-- row 1 -->
+  <rect class="bb" x="20" y="78" width="760" height="164" rx="10" stroke-width="1.2"/>
+  <text class="badt" x="36" y="102" font-size="15">✗ Search the whole index, hope the model ignores the rest</text>
+  <g class="a s0">
+    <rect class="box" x="36" y="122" width="140" height="56" rx="8"/>
+    <text class="tx" x="106" y="146" text-anchor="middle">vector search</text>
+    <text class="sm" x="106" y="164" text-anchor="middle">all tenants, k = 5</text>
+  </g>
+  <g class="a s1">
+    <path class="ln" d="M180,150 L222,150" marker-end="url(#ar)"/>
+    <rect class="okf" x="228" y="132" width="34" height="34" rx="5"/><text class="on" x="245" y="154" text-anchor="middle">A</text>
+    <rect class="badf" x="268" y="132" width="34" height="34" rx="5"/><text class="on" x="285" y="154" text-anchor="middle">B</text>
+    <rect class="okf" x="308" y="132" width="34" height="34" rx="5"/><text class="on" x="325" y="154" text-anchor="middle">A</text>
+    <rect class="badf" x="348" y="132" width="34" height="34" rx="5"/><text class="on" x="365" y="154" text-anchor="middle">B</text>
+    <rect class="okf" x="388" y="132" width="34" height="34" rx="5"/><text class="on" x="405" y="154" text-anchor="middle">A</text>
+    <text class="sm" x="325" y="186" text-anchor="middle">top 5 by similarity</text>
+  </g>
+  <g class="a s2">
+    <path class="ln" d="M428,150 L470,150" marker-end="url(#ar)"/>
+    <rect class="box" x="476" y="122" width="100" height="56" rx="8"/>
+    <text class="tx" x="526" y="146" text-anchor="middle">prompt</text>
+    <text class="sm" x="526" y="164" text-anchor="middle">all 5 chunks</text>
+  </g>
+  <g class="a s3">
+    <path class="ln" d="M580,150 L606,150" marker-end="url(#ar)"/>
+    <text class="tx" x="614" y="140">"You pay $4.10 per</text>
+    <text class="tx" x="614" y="158">parcel [2]."</text>
+    <text class="badt" x="614" y="180" font-size="13">Tenant B's rate leaked</text>
+    <text class="sm" x="36" y="222">Prompting "only use tenant A data" is not access control: the model already saw B's chunk.</text>
+  </g>
+
+  <!-- row 2 -->
+  <rect class="bo" x="20" y="256" width="760" height="164" rx="10" stroke-width="1.2"/>
+  <text class="okt" x="36" y="280" font-size="15">✓ Filter inside the search: tenant_id = A AND groups ∩ user.groups</text>
+  <g class="a s0">
+    <rect class="box" x="36" y="300" width="140" height="56" rx="8"/>
+    <text class="tx" x="106" y="324" text-anchor="middle">filtered search</text>
+    <text class="sm" x="106" y="342" text-anchor="middle">tenant A only, k = 5</text>
+  </g>
+  <g class="a s1">
+    <path class="ln" d="M180,328 L222,328" marker-end="url(#ar)"/>
+    <rect class="okf" x="228" y="310" width="34" height="34" rx="5"/><text class="on" x="245" y="332" text-anchor="middle">A</text>
+    <rect class="okf" x="268" y="310" width="34" height="34" rx="5"/><text class="on" x="285" y="332" text-anchor="middle">A</text>
+    <rect class="okf" x="308" y="310" width="34" height="34" rx="5"/><text class="on" x="325" y="332" text-anchor="middle">A</text>
+    <rect class="okf" x="348" y="310" width="34" height="34" rx="5"/><text class="on" x="365" y="332" text-anchor="middle">A</text>
+    <rect class="okf" x="388" y="310" width="34" height="34" rx="5"/><text class="on" x="405" y="332" text-anchor="middle">A</text>
+    <text class="sm" x="325" y="364" text-anchor="middle">still 5 results, all allowed</text>
+  </g>
+  <g class="a s2">
+    <path class="ln" d="M428,328 L470,328" marker-end="url(#ar)"/>
+    <rect class="box" x="476" y="300" width="100" height="56" rx="8"/>
+    <text class="tx" x="526" y="324" text-anchor="middle">prompt</text>
+    <text class="sm" x="526" y="342" text-anchor="middle">5 A chunks</text>
+  </g>
+  <g class="a s3">
+    <path class="ln" d="M580,328 L606,328" marker-end="url(#ar)"/>
+    <text class="tx" x="614" y="318">"You pay $3.80 per</text>
+    <text class="tx" x="614" y="336">parcel [1]."</text>
+    <text class="okt" x="614" y="358" font-size="13">Correct tenant, cited</text>
+    <text class="sm" x="36" y="400">Filtering after a top-k search instead returns fewer than k rows (or zero) when the filter is selective.</text>
+  </g>
+  <text class="sub" x="28" y="444">Rates and tenants are invented for the illustration.</text>
+</svg>

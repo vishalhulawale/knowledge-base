@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Texts become points; meaning becomes distance</title>
+  <desc id="d">Left: six short pharmacy-support texts pass through the same embedding model and each becomes a list of 1,024 numbers. Right: a two-dimensional projection of those vectors. Texts about refilling medication sit close together, texts about insurance claims form a second cluster, and password texts a third. The query 'how do I reorder my meds?' lands inside the refill cluster, so its nearest neighbours by cosine similarity are 'refill my prescription' (0.89) and 'renew Rx for metformin' (0.84), even though neither shares a keyword with the query; a keyword search would match nothing. Simplified: real vectors have hundreds or thousands of dimensions, and the similarity scores are illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}.lnm{stroke:#cbd5e1;stroke-width:1.2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnm{stroke:#475569}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="468" rx="14"/>
+  <text class="h" x="28" y="40">Texts become points; similar meaning means nearby points</text>
+  <text class="sub" x="28" y="62">Same model for documents and queries. Scores are cosine similarity (illustrative).</text>
+  <rect class="box" x="20" y="80" width="300" height="356" rx="10" stroke-width="1.2"/>
+  <text class="h2" x="170" y="104" text-anchor="middle">1. Embed</text>
+  <circle class="tea" cx="40" cy="124" r="5"/><text class="sm" x="52" y="128">refill my prescription</text>
+  <circle class="tea" cx="40" cy="150" r="5"/><text class="sm" x="52" y="154">renew Rx for metformin</text>
+  <circle class="pri" cx="40" cy="176" r="5"/><text class="sm" x="52" y="180">why was my claim denied</text>
+  <circle class="pri" cx="40" cy="202" r="5"/><text class="sm" x="52" y="206">appeal a rejected claim</text>
+  <circle class="wrnf" cx="40" cy="228" r="5"/><text class="sm" x="52" y="232">reset my password</text>
+  <circle class="wrnf" cx="40" cy="254" r="5"/><text class="sm" x="52" y="258">locked out of my account</text>
+  <line class="ln" x1="170" y1="282" x2="170" y2="300" marker-end="url(#ar)"/>
+  <rect class="bp" x="70" y="304" width="200" height="38" rx="8" stroke-width="1.5"/>
+  <text class="prit" x="170" y="328" text-anchor="middle" font-size="14">embedding model</text>
+  <line class="ln" x1="170" y1="342" x2="170" y2="360" marker-end="url(#ar)"/>
+  <text class="sm" x="170" y="380" text-anchor="middle" font-family="ui-monospace, monospace">[0.021, -0.113, 0.087, … ]</text>
+  <text class="sub" x="170" y="400" text-anchor="middle">1,024 floats per text (≈4 KB as float32)</text>
+  <text class="sub" x="170" y="420" text-anchor="middle">stored with id, text and metadata</text>
+  <rect class="box" x="336" y="80" width="444" height="356" rx="10" stroke-width="1.2"/>
+  <text class="h2" x="558" y="104" text-anchor="middle">2. Search by distance</text>
+  <ellipse class="bt" cx="555" cy="205" rx="80" ry="55" stroke-width="1" stroke-dasharray="4 4"/>
+  <ellipse class="bp" cx="470" cy="360" rx="80" ry="45" stroke-width="1" stroke-dasharray="4 4"/>
+  <ellipse class="bw" cx="705" cy="365" rx="62" ry="50" stroke-width="1" stroke-dasharray="4 4"/>
+  <line class="lno" x1="590" y1="170" x2="526" y2="189"/>
+  <line class="lno" x1="590" y1="170" x2="581" y2="224"/>
+  <text class="okt" x="548" y="168" text-anchor="middle" font-size="12">0.89</text>
+  <text class="okt" x="603" y="205" font-size="12">0.84</text>
+  <line class="lnm dash" x1="590" y1="170" x2="690" y2="334"/>
+  <text class="sub" x="652" y="262">0.12</text>
+  <circle class="tea" cx="520" cy="190" r="7"/>
+  <circle class="tea" cx="580" cy="230" r="7"/>
+  <circle class="pri" cx="440" cy="340" r="7"/>
+  <circle class="pri" cx="500" cy="380" r="7"/>
+  <circle class="wrnf" cx="690" cy="340" r="7"/>
+  <circle class="wrnf" cx="720" cy="390" r="7"/>
+  <text class="sm" x="520" y="214" text-anchor="middle">refill my prescription</text>
+  <text class="sm" x="580" y="252" text-anchor="middle">renew Rx for metformin</text>
+  <text class="sm" x="440" y="320" text-anchor="middle">why was my claim denied</text>
+  <text class="sm" x="500" y="406" text-anchor="middle">appeal a rejected claim</text>
+  <text class="sm" x="690" y="322" text-anchor="middle">reset my password</text>
+  <text class="sm" x="712" y="420" text-anchor="middle">locked out of my account</text>
+  <polygon class="badf" points="590.0,159.0 592.9,166.0 600.5,166.6 594.7,171.5 596.5,178.9 590.0,174.9 583.5,178.9 585.3,171.5 579.5,166.6 587.1,166.0"/>
+  <text class="badt" x="606" y="140" font-size="13">query:</text>
+  <text class="badt" x="606" y="156" font-size="13">"how do I reorder my meds?"</text>
+  <text class="sub" x="352" y="134">2-D projection of</text>
+  <text class="sub" x="352" y="150">1,024-D vectors</text>
+  <text class="tx" x="28" y="458"><tspan class="wrnt">Keyword search:</tspan> "reorder" and "meds" match no stored text. <tspan class="okt">Vector search:</tspan> the two refill texts, ranked by similarity.</text>
+</svg>

@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 490" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">How text becomes tokens</title>
+  <desc id="d">A sentence, "Prior authorization approved for 750K members.", is split by a subword tokenizer into nine tokens: Prior, author, ization, approved, for, 750, K, members and a full stop. Each token maps to an integer ID, and the model only ever sees that list of integers. Leading spaces belong to the token that follows them, and the rare word authorization is split into two pieces. Below, three rows compare rough token cost per kind of input: common English prose is about four characters per token, code and JSON need more tokens for the same characters, and numbers, identifiers and non-English scripts need more again. The token boundaries and IDs are illustrative, not the output of any specific tokenizer.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}.bm{fill:#f1f5f9;stroke:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}.bm{fill:#1e293b;stroke:#64748b}
+    }
+    .chip{font-size:15px;font-weight:600;fill:#0f172a}.id{font-size:12px;fill:#64748b;font-family:ui-monospace,Menlo,monospace}
+    @media (prefers-color-scheme: dark){.chip{fill:#f1f5f9}.id{fill:#94a3b8}}
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="488" rx="14"/>
+  <text class="h" x="28" y="40">Text in, integers out: what a tokenizer does</text>
+  <text class="sub" x="28" y="62">Input string (45 characters)</text>
+  <rect class="box" x="28" y="74" width="744" height="40" rx="8"/>
+  <text class="tx" x="44" y="99" font-size="16">Prior authorization approved for 750K members.</text>
+  <text class="sub" x="28" y="146">Subword tokens (9) with their vocabulary IDs. A middle dot marks a leading space that belongs to the token.</text>
+  <rect class="bp" x="28" y="160" width="70" height="38" rx="7" stroke-width="1.5"/>
+  <text class="chip" x="63" y="185" text-anchor="middle">Prior</text>
+  <text class="id" x="63" y="218" text-anchor="middle">2047</text>
+  <rect class="bt" x="104" y="160" width="89" height="38" rx="7" stroke-width="1.5"/>
+  <text class="chip" x="149" y="185" text-anchor="middle">·author</text>
+  <text class="id" x="149" y="218" text-anchor="middle">3626</text>
+  <rect class="bp" x="199" y="160" width="89" height="38" rx="7" stroke-width="1.5"/>
+  <text class="chip" x="244" y="185" text-anchor="middle">ization</text>
+  <text class="id" x="244" y="218" text-anchor="middle">2065</text>
+  <rect class="bt" x="294" y="160" width="108" height="38" rx="7" stroke-width="1.5"/>
+  <text class="chip" x="349" y="185" text-anchor="middle">·approved</text>
+  <text class="id" x="349" y="218" text-anchor="middle">12054</text>
+  <rect class="bp" x="409" y="160" width="60" height="38" rx="7" stroke-width="1.5"/>
+  <text class="chip" x="439" y="185" text-anchor="middle">·for</text>
+  <text class="id" x="439" y="218" text-anchor="middle">369</text>
+  <rect class="bt" x="475" y="160" width="60" height="38" rx="7" stroke-width="1.5"/>
+  <text class="chip" x="505" y="185" text-anchor="middle">·750</text>
+  <text class="id" x="505" y="218" text-anchor="middle">22982</text>
+  <rect class="bp" x="542" y="160" width="48" height="38" rx="7" stroke-width="1.5"/>
+  <text class="chip" x="566" y="185" text-anchor="middle">K</text>
+  <text class="id" x="566" y="218" text-anchor="middle">42</text>
+  <rect class="bt" x="596" y="160" width="99" height="38" rx="7" stroke-width="1.5"/>
+  <text class="chip" x="645" y="185" text-anchor="middle">·members</text>
+  <text class="id" x="645" y="218" text-anchor="middle">3697</text>
+  <rect class="bp" x="700" y="160" width="48" height="38" rx="7" stroke-width="1.5"/>
+  <text class="chip" x="724" y="185" text-anchor="middle">.</text>
+  <text class="id" x="724" y="218" text-anchor="middle">13</text>
+  <text class="sm" x="28" y="246">The model sees only <tspan class="prit">[2047, 3626, 2065, 12054, 369, 22982, 42, 3697, 13]</tspan>. It never sees letters, so</text>
+  <text class="sm" x="28" y="264">"how many r's in strawberry" and exact arithmetic on long numbers are harder than they look.</text>
+  <text class="h2" x="28" y="300">Same characters, different token bills (bar = relative token count)</text>
+  <text class="lbl" x="28" y="330">English prose</text>
+  <rect class="okf" x="250" y="317" width="160" height="16" rx="4"/>
+  <text class="sub" x="250" y="350">about 4 characters per token (roughly 3/4 of a word)</text>
+  <text class="lbl" x="28" y="376">Code and JSON</text>
+  <rect class="wrnf" x="250" y="363" width="250" height="16" rx="4"/>
+  <text class="sub" x="250" y="396">braces, quotes, indentation and camelCase split into more tokens</text>
+  <text class="lbl" x="28" y="422">IDs, numbers, non-Latin text</text>
+  <rect class="badf" x="250" y="409" width="360" height="16" rx="4"/>
+  <text class="sub" x="250" y="442">UUIDs, long numbers and many non-English scripts cost the most</text>
+  <text class="sub" x="28" y="472">Illustrative boundaries and IDs. Every model family has its own tokenizer, so count tokens with the provider's API.</text>
+</svg>

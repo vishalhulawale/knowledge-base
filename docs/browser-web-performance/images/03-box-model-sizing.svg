@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">content-box vs border-box sizing</title>
+  <desc id="d">Two boxes with the same declarations: width 300px, padding 20px, border 5px and margin 20px. On the left, with box-sizing content-box (the CSS default), the 300px is the content width, so padding and border are added on top and the box is 350px wide on screen. On the right, with box-sizing border-box, the 300px includes padding and border, so the box is 300px wide and the content shrinks to 250px. In both cases the margin sits outside the border and is not part of the width. A note says vertical margins between block siblings can collapse into one, but not inside flex or grid containers. Drawn at 90 percent scale.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;font-size:12.5px;fill:#334155}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .mg{fill:none;stroke:#d97706;stroke-width:1.5;stroke-dasharray:5 4}
+    .bd{fill:#334155}
+    .pd{fill:#ccfbf1}
+    .ct{fill:#e0e7ff}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .okt{fill:#16a34a;font-weight:700}.badt{fill:#dc2626;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:1.5;fill:none}
+    .ah{fill:#64748b}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.tx,.sm,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .mg{stroke:#fbbf24}
+      .bd{fill:#cbd5e1}
+      .pd{fill:#134e4a}
+      .ct{fill:#312e81}
+      .prit{fill:#a5b4fc}.teat{fill:#5eead4}.wrnt{fill:#fbbf24}.okt{fill:#4ade80}.badt{fill:#f87171}
+      .ln{stroke:#94a3b8}.ah{fill:#94a3b8}
+    }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Same CSS, two widths on screen</text>
+  <text class="mono" x="28" y="64">width: 300px; padding: 20px; border: 5px solid; margin: 20px;</text>
+
+  <!-- left panel: content-box -->
+  <rect class="box" x="20" y="84" width="370" height="250" rx="10" stroke-width="1.2"/>
+  <text class="h2" x="40" y="110">box-sizing: content-box</text>
+  <text class="sub" x="40" y="128">the default: width = content only</text>
+  <rect class="mg" x="37" y="140" width="351" height="135"/>
+  <rect class="bd" x="55" y="158" width="315" height="99"/>
+  <rect class="pd" x="59.5" y="162.5" width="306" height="90"/>
+  <rect class="ct" x="77.5" y="180.5" width="270" height="54"/>
+  <text class="prit" x="212.5" y="205" text-anchor="middle" font-size="13">content 300</text>
+  <text class="teat" x="212.5" y="223" text-anchor="middle" font-size="11">+ padding 20 + 20</text>
+  <text class="wrnt" x="44" y="152" font-size="11">margin 20</text>
+  <line class="ln" x1="57" y1="293" x2="368" y2="293" marker-start="url(#ar)" marker-end="url(#ar)"/>
+  <text class="badt" x="212.5" y="318" text-anchor="middle" font-size="14">rendered width 350px</text>
+
+  <!-- right panel: border-box -->
+  <rect class="box" x="410" y="84" width="370" height="250" rx="10" stroke-width="1.2"/>
+  <text class="h2" x="430" y="110">box-sizing: border-box</text>
+  <text class="sub" x="430" y="128">width = content + padding + border</text>
+  <rect class="mg" x="427" y="140" width="306" height="135"/>
+  <rect class="bd" x="445" y="158" width="270" height="99"/>
+  <rect class="pd" x="449.5" y="162.5" width="261" height="90"/>
+  <rect class="ct" x="467.5" y="180.5" width="225" height="54"/>
+  <text class="prit" x="580" y="205" text-anchor="middle" font-size="13">content 250</text>
+  <text class="teat" x="580" y="223" text-anchor="middle" font-size="11">padding eats into width</text>
+  <text class="wrnt" x="434" y="152" font-size="11">margin 20</text>
+  <line class="ln" x1="447" y1="293" x2="713" y2="293" marker-start="url(#ar)" marker-end="url(#ar)"/>
+  <text class="okt" x="580" y="318" text-anchor="middle" font-size="14">rendered width 300px</text>
+
+  <!-- legend -->
+  <rect class="ct" x="28" y="350" width="14" height="14"/><text class="sm" x="48" y="362">content</text>
+  <rect class="pd" x="110" y="350" width="14" height="14"/><text class="sm" x="130" y="362">padding</text>
+  <rect class="bd" x="192" y="350" width="14" height="14"/><text class="sm" x="212" y="362">border</text>
+  <rect class="mg" x="270" y="350" width="14" height="14"/><text class="sm" x="290" y="362">margin (never in width)</text>
+  <text class="sub" x="28" y="388">Vertical margins of block siblings collapse to the larger one; they never collapse inside flex or grid containers.</text>
+</svg>
