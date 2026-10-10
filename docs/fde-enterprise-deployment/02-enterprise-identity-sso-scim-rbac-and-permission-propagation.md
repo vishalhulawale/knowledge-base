@@ -68,6 +68,9 @@ sequenceDiagram
 ```
 *Notice that SSO (the middle part) and provisioning (the top and bottom) are separate flows: the leaver path never involves the user logging in, which is exactly why JIT alone can't deprovision.*
 
+![Animation: a timeline from a leaver record at time zero. With JIT only, the account, API keys, saved chats and agent jobs stay open indefinitely. With SCIM, the next incremental cycle, up to about 40 minutes in Entra ID, sends PATCH active=false and the app revokes sessions, tokens, keys and jobs, inside an example one-hour target. Adding OIDC back-channel logout ends the app session at once, while keys and jobs still close on the next SCIM cycle.](images/02-leaver-timeline.svg){ loading=lazy }
+*Watch the JIT bar run off the chart: without a leaver signal, nothing ever closes.*
+
 What enterprise IdPs actually send, and what your SCIM server must handle:
 
 - **Deactivate, not delete.** Entra ID and Okta usually send `PATCH ... active=false` when a user is unassigned or disabled; hard `DELETE` may come later or never. Treat deactivation as the security event.
@@ -84,6 +87,9 @@ Most enterprise deployments start with **RBAC**: IdP groups map to app roles (`a
 - **Prefer group object IDs over display names**, which can be renamed or duplicated.
 - **Limit groups in tokens.** Entra ID emits at most 150 groups in a SAML assertion and 200 in a JWT; beyond that it sends an *overage* indicator and your app must call Microsoft Graph. Fix it by emitting only groups assigned to the application, or by using **app roles**, which appear in a `roles` claim.
 - **ABAC** adds attributes (department, region, clearance, line of business) for rules like "claims reviewers in the EU see EU claims only". Attributes come from the token or SCIM enterprise extension. Keep the policy in one place (a policy engine such as OPA/Cedar, or one service), not scattered `if` statements.
+
+![Two panels. Reading only the groups claim: an analyst in 12 groups gets ASSISTANT_USER, but an executive in 340 groups exceeds the 200-group JWT limit, gets an overage _claim_names pointer instead of groups, and silently receives no roles. With app roles or app-assigned groups, both tokens carry a small roles claim: ASSISTANT_USER for the analyst and ASSISTANT_ADMIN for the executive. Group counts are illustrative.](images/02-group-overage.svg){ loading=lazy }
+*The users with the most groups, often executives, are the ones who silently lose access.*
 
 ### Permission propagation into retrieval and tools
 

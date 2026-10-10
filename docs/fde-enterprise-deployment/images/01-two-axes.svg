@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 452" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Deployment model axes</title>
+  <desc id="d">A grid with where data lives down the side (vendor cloud shared, vendor cloud dedicated, customer cloud account, customer data centre, isolated enclave) and who operates across the top (vendor with full production access, vendor through a scoped audited role, customer with break-glass vendor access, customer only with no vendor access). Multi-tenant and single-tenant hosted sit in the vendor column. The customer cloud account row holds two models: BYOC run by the vendor through a scoped role, and a customer-run VPC install. On-prem is customer-run in their data centre and air-gapped is customer-only in an isolated enclave. Moving right gives more control and more operational pain; releases go from ten deploys a day to perhaps one signed bundle a quarter.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="450" rx="14"/>
+  <text class="h" x="28" y="40">Two axes, not one: where data lives vs who operates</text><text class="sub" x="28" y="62">"Customer VPC" is one row but two operating models, split by whether the vendor may hold a role.</text><text class="sm" x="196" y="86" font-weight="700">Who operates, and vendor access to production →</text><text class="sm" x="28" y="120" font-weight="700">Where data lives ↓</text><text class="sub" x="266.5" y="106" text-anchor="middle" style="font-size:12px">Vendor operates,</text><text class="sub" x="266.5" y="121" text-anchor="middle" style="font-size:12px">full prod access</text><text class="sub" x="407.5" y="106" text-anchor="middle" style="font-size:12px">Vendor operates via</text><text class="sub" x="407.5" y="121" text-anchor="middle" style="font-size:12px">scoped role, audited</text><text class="sub" x="548.5" y="106" text-anchor="middle" style="font-size:12px">Customer operates,</text><text class="sub" x="548.5" y="121" text-anchor="middle" style="font-size:12px">break-glass vendor</text><text class="sub" x="689.5" y="106" text-anchor="middle" style="font-size:12px">Customer only,</text><text class="sub" x="689.5" y="121" text-anchor="middle" style="font-size:12px">no vendor access</text><rect class="bm" x="196" y="132" width="564" height="44" rx="0" stroke-width="0.6"/><text class="sm" x="28" y="159">Vendor cloud, shared</text><rect class="box" x="196" y="176" width="564" height="44" rx="0" stroke-width="0.6"/><text class="sm" x="28" y="203">Vendor cloud, dedicated</text><rect class="bm" x="196" y="220" width="564" height="44" rx="0" stroke-width="0.6"/><text class="sm" x="28" y="247">Customer cloud account</text><rect class="box" x="196" y="264" width="564" height="44" rx="0" stroke-width="0.6"/><text class="sm" x="28" y="291">Customer data centre</text><rect class="bm" x="196" y="308" width="564" height="44" rx="0" stroke-width="0.6"/><text class="sm" x="28" y="335">Isolated enclave</text><line class="grid" x1="337" y1="132" x2="337" y2="352"/><line class="grid" x1="478" y1="132" x2="478" y2="352"/><line class="grid" x1="619" y1="132" x2="619" y2="352"/><rect class="bt" x="202" y="139" width="129" height="30" rx="15" stroke-width="1.5"/><text class="sm" x="266.5" y="159" text-anchor="middle" font-weight="700" style="font-size:12.5px">Multi-tenant</text><rect class="bt" x="202" y="183" width="129" height="30" rx="15" stroke-width="1.5"/><text class="sm" x="266.5" y="203" text-anchor="middle" font-weight="700" style="font-size:12.5px">Single-tenant</text><rect class="bp" x="343" y="227" width="129" height="30" rx="15" stroke-width="1.5"/><text class="sm" x="407.5" y="247" text-anchor="middle" font-weight="700" style="font-size:12.5px">BYOC, vendor-run</text><rect class="bp" x="484" y="227" width="129" height="30" rx="15" stroke-width="1.5"/><text class="sm" x="548.5" y="247" text-anchor="middle" font-weight="700" style="font-size:12.5px">VPC, customer-run</text><rect class="bw" x="484" y="271" width="129" height="30" rx="15" stroke-width="1.5"/><text class="sm" x="548.5" y="291" text-anchor="middle" font-weight="700" style="font-size:12.5px">On-prem</text><rect class="bb" x="625" y="315" width="129" height="30" rx="15" stroke-width="1.5"/><text class="sm" x="689.5" y="335" text-anchor="middle" font-weight="700" style="font-size:12.5px">Air-gapped</text><line class="lnw" x1="196" y1="378" x2="760" y2="378" marker-end="url(#arw)"/><text class="sub" x="196" y="398">fastest start, least customer control</text><text class="sub" x="760" y="398" text-anchor="end">most control, most operational pain</text><text class="sm" x="28" y="430">Releases slide from ten deploys a day (hosted) to a signed bundle carried in perhaps once a quarter (air-gapped).</text>
+</svg>

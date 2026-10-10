@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 362" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Leaver deprovisioning timeline</title>
+  <desc id="d">Animation: a timeline from the moment a leaver is recorded in HR and the IdP. With JIT provisioning only, access never ends: the account, API keys, saved chats and agent jobs live on for days. With SCIM, the next incremental cycle, up to about 40 minutes in Entra ID, sends PATCH active=false and the app revokes sessions, tokens, keys and jobs, inside an example one-hour target. Adding OIDC back-channel logout ends the app session at once when the IdP kills it, while keys and jobs still close on the next SCIM cycle.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .g{transform-box:fill-box;transform-origin:0 50%;animation:14s infinite linear}
+    .k{opacity:0;animation:14s infinite linear}
+    .ph{animation:ph 14s infinite linear}@keyframes ph{0%{transform:translateX(0)}80%,100%{transform:translateX(552px)}}
+    @keyframes g0{0%{transform:scaleX(0)}80%,100%{transform:scaleX(1)}}.g0{animation-name:g0}
+    @keyframes g1{0%{transform:scaleX(0)}46.38%,100%{transform:scaleX(1)}}.g1{animation-name:g1}
+    @keyframes r1{0%,46.37%{opacity:0}46.38%,96.99%{opacity:1}97%,100%{opacity:0}}.r1{animation-name:r1}
+    @keyframes g2{0%{transform:scaleX(0)}0.58%,100%{transform:scaleX(1)}}.g2{animation-name:g2}
+    @keyframes r2{0%,1.49%{opacity:0}1.5%,96.99%{opacity:1}97%,100%{opacity:0}}.r2{animation-name:r2}
+    @keyframes g3{0%{transform:scaleX(0)}46.38%,100%{transform:scaleX(1)}}.g3{animation-name:g3}
+    @keyframes r3{0%,46.37%{opacity:0}46.38%,96.99%{opacity:1}97%,100%{opacity:0}}.r3{animation-name:r3}
+    @media (prefers-reduced-motion: reduce){.g{animation:none;transform:none}.k{animation:none;opacity:1}.ph{animation:none;opacity:0}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="360" rx="14"/>
+  <text class="h" x="28" y="40">An employee leaves at 09:00. When does assistant access end?</text><text class="sub" x="28" y="62">Red is access still open after the leaver record. ~40 min is Entra's incremental cycle; the 1-hour target is an example.</text><line class="grid" x1="210" y1="90" x2="210" y2="292"/><text class="sub" x="210" y="310" text-anchor="middle">+0 min</text><line class="grid" x1="290" y1="90" x2="290" y2="292"/><text class="sub" x="290" y="310" text-anchor="middle">+10 min</text><line class="grid" x1="370" y1="90" x2="370" y2="292"/><text class="sub" x="370" y="310" text-anchor="middle">+20 min</text><line class="grid" x1="450" y1="90" x2="450" y2="292"/><text class="sub" x="450" y="310" text-anchor="middle">+30 min</text><line class="grid" x1="530" y1="90" x2="530" y2="292"/><text class="sub" x="530" y="310" text-anchor="middle">+40 min</text><line class="grid" x1="610" y1="90" x2="610" y2="292"/><text class="sub" x="610" y="310" text-anchor="middle">+50 min</text><line class="grid" x1="690" y1="90" x2="690" y2="292"/><text class="sub" x="690" y="310" text-anchor="middle">+60 min</text><text class="sub" x="762" y="310" text-anchor="end">days…</text><line class="lno dash" x1="690" y1="84" x2="690" y2="292"/><text class="okt" x="684" y="84" text-anchor="end" style="font-size:12px">target: within 1 hour</text><line class="lnb" x1="210" y1="84" x2="210" y2="292"/><text class="badt" x="216" y="84" style="font-size:12px">leaver in HR → IdP</text><text class="sm" x="28" y="112" font-weight="700">JIT only</text><text class="sub" x="28" y="130">no leaver signal</text><text class="sm" x="28" y="180" font-weight="700">SCIM</text><text class="sub" x="28" y="198">PATCH active=false</text><text class="sm" x="28" y="248" font-weight="700">SCIM + OIDC</text><text class="sub" x="28" y="266">back-channel logout</text><text class="badt" x="226" y="100" style="font-size:12px">account, API keys, saved chats, agent jobs live on</text><g class="k r1"><rect class="card" x="535" y="170" width="186.9" height="16" rx="3" style="stroke:none"/><rect class="card" x="535" y="185" width="223" height="16" rx="3" style="stroke:none"/><text class="okt" x="538" y="182" style="font-size:12px">next cycle (up to ~40 min):</text><text class="sm" x="538" y="197" style="font-size:12px">revoke sessions, tokens, keys, jobs</text></g><g class="k r2"><text class="okt" x="226" y="243" style="font-size:12px">session killed at the IdP ends the app session at once</text></g><g class="k r3"><rect class="card" x="535" y="254" width="173.4" height="16" rx="3" style="stroke:none"/><text class="sm" x="538" y="266" style="font-size:12px">keys, jobs: next SCIM cycle</text></g><rect class="badf g g0" x="210" y="106" width="552" height="22" rx="4"/><rect class="badf g g1" x="210" y="172" width="320" height="22" rx="4"/><rect class="badf g g2" x="210" y="232" width="4.0" height="14" rx="4"/><rect class="wrnf g g3" x="210" y="254" width="320" height="14" rx="4"/><g class="ph"><line class="lnp" x1="210" y1="92" x2="210" y2="292" stroke-width="2"/></g><text class="sm" x="28" y="340">Test it: deactivate a test user in the customer's IdP and time how long until every path is closed.</text>
+</svg>

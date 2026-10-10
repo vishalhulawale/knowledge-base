@@ -36,6 +36,9 @@ Before cloud, enterprise software was mostly installed on-prem (think shrink-wra
 | **On-prem / private cloud** | Customer data centre (VMware, OpenShift, bare-metal Kubernetes) | Customer data centre | Customer, with vendor support | Banks, telcos, manufacturers with data-centre estates |
 | **Air-gapped** | Isolated network, no internet path | Inside the enclave | Customer only; vendor has no remote access | Defence, intelligence, critical infrastructure, some healthcare |
 
+![A grid with where data lives down the side (vendor cloud shared, vendor cloud dedicated, customer cloud account, customer data centre, isolated enclave) and who operates across the top (vendor with full access, vendor via a scoped audited role, customer with break-glass vendor access, customer only). Multi-tenant and single-tenant sit in the vendor column; the customer cloud account row holds both BYOC run by the vendor and a customer-run VPC install; on-prem is customer-run; air-gapped is customer-only. Releases slide from ten deploys a day to perhaps one signed bundle a quarter.](images/01-two-axes.svg){ loading=lazy }
+*Watch the customer-cloud-account row: same data location, two very different operating models.*
+
 Two terms interviewers use loosely:
 
 - **BYOC (bring your own cloud):** the vendor's software runs in the customer's cloud account, usually still managed by the vendor through a cross-account role. Databricks' classic data plane, Confluent and several vector-database vendors use variants of this.
@@ -139,6 +142,9 @@ Air-gapped (also "disconnected" or "classified enclave") deployments break every
 ### One codebase, several profiles
 
 The common mistake is to fork the product or hard-code endpoints when the first on-prem customer appears. The fix is install-time configuration (see the full Helm chart in [Packaging & delivery](05-packaging-and-delivery-into-a-customer-account-docker-helm-t.md)) plus a preflight that refuses contradictory settings.
+
+![Animation: a values file copied from the hosted profile into an air-gapped install is checked line by line, and six settings fail in turn: llm.provider bedrock, telemetry enabled, an empty image registry, an empty model endpoint, the public login.microsoftonline.com OIDC issuer, and an unpinned image digest. The install is refused in seconds with nothing deployed, instead of failing at start-up inside the enclave.](images/01-preflight-airgap.svg){ loading=lazy }
+*Each failure is caught at install time, where it costs seconds, not inside an enclave you cannot reach.*
 
 === "❌ Common mistake"
     ```python
