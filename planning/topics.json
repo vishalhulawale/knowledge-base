@@ -1598,25 +1598,25 @@
           "title": "Strategic DDD: bounded contexts, ubiquitous language, context mapping",
           "slug": "01-strategic-ddd-bounded-contexts-ubiquitous-language-context-m",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Tactical DDD: entities, value objects, aggregates, domain events",
           "slug": "02-tactical-ddd-entities-value-objects-aggregates-domain-events",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Hexagonal / ports-and-adapters & clean architecture",
           "slug": "03-hexagonal-ports-and-adapters-and-clean-architecture",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Using DDD to define microservice boundaries",
           "slug": "04-using-ddd-to-define-microservice-boundaries",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },

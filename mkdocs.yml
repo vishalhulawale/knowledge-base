@@ -190,6 +190,10 @@ nav:
           - "Microservice Testing Strategy & Contract Testing": microservices/12-microservice-testing-strategy-and-contract-testing.md
       - "Domain-Driven Design & Clean Architecture":
           - Overview: ddd-clean-architecture/index.md
+          - "Strategic DDD: Bounded Contexts, Ubiquitous Language, Context Mapping": ddd-clean-architecture/01-strategic-ddd-bounded-contexts-ubiquitous-language-context-m.md
+          - "Tactical DDD: Entities, Value Objects, Aggregates, Domain Events": ddd-clean-architecture/02-tactical-ddd-entities-value-objects-aggregates-domain-events.md
+          - "Hexagonal / Ports-and-Adapters & Clean Architecture": ddd-clean-architecture/03-hexagonal-ports-and-adapters-and-clean-architecture.md
+          - "Using DDD to Define Microservice Boundaries": ddd-clean-architecture/04-using-ddd-to-define-microservice-boundaries.md
       - "Distributed Systems Concepts":
           - Overview: distributed-systems/index.md
           - "Fallacies of Distributed Computing, Failure Modes": distributed-systems/01-fallacies-of-distributed-computing-failure-modes.md

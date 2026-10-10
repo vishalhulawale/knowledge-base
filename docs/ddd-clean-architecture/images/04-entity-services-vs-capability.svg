@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Entity versus capability services</title>
+  <desc id="d">Animation. Left: a checkout request goes to an Order service, which calls Customer, Product, Pricing and Inventory services; Pricing then calls Product and Customer and Inventory calls Product, each arrow appearing in turn. The last call, Inventory to Product, times out and the whole checkout fails: nine hops, any one of which can break it. Right: a capability-aligned Ordering service holds a pricing domain service and a local price list fed by events, handles the checkout with one call, and emits an OrderPlaced event asynchronously to Inventory, which reserves stock later.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:14s infinite linear}
+    @keyframes e0{0%,3.99%{opacity:0}4%,96.99%{opacity:1}97%,100%{opacity:0}}.e0{animation-name:e0}
+    @keyframes e1{0%,9.99%{opacity:0}10%,96.99%{opacity:1}97%,100%{opacity:0}}.e1{animation-name:e1}
+    @keyframes e2{0%,15.99%{opacity:0}16%,96.99%{opacity:1}97%,100%{opacity:0}}.e2{animation-name:e2}
+    @keyframes e3{0%,21.99%{opacity:0}22%,96.99%{opacity:1}97%,100%{opacity:0}}.e3{animation-name:e3}
+    @keyframes e4{0%,27.99%{opacity:0}28%,96.99%{opacity:1}97%,100%{opacity:0}}.e4{animation-name:e4}
+    @keyframes e5{0%,33.99%{opacity:0}34%,96.99%{opacity:1}97%,100%{opacity:0}}.e5{animation-name:e5}
+    @keyframes e6{0%,39.99%{opacity:0}40%,96.99%{opacity:1}97%,100%{opacity:0}}.e6{animation-name:e6}
+    @keyframes fail{0%,49.99%{opacity:0}50%,96.99%{opacity:1}97%,100%{opacity:0}}.fail{animation-name:fail}
+    @media (prefers-reduced-motion: reduce){.k{animation:none;opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="428" rx="14"/>
+  <text class="h" x="28" y="40">Entity services vs a capability service</text><text class="sub" x="28" y="62">One checkout request. Call counts from the sequence diagram above.</text><text class="lbl" x="28" y="96">Entity services</text><rect class="bm" x="130" y="104" width="140" height="32" rx="8" stroke-width="1.5"/><text class="sm" x="200" y="125" text-anchor="middle">Checkout UI</text><line class="ln" x1="200" y1="136" x2="200" y2="148" marker-end="url(#ar)"/><rect class="box" x="130" y="150" width="140" height="32" rx="8" stroke-width="1.5"/><text class="sm" x="200" y="171" text-anchor="middle">Order svc</text><rect class="box" x="36" y="230" width="80" height="32" rx="8" stroke-width="1.5"/><text class="sm" x="76" y="251" text-anchor="middle">Customer</text><rect class="box" x="124" y="230" width="80" height="32" rx="8" stroke-width="1.5"/><text class="sm" x="164" y="251" text-anchor="middle">Product</text><rect class="box" x="212" y="230" width="80" height="32" rx="8" stroke-width="1.5"/><text class="sm" x="252" y="251" text-anchor="middle">Pricing</text><rect class="box" x="300" y="230" width="80" height="32" rx="8" stroke-width="1.5"/><text class="sm" x="340" y="251" text-anchor="middle">Inventory</text><g class="k e0"><path class="lnw" d="M 200 182 L 76 228" marker-end="url(#arw)"/></g><g class="k e1"><path class="lnw" d="M 200 182 L 164 228" marker-end="url(#arw)"/></g><g class="k e2"><path class="lnw" d="M 200 182 L 252 228" marker-end="url(#arw)"/></g><g class="k e3"><path class="lnw" d="M 200 182 L 340 228" marker-end="url(#arw)"/></g><g class="k e4"><path class="lnw" d="M 252 262 Q 208 300 172 264" marker-end="url(#arw)"/></g><g class="k e5"><path class="lnw" d="M 240 262 Q 164 330 84 264" marker-end="url(#arw)"/></g><g class="k e6"><path class="lnb" d="M 340 262 Q 252 350 160 264" marker-end="url(#arb)"/></g><g class="k fail"><rect class="bb" x="36" y="356" width="344" height="52" rx="8" stroke-width="1.5"/><text class="badt" x="208" y="378" text-anchor="middle" style="font-size:14px">Inventory → Product times out</text><text class="sm" x="208" y="398" text-anchor="middle">checkout fails: 9 hops, any one can break it</text></g><line class="grid" x1="400" y1="90" x2="400" y2="412"/><text class="lbl" x="420" y="96">Capability-aligned Ordering</text><rect class="bm" x="526" y="104" width="140" height="32" rx="8" stroke-width="1.5"/><text class="sm" x="596" y="125" text-anchor="middle">Checkout UI</text><line class="ln" x1="596" y1="136" x2="596" y2="148" marker-end="url(#ar)"/><rect class="bt" x="440" y="150" width="312" height="116" rx="10" stroke-width="1.5"/><text class="teat" x="456" y="174" style="font-size:14px">Ordering service</text><rect class="box" x="456" y="188" width="136" height="60" rx="8" stroke-width="1.5"/><text class="sm" x="524" y="214" text-anchor="middle">PricingPolicy</text><text class="sm" x="524" y="232" text-anchor="middle">(domain service)</text><rect class="box" x="604" y="188" width="136" height="60" rx="8" stroke-width="1.5"/><text class="sm" x="672" y="214" text-anchor="middle">local price list</text><text class="sm" x="672" y="232" text-anchor="middle">fed by events</text><rect class="box" x="624" y="312" width="128" height="32" rx="8" stroke-width="1.5"/><text class="sm" x="688" y="333" text-anchor="middle">Inventory</text><path class="lnt dash" d="M 688 266 L 688 308" marker-end="url(#art)"/><text class="sm" x="680" y="292" text-anchor="end">OrderPlaced (async)</text><g class="k fail"><rect class="bo" x="420" y="356" width="352" height="52" rx="8" stroke-width="1.5"/><text class="okt" x="596" y="378" text-anchor="middle" style="font-size:14px">1 call, order placed ✓</text><text class="sm" x="596" y="398" text-anchor="middle">stock reserved later from the event</text></g>
+</svg>
