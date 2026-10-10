@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 404" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Unbounded versus bounded cache</title>
+  <desc id="d">Animation over seven days of the same traffic. Left, an unbounded ConcurrentMapCacheManager cache: heap used after GC climbs steadily from 20 percent to the maximum on day 6 and the service fails with OutOfMemoryError. Right, a Caffeine cache with maximumSize 10,000: heap after GC rises until the cache reaches its bound around day 2, then stays flat at about 40 percent while old keys are evicted. Hit ratios are 71 and 69 percent. Values are illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:14s infinite linear}
+    .draw{stroke-dasharray:100;animation:draw 14s infinite linear}
+    @keyframes draw{0%{stroke-dashoffset:100}62%,100%{stroke-dashoffset:0}}
+    @keyframes oom{0%,61.99%{opacity:0}62%,100%{opacity:1}}.oom{animation-name:oom}
+    @keyframes ev{0%,29.99%{opacity:0}30%,100%{opacity:1}}.ev{animation-name:ev}
+    @media (prefers-reduced-motion: reduce){.draw{animation:none;stroke-dashoffset:0}.k{animation:none;opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="402" rx="14"/>
+  <text class="h" x="28" y="40">Same traffic, two caches</text><text class="sub" x="28" y="62">Every request brings some never-seen keys. Illustrative growth over 7 days.</text><rect class="bb" x="28" y="80" width="362" height="280" rx="10" stroke-width="1.2"/><text class="badt" x="44" y="104" style="font-size:14px">Unbounded: ConcurrentMapCacheManager</text><line class="grid" x1="84" y1="318" x2="368" y2="318"/><text class="sub" x="78" y="322" text-anchor="end">0</text><line class="grid" x1="84" y1="224" x2="368" y2="224"/><text class="sub" x="78" y="228" text-anchor="end">50%</text><line class="grid" x1="84" y1="130" x2="368" y2="130"/><text class="sub" x="78" y="134" text-anchor="end">max</text><text class="sub" x="84" y="336" text-anchor="middle">d0</text><text class="sub" x="124.571" y="336" text-anchor="middle">d1</text><text class="sub" x="165.143" y="336" text-anchor="middle">d2</text><text class="sub" x="205.714" y="336" text-anchor="middle">d3</text><text class="sub" x="246.286" y="336" text-anchor="middle">d4</text><text class="sub" x="286.857" y="336" text-anchor="middle">d5</text><text class="sub" x="327.429" y="336" text-anchor="middle">d6</text><text class="sub" x="368" y="336" text-anchor="middle">d7</text><text class="sub" x="44" y="352">heap used after GC</text><path class="lnb draw" d="M 84.0 280.4 L 96.2 269.1 L 124.6 256.0 L 165.1 233.4 L 205.7 210.8 L 246.3 188.3 L 286.9 165.7 L 327.4 143.2 L 347.7 130.0" pathLength="100" style="stroke-width:3"/><g class="k oom"><rect class="badf" x="230.057" y="136" width="150" height="28" rx="6"/><text class="on13" x="305.057" y="155" text-anchor="middle">OutOfMemoryError</text></g><rect class="bt" x="410" y="80" width="362" height="280" rx="10" stroke-width="1.2"/><text class="teat" x="426" y="104" style="font-size:14px">Bounded: Caffeine maximumSize=10000</text><line class="grid" x1="466" y1="318" x2="750" y2="318"/><text class="sub" x="460" y="322" text-anchor="end">0</text><line class="grid" x1="466" y1="224" x2="750" y2="224"/><text class="sub" x="460" y="228" text-anchor="end">50%</text><line class="grid" x1="466" y1="130" x2="750" y2="130"/><text class="sub" x="460" y="134" text-anchor="end">max</text><text class="sub" x="466" y="336" text-anchor="middle">d0</text><text class="sub" x="506.571" y="336" text-anchor="middle">d1</text><text class="sub" x="547.143" y="336" text-anchor="middle">d2</text><text class="sub" x="587.714" y="336" text-anchor="middle">d3</text><text class="sub" x="628.286" y="336" text-anchor="middle">d4</text><text class="sub" x="668.857" y="336" text-anchor="middle">d5</text><text class="sub" x="709.429" y="336" text-anchor="middle">d6</text><text class="sub" x="750" y="336" text-anchor="middle">d7</text><text class="sub" x="426" y="352">heap used after GC</text><path class="lnt draw" d="M 466.0 280.4 L 478.2 269.1 L 506.6 256.0 L 530.9 246.6 L 555.3 242.8 L 587.7 242.8 L 628.3 242.8 L 668.9 242.8 L 709.4 242.8 L 750.0 242.8" pathLength="100" style="stroke-width:3"/><line class="lnw dash" x1="466" y1="239.04" x2="750" y2="239.04"/><text class="wrnt" x="750" y="231.04" text-anchor="end" style="font-size:12px">bound: 10,000 entries</text><g class="k ev"><text class="teat" x="648.571" y="268.8" text-anchor="middle" style="font-size:13px">evicting old keys, flat</text></g><text class="sm" x="28" y="384">Hit ratio: unbounded 71%, bounded 69%. The evicted keys were rarely read again.</text>
+</svg>

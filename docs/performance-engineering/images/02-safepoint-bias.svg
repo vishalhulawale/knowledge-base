@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 452" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Safepoint bias in sampling</title>
+  <desc id="d">Animation: a thread runs parse, then a long counted loop hotLoop with no safepoint poll inside, then format and write. A cursor moves across the timeline and six samples fire at equal intervals. In the JVMTI sampler row each sample slides forward to the next safepoint poll, so the three samples taken during hotLoop are recorded in format. In the JFR and async-profiler row each sample is recorded where the thread really was. Tallies: biased parse 1, hotLoop 0, format 4, write 1; async parse 1, hotLoop 3, format 1, write 1. The timeline is illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:14s infinite linear}
+    .cur{animation:cur 14s infinite linear}
+    @keyframes cur{0%{transform:translateX(0)}70%,100%{transform:translateX(555px)}}
+    @keyframes p00{0%,8.49%{opacity:0}8.5%,100%{opacity:1}}.p00{animation-name:p00}
+    @keyframes p01{0%,19.89%{opacity:0}19.9%,100%{opacity:1}}.p01{animation-name:p01}
+    @keyframes p02{0%,31.19%{opacity:0}31.2%,100%{opacity:1}}.p02{animation-name:p02}
+    @keyframes p03{0%,42.59%{opacity:0}42.6%,100%{opacity:1}}.p03{animation-name:p03}
+    @keyframes p04{0%,53.89%{opacity:0}53.9%,100%{opacity:1}}.p04{animation-name:p04}
+    @keyframes p05{0%,65.29%{opacity:0}65.3%,100%{opacity:1}}.p05{animation-name:p05}
+    @keyframes p10{0%,8.49%{opacity:0}8.5%,100%{opacity:1}}.p10{animation-name:p10}
+    @keyframes p11{0%,19.89%{opacity:0}19.9%,100%{opacity:1}}.p11{animation-name:p11}
+    @keyframes p12{0%,31.19%{opacity:0}31.2%,100%{opacity:1}}.p12{animation-name:p12}
+    @keyframes p13{0%,42.59%{opacity:0}42.6%,100%{opacity:1}}.p13{animation-name:p13}
+    @keyframes p14{0%,53.89%{opacity:0}53.9%,100%{opacity:1}}.p14{animation-name:p14}
+    @keyframes p15{0%,65.29%{opacity:0}65.3%,100%{opacity:1}}.p15{animation-name:p15}
+    @media (prefers-reduced-motion: reduce){.cur{animation:none;transform:translateX(555px)}.k{animation:none;opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="450" rx="14"/>
+  <text class="h" x="28" y="40">Safepoint bias: samples land at the wrong frame</text><text class="sub" x="28" y="62">One thread over time. Six samples at fixed intervals. Illustrative timeline.</text><text class="lbl" x="28" y="112">Thread runs</text><rect class="bt" x="210" y="90" width="110.5" height="34" rx="4" stroke-width="1.2"/><text class="sm" x="266.25" y="112" text-anchor="middle">parse()</text><rect class="bw" x="322.5" y="90" width="275.5" height="34" rx="4" stroke-width="1.2"/><text class="sm" x="461.25" y="112" text-anchor="middle">hotLoop()</text><rect class="bp" x="600" y="90" width="88" height="34" rx="4" stroke-width="1.2"/><text class="sm" x="645" y="112" text-anchor="middle">format()</text><rect class="bo" x="690" y="90" width="73" height="34" rx="4" stroke-width="1.2"/><text class="sm" x="727.5" y="112" text-anchor="middle">write()</text><text class="wrnt" x="461.25" y="142" text-anchor="middle" style="font-size:12px">counted loop: no safepoint poll inside</text><path class="wrnf" d="M255,128 l-5,9 h10 z"/><path class="wrnf" d="M292.5,128 l-5,9 h10 z"/><path class="wrnf" d="M603.75,128 l-5,9 h10 z"/><path class="wrnf" d="M660,128 l-5,9 h10 z"/><path class="wrnf" d="M693.75,128 l-5,9 h10 z"/><path class="wrnf" d="M735,128 l-5,9 h10 z"/><path class="wrnf" d="M34,140 l-5,9 h10 z"/><text class="sub" x="46" y="149">safepoint poll</text><line class="lnp" x1="34" y1="158" x2="34" y2="170"/><text class="sub" x="46" y="168">sample fires</text><text class="lbl" x="28" y="204">JVMTI sampler</text><text class="sub" x="28" y="222">(biased)</text><line class="grid" x1="210" y1="200" x2="765" y2="200"/><g class="k p00"><path class="lnb dash" d="M277.5,170 Q285,156 290.5,190" marker-end="url(#arb)" style="stroke-width:1.5"/><circle class="badf" cx="292.5" cy="200" r="7"/></g><g class="k p01"><path class="lnb dash" d="M367.5,170 Q485.625,156 601.75,190" marker-end="url(#arb)" style="stroke-width:1.5"/><circle class="badf" cx="603.75" cy="200" r="7"/></g><g class="k p02"><path class="lnb dash" d="M457.5,170 Q530.625,156 601.75,190" marker-end="url(#arb)" style="stroke-width:1.5"/><circle class="badf" cx="603.75" cy="200" r="7"/></g><g class="k p03"><path class="lnb dash" d="M547.5,170 Q575.625,156 601.75,190" marker-end="url(#arb)" style="stroke-width:1.5"/><circle class="badf" cx="603.75" cy="200" r="7"/></g><g class="k p04"><path class="lnb dash" d="M637.5,170 Q648.75,156 658,190" marker-end="url(#arb)" style="stroke-width:1.5"/><circle class="badf" cx="660" cy="200" r="7"/></g><g class="k p05"><path class="lnb dash" d="M727.5,170 Q731.25,156 733,190" marker-end="url(#arb)" style="stroke-width:1.5"/><circle class="badf" cx="735" cy="200" r="7"/></g><text class="lbl" x="28" y="284">JFR, async-profiler</text><text class="sub" x="28" y="302">(async)</text><line class="grid" x1="210" y1="280" x2="765" y2="280"/><g class="k p10"><circle class="okf" cx="277.5" cy="280" r="7"/></g><g class="k p11"><circle class="okf" cx="367.5" cy="280" r="7"/></g><g class="k p12"><circle class="okf" cx="457.5" cy="280" r="7"/></g><g class="k p13"><circle class="okf" cx="547.5" cy="280" r="7"/></g><g class="k p14"><circle class="okf" cx="637.5" cy="280" r="7"/></g><g class="k p15"><circle class="okf" cx="727.5" cy="280" r="7"/></g><line class="lnp" x1="277.5" y1="78" x2="277.5" y2="88"/><line class="lnp" x1="367.5" y1="78" x2="367.5" y2="88"/><line class="lnp" x1="457.5" y1="78" x2="457.5" y2="88"/><line class="lnp" x1="547.5" y1="78" x2="547.5" y2="88"/><line class="lnp" x1="637.5" y1="78" x2="637.5" y2="88"/><line class="lnp" x1="727.5" y1="78" x2="727.5" y2="88"/><g class="cur"><line class="lnp" x1="210" y1="84" x2="210" y2="300"/></g><rect class="bm" x="28" y="318" width="744" height="92" rx="10"/><text class="lbl" x="44" y="342">Samples per method</text><text class="sm" x="250" y="342" text-anchor="middle">parse()</text><text class="sm" x="380" y="342" text-anchor="middle">hotLoop()</text><text class="sm" x="510" y="342" text-anchor="middle">format()</text><text class="sm" x="640" y="342" text-anchor="middle">write()</text><text class="badt" x="44" y="366" style="font-size:14px">biased</text><text class="badt" x="250" y="366" text-anchor="middle" style="font-size:15px">1</text><text class="badt" x="380" y="366" text-anchor="middle" style="font-size:15px">0</text><text class="badt" x="510" y="366" text-anchor="middle" style="font-size:15px">4</text><text class="badt" x="640" y="366" text-anchor="middle" style="font-size:15px">1</text><text class="okt" x="44" y="392" style="font-size:14px">async</text><text class="okt" x="250" y="392" text-anchor="middle" style="font-size:15px">1</text><text class="okt" x="380" y="392" text-anchor="middle" style="font-size:15px">3</text><text class="okt" x="510" y="392" text-anchor="middle" style="font-size:15px">1</text><text class="okt" x="640" y="392" text-anchor="middle" style="font-size:15px">1</text><text class="sm" x="44" y="432">The biased profiler gives hotLoop() zero samples and blames format(), the frame at the next poll.</text>
+</svg>

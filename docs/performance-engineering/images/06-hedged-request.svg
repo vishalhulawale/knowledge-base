@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 406" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Hedged request timeline</title>
+  <desc id="d">Animation: a cursor sweeps a 640 millisecond timeline for two cases. Without hedging, the request to replica 1 waits through a 600 millisecond GC pause and the answer arrives at 610 milliseconds. With hedging, when no reply has arrived by the p95 latency of 40 milliseconds, a backup request goes to replica 2, which answers at 48 milliseconds, and the request to replica 1 is cancelled. Only requests still waiting at the p95 send a backup, about 1 in 20. A note cites Google's result of hedging after 10 milliseconds cutting a BigTable p99.9 from 1,800 to 74 milliseconds with 2 percent more requests.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .rv{transform-box:fill-box;transform-origin:0 50%;animation:rv 14s infinite linear}
+    @keyframes rv{0%,5%{transform:scaleX(0)}80%,100%{transform:scaleX(1)}}
+    .cur{animation:cur 14s infinite linear}
+    @keyframes cur{0%,5%{transform:translateX(0);opacity:1}80%{transform:translateX(610px);opacity:1}80.01%,100%{transform:translateX(610px);opacity:0}}
+    .k{opacity:0;animation:14s infinite linear}
+    @keyframes h1{0%,10.615%{opacity:0}10.625%,100%{opacity:1}}.h1{animation-name:h1}
+    @keyframes h2{0%,76.4744%{opacity:0}76.4844%,100%{opacity:1}}.h2{animation-name:h2}
+    @media (prefers-reduced-motion: reduce){.rv{animation:none;transform:none}.cur{animation:none;opacity:0}.k{animation:none;opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="404" rx="14"/>
+  <text class="h" x="28" y="40">A hedged read: backup after the p95 delay</text><text class="sub" x="28" y="62">Replica 1 is stuck in a 600 ms pause. Hedge only idempotent reads. Illustrative.</text><text class="sub" x="770" y="330" text-anchor="end">ms</text><text class="lbl" x="28" y="108">Without hedging</text><text class="lbl" x="28" y="206">With hedging</text><line class="grid" x1="160" y1="84" x2="160" y2="296"/><text class="sub" x="160" y="314" text-anchor="middle">0</text><line class="grid" x1="236.25" y1="84" x2="236.25" y2="296"/><text class="sub" x="236.25" y="314" text-anchor="middle">80</text><line class="grid" x1="312.5" y1="84" x2="312.5" y2="296"/><text class="sub" x="312.5" y="314" text-anchor="middle">160</text><line class="grid" x1="388.75" y1="84" x2="388.75" y2="296"/><text class="sub" x="388.75" y="314" text-anchor="middle">240</text><line class="grid" x1="465" y1="84" x2="465" y2="296"/><text class="sub" x="465" y="314" text-anchor="middle">320</text><line class="grid" x1="541.25" y1="84" x2="541.25" y2="296"/><text class="sub" x="541.25" y="314" text-anchor="middle">400</text><line class="grid" x1="617.5" y1="84" x2="617.5" y2="296"/><text class="sub" x="617.5" y="314" text-anchor="middle">480</text><line class="grid" x1="693.75" y1="84" x2="693.75" y2="296"/><text class="sub" x="693.75" y="314" text-anchor="middle">560</text><line class="grid" x1="770" y1="84" x2="770" y2="296"/><text class="sub" x="770" y="314" text-anchor="middle">640</text><clipPath id="chd"><rect x="0" y="0" width="158" height="406"/><rect class="rv" x="158" y="0" width="624" height="406"/></clipPath><g clip-path="url(#chd)"><text class="sm" x="28" y="141">→ replica 1</text><rect class="wrnf" x="160" y="125" width="571.875" height="22" rx="4"/><text class="on13" x="445.938" y="141" text-anchor="middle">GC pause</text><rect class="okf" x="731.875" y="125" width="9.53125" height="22" rx="2"/><text class="sm" x="28" y="241">→ replica 1</text><text class="sm" x="28" y="275">→ replica 2</text><rect class="wrnf" x="160" y="225" width="45.75" height="22" rx="4"/><rect class="okf" x="198.125" y="259" width="7.625" height="22" rx="2"/><line class="lnp dash" x1="198.125" y1="214" x2="198.125" y2="290"/><text class="prit" x="202.125" y="222" style="font-size:12px">p95 = 40 ms: send hedge</text></g><g class="cur"><line class="lnp" x1="160" y1="114" x2="160" y2="292"/></g><g class="k h1"><text class="sub" x="213.375" y="241">cancelled</text><text class="okt" x="213.375" y="275" style="font-size:14px">answer at 48 ms</text></g><g class="k h2"><text class="badt" x="723.875" y="168" text-anchor="end" style="font-size:14px">answer at 610 ms</text></g><text class="sm" x="28" y="362">Only requests still waiting at the p95 send a backup, so about 1 in 20 costs an extra call.</text><text class="sm" x="28" y="384">Google: hedging after 10 ms cut a BigTable p99.9 from 1,800 ms to 74 ms with 2% more requests.</text>
+</svg>
