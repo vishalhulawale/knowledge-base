@@ -2488,43 +2488,43 @@
           "title": "FDE system design framework: customer context, deployment constraint, rollout plan",
           "slug": "01-fde-system-design-framework-customer-context-deployment-cons",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Case: enterprise knowledge assistant (RAG over internal docs with access control)",
           "slug": "02-case-enterprise-knowledge-assistant",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Case: agentic workflow automation with human approval (claims or ticket triage)",
           "slug": "03-case-agentic-workflow-automation-with-human-approval",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Case: document extraction pipeline (forms, invoices) with evals",
           "slug": "04-case-document-extraction-pipeline-with-evals",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Case: customer-support agent with escalation & handoff",
           "slug": "05-case-customer-support-agent-with-escalation-and-handoff",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Case: unifying siloed systems into an operational dashboard",
           "slug": "06-case-unifying-siloed-systems-into-an-operational-dashboard",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Defending trade-offs: build vs buy, latency vs cost, cloud vs on-prem",
           "slug": "07-defending-trade-offs-build-vs-buy-latency-vs-cost-cloud-vs-o",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },

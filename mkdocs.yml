@@ -489,5 +489,12 @@ nav:
           - "Production Rollout, Monitoring, On-Call & Handoff to the Customer's Team": fde-enterprise-deployment/07-production-rollout-monitoring-on-call-and-handoff-to-the-cus.md
       - "FDE System Design":
           - Overview: fde-system-design/index.md
+          - "FDE System Design Framework: Customer Context, Deployment Constraint, Rollout Plan": fde-system-design/01-fde-system-design-framework-customer-context-deployment-cons.md
+          - "Case: Enterprise Knowledge Assistant (RAG over Internal Docs with Access Control)": fde-system-design/02-case-enterprise-knowledge-assistant.md
+          - "Case: Agentic Workflow Automation with Human Approval (Claims or Ticket Triage)": fde-system-design/03-case-agentic-workflow-automation-with-human-approval.md
+          - "Case: Document Extraction Pipeline (Forms, Invoices) with Evals": fde-system-design/04-case-document-extraction-pipeline-with-evals.md
+          - "Case: Customer-Support Agent with Escalation & Handoff": fde-system-design/05-case-customer-support-agent-with-escalation-and-handoff.md
+          - "Case: Unifying Siloed Systems into an Operational Dashboard": fde-system-design/06-case-unifying-siloed-systems-into-an-operational-dashboard.md
+          - "Defending Trade-offs: Build vs Buy, Latency vs Cost, Cloud vs On-Prem": fde-system-design/07-defending-trade-offs-build-vs-buy-latency-vs-cost-cloud-vs-o.md
       - "FDE Behavioral, Take-Home & Deep Dive":
           - Overview: fde-behavioral-take-home/index.md
