@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 404" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Sleep versus auto-wait</title>
+  <desc id="d">Animation: a playhead moves along a three second timeline. The app's refill button is disabled until its API call returns at 1.6 seconds. A test that sleeps one second then clicks hits the disabled button at 1.0 seconds and fails. A Playwright locator click re-checks that the element is attached, visible, stable and enabled about every quarter second and clicks at about 1.65 seconds, as soon as the button is enabled, then the assertion retries too.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:14s infinite linear}
+    .ph{animation:ph 14s infinite linear}
+    @keyframes ph{0%{transform:translateX(0)}75%,100%{transform:translateX(560px)}}
+    @keyframes en{0%,40.99%{opacity:0}41%,100%{opacity:1}}.en{animation-name:en}
+    @keyframes sl{0%,25.99%{opacity:0}26%,100%{opacity:1}}.sl{animation-name:sl}
+    @keyframes t0{0%,2.24%{opacity:0}2.25%,100%{opacity:1}}.t0{animation-name:t0}
+    @keyframes t1{0%,8.49%{opacity:0}8.5%,100%{opacity:1}}.t1{animation-name:t1}
+    @keyframes t2{0%,14.74%{opacity:0}14.75%,100%{opacity:1}}.t2{animation-name:t2}
+    @keyframes t3{0%,20.99%{opacity:0}21%,100%{opacity:1}}.t3{animation-name:t3}
+    @keyframes t4{0%,27.24%{opacity:0}27.25%,100%{opacity:1}}.t4{animation-name:t4}
+    @keyframes t5{0%,33.49%{opacity:0}33.5%,100%{opacity:1}}.t5{animation-name:t5}
+    @keyframes ok{0%,42.24%{opacity:0}42.25%,100%{opacity:1}}.ok{animation-name:ok}
+    @media (prefers-reduced-motion: reduce){.k,.ph{animation:none}.k{opacity:1}.ph{opacity:0}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="402" rx="14"/>
+  <text class="h" x="28" y="40">Fixed sleep vs auto-waiting locator</text><text class="sub" x="28" y="62">The refill button enables when the API answers at 1.6 s. Seconds.</text><line class="grid" x1="190" y1="88" x2="190" y2="330"/><text class="sub" x="190" y="348" text-anchor="middle">0 s</text><line class="grid" x1="376.7" y1="88" x2="376.7" y2="330"/><text class="sub" x="376.7" y="348" text-anchor="middle">1 s</text><line class="grid" x1="563.4" y1="88" x2="563.4" y2="330"/><text class="sub" x="563.4" y="348" text-anchor="middle">2 s</text><line class="grid" x1="750.1" y1="88" x2="750.1" y2="330"/><text class="sub" x="750.1" y="348" text-anchor="middle">3 s</text><text class="lbl" x="28" y="116">App</text><rect class="bm" x="190" y="100" width="298.72" height="26" rx="5"/><text class="sm" x="339.36" y="118" text-anchor="middle">GET /refills (button disabled)</text><g class="k en"><rect class="okf" x="490.72" y="100" width="257.38" height="26" rx="6"/><text class="on13" x="619.41" y="118" text-anchor="middle">button enabled</text></g><text class="lbl" x="28" y="186">sleep(1000)</text><text class="sub" x="28" y="204">then click</text><rect class="mutf" x="190" y="176" width="186.7" height="22" rx="5"/><text class="on13" x="283.35" y="192" text-anchor="middle">waiting</text><g class="k sl"><circle class="badf" cx="376.7" cy="187" r="10"/><text class="on13" x="376.7" y="191" text-anchor="middle">✕</text><text class="badt" x="392.7" y="230" style="font-size:13px">clicked a disabled button: test fails</text></g><text class="lbl" x="28" y="276">locator.click()</text><text class="sub" x="28" y="294">auto-wait</text><g class="k t0"><circle class="mutf" cx="199.335" cy="277" r="6"/></g><g class="k t1"><circle class="mutf" cx="246.01" cy="277" r="6"/></g><g class="k t2"><circle class="mutf" cx="292.685" cy="277" r="6"/></g><g class="k t3"><circle class="mutf" cx="339.36" cy="277" r="6"/></g><g class="k t4"><circle class="mutf" cx="386.03499999999997" cy="277" r="6"/></g><g class="k t5"><circle class="mutf" cx="432.71" cy="277" r="6"/></g><g class="k ok"><circle class="okf" cx="498.05499999999995" cy="277" r="10"/><text class="okt" x="514.055" y="282" style="font-size:13px">clicked as soon as enabled</text><text class="sub" x="514.055" y="302">then expect(status) retries too</text></g><text class="sub" x="195.335" y="316" style="font-size:12px">re-checks: attached, visible, stable, enabled</text><g class="ph"><line class="lnp" x1="190" y1="84" x2="190" y2="334"/></g><text class="sm" x="28" y="384">A sleep long enough for a slow CI run wastes time on every fast run; waiting on the condition does neither.</text>
+</svg>

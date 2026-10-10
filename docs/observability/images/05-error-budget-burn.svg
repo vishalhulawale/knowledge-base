@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 372" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Error budget burn</title>
+  <desc id="d">Animation: a line of error budget remaining is drawn across a 30-day window. It starts at 100 percent and falls about 2 percent a day from normal errors, drops 40 percent in one incident on day 12 and another 15 percent on day 20, and reaches zero on day 23, where a red zone marks the release freeze for the rest of the window. Numbers are illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:14s infinite linear}
+    .cover{fill:#f8fafc}
+    @media (prefers-color-scheme: dark){.cover{fill:#1f2430}}
+    @keyframes sweep{0%{transform:translateX(0)}70%,100%{transform:translateX(638px)}}
+    .sweep{animation:sweep 14s infinite linear}
+    @keyframes i1{0%,30.39%{opacity:0}30.4%,100%{opacity:1}}.i1{animation-name:i1}
+    @keyframes i2{0%,47.99%{opacity:0}48%,100%{opacity:1}}.i2{animation-name:i2}
+    @keyframes fz{0%,57.6567%{opacity:0}57.6667%,100%{opacity:1}}.fz{animation-name:fz}
+    @media (prefers-reduced-motion: reduce){.sweep{animation:none;opacity:0}.k{animation:none;opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="370" rx="14"/>
+  <text class="h" x="28" y="40">Error budget remaining over a 30-day window</text><text class="sub" x="28" y="62">Normal errors spend ~2% a day; incidents on day 12 and day 20. Illustrative.</text><line class="grid" x1="80" y1="300" x2="710" y2="300"/><text class="sub" x="72" y="304" text-anchor="end">0%</text><line class="grid" x1="80" y1="250" x2="710" y2="250"/><text class="sub" x="72" y="254" text-anchor="end">25%</text><line class="grid" x1="80" y1="200" x2="710" y2="200"/><text class="sub" x="72" y="204" text-anchor="end">50%</text><line class="grid" x1="80" y1="150" x2="710" y2="150"/><text class="sub" x="72" y="154" text-anchor="end">75%</text><line class="grid" x1="80" y1="100" x2="710" y2="100"/><text class="sub" x="72" y="104" text-anchor="end">100%</text><text class="sub" x="80" y="320" text-anchor="middle">day 0</text><text class="sub" x="185" y="320" text-anchor="middle">day 5</text><text class="sub" x="290" y="320" text-anchor="middle">day 10</text><text class="sub" x="395" y="320" text-anchor="middle">day 15</text><text class="sub" x="500" y="320" text-anchor="middle">day 20</text><text class="sub" x="605" y="320" text-anchor="middle">day 25</text><text class="sub" x="710" y="320" text-anchor="middle">day 30</text><path class="lnt" d="M 80 100 L 101 104 L 122 108 L 143 112 L 164 116 L 185 120 L 206 124 L 227 128 L 248 132 L 269 136 L 290 140 L 311 144 L 332 148 L 332 228 L 353 232 L 374 236 L 395 240 L 416 244 L 437 248 L 458 252 L 479 256 L 500 260 L 500 290 L 521 294 L 542 298 L 563 300 L 584 300 L 605 300 L 626 300 L 647 300 L 668 300 L 689 300 L 710 300" style="stroke-width:3"/><rect class="cover sweep" x="82" y="96" width="634" height="206"/><g class="k i1"><text class="badt" x="324" y="190" text-anchor="end" style="font-size:13px">incident: −40%</text></g><g class="k i2"><text class="badt" x="492" y="276" text-anchor="end" style="font-size:13px">second incident: −15%</text></g><g class="k fz"><rect class="bb" x="559" y="92" width="155" height="210" rx="6" fill-opacity="0.5" stroke-width="1"/><text class="badt" x="636.5" y="116" text-anchor="middle" style="font-size:13px">budget spent:</text><text class="badt" x="636.5" y="134" text-anchor="middle" style="font-size:13px">release freeze</text></g><text class="sm" x="28" y="352">One bad hour can cost more than two weeks of normal errors. Watch the slope (burn rate), not just the level.</text>
+</svg>

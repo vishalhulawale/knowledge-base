@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 322" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Metric cardinality explosion</title>
+  <desc id="d">Animation on a log scale. Row one multiplies uri with 5 route templates by status 4, method 3, outcome 2, 12 histogram buckets and 20 pods, giving 57,600 series, fine for one Prometheus. Row two swaps the uri label for 50,000 raw paths, and its bar grows to 576 million series and is marked out of memory. Counts are illustrative. The fix is route templates and bounded values, with IDs on spans and logs.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:14s infinite linear}
+    @keyframes grow{0%,30%{transform:scaleX(1)}60%,100%{transform:scaleX(3.272)}}
+    .grow{transform-box:fill-box;transform-origin:left center;animation:grow 14s infinite ease-in-out}
+    @keyframes w{0%,59.99%{opacity:0}60%,100%{opacity:1}}.w{animation-name:w}
+    @media (prefers-reduced-motion: reduce){.grow{animation:none;transform:scaleX(3.272)}.k{animation:none;opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="320" rx="14"/>
+  <text class="h" x="28" y="40">Labels multiply series, they don't add</text><text class="sub" x="28" y="62">Series for one histogram metric. Illustrative counts, log scale.</text><rect class="bt" x="28" y="84" width="129" height="28" rx="14" stroke-width="1.2"/><text class="sm" x="92.5" y="103" text-anchor="middle">uri 5 templates</text><text class="lbl" x="165" y="103" text-anchor="middle">×</text><rect class="bm" x="173" y="84" width="77.2" height="28" rx="14" stroke-width="1.2"/><text class="sm" x="211.6" y="103" text-anchor="middle">status 4</text><text class="lbl" x="258.2" y="103" text-anchor="middle">×</text><rect class="bm" x="266.2" y="84" width="77.2" height="28" rx="14" stroke-width="1.2"/><text class="sm" x="304.8" y="103" text-anchor="middle">method 3</text><text class="lbl" x="351.4" y="103" text-anchor="middle">×</text><rect class="bm" x="359.4" y="84" width="84.6" height="28" rx="14" stroke-width="1.2"/><text class="sm" x="401.7" y="103" text-anchor="middle">outcome 2</text><text class="lbl" x="452" y="103" text-anchor="middle">×</text><rect class="bm" x="460" y="84" width="92" height="28" rx="14" stroke-width="1.2"/><text class="sm" x="506" y="103" text-anchor="middle">buckets 12</text><text class="lbl" x="560" y="103" text-anchor="middle">×</text><rect class="bm" x="568" y="84" width="69.8" height="28" rx="14" stroke-width="1.2"/><text class="sm" x="602.9" y="103" text-anchor="middle">pods 20</text><rect class="bb" x="28" y="214" width="166" height="28" rx="14" stroke-width="1.2"/><text class="sm" x="111" y="233" text-anchor="middle">uri 50,000 raw paths</text><text class="lbl" x="202" y="233" text-anchor="middle">×</text><rect class="bm" x="210" y="214" width="77.2" height="28" rx="14" stroke-width="1.2"/><text class="sm" x="248.6" y="233" text-anchor="middle">status 4</text><text class="lbl" x="295.2" y="233" text-anchor="middle">×</text><rect class="bm" x="303.2" y="214" width="77.2" height="28" rx="14" stroke-width="1.2"/><text class="sm" x="341.8" y="233" text-anchor="middle">method 3</text><text class="lbl" x="388.4" y="233" text-anchor="middle">×</text><rect class="bm" x="396.4" y="214" width="84.6" height="28" rx="14" stroke-width="1.2"/><text class="sm" x="438.7" y="233" text-anchor="middle">outcome 2</text><text class="lbl" x="489" y="233" text-anchor="middle">×</text><rect class="bm" x="497" y="214" width="92" height="28" rx="14" stroke-width="1.2"/><text class="sm" x="543" y="233" text-anchor="middle">buckets 12</text><text class="lbl" x="597" y="233" text-anchor="middle">×</text><rect class="bm" x="605" y="214" width="69.8" height="28" rx="14" stroke-width="1.2"/><text class="sm" x="639.9" y="233" text-anchor="middle">pods 20</text><text class="teat" x="647.8" y="103" style="font-size:15px">= 57,600</text><text class="badt" x="684.8" y="233" style="font-size:15px">= 576 million</text><line class="grid" x1="60" y1="128" x2="60" y2="186"/><text class="sub" x="60" y="202" text-anchor="middle">1,000</text><line class="grid" x1="176.667" y1="128" x2="176.667" y2="186"/><text class="sub" x="176.667" y="202" text-anchor="middle">10⁴</text><line class="grid" x1="293.333" y1="128" x2="293.333" y2="186"/><text class="sub" x="293.333" y="202" text-anchor="middle">10⁵</text><line class="grid" x1="410" y1="128" x2="410" y2="186"/><text class="sub" x="410" y="202" text-anchor="middle">10⁶</text><line class="grid" x1="526.667" y1="128" x2="526.667" y2="186"/><text class="sub" x="526.667" y="202" text-anchor="middle">10⁷</text><line class="grid" x1="643.333" y1="128" x2="643.333" y2="186"/><text class="sub" x="643.333" y="202" text-anchor="middle">10⁸</text><line class="grid" x1="760" y1="128" x2="760" y2="186"/><text class="sub" x="760" y="202" text-anchor="middle">10⁹</text><rect class="tea" x="60" y="136" width="205.383" height="16" rx="4"/><text class="teat" x="273.383" y="149" style="font-size:12px">fine for one Prometheus</text><rect class="badf grow" x="60" y="160" width="205.383" height="16" rx="4"/><g class="k w"><text class="on13" x="728.049" y="172" text-anchor="end">OOM</text></g><text class="sm" x="28" y="280">Fix: route templates, enums, status class. Put IDs on spans and logs, never on metric labels.</text><text class="sm" x="28" y="302">Safety net: MeterFilter.maximumAllowableTags, sample_limit per scrape target.</text>
+</svg>

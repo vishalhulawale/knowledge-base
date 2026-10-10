@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 404" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Container lifecycle timing</title>
+  <desc id="d">Animation: a playhead sweeps two timelines for three integration test classes. With a container per test class, each class starts Postgres in 4 seconds, restarts the Spring context in 5 seconds and runs 3 seconds of tests, finishing at 36 seconds. With a singleton container and shared configuration, Postgres and the context start once and the three classes run back to back, finishing at 18 seconds. Illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:15s infinite linear}
+    .ph{animation:ph 15s infinite linear}
+    @keyframes ph{0%{transform:translateX(0)}80%,100%{transform:translateX(666px)}}
+    @keyframes b0{0%,0.99%{opacity:0}1%,100%{opacity:1}}.b0{animation-name:b0}
+    @keyframes b1{0%,9.87889%{opacity:0}9.88889%,100%{opacity:1}}.b1{animation-name:b1}
+    @keyframes b2{0%,20.99%{opacity:0}21%,100%{opacity:1}}.b2{animation-name:b2}
+    @keyframes b3{0%,27.6567%{opacity:0}27.6667%,100%{opacity:1}}.b3{animation-name:b3}
+    @keyframes b4{0%,36.5456%{opacity:0}36.5556%,100%{opacity:1}}.b4{animation-name:b4}
+    @keyframes b5{0%,47.6567%{opacity:0}47.6667%,100%{opacity:1}}.b5{animation-name:b5}
+    @keyframes b6{0%,54.3233%{opacity:0}54.3333%,100%{opacity:1}}.b6{animation-name:b6}
+    @keyframes b7{0%,63.2122%{opacity:0}63.2222%,100%{opacity:1}}.b7{animation-name:b7}
+    @keyframes b8{0%,74.3233%{opacity:0}74.3333%,100%{opacity:1}}.b8{animation-name:b8}
+    @keyframes e9{0%,80.99%{opacity:0}81%,100%{opacity:1}}.e9{animation-name:e9}
+    @keyframes b9{0%,0.99%{opacity:0}1%,100%{opacity:1}}.b9{animation-name:b9}
+    @keyframes b10{0%,9.87889%{opacity:0}9.88889%,100%{opacity:1}}.b10{animation-name:b10}
+    @keyframes b11{0%,20.99%{opacity:0}21%,100%{opacity:1}}.b11{animation-name:b11}
+    @keyframes b12{0%,27.6567%{opacity:0}27.6667%,100%{opacity:1}}.b12{animation-name:b12}
+    @keyframes b13{0%,34.3233%{opacity:0}34.3333%,100%{opacity:1}}.b13{animation-name:b13}
+    @keyframes e14{0%,40.99%{opacity:0}41%,100%{opacity:1}}.e14{animation-name:e14}
+    @media (prefers-reduced-motion: reduce){.k,.ph{animation:none}.k{opacity:1}.ph{opacity:0}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="402" rx="14"/>
+  <text class="h" x="28" y="40">Container lifecycle and suite time</text><text class="sub" x="28" y="62">Three integration test classes. Seconds, illustrative.</text><line class="grid" x1="60" y1="96" x2="60" y2="330"/><text class="sub" x="60" y="348" text-anchor="middle">0 s</text><line class="grid" x1="171" y1="96" x2="171" y2="330"/><text class="sub" x="171" y="348" text-anchor="middle">6 s</text><line class="grid" x1="282" y1="96" x2="282" y2="330"/><text class="sub" x="282" y="348" text-anchor="middle">12 s</text><line class="grid" x1="393" y1="96" x2="393" y2="330"/><text class="sub" x="393" y="348" text-anchor="middle">18 s</text><line class="grid" x1="504" y1="96" x2="504" y2="330"/><text class="sub" x="504" y="348" text-anchor="middle">24 s</text><line class="grid" x1="615" y1="96" x2="615" y2="330"/><text class="sub" x="615" y="348" text-anchor="middle">30 s</text><line class="grid" x1="726" y1="96" x2="726" y2="330"/><text class="sub" x="726" y="348" text-anchor="middle">36 s</text><text class="sm" x="28" y="102" font-weight="700">Container per test class: Postgres + context restart for every class</text><g class="k b0"><rect class="wrnf" x="61" y="110" width="72" height="46" rx="5"/><text class="on13" x="97" y="138" text-anchor="middle">Postgres</text></g><g class="k b1"><rect class="pri" x="135" y="110" width="90.5" height="46" rx="5"/><text class="on13" x="180.25" y="138" text-anchor="middle">context</text></g><g class="k b2"><rect class="okf" x="227.5" y="110" width="53.5" height="46" rx="5"/><text class="on13" x="254.25" y="138" text-anchor="middle">tests</text></g><g class="k b3"><rect class="wrnf" x="283" y="110" width="72" height="46" rx="5"/><text class="on13" x="319" y="138" text-anchor="middle">Postgres</text></g><g class="k b4"><rect class="pri" x="357" y="110" width="90.5" height="46" rx="5"/><text class="on13" x="402.25" y="138" text-anchor="middle">context</text></g><g class="k b5"><rect class="okf" x="449.5" y="110" width="53.5" height="46" rx="5"/><text class="on13" x="476.25" y="138" text-anchor="middle">tests</text></g><g class="k b6"><rect class="wrnf" x="505" y="110" width="72" height="46" rx="5"/><text class="on13" x="541" y="138" text-anchor="middle">Postgres</text></g><g class="k b7"><rect class="pri" x="579" y="110" width="90.5" height="46" rx="5"/><text class="on13" x="624.25" y="138" text-anchor="middle">context</text></g><g class="k b8"><rect class="okf" x="671.5" y="110" width="53.5" height="46" rx="5"/><text class="on13" x="698.25" y="138" text-anchor="middle">tests</text></g><g class="k e9"><text class="badt" x="722" y="182" text-anchor="end" style="font-size:15px">done: 36 s</text></g><text class="sm" x="28" y="242" font-weight="700">Singleton container + shared config: one start, one cached context</text><g class="k b9"><rect class="wrnf" x="61" y="250" width="72" height="46" rx="5"/><text class="on13" x="97" y="278" text-anchor="middle">Postgres</text></g><g class="k b10"><rect class="pri" x="135" y="250" width="90.5" height="46" rx="5"/><text class="on13" x="180.25" y="278" text-anchor="middle">context</text></g><g class="k b11"><rect class="okf" x="227.5" y="250" width="53.5" height="46" rx="5"/><text class="on13" x="254.25" y="278" text-anchor="middle">tests</text></g><g class="k b12"><rect class="okf" x="283" y="250" width="53.5" height="46" rx="5"/><text class="on13" x="309.75" y="278" text-anchor="middle">tests</text></g><g class="k b13"><rect class="okf" x="338.5" y="250" width="53.5" height="46" rx="5"/><text class="on13" x="365.25" y="278" text-anchor="middle">tests</text></g><g class="k e14"><text class="okt" x="401" y="279" style="font-size:15px">done: 18 s</text></g><g class="ph"><line class="lnp" x1="60" y1="92" x2="60" y2="334"/></g><text class="sm" x="28" y="384">Same tests, half the time: start containers once per JVM and give every class the same configuration.</text>
+</svg>

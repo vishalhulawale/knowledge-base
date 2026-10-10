@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 392" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Renamed field caught early</title>
+  <desc id="d">Animation: two lanes show the same change, a provider pull request renaming plan.code to planCode. Without contracts the change is merged and deployed to shared staging, the consumer's end-to-end run two days later fails, and claims-bff breaks with no clear owner. With Pact and can-i-deploy, pact verification fails on the provider's pull request, can-i-deploy says no and blocks the release, and the team uses expand and contract instead.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:14s infinite linear}
+    @keyframes l0s0{0%,3.99%{opacity:0}4%,100%{opacity:1}}.l0s0{animation-name:l0s0}
+    @keyframes l0s1{0%,21.99%{opacity:0}22%,100%{opacity:1}}.l0s1{animation-name:l0s1}
+    @keyframes l0s2{0%,39.99%{opacity:0}40%,100%{opacity:1}}.l0s2{animation-name:l0s2}
+    @keyframes l0s3{0%,57.99%{opacity:0}58%,100%{opacity:1}}.l0s3{animation-name:l0s3}
+    @keyframes l1s0{0%,3.99%{opacity:0}4%,100%{opacity:1}}.l1s0{animation-name:l1s0}
+    @keyframes l1s1{0%,21.99%{opacity:0}22%,100%{opacity:1}}.l1s1{animation-name:l1s1}
+    @keyframes l1s2{0%,39.99%{opacity:0}40%,100%{opacity:1}}.l1s2{animation-name:l1s2}
+    @keyframes l1s3{0%,57.99%{opacity:0}58%,100%{opacity:1}}.l1s3{animation-name:l1s3}
+    @keyframes fin{0%,77.99%{opacity:0}78%,100%{opacity:1}}.fin{animation-name:fin}
+    @media (prefers-reduced-motion: reduce){.k{animation:none;opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="390" rx="14"/>
+  <text class="h" x="28" y="40">A renamed field, with and without contracts</text><text class="sub" x="28" y="62">claims-bff reads plan.code from member-service.</text><text class="lbl" x="28" y="98">Without contracts</text><rect class="box" x="28" y="112" width="174" height="64" rx="8" stroke-dasharray="4 4"/><g class="k l0s0"><rect class="bo" x="28" y="112" width="174" height="64" rx="8" stroke-width="1.5"/><text class="okt" x="115" y="139" text-anchor="middle" style="font-size:14px">Provider PR renames</text><text class="sub" x="115" y="160" text-anchor="middle">plan.code → planCode</text><line class="ln" x1="204" y1="144" x2="215" y2="144" marker-end="url(#ar)"/></g><rect class="box" x="218" y="112" width="174" height="64" rx="8" stroke-dasharray="4 4"/><g class="k l0s1"><rect class="bo" x="218" y="112" width="174" height="64" rx="8" stroke-width="1.5"/><text class="okt" x="305" y="139" text-anchor="middle" style="font-size:14px">Merged, deployed</text><text class="sub" x="305" y="160" text-anchor="middle">to shared staging</text><line class="ln" x1="394" y1="144" x2="405" y2="144" marker-end="url(#ar)"/></g><rect class="box" x="408" y="112" width="174" height="64" rx="8" stroke-dasharray="4 4"/><g class="k l0s2"><rect class="bw" x="408" y="112" width="174" height="64" rx="8" stroke-width="1.5"/><text class="wrnt" x="495" y="139" text-anchor="middle" style="font-size:14px">Consumer E2E run</text><text class="sub" x="495" y="160" text-anchor="middle">two days later</text><line class="ln" x1="584" y1="144" x2="595" y2="144" marker-end="url(#ar)"/></g><rect class="box" x="598" y="112" width="174" height="64" rx="8" stroke-dasharray="4 4"/><g class="k l0s3"><rect class="bb" x="598" y="112" width="174" height="64" rx="8" stroke-width="1.5"/><text class="badt" x="685" y="139" text-anchor="middle" style="font-size:14px">claims-bff breaks</text><text class="sub" x="685" y="160" text-anchor="middle">who changed what?</text></g><text class="lbl" x="28" y="248">With Pact + can-i-deploy</text><rect class="box" x="28" y="262" width="174" height="64" rx="8" stroke-dasharray="4 4"/><g class="k l1s0"><rect class="bo" x="28" y="262" width="174" height="64" rx="8" stroke-width="1.5"/><text class="okt" x="115" y="289" text-anchor="middle" style="font-size:14px">Provider PR renames</text><text class="sub" x="115" y="310" text-anchor="middle">plan.code → planCode</text><line class="ln" x1="204" y1="294" x2="215" y2="294" marker-end="url(#ar)"/></g><rect class="box" x="218" y="262" width="174" height="64" rx="8" stroke-dasharray="4 4"/><g class="k l1s1"><rect class="bb" x="218" y="262" width="174" height="64" rx="8" stroke-width="1.5"/><text class="badt" x="305" y="289" text-anchor="middle" style="font-size:14px">Pact verification</text><text class="sub" x="305" y="310" text-anchor="middle">fails on the PR</text><line class="ln" x1="394" y1="294" x2="405" y2="294" marker-end="url(#ar)"/></g><rect class="box" x="408" y="262" width="174" height="64" rx="8" stroke-dasharray="4 4"/><g class="k l1s2"><rect class="bb" x="408" y="262" width="174" height="64" rx="8" stroke-width="1.5"/><text class="badt" x="495" y="289" text-anchor="middle" style="font-size:14px">can-i-deploy: no</text><text class="sub" x="495" y="310" text-anchor="middle">release blocked</text><line class="ln" x1="584" y1="294" x2="595" y2="294" marker-end="url(#ar)"/></g><rect class="box" x="598" y="262" width="174" height="64" rx="8" stroke-dasharray="4 4"/><g class="k l1s3"><rect class="bt" x="598" y="262" width="174" height="64" rx="8" stroke-width="1.5"/><text class="teat" x="685" y="289" text-anchor="middle" style="font-size:14px">Expand + contract</text><text class="sub" x="685" y="310" text-anchor="middle">add field, migrate</text></g><g class="k fin"><text class="sm" x="28" y="372">Same change. Top: found in a shared environment days later. Bottom: found by the provider on its own PR.</text></g>
+</svg>

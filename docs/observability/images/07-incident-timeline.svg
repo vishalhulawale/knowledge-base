@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 404" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Incident response timeline</title>
+  <desc id="d">Animation: a timeline from 14:00 to 16:20. Impact starts at 14:02, the page fires at 14:09 and is acknowledged at 14:11, a SEV2 is declared at 14:20, a rollback starts at 14:41, user impact is mitigated at 14:49 and the incident is resolved at 16:10. Status updates go out every 30 minutes from 14:20. Bars underneath show time to detect 7 minutes, time to acknowledge 2 minutes, time to mitigate 40 minutes after the page and time to resolve 2 hours 8 minutes from impact. Illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:14s infinite linear}
+    @keyframes e0{0%,2.99%{opacity:0}3%,100%{opacity:1}}.e0{animation-name:e0}
+    @keyframes e1{0%,6.49%{opacity:0}6.5%,100%{opacity:1}}.e1{animation-name:e1}
+    @keyframes e2{0%,7.49%{opacity:0}7.5%,100%{opacity:1}}.e2{animation-name:e2}
+    @keyframes e3{0%,11.99%{opacity:0}12%,100%{opacity:1}}.e3{animation-name:e3}
+    @keyframes e4{0%,22.49%{opacity:0}22.5%,100%{opacity:1}}.e4{animation-name:e4}
+    @keyframes e5{0%,26.49%{opacity:0}26.5%,100%{opacity:1}}.e5{animation-name:e5}
+    @keyframes e6{0%,66.99%{opacity:0}67%,100%{opacity:1}}.e6{animation-name:e6}
+    @keyframes u0{0%,11.99%{opacity:0}12%,100%{opacity:1}}.u0{animation-name:u0}
+    @keyframes u1{0%,26.99%{opacity:0}27%,100%{opacity:1}}.u1{animation-name:u1}
+    @keyframes u2{0%,41.99%{opacity:0}42%,100%{opacity:1}}.u2{animation-name:u2}
+    @keyframes u3{0%,56.99%{opacity:0}57%,100%{opacity:1}}.u3{animation-name:u3}
+    @keyframes p0{0%,6.49%{opacity:0}6.5%,100%{opacity:1}}.p0{animation-name:p0}
+    @keyframes p1{0%,7.49%{opacity:0}7.5%,100%{opacity:1}}.p1{animation-name:p1}
+    @keyframes p2{0%,26.49%{opacity:0}26.5%,100%{opacity:1}}.p2{animation-name:p2}
+    @keyframes p3{0%,66.99%{opacity:0}67%,100%{opacity:1}}.p3{animation-name:p3}
+    @media (prefers-reduced-motion: reduce){.k{animation:none;opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="402" rx="14"/>
+  <text class="h" x="28" y="40">An incident on the clock</text><text class="sub" x="28" y="62">Illustrative SEV2 from the page's postmortem skeleton (times IST).</text><line class="grid" x1="60" y1="112" x2="60" y2="336"/><text class="sub" x="60" y="354" text-anchor="middle">14:00</text><line class="grid" x1="156" y1="112" x2="156" y2="336"/><text class="sub" x="156" y="354" text-anchor="middle">14:20</text><line class="grid" x1="252" y1="112" x2="252" y2="336"/><text class="sub" x="252" y="354" text-anchor="middle">14:40</text><line class="grid" x1="348" y1="112" x2="348" y2="336"/><text class="sub" x="348" y="354" text-anchor="middle">15:00</text><line class="grid" x1="444" y1="112" x2="444" y2="336"/><text class="sub" x="444" y="354" text-anchor="middle">15:20</text><line class="grid" x1="540" y1="112" x2="540" y2="336"/><text class="sub" x="540" y="354" text-anchor="middle">15:40</text><line class="grid" x1="636" y1="112" x2="636" y2="336"/><text class="sub" x="636" y="354" text-anchor="middle">16:00</text><line class="grid" x1="732" y1="112" x2="732" y2="336"/><text class="sub" x="732" y="354" text-anchor="middle">16:20</text><line class="ln" x1="60" y1="200" x2="740" y2="200"/><g class="k e0"><circle class="badf" cx="69.6" cy="200" r="7"/><text class="sm" x="65.6" y="180" text-anchor="start">impact starts</text></g><g class="k e1"><circle class="wrnf" cx="103.2" cy="200" r="7"/><text class="sm" x="99.2" y="226" text-anchor="start">page 14:09, ack 14:11</text></g><g class="k e2"><circle class="wrnf" cx="112.8" cy="200" r="7"/></g><g class="k e3"><circle class="pri" cx="156" cy="200" r="7"/><text class="sm" x="156" y="162" text-anchor="middle">SEV2 declared</text></g><g class="k e4"><circle class="tea" cx="256.8" cy="200" r="7"/><text class="sm" x="256.8" y="180" text-anchor="middle">rollback</text></g><g class="k e5"><circle class="okf" cx="295.2" cy="200" r="7"/><text class="sm" x="295.2" y="226" text-anchor="middle">mitigated</text></g><g class="k e6"><circle class="okf" cx="684" cy="200" r="7"/><text class="sm" x="684" y="180" text-anchor="middle">resolved</text></g><g class="k u0"><rect class="bt" x="130" y="116" width="52" height="22" rx="11" stroke-width="1.2"/><text class="teat" x="156" y="132" text-anchor="middle" style="font-size:12px">update</text></g><g class="k u1"><rect class="bt" x="274" y="116" width="52" height="22" rx="11" stroke-width="1.2"/><text class="teat" x="300" y="132" text-anchor="middle" style="font-size:12px">update</text></g><g class="k u2"><rect class="bt" x="418" y="116" width="52" height="22" rx="11" stroke-width="1.2"/><text class="teat" x="444" y="132" text-anchor="middle" style="font-size:12px">update</text></g><g class="k u3"><rect class="bt" x="562" y="116" width="52" height="22" rx="11" stroke-width="1.2"/><text class="teat" x="588" y="132" text-anchor="middle" style="font-size:12px">update</text></g><text class="sub" x="60" y="104">status updates every 30 min →</text><g class="k p0"><rect class="wrnf" x="69.6" y="247" width="33.6" height="9" rx="2"/><text class="sm" x="109.2" y="256">MTTD 7 min</text></g><g class="k p1"><rect class="wrnf" x="103.2" y="267" width="9.6" height="9" rx="2"/><text class="sm" x="118.8" y="276">MTTA 2 min</text></g><g class="k p2"><rect class="tea" x="103.2" y="287" width="192" height="9" rx="2"/><text class="sm" x="301.2" y="296">time to mitigate 40 min (page → mitigated)</text></g><g class="k p3"><rect class="okf" x="69.6" y="307" width="614.4" height="9" rx="2"/><text class="sm" x="69.6" y="330">time to resolve 2 h 8 min (from impact)</text></g><text class="sm" x="28" y="384">MTTD 7 min · MTTA 2 min · mitigated 40 min after the page · resolved 2 h 8 min after impact.</text>
+</svg>

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 476" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Top 10 2021 to 2025</title>
+  <desc id="d">A slope chart linking each OWASP Top 10 2021 category on the left to its 2025 position on the right. Broken Access Control stays first. Security Misconfiguration climbs from fifth to second. Vulnerable and Outdated Components expands into the new Software Supply Chain Failures at third. Cryptographic Failures, Injection and Insecure Design each slide two places, to fourth, fifth and sixth. SSRF merges into Broken Access Control. Authentication, Integrity and Logging keep their places, Logging renamed to Alerting. Mishandling of Exceptional Conditions arrives new at tenth.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="474" rx="14"/>
+  <text class="h" x="28" y="40">OWASP Top 10: from 2021 to 2025</text><text class="sub" x="28" y="62">Lines join each 2021 category to where it sits in 2025.</text><text class="lbl" x="40" y="92">2021</text><text class="lbl" x="486" y="92">2025</text><rect class="box" x="28" y="99" width="288" height="26" rx="6" stroke-width="1"/><text class="sm" x="38" y="117">A01 Broken Access Control</text><rect class="box" x="476" y="99" width="296" height="26" rx="6" stroke-width="1"/><text class="sm" x="486" y="117">A01 Broken Access Control</text><rect class="box" x="28" y="131" width="288" height="26" rx="6" stroke-width="1"/><text class="sm" x="38" y="149">A02 Cryptographic Failures</text><rect class="box" x="476" y="131" width="296" height="26" rx="6" stroke-width="1"/><text class="sm" x="486" y="149">A02 Security Misconfiguration</text><rect class="box" x="28" y="163" width="288" height="26" rx="6" stroke-width="1"/><text class="sm" x="38" y="181">A03 Injection</text><rect class="bt" x="476" y="163" width="296" height="26" rx="6" stroke-width="1"/><text class="sm" x="486" y="181">A03 Software Supply Chain</text><rect class="box" x="28" y="195" width="288" height="26" rx="6" stroke-width="1"/><text class="sm" x="38" y="213">A04 Insecure Design</text><rect class="box" x="476" y="195" width="296" height="26" rx="6" stroke-width="1"/><text class="sm" x="486" y="213">A04 Cryptographic Failures</text><rect class="box" x="28" y="227" width="288" height="26" rx="6" stroke-width="1"/><text class="sm" x="38" y="245">A05 Security Misconfiguration</text><rect class="box" x="476" y="227" width="296" height="26" rx="6" stroke-width="1"/><text class="sm" x="486" y="245">A05 Injection</text><rect class="box" x="28" y="259" width="288" height="26" rx="6" stroke-width="1"/><text class="sm" x="38" y="277">A06 Vulnerable &amp; Outdated Comp.</text><rect class="box" x="476" y="259" width="296" height="26" rx="6" stroke-width="1"/><text class="sm" x="486" y="277">A06 Insecure Design</text><rect class="box" x="28" y="291" width="288" height="26" rx="6" stroke-width="1"/><text class="sm" x="38" y="309">A07 Identification &amp; Auth Failures</text><rect class="box" x="476" y="291" width="296" height="26" rx="6" stroke-width="1"/><text class="sm" x="486" y="309">A07 Authentication Failures</text><rect class="box" x="28" y="323" width="288" height="26" rx="6" stroke-width="1"/><text class="sm" x="38" y="341">A08 Software &amp; Data Integrity</text><rect class="box" x="476" y="323" width="296" height="26" rx="6" stroke-width="1"/><text class="sm" x="486" y="341">A08 Software &amp; Data Integrity</text><rect class="box" x="28" y="355" width="288" height="26" rx="6" stroke-width="1"/><text class="sm" x="38" y="373">A09 Logging &amp; Monitoring</text><rect class="box" x="476" y="355" width="296" height="26" rx="6" stroke-width="1"/><text class="sm" x="486" y="373">A09 Logging &amp; Alerting</text><rect class="box" x="28" y="387" width="288" height="26" rx="6" stroke-width="1"/><text class="sm" x="38" y="405">A10 SSRF</text><rect class="bt" x="476" y="387" width="296" height="26" rx="6" stroke-width="1"/><text class="sm" x="486" y="405">A10 Exceptional Conditions</text><rect class="tea" x="722" y="167" width="42" height="18" rx="9"/><text class="on13" x="743" y="180" text-anchor="middle" style="font-size:11px">new</text><rect class="tea" x="722" y="391" width="42" height="18" rx="9"/><text class="on13" x="743" y="404" text-anchor="middle" style="font-size:11px">new</text><path class="ln" d="M 318 112 C 396 112 396 112 470 112"/><path class="lnw" d="M 318 144 C 396 144 396 208 470 208" marker-end="url(#arw)"/><path class="lnw" d="M 318 176 C 396 176 396 240 470 240" marker-end="url(#arw)"/><path class="lnw" d="M 318 208 C 396 208 396 272 470 272" marker-end="url(#arw)"/><path class="lno" d="M 318 240 C 396 240 396 144 470 144" marker-end="url(#aro)"/><path class="lno dash" d="M 318 272 C 396 272 396 176 470 176" marker-end="url(#aro)"/><path class="ln" d="M 318 304 C 396 304 396 304 470 304"/><path class="ln" d="M 318 336 C 396 336 396 336 470 336"/><path class="ln" d="M 318 368 C 396 368 396 368 470 368"/><path class="lnp dash" d="M 318 400 C 396 400 396 112 470 112" marker-end="url(#arp)"/><line class="ln" x1="28" y1="448" x2="58" y2="448"/><text class="sub" x="66" y="452">same place</text><line class="lno" x1="178" y1="448" x2="208" y2="448"/><text class="sub" x="216" y="452">climbs</text><line class="lnw" x1="328" y1="448" x2="358" y2="448"/><text class="sub" x="366" y="452">slides</text><line class="lnp dash" x1="478" y1="448" x2="508" y2="448"/><text class="sub" x="516" y="452">merged into A01</text><line class="lno dash" x1="628" y1="448" x2="658" y2="448"/><text class="sub" x="666" y="452">expanded</text>
+</svg>

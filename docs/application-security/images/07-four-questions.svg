@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 428" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">The four questions loop</title>
+  <desc id="d">Animation: four boxes arranged in a loop light up in turn, each with a detail panel. What are we working on: draw the data-flow diagram and list assets. What can go wrong: walk STRIDE on flows that cross trust boundaries and add abuse cases. What will we do about it: mitigate, eliminate, transfer or accept, and write tickets with tests. Did we do a good job: tests pass, mitigations shipped, and the model is re-run when the design changes.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:16s infinite linear}
+    @keyframes q0{0%,24.99%{opacity:1}25%,100%{opacity:0}}.q0{animation-name:q0}
+    @keyframes q1{0%,24.99%{opacity:0}25%,49.99%{opacity:1}50%,100%{opacity:0}}.q1{animation-name:q1}
+    @keyframes q2{0%,49.99%{opacity:0}50%,74.99%{opacity:1}75%,100%{opacity:0}}.q2{animation-name:q2}
+    @keyframes q3{0%,74.99%{opacity:0}75%,100%{opacity:1}}.q3{animation-name:q3}
+    @media (prefers-reduced-motion: reduce){.k{animation:none;opacity:0}.q1{opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="426" rx="14"/>
+  <text class="h" x="28" y="40">The four questions, as a loop</text><text class="sub" x="28" y="62">From the Threat Modeling Manifesto. Re-run whenever the design changes.</text><circle class="ln" cx="220" cy="230" r="120" fill="none" stroke-dasharray="6 6"/><rect class="box" x="140" y="84" width="160" height="52" rx="10" stroke-width="1.5"/><text class="sm" x="220" y="106.5" text-anchor="middle">What are we</text><text class="sm" x="220" y="123.5" text-anchor="middle">working on?</text><g class="k q0"><rect class="tea" x="140" y="84" width="160" height="52" rx="10" stroke-width="1.5"/><text class="on13" x="220" y="106.5" text-anchor="middle">What are we</text><text class="on13" x="220" y="123.5" text-anchor="middle">working on?</text><rect class="bt" x="430" y="150" width="342" height="150" rx="10"/><text class="teat" x="446" y="180" style="font-size:15px">1. What are we working on?</text><text class="sm" x="446" y="210">Draw the DFD: entities, processes,</text><text class="sm" x="446" y="230">stores, flows, trust boundaries. List</text><text class="sm" x="446" y="250">assets like PHI.</text></g><rect class="box" x="260" y="204" width="160" height="52" rx="10" stroke-width="1.5"/><text class="sm" x="340" y="226.5" text-anchor="middle">What can go</text><text class="sm" x="340" y="243.5" text-anchor="middle">wrong?</text><g class="k q1"><rect class="tea" x="260" y="204" width="160" height="52" rx="10" stroke-width="1.5"/><text class="on13" x="340" y="226.5" text-anchor="middle">What can go</text><text class="on13" x="340" y="243.5" text-anchor="middle">wrong?</text><rect class="bt" x="430" y="150" width="342" height="150" rx="10"/><text class="teat" x="446" y="180" style="font-size:15px">2. What can go wrong?</text><text class="sm" x="446" y="210">Walk STRIDE on the flows that cross</text><text class="sm" x="446" y="230">trust boundaries. Add abuse cases.</text></g><rect class="box" x="140" y="324" width="160" height="52" rx="10" stroke-width="1.5"/><text class="sm" x="220" y="346.5" text-anchor="middle">What will we do</text><text class="sm" x="220" y="363.5" text-anchor="middle">about it?</text><g class="k q2"><rect class="tea" x="140" y="324" width="160" height="52" rx="10" stroke-width="1.5"/><text class="on13" x="220" y="346.5" text-anchor="middle">What will we do</text><text class="on13" x="220" y="363.5" text-anchor="middle">about it?</text><rect class="bt" x="430" y="150" width="342" height="150" rx="10"/><text class="teat" x="446" y="180" style="font-size:15px">3. What will we do about it?</text><text class="sm" x="446" y="210">Mitigate, eliminate, transfer or accept</text><text class="sm" x="446" y="230">with an owner. Write tickets with tests.</text></g><rect class="box" x="20" y="204" width="160" height="52" rx="10" stroke-width="1.5"/><text class="sm" x="100" y="226.5" text-anchor="middle">Did we do a good</text><text class="sm" x="100" y="243.5" text-anchor="middle">job?</text><g class="k q3"><rect class="tea" x="20" y="204" width="160" height="52" rx="10" stroke-width="1.5"/><text class="on13" x="100" y="226.5" text-anchor="middle">Did we do a good</text><text class="on13" x="100" y="243.5" text-anchor="middle">job?</text><rect class="bt" x="430" y="150" width="342" height="150" rx="10"/><text class="teat" x="446" y="180" style="font-size:15px">4. Did we do a good job?</text><text class="sm" x="446" y="210">Tests pass, mitigations shipped, model</text><text class="sm" x="446" y="230">linked from the design doc. Re-run on</text><text class="sm" x="446" y="250">change.</text></g><text class="sub" x="220" y="235" text-anchor="middle">change?</text><text class="sm" x="28" y="406">A one-hour pass per significant feature beats a 40-page model nobody updates.</text>
+</svg>
