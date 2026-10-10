@@ -89,7 +89,7 @@ flowchart LR
 ```
 *Notice mutant 1 only dies if some test uses exactly 7 days: mutation testing is a precise way to find missing boundary tests that coverage reports as "covered".*
 
-![Comparison of two test suites for the same refill window method: suite A has 100 percent line coverage but no boundary case and kills one of three mutants; suite B has the same coverage, tests 6 and 7 days, and kills all three](images/07-coverage-vs-mutation.svg){ loading=lazy }
+![Comparison of two test suites for the same refill window method: suite A has 100 percent line coverage but no boundary case and kills one of three mutants; suite B has the same coverage, tests 6, 7 and 8 days, and kills all three](images/07-coverage-vs-mutation.svg){ loading=lazy }
 *Same coverage number, very different protection: only the mutation score shows that suite A never checks the boundary.*
 
 ### SonarQube concepts

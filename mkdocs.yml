@@ -348,9 +348,23 @@ nav:
           - Overview: azure/index.md
       - "Observability & Production Support":
           - Overview: observability/index.md
+          - "Logs, Metrics & Traces (Three Pillars)": observability/01-logs-metrics-and-traces.md
+          - "Structured Logging & Correlation IDs": observability/02-structured-logging-and-correlation-ids.md
+          - "Metrics with Micrometer/Prometheus & Dashboards (Grafana)": observability/03-metrics-with-micrometer-prometheus-and-dashboards.md
+          - "Distributed Tracing with OpenTelemetry": observability/04-distributed-tracing-with-opentelemetry.md
+          - "SLIs, SLOs, SLAs & Error Budgets": observability/05-slis-slos-slas-and-error-budgets.md
+          - "Alerting & On-call": observability/06-alerting-and-on-call.md
+          - "Incident Management & Postmortems": observability/07-incident-management-and-postmortems.md
   - "Security":
       - "Application Security":
           - Overview: application-security/index.md
+          - "OWASP Top 10": application-security/01-owasp-top-10.md
+          - "XSS, CSRF, SQL injection & prevention": application-security/02-xss-csrf-sql-injection-and-prevention.md
+          - "CORS explained": application-security/03-cors-explained.md
+          - "Input validation & output encoding": application-security/04-input-validation-and-output-encoding.md
+          - "Secrets management & secure configuration": application-security/05-secrets-management-and-secure-configuration.md
+          - "Security headers & dependency scanning": application-security/06-security-headers-and-dependency-scanning.md
+          - "Threat modelling basics": application-security/07-threat-modelling-basics.md
       - "Cryptography & Key Management":
           - Overview: cryptography-key-management/index.md
           - "Symmetric vs Asymmetric Encryption, Hashing, MAC & Digital Signatures": cryptography-key-management/01-symmetric-vs-asymmetric-encryption-hashing-mac-digital-signa.md
@@ -405,6 +419,13 @@ nav:
   - "Testing & Practices":
       - "Testing Strategy":
           - Overview: testing/index.md
+          - "Test Pyramid & Testing Strategy for Microservices": testing/01-test-pyramid-and-testing-strategy-for-microservices.md
+          - "JUnit 5 & Mockito": testing/02-junit-5-and-mockito.md
+          - "Spring Boot Test Slices & Integration Tests": testing/03-spring-boot-test-slices-and-integration-tests.md
+          - "Testcontainers": testing/04-testcontainers.md
+          - "Contract Testing (Spring Cloud Contract, Pact)": testing/05-contract-testing.md
+          - "Frontend Testing: Jest, React Testing Library, E2E (Playwright/Cypress)": testing/06-frontend-testing-jest-react-testing-library-e2e.md
+          - "TDD, Coverage & Quality Gates (SonarQube)": testing/07-tdd-coverage-and-quality-gates.md
       - "Engineering Practices":
           - Overview: engineering-practices/index.md
       - "Agile Delivery & Estimation":

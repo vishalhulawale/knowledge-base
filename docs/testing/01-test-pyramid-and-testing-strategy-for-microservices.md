@@ -137,7 +137,7 @@ Kafka consumers need tests for the paths that only show up under failure:
 - **Retry exhaustion**: a transient upstream error is retried N times, then lands on the retry/DLQ topic with the original headers.
 - **Idempotency**: the same event delivered twice produces one side effect.
 
-These are integration tests with Testcontainers Kafka; the decision logic ("is this exception retryable?") stays in unit tests. The broker-side design is on the [Kafka error handling page](../kafka/07-error-handling-retry-topics-dlq-poison-pills.md).
+These are integration tests with Testcontainers Kafka; the decision logic ("is this exception retryable?") stays in unit tests. The broker-side design is on the [Kafka error handling page](../kafka/07-error-handling-retry-topics-dlq-poison-messages-replay.md).
 
 ### Mapping layers to the pipeline
 

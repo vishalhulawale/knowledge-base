@@ -1268,43 +1268,43 @@
           "title": "Test pyramid & testing strategy for microservices",
           "slug": "01-test-pyramid-and-testing-strategy-for-microservices",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "JUnit 5 & Mockito",
           "slug": "02-junit-5-and-mockito",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Spring Boot test slices & integration tests",
           "slug": "03-spring-boot-test-slices-and-integration-tests",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Testcontainers",
           "slug": "04-testcontainers",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Contract testing (Spring Cloud Contract, Pact)",
           "slug": "05-contract-testing",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Frontend testing: Jest, React Testing Library, E2E (Playwright/Cypress)",
           "slug": "06-frontend-testing-jest-react-testing-library-e2e",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "TDD, coverage & quality gates (SonarQube)",
           "slug": "07-tdd-coverage-and-quality-gates",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
@@ -1498,43 +1498,43 @@
           "title": "Logs, metrics & traces (three pillars)",
           "slug": "01-logs-metrics-and-traces",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Structured logging & correlation IDs",
           "slug": "02-structured-logging-and-correlation-ids",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Metrics with Micrometer/Prometheus & dashboards (Grafana)",
           "slug": "03-metrics-with-micrometer-prometheus-and-dashboards",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Distributed tracing with OpenTelemetry",
           "slug": "04-distributed-tracing-with-opentelemetry",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "SLIs, SLOs, SLAs & error budgets",
           "slug": "05-slis-slos-slas-and-error-budgets",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Alerting & on-call",
           "slug": "06-alerting-and-on-call",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Incident management & postmortems",
           "slug": "07-incident-management-and-postmortems",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
@@ -1548,43 +1548,43 @@
           "title": "OWASP Top 10",
           "slug": "01-owasp-top-10",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "XSS, CSRF, SQL injection & prevention",
           "slug": "02-xss-csrf-sql-injection-and-prevention",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "CORS explained",
           "slug": "03-cors-explained",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Input validation & output encoding",
           "slug": "04-input-validation-and-output-encoding",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Secrets management & secure configuration",
           "slug": "05-secrets-management-and-secure-configuration",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Security headers & dependency scanning",
           "slug": "06-security-headers-and-dependency-scanning",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Threat modelling basics",
           "slug": "07-threat-modelling-basics",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },

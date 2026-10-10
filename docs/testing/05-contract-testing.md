@@ -185,6 +185,9 @@ pact-broker can-i-deploy --pacticipant member-service --version "$GIT_SHA" --to-
 pact-broker record-deployment --pacticipant member-service --version "$GIT_SHA" --environment production
 ```
 
+![Pact Broker matrix table: member-service candidate 9d41 fails verification against claims-bff b9e0 in production but passes against mobile-app 3f11 and claims-bff c2a7 on main; can-i-deploy for 9d41 to production answers no](images/05-pact-matrix.svg){ loading=lazy }
+*`can-i-deploy` only cares about the versions actually deployed: deploy the consumer that already passes first, then the provider.*
+
 ### Spring Cloud Contract: one contract, two outputs
 
 ```yaml
