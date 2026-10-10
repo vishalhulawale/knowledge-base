@@ -120,6 +120,9 @@ Handoff means transferring **capability**, not files. A useful handoff package:
 
 Then prove it: **reverse shadowing** (the customer drives, the FDE watches), **game days** (inject a provider outage, an expired certificate, a bad prompt release) and a period where the customer handles real incidents unaided. Only then remove vendor access and close the engagement with a business-outcome review.
 
+![Two lanes, vendor and customer, across build and launch, hypercare (4 weeks in the example), shared (4 weeks) and steady state, showing who is first responder in each phase: vendor primary through hypercare, then customer L1/L2 with vendor L3 via support, then customer-owned with vendor escalation per contract; the final handoff requires six pieces of evidence, from an unaided release, rollback and prompt change to removal of vendor access and a business review.](images/07-pager-handoff.svg){ loading=lazy }
+*Watch the green cells cross from the vendor lane to the customer lane one phase at a time, and the handoff gate demand evidence rather than attendance.*
+
 ## In practice: code & configuration
 
 ### Canary gate: promote, hold or roll back
@@ -168,6 +171,9 @@ print(decide(stable, Window(2_000, 4, 4300, 0.90, 0.041)))
 ```
 
 Note the third case: no errors and acceptable latency, yet a rollback, because quality and cost regressed. An error-rate-only canary would have promoted it.
+
+![Animation: the canary gate judges three windows against a stable baseline of 18,000 requests; window 1 holds because 300 requests is below the 500 minimum, window 2 promotes because every gate passes, and window 3 rolls back because eval pass rate fell from 94.0% to 90.0% and cost per task rose from $0.031 to $0.041, even though errors and latency were fine.](images/07-canary-gate.svg){ loading=lazy }
+*Watch window 3: error rate and latency both pass, and only the quality and cost rows catch the regression.*
 
 ### Alert rules linked to runbooks
 
