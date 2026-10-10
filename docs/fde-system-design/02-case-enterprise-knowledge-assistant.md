@@ -111,8 +111,14 @@ sequenceDiagram
 ```
 *Notice the cache on group lookups: short enough that removals propagate quickly, long enough to keep latency down. State the TTL as a security decision, not a performance tweak.*
 
+![Animation: bars show how long a removed permission can still feed answers: up to 24 hours with nightly re-crawls, 15 to 20 minutes with change events and a group cache, near zero with a late check at the source](images/02-removal-window.svg){ loading=lazy }
+*The exposure window is a number to agree with security, not an accident of the sync schedule.*
+
 !!! warning "Gotcha: the answer cache"
     A response cache keyed only on the question text will serve one user's answer, built from documents they could see, to another user who can't. Scope any cache by the user's permission set (or by a hash of the retrieved document IDs plus the groups), or don't cache answers at all.
+
+![Two panels: an answer cache keyed by question text serves a finance analyst's answer to an ops analyst; a key that includes the permission set gives each user an answer from their own documents](images/02-cache-leak.svg){ loading=lazy }
+*Same question, different permissions: the cache key must know the difference.*
 
 ### Deep dive 2: chunking, retrieval and answering
 

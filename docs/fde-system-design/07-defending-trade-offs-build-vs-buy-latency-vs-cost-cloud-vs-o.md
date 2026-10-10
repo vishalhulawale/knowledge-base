@@ -32,6 +32,9 @@ flowchart LR
 ```
 *Notice that the criteria come before the recommendation and come from the customer. A recommendation defended with your own preferences ("I like Postgres") loses to one defended with theirs ("you need this live before the regulatory deadline").*
 
+![Five pills: options, the customer's criteria, recommendation, cost and revisit trigger, with a worked example answer about Bedrock versus self-hosting](images/07-tradeoff-script.svg){ loading=lazy }
+*Criteria before recommendation; revisit trigger last.*
+
 Example, said aloud:
 
 > "Two options: Bedrock in your AWS account, or a self-hosted open-weight model in your VPC. Your criteria, in order: data stays in your AWS boundary, live in 10 weeks, answer quality on your eval set. I recommend Bedrock: it meets the boundary requirement through your existing AWS agreement, we can be live in weeks, and the strongest models scored 9 points higher on your eval set. The cost is per-token spend and dependence on what Bedrock offers in your region. I'd revisit if monthly spend passes about $X, where self-hosting becomes cheaper, or if security rules out third-party models entirely."
@@ -127,6 +130,9 @@ How to decide:
 3. **Model cost at their real volume.** Self-hosting has a fixed GPU cost; per-token pricing scales with use. There's a break-even volume, and utilisation matters: GPUs at 15% utilisation are expensive.
 4. **Count the people.** Self-hosting means someone owns model serving, upgrades, security patches and capacity at 3 a.m.
 5. **Choose the reversible path:** a gateway lets you start on a cloud platform and move steps to self-hosted models later (or the reverse) without rewriting the application.
+
+![Monthly cost against volume: per-token pricing rises in a straight line while self-hosting steps up with GPU capacity and people; they cross at a break-even volume that only counts if the self-hosted model meets the quality bar](images/07-break-even.svg){ loading=lazy }
+*Break-even is a volume and a quality question, not just a price question.*
 
 !!! warning "Gotcha: 'on-prem for security' without a threat model"
     Self-hosting doesn't automatically make a system safer: unpatched GPU servers and homegrown model serving can be riskier than a managed service with strong contractual and technical controls. Ask what threat the requirement addresses (data exfiltration, provider training on data, residency, availability) and match the control to it.

@@ -113,6 +113,9 @@ stateDiagram-v2
 ```
 *Notice that the bed's state is assembled from events in four different systems. That's the value of the unified model: no single source knows a bed's full lifecycle, and the "Dirty → Available" duration is exactly the metric the outcome targets.*
 
+![Animation: events from the EHR, bed system and cleaning system arrive with three different IDs for one bed; a crosswalk maps them to one bed and the event log yields a turnaround time no single system can compute](images/06-event-assembly.svg){ loading=lazy }
+*The unified model earns its keep with metrics no source system has.*
+
 Metrics are **derived from events** (time in each state, boarding duration = bed assigned − admit decision) and defined once in a metrics layer, so the wall, the daily report and the executive deck agree.
 
 ### Deep dive 4: freshness tiers and cost
@@ -124,6 +127,9 @@ Metrics are **derived from events** (time in each state, boarding duration = bed
 | Batch | Hourly/daily | Scheduled ELT | Finance, length-of-stay trends |
 
 Show freshness on screen: every tile has "updated 40 s ago" and turns grey if a source is late. Staff stop trusting a dashboard the first time it's silently stale.
+
+![Three freshness tiers: real time in seconds for bed state and arrivals, near real time in minutes for staffing and schedules, batch hourly or daily for finance and trends](images/06-freshness-tiers.svg){ loading=lazy }
+*Pay for seconds only where a decision needs seconds.*
 
 ### Deep dive 5: from display to action
 

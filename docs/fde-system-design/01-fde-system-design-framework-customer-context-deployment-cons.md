@@ -87,6 +87,9 @@ flowchart TD
 ```
 *Notice that each branch changes the model choice, the network design, the identity integration and the release process. Ask this in the first ten minutes, and ask who approves it (CISO, data protection officer, architecture board).*
 
+![Four deployment options from fastest with least control to most control: hosted model API, cloud AI platform in the customer's account, self-hosted open-weight model in their VPC, and air-gapped, with what each means for data, models and timeline](images/01-deployment-branches.svg){ loading=lazy }
+*Ask which column you're in before drawing anything else.*
+
 Details of each option are on the [deployment models page](../fde-enterprise-deployment/01-deployment-models-hosted-api-vs-customer-vpc-vs-on-prem-and.md). Two facts worth knowing for the cloud-platform branch: Amazon Bedrock's documentation states that it doesn't store or log prompts and completions, doesn't use them to train AWS models and doesn't distribute them to third parties, and that model providers have no access to the accounts where their models are deployed. That is often what makes a security team say yes. Verify the equivalent terms for Azure and Vertex for the customer's specific region and features.
 
 Other constraints to name explicitly:
@@ -145,6 +148,9 @@ stateDiagram-v2
     Shadow --> Stopped: quality gap too large
 ```
 *Notice the backwards arrow. Automation is earned per slice and can be withdrawn; a rollout plan that only goes forwards isn't a plan for an AI system.*
+
+![Animation: rising steps light up in turn, offline evals, shadow, assist and selective automation, with gates between them, then a red arrow moves a slice back to assist after drift or an incident](images/01-rollout-ladder.svg){ loading=lazy }
+*Every step up needs evidence; any step can be reversed.*
 
 - **Offline evals** on the golden set.
 - **Shadow mode:** the system runs on live traffic but nobody sees its output; compare with what humans did.

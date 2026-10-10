@@ -95,6 +95,9 @@ Implementation options: a workflow engine (AWS Step Functions, Temporal, Azure D
 
 The **policy engine** is ordinary code (or a rules engine) that takes the proposed action, the tier, the confidence, the case attributes (amount, member type) and the slice's auto-approval status, and returns `execute`, `needs_approval` or `blocked`. Keep it outside the model and version it like code.
 
+![Four action tiers with their policies: reads automatic, internal reversible actions automated once proven, customer-facing actions approved with a preview, irreversible or adverse actions always human](images/03-risk-tiers.svg){ loading=lazy }
+*There is no 'deny' button for the model to press.*
+
 The **review queue UI** decides whether humans actually review or rubber-stamp:
 
 - Show the proposed action and parameters, the reason, the **evidence with links**, and what will happen on approval (a preview of the message or the field changes).
@@ -111,6 +114,9 @@ The failure the interviewer will probe: the payment API timed out after it actua
 - **Exactly-once effect, at-least-once delivery**: retries are fine because the key makes them harmless.
 
 This is the same discipline as the [idempotent consumer](../kafka/08-idempotent-consumers-and-deduplication.md) and [idempotency keys](../api-design/05-idempotency-keys-and-safe-retries.md) pages, applied to agent actions.
+
+![Animation: a payment request times out after succeeding; without an idempotency key the retry pays twice, with the same key the retry returns the stored result and pays once](images/03-double-payment.svg){ loading=lazy }
+*The retry is safe only because the key travels with it.*
 
 ### Deep dive 3: tools and security
 

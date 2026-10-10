@@ -53,6 +53,9 @@ flowchart LR
 ```
 *Notice the two feedback paths: corrections from review become eval cases, and a random sample of auto-approved documents is audited so you can measure the error rate you can't otherwise see.*
 
+![Animation: a grid of 100 documents splits into 63 straight-through, 37 with flagged fields for review, and a 3 percent audit sample of the auto-approved ones](images/04-doc-routing.svg){ loading=lazy }
+*The audit sample is how you measure the errors nobody reviewed.*
+
 ### Stage by stage
 
 **Ingest.** Store the original file immutably with a content hash (dedupe resent invoices), source, received time and a document ID. Everything downstream references that ID.
@@ -96,6 +99,9 @@ flowchart TD
     F & D & S --> GATE{"CI gate vs baseline<br/>and thresholds"}
 ```
 *Notice the third box: the number that matters most is the error rate among documents you let through without review, because those errors reach the ERP unseen.*
+
+![Curve of straight-through processing against error rate among auto-approved documents for different thresholds, with the chosen point at 63 percent STP and 0.2 percent errors, below today's 2.1 percent manual keying error](images/04-stp-curve.svg){ loading=lazy }
+*Engineers draw the curve; the sponsor chooses the point.*
 
 - **Golden set:** real documents, stratified (top vendors, long tail, poor scans, handwriting, multi-page), labelled by two people with disagreements resolved; keep a held-out split.
 - **Normalisation before comparison:** dates to ISO, amounts to decimals, whitespace and case; otherwise you measure formatting, not extraction.

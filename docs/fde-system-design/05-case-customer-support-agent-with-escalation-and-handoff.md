@@ -88,6 +88,9 @@ Two principles:
 - **Never trap the customer.** A visible "talk to a person" option at all times, and an immediate handoff when asked. Hiding it inflates deflection and destroys trust.
 - **Escalation quality is measurable.** Precision: of escalated conversations, how many needed a human? Recall: of conversations that needed a human (from QA samples, repeat contacts, complaints), how many were escalated? Both matter; a bot that escalates everything is useless, one that escalates nothing is dangerous.
 
+![Seven escalation triggers: customer asks for a human, repeated failure, low confidence, sensitive topic, negative sentiment, action beyond limits and tool failure, plus out-of-hours handling](images/05-escalation-triggers.svg){ loading=lazy }
+*The amber triggers skip the model's judgement entirely.*
+
 ### Deep dive 2: handoff with context
 
 ```mermaid
@@ -106,6 +109,9 @@ sequenceDiagram
     P->>C: "Hi, I can see the duplicate charge on order 8812..."
 ```
 *Notice the message to the customer: it says who, how long, and that context travels. A cold transfer into a queue that starts with "How can I help?" is the most common complaint about bot handoffs.*
+
+![Animation: a cold transfer leaves the customer repeating everything to an agent with no context; a warm handoff passes a summary, identity and intent so the agent opens with the actual problem](images/05-warm-handoff.svg){ loading=lazy }
+*The customer should never have to tell the story twice.*
 
 The handoff payload:
 
