@@ -1812,31 +1812,31 @@
           "title": "SQL vs NoSQL: choosing the right database",
           "slug": "01-sql-vs-nosql-choosing-the-right-database",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Data modelling for relational, document, key-value & wide-column stores",
           "slug": "02-data-modelling-for-relational-document-key-value-and-wide-co",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Replication, partitioning & indexing trade-offs",
           "slug": "03-replication-partitioning-and-indexing-trade-offs",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Schema evolution & zero-downtime migrations",
           "slug": "04-schema-evolution-and-zero-downtime-migrations",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Polyglot persistence in microservices",
           "slug": "05-polyglot-persistence-in-microservices",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
@@ -1850,31 +1850,31 @@
           "title": "Git internals & branching strategies (GitFlow vs trunk-based)",
           "slug": "01-git-internals-and-branching-strategies",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Code review best practices",
           "slug": "02-code-review-best-practices",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Technical debt management",
           "slug": "03-technical-debt-management",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Architecture Decision Records & documentation",
           "slug": "04-architecture-decision-records-and-documentation",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "DORA metrics & engineering effectiveness",
           "slug": "05-dora-metrics-and-engineering-effectiveness",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },

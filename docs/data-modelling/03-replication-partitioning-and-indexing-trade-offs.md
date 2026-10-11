@@ -29,7 +29,7 @@ The mechanics are covered elsewhere and linked rather than repeated: [leader/fol
 | Partitioning | Write and storage scale beyond one node | Routing; cross-partition work for some operations | Cross-partition transactions and uniqueness |
 | Secondary index | Fast reads on non-key columns | One extra structure update per index | Global indexes lag the base data |
 
-![Animation: one INSERT into an orders table fans out step by step: the heap row, then four index entries, then a write-ahead log record, then shipping to two replicas, with a counter reaching fifteen page or log writes for one logical row](images/03-write-amplification.svg){ loading=lazy }
+![Animation: one INSERT into an orders table fans out step by step: the heap row, then four index entries, then a write-ahead log record, then shipping to two replicas, with a counter reaching fifteen page writes, plus log records, for one logical row](images/03-write-amplification.svg){ loading=lazy }
 *One logical write becomes many physical ones; every index and replica you add multiplies the cost of every insert, forever.*
 
 ### Replication compared

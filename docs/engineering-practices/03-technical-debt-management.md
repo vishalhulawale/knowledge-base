@@ -75,7 +75,7 @@ quadrantChart
     title Debt items by interest paid and cost to fix
     x-axis Low cost to fix --> High cost to fix
     y-axis Low interest --> High interest
-    quadrant-1 Plan it: roadmap item
+    quadrant-1 Plan it as a roadmap item
     quadrant-2 Do now
     quadrant-3 Boy-scout when touched
     quadrant-4 Accept and record

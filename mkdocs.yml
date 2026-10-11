@@ -321,6 +321,11 @@ nav:
           - "Distributed Locks, Rate Limiting & Pub/Sub with Redis": redis-caching/07-distributed-locks-rate-limiting-and-pub-sub-with-redis.md
       - "Data Modelling & Database Selection":
           - Overview: data-modelling/index.md
+          - "SQL vs NoSQL: Choosing the Right Database": data-modelling/01-sql-vs-nosql-choosing-the-right-database.md
+          - "Data Modelling for Relational, Document, Key-Value & Wide-Column Stores": data-modelling/02-data-modelling-for-relational-document-key-value-and-wide-co.md
+          - "Replication, Partitioning & Indexing Trade-offs": data-modelling/03-replication-partitioning-and-indexing-trade-offs.md
+          - "Schema Evolution & Zero-Downtime Migrations": data-modelling/04-schema-evolution-and-zero-downtime-migrations.md
+          - "Polyglot Persistence in Microservices": data-modelling/05-polyglot-persistence-in-microservices.md
       - "Elasticsearch & DynamoDB":
           - Overview: elasticsearch-dynamodb/index.md
   - "Cloud & DevOps":
@@ -453,6 +458,11 @@ nav:
           - "TDD, Coverage & Quality Gates (SonarQube)": testing/07-tdd-coverage-and-quality-gates.md
       - "Engineering Practices":
           - Overview: engineering-practices/index.md
+          - "Git Internals & Branching Strategies (GitFlow vs Trunk-Based)": engineering-practices/01-git-internals-and-branching-strategies.md
+          - "Code Review Best Practices": engineering-practices/02-code-review-best-practices.md
+          - "Technical Debt Management": engineering-practices/03-technical-debt-management.md
+          - "Architecture Decision Records & Documentation": engineering-practices/04-architecture-decision-records-and-documentation.md
+          - "DORA Metrics & Engineering Effectiveness": engineering-practices/05-dora-metrics-and-engineering-effectiveness.md
       - "Agile Delivery & Estimation":
           - Overview: agile-delivery/index.md
   - "GenAI":
