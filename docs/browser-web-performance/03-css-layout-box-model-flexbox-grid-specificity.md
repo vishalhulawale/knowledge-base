@@ -298,23 +298,16 @@ Subgrid for aligned card internals, with a same-cascade fallback for older brows
 
     **Common wrong answer:** "Layers add specificity to their rules."
 
-??? question "Q7. Container queries vs media queries?"
-    **Answer:** Media queries test the viewport and user preferences, so they suit page-level layout and `prefers-reduced-motion`. Container queries test an ancestor marked with `container-type`, so a component adapts to the space it's given wherever it is placed. `inline-size` containment means the container's width can't depend on its children, which avoids circularity. `cqi` units size type relative to the container.
-
-    **Interviewer listens for:** `container-type` requirement, component vs page, containment reason.
-
-    **Common wrong answer:** "Container queries are media queries scoped to a div," without mentioning containment.
-
 ### Senior
 
-??? question "Q8. Walk through how the browser decides which declaration wins."
+??? question "Q7. Walk through how the browser decides which declaration wins."
     **Answer:** Filter to declarations that apply to the element (matching selector, active media/container condition). Then sort: origin and importance (UA, user, author; important reverses order), context (shadow DOM), element-attached inline styles, cascade layers, specificity, scope proximity for `@scope`, and finally order of appearance. The first criterion that differs decides. Animations sit above normal author styles and transitions above everything.
 
     **Interviewer listens for:** specificity isn't first; layers and `!important` placement; order last.
 
     **Common wrong answer:** "Highest specificity wins, then last one."
 
-??? question "Q9. How would you prevent CSS collisions between micro-frontends on one page?"
+??? question "Q8. How would you prevent CSS collisions between micro-frontends on one page?"
     **Answer:** Locally scoped class names (CSS Modules, CSS-in-JS) so selectors can't leak; no global resets or element selectors in remotes; the shell owns global CSS and the `@layer` order, with shared libraries in a low layer; design tokens as custom properties from the shell; one shared instance of MUI/Emotion; Shadow DOM where widgets are web components. Enforce with stylelint rules and visual regression tests per MFE.
 
     **Interviewer listens for:** ownership of global CSS, scoping mechanism, layer order, governance.
@@ -323,7 +316,7 @@ Subgrid for aligned card internals, with a same-cascade fallback for older brows
 
 ### Scenario-based
 
-??? question "Q10. Cards in a grid have different title lengths, so their buttons don't line up. Fix it without fixed heights."
+??? question "Q9. Cards in a grid have different title lengths, so their buttons don't line up. Fix it without fixed heights."
     **Answer:** Make each card span the rows it needs (`grid-row: span 3`) and set `grid-template-rows: subgrid` on the card so title, body and actions use the parent's row tracks. Each row track sizes to the tallest item in that row across cards, so the buttons align. Put an explicit `grid-template-rows: auto 1fr auto` before it as a fallback. A flex-column card with `margin-top: auto` on the button only aligns the bottoms, not the titles.
 
     **Interviewer listens for:** subgrid, why fixed heights fail with real content, the fallback.

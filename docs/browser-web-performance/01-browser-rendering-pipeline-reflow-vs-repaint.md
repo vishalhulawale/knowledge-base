@@ -216,7 +216,7 @@ In the DevTools **Performance** panel, purple *Layout* blocks nested under a scr
 ### Fundamentals
 
 ??? question "Q1. Walk me through how a browser renders a page from HTML to pixels."
-    **Answer:** HTML is parsed incrementally into the DOM; CSS into the CSSOM, which is render-blocking. Style calculation combines them into computed styles for each element that generates a box. Layout computes each box's size and position. Paint records drawing commands into display lists. The compositor splits content into layers, rasterises tiles and draws them on the GPU. Synchronous scripts pause parsing; the preload scanner fetches resources early. After first paint, updates rerun the pipeline from the first affected stage.
+    **Answer:** HTML is parsed incrementally into the DOM; CSS into the render-blocking CSSOM. Style combines them into computed styles; layout computes each box's size and position; paint records display lists; the compositor rasterises layers into tiles and draws them on the GPU. Synchronous scripts pause parsing while the preload scanner fetches ahead. Later updates rerun the pipeline from the first affected stage.
 
     **Interviewer listens for:** DOM + CSSOM, CSS render-blocking, layout vs paint vs composite, main thread vs compositor.
 
@@ -246,7 +246,7 @@ In the DevTools **Performance** panel, purple *Layout* blocks nested under a scr
     **Common wrong answer:** "Use `setTimeout` to make it async"; the reads and writes still interleave.
 
 ??? question "Q5. Where does `requestAnimationFrame` run in the event loop, and why use it?"
-    **Answer:** In the HTML event loop's "update the rendering" step, rAF callbacks run after resize, scroll, media-query and animation steps and immediately before the browser recalculates style and layout and paints. Writes made there are applied in the frame being prepared, once. Unlike `setTimeout`, rAF is aligned with the display's refresh and paused in background tabs. Reads made at the start of a rAF callback, before any writes, see clean layout.
+    **Answer:** In the event loop's "update the rendering" step, rAF callbacks run immediately before style, layout and paint, so writes there are applied once in the frame being prepared. Unlike `setTimeout`, rAF is aligned with the display refresh and paused in background tabs.
 
     **Interviewer listens for:** before style/layout/paint, refresh-aligned, batching visual writes.
 
@@ -262,14 +262,14 @@ In the DevTools **Performance** panel, purple *Layout* blocks nested under a scr
 ### Senior
 
 ??? question "Q7. How do CSS containment and `content-visibility` improve rendering performance?"
-    **Answer:** `contain: layout paint style` declares that a subtree's internals cannot affect the outside, so a change inside only dirties that subtree and paint can be clipped to it. `content-visibility: auto` applies that containment and also skips layout and paint of the contents while the element is off-screen, which speeds initial render of long pages and makes interactions in big layouts cheaper. It needs `contain-intrinsic-size` for a placeholder size, otherwise skipped sections collapse and the scrollbar jumps. Content stays searchable and focusable; it is Baseline since 2025 and harmless where unsupported.
+    **Answer:** `contain: layout paint style` says a subtree's internals cannot affect the outside, so a change dirties only that subtree. `content-visibility: auto` adds that containment and skips layout and paint of off-screen contents, speeding initial render and interactions in big layouts. It needs `contain-intrinsic-size`, or skipped sections collapse and the scrollbar jumps. Content stays searchable and focusable.
 
     **Interviewer listens for:** scope of invalidation, off-screen skip, intrinsic size, accessibility preserved.
 
     **Common wrong answer:** "It's the same as lazy loading" or "it's like `display: none`".
 
 ??? question "Q8. How does this relate to INP, and what would you do if INP is poor?"
-    **Answer:** INP measures from the input to the next paint, so it includes input delay (main thread busy), processing time (handlers) and presentation delay (style, layout, paint after the handler). Use field data with LoAF attribution and a DevTools trace to see which part dominates. For long handlers, split the work and yield; for presentation delay, remove forced layouts, reduce DOM size, scope layout with containment, and avoid re-rendering large subtrees. Compositor-only animations help smoothness but not INP, because input handling and the next paint still need the main thread.
+    **Answer:** INP runs from input to next paint: input delay (main thread busy), processing (handlers) and presentation delay (style, layout, paint). Use LoAF attribution and a trace to find which dominates. Long handlers: split and yield. Presentation delay: remove forced layouts, shrink the DOM, scope layout with containment, avoid re-rendering large subtrees. Compositor animations don't help INP, because input and the next paint still need the main thread.
 
     **Interviewer listens for:** three INP phases, LoAF, rendering cost as part of INP.
 
@@ -278,7 +278,7 @@ In the DevTools **Performance** panel, purple *Layout* blocks nested under a scr
 ### Scenario-based
 
 ??? question "Q9. A drag-and-drop board with 500 cards drops frames while dragging. How do you diagnose and fix it?"
-    **Answer:** Record a Performance trace while dragging. Typical findings: the `pointermove` handler reads `getBoundingClientRect()` of cards after updating styles (forced reflow warnings), and the dragged card moves via `top`/`left`, reflowing the column every event. Fixes: read positions once at drag start and cache them; apply moves in rAF; move the dragged card with `transform: translate()`; put `contain: content` or `content-visibility: auto` (with `contain-intrinsic-size`) on columns so a drop only reflows one column; virtualise very long columns. Verify with the trace and Paint flashing.
+    **Answer:** Record a trace while dragging. Typical findings: the `pointermove` handler reads `getBoundingClientRect()` after writing styles (forced reflow), and the card moves via `top`/`left`, reflowing the column per event. Fixes: cache positions at drag start, apply moves in rAF, move the card with `transform`, put `contain: content` or `content-visibility: auto` on columns, virtualise long columns. Verify with the trace and Paint flashing.
 
     **Interviewer listens for:** measure first, cache reads, transform, containment, verify.
 
