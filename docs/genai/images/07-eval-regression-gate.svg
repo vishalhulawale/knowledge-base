@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">An eval gate blocks a prompt change that looks fine on average</title>
+  <desc id="d">A prompt change from v1 to v2 is run against the same golden set of 200 cases. Four metrics are drawn as bars, each with the v1 baseline as a thin grey bar, the v2 candidate as a thicker bar that grows in, and an amber threshold marker. Answer correctness rises from 0.86 to 0.93, faithfulness to the retrieved context falls from 0.94 to 0.84, below its 0.90 threshold, JSON schema validity stays at 1.00, and correct refusal of out-of-scope questions rises from 0.97 to 0.99. The blended average barely moves, 0.94 for both, but because each metric has its own threshold the gate turns red and blocks the merge, naming faithfulness as the reason. The numbers are illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .trk{fill:#e2e8f0}
+    .base{fill:#94a3b8}
+    .pri{fill:#4f46e5}.okf{fill:#16a34a}.badf{fill:#dc2626}
+    .prit{fill:#4f46e5;font-weight:700}.okt{fill:#16a34a;font-weight:700}.badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .thr{stroke:#d97706;stroke-width:2.5;stroke-dasharray:4 3}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bp{fill:#eef2ff;stroke:#4f46e5}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}.ah{fill:#64748b}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .trk{fill:#334155}.base{fill:#64748b}
+      .pri{fill:#818cf8}.okf{fill:#4ade80}.badf{fill:#f87171}
+      .prit{fill:#818cf8}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .thr{stroke:#fbbf24}
+      .bb{fill:#450a0a;stroke:#f87171}.bp{fill:#1e1b4b;stroke:#818cf8}
+      .ln{stroke:#94a3b8}.ah{fill:#94a3b8}
+    }
+    .g{transform-box:fill-box;transform-origin:left center;transform:scaleX(0);animation:14s infinite ease-out}
+    @keyframes g0{0%,6%{transform:scaleX(0)}16%,92%{transform:scaleX(1)}97%,100%{transform:scaleX(0)}}
+    @keyframes g1{0%,18%{transform:scaleX(0)}28%,92%{transform:scaleX(1)}97%,100%{transform:scaleX(0)}}
+    @keyframes g2{0%,30%{transform:scaleX(0)}40%,92%{transform:scaleX(1)}97%,100%{transform:scaleX(0)}}
+    @keyframes g3{0%,42%{transform:scaleX(0)}52%,92%{transform:scaleX(1)}97%,100%{transform:scaleX(0)}}
+    .g0{animation-name:g0}.g1{animation-name:g1}.g2{animation-name:g2}.g3{animation-name:g3}
+    .a{opacity:0;animation:14s infinite linear}
+    @keyframes v0{0%,15%{opacity:0}17%,92%{opacity:1}97%,100%{opacity:0}}
+    @keyframes v1{0%,27%{opacity:0}29%,92%{opacity:1}97%,100%{opacity:0}}
+    @keyframes v2{0%,39%{opacity:0}41%,92%{opacity:1}97%,100%{opacity:0}}
+    @keyframes v3{0%,51%{opacity:0}53%,92%{opacity:1}97%,100%{opacity:0}}
+    @keyframes v4{0%,58%{opacity:0}60%,92%{opacity:1}97%,100%{opacity:0}}
+    @keyframes v5{0%,66%{opacity:0}68%,92%{opacity:1}97%,100%{opacity:0}}
+    .v0{animation-name:v0}.v1{animation-name:v1}.v2{animation-name:v2}.v3{animation-name:v3}.v4{animation-name:v4}.v5{animation-name:v5}
+    @media (prefers-reduced-motion: reduce){ .g{animation:none;transform:none} .a{animation:none;opacity:1} }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="468" rx="14"/>
+  <text class="h" x="28" y="40">Eval gate: prompt v1 → v2 on the same golden set</text>
+  <text class="sub" x="28" y="62">Grey = v1 baseline, colour = v2 candidate, amber dash = per-metric threshold. Illustrative numbers.</text>
+
+  <!-- left: inputs -->
+  <rect class="box" x="24" y="86" width="196" height="64" rx="10"/>
+  <text class="h2" x="122" y="112" text-anchor="middle">Golden set</text>
+  <text class="sm" x="122" y="132" text-anchor="middle">200 versioned cases</text>
+  <rect class="bp" x="24" y="176" width="196" height="64" rx="10" stroke-width="1.5"/>
+  <text class="h2" x="122" y="202" text-anchor="middle">PR: prompt v2</text>
+  <text class="sm" x="122" y="222" text-anchor="middle">"answer more directly"</text>
+  <rect class="box" x="24" y="266" width="196" height="84" rx="10"/>
+  <text class="h2" x="122" y="292" text-anchor="middle">Graders</text>
+  <text class="sm" x="122" y="312" text-anchor="middle">code checks + LLM judge</text>
+  <text class="sm" x="122" y="330" text-anchor="middle">(judge ≠ model under test)</text>
+  <line class="ln" x1="220" y1="218" x2="262" y2="218" marker-end="url(#ar)"/>
+
+  <!-- metric rows: track x=330..730 (width 400 = 1.0) -->
+  <text class="tx" x="270" y="100" font-weight="700">Metric</text>
+  <text class="sub" x="330" y="100">0</text><text class="sub" x="730" y="100" text-anchor="end">1.0</text>
+
+  <text class="tx" x="270" y="134">Correct</text>
+  <rect class="trk" x="330" y="118" width="400" height="24" rx="4"/>
+  <rect class="base" x="330" y="146" width="344" height="6" rx="2"/>
+  <rect class="g g0 okf" x="330" y="118" width="372" height="24" rx="4"/>
+  <line class="thr" x1="650" y1="112" x2="650" y2="156"/>
+  <g class="a v0"><text class="okt" x="740" y="135" font-size="13">0.93</text></g>
+  <text class="sub" x="270" y="168" font-size="11">v1 0.86 · min 0.80</text>
+
+  <text class="tx" x="270" y="204">Faithful</text>
+  <rect class="trk" x="330" y="188" width="400" height="24" rx="4"/>
+  <rect class="base" x="330" y="216" width="376" height="6" rx="2"/>
+  <rect class="g g1 badf" x="330" y="188" width="336" height="24" rx="4"/>
+  <line class="thr" x1="690" y1="182" x2="690" y2="226"/>
+  <g class="a v1"><text class="badt" x="740" y="205" font-size="13">0.84</text></g>
+  <text class="sub" x="270" y="238" font-size="11">v1 0.94 · min 0.90</text>
+
+  <text class="tx" x="270" y="274">Schema</text>
+  <rect class="trk" x="330" y="258" width="400" height="24" rx="4"/>
+  <rect class="base" x="330" y="286" width="400" height="6" rx="2"/>
+  <rect class="g g2 okf" x="330" y="258" width="400" height="24" rx="4"/>
+  <line class="thr" x1="726" y1="252" x2="726" y2="296"/>
+  <g class="a v2"><text class="okt" x="740" y="275" font-size="13">1.00</text></g>
+  <text class="sub" x="270" y="308" font-size="11">v1 1.00 · min 0.99</text>
+
+  <text class="tx" x="270" y="344">Refusal</text>
+  <rect class="trk" x="330" y="328" width="400" height="24" rx="4"/>
+  <rect class="base" x="330" y="356" width="388" height="6" rx="2"/>
+  <rect class="g g3 okf" x="330" y="328" width="396" height="24" rx="4"/>
+  <line class="thr" x1="710" y1="322" x2="710" y2="366"/>
+  <g class="a v3"><text class="okt" x="740" y="345" font-size="13">0.99</text></g>
+  <text class="sub" x="270" y="378" font-size="11">v1 0.97 · min 0.95</text>
+
+  <!-- verdicts -->
+  <g class="a v4">
+    <rect class="box" x="24" y="398" width="300" height="52" rx="10"/>
+    <text class="tx" x="40" y="420">Blended average: <tspan class="wrnt">0.94 → 0.94</tspan></text>
+    <text class="sm" x="40" y="438">"Looks the same" hides the regression</text>
+  </g>
+  <g class="a v5">
+    <rect class="bb" x="340" y="398" width="436" height="52" rx="10" stroke-width="1.5"/>
+    <text class="badt" x="358" y="420" font-size="15">Merge blocked</text>
+    <text class="sm" x="358" y="438">faithfulness 0.84 &lt; 0.90: answers now add claims not in the context</text>
+  </g>
+</svg>

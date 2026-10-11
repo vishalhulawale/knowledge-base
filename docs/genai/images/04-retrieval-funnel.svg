@@ -94,7 +94,7 @@
   <g class="a l5">
     <path class="ln" d="M400,396 L400,414" marker-end="url(#ar)"/>
     <text class="lbl" x="28" y="440">6. Augment + generate</text>
-    <text class="sub" x="28" y="458">sources numbered, citations required</text>
+    <text class="sub" x="28" y="458">numbered, must cite</text>
     <rect class="bo" x="220" y="420" width="552" height="66" rx="8" stroke-width="1.4"/>
     <text class="tx" x="236" y="442">&lt;source id="1" doc="Gold formulary §3.2"&gt; … &lt;/source&gt; … &lt;source id="5"&gt;</text>
     <text class="tx" x="236" y="462">"Yes. Drug X needs prior authorization on Gold [1]; submit form PA-2291 [3]."</text>

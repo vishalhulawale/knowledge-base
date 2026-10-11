@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Three paths through the pixel pipeline</title>
+  <desc id="d">Three rows, each showing the five pipeline stages JavaScript, Style, Layout, Paint and Composite. In the first row a geometry change such as width, top, font-size or inserting nodes lights up all five stages, because the browser must recompute layout, repaint and composite: this is a reflow. In the second row a paint-only change such as color, background-color or box-shadow lights up JavaScript, Style, Paint and Composite while Layout is skipped: this is a repaint. In the third row a transform or opacity change lights up Style and Composite only; Layout and Paint are skipped, and a running CSS animation or transition of these properties can be advanced by the compositor thread without the main thread. The stages light up one after another, row by row. Simplified: Chromium splits these stages further (pre-paint, commit, layerize, raster, draw).</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#0f172a;font-size:15px;font-weight:700}
+    .tx{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .code{fill:#334155;font-size:12.5px;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1;stroke-width:1.2}
+    .skip{fill:none;stroke:#94a3b8;stroke-width:1.4;stroke-dasharray:5 4}
+    .skipt{fill:#94a3b8;font-size:13px;font-style:italic}
+    .st{fill:#334155;font-size:14px;font-weight:600}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.wrnf{fill:#d97706}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .ln{stroke:#94a3b8;stroke-width:1.6;fill:none}
+    .ah{fill:#94a3b8}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.lbl{fill:#f1f5f9}.tx,.st,.code{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .skip{stroke:#64748b}.skipt{fill:#94a3b8}
+      .on{fill:#0f172a}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.wrnf{fill:#fbbf24}
+      .badt{fill:#f87171}.wrnt{fill:#fbbf24}.okt{fill:#4ade80}
+      .ln{stroke:#64748b}.ah{fill:#64748b}
+    }
+    .a{opacity:0;animation:13s infinite linear}
+    @keyframes s0{0%,2%{opacity:0}4%,90%{opacity:1}94%,100%{opacity:0}} .s0{animation-name:s0}
+    @keyframes s1{0%,6%{opacity:0}8%,90%{opacity:1}94%,100%{opacity:0}} .s1{animation-name:s1}
+    @keyframes s2{0%,10%{opacity:0}12%,90%{opacity:1}94%,100%{opacity:0}} .s2{animation-name:s2}
+    @keyframes s3{0%,14%{opacity:0}16%,90%{opacity:1}94%,100%{opacity:0}} .s3{animation-name:s3}
+    @keyframes s4{0%,18%{opacity:0}20%,90%{opacity:1}94%,100%{opacity:0}} .s4{animation-name:s4}
+    @keyframes p0{0%,30%{opacity:0}32%,90%{opacity:1}94%,100%{opacity:0}} .p0{animation-name:p0}
+    @keyframes p1{0%,34%{opacity:0}36%,90%{opacity:1}94%,100%{opacity:0}} .p1{animation-name:p1}
+    @keyframes p3{0%,40%{opacity:0}42%,90%{opacity:1}94%,100%{opacity:0}} .p3{animation-name:p3}
+    @keyframes p4{0%,44%{opacity:0}46%,90%{opacity:1}94%,100%{opacity:0}} .p4{animation-name:p4}
+    @keyframes c1{0%,56%{opacity:0}58%,90%{opacity:1}94%,100%{opacity:0}} .c1{animation-name:c1}
+    @keyframes c4{0%,62%{opacity:0}64%,90%{opacity:1}94%,100%{opacity:0}} .c4{animation-name:c4}
+    @media (prefers-reduced-motion: reduce){ .a{animation:none;opacity:1} }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="468" rx="14"/>
+  <text class="h" x="28" y="40">What a style change costs: three paths through the pipeline</text>
+  <text class="sub" x="28" y="62">Amber = JavaScript, indigo = main-thread rendering work, teal = compositor. Dashed = stage skipped.</text>
+
+  <!-- Row 1: layout -->
+  <text class="lbl" x="28" y="110">Geometry change</text>
+  <text class="code" x="28" y="130">width, top, font-size,</text>
+  <text class="code" x="28" y="147">adding DOM nodes</text>
+  <g>
+    <rect class="box" x="224" y="96" width="96" height="44" rx="8"/><text class="st" x="272" y="123" text-anchor="middle">JavaScript</text>
+    <rect class="box" x="336" y="96" width="96" height="44" rx="8"/><text class="st" x="384" y="123" text-anchor="middle">Style</text>
+    <rect class="box" x="448" y="96" width="96" height="44" rx="8"/><text class="st" x="496" y="123" text-anchor="middle">Layout</text>
+    <rect class="box" x="560" y="96" width="96" height="44" rx="8"/><text class="st" x="608" y="123" text-anchor="middle">Paint</text>
+    <rect class="box" x="672" y="96" width="96" height="44" rx="8"/><text class="st" x="720" y="123" text-anchor="middle">Composite</text>
+    <line class="ln" x1="321" y1="118" x2="334" y2="118" marker-end="url(#ar)"/><line class="ln" x1="433" y1="118" x2="446" y2="118" marker-end="url(#ar)"/>
+    <line class="ln" x1="545" y1="118" x2="558" y2="118" marker-end="url(#ar)"/><line class="ln" x1="657" y1="118" x2="670" y2="118" marker-end="url(#ar)"/>
+  </g>
+  <g class="a s0"><rect class="wrnf" x="224" y="96" width="96" height="44" rx="8"/><text class="on" x="272" y="123" text-anchor="middle">JavaScript</text></g>
+  <g class="a s1"><rect class="pri" x="336" y="96" width="96" height="44" rx="8"/><text class="on" x="384" y="123" text-anchor="middle">Style</text></g>
+  <g class="a s2"><rect class="pri" x="448" y="96" width="96" height="44" rx="8"/><text class="on" x="496" y="123" text-anchor="middle">Layout</text></g>
+  <g class="a s3"><rect class="pri" x="560" y="96" width="96" height="44" rx="8"/><text class="on" x="608" y="123" text-anchor="middle">Paint</text></g>
+  <g class="a s4"><rect class="tea" x="672" y="96" width="96" height="44" rx="8"/><text class="on" x="720" y="123" text-anchor="middle">Composite</text></g>
+  <text class="tx" x="224" y="166"><tspan class="badt">Reflow:</tspan> geometry of this box and possibly its ancestors, siblings and children is recomputed, then repainted.</text>
+
+  <!-- Row 2: paint -->
+  <text class="lbl" x="28" y="226">Paint-only change</text>
+  <text class="code" x="28" y="246">color, background-color,</text>
+  <text class="code" x="28" y="263">box-shadow, outline</text>
+  <g>
+    <rect class="box" x="224" y="212" width="96" height="44" rx="8"/><text class="st" x="272" y="239" text-anchor="middle">JavaScript</text>
+    <rect class="box" x="336" y="212" width="96" height="44" rx="8"/><text class="st" x="384" y="239" text-anchor="middle">Style</text>
+    <rect class="skip" x="448" y="212" width="96" height="44" rx="8"/><text class="skipt" x="496" y="239" text-anchor="middle">Layout skipped</text>
+    <rect class="box" x="560" y="212" width="96" height="44" rx="8"/><text class="st" x="608" y="239" text-anchor="middle">Paint</text>
+    <rect class="box" x="672" y="212" width="96" height="44" rx="8"/><text class="st" x="720" y="239" text-anchor="middle">Composite</text>
+    <line class="ln" x1="321" y1="234" x2="334" y2="234" marker-end="url(#ar)"/><line class="ln" x1="433" y1="234" x2="446" y2="234" marker-end="url(#ar)"/>
+    <line class="ln" x1="545" y1="234" x2="558" y2="234" marker-end="url(#ar)"/><line class="ln" x1="657" y1="234" x2="670" y2="234" marker-end="url(#ar)"/>
+  </g>
+  <g class="a p0"><rect class="wrnf" x="224" y="212" width="96" height="44" rx="8"/><text class="on" x="272" y="239" text-anchor="middle">JavaScript</text></g>
+  <g class="a p1"><rect class="pri" x="336" y="212" width="96" height="44" rx="8"/><text class="on" x="384" y="239" text-anchor="middle">Style</text></g>
+  <g class="a p3"><rect class="pri" x="560" y="212" width="96" height="44" rx="8"/><text class="on" x="608" y="239" text-anchor="middle">Paint</text></g>
+  <g class="a p4"><rect class="tea" x="672" y="212" width="96" height="44" rx="8"/><text class="on" x="720" y="239" text-anchor="middle">Composite</text></g>
+  <text class="tx" x="224" y="282"><tspan class="wrnt">Repaint:</tspan> boxes stay where they are; only the pixels of the affected area are redrawn.</text>
+
+  <!-- Row 3: composite -->
+  <text class="lbl" x="28" y="342">Composite-only change</text>
+  <text class="code" x="28" y="362">transform (translate,</text>
+  <text class="code" x="28" y="379">scale, rotate), opacity</text>
+  <g>
+    <rect class="skip" x="224" y="328" width="96" height="44" rx="8"/><text class="skipt" x="272" y="347" text-anchor="middle">JS optional</text><text class="skipt" x="272" y="363" text-anchor="middle">(CSS anim)</text>
+    <rect class="box" x="336" y="328" width="96" height="44" rx="8"/><text class="st" x="384" y="355" text-anchor="middle">Style</text>
+    <rect class="skip" x="448" y="328" width="96" height="44" rx="8"/><text class="skipt" x="496" y="355" text-anchor="middle">Layout skipped</text>
+    <rect class="skip" x="560" y="328" width="96" height="44" rx="8"/><text class="skipt" x="608" y="355" text-anchor="middle">Paint skipped</text>
+    <rect class="box" x="672" y="328" width="96" height="44" rx="8"/><text class="st" x="720" y="355" text-anchor="middle">Composite</text>
+    <line class="ln" x1="433" y1="350" x2="446" y2="350" marker-end="url(#ar)"/>
+    <line class="ln" x1="545" y1="350" x2="558" y2="350" marker-end="url(#ar)"/><line class="ln" x1="657" y1="350" x2="670" y2="350" marker-end="url(#ar)"/>
+  </g>
+  <g class="a c1"><rect class="pri" x="336" y="328" width="96" height="44" rx="8"/><text class="on" x="384" y="355" text-anchor="middle">Style</text></g>
+  <g class="a c4"><rect class="tea" x="672" y="328" width="96" height="44" rx="8"/><text class="on" x="720" y="355" text-anchor="middle">Composite</text></g>
+  <text class="tx" x="224" y="398"><tspan class="okt">Composite:</tspan> the already-painted layer is moved or faded on the GPU.</text>
+  <text class="tx" x="224" y="416">A running CSS animation of these properties can tick on the compositor thread alone.</text>
+
+  <text class="sub" x="28" y="448">Cost falls from top to bottom. Simplified: Chromium also has pre-paint, commit, layerize, raster and draw steps.</text>
+</svg>

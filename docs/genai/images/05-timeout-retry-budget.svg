@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Worst-case latency of an LLM call: defaults vs a budget</title>
+  <desc id="d">Three timelines on a shared axis from 0 to 180 seconds, for the case where the model provider is slow or overloaded. Row one, defaults: a 60 second timeout and 2 retries, so three attempts can hold the request thread for up to 180 seconds, long after the user gave up at around 10 seconds. Row two, a budget: a 15 second timeout, one retry after the retry-after delay of about 2 seconds, then a fallback answer at about 32 seconds at worst. Row three, circuit breaker open: after repeated failures the breaker rejects the call in milliseconds and the fallback answer is returned at once, with no thread held. Numbers are illustrative; the 60 second timeout and 2 retries are the Spring AI Anthropic defaults.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .tx{fill:#334155;font-size:14px;font-weight:600}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .ax{stroke:#94a3b8;stroke-width:1.5}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .bad{fill:#dc2626}.badl{fill:#fecaca}.wrn{fill:#d97706}.ok{fill:#16a34a}.mut{fill:#cbd5e1}
+    .on{fill:#ffffff;font-size:12px;font-weight:700}
+    .okt{fill:#16a34a;font-weight:700}.badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .user{stroke:#4f46e5;stroke-width:2;stroke-dasharray:4 4}.usert{fill:#4f46e5;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .ax{stroke:#64748b}.grid{stroke:#334155}
+      .bad{fill:#f87171}.badl{fill:#7f1d1d}.wrn{fill:#fbbf24}.ok{fill:#4ade80}.mut{fill:#475569}
+      .on{fill:#0f172a}
+      .okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .user{stroke:#818cf8}.usert{fill:#818cf8}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="438" rx="14"/>
+  <text class="h" x="28" y="40">Provider is slow: how long is a request thread held?</text>
+  <text class="sub" x="28" y="62">Axis 0–180 s (3.5 px per second). Each bar is one attempt that hits its timeout.</text>
+
+  <!-- axis: x0=150, 3.5px/s -> 180s = 630px -> 780 -->
+  <line class="grid" x1="150" y1="84" x2="150" y2="352"/><line class="grid" x1="255" y1="84" x2="255" y2="352"/>
+  <line class="grid" x1="360" y1="84" x2="360" y2="352"/><line class="grid" x1="465" y1="84" x2="465" y2="352"/>
+  <line class="grid" x1="570" y1="84" x2="570" y2="352"/><line class="grid" x1="675" y1="84" x2="675" y2="352"/>
+  <line class="grid" x1="780" y1="84" x2="780" y2="352"/>
+  <line class="ax" x1="150" y1="352" x2="780" y2="352"/>
+  <text class="sm" x="150" y="370" text-anchor="middle">0 s</text><text class="sm" x="255" y="370" text-anchor="middle">30</text>
+  <text class="sm" x="360" y="370" text-anchor="middle">60</text><text class="sm" x="465" y="370" text-anchor="middle">90</text>
+  <text class="sm" x="570" y="370" text-anchor="middle">120</text><text class="sm" x="675" y="370" text-anchor="middle">150</text>
+  <text class="sm" x="780" y="370" text-anchor="end">180 s</text>
+
+  <!-- user gives up at 10s -->
+  <line class="user" x1="185" y1="84" x2="185" y2="352"/>
+  <text class="usert" x="190" y="96" font-size="12">user gives up (~10 s)</text>
+
+  <!-- row 1 -->
+  <text class="tx" x="28" y="128">Defaults</text><text class="sm" x="28" y="146">60 s × 3 attempts</text>
+  <rect class="bad" x="150" y="112" width="208" height="30" rx="4"/><text class="on" x="254" y="132" text-anchor="middle">attempt 1: 60 s</text>
+  <rect class="bad" x="361" y="112" width="208" height="30" rx="4"/><text class="on" x="465" y="132" text-anchor="middle">retry 1: 60 s</text>
+  <rect class="bad" x="572" y="112" width="208" height="30" rx="4"/><text class="on" x="676" y="132" text-anchor="middle">retry 2: 60 s</text>
+  <text class="badt" x="780" y="164" text-anchor="end" font-size="13">error after 180 s, thread held the whole time</text>
+
+  <!-- row 2 -->
+  <text class="tx" x="28" y="214">Budget</text><text class="sm" x="28" y="232">15 s, 1 retry</text>
+  <rect class="wrn" x="150" y="198" width="52" height="30" rx="4"/><text class="on" x="176" y="218" text-anchor="middle">15 s</text>
+  <rect class="mut" x="203" y="198" width="7" height="30"/>
+  <rect class="wrn" x="211" y="198" width="52" height="30" rx="4"/><text class="on" x="237" y="218" text-anchor="middle">15 s</text>
+  <rect class="ok" x="264" y="198" width="10" height="30" rx="2"/>
+  <text class="okt" x="284" y="218" font-size="13">fallback answer at ~32 s worst case</text>
+  <text class="sm" x="203" y="250">retry-after ~2 s</text>
+
+  <!-- row 3 -->
+  <text class="tx" x="28" y="300">Breaker open</text><text class="sm" x="28" y="318">fail fast</text>
+  <rect class="ok" x="150" y="284" width="6" height="30" rx="2"/>
+  <text class="okt" x="166" y="304" font-size="13">rejected in ms, fallback at once: no thread, no tokens spent</text>
+
+  <text class="sub" x="28" y="400">Illustrative numbers. 60 s timeout and max-retries 2 are the Spring AI Anthropic defaults; the SDK retries</text>
+  <text class="sub" x="28" y="418">timeouts, 429 and 5xx, so the wall clock can reach timeout × (retries + 1). Streaming shows tokens early but needs the same budget.</text>
+</svg>

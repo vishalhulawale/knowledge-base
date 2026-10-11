@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">How the cascade picks one color for a button</title>
+  <desc id="d">Four author rules set the color of the same button. Rule A, inside layer base, is #app .btn with specificity 1-1-0. Rule B, inside layer components, is .btn.primary with specificity 0-2-0. Rule C is an unlayered .btn with specificity 0-1-0. Rule D is an unlayered :where(#app) .btn, also 0-1-0 because :where() adds nothing, and it comes after C in the source. The cascade checks four steps in order and stops as soon as one step decides. Origin and importance: all four are normal author declarations, so all pass. Layers: unlayered normal styles beat every layer, so A and B drop out even though A has an ID. Specificity: C and D tie at 0-1-0. Order of appearance: D comes last, so D wins and the button is teal. The steps light up one after another.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:15px;font-weight:700}
+    .tx{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;font-size:13px;fill:#334155}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bo{fill:#f0fdfa;stroke:#0ea5a4}.bb{fill:#fef2f2;stroke:#dc2626}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.badt{fill:#dc2626;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .sw-r{fill:#dc2626}.sw-g{fill:#16a34a}.sw-b{fill:#2563eb}.sw-t{fill:#0ea5a4}
+    .pri{fill:#4f46e5}
+    .on{fill:#ffffff;font-size:13px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.tx,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bo{fill:#042f2e;stroke:#2dd4bf}.bb{fill:#450a0a;stroke:#f87171}
+      .prit{fill:#a5b4fc}.teat{fill:#5eead4}.badt{fill:#f87171}.okt{fill:#4ade80}
+      .sw-r{fill:#f87171}.sw-g{fill:#4ade80}.sw-b{fill:#60a5fa}.sw-t{fill:#2dd4bf}
+      .pri{fill:#818cf8}
+      .on{fill:#0f172a}
+    }
+    .a{opacity:0;animation:14s infinite linear}
+    .x{animation:14s infinite linear}
+    @keyframes s1{0%,6%{opacity:0}9%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s2{0%,26%{opacity:0}29%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s3{0%,46%{opacity:0}49%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes s4{0%,66%{opacity:0}69%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes win{0%,76%{opacity:0}79%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes outL{0%,29%{opacity:1}33%,92%{opacity:.3}96%,100%{opacity:1}}
+    @keyframes outO{0%,69%{opacity:1}73%,92%{opacity:.3}96%,100%{opacity:1}}
+    .s1{animation-name:s1}.s2{animation-name:s2}.s3{animation-name:s3}.s4{animation-name:s4}.win{animation-name:win}
+    .outL{animation-name:outL}.outO{animation-name:outO}
+    @media (prefers-reduced-motion: reduce){
+      .a{animation:none;opacity:1}
+      .x{animation:none}.outL,.outO{opacity:.3}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="498" rx="14"/>
+  <text class="h" x="28" y="40">Four rules, one button: who sets color?</text>
+  <text class="sub" x="28" y="62">Declared order: @layer base, components;  then unlayered rules. Steps are checked top to bottom; the first that differs decides.</text>
+
+  <!-- rules -->
+  <g class="x outL">
+    <rect class="box" x="20" y="84" width="380" height="72" rx="10" stroke-width="1.2"/>
+    <text class="h2" x="36" y="106">A · @layer base</text>
+    <rect class="sw-r" x="364" y="94" width="22" height="22" rx="5"/>
+    <text class="mono" x="36" y="128">#app .btn { color: red }</text>
+    <text class="tx" x="36" y="147">specificity 1-1-0</text>
+  </g>
+  <g class="x outL">
+    <rect class="box" x="20" y="166" width="380" height="72" rx="10" stroke-width="1.2"/>
+    <text class="h2" x="36" y="188">B · @layer components</text>
+    <rect class="sw-g" x="364" y="176" width="22" height="22" rx="5"/>
+    <text class="mono" x="36" y="210">.btn.primary { color: green }</text>
+    <text class="tx" x="36" y="229">specificity 0-2-0</text>
+  </g>
+  <g class="x outO">
+    <rect class="box" x="20" y="248" width="380" height="72" rx="10" stroke-width="1.2"/>
+    <text class="h2" x="36" y="270">C · unlayered, earlier</text>
+    <rect class="sw-b" x="364" y="258" width="22" height="22" rx="5"/>
+    <text class="mono" x="36" y="292">.btn { color: blue }</text>
+    <text class="tx" x="36" y="311">specificity 0-1-0</text>
+  </g>
+  <rect class="box" x="20" y="330" width="380" height="72" rx="10" stroke-width="1.2"/>
+  <text class="h2" x="36" y="352">D · unlayered, later</text>
+  <rect class="sw-t" x="364" y="340" width="22" height="22" rx="5"/>
+  <text class="mono" x="36" y="374">:where(#app) .btn { color: teal }</text>
+  <text class="tx" x="36" y="393">specificity 0-1-0 (:where adds 0)</text>
+
+  <!-- steps -->
+  <g class="a s1">
+    <rect class="bp" x="420" y="84" width="360" height="72" rx="10" stroke-width="1.2"/>
+    <circle class="pri" cx="444" cy="108" r="12"/><text class="on" x="444" y="113" text-anchor="middle">1</text>
+    <text class="h2" x="466" y="113">Origin and importance</text>
+    <text class="tx" x="440" y="142">All normal author declarations: A B C D stay</text>
+  </g>
+  <g class="a s2">
+    <rect class="bb" x="420" y="166" width="360" height="72" rx="10" stroke-width="1.2"/>
+    <circle class="pri" cx="444" cy="190" r="12"/><text class="on" x="444" y="195" text-anchor="middle">2</text>
+    <text class="h2" x="466" y="195">Cascade layers</text>
+    <text class="tx" x="440" y="224">Unlayered beats any layer: A and B out, ID or not</text>
+  </g>
+  <g class="a s3">
+    <rect class="bp" x="420" y="248" width="360" height="72" rx="10" stroke-width="1.2"/>
+    <circle class="pri" cx="444" cy="272" r="12"/><text class="on" x="444" y="277" text-anchor="middle">3</text>
+    <text class="h2" x="466" y="277">Specificity</text>
+    <text class="tx" x="440" y="306">C 0-1-0 vs D 0-1-0: tie, keep going</text>
+  </g>
+  <g class="a s4">
+    <rect class="bo" x="420" y="330" width="360" height="72" rx="10" stroke-width="1.2"/>
+    <circle class="pri" cx="444" cy="354" r="12"/><text class="on" x="444" y="359" text-anchor="middle">4</text>
+    <text class="h2" x="466" y="359">Order of appearance</text>
+    <text class="tx" x="440" y="388">D is declared after C: D wins</text>
+  </g>
+
+  <g class="a win">
+    <rect class="bo" x="20" y="418" width="760" height="56" rx="10" stroke-width="1.5"/>
+    <rect class="sw-t" x="36" y="435" width="22" height="22" rx="5"/>
+    <text class="teat" x="70" y="451" font-size="15">color: teal.</text>
+    <text class="tx" x="160" y="451">The ID rule in a layer lost to a one-class unlayered rule: layers are checked before specificity.</text>
+  </g>
+  <text class="sub" x="28" y="490">Simplified: scope proximity (@scope) sits between specificity and order; !important reverses layer order.</text>
+</svg>

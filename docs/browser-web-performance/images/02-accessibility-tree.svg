@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">What a div button and a real button expose to the accessibility tree</title>
+  <desc id="d">Two columns compare the same visible "Save claim" control. On the left it is a div with a click handler: the browser exposes it as a generic node with no button role, it is not in the Tab order, Enter and Space do nothing, and a screen reader reads it as plain text "Save claim", so keyboard and screen-reader users cannot tell it is a control or reach it. On the right it is a native button element: the accessibility tree has role button and accessible name "Save claim" computed from its text, it is focusable with Tab, Enter and Space activate it, the disabled attribute is understood, and a screen reader announces "Save claim, button". A note at the bottom lists the work needed to make the div equivalent: role, tabindex, key handlers and disabled state, all of which the native element already provides. Simplified: screen reader wording varies by product.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:12px}
+    .code{fill:#334155;font-size:12.5px;font-family:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bar{fill:#e2e8f0}
+    .okt{fill:#16a34a;font-weight:700}.badt{fill:#dc2626;font-weight:700}.prit{fill:#4f46e5;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bo{fill:#f0fdf4;stroke:#16a34a}.bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    .btn{fill:#4f46e5}.btn2{fill:#ffffff;stroke:#94a3b8}.btnt{fill:#ffffff;font-size:13px;font-weight:700}.btn2t{fill:#334155;font-size:13px;font-weight:600}
+    .lnk{fill:#4f46e5;font-size:13px;font-weight:600;text-decoration:underline}
+    .bd{fill:#0f172a;fill-opacity:.42}
+    .ringok{fill:none;stroke:#4f46e5;stroke-width:3}.ringbad{fill:none;stroke:#dc2626;stroke-width:3;stroke-dasharray:6 3}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}.ah{fill:#64748b}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.tx,.sm,.code{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}.bar{fill:#334155}
+      .okt{fill:#4ade80}.badt{fill:#f87171}.prit{fill:#818cf8}.wrnt{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bo{fill:#052e16;stroke:#4ade80}.bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+      .btn{fill:#818cf8}.btn2{fill:#111827;stroke:#64748b}.btnt{fill:#0f172a}.btn2t{fill:#e2e8f0}
+      .lnk{fill:#a5b4fc}
+      .bd{fill:#000000;fill-opacity:.55}
+      .ringok{stroke:#a5b4fc}.ringbad{stroke:#f87171}
+      .ln{stroke:#94a3b8}.ah{fill:#94a3b8}
+    }
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="468" rx="14"/>
+  <text class="h" x="28" y="40">Same pixels, different accessibility tree</text>
+  <text class="sub" x="28" y="62">Assistive technology never sees your CSS. It reads the role, name, state and focusability the browser exposes.</text>
+  <rect class="box" x="20" y="80" width="372" height="320" rx="10" stroke-width="1.2"/>
+  <text class="badt" x="206" y="106" text-anchor="middle" font-size="15">✗ Styled &lt;div&gt; with onClick</text>
+  <text class="code" x="38" y="132">&lt;div class="btn" onclick="save()"&gt;</text>
+  <text class="code" x="56" y="150">Save claim</text>
+  <rect class="btn" x="270" y="120" width="100" height="34" rx="8"/><text class="btnt" x="320" y="142" text-anchor="middle">Save claim</text>
+  <line class="ln" x1="206" y1="160" x2="206" y2="180" marker-end="url(#ar)"/>
+  <rect class="bb" x="36" y="186" width="340" height="150" rx="8" stroke-width="1.3"/>
+  <text class="sub" x="48" y="206">Accessibility tree node</text>
+  <text class="tx" x="48" y="230" font-weight="700">Role</text><text class="tx" x="138" y="230">generic (no semantics)</text>
+  <text class="tx" x="48" y="252" font-weight="700">Name</text><text class="tx" x="138" y="252">none (text read as text)</text>
+  <text class="tx" x="48" y="274" font-weight="700">Focusable</text><text class="tx" x="138" y="274">no, Tab skips it</text>
+  <text class="tx" x="48" y="296" font-weight="700">Keyboard</text><text class="tx" x="138" y="296">Enter / Space do nothing</text>
+  <text class="tx" x="48" y="318" font-weight="700">Disabled</text><text class="tx" x="138" y="318">only looks greyed out</text>
+  <text class="sub" x="48" y="364">Screen reader says</text>
+  <text class="badt" x="48" y="386" font-size="15">“Save claim”  (plain text)</text>
+  <rect class="box" x="408" y="80" width="372" height="320" rx="10" stroke-width="1.2"/>
+  <text class="okt" x="594" y="106" text-anchor="middle" font-size="15">✓ Native &lt;button&gt;</text>
+  <text class="code" x="426" y="132">&lt;button type="button" onclick="save()"&gt;</text>
+  <text class="code" x="444" y="150">Save claim</text>
+  <rect class="btn" x="658" y="120" width="100" height="34" rx="8"/><text class="btnt" x="708" y="142" text-anchor="middle">Save claim</text>
+  <line class="ln" x1="594" y1="160" x2="594" y2="180" marker-end="url(#ar)"/>
+  <rect class="bo" x="424" y="186" width="340" height="150" rx="8" stroke-width="1.3"/>
+  <text class="sub" x="436" y="206">Accessibility tree node</text>
+  <text class="tx" x="436" y="230" font-weight="700">Role</text><text class="tx" x="526" y="230">button</text>
+  <text class="tx" x="436" y="252" font-weight="700">Name</text><text class="tx" x="526" y="252">“Save claim” (from content)</text>
+  <text class="tx" x="436" y="274" font-weight="700">Focusable</text><text class="tx" x="526" y="274">yes, in Tab order</text>
+  <text class="tx" x="436" y="296" font-weight="700">Keyboard</text><text class="tx" x="526" y="296">Enter and Space activate</text>
+  <text class="tx" x="436" y="318" font-weight="700">Disabled</text><text class="tx" x="526" y="318">disabled attribute understood</text>
+  <text class="sub" x="436" y="364">Screen reader says</text>
+  <text class="okt" x="436" y="386" font-size="15">“Save claim, button”</text>
+  <rect class="bw" x="20" y="414" width="760" height="42" rx="8" stroke-width="1.2"/>
+  <text class="sm" x="36" y="432">To repair the div you must add role="button", tabindex="0", Enter (keydown) and Space (keyup) handlers,</text>
+  <text class="sm" x="36" y="448">aria-disabled plus click guarding, and a :focus-visible style. The native element ships all of it, tested across screen readers.</text>
+</svg>

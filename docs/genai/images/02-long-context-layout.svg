@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Where information sits in a long prompt matters</title>
+  <desc id="d">Left: a sketch of the lost-in-the-middle effect. Answer accuracy is plotted against where the one relevant document sits among many retrieved documents. The curve is U-shaped: highest when the relevant document is first or last, lowest when it is in the middle. The curve is illustrative of the shape reported by Liu and colleagues in 2023, not their exact numbers. Right: the recommended layout for a long prompt, from top to bottom: long documents wrapped in document tags with source metadata, then instructions and the output format, then a few examples in example tags, and finally the question at the very end. Anthropic's documentation reports that putting the query at the end can improve response quality by up to 30 percent on complex, multi-document inputs.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .tx{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .ax{stroke:#64748b;stroke-width:1.5;fill:none}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .crv{stroke:#4f46e5;stroke-width:3;fill:none}
+    .dot{fill:#4f46e5}.badf{fill:#dc2626}.okf{fill:#16a34a}
+    .okt{fill:#16a34a;font-weight:700}.badt{fill:#dc2626;font-weight:700}.prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.tx{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .ax{stroke:#94a3b8}.grid{stroke:#334155}
+      .crv{stroke:#818cf8}.dot{fill:#818cf8}.badf{fill:#f87171}.okf{fill:#4ade80}
+      .okt{fill:#4ade80}.badt{fill:#f87171}.prit{fill:#818cf8}.teat{fill:#5eead4}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="438" rx="14"/>
+  <text class="h" x="28" y="40">Position matters in long prompts</text>
+  <text class="sub" x="28" y="62">Left: shape of the "lost in the middle" effect (illustrative). Right: the layout to use.</text>
+
+  <rect class="box" x="20" y="80" width="400" height="320" rx="10"/>
+  <text class="h2" x="40" y="106">Accuracy vs position of the key document</text>
+  <line class="grid" x1="80" y1="150" x2="400" y2="150"/>
+  <line class="grid" x1="80" y1="210" x2="400" y2="210"/>
+  <line class="grid" x1="80" y1="270" x2="400" y2="270"/>
+  <line class="ax" x1="80" y1="130" x2="80" y2="330"/>
+  <line class="ax" x1="80" y1="330" x2="400" y2="330"/>
+  <text class="sub" x="70" y="154" text-anchor="end">high</text>
+  <text class="sub" x="70" y="274" text-anchor="end">low</text>
+  <path class="crv" d="M95,155 C150,230 190,268 240,270 C290,268 330,240 385,170"/>
+  <circle class="okf" cx="95" cy="155" r="6"/>
+  <circle class="badf" cx="240" cy="270" r="6"/>
+  <circle class="okf" cx="385" cy="170" r="6"/>
+  <text class="sub" x="95" y="350" text-anchor="middle">first</text>
+  <text class="sub" x="240" y="350" text-anchor="middle">middle</text>
+  <text class="sub" x="385" y="350" text-anchor="middle">last</text>
+  <text class="badt" x="240" y="296" text-anchor="middle" font-size="13">buried facts get missed</text>
+  <text class="sub" x="40" y="384">Position of the relevant document among ~20 retrieved</text>
+
+  <rect class="box" x="440" y="80" width="340" height="320" rx="10"/>
+  <text class="h2" x="460" y="106">Long-prompt layout, top to bottom</text>
+  <rect class="bt" x="460" y="120" width="300" height="92" rx="8"/>
+  <text class="teat" x="474" y="142">1. Long inputs first</text>
+  <text class="mono tx" x="474" y="164">&lt;document index="1"&gt;</text>
+  <text class="mono tx" x="474" y="182">  &lt;source&gt;policy.pdf&lt;/source&gt; …</text>
+  <text class="mono tx" x="474" y="200">&lt;/document&gt; …</text>
+  <rect class="bp" x="460" y="220" width="300" height="46" rx="8"/>
+  <text class="prit" x="474" y="240">2. Instructions + output format</text>
+  <text class="tx" x="474" y="258">rules, with the reason for each</text>
+  <rect class="bp" x="460" y="274" width="300" height="46" rx="8"/>
+  <text class="prit" x="474" y="294">3. 3–5 examples</text>
+  <text class="mono tx" x="474" y="312">&lt;examples&gt;&lt;example&gt;…</text>
+  <rect class="bo" x="460" y="328" width="300" height="46" rx="8"/>
+  <text class="okt" x="474" y="348">4. The question, last</text>
+  <text class="tx" x="474" y="366">up to 30% better on multi-doc inputs</text>
+  <text class="sub" x="28" y="424">Curve shape after Liu et al. (2023); the 30% figure is from Anthropic's prompting guide. Not to scale.</text>
+</svg>

@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Constrained decoding: the schema grammar masks invalid tokens</title>
+  <desc id="d">An animation in three steps showing how structured outputs constrain generation to a JSON schema whose only property is severity, an enum of low, medium or high. In step one the output so far is an open brace, the key severity and an opening quote. The model's top next-token candidates are critical with probability 0.46, high 0.31, medium 0.15 and low 0.08. The grammar compiled from the schema allows only high, medium and low, so critical is masked out, the remaining probabilities are renormalised to 0.57, 0.28 and 0.15, and high is sampled. In step two the candidates are a quote followed by a comma with probability 0.50, a quote followed by a closing brace 0.40, and the fragment er 0.10. Only the closing quote and brace is allowed, because the schema has no other properties and additionalProperties is false, so it is chosen. In step three the output is the complete object severity high, which always parses and matches the schema, but whether high is the right severity is not checked by the grammar. Probabilities are illustrative and tokens are simplified.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:15px;font-weight:700}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.okf{fill:#16a34a}.badf{fill:#dc2626}.mutf{fill:#cbd5e1}
+    .prit{fill:#4f46e5;font-weight:700}.okt{fill:#16a34a;font-weight:700}.badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .lnb{stroke:#dc2626;stroke-width:2.5}
+    .bo{fill:#f0fdf4;stroke:#16a34a}.bp{fill:#eef2ff;stroke:#4f46e5}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .pri{fill:#818cf8}.okf{fill:#4ade80}.badf{fill:#f87171}.mutf{fill:#475569}
+      .prit{fill:#818cf8}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .lnb{stroke:#f87171}
+      .bo{fill:#052e16;stroke:#4ade80}.bp{fill:#1e1b4b;stroke:#818cf8}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes s1{0%{opacity:1}31%{opacity:1}33%,100%{opacity:0}}
+    @keyframes m1{0%,9%{opacity:0}11%,31%{opacity:1}33%,100%{opacity:0}}
+    @keyframes c1{0%,19%{opacity:0}21%,31%{opacity:1}33%,100%{opacity:0}}
+    @keyframes s2{0%,33%{opacity:0}35%,64%{opacity:1}66%,100%{opacity:0}}
+    @keyframes m2{0%,42%{opacity:0}44%,64%{opacity:1}66%,100%{opacity:0}}
+    @keyframes c2{0%,52%{opacity:0}54%,64%{opacity:1}66%,100%{opacity:0}}
+    @keyframes s3{0%,66%{opacity:0}68%,98%{opacity:1}100%{opacity:0}}
+    .s1{animation-name:s1}.m1{animation-name:m1}.c1{animation-name:c1}
+    .s2{animation-name:s2}.m2{animation-name:m2}.c2{animation-name:c2}.s3{animation-name:s3}
+    @media (prefers-reduced-motion: reduce){ .a{animation:none;opacity:0} .s1,.m1,.c1{opacity:1} }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="498" rx="14"/>
+  <text class="h" x="28" y="40">Constrained decoding: the grammar masks invalid tokens</text>
+  <text class="sub" x="28" y="62">Schema: {"severity": "low" | "medium" | "high"}, additionalProperties false. Probabilities illustrative.</text>
+
+  <rect class="box" x="20" y="80" width="420" height="290" rx="10"/>
+  <text class="h2" x="40" y="106">Model proposes the next token</text>
+  <rect class="box" x="460" y="80" width="320" height="290" rx="10"/>
+  <text class="h2" x="480" y="106">Grammar (compiled from the schema)</text>
+
+  <!-- Step 1 -->
+  <g class="a s1">
+    <text class="sub" x="40" y="130">Step 1 of 3: which enum value?</text>
+    <text class="sm mono" x="40" y="166">critical</text><rect class="pri" x="130" y="153" width="230" height="18" rx="3"/><text class="sm" x="368" y="166">0.46</text>
+    <text class="sm mono" x="40" y="211">high</text><rect class="pri" x="130" y="198" width="155" height="18" rx="3"/><text class="sm" x="293" y="211">0.31</text>
+    <text class="sm mono" x="40" y="256">medium</text><rect class="pri" x="130" y="243" width="75" height="18" rx="3"/><text class="sm" x="213" y="256">0.15</text>
+    <text class="sm mono" x="40" y="301">low</text><rect class="pri" x="130" y="288" width="40" height="18" rx="3"/><text class="sm" x="178" y="301">0.08</text>
+    <text class="tx" x="480" y="136">Valid next tokens here:</text>
+    <text class="tx mono" x="480" y="160">high · medium · low</text>
+  </g>
+  <g class="a m1">
+    <rect class="mutf" x="130" y="153" width="230" height="18" rx="3"/>
+    <line class="lnb" x1="34" y1="162" x2="410" y2="162"/>
+    <text class="badt" x="40" y="190" font-size="12">masked: not in the enum</text>
+    <text class="tx" x="480" y="196">critical → probability set to 0</text>
+    <text class="tx" x="480" y="220">Renormalise the rest:</text>
+    <text class="tx mono" x="480" y="244">high 0.57 · medium 0.28</text>
+    <text class="tx mono" x="480" y="266">low 0.15</text>
+  </g>
+  <g class="a c1">
+    <rect class="bo" x="34" y="194" width="300" height="26" rx="5" fill-opacity="0.35"/>
+    <text class="okt" x="480" y="310">Sampled: high</text>
+  </g>
+
+  <!-- Step 2 -->
+  <g class="a s2">
+    <text class="sub" x="40" y="130">Step 2 of 3: what comes after the value?</text>
+    <text class="sm mono" x="40" y="166">",</text><rect class="pri" x="130" y="153" width="250" height="18" rx="3"/><text class="sm" x="388" y="166">0.50</text>
+    <text class="sm mono" x="40" y="211">"}</text><rect class="pri" x="130" y="198" width="200" height="18" rx="3"/><text class="sm" x="338" y="211">0.40</text>
+    <text class="sm mono" x="40" y="256">er</text><rect class="pri" x="130" y="243" width="50" height="18" rx="3"/><text class="sm" x="188" y="256">0.10</text>
+    <text class="tx" x="480" y="136">Valid next tokens here:</text>
+    <text class="tx mono" x="480" y="160">"}  (close string and object)</text>
+  </g>
+  <g class="a m2">
+    <rect class="mutf" x="130" y="153" width="250" height="18" rx="3"/>
+    <line class="lnb" x1="34" y1="162" x2="420" y2="162"/>
+    <rect class="mutf" x="130" y="243" width="50" height="18" rx="3"/>
+    <line class="lnb" x1="34" y1="252" x2="230" y2="252"/>
+    <text class="badt" x="40" y="190" font-size="12">masked: no other properties allowed</text>
+    <text class="badt" x="40" y="280" font-size="12">masked: "higher" is not an enum value</text>
+    <text class="tx" x="480" y="196">", → would open a 2nd property</text>
+    <text class="tx" x="480" y="220">er → would spell "higher"</text>
+  </g>
+  <g class="a c2">
+    <rect class="bo" x="34" y="194" width="350" height="26" rx="5" fill-opacity="0.35"/>
+    <text class="okt" x="480" y="310">Sampled: "}</text>
+  </g>
+
+  <!-- Step 3 -->
+  <g class="a s3">
+    <text class="sub" x="40" y="130">Step 3 of 3: done</text>
+    <text class="okt" x="40" y="172">✓ Always parses</text>
+    <text class="okt" x="40" y="204">✓ Matches the schema (types, enum, required)</text>
+    <text class="wrnt" x="40" y="236">? Is "high" the right answer?</text>
+    <text class="tx" x="40" y="262">The grammar constrains shape, not truth.</text>
+    <text class="tx" x="40" y="286">Business rules still run in your code.</text>
+    <text class="tx" x="480" y="136">Ends when the grammar reaches</text>
+    <text class="tx" x="480" y="158">an accepting state.</text>
+    <text class="tx" x="480" y="196">Cost: first use of a schema</text>
+    <text class="tx" x="480" y="218">compiles the grammar (extra</text>
+    <text class="tx" x="480" y="240">latency); then it is cached.</text>
+  </g>
+
+  <!-- Output so far -->
+  <rect class="bp" x="20" y="390" width="760" height="56" rx="10"/>
+  <text class="sub" x="40" y="412">Output so far</text>
+  <g class="a s1"><text class="tx mono" x="40" y="434" font-size="16">{"severity": "▌</text></g>
+  <g class="a s2"><text class="tx mono" x="40" y="434" font-size="16">{"severity": "high▌</text></g>
+  <g class="a s3"><text class="tx mono" x="40" y="434" font-size="16">{"severity": "high"}</text></g>
+  <text class="sub" x="28" y="476">Without the mask the most likely tokens were "critical" and ", — both would have broken the contract.</text>
+</svg>

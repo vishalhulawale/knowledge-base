@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">One ChatClient call: the advisor chain and the tool-calling loop</title>
+  <desc id="d">Five lifelines from left to right: the controller that calls ChatClient, the chat memory advisor at order 200, the ToolCallingAdvisor at order 300, the Anthropic ChatModel, and the Claude Messages API. The controller sends a prompt with a conversation id. The memory advisor adds the stored history and passes it on; the ToolCallingAdvisor and the ChatModel send call 1 to the API with the history, the user message and the tool schemas. The API answers with stop reason tool_use. The ToolCallingAdvisor runs the annotated Java tool method in the application, then sends call 2 with the tool result appended. The API answers with stop reason end_turn and the final text, which travels back to the controller. Finally the memory advisor stores only the user message and the final answer; the tool-call messages stay inside the loop. The arrows appear one step at a time. Simplified: one tool call, no streaming.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .tx{fill:#334155;font-size:14px;font-weight:600}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .ln{stroke:#94a3b8;stroke-width:1.5;fill:none;stroke-dasharray:5 5}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bw{fill:#fffbeb;stroke:#d97706}.bn{fill:#ffffff;stroke:#cbd5e1}
+    .okt{fill:#16a34a;font-weight:700}.wrnt{fill:#b45309;font-weight:700}.prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .ln{stroke:#64748b}
+      .lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnw{stroke:#fbbf24}
+      .ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bw{fill:#451a03;stroke:#fbbf24}.bn{fill:#111827;stroke:#475569}
+      .okt{fill:#4ade80}.wrnt{fill:#fbbf24}.prit{fill:#818cf8}.teat{fill:#5eead4}
+    }
+    .a{opacity:0;animation:16s infinite linear}
+    @keyframes l0{0%,3%{opacity:0}5%,90%{opacity:1}94%,100%{opacity:0}} .l0{animation-name:l0}
+    @keyframes l1{0%,15%{opacity:0}17%,90%{opacity:1}94%,100%{opacity:0}} .l1{animation-name:l1}
+    @keyframes l2{0%,27%{opacity:0}29%,90%{opacity:1}94%,100%{opacity:0}} .l2{animation-name:l2}
+    @keyframes l3{0%,39%{opacity:0}41%,90%{opacity:1}94%,100%{opacity:0}} .l3{animation-name:l3}
+    @keyframes l4{0%,51%{opacity:0}53%,90%{opacity:1}94%,100%{opacity:0}} .l4{animation-name:l4}
+    @keyframes l5{0%,63%{opacity:0}65%,90%{opacity:1}94%,100%{opacity:0}} .l5{animation-name:l5}
+    @keyframes l6{0%,75%{opacity:0}77%,90%{opacity:1}94%,100%{opacity:0}} .l6{animation-name:l6}
+    @media (prefers-reduced-motion: reduce){ .a{animation:none;opacity:1} }
+  </style>
+  <defs>
+    <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="518" rx="14"/>
+  <text class="h" x="28" y="40">One chatClient.prompt()...call(): two model calls, one tool run</text>
+  <text class="sub" x="28" y="62">Indigo = requests to Claude, amber = tool_use round trip, teal = tool execution in your JVM, green = final answer.</text>
+
+  <!-- participants -->
+  <rect class="bn" x="20" y="84" width="120" height="56" rx="10" stroke-width="1.3"/>
+  <text class="tx" x="80" y="108" text-anchor="middle">Controller</text><text class="sm" x="80" y="126" text-anchor="middle">ChatClient</text>
+  <rect class="bt" x="160" y="84" width="160" height="56" rx="10" stroke-width="1.3"/>
+  <text class="tx" x="240" y="108" text-anchor="middle">Memory advisor</text><text class="sm" x="240" y="126" text-anchor="middle">order +200</text>
+  <rect class="bw" x="335" y="84" width="150" height="56" rx="10" stroke-width="1.3"/>
+  <text class="tx" x="410" y="108" text-anchor="middle">ToolCallingAdvisor</text><text class="sm" x="410" y="126" text-anchor="middle">order +300</text>
+  <rect class="bp" x="505" y="84" width="130" height="56" rx="10" stroke-width="1.3"/>
+  <text class="tx" x="570" y="108" text-anchor="middle">Anthropic</text><text class="sm" x="570" y="126" text-anchor="middle">ChatModel</text>
+  <rect class="bp" x="655" y="84" width="130" height="56" rx="10" stroke-width="1.3"/>
+  <text class="tx" x="720" y="108" text-anchor="middle">Claude</text><text class="sm" x="720" y="126" text-anchor="middle">Messages API</text>
+
+  <line class="ln" x1="80" y1="140" x2="80" y2="476"/><line class="ln" x1="240" y1="140" x2="240" y2="476"/>
+  <line class="ln" x1="410" y1="140" x2="410" y2="476"/><line class="ln" x1="570" y1="140" x2="570" y2="476"/>
+  <line class="ln" x1="720" y1="140" x2="720" y2="476"/>
+
+  <!-- 0: prompt -->
+  <g class="a l0"><text class="sm" x="160" y="170" text-anchor="middle">prompt + conversationId</text><line class="lnt" x1="80" y1="178" x2="236" y2="178" marker-end="url(#art)"/></g>
+  <!-- 1: call 1 -->
+  <g class="a l1"><text class="sm" x="480" y="204" text-anchor="middle">call 1: history + user message + tool schemas</text><line class="lnp" x1="240" y1="212" x2="716" y2="212" marker-end="url(#arp)"/></g>
+  <!-- 2: tool_use -->
+  <g class="a l2"><text class="sm" x="565" y="240" text-anchor="middle">stop_reason: tool_use getClaimStatus</text><line class="lnw" x1="720" y1="248" x2="414" y2="248" marker-end="url(#arw)"/></g>
+  <!-- 3: tool runs -->
+  <g class="a l3"><rect class="bt" x="335" y="268" width="150" height="50" rx="8" stroke-width="1.3"/>
+    <text class="sm" x="410" y="289" text-anchor="middle">runs @Tool method</text><text class="teat" x="410" y="307" text-anchor="middle" font-size="12">getClaimStatus("C-104")</text></g>
+  <!-- 4: call 2 -->
+  <g class="a l4"><text class="sm" x="600" y="342" text-anchor="middle">call 2: + tool_use + tool_result</text><line class="lnp" x1="485" y1="350" x2="716" y2="350" marker-end="url(#arp)"/></g>
+  <!-- 5: final -->
+  <g class="a l5"><text class="sm" x="400" y="380" text-anchor="middle">stop_reason: end_turn, final text "Claim C-104 is approved..."</text><line class="lno" x1="720" y1="388" x2="84" y2="388" marker-end="url(#aro)"/></g>
+  <!-- 6: memory saves -->
+  <g class="a l6"><rect class="bo" x="150" y="406" width="180" height="58" rx="8" stroke-width="1.3"/>
+    <text class="okt" x="240" y="428" text-anchor="middle" font-size="12">saves user message</text><text class="okt" x="240" y="446" text-anchor="middle" font-size="12">+ final answer only</text></g>
+  <g class="a l6"><text class="sub" x="350" y="432">Tool-call messages stay inside the loop,</text><text class="sub" x="350" y="450">so memory stores never see half a turn.</text></g>
+  <g class="a l4"><text class="wrnt" x="700" y="460" text-anchor="end" font-size="13">2 billed API calls</text></g>
+
+  <text class="sub" x="28" y="502">Simplified: one tool call, non-streaming. Spring AI 2.0 defaults: memory order HIGHEST_PRECEDENCE+200, tool advisor +300.</text>
+</svg>
