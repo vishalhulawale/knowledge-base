@@ -17,7 +17,7 @@ tags: [browser-web-performance, P1]
 
 Layout bugs are the most common front-end defects: a card that overflows on a long URL, a button that inherits the wrong colour from a third-party stylesheet, a footer that refuses to align across cards. Most come from three misunderstandings: what `width` measures, how flex items grow and shrink, and how the cascade picks a winner.
 
-CSS layout evolved in waves. Tables and floats (1990s–2000s) were hacks for page layout. Flexbox (Baseline 2015) solved one-dimensional alignment; grid (Baseline 2017) gave true two-dimensional layout. Since 2022 a second wave shipped: cascade layers (2022), container queries (2023), subgrid (2023), `:has()` and native nesting (Dec 2023). Interviewers for senior full-stack roles use this topic to see whether you can reason about layout from first principles and whether your knowledge stops at Bootstrap-era CSS.
+Tables and floats were hacks for page layout; flexbox (Baseline 2015) and grid (2017) replaced them. A second wave followed: cascade layers (2022), container queries and subgrid (2023), `:has()` and native nesting (Dec 2023). Interviewers use the topic to check whether you reason from first principles or stopped at Bootstrap-era CSS.
 
 Layout also affects performance: changing geometry triggers **layout (reflow)** for the affected subtree, which is covered in [Browser rendering pipeline, reflow vs repaint](01-browser-rendering-pipeline-reflow-vs-repaint.md); unreserved space for late content causes layout shift, covered in [Core Web Vitals](04-core-web-vitals-and-performance-optimisation.md).
 
@@ -33,10 +33,7 @@ Each element generates a box with four areas: **content**, **padding**, **border
 ![Two boxes with width 300px, padding 20px, border 5px and margin 20px. With content-box the rendered width is 350px; with border-box it is 300px and the content shrinks to 250px. Margin sits outside in both](images/03-box-model-sizing.svg){ loading=lazy }
 *Same declarations, 50px difference on screen. Margin is never part of either width.*
 
-Two more box rules come up often:
-
-- **Margin collapsing.** Vertical margins of adjacent block boxes (and of a parent and its first or last child) collapse into one margin equal to the larger. Margins of floats and absolutely positioned elements never collapse, and margins don't collapse inside flex or grid containers. A new **block formatting context** (`display: flow-root`, `overflow` other than `visible`, flex/grid items) stops parent–child collapsing.
-- **Outer and inner display.** `display` has two parts: how the box participates in its parent (block or inline) and what layout it creates for its children (flow, flex, grid). `display: flex` is block-outside, flex-inside; `inline-flex` is inline-outside.
+**Margin collapsing:** vertical margins of adjacent block boxes (and of a parent and its first or last child) collapse into one margin equal to the larger. Margins of floats and absolutely positioned elements never collapse, nor do margins inside flex or grid containers. A new **block formatting context** (`display: flow-root`) stops parent–child collapsing.
 
 ### Flexbox: one axis, content first
 
@@ -53,7 +50,7 @@ A flex container lays items along a **main axis** (`flex-direction: row` by defa
 
 The classic surprise is the **automatic minimum size**: a flex item's `min-width` defaults to `auto`, which means "no smaller than its min-content width". A long URL or `<pre>` inside a flex item therefore refuses to shrink and overflows the container. The fix is `min-width: 0` (or `min-inline-size: 0`) on the item.
 
-Alignment: `justify-content` distributes along the main axis, `align-items` aligns on the cross axis, `gap` replaces child margins (Baseline for flexbox since 2021), and `margin-inline-start: auto` pushes an item to the far end. There is no `justify-self` in flexbox.
+Use `gap` instead of child margins, and `margin-inline-start: auto` to push an item to the far end (there is no `justify-self` in flexbox).
 
 ### Grid: two axes, layout first
 

@@ -233,10 +233,10 @@ flowchart TD
 
 - **Where I used it:** not a resume claim; position as transferable knowledge. *[confirm any hands-on LLM, Copilot or GenAI work before claiming it]*. The closest match is **owning the GraphQL Consumer Service** on OptumRx Meteor: integrating 5 upstream systems behind a typed schema is the same discipline as putting a JSON Schema between an LLM and downstream code. **Kafka workflows with retry and DLQ handling** map directly onto "validate, retry with the error, then dead-letter".
 - **Talking points:**
-    - Schema-first contracts: GraphQL types for clients, JSON Schema or Java records for LLM output. Both reject unknown fields and fail fast.
-    - The LLM is an untrusted upstream system: validate its output like any external payload and never let free text trigger privileged actions. This is the same principle as the OAuth2 and Spring Security work on Meteor and Metasys.
-    - Healthcare constraints (750K+ users on Meteor): PHI minimisation in prompts, audit logging and human review for anything that looks like a decision.
-- **Likely follow-up chain:** "How would you add an LLM to triage claims notes?" → typed record, structured outputs, validation and routing in code → "What if the model returns valid JSON with the wrong severity?" → evals with labelled data, confidence/escalation path, human review for HIGH, monitoring label distribution drift → "What about a malicious note?" → indirect injection, fenced data, action enum, least-privilege, no approval path from model output.
+    - Schema-first contracts: GraphQL types for clients, JSON Schema or Java records for LLM output; both fail fast on unknown shapes.
+    - The LLM is an untrusted upstream: validate its output like any external payload and never let free text trigger privileged actions, the same principle as the OAuth2 / Spring Security work on Meteor and Metasys.
+    - Healthcare constraints (750K+ users on Meteor): PHI minimisation, audit logging, human review for anything that looks like a decision.
+- **Likely follow-up chain:** "Add an LLM to triage claims notes?" → typed record, structured outputs, routing in code → "Valid JSON, wrong severity?" → labelled evals, escalation path, human review for HIGH, drift monitoring → "Malicious note?" → indirect injection, fenced data, action enum, no approval path from model output.
 
 ## Interview questions
 
