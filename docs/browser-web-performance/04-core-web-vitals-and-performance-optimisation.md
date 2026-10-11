@@ -42,14 +42,14 @@ Scoring rules worth knowing:
 
 LCP time is the sum of four consecutive parts. web.dev's guidance for a well-optimised page is roughly 40% TTFB, under 10% load delay, 40% load duration, under 10% render delay.
 
-| Subpart | From → to | Typical cause when large | Fix |
+| Subpart | Ends when | Large because | Fix |
 |---|---|---|---|
-| TTFB | Navigation start → first byte of HTML | Slow origin, redirects, no CDN | CDN, edge caching, streaming SSR, fewer redirects |
-| Resource load delay | TTFB → LCP resource request starts | Image discovered late: injected by JS, CSS background, `loading="lazy"`, low priority | `<img>` in server HTML, `fetchpriority="high"`, `preload` for CSS backgrounds |
-| Resource load duration | Request → last byte | Big file, slow connection, cross-origin connection setup | AVIF/WebP, `srcset`+`sizes`, CDN, `preconnect` |
-| Element render delay | Resource loaded → painted | Render-blocking CSS/JS, client-side rendering still running, hidden behind A/B test script | Inline critical CSS, `defer`/module scripts, SSR the hero, avoid anti-flicker snippets |
+| TTFB | First HTML byte | Slow origin, redirects, no CDN | CDN, edge caching, fewer redirects |
+| Resource load delay | LCP request starts | Found late (JS-injected, CSS background, lazy) or low priority | `<img>` in server HTML, `fetchpriority="high"`, `preload` for backgrounds |
+| Resource load duration | Last byte arrives | Big file, new cross-origin connection | AVIF/WebP, `srcset`+`sizes`, `preconnect` |
+| Element render delay | Element painted | Render-blocking CSS/JS, client rendering, anti-flicker scripts | Critical CSS, `defer`, SSR the hero |
 
-![Animation: a playhead sweeps a 0 to 4 second axis. In the "before" row a JS-injected, lazy-loaded hero image spends 800 ms in TTFB, 1,400 ms in resource load delay, 900 ms loading and 400 ms in render delay, so LCP lands at 3.5 s. In the "after" row the image is in server HTML with fetchpriority high: TTFB is still 800 ms, but load delay is 100 ms, loading 700 ms and render delay 100 ms, so LCP lands at 1.7 s](images/04-lcp-subparts.svg){ loading=lazy }
+![Animation: a playhead sweeps 0 to 4 seconds. Before: a JS-injected, lazy hero spends 800 ms in TTFB, 1,400 ms in load delay, 900 ms loading and 400 ms rendering, so LCP is 3.5 s. After: the image is in server HTML with fetchpriority high, load delay drops to 100 ms and LCP is 1.7 s](images/04-lcp-subparts.svg){ loading=lazy }
 *Watch the amber bar: the server didn't get faster; the browser simply found and requested the image sooner.*
 
 Discovery matters because the **preload scanner** fetches what it finds in raw HTML ahead of the parser, but can't see images created by JavaScript or referenced only in CSS. Even found images start at low priority until layout proves they're in the viewport; `fetchpriority="high"` (Baseline since October 2024) skips that wait.
@@ -69,7 +69,7 @@ flowchart LR
 
 An interaction's latency is **input delay** (the main thread is busy when the event arrives) + **processing** (your event handlers, including React state updates and re-render) + **presentation delay** (style, layout, paint and commit of the next frame). Any task over **50 ms** is a *long task* and a source of input delay for whatever the user does next.
 
-![Animation: a user taps at 60 ms. On the top row a single 300 ms task blocks the main thread, so the tap waits 240 ms, the handler runs 120 ms and the frame paints 40 ms later: INP 400 ms. On the bottom row the same work runs in 45 ms chunks that yield, so the tap waits 35 ms, the handler does only the visible update in 40 ms and the frame paints 25 ms later: INP 100 ms, with the rest of the work after the paint](images/04-inp-phases.svg){ loading=lazy }
+![Animation: a tap at 60 ms. With one 300 ms task the tap waits 240 ms, the handler runs 120 ms and paint follows 40 ms later: INP 400 ms. With 45 ms chunks that yield it waits 35 ms, the handler runs 40 ms and paint follows 25 ms later: INP 100 ms](images/04-inp-phases.svg){ loading=lazy }
 *The total work is the same in both rows; yielding only changes when the user's input gets a turn.*
 
 Fixes by phase:
@@ -84,7 +84,7 @@ Fixes by phase:
 
 Each animation frame with shifting elements gets a score = **impact fraction** (share of the viewport covered by the union of the old and new positions of the moved elements) × **distance fraction** (largest move divided by the viewport's larger dimension).
 
-![Animation: two phones load the same article. On the left a banner image without width and height arrives and pushes a text block down 160 of 640 pixels; the impact region covers 400 of 640 pixels, so the shift scores 0.625 times 0.25, about 0.16. On the right the image has width and height, the space is reserved, and nothing moves](images/04-cls-layout-shift.svg){ loading=lazy }
+![Animation: on the left a banner without width and height arrives and pushes the text down 160 of 640 pixels, impact fraction 0.625 times distance fraction 0.25, about 0.16. On the right the space is reserved and nothing moves](images/04-cls-layout-shift.svg){ loading=lazy }
 *One late image without dimensions is enough to fail CLS on its own.*
 
 Causes: media and ads without reserved space, font swaps with different metrics, content injected above the reader (banners), animating `top`/`height`, and SPA routes that render an empty shell before data. Fixes: `width`/`height` or `aspect-ratio`, `min-height` slots for ads and late micro-frontends, final-size skeletons, `font-size-adjust`, overlays instead of push-down banners, and `contain-intrinsic-size` with every `content-visibility: auto` (otherwise the section collapses to 0 height and the scrollbar jumps).
@@ -109,7 +109,7 @@ The `web-vitals` attribution build reports LCP subparts, INP phases plus the lon
 
 ## In practice: code & configuration
 
-The classic React mistake is a client-rendered, lazy hero with no dimensions: it fails LCP (late discovery) and CLS (no reserved space) at once.
+A client-rendered, lazy hero with no dimensions fails LCP and CLS at once.
 
 === "❌ Common mistake"
     ```tsx
@@ -201,11 +201,11 @@ Skipping rendering for long, below-the-fold sections (Baseline since September 2
 
 | Option | Pros | Cons | Use when |
 |---|---|---|---|
-| SSR / SSG of the above-the-fold content | LCP element in HTML; fast FCP/LCP | Hydration can add long tasks (INP); server cost | Public, content-led pages |
-| Client-side rendering only | Simple hosting, rich interactivity | LCP waits for bundle + data; empty-shell CLS | Authenticated internal apps where users stay long |
-| `fetchpriority="high"` | Cuts load delay for 1 critical image | Zero-sum: on many resources it helps none | The single LCP candidate |
-| `content-visibility: auto` | Skips rendering of off-screen subtrees | Needs `contain-intrinsic-size`; scroll/keyboard edge cases | Long pages, feeds, heavy dashboards |
-| `startTransition` / `useDeferredValue` | Keeps urgent updates (typing) responsive | Only helps React rendering work, not your own sync code | Filters and search over large lists |
+| SSR / SSG above the fold | LCP element in HTML | Hydration long tasks (INP); server cost | Public, content-led pages |
+| Client-side rendering only | Simple hosting | LCP waits for bundle + data; empty-shell CLS | Authenticated apps with long sessions |
+| `fetchpriority="high"` | Cuts load delay | Zero-sum if overused | The single LCP candidate |
+| `content-visibility: auto` | Skips off-screen rendering | Needs `contain-intrinsic-size`; keyboard edge cases | Long pages, heavy dashboards |
+| `startTransition` | Typing stays responsive | Only helps React rendering, not your sync code | Filters over large lists |
 
 !!! warning "Gotcha: lazy-loading everything"
     A lint rule or `<Image>` component that defaults to `loading="lazy"` lazy-loads the hero too. Let the hero component opt out and into `fetchpriority="high"`.
@@ -224,51 +224,44 @@ Skipping rendering for long, below-the-fold sections (Baseline since September 2
     - Backend latency shows up in LCP: GraphQL Consumer Service time is part of TTFB (server-rendered) or render delay (client fetches first); Redis caching of reference data shortens it.
     - INP on data-heavy healthcare screens: memoisation, virtualisation, transitions, yielding (see [React performance optimisation](../react/06-performance-optimisation-memoization-code-splitting-lazy-loa.md)).
     - The engineering standards I set are where bundle budgets and Lighthouse CI belong: *[confirm whether performance checks were part of them]*.
-- **Likely follow-up chain:** "What are Core Web Vitals?" → LCP/INP/CLS with thresholds and p75 → "Your LCP is 3.8 s at p75 on mobile. What do you do?" → field attribution, subparts, preload scanner, `fetchpriority`, no lazy hero, TTFB via CDN/caching → "And if INP is bad on the claims search page?" → INP phases, LoAF attribution, long tasks, transitions, yielding, workers → "How do you stop it regressing?" → budgets in CI, RUM p75 per template, alerting.
+- **Likely follow-up chain:** "What are Core Web Vitals?" → thresholds and p75 → "Mobile LCP is 3.8 s. What do you do?" → attribution, subparts, discovery, `fetchpriority` → "And slow INP on claims search?" → phases, LoAF, long tasks, transitions, yielding → "How do you stop regressions?" → CI budgets, RUM p75 per template.
 
 ## Interview questions
 
 ### Fundamentals
 
 ??? question "Q1. What are the Core Web Vitals and their thresholds?"
-    **Answer:** LCP (loading) good ≤ 2.5 s, poor > 4 s; INP (responsiveness) good ≤ 200 ms, poor > 500 ms; CLS (visual stability) good ≤ 0.1, poor > 0.25. Each is assessed at the 75th percentile of real page views, segmented by mobile and desktop, and a page passes only if all three are good. INP replaced FID in March 2024.
+    **Answer:** LCP ≤ 2.5 s (poor > 4 s), INP ≤ 200 ms (poor > 500 ms), CLS ≤ 0.1 (poor > 0.25), each at the 75th percentile of real page views, mobile and desktop separately; a page passes only if all three are good.
 
     **Interviewer listens for:** all three numbers, p75, field data, INP not FID.
 
     **Common wrong answer:** Listing FID, or quoting a Lighthouse score as "the Core Web Vitals".
 
 ??? question "Q2. Why was FID replaced by INP?"
-    **Answer:** FID measured only the input delay of the first interaction. It ignored handler time and rendering, and most pages passed it even when later interactions were slow. INP observes every click, tap and key press for the whole visit, measures input delay + processing + presentation delay up to the next paint, and reports (nearly) the worst one, ignoring one outlier per 50 interactions.
+    **Answer:** FID measured only the input delay of the first interaction, ignoring handlers and rendering, so nearly every page passed. INP observes every click, tap and key press in the visit, measures all three phases up to the next paint, and reports (nearly) the worst.
 
     **Interviewer listens for:** first-only vs all interactions, the three phases, next paint.
 
     **Common wrong answer:** "INP is just FID renamed."
 
-??? question "Q3. How is a layout-shift score calculated, and which shifts don't count?"
-    **Answer:** Impact fraction (union of old and new positions of the shifting elements, as a share of the viewport) × distance fraction (largest move divided by the viewport's larger dimension). CLS is the largest session window: shifts less than 1 s apart, window capped at 5 s. Shifts within 500 ms of a discrete user input and changes made with `transform` don't count.
-
-    **Interviewer listens for:** both fractions, session windows, expected shifts excluded.
-
-    **Common wrong answer:** "CLS is the total of all shifts during the visit." That was the original definition; it changed to session windows in 2021.
-
 ### Intermediate
 
-??? question "Q4. Walk through the four LCP subparts and a fix for each."
-    **Answer:** TTFB (CDN, caching, fewer redirects, streaming SSR); resource load delay (image in HTML, `fetchpriority="high"`, preload for CSS backgrounds, no lazy loading); resource load duration (AVIF/WebP, responsive `srcset`/`sizes`, CDN, `preconnect` for a cross-origin image host); element render delay (inline critical CSS, defer scripts, SSR the hero, no anti-flicker hiding). Measure which dominates first, with `web-vitals` attribution or the DevTools LCP breakdown.
+??? question "Q3. Walk through the four LCP subparts and a fix for each."
+    **Answer:** TTFB (CDN, caching, fewer redirects); load delay (image in HTML, `fetchpriority="high"`, no lazy loading); load duration (AVIF, `srcset`/`sizes`, `preconnect`); render delay (critical CSS, deferred scripts, SSR the hero). First measure which dominates with `web-vitals` attribution or the DevTools LCP breakdown.
 
     **Interviewer listens for:** naming the subparts, measuring before fixing, load delay as the common culprit.
 
     **Common wrong answer:** "Compress the image", the only answer for one subpart of four.
 
-??? question "Q5. When should you use `fetchpriority`, `preload` and `loading="lazy"`?"
-    **Answer:** `fetchpriority="high"` on the one or two LCP candidates; `fetchpriority="low"` on images that are technically above the fold but hidden (carousel slides, mega menus). `<link rel="preload" as="image">` only when the LCP resource isn't discoverable in HTML, such as a CSS background. `loading="lazy"` for below-the-fold images and iframes, never on the LCP image, and don't combine it with `fetchpriority="high"`. Prioritisation is zero-sum: marking everything high helps nothing.
+??? question "Q4. When should you use `fetchpriority`, `preload` and `loading="lazy"`?"
+    **Answer:** `fetchpriority="high"` on the one or two LCP candidates; `"low"` on above-the-fold but hidden images (carousel slides, mega menus). `preload` only when the LCP resource isn't in the HTML, such as a CSS background. `loading="lazy"` for below-the-fold images and iframes, never the LCP image. Prioritisation is zero-sum.
 
     **Interviewer listens for:** zero-sum, discoverability, not lazy-loading the hero.
 
     **Common wrong answer:** "Preload all images and fonts to be safe."
 
-??? question "Q6. How do you fix a slow interaction in a React app?"
-    **Answer:** Find it in the field (INP attribution: target, phase, LoAF script), reproduce with CPU throttling in the Performance panel. If input delay dominates, cut or split startup work and third parties. If processing dominates, render less (memoise, split context, virtualise), make non-urgent updates transitions, and yield or move work to a worker. If presentation dominates, shrink the DOM, avoid forced layouts, use `content-visibility` for off-screen sections. Always paint feedback first.
+??? question "Q5. How do you fix a slow interaction in a React app?"
+    **Answer:** Find it in the field (INP attribution: target, phase, LoAF script) and reproduce with CPU throttling. Input delay: split startup work and third parties. Processing: render less (memoise, split context, virtualise), use transitions, yield or use a worker. Presentation: smaller DOM, no forced layouts, `content-visibility`. Paint feedback first.
 
     **Interviewer listens for:** diagnosing the phase before choosing a fix; React-specific and platform-level tools.
 
@@ -276,15 +269,15 @@ Skipping rendering for long, below-the-fold sections (Baseline since September 2
 
 ### Senior
 
-??? question "Q7. Why do CrUX, your RUM tool and Lighthouse disagree, and which do you trust?"
-    **Answer:** CrUX is opt-in Chrome users only, 28-day rolling p75, includes iframe content. RUM covers all browsers that support the APIs (CLS is Chromium-only; LCP and INP arrived in Safari 26.2), uses your own sampling and can't see into iframes. Lighthouse is a single synthetic cold load on emulated hardware with no interaction. Use CrUX/Search Console for "do we pass", RUM for segmentation and attribution, lab for reproduction and regression checks.
+??? question "Q6. Why do CrUX, your RUM tool and Lighthouse disagree, and which do you trust?"
+    **Answer:** CrUX is opt-in Chrome users, 28-day p75, and includes iframe content. RUM covers every browser with the APIs (CLS is Chromium-only; LCP and INP reached Safari in 26.2), with your own sampling, and can't see into iframes. Lighthouse is one synthetic cold load with no interaction. CrUX for "do we pass", RUM for segmentation and attribution, lab for reproduction.
 
     **Interviewer listens for:** field vs lab, population differences, each tool's job.
 
     **Common wrong answer:** "Lighthouse 95, so we're fine."
 
-??? question "Q8. How would you keep Core Web Vitals healthy in a micro-frontend platform owned by several teams?"
-    **Answer:** Treat performance as a platform contract: shared framework singletons and a shared design system so React isn't shipped five times; per-remote bundle budgets enforced in CI; the shell owns the LCP element and server-renders it; remotes load per route and mount into reserved slots; third-party scripts go through a central, deferred loader. RUM tags metrics with route and owning team, and dashboards show p75 per team so regressions have an owner.
+??? question "Q7. How would you keep Core Web Vitals healthy in a micro-frontend platform owned by several teams?"
+    **Answer:** Make performance a platform contract: shared framework singletons and design system; per-remote bundle budgets in CI; the shell owns and server-renders the LCP element; remotes load per route into reserved slots; third parties go through one deferred loader. RUM tags metrics with route and owning team so every regression has an owner.
 
     **Interviewer listens for:** ownership, budgets, shared dependencies, reserved slots, attribution per team.
 
@@ -292,15 +285,15 @@ Skipping rendering for long, below-the-fold sections (Baseline since September 2
 
 ### Scenario-based
 
-??? question "Q9. After a redesign, mobile LCP p75 went from 2.1 s to 3.6 s. TTFB didn't change. What happened?"
-    **Answer:** With TTFB stable, look at load delay and render delay. Typical redesign causes: the hero became a carousel or CSS background (not discoverable), a component library applies `loading="lazy"` by default, the hero image is now client-rendered after a data fetch, a new web font or render-blocking stylesheet delays rendering, or the LCP element changed (a large text block waiting on a font). Confirm with attribution (which element, which subpart), then fix discovery and priority first.
+??? question "Q8. After a redesign, mobile LCP p75 went from 2.1 s to 3.6 s. TTFB didn't change. What happened?"
+    **Answer:** TTFB is stable, so look at load and render delay. Typical causes: the hero became a carousel or CSS background (not discoverable), a component library lazy-loads by default, the hero is now client-rendered after a fetch, a new font or render-blocking stylesheet, or a different LCP element. Confirm with attribution (element, subpart), then fix discovery and priority.
 
     **Interviewer listens for:** reasoning from subparts, checking which element is LCP.
 
     **Common wrong answer:** "Scale up the servers."
 
-??? question "Q10. A claims-history page has CLS 0.3 in the field but 0 in Lighthouse. How do you find and fix it?"
-    **Answer:** Lighthouse measures only the initial load without scrolling, so the shifts happen later: infinite scroll inserting rows above the viewport, a banner or late micro-frontend pushing content, images without dimensions further down, or a `content-visibility: auto` section without `contain-intrinsic-size`. Use `largestShiftTarget` and timing from RUM, reproduce with the DevTools Layout Shift regions, then reserve space, insert content below the viewport or behind a "new items" button, and add intrinsic sizes.
+??? question "Q9. A claims-history page has CLS 0.3 in the field but 0 in Lighthouse. How do you find and fix it?"
+    **Answer:** Lighthouse sees only the initial load, so the shifts come later: rows inserted above the viewport, a late banner or micro-frontend, images without dimensions further down, or `content-visibility: auto` without `contain-intrinsic-size`. Find them with RUM's `largestShiftTarget`, reproduce with DevTools layout-shift regions, then reserve space, insert below the viewport or behind a "new items" button, and add intrinsic sizes.
 
     **Interviewer listens for:** post-load shifts, field attribution, concrete space-reservation fixes.
 
@@ -319,19 +312,16 @@ Skipping rendering for long, below-the-fold sections (Baseline since September 2
 | CLS fixes | `width`/`height`, `aspect-ratio`, reserved slots, `transform` animations, font fallbacks |
 | `content-visibility: auto` | Off-screen only, always with `contain-intrinsic-size: auto <size>` |
 | Tools | CrUX/Search Console (pass?), `web-vitals` attribution (why?), DevTools/Lighthouse (reproduce) |
-| bfcache | Instant back/forward; blocked by `unload` and (historically) `no-store` |
 
 ## Sources
-1. [Web Vitals (web.dev)](https://web.dev/articles/vitals): the three Core Web Vitals, thresholds, 75th percentile, metric lifecycle.
-2. [How the Core Web Vitals thresholds were defined (web.dev)](https://web.dev/articles/defining-core-web-vitals-thresholds): good/poor values and the p75 rule.
-3. [Largest Contentful Paint](https://web.dev/articles/lcp) and [Optimize LCP (web.dev)](https://web.dev/articles/optimize-lcp): candidate elements, exclusions, the four subparts and target percentages.
-4. [Interaction to Next Paint](https://web.dev/articles/inp) and [Optimize INP (web.dev)](https://web.dev/articles/optimize-inp): interactions counted, one-in-50 outlier rule, the three phases.
-5. [Cumulative Layout Shift (web.dev)](https://web.dev/articles/cls): session windows (1 s / 5 s) and the 500 ms input exclusion.
-6. [Layout Instability API (WICG spec and explainer)](https://wicg.github.io/layout-instability/): impact and distance fractions, transform and scroll exclusions, `hadRecentInput`.
-7. [Event Timing API (W3C)](https://w3c.github.io/event-timing/): interaction grouping and duration thresholds behind INP.
-8. [GoogleChrome/web-vitals README](https://github.com/GoogleChrome/web-vitals): threshold constants, attribution fields (LCP subparts, INP phases, LoAF), per-browser support, bfcache re-reporting, soft-navigation support.
-9. [Introducing INP to Core Web Vitals (Google Search Central)](https://developers.google.com/search/blog/2023/05/introducing-inp) and [CrUX release notes](https://developer.chrome.com/docs/crux/release-notes): INP replaced FID on 12 March 2024.
-10. [Back/forward cache (web.dev)](https://web.dev/articles/bfcache): `unload` and `Cache-Control: no-store` blocking bfcache.
-11. [Modern Web Guidance: performance, optimize-image-priority, break-up-long-tasks, identify-inp-causes, defer-rendering-heavy-content (Chrome team skill)](https://www.npmjs.com/package/modern-web-guidance): current guidance and Baseline dates for `fetchpriority`, `scheduler.yield()`, Event Timing and `content-visibility`.
-12. [Vodafone: a 31% improvement in LCP increased sales by 8%](https://web.dev/case-studies/vodafone) and [How redBus improved INP and increased sales by 7%](https://web.dev/case-studies/redbus-inp) (web.dev case studies).
-13. [HTML Standard: fetch priority attribute](https://html.spec.whatwg.org/multipage/urls-and-fetching.html#fetch-priority-attributes) and [CSS Containment Level 2: content-visibility](https://www.w3.org/TR/css-contain-2/#content-visibility): normative definitions.
+1. [Web Vitals](https://web.dev/articles/vitals) and [How the Core Web Vitals thresholds were defined](https://web.dev/articles/defining-core-web-vitals-thresholds) (web.dev): metrics, thresholds, p75.
+2. [LCP](https://web.dev/articles/lcp) and [Optimize LCP](https://web.dev/articles/optimize-lcp) (web.dev): candidates, exclusions, subparts and target shares.
+3. [INP](https://web.dev/articles/inp) and [Optimize INP](https://web.dev/articles/optimize-inp) (web.dev): interactions counted, one-in-50 rule, three phases.
+4. [CLS](https://web.dev/articles/cls) (web.dev) and the [Layout Instability spec](https://wicg.github.io/layout-instability/): session windows, impact × distance, `hadRecentInput` (500 ms), transform exclusion.
+5. [Event Timing API (W3C)](https://w3c.github.io/event-timing/): interaction grouping behind INP.
+6. [GoogleChrome/web-vitals](https://github.com/GoogleChrome/web-vitals): threshold constants, attribution fields, browser support, bfcache re-reporting, soft navigations.
+7. [Introducing INP (Google Search Central)](https://developers.google.com/search/blog/2023/05/introducing-inp) and [CrUX release notes](https://developer.chrome.com/docs/crux/release-notes): INP replaced FID on 12 March 2024.
+8. [Back/forward cache (web.dev)](https://web.dev/articles/bfcache): `unload` and `no-store` eligibility.
+9. [Modern Web Guidance (Chrome team)](https://www.npmjs.com/package/modern-web-guidance): current guidance and Baseline dates for `fetchpriority`, `scheduler.yield()`, Event Timing, `content-visibility`.
+10. [Vodafone](https://web.dev/case-studies/vodafone) and [redBus](https://web.dev/case-studies/redbus-inp) case studies (web.dev).
+11. [HTML Standard: fetch priority](https://html.spec.whatwg.org/multipage/urls-and-fetching.html#fetch-priority-attributes) and [CSS Containment 2: content-visibility](https://www.w3.org/TR/css-contain-2/#content-visibility).

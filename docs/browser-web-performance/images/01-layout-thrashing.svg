@@ -7,7 +7,7 @@
     .lbl{fill:#0f172a;font-size:15px;font-weight:700}
     .tx{fill:#334155;font-size:13px}
     .sub{fill:#64748b;font-size:13px}
-    .code{fill:#334155;font-size:12px;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .code{fill:#334155;font-size:11px;white-space:pre;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
     .lane{fill:#ffffff;stroke:#cbd5e1;stroke-width:1.2}
     .on{fill:#ffffff;font-size:12px;font-weight:700}
     .rd{fill:#0ea5a4}.wr{fill:#d97706}.fl{fill:#dc2626}.ly{fill:#4f46e5}.pt{fill:#16a34a}
@@ -49,9 +49,9 @@
 
   <!-- Lane 1: thrashing -->
   <text class="lbl" x="28" y="112"><tspan class="badt">✗</tspan> Interleaved</text>
-  <text class="code" x="28" y="132">for (card of cards) {</text>
-  <text class="code" x="28" y="148">  h = card.offsetHeight</text>
-  <text class="code" x="28" y="164">  card.style.height=h+8</text>
+  <text class="code" x="28" y="132">for (c of cards) {</text>
+  <text class="code" x="28" y="148">  h = c.offsetHeight</text>
+  <text class="code" x="28" y="164">  c.style.height = …</text>
   <text class="code" x="28" y="180">}</text>
   <rect class="lane" x="168" y="100" width="604" height="88" rx="8"/>
   <rect class="over" x="504" y="101" width="102" height="86"/>
@@ -68,10 +68,10 @@
 
   <!-- Lane 2: batched -->
   <text class="lbl" x="28" y="242"><tspan class="okt">✓</tspan> Batched</text>
-  <text class="code" x="28" y="262">hs = cards.map(c =&gt;</text>
-  <text class="code" x="28" y="278">  c.offsetHeight)</text>
-  <text class="code" x="28" y="294">cards.forEach((c, i) =&gt;</text>
-  <text class="code" x="28" y="310">  c.style.height=…)</text>
+  <text class="code" x="28" y="262">// read all first</text>
+  <text class="code" x="28" y="278">hs = cards.map(c =&gt;</text>
+  <text class="code" x="28" y="294">  c.offsetHeight)</text>
+  <text class="code" x="28" y="310">// then write all</text>
   <rect class="lane" x="168" y="230" width="604" height="88" rx="8"/>
   <g class="a r1"><rect class="rd" x="170" y="254" width="48" height="40"/><line class="sep" x1="182" y1="254" x2="182" y2="294"/><line class="sep" x1="194" y1="254" x2="194" y2="294"/><line class="sep" x1="206" y1="254" x2="206" y2="294"/></g>
   <g class="a r2"><rect class="wr" x="218" y="254" width="48" height="40"/><line class="sep" x1="230" y1="254" x2="230" y2="294"/><line class="sep" x1="242" y1="254" x2="242" y2="294"/><line class="sep" x1="254" y1="254" x2="254" y2="294"/></g>

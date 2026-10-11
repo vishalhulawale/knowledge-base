@@ -7,11 +7,11 @@ tags: [browser-web-performance, P1]
 # Bundlers & build tooling (Vite, Webpack)
 
 !!! abstract "Key takeaways"
-    - A bundler starts from entry points, **resolves** every `import` into a **module graph**, **transforms** each file (TypeScript, JSX, CSS, assets), then **tree-shakes**, **splits** the graph into chunks, **minifies** and writes files with **content hashes** in their names. Bundling still pays off over HTTP/2: fewer requests and shallower import waterfalls, less code (scope hoisting, dead-code elimination) and better compression.
-    - **webpack 5** bundles in dev and prod: config-heavy (loaders + plugins), very extensible, and the home of **Module Federation**. It is still actively developed (5.111, September 2026), with built-in CSS, HTML and TypeScript support arriving behind `"auto"` defaults.
-    - **Vite** serves your source as **native ES modules** in dev (pre-bundling only `node_modules`) so startup doesn't grow with app size, and bundles for production. Since **Vite 8 (March 2026)** one Rust bundler, **Rolldown** (with the **Oxc** compiler), replaces the old esbuild-for-dev + Rollup-for-build split.
-    - Long-term caching = `[contenthash]` file names + `Cache-Control: immutable` on assets + **`no-cache` on `index.html`**, a separate runtime/vendor chunk so one edit doesn't re-hash everything, and a plan for users holding an old HTML that points at deleted chunks.
-    - Faster webpack-compatible options exist: **Rspack 2.0** (Rust, webpack API, April 2026) and **Turbopack** (the default bundler in current Next.js). Pick by ecosystem: new SPA → Vite; big webpack estate or Module Federation → webpack or Rspack.
+    - A bundler **resolves** imports into a **module graph**, **transforms** each file (TS, JSX, CSS), then **tree-shakes**, **splits** into chunks, **minifies** and emits **content-hashed** files. It still pays off over HTTP/2: fewer requests and waterfalls, less code, better compression.
+    - **webpack 5** bundles in dev and prod: loaders + plugins, very extensible, origin of **Module Federation**, and still active (5.111, September 2026).
+    - **Vite** serves source as **native ES modules** in dev (pre-bundling only `node_modules`), so startup doesn't grow with app size. Since **Vite 8 (March 2026)** one Rust bundler, **Rolldown** (with **Oxc**), replaces the esbuild-for-dev + Rollup-for-build split.
+    - Long-term caching = `[contenthash]` names + `immutable` assets + **`no-cache` on `index.html`**, plus runtime/vendor chunks so one edit doesn't re-hash everything.
+    - **Rspack 2.0** (Rust, webpack API) and **Turbopack** (Next.js default) are the other fast options. New SPA → Vite; big webpack estate or Module Federation-heavy → webpack or Rspack.
 
 ## Why it matters
 
@@ -38,8 +38,8 @@ flowchart LR
 ```
 *Notice that resolution and transformation loop until the graph is complete; only then can the bundler know what is unused and how to split it.*
 
-- **Resolve.** Turn `import 'react'` into a path, honouring `package.json` `exports`/`module`/`browser` fields, aliases and `tsconfig` paths. Picking the CommonJS build instead of the ESM one is a classic reason tree shaking stops working.
-- **Transform.** webpack does this with **loaders** (`babel-loader`, `ts-loader`, `css-loader`) and hooks **plugins** into compilation; Vite and Rolldown use **Rollup-style plugin hooks** (`resolveId`, `load`, `transform`). TypeScript is *stripped*, not type-checked: run `tsc --noEmit` separately in CI.
+- **Resolve.** Turn `import 'react'` into a path via `package.json` `exports`, aliases and `tsconfig` paths. Resolving to a CommonJS build is a classic reason tree shaking stops working.
+- **Transform.** webpack uses per-file **loaders** (`ts-loader`, `css-loader`) plus whole-build **plugins**; Vite and Rolldown use one **Rollup-style plugin** API (`resolveId`, `load`, `transform`). TypeScript is *stripped*, not type-checked: run `tsc --noEmit` in CI.
 - **Tree shaking** works on static `import`/`export`. The bundler marks unused exports, and the minifier deletes them. Whole modules can only be dropped if they're known to be free of **side effects**, which is what `"sideEffects": false` in `package.json` declares (list CSS files as side-effectful or they disappear).
 - **Code splitting.** Every dynamic `import()` is a split point that becomes an async chunk (`React.lazy` routes). Shared modules move to common chunks; webpack's `SplitChunksPlugin` does this for async chunks by default (`chunks: "async"`, `minSize: 20000` bytes in production), Rolldown uses `output.codeSplitting.groups`.
 - **Scope hoisting** concatenates ES modules into one function scope instead of wrapping each in a module function: smaller and faster to run.
@@ -52,7 +52,7 @@ flowchart LR
 
 In development `webpack serve` builds the whole graph into in-memory bundles, then serves them; HMR re-builds the changed module and pushes an update over a WebSocket. Cold start therefore grows with app size, which is the pain Vite was built to fix (mitigated by the persistent `cache: { type: 'filesystem' }`, added in webpack 5).
 
-webpack 5 (October 2020) also added **Module Federation**, the `asset/*` module types replacing `file-loader`/`url-loader`, deterministic module and chunk IDs in production (stable hashes), and removed automatic Node.js polyfills. Its 2026 releases are moving common plugins into core: native CSS (`experiments.css`), HTML entries, TypeScript type-stripping and a `universal` target, defaulting to `"auto"` since 5.109 (enabled unless you already have a loader for that file type), and **stable ESM output** in 5.111. The roadmap says CSS support stops being experimental in webpack 6.
+webpack 5 (October 2020) added **Module Federation**, `asset/*` modules, deterministic production IDs (stable hashes) and dropped automatic Node.js polyfills. Its 2026 releases move common plugins into core: native CSS, HTML entries and TypeScript type-stripping, enabled as `"auto"` since 5.109 (unless you already have a loader for that file type), and **stable ESM output** in 5.111. CSS support leaves experimental status in webpack 6.
 
 ### Vite 8: native ESM in dev, Rolldown for everything
 
@@ -74,7 +74,7 @@ sequenceDiagram
 ```
 *Notice that the server only transforms the files the browser actually requests; an edit re-fetches one module, not a rebuilt bundle.*
 
-Vite splits the work into **dependencies** (rarely change; pre-bundled once, converting CommonJS/UMD to ESM and collapsing many-file packages into one request) and **source** (served on demand as native ESM, transformed per request). Startup is near-instant regardless of app size and HMR stays fast because only the edited module (and its HMR boundary) is replaced.
+Vite splits the work into **dependencies** (pre-bundled once: CommonJS to ESM, many-file packages to one request) and **source** (served on demand as native ESM). Startup is near-instant regardless of app size, and HMR replaces only the edited module.
 
 For production Vite **bundles**, because unbundled ESM is a request waterfall. Until Vite 7 that meant two tools: esbuild for dev transforms and pre-bundling, Rollup for the build, with two plugin pipelines that sometimes behaved differently. **Vite 8** ships **Rolldown**, a Rust bundler with Rollup's plugin API, using **Oxc** for parsing, transforming and minifying, and **Lightning CSS** for CSS minification. Linear reported its production build dropping from 46 s to 6 s. A compatibility layer maps old `esbuild` and `build.rollupOptions` settings; new configs use `build.rolldownOptions`, and the object form of `manualChunks` is gone in favour of `codeSplitting`.
 
@@ -193,7 +193,7 @@ npx source-map-explorer dist/assets/*.js
 
 - **Migrations to Vite and Rust bundlers** dominate 2024–2026: CRA's deprecation moved many React apps to Vite, Linear's production build fell from 46 s to 6 s on Rolldown, and Rspack reports 5 million weekly downloads, largely webpack estates switching without rewriting config.
 - **Module Federation at enterprise scale.** Banking, insurance and healthcare portals use a federated shell so teams deploy independently.
-- **Stale-chunk errors after deploys.** A user with an old tab clicks a lazy route, the old chunk is gone, and `ChunkLoadError` (webpack) or "Failed to fetch dynamically imported module" (Vite) appears. Fix with `no-cache` on HTML, keeping the previous release's assets for a while, and a reload-on-preload-error handler.
+- **Stale-chunk errors after deploys.** An old tab requests a lazy chunk the new deploy deleted: `ChunkLoadError` (webpack) or "Failed to fetch dynamically imported module" (Vite). See Q8.
 - **Leaked secrets and source.** Anything in a client bundle is public: `VITE_*`/`process.env` values are inlined at build time, and public source maps reveal original code. In regulated domains (PHI, PCI) the build pipeline is part of the threat model (see [frontend CI/CD and monorepos](../frontend-architecture/06-frontend-ci-cd-and-monorepos.md)).
 
 ## Trade-offs & production gotchas
@@ -203,17 +203,13 @@ npx source-map-explorer dist/assets/*.js
 | Vite (native ESM dev) | Instant start, fast HMR, tiny config, same Rolldown pipeline for dev deps and build | Many dev requests on huge apps; some webpack-only plugins have no equivalent | Most new SPAs and libraries |
 | webpack 5 | Most mature plugin ecosystem, fine-grained control, reference Module Federation | Slow cold starts on large apps, verbose config | Existing estates, unusual build needs |
 | Rspack | webpack API at Rust speed, native MF | Not every webpack plugin is supported | Large webpack apps whose builds hurt |
-| One entry bundle | Simple, one request | Every user downloads every route, any change invalidates all | Tiny apps only |
 | Aggressive splitting | Small initial JS, good caching | Request waterfalls, more chunks to manage | Route-level splits plus one vendor chunk is a good default |
 
 !!! warning "Gotcha: tree shaking silently disabled"
-    Importing from a package's CommonJS build, `import * as _ from 'lodash'` instead of `lodash-es` named imports, Babel converting ES modules to CommonJS before the bundler sees them, or a package without `"sideEffects": false` all keep dead code. Check the treemap, not the config.
+    A CommonJS build of a package (`lodash` instead of `lodash-es`), Babel converting ESM to CommonJS first, or a missing `"sideEffects": false` all keep dead code. Check the treemap, not the config.
 
 !!! warning "Gotcha: dev works, prod breaks"
     Dev is unbundled and production is bundled, so CommonJS interop or CSS ordering bugs can appear only after `vite build` (Rolldown narrows the gap; it doesn't close it). Run `vite build && vite preview` in CI.
-
-!!! tip "Budgets"
-    Fail the PR when a route's bundle exceeds its size budget, and look at the analyzer whenever a dependency is added.
 
 ## How this connects to my experience
 
@@ -229,14 +225,14 @@ npx source-map-explorer dist/assets/*.js
 ### Fundamentals
 
 ??? question "Q1. What does a bundler do, and why do we still need one with HTTP/2 and native ES modules?"
-    **Answer:** It builds a module graph from entry points, transforms each file (TS, JSX, CSS, assets), removes unused code, splits the graph into chunks, minifies and emits content-hashed files plus a manifest. Unbundled ESM in production means the browser discovers imports level by level (a waterfall), pays per-request overhead even over HTTP/2 (streams are capped around 100), can't tree-shake and compresses worse. Bundling flattens the graph into a sensible number of chunks.
+    **Answer:** It builds a module graph from entry points, transforms files, removes unused code, splits into chunks, minifies and emits content-hashed files. Unbundled ESM in production means import waterfalls (the browser discovers imports level by level), per-request overhead even over HTTP/2 (streams capped around 100), no tree shaking and worse compression.
 
     **Interviewer listens for:** module graph, waterfall, tree shaking, compression, caching via hashes.
 
     **Common wrong answer:** "HTTP/2 multiplexing made bundling obsolete."
 
 ??? question "Q2. How does tree shaking work, and what breaks it?"
-    **Answer:** ES module imports and exports are static, so the bundler can mark exports nobody imports and the minifier removes them; whole modules are skipped when the package declares `"sideEffects": false`. It breaks with CommonJS (`require` is dynamic), namespace usage the bundler can't analyse, Babel transpiling ESM to CJS first, top-level side effects, or a package resolving to its CJS build.
+    **Answer:** ES module imports and exports are static, so the bundler marks unused exports and the minifier removes them; whole modules are skipped when the package declares `"sideEffects": false`. It breaks with CommonJS (`require` is dynamic), Babel transpiling ESM to CJS first, or top-level side effects.
 
     **Interviewer listens for:** static ESM, `sideEffects`, CJS as the usual culprit.
 

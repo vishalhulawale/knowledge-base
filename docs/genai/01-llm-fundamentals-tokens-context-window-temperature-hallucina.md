@@ -22,8 +22,6 @@ Most production problems with LLMs trace back to these four ideas:
 - **Reproducibility depends on sampling**, so byte-for-byte snapshot tests are flaky by design.
 - **Trust depends on hallucination.** A chatbot inventing a refund policy is a system-design failure, not a model bug you can patch.
 
-The transformer's self-attention (2017) lets every token attend to every other token in the window. That made long, coherent generation possible, and it is also why context is a scarce resource.
-
 ## Core concepts
 
 ### The generation loop
@@ -58,7 +56,7 @@ A **tokenizer** maps text to integer IDs from a fixed vocabulary. Most use **byt
 | Non-English scripts | Often several times English | Fewer merges learned for them |
 | Images, PDFs | Converted to tokens | Same window, same bill |
 
-Two consequences. First, **count with the provider's tokenizer**: OpenAI's `tiktoken` does not match Claude's, so use `POST /v1/messages/count_tokens` and the `usage` field on responses. Tokenizers also change between generations; Anthropic notes the tokenizer introduced with Opus 4.7 uses roughly 1x–1.35x as many tokens for the same text, so re-baseline cost on migration. Second, **design payloads for tokens**: a 5,000-row JSON dump "just in case" is paid for on every call and dilutes attention.
+**Count with the provider's tokenizer**: `tiktoken` does not match Claude's, so use `POST /v1/messages/count_tokens` and the response `usage`. Tokenizers also change between generations (Anthropic says the one introduced with Opus 4.7 uses roughly 1x–1.35x as many tokens for the same text), so re-baseline cost on migration.
 
 ### The context window
 
@@ -117,12 +115,12 @@ flowchart TD
 
 Kalai et al. ("Why Language Models Hallucinate", OpenAI, 2025) argue that hallucinations arise from ordinary statistical pressure in pretraining and **persist because benchmarks grade like multiple-choice exams**: a guess can score, "I don't know" cannot. Practical mitigations, most of them in Anthropic's guidance:
 
-1. **Supply the facts** through retrieval or tool calls to authoritative systems, and instruct the model to answer **only** from them.
-2. **Allow "I don't know"** and make the calling code handle it.
-3. **Quote, then answer**: extract verbatim quotes first; require citations and drop claims without one.
-4. **Verify** with deterministic checks (does the cited ID exist?), best-of-N consistency or a verifier pass.
-5. **Constrain output** with schemas and enums so the model can't invent fields or statuses.
-6. **Measure** with an eval suite and keep humans on high-stakes decisions (see [AI-assisted development, evaluation & responsible AI](07-ai-assisted-development-evaluation-and-responsible-ai.md)).
+1. **Supply the facts** via retrieval or tool calls, and answer **only** from them.
+2. **Allow "I don't know"** and handle it in code.
+3. **Quote, then answer**; require citations and drop unsupported claims.
+4. **Verify** deterministically (does the cited ID exist?) or with best-of-N consistency.
+5. **Constrain output** with schemas and enums.
+6. **Measure** with evals; keep humans on high-stakes decisions (see [AI-assisted development, evaluation & responsible AI](07-ai-assisted-development-evaluation-and-responsible-ai.md)).
 
 ## In practice: code & configuration
 
@@ -191,7 +189,6 @@ The fixed version budgets tokens, retrieves only what matters, gives the model a
 
 - **Mata v. Avianca (S.D.N.Y., June 2023):** lawyers filed a brief citing cases ChatGPT had invented and kept defending them; the court fined the lawyers and their firm $5,000, noting that using AI is not improper but failing to check is.
 - **Moffatt v. Air Canada (BC Civil Resolution Tribunal, February 2024):** the airline's chatbot said a bereavement fare could be claimed retroactively, contrary to policy. The tribunal rejected the idea that the chatbot was responsible for its own statements: the company owns what its bot says.
-- **Long-context products** (document Q&A, coding assistants) lean on retrieval and compaction rather than stuffing the window, for cost, latency and context rot.
 - **Healthcare and banking:** a hallucinated dosage, coverage rule or balance is a safety or compliance incident. Typical controls: answers only from access-controlled sources, validated structured output, audit logs with PHI/PII handling, human review for decisions.
 
 ## Trade-offs & production gotchas
@@ -202,16 +199,12 @@ The fixed version budgets tokens, retrieves only what matters, gives the model a
 | Retrieve relevant chunks (RAG) | Cheaper, fresher, citable, per-chunk access control | Retrieval misses cause wrong answers | Q&A over a large or changing corpus |
 | Summarise or trim old turns | Bounded cost for long chats | Loses early detail | Long conversations, agents |
 | Low temperature / low effort | Consistent, cheaper | Still not deterministic | Extraction, classification, routing |
-| Higher temperature, several samples | Diversity, best-of-N | More errors | Brainstorming, candidates to rank |
 
 !!! warning "Gotcha: output is the slow, expensive part"
     Latency ≈ time to first token + output tokens × per-token time, and output costs more than input. Set `max_tokens` to what the use case needs, ask for concise structured output and stream long answers.
 
 !!! warning "Gotcha: the wrong tokenizer"
     Estimating Claude cost with `tiktoken` or characters ÷ 4 under-counts code, JSON and non-English text. Use the token-counting endpoint and the response `usage`, and alert on tokens per request.
-
-!!! tip "Treat the model as an untrusted, probabilistic upstream"
-    Timeouts, retries with backoff on 429/5xx, a circuit breaker, a fallback path and validation of every response: the resilience you'd give any flaky third-party API, plus content checks.
 
 ## How this connects to my experience
 
@@ -270,23 +263,16 @@ The fixed version budgets tokens, retrieves only what matters, gives the model a
 
     **Common wrong answer:** "Bigger context is always better now."
 
-??? question "Q7. How do you estimate and control the cost of an LLM feature?"
-    **Answer:** Cost ≈ input tokens × input price + output tokens × output price, times volume, measured from response `usage`. Levers: shorter prompts and tool lists, retrieval instead of dumps, prompt caching, capped `max_tokens` and concise output, smaller or lower-effort models where evals show quality holds, batch APIs for offline work. Budget and alert per feature or tenant, and judge cost per completed task, not per request.
-
-    **Interviewer listens for:** output priced higher, measured usage, caching, evidence-based model choice.
-
-    **Common wrong answer:** "Just use the cheapest model."
-
 ### Senior
 
-??? question "Q8. Design guardrails for an LLM that answers members' questions about prescription coverage."
+??? question "Q7. Design guardrails for an LLM that answers members' questions about prescription coverage."
     **Answer:** Answer only from retrieved, authorised sources (plan documents, formulary, the member's claims via existing APIs with the member's own token). Require quotes and allow `UNKNOWN`; return structured output and validate citations and codes against reference data. Route coverage decisions to humans, refuse medical advice, log with PHI controls, rate-limit and monitor, and run an eval suite (including adversarial questions) before every prompt or model change.
 
     **Interviewer listens for:** grounding with access control, abstention, validation, human in the loop, evals, audit.
 
     **Common wrong answer:** "Add 'do not hallucinate' to the system prompt."
 
-??? question "Q9. A long chat gets worse and then fails. What is happening?"
+??? question "Q8. A long chat gets worse and then fails. What is happening?"
     **Answer:** The resent history keeps growing: quality degrades with length, early instructions are diluted, and eventually input plus `max_tokens` no longer fits (400, `model_context_window_exceeded` or `max_tokens` truncation). Track tokens per turn, compact or trim old turns and stale tool results, keep stable instructions in the system prompt, retrieve rather than carry documents, and handle stop reasons explicitly.
 
     **Interviewer listens for:** statelessness, both failure modes, compaction, stop-reason handling.
@@ -295,7 +281,7 @@ The fixed version budgets tokens, retrieves only what matters, gives the model a
 
 ### Scenario-based
 
-??? question "Q10. After migrating to a newer Claude model, every request returns 400. What do you check?"
+??? question "Q9. After migrating to a newer Claude model, every request returns 400. What do you check?"
     **Answer:** Read the error, then check removed parameters: on the newest models `temperature`/`top_p`/`top_k`, fixed thinking budgets and assistant prefill are rejected. Remove them and steer with the prompt, effort and structured outputs. Then re-baseline token counts (the tokenizer may have changed), cost and evals before shifting traffic.
 
     **Interviewer listens for:** removed sampling params, tokenizer re-baseline, eval before rollout.

@@ -66,7 +66,7 @@
   <g class="a s2"><rect class="pri" x="448" y="96" width="96" height="44" rx="8"/><text class="on" x="496" y="123" text-anchor="middle">Layout</text></g>
   <g class="a s3"><rect class="pri" x="560" y="96" width="96" height="44" rx="8"/><text class="on" x="608" y="123" text-anchor="middle">Paint</text></g>
   <g class="a s4"><rect class="tea" x="672" y="96" width="96" height="44" rx="8"/><text class="on" x="720" y="123" text-anchor="middle">Composite</text></g>
-  <text class="tx" x="224" y="166"><tspan class="badt">Reflow:</tspan> geometry of this box and possibly its ancestors, siblings and children is recomputed, then repainted.</text>
+  <text class="tx" x="224" y="166"><tspan class="badt">Reflow:</tspan> geometry is recomputed (often ancestors and siblings too), then repainted.</text>
 
   <!-- Row 2: paint -->
   <text class="lbl" x="28" y="226">Paint-only change</text>
