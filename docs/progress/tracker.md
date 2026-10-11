@@ -235,3 +235,6 @@ Mock-interview results and revision schedule, updated by the `learn-topic` skill
 | 2026-10-10 | Performance: 05 Load testing & capacity planning | — (studied, mock skipped) | Confirm: whether Meteor ran load tests, tool, numbers | 2026-10-11 |
 | 2026-10-10 | Performance: 06 Latency percentiles & tail latency | — (studied, mock skipped) | Confirm: GraphQL service timeouts and SLOs; Kafka lag/latency percentiles monitored | 2026-10-11 |
 | 2026-10-11 | Networking: 06 What happens when you type a URL | — (studied, mock skipped) | Confirm: CDN + caching for Meteor shell/remote bundles; ALB/NLB/ingress on ConvergeHealth; any page-load timings measured; forwarded-headers/OAuth2 redirect issue behind TLS-terminating LB | 2026-10-12 |
+| 2026-10-11 | Azure: 01 Core services mapped to AWS | — (studied, mock skipped) | Confirm: Azure APIs + auth CCKM used; any Azure Terraform; where Azure/AKS was used and how deeply | 2026-10-12 |
+| 2026-10-11 | Azure: 02 AKS, App Service & Functions | — (studied, mock skipped) | Confirm: AKS usage and depth | 2026-10-12 |
+| 2026-10-11 | Azure: 03 Entra ID & Key Vault ★ | — (studied, mock skipped) | Confirm: Key Vault ops CCKM performed (Premium vs Managed HSM) and how it authenticated; whether Entra ID was in Optum's PingFederate/AD chain | 2026-10-12 |

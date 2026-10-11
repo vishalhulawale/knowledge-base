@@ -1920,19 +1920,19 @@
           "title": "Core services mapped to AWS equivalents",
           "slug": "01-core-services-mapped-to-aws-equivalents",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "AKS, App Service & Azure Functions",
           "slug": "02-aks-app-service-and-azure-functions",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Entra ID & Key Vault",
           "slug": "03-entra-id-and-key-vault",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },

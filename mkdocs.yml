@@ -352,6 +352,9 @@ nav:
           - Overview: cicd-devops/index.md
       - "Azure":
           - Overview: azure/index.md
+          - "Core services mapped to AWS equivalents": azure/01-core-services-mapped-to-aws-equivalents.md
+          - "AKS, App Service & Azure Functions": azure/02-aks-app-service-and-azure-functions.md
+          - "Entra ID & Key Vault": azure/03-entra-id-and-key-vault.md
       - "Observability & Production Support":
           - Overview: observability/index.md
           - "Logs, Metrics & Traces (Three Pillars)": observability/01-logs-metrics-and-traces.md
