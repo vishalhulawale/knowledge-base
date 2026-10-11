@@ -62,7 +62,7 @@ A cookie is "third-party" when the site that set it differs from the site in the
 
 The replacements for legitimate cross-site state:
 
-- **CHIPS** (`Partitioned` attribute, Chrome 114+, Firefox, Safari): the cookie is keyed by **(top-level site, cookie host)**, so a support-chat widget keeps its state on `shop.example` and its subdomains but can't correlate it with `news.example`.
+- **CHIPS** (`Partitioned` attribute; default in Chrome 114+, and Google reports support in other browsers): the cookie is keyed by **(top-level site, cookie host)**, so a support-chat widget keeps its state on `shop.example` and its subdomains but can't correlate it with `news.example`.
 - **Storage Access API:** an embedded iframe calls `document.requestStorageAccess()` after a user gesture to get its unpartitioned cookies, with a browser prompt or heuristics.
 - **FedCM:** browser-mediated federated sign-in, replacing hidden IdP iframes that relied on third-party cookies.
 

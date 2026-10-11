@@ -56,7 +56,7 @@
     .g3{animation-name:g3}
     @keyframes r2{0%,76%{opacity:0}78%,90%{opacity:1}94%,100%{opacity:0}}
     .r2{animation-name:r2}
-    @media (prefers-reduced-motion: reduce){ .a{animation:none;opacity:1} }
+    @media (prefers-reduced-motion: reduce){ .a{animation:none;opacity:1} .f1,.g1,.g2,.g3{opacity:.18} }
   </style>
   <defs>
     <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
@@ -71,7 +71,6 @@
   <text class="h2" x="36" y="104">Post-filter (default with an HNSW / IVFFlat index)</text>
   <text class="sm" x="36" y="128">1. index returns ef_search = 40 candidates</text>
   <circle class="mutf a f1" cx="48" cy="146" r="6"/><circle class="mutf a f1" cx="64" cy="146" r="6"/><circle class="mutf a f1" cx="80" cy="146" r="6"/><circle class="okf a c1" cx="96" cy="146" r="6"/><circle class="mutf a f1" cx="112" cy="146" r="6"/><circle class="mutf a f1" cx="128" cy="146" r="6"/><circle class="mutf a f1" cx="144" cy="146" r="6"/><circle class="mutf a f1" cx="160" cy="146" r="6"/><circle class="mutf a f1" cx="176" cy="146" r="6"/><circle class="mutf a f1" cx="192" cy="146" r="6"/><circle class="mutf a f1" cx="48" cy="162" r="6"/><circle class="mutf a f1" cx="64" cy="162" r="6"/><circle class="mutf a f1" cx="80" cy="162" r="6"/><circle class="mutf a f1" cx="96" cy="162" r="6"/><circle class="okf a c1" cx="112" cy="162" r="6"/><circle class="mutf a f1" cx="128" cy="162" r="6"/><circle class="mutf a f1" cx="144" cy="162" r="6"/><circle class="mutf a f1" cx="160" cy="162" r="6"/><circle class="mutf a f1" cx="176" cy="162" r="6"/><circle class="mutf a f1" cx="192" cy="162" r="6"/><circle class="mutf a f1" cx="48" cy="178" r="6"/><circle class="mutf a f1" cx="64" cy="178" r="6"/><circle class="okf a c1" cx="80" cy="178" r="6"/><circle class="mutf a f1" cx="96" cy="178" r="6"/><circle class="mutf a f1" cx="112" cy="178" r="6"/><circle class="mutf a f1" cx="128" cy="178" r="6"/><circle class="mutf a f1" cx="144" cy="178" r="6"/><circle class="mutf a f1" cx="160" cy="178" r="6"/><circle class="mutf a f1" cx="176" cy="178" r="6"/><circle class="mutf a f1" cx="192" cy="178" r="6"/><circle class="mutf a f1" cx="48" cy="194" r="6"/><circle class="mutf a f1" cx="64" cy="194" r="6"/><circle class="mutf a f1" cx="80" cy="194" r="6"/><circle class="mutf a f1" cx="96" cy="194" r="6"/><circle class="mutf a f1" cx="112" cy="194" r="6"/><circle class="mutf a f1" cx="128" cy="194" r="6"/><circle class="mutf a f1" cx="144" cy="194" r="6"/><circle class="okf a c1" cx="160" cy="194" r="6"/><circle class="mutf a f1" cx="176" cy="194" r="6"/><circle class="mutf a f1" cx="192" cy="194" r="6"/>
-  <g class="a f1"></g>
   <line class="ln a r1" x1="230" y1="170" x2="300" y2="170" marker-end="url(#ar)"/>
   <g class="a r1"><text class="sm" x="316" y="150">2. WHERE tenant = 'acme' drops 36</text>
   <text class="badt" x="316" y="180" font-size="22">4 rows</text><text class="tx" x="400" y="180">returned for LIMIT 10, no error</text>

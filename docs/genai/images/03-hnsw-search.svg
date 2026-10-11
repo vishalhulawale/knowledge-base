@@ -38,22 +38,24 @@
     .a{opacity:0;animation:14s infinite linear}
     @keyframes s0{0%,6%{opacity:0}8%,90%{opacity:1}94%,100%{opacity:0}}
     .s0{animation-name:s0}
-    @keyframes s1{0%,15%{opacity:0}17%,90%{opacity:1}94%,100%{opacity:0}}
+    @keyframes s1{0%,14%{opacity:0}16%,90%{opacity:1}94%,100%{opacity:0}}
     .s1{animation-name:s1}
-    @keyframes s2{0%,24%{opacity:0}26%,90%{opacity:1}94%,100%{opacity:0}}
+    @keyframes s2{0%,22%{opacity:0}24%,90%{opacity:1}94%,100%{opacity:0}}
     .s2{animation-name:s2}
-    @keyframes s3{0%,33%{opacity:0}35%,90%{opacity:1}94%,100%{opacity:0}}
+    @keyframes s3{0%,30%{opacity:0}32%,90%{opacity:1}94%,100%{opacity:0}}
     .s3{animation-name:s3}
-    @keyframes s4{0%,42%{opacity:0}44%,90%{opacity:1}94%,100%{opacity:0}}
+    @keyframes s4{0%,38%{opacity:0}40%,90%{opacity:1}94%,100%{opacity:0}}
     .s4{animation-name:s4}
-    @keyframes s5{0%,51%{opacity:0}53%,90%{opacity:1}94%,100%{opacity:0}}
+    @keyframes s5{0%,46%{opacity:0}48%,90%{opacity:1}94%,100%{opacity:0}}
     .s5{animation-name:s5}
-    @keyframes s6{0%,60%{opacity:0}62%,90%{opacity:1}94%,100%{opacity:0}}
+    @keyframes s6{0%,54%{opacity:0}56%,90%{opacity:1}94%,100%{opacity:0}}
     .s6{animation-name:s6}
-    @keyframes s7{0%,69%{opacity:0}71%,90%{opacity:1}94%,100%{opacity:0}}
+    @keyframes s7{0%,62%{opacity:0}64%,90%{opacity:1}94%,100%{opacity:0}}
     .s7{animation-name:s7}
-    @keyframes s8{0%,78%{opacity:0}80%,90%{opacity:1}94%,100%{opacity:0}}
+    @keyframes s8{0%,70%{opacity:0}72%,90%{opacity:1}94%,100%{opacity:0}}
     .s8{animation-name:s8}
+    @keyframes s9{0%,78%{opacity:0}80%,90%{opacity:1}94%,100%{opacity:0}}
+    .s9{animation-name:s9}
     @media (prefers-reduced-motion: reduce){ .a{animation:none;opacity:1} }
   </style>
   <defs>
@@ -67,77 +69,80 @@
   <text class="sub" x="28" y="62">Greedy hop to the neighbour closest to the query; drop a layer when no neighbour is closer.</text>
   <rect class="box" x="20" y="84" width="610" height="66" rx="10" stroke-width="1.2"/>
   <text class="sub" x="34" y="102">Layer 2 (few nodes, long links)</text>
-  <line class="lnm" x1="80" y1="125" x2="300" y2="122"/>
-  <line class="lnm" x1="300" y1="122" x2="520" y2="128"/>
-  <line class="lnm" x1="80" y1="125" x2="520" y2="128"/>
-  <circle class="mutf" cx="80" cy="125" r="6"/>
-  <circle class="mutf" cx="300" cy="122" r="6"/>
-  <circle class="mutf" cx="520" cy="128" r="6"/>
-  <polygon class="badf" points="600.0,108.0 602.4,113.7 608.6,114.2 603.9,118.3 605.3,124.3 600.0,121.0 594.7,124.3 596.1,118.3 591.4,114.2 597.6,113.7"/>
+  <line class="lnm" x1="90" y1="130" x2="260" y2="124"/>
+  <line class="lnm" x1="260" y1="124" x2="420" y2="130"/>
+  <line class="lnm" x1="90" y1="130" x2="420" y2="130"/>
+  <circle class="mutf" cx="90" cy="130" r="6"/>
+  <circle class="mutf" cx="260" cy="124" r="6"/>
+  <circle class="mutf" cx="420" cy="130" r="6"/>
+  <polygon class="badf" points="608.0,108.0 610.4,113.7 616.6,114.2 611.9,118.3 613.3,124.3 608.0,121.0 602.7,124.3 604.1,118.3 599.4,114.2 605.6,113.7"/>
   <rect class="box" x="20" y="184" width="610" height="86" rx="10" stroke-width="1.2"/>
   <text class="sub" x="34" y="202">Layer 1</text>
-  <line class="lnm" x1="80" y1="235" x2="190" y2="225"/>
-  <line class="lnm" x1="190" y1="225" x2="300" y2="240"/>
-  <line class="lnm" x1="300" y1="240" x2="420" y2="228"/>
-  <line class="lnm" x1="420" y1="228" x2="520" y2="235"/>
-  <circle class="mutf" cx="80" cy="235" r="6"/>
-  <circle class="mutf" cx="190" cy="225" r="6"/>
-  <circle class="mutf" cx="300" cy="240" r="6"/>
-  <circle class="mutf" cx="420" cy="228" r="6"/>
-  <circle class="mutf" cx="520" cy="235" r="6"/>
-  <polygon class="badf" points="600.0,218.0 602.4,223.7 608.6,224.2 603.9,228.3 605.3,234.3 600.0,231.1 594.7,234.3 596.1,228.3 591.4,224.2 597.6,223.7"/>
+  <line class="lnm" x1="90" y1="237" x2="190" y2="228"/>
+  <line class="lnm" x1="190" y1="228" x2="300" y2="242"/>
+  <line class="lnm" x1="300" y1="242" x2="420" y2="230"/>
+  <line class="lnm" x1="420" y1="230" x2="500" y2="248"/>
+  <line class="lnm" x1="500" y1="248" x2="570" y2="232"/>
+  <circle class="mutf" cx="90" cy="237" r="6"/>
+  <circle class="mutf" cx="190" cy="228" r="6"/>
+  <circle class="mutf" cx="300" cy="242" r="6"/>
+  <circle class="mutf" cx="420" cy="230" r="6"/>
+  <circle class="mutf" cx="500" cy="248" r="6"/>
+  <circle class="mutf" cx="570" cy="232" r="6"/>
+  <polygon class="badf" points="608.0,218.0 610.4,223.7 616.6,224.2 611.9,228.3 613.3,234.3 608.0,231.1 602.7,234.3 604.1,228.3 599.4,224.2 605.6,223.7"/>
   <rect class="box" x="20" y="304" width="610" height="126" rx="10" stroke-width="1.2"/>
   <text class="sub" x="34" y="322">Layer 0 (every vector)</text>
-  <line class="lnm" x1="72" y1="403" x2="112" y2="385"/>
-  <line class="lnm" x1="112" y1="385" x2="140" y2="395"/>
-  <line class="lnm" x1="140" y1="395" x2="179" y2="367"/>
-  <line class="lnm" x1="179" y1="367" x2="215" y2="401"/>
-  <line class="lnm" x1="215" y1="401" x2="258" y2="346"/>
-  <line class="lnm" x1="258" y1="346" x2="303" y2="370"/>
-  <line class="lnm" x1="303" y1="370" x2="335" y2="349"/>
-  <line class="lnm" x1="335" y1="349" x2="379" y2="347"/>
-  <line class="lnm" x1="379" y1="347" x2="407" y2="403"/>
-  <line class="lnm" x1="407" y1="403" x2="443" y2="380"/>
-  <line class="lnm" x1="443" y1="380" x2="492" y2="347"/>
-  <line class="lnm" x1="492" y1="347" x2="525" y2="346"/>
-  <line class="lnm" x1="525" y1="346" x2="560" y2="362"/>
-  <line class="lnm" x1="560" y1="362" x2="598" y2="378"/>
-  <line class="lnm" x1="72" y1="403" x2="140" y2="395"/>
-  <line class="lnm" x1="112" y1="385" x2="179" y2="367"/>
-  <line class="lnm" x1="140" y1="395" x2="215" y2="401"/>
-  <line class="lnm" x1="179" y1="367" x2="258" y2="346"/>
-  <line class="lnm" x1="215" y1="401" x2="303" y2="370"/>
-  <line class="lnm" x1="258" y1="346" x2="335" y2="349"/>
-  <line class="lnm" x1="303" y1="370" x2="379" y2="347"/>
-  <line class="lnm" x1="335" y1="349" x2="407" y2="403"/>
-  <line class="lnm" x1="379" y1="347" x2="443" y2="380"/>
-  <line class="lnm" x1="407" y1="403" x2="492" y2="347"/>
-  <line class="lnm" x1="443" y1="380" x2="525" y2="346"/>
-  <line class="lnm" x1="492" y1="347" x2="560" y2="362"/>
-  <line class="lnm" x1="525" y1="346" x2="598" y2="378"/>
-  <circle class="mutf" cx="72" cy="403" r="6"/>
-  <circle class="mutf" cx="112" cy="385" r="6"/>
-  <circle class="mutf" cx="140" cy="395" r="6"/>
-  <circle class="mutf" cx="179" cy="367" r="6"/>
-  <circle class="mutf" cx="215" cy="401" r="6"/>
-  <circle class="mutf" cx="258" cy="346" r="6"/>
-  <circle class="mutf" cx="303" cy="370" r="6"/>
-  <circle class="mutf" cx="335" cy="349" r="6"/>
-  <circle class="mutf" cx="379" cy="347" r="6"/>
-  <circle class="mutf" cx="407" cy="403" r="6"/>
-  <circle class="mutf" cx="443" cy="380" r="6"/>
-  <circle class="mutf" cx="492" cy="347" r="6"/>
-  <circle class="mutf" cx="525" cy="346" r="6"/>
-  <circle class="mutf" cx="560" cy="362" r="6"/>
-  <circle class="mutf" cx="598" cy="378" r="6"/>
-  <polygon class="badf" points="600.0,358.0 602.4,363.7 608.6,364.2 603.9,368.3 605.3,374.3 600.0,371.1 594.7,374.3 596.1,368.3 591.4,364.2 597.6,363.7"/>
-  <g class="a s0"><circle class="pri" cx="80" cy="125" r="9"/><text class="prit" x="80" y="111" text-anchor="middle" font-size="12">entry point</text></g>
-  <g class="a s1"><line class="lnp" x1="80" y1="125" x2="300" y2="122" marker-end="url(#arp)"/><circle class="pri" cx="300" cy="122" r="7"/></g>
-  <g class="a s2"><line class="lnp" x1="300" y1="122" x2="520" y2="128" marker-end="url(#arp)"/><circle class="pri" cx="520" cy="128" r="7"/></g>
-  <g class="a s3"><line class="lnw dash" x1="520" y1="128" x2="520" y2="235" marker-end="url(#arw)"/><circle class="pri" cx="520" cy="235" r="7"/></g>
-  <g class="a s5"><line class="lnw dash" x1="520" y1="235" x2="525" y2="346" marker-end="url(#arw)"/><circle class="pri" cx="525" cy="346" r="7"/></g>
-  <g class="a s6"><line class="lnp" x1="525" y1="346" x2="598" y2="378" marker-end="url(#arp)"/><circle class="pri" cx="598" cy="378" r="7"/></g>
-  <g class="a s7"><circle class="okf" cx="598" cy="378" r="8"/><circle class="okf" cx="560" cy="362" r="8"/><circle class="okf" cx="525" cy="346" r="8"/><circle class="okf" cx="492" cy="347" r="8"/><text class="okt" x="600" y="452" text-anchor="middle" font-size="13">top-k returned</text></g>
+  <line class="lnm" x1="72" y1="404" x2="108" y2="386"/>
+  <line class="lnm" x1="108" y1="386" x2="132" y2="396"/>
+  <line class="lnm" x1="132" y1="396" x2="167" y2="369"/>
+  <line class="lnm" x1="167" y1="369" x2="199" y2="402"/>
+  <line class="lnm" x1="199" y1="402" x2="238" y2="349"/>
+  <line class="lnm" x1="238" y1="349" x2="279" y2="372"/>
+  <line class="lnm" x1="279" y1="372" x2="307" y2="352"/>
+  <line class="lnm" x1="307" y1="352" x2="347" y2="350"/>
+  <line class="lnm" x1="347" y1="350" x2="371" y2="404"/>
+  <line class="lnm" x1="371" y1="404" x2="403" y2="382"/>
+  <line class="lnm" x1="403" y1="382" x2="448" y2="350"/>
+  <line class="lnm" x1="448" y1="350" x2="477" y2="350"/>
+  <line class="lnm" x1="477" y1="350" x2="508" y2="364"/>
+  <line class="lnm" x1="508" y1="364" x2="542" y2="379"/>
+  <line class="lnm" x1="72" y1="404" x2="132" y2="396"/>
+  <line class="lnm" x1="108" y1="386" x2="167" y2="369"/>
+  <line class="lnm" x1="132" y1="396" x2="199" y2="402"/>
+  <line class="lnm" x1="167" y1="369" x2="238" y2="349"/>
+  <line class="lnm" x1="199" y1="402" x2="279" y2="372"/>
+  <line class="lnm" x1="238" y1="349" x2="307" y2="352"/>
+  <line class="lnm" x1="279" y1="372" x2="347" y2="350"/>
+  <line class="lnm" x1="307" y1="352" x2="371" y2="404"/>
+  <line class="lnm" x1="347" y1="350" x2="403" y2="382"/>
+  <line class="lnm" x1="371" y1="404" x2="448" y2="350"/>
+  <line class="lnm" x1="403" y1="382" x2="477" y2="350"/>
+  <line class="lnm" x1="448" y1="350" x2="508" y2="364"/>
+  <line class="lnm" x1="477" y1="350" x2="542" y2="379"/>
+  <circle class="mutf" cx="72" cy="404" r="6"/>
+  <circle class="mutf" cx="108" cy="386" r="6"/>
+  <circle class="mutf" cx="132" cy="396" r="6"/>
+  <circle class="mutf" cx="167" cy="369" r="6"/>
+  <circle class="mutf" cx="199" cy="402" r="6"/>
+  <circle class="mutf" cx="238" cy="349" r="6"/>
+  <circle class="mutf" cx="279" cy="372" r="6"/>
+  <circle class="mutf" cx="307" cy="352" r="6"/>
+  <circle class="mutf" cx="347" cy="350" r="6"/>
+  <circle class="mutf" cx="371" cy="404" r="6"/>
+  <circle class="mutf" cx="403" cy="382" r="6"/>
+  <circle class="mutf" cx="448" cy="350" r="6"/>
+  <circle class="mutf" cx="477" cy="350" r="6"/>
+  <circle class="mutf" cx="508" cy="364" r="6"/>
+  <circle class="mutf" cx="542" cy="379" r="6"/>
+  <polygon class="badf" points="608.0,358.0 610.4,363.7 616.6,364.2 611.9,368.3 613.3,374.3 608.0,371.1 602.7,374.3 604.1,368.3 599.4,364.2 605.6,363.7"/>
+  <g class="a s0"><circle class="pri" cx="90" cy="130" r="9"/><text class="prit" x="90" y="152" text-anchor="middle" font-size="12">entry point</text></g>
+  <g class="a s1"><line class="lnp" x1="90" y1="130" x2="260" y2="124" marker-end="url(#arp)"/><circle class="pri" cx="260" cy="124" r="7"/></g>
+  <g class="a s2"><line class="lnp" x1="260" y1="124" x2="420" y2="130" marker-end="url(#arp)"/><circle class="pri" cx="420" cy="130" r="7"/></g>
+  <g class="a s3"><line class="lnw dash" x1="420" y1="130" x2="420" y2="230" marker-end="url(#arw)"/><circle class="pri" cx="420" cy="230" r="7"/></g>
+  <g class="a s4"><line class="lnp" x1="420" y1="230" x2="500" y2="248" marker-end="url(#arp)"/><circle class="pri" cx="500" cy="248" r="7"/></g>
+  <g class="a s5"><line class="lnp" x1="500" y1="248" x2="570" y2="232" marker-end="url(#arp)"/><circle class="pri" cx="570" cy="232" r="7"/></g>
+  <g class="a s6"><line class="lnw dash" x1="570" y1="232" x2="542" y2="379" marker-end="url(#arw)"/><circle class="pri" cx="542" cy="379" r="7"/></g>
+  <g class="a s8"><circle class="okf" cx="542" cy="379" r="8"/><circle class="okf" cx="508" cy="364" r="8"/><circle class="okf" cx="477" cy="350" r="8"/><circle class="okf" cx="448" cy="350" r="8"/><text class="okt" x="600" y="452" text-anchor="middle" font-size="13">top-k returned</text></g>
   <rect class="bp" x="644" y="84" width="136" height="346" rx="10" stroke-width="1.2"/>
   <text class="prit" x="712" y="110" text-anchor="middle" font-size="14">Build knobs</text>
   <text class="sm" x="712" y="132" text-anchor="middle">m = 16</text>
@@ -153,6 +158,6 @@
   <text class="sm" x="712" y="348" text-anchor="middle">nodes; whole</text>
   <text class="sm" x="712" y="364" text-anchor="middle">graph in RAM</text>
   <text class="sub" x="712" y="410" text-anchor="middle">pgvector defaults</text>
-  <g class="a s8"><text class="tx" x="28" y="480">Visited about a dozen nodes, not all of them: that is why it is <tspan class="wrnt">approximate</tspan>.</text>
+  <g class="a s9"><text class="tx" x="28" y="480">Visited about a dozen nodes, not all of them: that is why it is <tspan class="wrnt">approximate</tspan>.</text>
   <text class="sub" x="28" y="500">A greedy path can miss the true nearest neighbour; raising ef_search widens the candidate list.</text></g>
 </svg>

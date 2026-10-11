@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 490" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
   <title id="t">Texts become points; meaning becomes distance</title>
   <desc id="d">Left: six short pharmacy-support texts pass through the same embedding model and each becomes a list of 1,024 numbers. Right: a two-dimensional projection of those vectors. Texts about refilling medication sit close together, texts about insurance claims form a second cluster, and password texts a third. The query 'how do I reorder my meds?' lands inside the refill cluster, so its nearest neighbours by cosine similarity are 'refill my prescription' (0.89) and 'renew Rx for metformin' (0.84), even though neither shares a keyword with the query; a keyword search would match nothing. Simplified: real vectors have hundreds or thousands of dimensions, and the similarity scores are illustrative.</desc>
   <style>
@@ -41,7 +41,7 @@
     <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker>
     <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker>
   </defs>
-  <rect class="card" x="1" y="1" width="798" height="468" rx="14"/>
+  <rect class="card" x="1" y="1" width="798" height="488" rx="14"/>
   <text class="h" x="28" y="40">Texts become points; similar meaning means nearby points</text>
   <text class="sub" x="28" y="62">Same model for documents and queries. Scores are cosine similarity (illustrative).</text>
   <rect class="box" x="20" y="80" width="300" height="356" rx="10" stroke-width="1.2"/>
@@ -69,7 +69,7 @@
   <text class="okt" x="548" y="168" text-anchor="middle" font-size="12">0.89</text>
   <text class="okt" x="603" y="205" font-size="12">0.84</text>
   <line class="lnm dash" x1="590" y1="170" x2="690" y2="334"/>
-  <text class="sub" x="652" y="262">0.12</text>
+  <text class="sub" x="662" y="268">0.12</text>
   <circle class="tea" cx="520" cy="190" r="7"/>
   <circle class="tea" cx="580" cy="230" r="7"/>
   <circle class="pri" cx="440" cy="340" r="7"/>
@@ -77,7 +77,7 @@
   <circle class="wrnf" cx="690" cy="340" r="7"/>
   <circle class="wrnf" cx="720" cy="390" r="7"/>
   <text class="sm" x="520" y="214" text-anchor="middle">refill my prescription</text>
-  <text class="sm" x="580" y="252" text-anchor="middle">renew Rx for metformin</text>
+  <text class="sm" x="560" y="254" text-anchor="middle">renew Rx for metformin</text>
   <text class="sm" x="440" y="320" text-anchor="middle">why was my claim denied</text>
   <text class="sm" x="500" y="406" text-anchor="middle">appeal a rejected claim</text>
   <text class="sm" x="690" y="322" text-anchor="middle">reset my password</text>
@@ -87,5 +87,6 @@
   <text class="badt" x="606" y="156" font-size="13">"how do I reorder my meds?"</text>
   <text class="sub" x="352" y="134">2-D projection of</text>
   <text class="sub" x="352" y="150">1,024-D vectors</text>
-  <text class="tx" x="28" y="458"><tspan class="wrnt">Keyword search:</tspan> "reorder" and "meds" match no stored text. <tspan class="okt">Vector search:</tspan> the two refill texts, ranked by similarity.</text>
+  <text class="tx" x="28" y="458"><tspan class="wrnt">Keyword search:</tspan> "reorder" and "meds" appear in no stored text, so nothing matches.</text>
+  <text class="tx" x="28" y="478"><tspan class="okt">Vector search:</tspan> returns the two refill texts, ranked by similarity.</text>
 </svg>
