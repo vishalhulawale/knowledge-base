@@ -1888,25 +1888,25 @@
           "title": "CI/CD pipeline design (GitLab CI, Jenkins, GitHub Actions)",
           "slug": "01-ci-cd-pipeline-design",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Terraform fundamentals: state, modules, plan/apply",
           "slug": "02-terraform-fundamentals-state-modules-plan-apply",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Infrastructure as Code best practices",
           "slug": "03-infrastructure-as-code-best-practices",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "GitOps & deployment strategies",
           "slug": "04-gitops-and-deployment-strategies",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },

@@ -96,7 +96,7 @@ Git must not contain plain secrets. Options: **External Secrets Operator** (Git 
 | A/B test | Route by user attribute, measure business metric | Flag off | Flag tooling | Chosen cohort | Product experiments (not a safety mechanism) |
 
 ![Animation: a canary rollout steps traffic from 5 percent to 25 and 50 percent, with an analysis check of error rate after each step; in the good run it reaches 100 percent; in the bad run the error rate at 25 percent exceeds the 1 percent threshold and traffic returns to the stable version automatically](images/04-canary-steps.svg){ loading=lazy }
-*Notice that the abort happens at 25%: only a quarter of users ever saw the bad version, for one analysis interval.*
+*Notice that the abort happens at 25%: at most 25% of traffic ever reached the bad version, and only for a couple of analysis intervals.*
 
 **Canary with automated analysis.** Plain Deployments can only approximate a canary by pod ratio. **Argo Rollouts** or **Flagger** shift exact traffic weights through an ingress, service mesh or Gateway API, run analysis queries (Prometheus, Datadog, CloudWatch) at each step, and abort automatically. Compare the canary against the stable baseline, not against a fixed number, when traffic patterns vary by time of day.
 

@@ -238,3 +238,7 @@ Mock-interview results and revision schedule, updated by the `learn-topic` skill
 | 2026-10-11 | Azure: 01 Core services mapped to AWS | — (studied, mock skipped) | Confirm: Azure APIs + auth CCKM used; any Azure Terraform; where Azure/AKS was used and how deeply | 2026-10-12 |
 | 2026-10-11 | Azure: 02 AKS, App Service & Functions | — (studied, mock skipped) | Confirm: AKS usage and depth | 2026-10-12 |
 | 2026-10-11 | Azure: 03 Entra ID & Key Vault ★ | — (studied, mock skipped) | Confirm: Key Vault ops CCKM performed (Premium vs Managed HSM) and how it authenticated; whether Entra ID was in Optum's PingFederate/AD chain | 2026-10-12 |
+| 2026-10-11 | CI/CD: 01 Pipeline design | — (studied, mock skipped) | Confirm: Coriolis GitLab stages + HSM (Luna/SafeNet) testing; Meteor CI/CD standard (GitLab/Jenkins, templates); release approval + cadence; static keys vs OIDC | 2026-10-12 |
+| 2026-10-11 | CI/CD: 02 Terraform fundamentals | — (studied, mock skipped) | Confirm: Deloitte Terraform scope (modules, size); state backend + locking; pipeline vs laptop runs; secrets in state | 2026-10-12 |
+| 2026-10-11 | CI/CD: 03 IaC best practices | — (studied, mock skipped) | Confirm: env/layer layout; who reviewed plans / could apply; policy-as-code controls | 2026-10-12 |
+| 2026-10-11 | CI/CD: 04 GitOps & deployment strategies | — (studied, mock skipped) | Confirm: Meteor rollout + rollback; push vs pull deploys; a backward-compatible GraphQL/Kafka change example | 2026-10-12 |

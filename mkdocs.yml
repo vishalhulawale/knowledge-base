@@ -350,6 +350,10 @@ nav:
           - "EKS/AKS Specifics & Troubleshooting Pods": docker-kubernetes/08-eks-aks-specifics-and-troubleshooting-pods.md
       - "CI/CD & DevOps":
           - Overview: cicd-devops/index.md
+          - "CI/CD Pipeline Design (GitLab CI, Jenkins, GitHub Actions)": cicd-devops/01-ci-cd-pipeline-design.md
+          - "Terraform Fundamentals: State, Modules, Plan/Apply": cicd-devops/02-terraform-fundamentals-state-modules-plan-apply.md
+          - "Infrastructure as Code Best Practices": cicd-devops/03-infrastructure-as-code-best-practices.md
+          - "GitOps & Deployment Strategies": cicd-devops/04-gitops-and-deployment-strategies.md
       - "Azure":
           - Overview: azure/index.md
           - "Core services mapped to AWS equivalents": azure/01-core-services-mapped-to-aws-equivalents.md
