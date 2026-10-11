@@ -145,11 +145,9 @@ Special cases interviewers probe:
 
 Any rule in `utilities` beats any rule in `components`, whatever the selectors' specificity, and unlayered rules beat all layers. Inside a layer, `:where()` keeps selectors flat so they compete only on meaningful signals. `revert-layer` rolls a property back to the value from the previous layer. Cascade layers are Baseline since March 2022.
 
-`@scope (.card) to (.content) { … }` limits rules to a subtree with a lower boundary, and adds **scope proximity**: when two scoped rules tie on specificity, the one whose scope root is closer to the element wins (useful for nested light/dark themes). It is Baseline only since March 2026, so treat it as progressive enhancement for broad audiences.
+`@scope (.card) to (.content) { … }` limits rules to a subtree and adds **scope proximity**: on a specificity tie, the closer scope root wins (useful for nested themes). It is Baseline only since March 2026, so treat it as progressive enhancement.
 
-### :has(): the parent selector
-
-`:has()` matches an element based on its descendants or following siblings: `form:has(:user-invalid)`, `.card:has(img)` for a different layout when an image exists, `label:has(:checked)`. It replaces many "add a class to the parent from JavaScript" patterns. It can't be nested inside another `:has()` and doesn't accept pseudo-elements. Baseline since December 2023 (Firefox 121 was last).
+**`:has()`** matches an element by its descendants or following siblings (`form:has(:user-invalid)`, `.card:has(img)`), replacing many "add a class to the parent from JavaScript" patterns. It can't be nested or contain pseudo-elements; Baseline since December 2023.
 
 ## In practice: code & configuration
 
@@ -234,18 +232,13 @@ Subgrid for aligned card internals, with a same-cascade fallback for older brows
 | Subgrid | Aligns grandchildren to outer tracks | Needs fixed child count per axis | Card title/body/CTA alignment |
 | Media queries | Viewport and user preferences | Component doesn't know its slot | Page-level breakpoints, `prefers-*` |
 | Container queries | Component adapts wherever it is placed | Needs an explicit container with containment | Reusable cards, widgets, MFE components |
-| BEM / naming conventions | Works everywhere, predictable | Discipline-based, verbose | Legacy codebases |
 | `@layer` + `:where()` | Priority by intent, not selector weight | Must declare order early; unlayered CSS beats all layers | New design systems, taming vendor CSS |
-| CSS Modules / CSS-in-JS | Locally scoped class names | Build step or runtime cost (Emotion) | React apps, micro-frontends |
 
 !!! warning "Gotcha: unlayered CSS beats every layer"
     Adopting layers gradually can backfire: your old unlayered stylesheet now beats **everything** you move into layers, including utilities. Put legacy CSS into its own low-priority layer (`@import url(legacy.css) layer(legacy)`) rather than leaving it unlayered.
 
 !!! warning "Gotcha: flex items won't shrink below their content"
     `min-width: auto` on flex items (and `minmax(auto, …)` behaviour on grid items) means a long token blows out the layout. Add `min-inline-size: 0` on the item or use `minmax(0, 1fr)` tracks, and `overflow-wrap: anywhere` for user-supplied strings such as IDs and URLs.
-
-!!! tip "Debugging"
-    Chrome and Firefox DevTools show flex and grid overlays (badges next to the element in the Elements panel), the computed box model, and in the Styles pane strike through losing declarations and group rules by `@layer`, which answers "why is this rule not applying?" faster than reading selectors.
 
 ## How this connects to my experience
 

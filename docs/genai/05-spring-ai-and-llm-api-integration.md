@@ -146,7 +146,11 @@ spring:
 
 === "✅ Correct approach"
     ```java
-    public record ClaimSummary(String claimId, String status, List<String> nextSteps) {}
+    public record ClaimSummary(String claimId, String status, List<String> nextSteps) {
+        static ClaimSummary unavailable() {
+            return new ClaimSummary(null, "UNAVAILABLE", List.of("Try again later"));
+        }
+    }
 
     @Configuration
     @EnableResilientMethods                                      // Spring Framework 7: @ConcurrencyLimit
@@ -168,6 +172,7 @@ spring:
 
     @Service
     class ClaimAssistant {
+        private static final Logger log = LoggerFactory.getLogger(ClaimAssistant.class);
         private final ChatClient chat;
         ClaimAssistant(ChatClient claimsClient) { this.chat = claimsClient; }
 
@@ -199,7 +204,8 @@ spring:
                                    ToolContext ctx) {
             String userId = (String) ctx.getContext().get("userId");
             return claims.findVisibleTo(claimId, userId)         // authorise here, not in the prompt
-                .orElseThrow(() -> new ToolExecutionException("not found or not permitted"));
+                .orElseThrow(() -> new IllegalArgumentException("not found or not permitted"));
+                // RuntimeException message goes back to the model as a tool error (default)
         }
     }
     ```
