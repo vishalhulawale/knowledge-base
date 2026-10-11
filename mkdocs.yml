@@ -419,6 +419,7 @@ nav:
           - "TLS handshake": networking/03-tls-handshake.md
           - "DNS Resolution": networking/04-dns-resolution.md
           - "Load Balancers (L4 vs L7), Reverse Proxies & CDNs": networking/05-load-balancers-reverse-proxies-and-cdns.md
+          - "\\\"What happens when you type a URL\\\"": networking/06-what-happens-when-you-type-a-url.md
   - "Coding (DSA)":
       - "Data Structures & Algorithms":
           - Overview: dsa/index.md

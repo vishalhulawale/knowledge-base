@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 532" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Early Hints waterfall</title>
+  <desc id="d">Two request waterfalls for the same page with a 100 ms round trip and 200 ms of server think time. By default the HTML arrives at 300 to 400 ms, and only then are app.css and hero.avif discovered; the font is discovered after the CSS loads, at 470 ms. First paint is at about 480 ms and LCP at about 650 ms. With a 103 Early Hints response at 100 ms, the CSS, font and hero image start downloading during the server's think time, so first paint moves to about 410 ms and LCP to about 430 ms. Illustrative numbers.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .wait{fill:#cbd5e1}
+    @media (prefers-color-scheme: dark){.wait{fill:#475569}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="530" rx="14"/>
+  <text class="h" x="28" y="40">103 Early Hints use the server's think time</text><text class="sub" x="28" y="62">Same page, 100 ms round trip, 200 ms to generate the HTML. Illustrative.</text><text class="h2" x="28" y="92">Default: resources found only in the HTML</text><line class="grid" x1="210" y1="104" x2="210" y2="228"/><line class="grid" x1="285" y1="104" x2="285" y2="228"/><line class="grid" x1="360" y1="104" x2="360" y2="228"/><line class="grid" x1="435" y1="104" x2="435" y2="228"/><line class="grid" x1="510" y1="104" x2="510" y2="228"/><line class="grid" x1="585" y1="104" x2="585" y2="228"/><line class="grid" x1="660" y1="104" x2="660" y2="228"/><line class="grid" x1="735" y1="104" x2="735" y2="228"/><text class="mono" x="28" y="125" xml:space="preserve">document</text><rect class="wait" x="210" y="110" width="225" height="20" rx="3"/><rect class="pri" x="435" y="110" width="75" height="20" rx="3"/><text class="mono" x="28" y="155" xml:space="preserve">app.css</text><rect class="tea" x="450" y="140" width="112.5" height="20" rx="3"/><text class="mono" x="28" y="185" xml:space="preserve">font.woff2</text><rect class="wrnf" x="562.5" y="170" width="112.5" height="20" rx="3"/><text class="mono" x="28" y="215" xml:space="preserve">hero.avif</text><rect class="okf" x="457.5" y="200" width="240" height="20" rx="3"/><line class="lnp dash" x1="570" y1="100" x2="570" y2="232" style="stroke-width:2"/><line class="lno dash" x1="697.5" y1="100" x2="697.5" y2="232" style="stroke-width:2"/><text class="prit" x="570" y="250" text-anchor="middle" style="font-size:13px">first paint 480 ms</text><text class="okt" x="697.5" y="250" text-anchor="middle" style="font-size:13px">LCP 650 ms</text><text class="h2" x="28" y="282">With 103 Early Hints: preload starts at 100 ms</text><line class="grid" x1="210" y1="294" x2="210" y2="418"/><line class="grid" x1="285" y1="294" x2="285" y2="418"/><line class="grid" x1="360" y1="294" x2="360" y2="418"/><line class="grid" x1="435" y1="294" x2="435" y2="418"/><line class="grid" x1="510" y1="294" x2="510" y2="418"/><line class="grid" x1="585" y1="294" x2="585" y2="418"/><line class="grid" x1="660" y1="294" x2="660" y2="418"/><line class="grid" x1="735" y1="294" x2="735" y2="418"/><text class="mono" x="28" y="315" xml:space="preserve">document</text><rect class="wait" x="210" y="300" width="225" height="20" rx="3"/><rect class="pri" x="435" y="300" width="75" height="20" rx="3"/><text class="mono" x="28" y="345" xml:space="preserve">app.css</text><rect class="tea" x="285" y="330" width="112.5" height="20" rx="3"/><text class="mono" x="28" y="375" xml:space="preserve">font.woff2</text><rect class="wrnf" x="285" y="360" width="112.5" height="20" rx="3"/><text class="mono" x="28" y="405" xml:space="preserve">hero.avif</text><rect class="okf" x="285" y="390" width="240" height="20" rx="3"/><text class="wrnt" x="291" y="315" style="font-size:13px">103 sent</text><line class="lnw" x1="285" y1="296" x2="285" y2="418" style="stroke-width:2"/><line class="lnp dash" x1="517.5" y1="290" x2="517.5" y2="422" style="stroke-width:2"/><line class="lno dash" x1="532.5" y1="290" x2="532.5" y2="422" style="stroke-width:2"/><text class="prit" x="513.5" y="440" text-anchor="end" style="font-size:13px">first paint 410 ms</text><text class="okt" x="536.5" y="440" style="font-size:13px">LCP 430 ms</text><text class="sub" x="210" y="462" text-anchor="middle">0</text><text class="sub" x="285" y="462" text-anchor="middle">100</text><text class="sub" x="360" y="462" text-anchor="middle">200</text><text class="sub" x="435" y="462" text-anchor="middle">300</text><text class="sub" x="510" y="462" text-anchor="middle">400</text><text class="sub" x="585" y="462" text-anchor="middle">500</text><text class="sub" x="660" y="462" text-anchor="middle">600</text><text class="sub" x="735" y="462" text-anchor="middle">700</text><text class="sub" x="472" y="482" text-anchor="middle">milliseconds since the request was sent</text><rect class="wait" x="28" y="500" width="14" height="14" rx="3"/><text class="sm" x="48" y="512">waiting for server</text><rect class="pri" x="195.2" y="500" width="14" height="14" rx="3"/><text class="sm" x="215.2" y="512">HTML</text><rect class="tea" x="258.8" y="500" width="14" height="14" rx="3"/><text class="sm" x="278.8" y="512">CSS</text><rect class="wrnf" x="315" y="500" width="14" height="14" rx="3"/><text class="sm" x="335" y="512">font</text><rect class="okf" x="378.6" y="500" width="14" height="14" rx="3"/><text class="sm" x="398.6" y="512">LCP image</text>
+</svg>

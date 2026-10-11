@@ -9,6 +9,6 @@
 | 3 | [TLS handshake](03-tls-handshake.md) |  | :material-check-circle: Done |
 | 4 | [DNS resolution](04-dns-resolution.md) |  | :material-check-circle: Done |
 | 5 | [Load balancers (L4 vs L7), reverse proxies & CDNs](05-load-balancers-reverse-proxies-and-cdns.md) |  | :material-check-circle: Done |
-| 6 | "What happens when you type a URL" |  | :material-progress-clock: To do |
+| 6 | ["What happens when you type a URL"](06-what-happens-when-you-type-a-url.md) |  | :material-check-circle: Done |
 
 ★ = tied to a resume claim; expect deep follow-up questions.
