@@ -61,7 +61,7 @@
   <line class="ln" x1="720" y1="140" x2="720" y2="476"/>
 
   <!-- 0: prompt -->
-  <g class="a l0"><text class="sm" x="160" y="170" text-anchor="middle">prompt + conversationId</text><line class="lnt" x1="80" y1="178" x2="236" y2="178" marker-end="url(#art)"/></g>
+  <g class="a l0"><text class="sm" x="88" y="170">prompt + conversationId</text><line class="lnt" x1="80" y1="178" x2="236" y2="178" marker-end="url(#art)"/></g>
   <!-- 1: call 1 -->
   <g class="a l1"><text class="sm" x="480" y="204" text-anchor="middle">call 1: history + user message + tool schemas</text><line class="lnp" x1="240" y1="212" x2="716" y2="212" marker-end="url(#arp)"/></g>
   <!-- 2: tool_use -->
@@ -79,5 +79,5 @@
   <g class="a l6"><text class="sub" x="350" y="432">Tool-call messages stay inside the loop,</text><text class="sub" x="350" y="450">so memory stores never see half a turn.</text></g>
   <g class="a l4"><text class="wrnt" x="700" y="460" text-anchor="end" font-size="13">2 billed API calls</text></g>
 
-  <text class="sub" x="28" y="502">Simplified: one tool call, non-streaming. Spring AI 2.0 defaults: memory order HIGHEST_PRECEDENCE+200, tool advisor +300.</text>
+  <text class="sub" x="28" y="502">Simplified: one tool call, non-streaming. Orders are Spring AI 2.0 defaults (HIGHEST_PRECEDENCE + n).</text>
 </svg>

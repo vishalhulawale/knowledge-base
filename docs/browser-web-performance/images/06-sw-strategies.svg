@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Service worker strategies: cache first, network first, stale-while-revalidate</title>
+  <desc id="d">Three side-by-side timelines, each with three lifelines: the page, the service worker's Cache API storage, and the network. In cache first, the request is matched in the cache and the cached response is returned at once; the network is not used unless the cache misses. In network first, the request goes to the network, the network fails or times out, and the service worker falls back to the cached copy, so the response arrives only after the network attempt. In stale-while-revalidate, the cached copy is returned at once, then the service worker fetches from the network in the background and puts the fresh copy into the cache for the next request. Arrows appear one step at a time. Simplified: the service worker itself is drawn as part of the cache lifeline.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .okt{fill:#16a34a;font-weight:700}.badt{fill:#dc2626;font-weight:700}.prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}.lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .okt{fill:#4ade80}.badt{fill:#f87171}.prit{fill:#818cf8}.teat{fill:#5eead4}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .a{opacity:0;animation:14s infinite linear}
+    @keyframes s0{0%,4%{opacity:0}6%,90%{opacity:1}94%,100%{opacity:0}}
+    .s0{animation-name:s0}
+    @keyframes s1{0%,16%{opacity:0}18%,90%{opacity:1}94%,100%{opacity:0}}
+    .s1{animation-name:s1}
+    @keyframes s2{0%,28%{opacity:0}30%,90%{opacity:1}94%,100%{opacity:0}}
+    .s2{animation-name:s2}
+    @keyframes s3{0%,40%{opacity:0}42%,90%{opacity:1}94%,100%{opacity:0}}
+    .s3{animation-name:s3}
+    @media (prefers-reduced-motion: reduce){ .a{animation:none;opacity:1} }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="498" rx="14"/>
+  <text class="h" x="28" y="40" text-anchor="start">One request, three service worker strategies</text>
+  <text class="sub" x="28" y="62" text-anchor="start">Green = the page gets its response. Red = failure. Teal = background update.</text>
+  <rect class="box" x="20" y="80" width="244" height="370" rx="10" stroke-width="1.2"/>
+  <text class="h2" x="142" y="104" text-anchor="middle">Cache first</text>
+  <text class="sub" x="56" y="128" text-anchor="middle">Page</text><text class="sub" x="142" y="128" text-anchor="middle">SW cache</text><text class="sub" x="228" y="128" text-anchor="middle">Network</text>
+  <line class="ln" x1="56" y1="136" x2="56" y2="400"/><line class="ln" x1="142" y1="136" x2="142" y2="400"/><line class="ln" x1="228" y1="136" x2="228" y2="400"/>
+  <rect class="box" x="276" y="80" width="244" height="370" rx="10" stroke-width="1.2"/>
+  <text class="h2" x="398" y="104" text-anchor="middle">Network first</text>
+  <text class="sub" x="312" y="128" text-anchor="middle">Page</text><text class="sub" x="398" y="128" text-anchor="middle">SW cache</text><text class="sub" x="484" y="128" text-anchor="middle">Network</text>
+  <line class="ln" x1="312" y1="136" x2="312" y2="400"/><line class="ln" x1="398" y1="136" x2="398" y2="400"/><line class="ln" x1="484" y1="136" x2="484" y2="400"/>
+  <rect class="box" x="532" y="80" width="244" height="370" rx="10" stroke-width="1.2"/>
+  <text class="h2" x="654" y="104" text-anchor="middle">Stale-while-revalidate</text>
+  <text class="sub" x="568" y="128" text-anchor="middle">Page</text><text class="sub" x="654" y="128" text-anchor="middle">SW cache</text><text class="sub" x="740" y="128" text-anchor="middle">Network</text>
+  <line class="ln" x1="568" y1="136" x2="568" y2="400"/><line class="ln" x1="654" y1="136" x2="654" y2="400"/><line class="ln" x1="740" y1="136" x2="740" y2="400"/>
+  <g class="a s0"><text class="sm" x="99.0" y="166" text-anchor="middle">match</text><line class="lnp" x1="56" y1="172" x2="138" y2="186" marker-end="url(#arp)"/></g>
+  <g class="a s1"><text class="sm" x="99.0" y="206" text-anchor="middle">hit: respond</text><line class="lno" x1="142" y1="212" x2="60" y2="226" marker-end="url(#aro)"/></g>
+  <g class="a s1"><text class="okt" x="142" y="428" text-anchor="middle" font-size="13">Instant; stale until next deploy</text></g>
+  <g class="a s0"><text class="sm" x="398.0" y="166" text-anchor="middle">fetch</text><line class="lnp" x1="312" y1="172" x2="480" y2="186" marker-end="url(#arp)"/></g>
+  <g class="a s1"><text class="sm" x="398.0" y="214" text-anchor="middle">offline / timeout</text><line class="lnb dash" x1="484" y1="220" x2="316" y2="234" marker-end="url(#arb)"/></g>
+  <g class="a s2"><text class="sm" x="355.0" y="262" text-anchor="middle">fallback match</text><line class="lnp" x1="312" y1="268" x2="394" y2="282" marker-end="url(#arp)"/></g>
+  <g class="a s3"><text class="sm" x="355.0" y="302" text-anchor="middle">cached copy</text><line class="lno" x1="398" y1="308" x2="316" y2="322" marker-end="url(#aro)"/></g>
+  <g class="a s3"><text class="wrnt" x="398" y="428" text-anchor="middle" font-size="13">Fresh online; slow networks wait</text></g>
+  <g class="a s0"><text class="sm" x="611.0" y="166" text-anchor="middle">match</text><line class="lnp" x1="568" y1="172" x2="650" y2="186" marker-end="url(#arp)"/></g>
+  <g class="a s1"><text class="sm" x="611.0" y="206" text-anchor="middle">respond now</text><line class="lno" x1="654" y1="212" x2="572" y2="226" marker-end="url(#aro)"/></g>
+  <g class="a s2"><text class="sm" x="697.0" y="254" text-anchor="middle">revalidate</text><line class="lnt" x1="654" y1="260" x2="736" y2="274" marker-end="url(#art)"/></g>
+  <g class="a s3"><text class="sm" x="697.0" y="294" text-anchor="middle">cache.put</text><line class="lnt" x1="740" y1="300" x2="658" y2="314" marker-end="url(#art)"/></g>
+  <g class="a s3"><text class="okt" x="654" y="428" text-anchor="middle" font-size="13">Instant now, fresh next time</text></g>
+  <text class="sub" x="28" y="482" text-anchor="start">Network only (auth, payments, PHI) and cache only (offline page) are the two remaining strategies.</text>
+</svg>

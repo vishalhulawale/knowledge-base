@@ -37,10 +37,11 @@
   <text class="sub" x="28" y="62">Assistive technology never sees your CSS. It reads the role, name, state and focusability the browser exposes.</text>
   <rect class="box" x="20" y="80" width="372" height="320" rx="10" stroke-width="1.2"/>
   <text class="badt" x="206" y="106" text-anchor="middle" font-size="15">✗ Styled &lt;div&gt; with onClick</text>
-  <text class="code" x="38" y="132">&lt;div class="btn" onclick="save()"&gt;</text>
-  <text class="code" x="56" y="150">Save claim</text>
+  <text class="code" x="38" y="128" xml:space="preserve">&lt;div class="btn"</text>
+  <text class="code" x="38" y="143" xml:space="preserve">  onclick="save()"&gt;</text>
+  <text class="code" x="38" y="158" xml:space="preserve">  Save claim&lt;/div&gt;</text>
   <rect class="btn" x="270" y="120" width="100" height="34" rx="8"/><text class="btnt" x="320" y="142" text-anchor="middle">Save claim</text>
-  <line class="ln" x1="206" y1="160" x2="206" y2="180" marker-end="url(#ar)"/>
+  <line class="ln" x1="206" y1="164" x2="206" y2="182" marker-end="url(#ar)"/>
   <rect class="bb" x="36" y="186" width="340" height="150" rx="8" stroke-width="1.3"/>
   <text class="sub" x="48" y="206">Accessibility tree node</text>
   <text class="tx" x="48" y="230" font-weight="700">Role</text><text class="tx" x="138" y="230">generic (no semantics)</text>
@@ -52,10 +53,11 @@
   <text class="badt" x="48" y="386" font-size="15">“Save claim”  (plain text)</text>
   <rect class="box" x="408" y="80" width="372" height="320" rx="10" stroke-width="1.2"/>
   <text class="okt" x="594" y="106" text-anchor="middle" font-size="15">✓ Native &lt;button&gt;</text>
-  <text class="code" x="426" y="132">&lt;button type="button" onclick="save()"&gt;</text>
-  <text class="code" x="444" y="150">Save claim</text>
+  <text class="code" x="426" y="128" xml:space="preserve">&lt;button type="button"</text>
+  <text class="code" x="426" y="143" xml:space="preserve">  onclick="save()"&gt;</text>
+  <text class="code" x="426" y="158" xml:space="preserve">  Save claim&lt;/button&gt;</text>
   <rect class="btn" x="658" y="120" width="100" height="34" rx="8"/><text class="btnt" x="708" y="142" text-anchor="middle">Save claim</text>
-  <line class="ln" x1="594" y1="160" x2="594" y2="180" marker-end="url(#ar)"/>
+  <line class="ln" x1="594" y1="164" x2="594" y2="182" marker-end="url(#ar)"/>
   <rect class="bo" x="424" y="186" width="340" height="150" rx="8" stroke-width="1.3"/>
   <text class="sub" x="436" y="206">Accessibility tree node</text>
   <text class="tx" x="436" y="230" font-weight="700">Role</text><text class="tx" x="526" y="230">button</text>

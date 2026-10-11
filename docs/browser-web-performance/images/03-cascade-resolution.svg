@@ -42,7 +42,7 @@
   </style>
   <rect class="card" x="1" y="1" width="798" height="498" rx="14"/>
   <text class="h" x="28" y="40">Four rules, one button: who sets color?</text>
-  <text class="sub" x="28" y="62">Declared order: @layer base, components;  then unlayered rules. Steps are checked top to bottom; the first that differs decides.</text>
+  <text class="sub" x="28" y="62">Layer order: @layer base, components; then unlayered rules. The first step that differs decides.</text>
 
   <!-- rules -->
   <g class="x outL">

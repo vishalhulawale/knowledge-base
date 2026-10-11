@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">A layout shift from an image without dimensions, and the fix</title>
+  <desc id="d">Two phone screens, 360 by 640 CSS pixels, load the same article. On the left the banner image has no width and height, so the browser lays out the article text at the top. When the image arrives it is 160 pixels tall and pushes the 240 pixel tall text block down by 160 pixels. The impact region, the union of where the text was and where it is now, covers 400 of 640 pixels, an impact fraction of 0.625; the distance fraction is 160 divided by 640, or 0.25; so this one shift scores 0.625 times 0.25, about 0.16, above the 0.1 good threshold on its own. On the right the image has width and height attributes, so a 160 pixel box is reserved from the first layout; when the image arrives it fills the box and nothing moves, a layout shift score of 0. The image loads, then the impact region and the score appear. Simplified: one shift, full-width elements.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .phone{fill:#ffffff;stroke:#94a3b8;stroke-width:2}
+    .bar{fill:#cbd5e1}.head{fill:#e2e8f0}
+    .img{fill:#4f46e5}.imgt{fill:#ffffff;font-size:12px;font-weight:700}
+    .slot{fill:none;stroke:#94a3b8;stroke-width:1.5;stroke-dasharray:5 4}
+    .impact{fill:#dc2626;fill-opacity:.12;stroke:#dc2626;stroke-width:2;stroke-dasharray:6 4}
+    .okt{fill:#16a34a;font-weight:700}.badt{fill:#dc2626;font-weight:700}
+    .arr{stroke:#dc2626;stroke-width:2.5;fill:none}.ahb{fill:#dc2626}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .phone{fill:#111827;stroke:#64748b}
+      .bar{fill:#475569}.head{fill:#334155}
+      .img{fill:#818cf8}.imgt{fill:#0f172a}
+      .slot{stroke:#64748b}
+      .impact{fill:#f87171;stroke:#f87171}
+      .okt{fill:#4ade80}.badt{fill:#f87171}
+      .arr{stroke:#f87171}.ahb{fill:#f87171}
+    }
+    .shift{animation:shift 12s infinite}
+    @keyframes shift{0%,30%{transform:translateY(0)}33%,92%{transform:translateY(80px)}96%,100%{transform:translateY(0)}}
+    .load{opacity:0;animation:load 12s infinite}
+    @keyframes load{0%,30%{opacity:0}33%,92%{opacity:1}96%,100%{opacity:0}}
+    .late{opacity:0;animation:late 12s infinite}
+    @keyframes late{0%,45%{opacity:0}49%,92%{opacity:1}96%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .shift{animation:none;transform:translateY(80px)}
+      .load,.late{animation:none;opacity:1}
+    }
+  </style>
+  <defs>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="518" rx="14"/>
+  <text class="h" x="28" y="40">Cumulative Layout Shift: what one late image costs</text>
+  <text class="sub" x="28" y="62">Phones drawn at half scale (360 × 640 CSS px viewport).</text>
+
+  <!-- left phone -->
+  <text class="h2" x="190" y="84" text-anchor="middle">&lt;img src="banner.avif"&gt;</text>
+  <rect class="phone" x="100" y="90" width="180" height="320" rx="12"/>
+  <rect class="head" x="101" y="91" width="178" height="20" rx="11"/>
+  <rect class="bar" x="112" y="124" width="150" height="10" rx="3"/><rect class="bar" x="112" y="140" width="110" height="10" rx="3"/>
+  <g class="load"><rect class="img" x="101" y="190" width="178" height="80"/><text class="imgt" x="190" y="234" text-anchor="middle">banner arrives</text></g>
+  <g class="shift">
+    <rect class="bar" x="112" y="196" width="156" height="8" rx="3"/><rect class="bar" x="112" y="212" width="148" height="8" rx="3"/>
+    <rect class="bar" x="112" y="228" width="156" height="8" rx="3"/><rect class="bar" x="112" y="244" width="120" height="8" rx="3"/>
+    <rect class="bar" x="112" y="260" width="156" height="8" rx="3"/><rect class="bar" x="112" y="276" width="140" height="8" rx="3"/>
+    <rect class="bar" x="112" y="292" width="98" height="8" rx="3"/>
+  </g>
+  <g class="late">
+    <rect class="impact" x="101" y="190" width="178" height="200"/>
+    <path class="arr" d="M300,196 L300,272" marker-end="url(#arb)"/>
+    <text class="sm" x="308" y="230">moved 160 px</text>
+    <text class="sm" x="308" y="246">of 640: 0.25</text>
+    <text class="sm" x="308" y="330">impact region</text>
+    <text class="sm" x="308" y="346">400 of 640 px: 0.625</text>
+    <text class="badt" x="190" y="440" text-anchor="middle" font-size="15">0.625 × 0.25 ≈ 0.16</text>
+    <text class="sub" x="190" y="460" text-anchor="middle">one shift, already over 0.1</text>
+  </g>
+
+  <!-- right phone -->
+  <text class="h2" x="590" y="84" text-anchor="middle">&lt;img … width="1200" height="533"&gt;</text>
+  <rect class="phone" x="500" y="90" width="180" height="320" rx="12"/>
+  <rect class="head" x="501" y="91" width="178" height="20" rx="11"/>
+  <rect class="bar" x="512" y="124" width="150" height="10" rx="3"/><rect class="bar" x="512" y="140" width="110" height="10" rx="3"/>
+  <rect class="slot" x="502" y="190" width="176" height="80"/>
+  <text class="sm" x="590" y="234" text-anchor="middle">space reserved</text>
+  <g class="load"><rect class="img" x="501" y="190" width="178" height="80"/><text class="imgt" x="590" y="234" text-anchor="middle">banner arrives</text></g>
+  <rect class="bar" x="512" y="276" width="156" height="8" rx="3"/><rect class="bar" x="512" y="292" width="148" height="8" rx="3"/>
+  <rect class="bar" x="512" y="308" width="156" height="8" rx="3"/><rect class="bar" x="512" y="324" width="120" height="8" rx="3"/>
+  <rect class="bar" x="512" y="340" width="156" height="8" rx="3"/><rect class="bar" x="512" y="356" width="140" height="8" rx="3"/>
+  <rect class="bar" x="512" y="372" width="98" height="8" rx="3"/>
+  <g class="late">
+    <text class="okt" x="590" y="440" text-anchor="middle" font-size="15">nothing moved: 0</text>
+    <text class="sub" x="590" y="460" text-anchor="middle">aspect ratio known before the bytes arrive</text>
+  </g>
+
+  <text class="sub" x="28" y="496">Score per shift = impact fraction × distance fraction. CLS = the largest burst (session window) of such scores.</text>
+</svg>

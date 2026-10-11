@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">The agent loop with tool calling</title>
+  <desc id="d">A loop of four stations. The model reasons over the user goal and all earlier results; it returns tool_use blocks with stop_reason tool_use; the harness validates, authorizes and executes each call; the harness appends tool_result blocks matched by tool_use_id and calls the model again. The animation walks through three turns of a pharmacy question, "Can I refill Rx 7781 today?". Turn 1 calls get_member. Turn 2 makes two parallel calls, check_formulary and find_pharmacy, whose results go back in one user message. Turn 3 has no tool_use, so stop_reason is end_turn and the loop exits with the answer. An amber band lists the guards the harness checks every turn: a maximum of 10 turns, a token or cost budget, a per-tool call cap, a wall-clock timeout, and human approval for write actions. Simplified: thinking, streaming and retries are not shown and the tool names are illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+    .a{opacity:0;animation:15s infinite linear}
+    @keyframes k1{0%,4%{opacity:0}5.5%,10%{opacity:1}11.5%,100%{opacity:0}} .k1{animation-name:k1}
+    @keyframes k2{0%,10%{opacity:0}11.5%,16%{opacity:1}17.5%,100%{opacity:0}} .k2{animation-name:k2}
+    @keyframes k3{0%,16%{opacity:0}17.5%,22%{opacity:1}23.5%,100%{opacity:0}} .k3{animation-name:k3}
+    @keyframes k4{0%,22%{opacity:0}23.5%,28%{opacity:1}29.5%,100%{opacity:0}} .k4{animation-name:k4}
+    @keyframes k5{0%,28%{opacity:0}29.5%,34%{opacity:1}35.5%,100%{opacity:0}} .k5{animation-name:k5}
+    @keyframes k6{0%,34%{opacity:0}35.5%,40%{opacity:1}41.5%,100%{opacity:0}} .k6{animation-name:k6}
+    @keyframes k7{0%,40%{opacity:0}41.5%,46%{opacity:1}47.5%,100%{opacity:0}} .k7{animation-name:k7}
+    @keyframes k8{0%,46%{opacity:0}47.5%,52%{opacity:1}53.5%,100%{opacity:0}} .k8{animation-name:k8}
+    @keyframes k9{0%,52%{opacity:0}53.5%,58%{opacity:1}59.5%,100%{opacity:0}} .k9{animation-name:k9}
+    @keyframes k10{0%,58%{opacity:0}59.5%,92%{opacity:1}93.5%,100%{opacity:0}} .k10{animation-name:k10}
+    @keyframes k11{0%,4%{opacity:0}5.5%,28%{opacity:1}29.5%,100%{opacity:0}} .k11{animation-name:k11}
+    @keyframes k12{0%,28%{opacity:0}29.5%,52%{opacity:1}53.5%,100%{opacity:0}} .k12{animation-name:k12}
+    @keyframes k13{0%,52%{opacity:0}53.5%,92%{opacity:1}93.5%,100%{opacity:0}} .k13{animation-name:k13}
+    @media (prefers-reduced-motion: reduce){ .a{animation:none;opacity:0} .a.keep{opacity:1} }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="498" rx="14"/>
+  <text class="h" x="28" y="40" text-anchor="start">The agent loop: model proposes, harness disposes</text>
+  <text class="sub" x="28" y="62" text-anchor="start">Each turn is one Messages API call. The loop ends on end_turn, or when a guard trips.</text>
+  <rect class="box" x="300" y="88" width="200" height="58" rx="10" stroke-width="1.5"/>
+  <text class="lbl" x="400.0" y="112" text-anchor="middle">1 · Model reasons</text>
+  <text class="sm" x="400.0" y="132" text-anchor="middle">reads goal + all results</text>
+  <rect class="box" x="560" y="190" width="210" height="58" rx="10" stroke-width="1.5"/>
+  <text class="lbl" x="665.0" y="214" text-anchor="middle">2 · Returns tool_use</text>
+  <text class="sm" x="665.0" y="234" text-anchor="middle">stop_reason = tool_use</text>
+  <rect class="box" x="300" y="292" width="200" height="58" rx="10" stroke-width="1.5"/>
+  <text class="lbl" x="400.0" y="316" text-anchor="middle">3 · Harness executes</text>
+  <text class="sm" x="400.0" y="336" text-anchor="middle">validate · authorize · run</text>
+  <rect class="box" x="30" y="190" width="210" height="58" rx="10" stroke-width="1.5"/>
+  <text class="lbl" x="135.0" y="214" text-anchor="middle">4 · Appends tool_result</text>
+  <text class="sm" x="135.0" y="234" text-anchor="middle">matched by tool_use_id</text>
+  <path class="ln" d="M500,117 C560,117 665,140 665,186" marker-end="url(#ar)"/>
+  <path class="ln" d="M665,248 C665,300 560,321 504,321" marker-end="url(#ar)"/>
+  <path class="ln" d="M300,321 C240,321 135,300 135,252" marker-end="url(#ar)"/>
+  <path class="ln" d="M135,190 C135,140 240,117 296,117" marker-end="url(#ar)"/>
+  <rect class="bt" x="30" y="80" width="190" height="50" rx="10" stroke-width="1.5"/>
+  <text class="lbl" x="125" y="101" text-anchor="middle">User goal</text>
+  <text class="sm" x="125" y="120" text-anchor="middle">“Can I refill Rx 7781 today?”</text>
+  <path class="lnt" d="M220,105 L296,108" marker-end="url(#art)"/>
+  <path class="lno" stroke-dasharray="6 5" d="M500,98 L556,98" marker-end="url(#aro)"/>
+  <rect class="bo" x="560" y="80" width="210" height="50" rx="10" stroke-width="1.5"/>
+  <text class="lbl" x="665" y="101" text-anchor="middle">end_turn → answer</text>
+  <text class="sm" x="665" y="120" text-anchor="middle">text only, no tool_use</text>
+  <rect class="bw" x="30" y="380" width="740" height="52" rx="10" stroke-width="1.5"/>
+  <text class="wrnt" x="46" y="402" text-anchor="start">Guards checked every turn:</text>
+  <text class="sm" x="46" y="421" text-anchor="start">max turns (10) · token / cost budget · per-tool call cap · wall-clock timeout · human approval for writes</text>
+  <g class="a k1"><rect class="bp" x="300" y="88" width="200" height="58" rx="10" stroke-width="2.5"/><text class="lbl" x="400.0" y="112" text-anchor="middle">1 · Model reasons</text><text class="sm" x="400.0" y="132" text-anchor="middle">reads goal + all results</text></g>
+  <g class="a k2"><rect class="bp" x="560" y="190" width="210" height="58" rx="10" stroke-width="2.5"/><text class="lbl" x="665.0" y="214" text-anchor="middle">2 · Returns tool_use</text><text class="sm" x="665.0" y="234" text-anchor="middle">stop_reason = tool_use</text></g>
+  <g class="a k3"><rect class="bt" x="300" y="292" width="200" height="58" rx="10" stroke-width="2.5"/><text class="lbl" x="400.0" y="316" text-anchor="middle">3 · Harness executes</text><text class="sm" x="400.0" y="336" text-anchor="middle">validate · authorize · run</text></g>
+  <g class="a k4"><rect class="bt" x="30" y="190" width="210" height="58" rx="10" stroke-width="2.5"/><text class="lbl" x="135.0" y="214" text-anchor="middle">4 · Appends tool_result</text><text class="sm" x="135.0" y="234" text-anchor="middle">matched by tool_use_id</text></g>
+  <g class="a k5"><rect class="bp" x="300" y="88" width="200" height="58" rx="10" stroke-width="2.5"/><text class="lbl" x="400.0" y="112" text-anchor="middle">1 · Model reasons</text><text class="sm" x="400.0" y="132" text-anchor="middle">reads goal + all results</text></g>
+  <g class="a k6 keep"><rect class="bp" x="560" y="190" width="210" height="58" rx="10" stroke-width="2.5"/><text class="lbl" x="665.0" y="214" text-anchor="middle">2 · Returns tool_use</text><text class="sm" x="665.0" y="234" text-anchor="middle">stop_reason = tool_use</text></g>
+  <g class="a k7"><rect class="bt" x="300" y="292" width="200" height="58" rx="10" stroke-width="2.5"/><text class="lbl" x="400.0" y="316" text-anchor="middle">3 · Harness executes</text><text class="sm" x="400.0" y="336" text-anchor="middle">validate · authorize · run</text></g>
+  <g class="a k8"><rect class="bt" x="30" y="190" width="210" height="58" rx="10" stroke-width="2.5"/><text class="lbl" x="135.0" y="214" text-anchor="middle">4 · Appends tool_result</text><text class="sm" x="135.0" y="234" text-anchor="middle">matched by tool_use_id</text></g>
+  <g class="a k9"><rect class="bp" x="300" y="88" width="200" height="58" rx="10" stroke-width="2.5"/><text class="lbl" x="400.0" y="112" text-anchor="middle">1 · Model reasons</text><text class="sm" x="400.0" y="132" text-anchor="middle">reads goal + all results</text></g>
+  <g class="a k10 keep"><rect class="bo" x="560" y="80" width="210" height="50" rx="10" stroke-width="2.5"/><text class="okt" x="665" y="101" text-anchor="middle">end_turn → answer</text><text class="sm" x="665" y="120" text-anchor="middle">“Yes, at Pune Central, $10 copay”</text></g>
+  <g class="a k11"><text class="prit" x="400" y="182" text-anchor="middle">Turn 1 of max 10</text><text class="sm" x="400" y="204" text-anchor="middle">tool_use: get_member(id)</text><text class="sm" x="400" y="224" text-anchor="middle">result: plan GOLD, zip 411001</text><text class="sub" x="400" y="244" text-anchor="middle">(appended as tool_result)</text></g>
+  <g class="a k12 keep"><text class="prit" x="400" y="182" text-anchor="middle">Turn 2 of max 10</text><text class="sm" x="400" y="204" text-anchor="middle">2 tool_use blocks (parallel):</text><text class="sm" x="400" y="224" text-anchor="middle">check_formulary · find_pharmacy</text><text class="sub" x="400" y="244" text-anchor="middle">both results in ONE user message</text></g>
+  <g class="a k13"><text class="prit" x="400" y="182" text-anchor="middle">Turn 3 of max 10</text><text class="sm" x="400" y="204" text-anchor="middle">no tool_use in the response</text><text class="sm" x="400" y="224" text-anchor="middle">stop_reason = end_turn</text><text class="sub" x="400" y="244" text-anchor="middle">loop exits with the answer</text></g>
+  <text class="sub" x="28" y="470" text-anchor="start">Simplified: one request per turn; thinking, streaming and retries are not shown. Tool names are illustrative.</text>
+</svg>

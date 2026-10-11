@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">A long task freezes a left animation but not a transform animation</title>
+  <desc id="d">Two boxes slide from left to right along identical tracks using the same CSS animation timing. The top box animates the left property, so every frame needs style, layout and paint on the main thread. The bottom box animates transform: translate, so the compositor thread can move its already-painted layer without the main thread. Partway through, a red band shows the main thread busy with a 300 millisecond JavaScript long task. During the band the top box freezes and then jumps forward when the task ends, while the bottom box keeps moving smoothly. Simplified: timings are illustrative, and a box only gets compositor-driven animation when the browser promotes it to its own layer.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#0f172a;font-size:15px;font-weight:700}
+    .tx{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .code{fill:#334155;font-size:12.5px;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .track{fill:#ffffff;stroke:#cbd5e1;stroke-width:1.2}
+    .bad{fill:#dc2626}.tea{fill:#0ea5a4}.pri{fill:#4f46e5}
+    .band{fill:#dc2626;opacity:.14}
+    .badt{fill:#dc2626;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .on{fill:#ffffff;font-size:12px;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.lbl{fill:#f1f5f9}.tx,.code{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .track{fill:#111827;stroke:#475569}
+      .bad{fill:#f87171}.tea{fill:#2dd4bf}.pri{fill:#818cf8}
+      .band{fill:#f87171;opacity:.2}
+      .badt{fill:#f87171}.okt{fill:#4ade80}
+      .on{fill:#0f172a}
+    }
+    .mv{animation:10s infinite linear}
+    @keyframes ml{0%{transform:translateX(0)}20%{transform:translateX(100px)}35%{transform:translateX(100px)}36%{transform:translateX(180px)}50%{transform:translateX(250px)}55%,95%{transform:translateX(250px)}100%{transform:translateX(0)}}
+    @keyframes mc{0%{transform:translateX(0)}50%{transform:translateX(250px)}55%,95%{transform:translateX(250px)}100%{transform:translateX(0)}}
+    .ml{animation-name:ml}.mc{animation-name:mc}
+    .bl{opacity:0;animation:10s infinite linear}
+    @keyframes bl{0%,19.9%{opacity:0}20%,35%{opacity:1}35.1%,100%{opacity:0}}
+    .bl{animation-name:bl}
+    @media (prefers-reduced-motion: reduce){
+      .mv,.bl{animation:none}
+      .ml{transform:translateX(100px)}.mc{transform:translateX(165px)}.bl{opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="358" rx="14"/>
+  <text class="h" x="28" y="40">Same animation, different threads, one long task</text>
+  <text class="sub" x="28" y="62">The red band is a 300 ms JavaScript task blocking the main thread.</text>
+
+  <!-- busy band spans both tracks -->
+  <g class="bl">
+    <rect class="band" x="220" y="82" width="552" height="212" rx="8"/>
+    <text class="badt" x="496" y="102" text-anchor="middle" font-size="13">Main thread busy: long task running</text>
+  </g>
+
+  <text class="lbl" x="28" y="140">Animates left</text>
+  <text class="code" x="28" y="160">left: 0 → 250px</text>
+  <text class="tx" x="28" y="178">style → layout → paint</text>
+  <text class="tx" x="28" y="194">every frame, main thread</text>
+  <rect class="track" x="220" y="120" width="552" height="64" rx="10"/>
+  <g class="mv ml"><rect class="bad" x="232" y="132" width="40" height="40" rx="8"/></g>
+  <text class="tx" x="232" y="204"><tspan class="badt">Freezes</tspan> during the task, then jumps: visible jank.</text>
+
+  <text class="lbl" x="28" y="246">Animates transform</text>
+  <text class="code" x="28" y="266">translate: 0 → 250px</text>
+  <text class="tx" x="28" y="284">composite only,</text>
+  <text class="tx" x="28" y="300">compositor thread</text>
+  <rect class="track" x="220" y="226" width="552" height="64" rx="10"/>
+  <g class="mv mc"><rect class="tea" x="232" y="238" width="40" height="40" rx="8"/></g>
+  <text class="tx" x="232" y="310"><tspan class="okt">Keeps moving</tspan> while the main thread is blocked.</text>
+
+  <text class="sub" x="28" y="340">Simplified: timings are illustrative. Input handlers still wait for the main thread, so INP suffers either way.</text>
+</svg>

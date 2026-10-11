@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">LCP broken into its four subparts, before and after a fix</title>
+  <desc id="d">Two horizontal timelines on a shared 0 to 4 second axis, revealed by a playhead sweeping left to right. Each LCP is split into four subparts: time to first byte, resource load delay, resource load duration and element render delay. Before the fix, the hero image is injected by JavaScript and lazy-loaded: TTFB 800 milliseconds, resource load delay 1,400 milliseconds, load duration 900 milliseconds and render delay 400 milliseconds, so LCP lands at 3.5 seconds, in the needs-improvement band. After the fix, the image is in the server HTML with fetchpriority high and no lazy loading, in a smaller AVIF file: TTFB is still 800 milliseconds, load delay drops to 100, load duration to 700 and render delay to 100, so LCP lands at 1.7 seconds, inside the 2.5 second good threshold. The point is that most of the win came from the load delay, not from a faster server. Illustrative numbers.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .cover{fill:#f8fafc}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .on{fill:#ffffff;font-size:12px;font-weight:700}
+    .mutf{fill:#64748b}.wrnf{fill:#d97706}.pri{fill:#4f46e5}.tea{fill:#0ea5a4}
+    .okt{fill:#16a34a;font-weight:700}.wrnt{fill:#b45309;font-weight:700}.badt{fill:#dc2626;font-weight:700}
+    .ln{stroke:#94a3b8;stroke-width:1.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2;fill:none}.lnb{stroke:#dc2626;stroke-width:2;fill:none}
+    .dash{stroke-dasharray:5 5}
+    .play{stroke:#4f46e5;stroke-width:2.5}
+    .flago{fill:#16a34a}.flagw{fill:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}.cover{fill:#1f2430}
+      .h,.h2{fill:#f1f5f9}.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .on{fill:#0f172a}
+      .mutf{fill:#94a3b8}.wrnf{fill:#fbbf24}.pri{fill:#818cf8}.tea{fill:#2dd4bf}
+      .okt{fill:#4ade80}.wrnt{fill:#fbbf24}.badt{fill:#f87171}
+      .ln{stroke:#64748b}.lno{stroke:#4ade80}.lnb{stroke:#f87171}
+      .play{stroke:#818cf8}
+      .flago{fill:#4ade80}.flagw{fill:#fbbf24}
+    }
+    .sweep{animation:sweep 12s infinite linear}
+    @keyframes sweep{0%{transform:translateX(0)}70%,100%{transform:translateX(702px)}}
+    .ph{animation:ph 12s infinite linear}
+    @keyframes ph{0%{transform:translateX(0);opacity:1}70%{transform:translateX(700px);opacity:1}72%,100%{transform:translateX(700px);opacity:0}}
+    .fa{opacity:0;animation:fa 12s infinite linear}
+    @keyframes fa{0%,29%{opacity:0}31%,94%{opacity:1}98%,100%{opacity:0}}
+    .fb{opacity:0;animation:fb 12s infinite linear}
+    @keyframes fb{0%,60%{opacity:0}62%,94%{opacity:1}98%,100%{opacity:0}}
+    @media (prefers-reduced-motion: reduce){
+      .sweep,.ph{animation:none;opacity:0}
+      .fa,.fb{animation:none;opacity:1}
+    }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="428" rx="14"/>
+  <text class="h" x="28" y="40">Where the LCP time goes: four subparts</text>
+  <text class="sub" x="28" y="62">Same server (TTFB 800 ms). Only how the hero image is discovered and fetched changes.</text>
+
+  <!-- axis -->
+  <line class="ln" x1="60" y1="330" x2="760" y2="330"/>
+  <g class="sm" text-anchor="middle">
+    <text x="60" y="348">0 s</text><text x="235" y="348">1 s</text><text x="410" y="348">2 s</text><text x="585" y="348">3 s</text><text x="760" y="348">4 s</text>
+  </g>
+  <text class="okt" x="497.5" y="84" text-anchor="middle" font-size="12">good ≤ 2.5 s</text>
+  <text class="badt" x="752" y="84" text-anchor="end" font-size="12">poor &gt; 4 s</text>
+
+  <!-- row A: before -->
+  <text class="h2" x="60" y="118">Before: hero image injected by JS, loading="lazy"</text>
+  <rect class="mutf" x="60" y="128" width="140" height="34"/>
+  <rect class="wrnf" x="200" y="128" width="245" height="34"/>
+  <rect class="pri" x="445" y="128" width="157.5" height="34"/>
+  <rect class="tea" x="602.5" y="128" width="70" height="34"/>
+  <text class="on" x="130" y="150" text-anchor="middle">TTFB 800</text>
+  <text class="on" x="322" y="150" text-anchor="middle">load delay 1,400</text>
+  <text class="on" x="524" y="150" text-anchor="middle">load 900</text>
+  <text class="on" x="637" y="150" text-anchor="middle">400</text>
+
+  <!-- row B: after -->
+  <text class="h2" x="60" y="218">After: &lt;img fetchpriority="high"&gt; in server HTML, AVIF</text>
+  <rect class="mutf" x="60" y="228" width="140" height="34"/>
+  <rect class="wrnf" x="200" y="228" width="17.5" height="34"/>
+  <rect class="pri" x="217.5" y="228" width="122.5" height="34"/>
+  <rect class="tea" x="340" y="228" width="17.5" height="34"/>
+  <text class="on" x="130" y="250" text-anchor="middle">TTFB 800</text>
+  <text class="on" x="279" y="250" text-anchor="middle">load 700</text>
+
+  <!-- cover that slides away to reveal the bars -->
+  <rect class="cover sweep" x="60" y="124" width="702" height="42"/>
+  <rect class="cover sweep" x="60" y="224" width="702" height="42"/>
+
+  <line class="lno dash" x1="497.5" y1="90" x2="497.5" y2="330"/>
+  <line class="lnb dash" x1="760" y1="90" x2="760" y2="330"/>
+  <!-- playhead -->
+  <line class="play ph" x1="60" y1="100" x2="60" y2="330"/>
+
+  <!-- LCP flags -->
+  <g class="fb"><line class="ln" x1="672.5" y1="162" x2="672.5" y2="186"/><rect class="flagw" x="612" y="170" width="121" height="22" rx="6"/><text class="on" x="672.5" y="186" text-anchor="middle">LCP 3.5 s</text></g>
+  <g class="fa"><line class="ln" x1="357.5" y1="262" x2="357.5" y2="286"/><rect class="flago" x="297" y="270" width="121" height="22" rx="6"/><text class="on" x="357.5" y="286" text-anchor="middle">LCP 1.7 s</text></g>
+
+  <!-- legend -->
+  <rect class="mutf" x="60" y="372" width="14" height="14"/><text class="tx" x="80" y="384">TTFB</text>
+  <rect class="wrnf" x="140" y="372" width="14" height="14"/><text class="tx" x="160" y="384">resource load delay</text>
+  <rect class="pri" x="310" y="372" width="14" height="14"/><text class="tx" x="330" y="384">resource load duration</text>
+  <rect class="tea" x="500" y="372" width="14" height="14"/><text class="tx" x="520" y="384">element render delay</text>
+  <text class="sub" x="28" y="414">Illustrative numbers. The biggest win is the amber bar: the browser found and requested the image sooner.</text>
+</svg>

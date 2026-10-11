@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Tree shaking: what survives into the bundle</title>
+  <desc id="d">Tree shaking in one picture. On the left are four source modules. app.ts imports formatDate from utils.ts, IconCheck from the icons barrel file, and imports polyfill.ts only for its side effects. utils.ts exports formatDate, formatMoney and parseCsv; only formatDate is used, so the other two exports are crossed out and removed. The icons package declares sideEffects false, so of its IconCheck, IconX and IconStar re-exports only IconCheck is kept and the other modules are never included. polyfill.ts exports nothing that is used, but it is kept because it has side effects. On the right, the output bundle contains app code, formatDate, IconCheck and the polyfill, scope-hoisted into one function scope and minified.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;font-size:12.5px;fill:#334155}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .cell{fill:#e2e8f0;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:1.5;fill:none}
+    .lnt{stroke:#0ea5a4;stroke-width:2;fill:none}
+    .ah{fill:#64748b}.aht{fill:#0ea5a4}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    .strike{stroke:#dc2626;stroke-width:1.5}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.tx,.sm,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .cell{fill:#334155;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .prit{fill:#a5b4fc}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnt{stroke:#2dd4bf}.ah{fill:#94a3b8}.aht{fill:#2dd4bf}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+      .strike{stroke:#f87171}
+    }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="428" rx="14"/>
+  <text class="h" x="28" y="40">Tree shaking: static imports decide what ships</text>
+  <text class="sub" x="28" y="62">Green = kept, red = removed. Unused exports go; side-effectful modules stay.</text>
+  <rect class="bp" x="30" y="84" width="260" height="78" rx="8"/>
+  <text class="h2" x="44" y="106">app.ts</text>
+  <text class="mono" x="44" y="126">import { formatDate } from "./utils"</text>
+  <text class="mono" x="44" y="142">import { IconCheck } from "icons"</text>
+  <text class="mono" x="44" y="158">import "./polyfill"</text>
+  <rect class="box" x="30" y="196" width="260" height="94" rx="8" stroke-width="1.2"/>
+  <text class="h2" x="44" y="218">utils.ts</text>
+  <text class="mono" x="44" y="240">export formatDate</text>
+  <circle class="okf" cx="272" cy="236" r="5"/>
+  <text class="mono" x="44" y="260">export formatMoney</text>
+  <circle class="badf" cx="272" cy="256" r="5"/>
+  <line class="strike" x1="42" y1="256" x2="180.79999999999998" y2="256"/>
+  <text class="mono" x="44" y="280">export parseCsv</text>
+  <circle class="badf" cx="272" cy="276" r="5"/>
+  <line class="strike" x1="42" y1="276" x2="158.0" y2="276"/>
+  <rect class="box" x="30" y="318" width="260" height="94" rx="8" stroke-width="1.2"/>
+  <text class="h2" x="44" y="340">icons (sideEffects: false)</text>
+  <text class="mono" x="44" y="362">IconCheck.js</text>
+  <circle class="okf" cx="272" cy="358" r="5"/>
+  <text class="mono" x="44" y="382">IconX.js</text>
+  <circle class="badf" cx="272" cy="378" r="5"/>
+  <line class="strike" x1="42" y1="378" x2="104.8" y2="378"/>
+  <text class="mono" x="44" y="402">IconStar.js</text>
+  <circle class="badf" cx="272" cy="398" r="5"/>
+  <line class="strike" x1="42" y1="398" x2="127.6" y2="398"/>
+  <rect class="box" x="320" y="196" width="200" height="54" rx="8" stroke-width="1.2"/>
+  <text class="h2" x="334" y="218">polyfill.ts</text>
+  <text class="mono" x="334" y="240">no used exports</text>
+  <circle class="okf" cx="502" cy="236" r="5"/>
+  <text class="sm" x="334" y="266">kept: has side effects</text>
+  <line class="ln" x1="160" y1="162" x2="160" y2="194" marker-end="url(#ar)"/>
+  <path class="ln" d="M290,140 H305 V316 H292" marker-end="url(#ar)"/>
+  <path class="ln" d="M290,156 H420 V194" marker-end="url(#ar)"/>
+  <line class="lnt" x1="530" y1="250" x2="572" y2="250" marker-end="url(#art)"/>
+  <rect class="bo" x="580" y="96" width="196" height="250" rx="10"/>
+  <text class="h2" x="594" y="122">main.[hash].js</text>
+  <text class="mono" x="594" y="150">polyfill code</text>
+  <text class="mono" x="594" y="174">formatDate()</text>
+  <text class="mono" x="594" y="198">IconCheck()</text>
+  <text class="mono" x="594" y="222">app code</text>
+  <text class="sm" x="594" y="262">one scope (hoisted),</text>
+  <text class="sm" x="594" y="278">minified, compressed</text>
+  <text class="okt" x="594" y="318" font-size="13">4 of 9 units shipped</text>
+  <text class="sub" x="28" y="412">A require() call, a CommonJS build of the package, or a missing sideEffects flag keeps the red items too.</text>
+</svg>

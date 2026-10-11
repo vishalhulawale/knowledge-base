@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">HTTP cache on first visit, repeat visit and after a deploy</title>
+  <desc id="d">Three phases of loading the same single-page app, each with two requests: index.html and the content-hashed JavaScript bundle. On the first visit both miss the browser's HTTP cache and are downloaded from the CDN or origin; index.html is stored with no-cache and an ETag, the bundle with max-age of one year and immutable. On a repeat visit the bundle is a fresh hit and no request is sent, while index.html is stale by design and is revalidated with If-None-Match, receiving a small 304 Not Modified. After a deploy, revalidating index.html returns 200 with new HTML that names a new bundle, app.7b21e0.js, which misses and is downloaded once. The phases appear one after another. Simplified: the service worker and bfcache layers are not shown.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .okt{fill:#16a34a;font-weight:700}.badt{fill:#dc2626;font-weight:700}.prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}.lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .okt{fill:#4ade80}.badt{fill:#f87171}.prit{fill:#818cf8}.teat{fill:#5eead4}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .a{opacity:0;animation:14s infinite linear}
+    @keyframes s0{0%,4%{opacity:0}6%,90%{opacity:1}94%,100%{opacity:0}}
+    .s0{animation-name:s0}
+    @keyframes s1{0%,16%{opacity:0}18%,90%{opacity:1}94%,100%{opacity:0}}
+    .s1{animation-name:s1}
+    @keyframes s2{0%,28%{opacity:0}30%,90%{opacity:1}94%,100%{opacity:0}}
+    .s2{animation-name:s2}
+    @keyframes s3{0%,40%{opacity:0}42%,90%{opacity:1}94%,100%{opacity:0}}
+    .s3{animation-name:s3}
+    @keyframes s4{0%,52%{opacity:0}54%,90%{opacity:1}94%,100%{opacity:0}}
+    .s4{animation-name:s4}
+    @keyframes s5{0%,64%{opacity:0}66%,90%{opacity:1}94%,100%{opacity:0}}
+    .s5{animation-name:s5}
+    @media (prefers-reduced-motion: reduce){ .a{animation:none;opacity:1} }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="518" rx="14"/>
+  <text class="h" x="28" y="40" text-anchor="start">Why only index.html talks to the server</text>
+  <text class="sub" x="28" y="62" text-anchor="start">Hashed bundle: max-age=31536000, immutable. index.html: no-cache + ETag.</text>
+  <text class="h2" x="100" y="96" text-anchor="middle">Request</text><text class="h2" x="465" y="96" text-anchor="middle">Browser HTTP cache</text><text class="h2" x="650" y="96" text-anchor="start">CDN / origin</text>
+  <rect class="box" x="16" y="106" width="768" height="120" rx="10" stroke-width="1"/>
+  <text class="h2" x="30" y="128" text-anchor="start">1. First visit</text>
+  <rect class="box" x="16" y="238" width="768" height="120" rx="10" stroke-width="1"/>
+  <text class="h2" x="30" y="260" text-anchor="start">2. Repeat visit</text>
+  <rect class="box" x="16" y="370" width="768" height="120" rx="10" stroke-width="1"/>
+  <text class="h2" x="30" y="392" text-anchor="start">3. After a deploy</text>
+  <g class="a s0"><text class="tx" x="30" y="155" text-anchor="start">index.html</text><text class="sm" x="290" y="142" text-anchor="middle">GET</text><line class="lnp" x1="180" y1="150" x2="396" y2="150" marker-end="url(#arp)"/><rect class="bb" x="405" y="136" width="120" height="26" rx="6" stroke-width="1.2"/><text class="sm" x="465" y="154" text-anchor="middle">miss</text><text class="sm" x="585" y="142" text-anchor="middle">fetch</text><line class="lnp" x1="530" y1="150" x2="640" y2="150" marker-end="url(#arp)"/><text class="prit" x="650" y="155" text-anchor="start" font-size="13">200 + ETag</text></g>
+  <g class="a s1"><text class="tx" x="30" y="195" text-anchor="start">app.3f9a1c.js</text><text class="sm" x="290" y="182" text-anchor="middle">GET</text><line class="lnp" x1="180" y1="190" x2="396" y2="190" marker-end="url(#arp)"/><rect class="bb" x="405" y="176" width="120" height="26" rx="6" stroke-width="1.2"/><text class="sm" x="465" y="194" text-anchor="middle">miss</text><text class="sm" x="585" y="182" text-anchor="middle">fetch</text><line class="lnp" x1="530" y1="190" x2="640" y2="190" marker-end="url(#arp)"/><text class="prit" x="650" y="195" text-anchor="start" font-size="13">200, kept 1 year</text></g>
+  <g class="a s2"><text class="tx" x="30" y="287" text-anchor="start">index.html</text><text class="sm" x="290" y="274" text-anchor="middle">GET</text><line class="lnp" x1="180" y1="282" x2="396" y2="282" marker-end="url(#arp)"/><rect class="bw" x="405" y="268" width="120" height="26" rx="6" stroke-width="1.2"/><text class="sm" x="465" y="286" text-anchor="middle">stale: revalidate</text><text class="sm" x="585" y="274" text-anchor="middle">If-None-Match</text><line class="lnw" x1="530" y1="282" x2="640" y2="282" marker-end="url(#arw)"/><text class="wrnt" x="650" y="287" text-anchor="start" font-size="13">304, tiny</text></g>
+  <g class="a s3"><text class="tx" x="30" y="327" text-anchor="start">app.3f9a1c.js</text><text class="sm" x="290" y="314" text-anchor="middle">GET</text><line class="lno" x1="180" y1="322" x2="396" y2="322" marker-end="url(#aro)"/><rect class="bo" x="405" y="308" width="120" height="26" rx="6" stroke-width="1.2"/><text class="sm" x="465" y="326" text-anchor="middle">fresh hit</text><text class="okt" x="650" y="327" text-anchor="start" font-size="13">no request</text></g>
+  <g class="a s4"><text class="tx" x="30" y="419" text-anchor="start">index.html</text><text class="sm" x="290" y="406" text-anchor="middle">GET</text><line class="lnp" x1="180" y1="414" x2="396" y2="414" marker-end="url(#arp)"/><rect class="bw" x="405" y="400" width="120" height="26" rx="6" stroke-width="1.2"/><text class="sm" x="465" y="418" text-anchor="middle">stale: revalidate</text><text class="sm" x="585" y="406" text-anchor="middle">If-None-Match</text><line class="lnw" x1="530" y1="414" x2="640" y2="414" marker-end="url(#arw)"/><text class="prit" x="650" y="419" text-anchor="start" font-size="13">200, new HTML</text></g>
+  <g class="a s5"><text class="tx" x="30" y="459" text-anchor="start">app.7b21e0.js</text><text class="sm" x="290" y="446" text-anchor="middle">new name: GET</text><line class="lnp" x1="180" y1="454" x2="396" y2="454" marker-end="url(#arp)"/><rect class="bb" x="405" y="440" width="120" height="26" rx="6" stroke-width="1.2"/><text class="sm" x="465" y="458" text-anchor="middle">miss</text><text class="sm" x="585" y="446" text-anchor="middle">fetch</text><line class="lnp" x1="530" y1="454" x2="640" y2="454" marker-end="url(#arp)"/><text class="prit" x="650" y="459" text-anchor="start" font-size="13">200, once</text></g>
+  <g class="a s5"><text class="sub" x="400" y="506" text-anchor="middle">A new URL is a new cache entry: no purge needed, and the old bundle simply ages out.</text></g>
+</svg>

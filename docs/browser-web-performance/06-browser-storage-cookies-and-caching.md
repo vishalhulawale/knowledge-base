@@ -7,17 +7,17 @@ tags: [browser-web-performance, P1]
 # Browser storage, cookies & caching
 
 !!! abstract "Key takeaways"
-    - **Cookies are for the server, storage APIs are for the page.** Cookies (about 4 KB each) ride on every matching request; `localStorage` / `sessionStorage` are synchronous, string-only and about 5 MiB per origin; **IndexedDB**, the **Cache API** and **OPFS** are async and share one per-origin quota (up to ~60% of disk in Chromium and Safari, best-effort 10% or 10 GiB in Firefox).
-    - A session cookie should be `__Host-` prefixed, `Secure`, `HttpOnly`, `SameSite=Lax` (or `Strict`) and short-lived. Chromium treats a missing `SameSite` as `Lax`; other browsers differ, so always set it. Browsers cap cookie lifetime at **400 days** (Chrome since 104).
-    - **Third-party cookies in 2026:** Safari and Firefox block or partition them by default; **Chrome still allows them by default** (Google dropped its phase-out in April 2025 and retired most Privacy Sandbox APIs in October 2025) but keeps **CHIPS** (`Partitioned`), the **Storage Access API** and **FedCM**. Design embeds as if unpartitioned third-party cookies don't exist.
-    - All storage is **best-effort** by default: evicted per origin, all-or-nothing, LRU under disk pressure, and in Safari after **7 days without user interaction** for script-written data. `navigator.storage.persist()` opts out of automatic eviction.
-    - A request falls through **bfcache → service worker → HTTP cache → network (CDN)**. Hashed assets get `max-age=31536000, immutable`; HTML gets `no-cache`; personal data gets `private` (or `no-store` only when it must never touch disk). Service workers add cache-first, network-first and stale-while-revalidate strategies that *you* version and expire.
+    - **Cookies are for the server, storage APIs are for the page.** Cookies (~4 KB) ride on every matching request; `localStorage` / `sessionStorage` are synchronous, string-only and 5 MiB per origin; **IndexedDB**, the **Cache API** and **OPFS** are async and share one large per-origin quota.
+    - A session cookie should be `__Host-` prefixed, `Secure`, `HttpOnly`, `SameSite=Lax` (or `Strict`) and short-lived. Only Chromium defaults a missing `SameSite` to `Lax`, so always set it.
+    - **Third-party cookies in 2026:** Safari blocks and Firefox partitions them by default; **Chrome still allows them** (Google dropped its phase-out in April 2025) but backs **CHIPS** (`Partitioned`), the **Storage Access API** and **FedCM**. Design embeds as if unpartitioned third-party cookies don't exist.
+    - Storage is **best-effort**: evicted per whole origin, LRU under disk pressure, and in Safari after **7 days without interaction**. `navigator.storage.persist()` opts out.
+    - A request falls through **bfcache → service worker → HTTP cache → network**. Hashed assets get `max-age=31536000, immutable`, HTML gets `no-cache`, personal data `private` (`no-store` only if it must never touch disk). Service worker caches are versioned and expired by *you*.
 
 ## Why it matters
 
-Every web app keeps some state on the client: who the user is (session cookie), what they chose (preferences, drafts), what they already downloaded (assets, reference data) and what they can use offline. Picking the wrong place causes the classic bugs and incidents: tokens stolen from `localStorage` via XSS, CSRF through a cookie without `SameSite`, a chat widget or SSO iframe that silently breaks in Safari, users stuck on an old bundle after a deploy, or patient data left on a shared kiosk's disk.
+Every web app keeps state on the client: who the user is, what they chose, what they already downloaded and what works offline. The wrong place causes classic incidents: tokens stolen from `localStorage` via XSS, CSRF through a cookie without `SameSite`, an SSO iframe that silently breaks in Safari, users stuck on an old bundle after a deploy, or patient data left on a shared kiosk's disk.
 
-The ground also moved. Chrome made `SameSite=Lax` the default in 2020, Safari has blocked all third-party cookies since 13.1 (2020), Firefox partitions all third-party state by default (Total Cookie Protection), and Chrome partitioned third-party storage in 115 (2023). Interviewers test whether your mental model is from 2018 or from today.
+The ground also moved: Chrome defaulted to `SameSite=Lax` (2020), Safari blocks all third-party cookies (13.1, 2020), Firefox partitions third-party state, and Chrome partitioned third-party storage (115, 2023). Interviewers check whether your model is from 2018 or today.
 
 ## Core concepts
 
@@ -35,7 +35,7 @@ The ground also moved. Chrome made `SameSite=Lax` the default in 2020, Safari ha
 
 Two words matter: an **origin** is scheme + host + port (`https://app.example.com:443`); a **site** is scheme + registrable domain (`https://example.com`). Storage APIs are per origin; `SameSite` and partitioning are about sites.
 
-`localStorage` blocks the main thread on every read and write, holds only strings and has no expiry, so it suits a few small values. Anything large, structured or written often belongs in IndexedDB (usually through a wrapper such as `idb` or Dexie).
+`localStorage` blocks the main thread and holds only strings, so keep it to a few small values; anything large or written often belongs in IndexedDB (via `idb` or Dexie).
 
 ### Cookies: anatomy and attributes
 
@@ -43,15 +43,15 @@ Two words matter: an **origin** is scheme + host + port (`https://app.example.co
 Set-Cookie: __Host-SESSION=8f2c...; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=1800
 ```
 
-- **Scope:** without `Domain` the cookie is **host-only** (safest). `Domain=example.com` shares it with every subdomain, including the forgotten marketing site. `Path` is not a security boundary.
-- **Lifetime:** no `Expires`/`Max-Age` means a session cookie, which "session restore" can keep alive indefinitely. Chrome clamps longer expiry to 400 days, as RFC 6265bis recommends.
+- **Scope:** without `Domain` the cookie is **host-only** (safest). `Domain=example.com` shares it with every subdomain.
+- **Lifetime:** no `Expires`/`Max-Age` means a session cookie (which session restore can revive). Chrome clamps expiry to 400 days, per RFC 6265bis.
 - **`Secure`:** HTTPS only. **`HttpOnly`:** invisible to `document.cookie`, but still sent with `fetch`, so it stops theft by XSS, not use by XSS.
-- **`SameSite`:** `Strict` (same-site requests only), `Lax` (plus cross-site top-level GET navigations), `None` (all contexts, requires `Secure`). The full matrix and measured browser behaviour are in [Frontend security](../frontend-architecture/05-frontend-security.md#csrf-and-samesite).
-- **Prefixes:** `__Secure-` requires `Secure`; `__Host-` also requires `Path=/` and no `Domain`, so a sibling subdomain can't overwrite it (cookie tossing). Newer `__Http-` / `__Host-Http-` prefixes also require `HttpOnly`.
+- **`SameSite`:** `Strict`, `Lax` (plus cross-site top-level GETs) or `None` (requires `Secure`); full matrix and measurements in [Frontend security](../frontend-architecture/05-frontend-security.md#csrf-and-samesite).
+- **Prefixes:** `__Secure-` requires `Secure`; `__Host-` also requires `Path=/` and no `Domain`, so a sibling subdomain can't overwrite it. Newer `__Http-` prefixes also require `HttpOnly`.
 
 ### Third-party cookies and partitioning
 
-A cookie is "third-party" when the site that set it differs from the site in the address bar, typically an `<iframe>` or a cross-site `fetch`. Historically the cookie jar was keyed only by the cookie's host, so `tracker.example` embedded on news and shopping sites saw one shared ID. Browsers have attacked that in three ways:
+A cookie is "third-party" when its site differs from the site in the address bar (an `<iframe>` or cross-site `fetch`). The jar used to be keyed only by the cookie's host, so a tracker embedded on many sites saw one shared ID.
 
 | Browser (2026) | Default behaviour |
 |---|---|
@@ -66,11 +66,11 @@ The replacements for legitimate cross-site state:
 - **Storage Access API:** an embedded iframe calls `document.requestStorageAccess()` after a user gesture to get its unpartitioned cookies, with a browser prompt or heuristics.
 - **FedCM:** browser-mediated federated sign-in, replacing hidden IdP iframes that relied on third-party cookies.
 
-![Animation: a tracker iframe is embedded on site A and then on site B. In the top row, without partitioning, both visits read and write the same cookie jar, so id=42 set on site A is read back on site B and the tracker links the visits. In the bottom row, with a Partitioned cookie, the jar is keyed by top-level site, so site B gets an empty jar and a different id](images/06-cookie-partitioning.svg){ loading=lazy }
+![Animation: a tracker iframe on site A writes id=42; without partitioning the same iframe on site B reads id=42 back and links the visits; with a Partitioned cookie the jar is keyed by top-level site, so site B gets an empty jar and a new id](images/06-cookie-partitioning.svg){ loading=lazy }
 *Watch the key under each jar: adding the top-level site to the key is the whole trick.*
 
 !!! warning "Gotcha: silent SSO and OIDC renew in iframes"
-    Hidden-iframe flows (`prompt=none` silent token renew, "check session" iframes, an IdP widget on a partner domain) depend on the IdP's third-party cookie. They fail in Safari and Firefox today and in Chrome for users who block third-party cookies. Use refresh-token rotation or a same-site **BFF**, and keep the IdP on a subdomain of the app's site (e.g. `login.example.com`) when you can.
+    Hidden-iframe flows (`prompt=none` silent renew, "check session" iframes) depend on the IdP's third-party cookie and fail in Safari, Firefox and for Chrome users who block them. Use refresh-token rotation or a same-site **BFF**, and host the IdP on a subdomain of the app's site when you can.
 
 ### Quotas, persistence and eviction
 
@@ -82,7 +82,7 @@ IndexedDB, Cache API and OPFS share one per-origin quota:
 | Firefox | Best-effort: min(10% of disk, 10 GiB per site); persistent: 50% up to 8 TiB | LRU by origin |
 | Safari 17+ | ~60% of disk for browser apps, ~15% for embedded WebViews; cross-origin frames ~1/10 of parent | LRU, plus 7-day no-interaction eviction of script-written data |
 
-Data is **best-effort** by default. Eviction deletes **all** of an origin's data at once, so IndexedDB and Cache API never go half-missing. `navigator.storage.persist()` asks to be exempt (Chrome and Safari decide from engagement without a prompt; Firefox prompts), and `navigator.storage.estimate()` returns padded usage and quota. Writes beyond quota throw `QuotaExceededError`, including `localStorage.setItem`, so wrap them in `try/catch`. Private browsing uses separate, temporary storage.
+Data is **best-effort**: eviction deletes **all** of an origin's data at once. `navigator.storage.persist()` asks for exemption (Chrome and Safari decide from engagement; Firefox prompts) and `estimate()` reports padded usage. Over-quota writes, `localStorage.setItem` included, throw `QuotaExceededError`.
 
 ### The browser's cache layers
 
@@ -103,7 +103,7 @@ flowchart TD
 ```
 *Notice that the service worker sits in front of the HTTP cache: its `fetch()` calls still go through the HTTP cache, so a bad `Cache-Control` on the SW script or assets hurts twice.*
 
-**HTTP cache (private cache).** RFC 9111 rules apply in the browser too: a response is **fresh** for `max-age`, then **stale** and revalidated with `If-None-Match` / `If-Modified-Since`. Without `Cache-Control` the browser applies **heuristic freshness** (typically 10% of the age since `Last-Modified`), which is how "it worked after a hard refresh" bugs start. Since Chrome 86 and Firefox 85 the HTTP cache is **partitioned by top-level site**, so a shared CDN copy of a library is no longer reused across different sites. Shared caches, `s-maxage`, `Vary` and purging are covered in [Load balancers, reverse proxies & CDNs](../networking/05-load-balancers-reverse-proxies-and-cdns.md#cdns-reverse-proxies-at-the-edge).
+**HTTP cache (private cache).** A response is **fresh** for `max-age`, then **stale** and revalidated with `If-None-Match` / `If-Modified-Since`. Without `Cache-Control` the browser guesses (**heuristic freshness**), the root of many "works after a hard refresh" bugs. Since Chrome 86 and Firefox 85 the HTTP cache is **partitioned by top-level site**, so a public-CDN library is no longer shared across sites. Shared caches, `s-maxage`, `Vary` and purging are in [Load balancers, reverse proxies & CDNs](../networking/05-load-balancers-reverse-proxies-and-cdns.md#cdns-reverse-proxies-at-the-edge).
 
 | Response | Header | Why |
 |---|---|---|
@@ -114,10 +114,10 @@ flowchart TD
 
 `no-cache` means "revalidate before use", not "don't store". `no-store` is the one that forbids storage.
 
-![Animation: three visits to a page. On the first visit every resource misses and goes to the network. On a repeat visit the hashed bundle is served from the HTTP cache with no request, while index.html is revalidated and gets a 304. After a deploy, index.html gets a 200 with a new bundle name, which misses and downloads once](images/06-cache-layers.svg){ loading=lazy }
+![Animation: first visit, everything misses and downloads; repeat visit, the hashed bundle comes from the HTTP cache with no request while index.html gets a 304; after a deploy, index.html returns 200 with a new bundle name, which downloads once](images/06-cache-layers.svg){ loading=lazy }
 *Watch `index.html`: it is the only file that always talks to the server, and that small conversation is what makes `immutable` assets safe.*
 
-**bfcache.** The back/forward cache keeps the whole page (JS heap included) in memory when the user navigates away, making Back instant. Pages are ineligible if they use `unload` handlers, hold some open connections or (in most browsers) are served with `Cache-Control: no-store`. Restores fire `pageshow` with `event.persisted === true`, so re-check auth or refresh data there. It feeds directly into navigation speed and [Core Web Vitals](04-core-web-vitals-and-performance-optimisation.md).
+**bfcache.** The back/forward cache keeps the whole page (JS heap included) in memory so Back is instant. `unload` handlers and (in most browsers) `Cache-Control: no-store` make a page ineligible. Restores fire `pageshow` with `event.persisted === true`: re-check auth there. It feeds directly into [Core Web Vitals](04-core-web-vitals-and-performance-optimisation.md).
 
 ### Service worker caching
 
@@ -154,7 +154,7 @@ sequenceDiagram
 | Network only | Never cache | Auth, payments, PHI |
 | Cache only | Precached only | Offline fallback page |
 
-![Animation: the same request handled by cache-first, network-first and stale-while-revalidate. Cache-first answers from the cache and never asks the network. Network-first waits for the network and falls back to the cache when the network fails. Stale-while-revalidate answers from the cache immediately and then updates the cache from the network for next time](images/06-sw-strategies.svg){ loading=lazy }
+![Animation: one request under three strategies; cache-first answers from the cache, network-first waits for the network and falls back to the cache when it fails, stale-while-revalidate answers from the cache and then refreshes it from the network](images/06-sw-strategies.svg){ loading=lazy }
 *Compare when the page gets its response (green) against when the network is used: only stale-while-revalidate gets both speed and freshness, one request late.*
 
 ## In practice: code & configuration
@@ -258,58 +258,57 @@ Clear-Site-Data: "cache", "cookies", "storage"
 
 ## Real-world usage
 
-- **Healthcare and banking:** HIPAA and PCI reviews ask what stays on the device. Typical rules: no PHI or tokens in `localStorage`, `no-store` on PHI and statement responses, session cookies `HttpOnly` + `SameSite`, idle timeout, and `Clear-Site-Data` on logout for shared or kiosk machines.
-- **Embedded widgets:** chat, maps, payment 3-D Secure frames and video players moved to `Partitioned` cookies or first-party storage when Safari and Firefox partitioned third-party state. Sites that kept unpartitioned `SameSite=None` cookies saw logins and carts break inside iframes.
-- **SSO:** after Safari's ITP, OIDC libraries deprecated iframe-based silent renew in favour of refresh-token rotation and BFFs ([OAuth for SPAs and the BFF pattern](../frontend-architecture/05-frontend-security.md#oauth-20-for-spas-and-the-bff-pattern)).
-- **Deploy-time breakage:** a long-cached `index.html` or a service worker that is never updated pins users to an old bundle whose chunks the CDN no longer has, producing `ChunkLoadError`s. Teams fix it with `no-cache` on the shell, keeping previous asset versions on the CDN for a while, and an "update available" prompt from the waiting service worker.
+- **Healthcare and banking:** HIPAA and PCI reviews ask what stays on the device: no PHI or tokens in `localStorage`, `no-store` on PHI and statements, `HttpOnly` + `SameSite` session cookies, and `Clear-Site-Data` on logout for shared machines.
+- **Embedded widgets:** chat, maps and payment frames moved to `Partitioned` cookies once Safari and Firefox partitioned third-party state; those relying on unpartitioned `SameSite=None` cookies broke inside iframes.
+- **SSO:** after ITP, OIDC libraries dropped iframe silent renew for refresh-token rotation and BFFs ([BFF pattern](../frontend-architecture/05-frontend-security.md#oauth-20-for-spas-and-the-bff-pattern)).
+- **Deploy-time breakage:** a long-cached `index.html` or stale service worker pins users to an old bundle whose chunks are gone (`ChunkLoadError`). Fix: `no-cache` on the shell, keep old assets for a while, and an "update available" prompt from the waiting worker.
 
 ## Trade-offs & production gotchas
 
 | Option | Pros | Cons | Use when |
 |---|---|---|---|
-| `HttpOnly` session cookie | Not readable by JS; automatic | CSRF needs `SameSite` + token; ~4 KB; sent on every request | Authentication for same-site apps |
-| `localStorage` | Simple, persistent, sync | Blocks main thread; strings; readable by any script; 5 MiB | Small non-sensitive preferences |
-| `sessionStorage` | Per tab, cleared when tab closes | Not shared across tabs; sync | Per-tab flow state |
-| IndexedDB | Large, async, indexed, transactional | Verbose API; best-effort eviction | Offline data, big client caches |
-| Cache API + service worker | Offline, full control of strategies | You own versioning and expiry; debugging complexity | PWAs, repeat-visit speed |
-| HTTP cache only | Zero code; CDN-friendly | Header mistakes are sticky (you can't recall a cached response) | Default for every app |
+| `HttpOnly` session cookie | Hidden from JS; automatic | Needs CSRF defences; sent on every request | Same-site auth |
+| `localStorage` | Simple, persistent | Sync; readable by any script | Small non-sensitive prefs |
+| IndexedDB | Large, async, transactional | Verbose; best-effort eviction | Offline data, big caches |
+| Service worker + Cache API | Offline; custom strategies | You own versioning and expiry | PWAs, repeat visits |
+| HTTP cache only | Zero code; CDN-friendly | Mistakes can't be recalled | Default for every app |
 
 !!! warning "Gotcha"
-    A cached response can't be recalled. A wrong `max-age` on `index.html`, or on `sw.js` itself, lives in every browser that saw it. Browsers revalidate the service worker script at least every 24 hours, but serve it with `no-cache` anyway and put long lifetimes only on hashed URLs.
+    A wrong `max-age` on `index.html` or `sw.js` lives in every browser that saw it. Serve both with `no-cache`; put long lifetimes only on hashed URLs.
 
 !!! warning "Gotcha"
-    Micro-frontends on one origin share `localStorage`, IndexedDB and cookies. Namespace keys per app (`claims:filters`), and remember a key written by one team's bundle is readable by every other bundle and third-party script on the page.
+    Micro-frontends on one origin share `localStorage`, IndexedDB and cookies. Namespace keys per app (`claims:filters`); every bundle and third-party script on the page can read them.
 
 ## How this connects to my experience
 
-- **Where I used it:** not a ★ resume claim; position as working knowledge from building the **OptumRx Meteor ReactJS application from the ground up with a micro-frontend architecture** (750K+ users), its **OAuth2 / PingFederate** login, and **Redis caching of frequently accessed queries and UI reference data** on the server side. Earlier, I owned **JWT-based authentication and SSO** at Johnson Controls.
+- **Where I used it:** not a ★ resume claim; position as working knowledge from building the **OptumRx Meteor ReactJS application from the ground up with a micro-frontend architecture** (750K+ users) with **OAuth2 / PingFederate** login and server-side **Redis caching of UI reference data**, and owning **JWT authentication and SSO** at Johnson Controls.
 - **Talking points:**
-    - Layered caching: Redis behind the GraphQL Consumer Service, React Query's in-memory cache in the browser, and HTTP caching for the static bundle. How UI reference data was cached in the browser (React Query `staleTime`, HTTP headers or local storage): *[confirm]*.
+    - Layered caching: Redis behind the GraphQL Consumer Service, React Query in the browser, HTTP caching for the bundle. How UI reference data was cached client-side: *[confirm]*.
     - Where the session or tokens lived in Meteor (HttpOnly cookie, BFF, or SPA memory) and how logout cleared state: *[confirm]*.
-    - Whether a service worker was used: *[confirm]*; if not, say so and explain when you would add one.
+    - Whether a service worker was used: *[confirm]*.
     - Shared-origin micro-frontends need namespaced storage keys and a single owner for auth cookies.
-- **Likely follow-up chain:** "Where did you store the auth token?" → explain the actual choice and the XSS / CSRF trade-off → "How did you stop CSRF?" → `SameSite` plus CSRF token or custom header → "Would that still work if the app were embedded in a partner portal?" → no for `Lax`/`Strict` cookies in a cross-site iframe; needs `SameSite=None; Partitioned` (CHIPS) or the Storage Access API, or better, a top-level redirect into the app.
+- **Likely follow-up chain:** "Where did you store the auth token?" → the actual choice and its XSS / CSRF trade-off → "How did you stop CSRF?" → `SameSite` plus CSRF token → "What if a partner portal embeds the app?" → `Lax` cookies aren't sent in a cross-site iframe; use a top-level redirect, CHIPS or the Storage Access API.
 
 ## Interview questions
 
 ### Fundamentals
 
 ??? question "Q1. Compare cookies, localStorage, sessionStorage and IndexedDB."
-    **Answer:** Cookies are small (~4 KB), set by server or script, scoped by domain and path, and sent with every matching request; use them for session identity. `localStorage` (5 MiB, origin-scoped, persistent) and `sessionStorage` (per tab) are synchronous, string-only and never sent to the server. IndexedDB is async, stores structured objects with indexes and transactions, and shares the large per-origin quota with the Cache API and OPFS.
+    **Answer:** Cookies (~4 KB) are scoped by domain and path and sent with every matching request: use them for session identity. `localStorage` (persistent) and `sessionStorage` (per tab) are synchronous, string-only, 5 MiB and never sent. IndexedDB is async, structured and transactional, sharing the large origin quota with the Cache API.
 
     **Interviewer listens for:** "sent with every request", sync vs async, per-tab scope, quota.
 
     **Common wrong answer:** "localStorage is more secure than cookies." Any script on the origin can read it.
 
 ??? question "Q2. Explain `Secure`, `HttpOnly` and `SameSite`."
-    **Answer:** `Secure` sends the cookie only over HTTPS. `HttpOnly` hides it from `document.cookie`, so XSS can't exfiltrate it, though XSS can still make requests that carry it. `SameSite` controls cross-site sending: `Strict` never, `Lax` only on top-level GET navigations, `None` always (requires `Secure`). Chromium defaults to `Lax` when absent; set it explicitly.
+    **Answer:** `Secure`: HTTPS only. `HttpOnly`: hidden from `document.cookie`, so XSS can't steal it, though it can still make requests carrying it. `SameSite`: `Strict` never cross-site, `Lax` only top-level GET navigations, `None` always (requires `Secure`). Only Chromium defaults to `Lax`; set it explicitly.
 
     **Interviewer listens for:** HttpOnly prevents theft not use; Lax allows top-level GET; None needs Secure.
 
     **Common wrong answer:** "SameSite replaces CSRF tokens entirely." Same-site subdomains and GET side effects still bite.
 
 ??? question "Q3. What's the difference between `no-cache` and `no-store`?"
-    **Answer:** `no-cache` allows storing but requires revalidation (ETag / `If-None-Match`, often a cheap 304) before each reuse; use it for HTML shells. `no-store` forbids storing at all; use it only for sensitive data, because it also disqualifies the page from bfcache in most browsers.
+    **Answer:** `no-cache` stores but revalidates before each reuse (often a cheap 304); use it for HTML. `no-store` forbids storage; reserve it for sensitive data, since it also costs bfcache eligibility.
 
     **Interviewer listens for:** revalidation vs storage, 304, bfcache cost.
 
@@ -318,7 +317,7 @@ Clear-Site-Data: "cache", "cookies", "storage"
 ### Intermediate
 
 ??? question "Q4. What are third-party cookies today, and what is CHIPS?"
-    **Answer:** Cookies sent in a context whose top-level site differs from the cookie's site, such as an embedded iframe. Safari blocks them, Firefox partitions them per top-level site, Chrome still allows them by default but supports user blocking. CHIPS adds a `Partitioned` attribute: the cookie is keyed by top-level site plus host, so an embed keeps state per embedding site but can't track across sites. Requires `Secure`; `__Host-` is recommended.
+    **Answer:** Cookies sent where the top-level site differs from the cookie's site, such as an iframe. Safari blocks them, Firefox partitions them, Chrome allows them unless the user blocks them. CHIPS's `Partitioned` attribute keys the cookie by top-level site plus host, so an embed keeps state per embedding site but can't track across sites. Requires `Secure`.
 
     **Interviewer listens for:** double keying, per-browser status, Storage Access API as the unpartitioned escape hatch.
 
@@ -332,7 +331,7 @@ Clear-Site-Data: "cache", "cookies", "storage"
     **Common wrong answer:** "Set a short max-age on everything."
 
 ??? question "Q6. When can the browser delete your IndexedDB data?"
-    **Answer:** Storage is best-effort by default. Browsers evict whole origins, LRU, under disk pressure or when the global limit is exceeded; Safari also clears script-written data after 7 days of browser use without user interaction. `navigator.storage.persist()` exempts the origin from automatic eviction; the user can still clear it. Handle `QuotaExceededError` and treat the server as source of truth.
+    **Answer:** Under disk pressure or the browser's global limit, whole origins are evicted LRU; Safari also clears script-written data after 7 days of use without interaction. `navigator.storage.persist()` exempts the origin (the user can still clear it). Handle `QuotaExceededError` and keep the server as source of truth.
 
     **Interviewer listens for:** all-or-nothing per origin, persist(), Safari 7-day rule.
 
@@ -341,14 +340,14 @@ Clear-Site-Data: "cache", "cookies", "storage"
 ### Senior
 
 ??? question "Q7. Walk through what happens when a page with a service worker requests an asset."
-    **Answer:** If the page is restored from bfcache, nothing is requested. Otherwise the controlling service worker's `fetch` handler runs and applies a strategy against the Cache API. If it calls `fetch()`, the request goes through the HTTP cache (fresh hit, conditional revalidation, or miss), then to the CDN and origin. New SW versions install, wait, then activate and delete old caches. The SW script itself is revalidated at least every 24 hours.
+    **Answer:** A bfcache restore requests nothing. Otherwise the controlling worker's `fetch` handler applies a strategy against the Cache API; when it calls `fetch()`, the request goes through the HTTP cache (fresh hit, revalidation or miss), then CDN and origin. New worker versions install, wait, activate and delete old caches.
 
     **Interviewer listens for:** order of layers, SW does not bypass HTTP cache, lifecycle and versioning.
 
     **Common wrong answer:** "The service worker replaces the HTTP cache."
 
 ??? question "Q8. Where should a SPA keep auth state, and how do cookie changes affect that?"
-    **Answer:** Prefer a same-site BFF issuing an `HttpOnly`, `Secure`, `SameSite=Lax`, `__Host-` session cookie, with CSRF protection; the browser never holds OAuth tokens. If the SPA must hold tokens, keep the access token in memory with short lifetime and rotated refresh tokens. Avoid flows that rely on third-party cookies (iframe silent renew, IdP on an unrelated site); they fail under ITP and partitioning.
+    **Answer:** Prefer a same-site BFF issuing an `HttpOnly`, `Secure`, `SameSite=Lax`, `__Host-` session cookie plus CSRF protection, so the browser never holds OAuth tokens. If the SPA must hold tokens, keep them in memory, short-lived, with rotated refresh tokens. Avoid flows needing third-party cookies (iframe silent renew); they fail under ITP and partitioning.
 
     **Interviewer listens for:** XSS vs CSRF trade, BFF, third-party cookie breakage.
 
@@ -357,14 +356,14 @@ Clear-Site-Data: "cache", "cookies", "storage"
 ### Scenario-based
 
 ??? question "Q9. After a release, some users see a blank page with `ChunkLoadError`. What happened?"
-    **Answer:** Their `index.html` (or service worker precache) still references old hashed chunks, and the new deploy deleted them from the CDN. Check `Cache-Control` on `index.html` and `sw.js`, keep the previous release's assets available, catch chunk-load failures and reload once, and have the waiting service worker prompt for an update.
+    **Answer:** A cached `index.html` or service worker precache references old hashed chunks that the deploy deleted. Check `Cache-Control` on `index.html` and `sw.js`, keep the previous release's assets, reload once on chunk-load failure, and prompt from the waiting worker.
 
     **Interviewer listens for:** cached shell vs deleted assets, SW update flow, retention of old assets.
 
     **Common wrong answer:** "Tell users to clear their cache."
 
 ??? question "Q10. A partner embeds our claims widget in an iframe and users are logged out in Safari. Fix it."
-    **Answer:** Our session cookie is third-party in that context and Safari blocks it (Chrome would block a `Lax` cookie too). Options: a top-level redirect into our site instead of an iframe; `SameSite=None; Secure; Partitioned` so the widget has its own session per partner site (user logs in once per partner); or the Storage Access API after a user click if we need the main session. For healthcare data, also confirm the partner's CSP `frame-ancestors` agreement.
+    **Answer:** Our session cookie is third-party there and Safari blocks it (a `Lax` cookie wouldn't be sent in any browser). Options: a top-level redirect instead of an iframe; `SameSite=None; Secure; Partitioned` for a per-partner session; or the Storage Access API after a user click to reach the main session. Also agree `frame-ancestors` with the partner.
 
     **Interviewer listens for:** third-party context diagnosis, CHIPS vs Storage Access trade-off, not "tell users to disable tracking prevention".
 
@@ -374,12 +373,10 @@ Clear-Site-Data: "cache", "cookies", "storage"
 
 | Concept | Remember |
 |---|---|
-| Cookie size / life | ~4 KB each; lifetime capped at 400 days |
 | Safe session cookie | `__Host-` + `Secure; HttpOnly; SameSite=Lax; Path=/`, no `Domain` |
 | SameSite default | `Lax` in Chromium (2-minute POST grace); varies elsewhere: set it |
 | Third-party cookies | Safari blocks, Firefox partitions, Chrome allows by default (2026) |
 | CHIPS | `Partitioned`: key = top-level site + host; requires `Secure` |
-| Web Storage | Sync, strings, 5 MiB, readable by any script; `sessionStorage` per tab |
 | Quota | IndexedDB + Cache + OPFS share it: Chromium/Safari ~60% disk, Firefox 10%/10 GiB |
 | Eviction | Whole origin, LRU; Safari 7 days without interaction; `persist()` to opt out |
 | Hashed assets | `max-age=31536000, immutable` |

@@ -112,5 +112,5 @@
   <g class="a s3"><rect class="bo" x="408" y="430" width="372" height="40" rx="8" stroke-width="1.2"/><text class="sub" x="422" y="455">4/6</text><text class="okt" x="458" y="455" font-size="13.5">Tab → Delete, still inside the dialog</text></g>
   <g class="a s4"><rect class="bo" x="408" y="430" width="372" height="40" rx="8" stroke-width="1.2"/><text class="sub" x="422" y="455">5/6</text><text class="okt" x="458" y="455" font-size="13.5">Esc → dialog closes (close request)</text></g>
   <g class="a s5"><rect class="bo" x="408" y="430" width="372" height="40" rx="8" stroke-width="1.2"/><text class="sub" x="422" y="455">6/6</text><text class="okt" x="458" y="455" font-size="13.5">Focus returns to “Delete claim” trigger</text></g>
-  <text class="sub" x="28" y="500">The native dialog gets inert background, Esc handling and focus return from the browser. A div overlay needs all three in script.</text>
+  <text class="sub" x="28" y="500">Native dialog: inert background, Esc and focus return come free. A div overlay must script all three.</text>
 </svg>

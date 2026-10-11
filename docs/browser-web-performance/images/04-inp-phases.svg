@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">INP phases with one long task versus yielding tasks</title>
+  <desc id="d">Two main-thread timelines on a shared 0 to 500 millisecond axis. In the top row a single 300 millisecond task is running when the user taps at 60 milliseconds. The tap waits 240 milliseconds of input delay until the task finishes, the click handler then runs for 120 milliseconds of processing, and the browser needs 40 milliseconds of presentation delay to paint the next frame, so the interaction latency is 400 milliseconds, in the needs-improvement band. In the bottom row the same work is split into chunks of about 45 milliseconds that yield to the main thread. The tap at 60 milliseconds waits only 35 milliseconds for the current chunk, the handler does only the visible update in 40 milliseconds, and the next frame is painted after 25 more, so the latency is 100 milliseconds, which is good. The remaining chunks continue after the paint. The phases appear one after another. Illustrative numbers.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .on{fill:#ffffff;font-size:12px;font-weight:700}
+    .task{fill:#cbd5e1}.taskt{fill:#334155;font-size:12px;font-weight:600}
+    .wrnf{fill:#d97706}.pri{fill:#4f46e5}.tea{fill:#0ea5a4}
+    .okt{fill:#16a34a;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#94a3b8;stroke-width:1.5;fill:none}
+    .tap{fill:#dc2626}.tapl{stroke:#dc2626;stroke-width:2}
+    .paint{stroke:#16a34a;stroke-width:2.5}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .on{fill:#0f172a}
+      .task{fill:#475569}.taskt{fill:#e2e8f0}
+      .wrnf{fill:#fbbf24}.pri{fill:#818cf8}.tea{fill:#2dd4bf}
+      .okt{fill:#4ade80}.wrnt{fill:#fbbf24}
+      .ln{stroke:#64748b}
+      .tap{fill:#f87171}.tapl{stroke:#f87171}
+      .paint{stroke:#4ade80}
+    }
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes p0{0%,6%{opacity:0}9%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes p1{0%,20%{opacity:0}23%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes p2{0%,36%{opacity:0}39%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes p3{0%,50%{opacity:0}53%,92%{opacity:1}96%,100%{opacity:0}}
+    @keyframes p4{0%,64%{opacity:0}67%,92%{opacity:1}96%,100%{opacity:0}}
+    .p0{animation-name:p0}.p1{animation-name:p1}.p2{animation-name:p2}.p3{animation-name:p3}.p4{animation-name:p4}
+    @media (prefers-reduced-motion: reduce){ .a{animation:none;opacity:1} }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="448" rx="14"/>
+  <text class="h" x="28" y="40">INP = input delay + processing + presentation delay</text>
+  <text class="sub" x="28" y="62">Main thread. Red = the tap. Green line = the next frame that shows the result.</text>
+
+  <line class="ln" x1="60" y1="360" x2="760" y2="360"/>
+  <g class="sm" text-anchor="middle">
+    <text x="60" y="378">0 ms</text><text x="200" y="378">100</text><text x="340" y="378">200</text><text x="480" y="378">300</text><text x="620" y="378">400</text><text x="760" y="378">500</text>
+  </g>
+
+  <!-- row A -->
+  <text class="h2" x="60" y="94">One 300 ms task (hydration + analytics)</text>
+  <rect class="task" x="60" y="112" width="420" height="34" rx="3"/>
+  <text class="taskt" x="270" y="134" text-anchor="middle">long task, 300 ms, no yield</text>
+  <g class="a p0"><line class="tapl" x1="144" y1="106" x2="144" y2="196"/><circle class="tap" cx="144" cy="106" r="5"/><text class="sm" x="152" y="208">tap at 60</text></g>
+  <g class="a p1"><rect class="wrnf" x="144" y="154" width="336" height="22" rx="3"/><text class="on" x="312" y="170" text-anchor="middle">input delay 240</text></g>
+  <g class="a p2"><rect class="pri" x="480" y="112" width="168" height="34" rx="3"/><text class="on" x="564" y="134" text-anchor="middle">handler 120</text></g>
+  <g class="a p3"><rect class="tea" x="648" y="112" width="56" height="34" rx="3"/><text class="on" x="676" y="134" text-anchor="middle">40</text></g>
+  <g class="a p4"><line class="paint" x1="704" y1="106" x2="704" y2="196"/><text class="wrnt" x="698" y="214" text-anchor="end" font-size="14">INP 400 ms: needs improvement</text></g>
+
+  <!-- row B -->
+  <text class="h2" x="60" y="242">Same work in ~45 ms chunks that yield</text>
+  <rect class="task" x="60" y="260" width="63" height="34" rx="3"/>
+  <rect class="task" x="130" y="260" width="63" height="34" rx="3"/>
+  <g class="a p4">
+    <rect class="task" x="284" y="260" width="63" height="34" rx="3"/>
+    <rect class="task" x="354" y="260" width="63" height="34" rx="3"/>
+    <rect class="task" x="424" y="260" width="63" height="34" rx="3"/>
+    <rect class="task" x="494" y="260" width="63" height="34" rx="3"/>
+    <text class="taskt" x="560" y="250">rest of the work, after the paint</text>
+  </g>
+  <g class="a p0"><line class="tapl" x1="144" y1="254" x2="144" y2="336"/><circle class="tap" cx="144" cy="254" r="5"/></g>
+  <g class="a p1"><rect class="wrnf" x="144" y="302" width="49" height="22" rx="3"/><text class="sm" x="168" y="340" text-anchor="middle">35</text></g>
+  <g class="a p2"><rect class="pri" x="193" y="260" width="56" height="34" rx="3"/><text class="on" x="221" y="282" text-anchor="middle">40</text></g>
+  <g class="a p3"><rect class="tea" x="249" y="260" width="35" height="34" rx="3"/></g>
+  <g class="a p4"><line class="paint" x1="284" y1="254" x2="284" y2="336"/><text class="okt" x="292" y="330" font-size="14">INP 100 ms: good</text></g>
+
+  <rect class="wrnf" x="60" y="398" width="14" height="14"/><text class="tx" x="80" y="410">input delay</text>
+  <rect class="pri" x="180" y="398" width="14" height="14"/><text class="tx" x="200" y="410">processing (event handlers)</text>
+  <rect class="tea" x="400" y="398" width="14" height="14"/><text class="tx" x="420" y="410">presentation delay (style, layout, paint)</text>
+  <text class="sub" x="28" y="438">Illustrative numbers. Good ≤ 200 ms, poor &gt; 500 ms, at the 75th percentile of page views.</text>
+</svg>

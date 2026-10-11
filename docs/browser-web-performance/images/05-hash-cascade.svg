@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Content-hash cascade vs chunk import map</title>
+  <desc id="d">Two rows show what a deploy that edits only utils.ts does to cached JavaScript files. In the top row, the default output, entry.js imports page.js which imports utils.js, and each import statement contains the imported file's hashed name. Editing utils changes its hash from e5f6 to 88xx; because page.js contains that name its bytes change and its hash moves from c3d4 to 77yy, and then entry.js changes from a1b2 to 99zz. Three files turn red and must be downloaded again, while vendor.js stays cached. In the bottom row, imports use stable names resolved through an import map in index.html, which is served with Cache-Control no-cache. Editing utils changes only utils.js and one line of the import map; page.js, entry.js and vendor.js keep their hashes and stay cached. Hashes are shortened examples, mirroring the example in the Vite 8.1 release notes.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;font-size:12.5px;fill:#334155}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .cell{fill:#e2e8f0;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:1.5;fill:none}
+    .lnt{stroke:#0ea5a4;stroke-width:2;fill:none}
+    .ah{fill:#64748b}.aht{fill:#0ea5a4}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    .strike{stroke:#dc2626;stroke-width:1.5}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.tx,.sm,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .cell{fill:#334155;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .prit{fill:#a5b4fc}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnt{stroke:#2dd4bf}.ah{fill:#94a3b8}.aht{fill:#2dd4bf}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+      .strike{stroke:#f87171}
+    }
+
+    .a{opacity:0;animation:14s infinite linear}
+    .b{opacity:1;animation:14s infinite linear}
+    @keyframes e1{0%,14%{opacity:0}16%,90%{opacity:1}94%,100%{opacity:0}}
+    .e1{animation-name:e1}
+    @keyframes e2{0%,30%{opacity:0}32%,90%{opacity:1}94%,100%{opacity:0}}
+    .e2{animation-name:e2}
+    @keyframes e3{0%,46%{opacity:0}48%,90%{opacity:1}94%,100%{opacity:0}}
+    .e3{animation-name:e3}
+    @keyframes res{0%,58%{opacity:0}60%,90%{opacity:1}94%,100%{opacity:0}}
+    .res{animation-name:res}
+    @keyframes o1{0%,14%{opacity:1}16%,90%{opacity:0}94%,100%{opacity:1}}
+    .o1{animation-name:o1}
+    @keyframes o2{0%,30%{opacity:1}32%,90%{opacity:0}94%,100%{opacity:1}}
+    .o2{animation-name:o2}
+    @keyframes o3{0%,46%{opacity:1}48%,90%{opacity:0}94%,100%{opacity:1}}
+    .o3{animation-name:o3}
+    @media (prefers-reduced-motion: reduce){ .a{animation:none;opacity:1} .b{animation:none;opacity:0} }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="438" rx="14"/>
+  <text class="h" x="28" y="40">One edit, how many re-downloads?</text>
+  <text class="sub" x="28" y="62">A deploy changes only utils.ts. Green = still cached, amber = edited, red = re-hashed by the cascade.</text>
+  <rect class="box" x="20" y="80" width="760" height="168" rx="10" stroke-width="1.2"/>
+  <text class="h2" x="36" y="106">Default: each import embeds the child's hashed file name</text>
+  <line class="ln" x1="190" y1="150" x2="228" y2="150" marker-end="url(#ar)"/>
+  <line class="ln" x1="380" y1="150" x2="418" y2="150" marker-end="url(#ar)"/>
+  <rect class="bo" x="610" y="128" width="150" height="44" rx="8"/><text class="mono" x="685" y="155" text-anchor="middle">vendor.9k8j.js</text>
+  <g class="b o1"><rect class="bo" x="420" y="128" width="150" height="44" rx="8"/><text class="mono" x="495" y="155" text-anchor="middle">utils.e5f6.js</text></g><g class="a e1"><rect class="bw" x="420" y="128" width="150" height="44" rx="8"/><text class="mono" x="495" y="155" text-anchor="middle">utils.88xx.js</text></g>
+  <g class="b o2"><rect class="bo" x="230" y="128" width="150" height="44" rx="8"/><text class="mono" x="305" y="155" text-anchor="middle">page.c3d4.js</text></g><g class="a e2"><rect class="bb" x="230" y="128" width="150" height="44" rx="8"/><text class="mono" x="305" y="155" text-anchor="middle">page.77yy.js</text></g>
+  <g class="b o3"><rect class="bo" x="40" y="128" width="150" height="44" rx="8"/><text class="mono" x="115" y="155" text-anchor="middle">entry.a1b2.js</text></g><g class="a e3"><rect class="bb" x="40" y="128" width="150" height="44" rx="8"/><text class="mono" x="115" y="155" text-anchor="middle">entry.99zz.js</text></g>
+  <text class="mono" x="236" y="194">import "./utils.e5f6.js"</text>
+  <g class="a e2"><text class="badt" x="236" y="212" font-size="12">name inside changed → new hash</text></g>
+  <g class="a res"><text class="badt" x="764" y="230" text-anchor="end" font-size="15">3 files re-downloaded</text></g>
+  <rect class="box" x="20" y="262" width="760" height="168" rx="10" stroke-width="1.2"/>
+  <text class="h2" x="36" y="288">Chunk import map: imports use stable names, index.html maps them</text>
+  <line class="ln" x1="190" y1="332" x2="228" y2="332" marker-end="url(#ar)"/>
+  <line class="ln" x1="380" y1="332" x2="418" y2="332" marker-end="url(#ar)"/>
+  <rect class="bo" x="610" y="310" width="150" height="44" rx="8"/><text class="mono" x="685" y="337" text-anchor="middle">vendor.9k8j.js</text>
+  <g class="b o1"><rect class="bo" x="420" y="310" width="150" height="44" rx="8"/><text class="mono" x="495" y="337" text-anchor="middle">utils.e5f6.js</text></g><g class="a e1"><rect class="bw" x="420" y="310" width="150" height="44" rx="8"/><text class="mono" x="495" y="337" text-anchor="middle">utils.88xx.js</text></g>
+  <rect class="bo" x="230" y="310" width="150" height="44" rx="8"/><text class="mono" x="305" y="337" text-anchor="middle">page.c3d4.js</text>
+  <rect class="bo" x="40" y="310" width="150" height="44" rx="8"/><text class="mono" x="115" y="337" text-anchor="middle">entry.a1b2.js</text>
+  <text class="mono" x="236" y="376">import "utils"</text>
+  <rect class="bp" x="40" y="386" width="350" height="26" rx="6"/>
+  <g class="b o1"><text class="mono" x="50" y="404">index.html: "utils": "/utils.e5f6.js"</text></g>
+  <g class="a e1"><text class="mono" x="50" y="404">index.html: "utils": "/utils.88xx.js"</text></g>
+  <g class="a res"><text class="okt" x="764" y="412" text-anchor="end" font-size="15">1 file + revalidated HTML</text></g>
+  <text class="sub" x="28" y="458"></text>
+</svg>

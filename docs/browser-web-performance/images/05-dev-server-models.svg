@@ -1,0 +1,193 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Bundle-first vs native-ESM dev server start-up</title>
+  <desc id="d">Two development servers starting the same React app side by side. On the left, a bundle-first dev server such as webpack's reads and transforms all 1,200 modules, shown as 40 squares of about 30 modules each filling row by row while a progress bar fills; only when the whole graph is bundled into memory does it report server ready, and an edit to Button.tsx triggers a rebuild of the affected chunk before the update is pushed. On the right, a native ES module dev server such as Vite pre-bundles node_modules once and reports ready almost at once; the browser then requests main.tsx, App.tsx, routes.tsx, Claims.tsx and Button.tsx, and only those five squares light up because only requested files are transformed. Editing Button.tsx sends one hot module replacement update for that one module. Simplified: timings are illustrative, not measurements, and webpack's persistent cache shortens warm restarts.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;font-size:12.5px;fill:#334155}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .cell{fill:#e2e8f0;stroke:#cbd5e1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:1.5;fill:none}
+    .lnt{stroke:#0ea5a4;stroke-width:2;fill:none}
+    .ah{fill:#64748b}.aht{fill:#0ea5a4}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    .strike{stroke:#dc2626;stroke-width:1.5}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.tx,.sm,.mono{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .cell{fill:#334155;stroke:#475569}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .prit{fill:#a5b4fc}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnt{stroke:#2dd4bf}.ah{fill:#94a3b8}.aht{fill:#2dd4bf}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+      .strike{stroke:#f87171}
+    }
+
+    .a{opacity:0;animation:16s infinite linear}
+    @keyframes w0{0%,4%{opacity:0}6%,90%{opacity:1}94%,100%{opacity:0}}
+    .w0{animation-name:w0}
+    @keyframes w1{0%,12%{opacity:0}14%,90%{opacity:1}94%,100%{opacity:0}}
+    .w1{animation-name:w1}
+    @keyframes w2{0%,20%{opacity:0}22%,90%{opacity:1}94%,100%{opacity:0}}
+    .w2{animation-name:w2}
+    @keyframes w3{0%,28%{opacity:0}30%,90%{opacity:1}94%,100%{opacity:0}}
+    .w3{animation-name:w3}
+    @keyframes rdyL{0%,40%{opacity:0}42%,90%{opacity:1}94%,100%{opacity:0}}
+    .rdyL{animation-name:rdyL}
+    @keyframes bund{0%,36%{opacity:0}38%,90%{opacity:1}94%,100%{opacity:0}}
+    .bund{animation-name:bund}
+    @keyframes rdyR{0%,8%{opacity:0}10%,90%{opacity:1}94%,100%{opacity:0}}
+    .rdyR{animation-name:rdyR}
+    @keyframes pre{0%,3%{opacity:0}5%,90%{opacity:1}94%,100%{opacity:0}}
+    .pre{animation-name:pre}
+    @keyframes r0{0%,14%{opacity:0}16%,90%{opacity:1}94%,100%{opacity:0}}
+    .r0{animation-name:r0}
+    @keyframes r1{0%,20%{opacity:0}22%,90%{opacity:1}94%,100%{opacity:0}}
+    .r1{animation-name:r1}
+    @keyframes r2{0%,26%{opacity:0}28%,90%{opacity:1}94%,100%{opacity:0}}
+    .r2{animation-name:r2}
+    @keyframes r3{0%,32%{opacity:0}34%,90%{opacity:1}94%,100%{opacity:0}}
+    .r3{animation-name:r3}
+    @keyframes r4{0%,38%{opacity:0}40%,90%{opacity:1}94%,100%{opacity:0}}
+    .r4{animation-name:r4}
+    @keyframes edit{0%,56%{opacity:0}58%,90%{opacity:1}94%,100%{opacity:0}}
+    .edit{animation-name:edit}
+    @keyframes hmr{0%,62%{opacity:0}64%,90%{opacity:1}94%,100%{opacity:0}}
+    .hmr{animation-name:hmr}
+    @keyframes editL{0%,56%{opacity:0}58%,90%{opacity:1}94%,100%{opacity:0}}
+    .editL{animation-name:editL}
+    @keyframes hmrL{0%,64%{opacity:0}66%,90%{opacity:1}94%,100%{opacity:0}}
+    .hmrL{animation-name:hmrL}
+    @keyframes bar{0%,4%{transform:scaleX(0)}36%,90%{transform:scaleX(1)}94%,100%{transform:scaleX(0)}}
+    .bar{transform-box:fill-box;transform-origin:left;animation:bar 16s infinite linear}
+    @media (prefers-reduced-motion: reduce){ .a{animation:none;opacity:1} .bar{animation:none;transform:none} }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+    <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="468" rx="14"/>
+  <text class="h" x="28" y="40">Dev server start-up: bundle everything vs serve on demand</text>
+  <text class="sub" x="28" y="62">Same app, 1,200 source modules (each square ≈ 30). Illustrative timing, not a benchmark.</text>
+  <rect class="box" x="20" y="80" width="370" height="370" rx="10" stroke-width="1.2"/>
+  <text class="h2" x="205" y="106" text-anchor="middle">Bundle-first (webpack serve)</text>
+  <rect class="box" x="410" y="80" width="370" height="370" rx="10" stroke-width="1.2"/>
+  <text class="h2" x="595" y="106" text-anchor="middle">Native ESM (Vite dev server)</text>
+  <text class="sm" x="42" y="140">Source modules</text>
+  <text class="sm" x="432" y="140">Source modules</text>
+  <rect class="cell" x="42" y="150" width="26" height="24" rx="4"/>
+  <rect class="cell" x="74" y="150" width="26" height="24" rx="4"/>
+  <rect class="cell" x="106" y="150" width="26" height="24" rx="4"/>
+  <rect class="cell" x="138" y="150" width="26" height="24" rx="4"/>
+  <rect class="cell" x="170" y="150" width="26" height="24" rx="4"/>
+  <rect class="cell" x="202" y="150" width="26" height="24" rx="4"/>
+  <rect class="cell" x="234" y="150" width="26" height="24" rx="4"/>
+  <rect class="cell" x="266" y="150" width="26" height="24" rx="4"/>
+  <rect class="cell" x="298" y="150" width="26" height="24" rx="4"/>
+  <rect class="cell" x="330" y="150" width="26" height="24" rx="4"/>
+  <rect class="cell" x="42" y="180" width="26" height="24" rx="4"/>
+  <rect class="cell" x="74" y="180" width="26" height="24" rx="4"/>
+  <rect class="cell" x="106" y="180" width="26" height="24" rx="4"/>
+  <rect class="cell" x="138" y="180" width="26" height="24" rx="4"/>
+  <rect class="cell" x="170" y="180" width="26" height="24" rx="4"/>
+  <rect class="cell" x="202" y="180" width="26" height="24" rx="4"/>
+  <rect class="cell" x="234" y="180" width="26" height="24" rx="4"/>
+  <rect class="cell" x="266" y="180" width="26" height="24" rx="4"/>
+  <rect class="cell" x="298" y="180" width="26" height="24" rx="4"/>
+  <rect class="cell" x="330" y="180" width="26" height="24" rx="4"/>
+  <rect class="cell" x="42" y="210" width="26" height="24" rx="4"/>
+  <rect class="cell" x="74" y="210" width="26" height="24" rx="4"/>
+  <rect class="cell" x="106" y="210" width="26" height="24" rx="4"/>
+  <rect class="cell" x="138" y="210" width="26" height="24" rx="4"/>
+  <rect class="cell" x="170" y="210" width="26" height="24" rx="4"/>
+  <rect class="cell" x="202" y="210" width="26" height="24" rx="4"/>
+  <rect class="cell" x="234" y="210" width="26" height="24" rx="4"/>
+  <rect class="cell" x="266" y="210" width="26" height="24" rx="4"/>
+  <rect class="cell" x="298" y="210" width="26" height="24" rx="4"/>
+  <rect class="cell" x="330" y="210" width="26" height="24" rx="4"/>
+  <rect class="cell" x="42" y="240" width="26" height="24" rx="4"/>
+  <rect class="cell" x="74" y="240" width="26" height="24" rx="4"/>
+  <rect class="cell" x="106" y="240" width="26" height="24" rx="4"/>
+  <rect class="cell" x="138" y="240" width="26" height="24" rx="4"/>
+  <rect class="cell" x="170" y="240" width="26" height="24" rx="4"/>
+  <rect class="cell" x="202" y="240" width="26" height="24" rx="4"/>
+  <rect class="cell" x="234" y="240" width="26" height="24" rx="4"/>
+  <rect class="cell" x="266" y="240" width="26" height="24" rx="4"/>
+  <rect class="cell" x="298" y="240" width="26" height="24" rx="4"/>
+  <rect class="cell" x="330" y="240" width="26" height="24" rx="4"/>
+  <g class="a w0"><rect class="pri" x="42" y="150" width="26" height="24" rx="4"/><rect class="pri" x="74" y="150" width="26" height="24" rx="4"/><rect class="pri" x="106" y="150" width="26" height="24" rx="4"/><rect class="pri" x="138" y="150" width="26" height="24" rx="4"/><rect class="pri" x="170" y="150" width="26" height="24" rx="4"/><rect class="pri" x="202" y="150" width="26" height="24" rx="4"/><rect class="pri" x="234" y="150" width="26" height="24" rx="4"/><rect class="pri" x="266" y="150" width="26" height="24" rx="4"/><rect class="pri" x="298" y="150" width="26" height="24" rx="4"/><rect class="pri" x="330" y="150" width="26" height="24" rx="4"/></g>
+  <g class="a w1"><rect class="pri" x="42" y="180" width="26" height="24" rx="4"/><rect class="pri" x="74" y="180" width="26" height="24" rx="4"/><rect class="pri" x="106" y="180" width="26" height="24" rx="4"/><rect class="pri" x="138" y="180" width="26" height="24" rx="4"/><rect class="pri" x="170" y="180" width="26" height="24" rx="4"/><rect class="pri" x="202" y="180" width="26" height="24" rx="4"/><rect class="pri" x="234" y="180" width="26" height="24" rx="4"/><rect class="pri" x="266" y="180" width="26" height="24" rx="4"/><rect class="pri" x="298" y="180" width="26" height="24" rx="4"/><rect class="pri" x="330" y="180" width="26" height="24" rx="4"/></g>
+  <g class="a w2"><rect class="pri" x="42" y="210" width="26" height="24" rx="4"/><rect class="pri" x="74" y="210" width="26" height="24" rx="4"/><rect class="pri" x="106" y="210" width="26" height="24" rx="4"/><rect class="pri" x="138" y="210" width="26" height="24" rx="4"/><rect class="pri" x="170" y="210" width="26" height="24" rx="4"/><rect class="pri" x="202" y="210" width="26" height="24" rx="4"/><rect class="pri" x="234" y="210" width="26" height="24" rx="4"/><rect class="pri" x="266" y="210" width="26" height="24" rx="4"/><rect class="pri" x="298" y="210" width="26" height="24" rx="4"/><rect class="pri" x="330" y="210" width="26" height="24" rx="4"/></g>
+  <g class="a w3"><rect class="pri" x="42" y="240" width="26" height="24" rx="4"/><rect class="pri" x="74" y="240" width="26" height="24" rx="4"/><rect class="pri" x="106" y="240" width="26" height="24" rx="4"/><rect class="pri" x="138" y="240" width="26" height="24" rx="4"/><rect class="pri" x="170" y="240" width="26" height="24" rx="4"/><rect class="pri" x="202" y="240" width="26" height="24" rx="4"/><rect class="pri" x="234" y="240" width="26" height="24" rx="4"/><rect class="pri" x="266" y="240" width="26" height="24" rx="4"/><rect class="pri" x="298" y="240" width="26" height="24" rx="4"/><rect class="pri" x="330" y="240" width="26" height="24" rx="4"/></g>
+  <rect class="cell" x="432" y="150" width="26" height="24" rx="4"/>
+  <rect class="cell" x="464" y="150" width="26" height="24" rx="4"/>
+  <rect class="cell" x="496" y="150" width="26" height="24" rx="4"/>
+  <rect class="cell" x="528" y="150" width="26" height="24" rx="4"/>
+  <rect class="cell" x="560" y="150" width="26" height="24" rx="4"/>
+  <rect class="cell" x="592" y="150" width="26" height="24" rx="4"/>
+  <rect class="cell" x="624" y="150" width="26" height="24" rx="4"/>
+  <rect class="cell" x="656" y="150" width="26" height="24" rx="4"/>
+  <rect class="cell" x="688" y="150" width="26" height="24" rx="4"/>
+  <rect class="cell" x="720" y="150" width="26" height="24" rx="4"/>
+  <rect class="cell" x="432" y="180" width="26" height="24" rx="4"/>
+  <rect class="cell" x="464" y="180" width="26" height="24" rx="4"/>
+  <rect class="cell" x="496" y="180" width="26" height="24" rx="4"/>
+  <rect class="cell" x="528" y="180" width="26" height="24" rx="4"/>
+  <rect class="cell" x="560" y="180" width="26" height="24" rx="4"/>
+  <rect class="cell" x="592" y="180" width="26" height="24" rx="4"/>
+  <rect class="cell" x="624" y="180" width="26" height="24" rx="4"/>
+  <rect class="cell" x="656" y="180" width="26" height="24" rx="4"/>
+  <rect class="cell" x="688" y="180" width="26" height="24" rx="4"/>
+  <rect class="cell" x="720" y="180" width="26" height="24" rx="4"/>
+  <rect class="cell" x="432" y="210" width="26" height="24" rx="4"/>
+  <rect class="cell" x="464" y="210" width="26" height="24" rx="4"/>
+  <rect class="cell" x="496" y="210" width="26" height="24" rx="4"/>
+  <rect class="cell" x="528" y="210" width="26" height="24" rx="4"/>
+  <rect class="cell" x="560" y="210" width="26" height="24" rx="4"/>
+  <rect class="cell" x="592" y="210" width="26" height="24" rx="4"/>
+  <rect class="cell" x="624" y="210" width="26" height="24" rx="4"/>
+  <rect class="cell" x="656" y="210" width="26" height="24" rx="4"/>
+  <rect class="cell" x="688" y="210" width="26" height="24" rx="4"/>
+  <rect class="cell" x="720" y="210" width="26" height="24" rx="4"/>
+  <rect class="cell" x="432" y="240" width="26" height="24" rx="4"/>
+  <rect class="cell" x="464" y="240" width="26" height="24" rx="4"/>
+  <rect class="cell" x="496" y="240" width="26" height="24" rx="4"/>
+  <rect class="cell" x="528" y="240" width="26" height="24" rx="4"/>
+  <rect class="cell" x="560" y="240" width="26" height="24" rx="4"/>
+  <rect class="cell" x="592" y="240" width="26" height="24" rx="4"/>
+  <rect class="cell" x="624" y="240" width="26" height="24" rx="4"/>
+  <rect class="cell" x="656" y="240" width="26" height="24" rx="4"/>
+  <rect class="cell" x="688" y="240" width="26" height="24" rx="4"/>
+  <rect class="cell" x="720" y="240" width="26" height="24" rx="4"/>
+  <g class="a r0"><rect class="tea" x="464" y="150" width="26" height="24" rx="4"/></g>
+  <g class="a r1"><rect class="tea" x="560" y="180" width="26" height="24" rx="4"/></g>
+  <g class="a r2"><rect class="tea" x="656" y="180" width="26" height="24" rx="4"/></g>
+  <g class="a r3"><rect class="tea" x="496" y="210" width="26" height="24" rx="4"/></g>
+  <g class="a r4"><rect class="tea" x="592" y="240" width="26" height="24" rx="4"/></g>
+  <text class="sm" x="42" y="292">Transform + bundle whole graph</text>
+  <rect class="cell" x="42" y="300" width="314" height="14" rx="7"/>
+  <rect class="pri bar" x="42" y="300" width="314" height="14" rx="7"/>
+  <g class="a bund"><rect class="bp" x="42" y="326" width="200" height="30" rx="6"/><text class="mono" x="54" y="346">in-memory bundle.js</text></g>
+  <g class="a rdyL"><text class="okt" x="356" y="346" text-anchor="end" font-size="15">Server ready</text></g>
+  <g class="a editL"><rect class="bw" x="42" y="372" width="314" height="30" rx="6"/><text class="sm" x="54" y="391">Edit Button.tsx: rebuild affected chunk</text></g>
+  <g class="a hmrL"><text class="wrnt" x="42" y="426" font-size="13">then push the update (cost grows with chunk size)</text></g>
+  <g class="a pre"><rect class="bt" x="432" y="296" width="226" height="26" rx="6"/><text class="mono" x="442" y="314">node_modules → .vite/deps</text></g>
+  <g class="a rdyR"><text class="okt" x="746" y="315" text-anchor="end" font-size="15">Server ready</text></g>
+  <g class="a r0"><text class="mono" x="432" y="340">GET main.tsx</text></g>
+  <g class="a r1"><text class="mono" x="538" y="340">GET App.tsx</text></g>
+  <g class="a r2"><text class="mono" x="644" y="340">GET routes.tsx</text></g>
+  <g class="a r3"><text class="mono" x="432" y="360">GET Claims.tsx</text></g>
+  <g class="a r4"><text class="mono" x="538" y="360">GET Button.tsx</text></g>
+  <g class="a edit"><rect class="bw" x="432" y="372" width="314" height="30" rx="6"/><text class="sm" x="444" y="391">Edit Button.tsx: re-transform 1 file</text></g>
+  <g class="a hmr"><text class="okt" x="432" y="426" font-size="13">HMR swaps 1 module (cost stays flat)</text></g>
+</svg>

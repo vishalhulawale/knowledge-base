@@ -47,7 +47,7 @@
   <rect class="bad" x="150" y="112" width="208" height="30" rx="4"/><text class="on" x="254" y="132" text-anchor="middle">attempt 1: 60 s</text>
   <rect class="bad" x="361" y="112" width="208" height="30" rx="4"/><text class="on" x="465" y="132" text-anchor="middle">retry 1: 60 s</text>
   <rect class="bad" x="572" y="112" width="208" height="30" rx="4"/><text class="on" x="676" y="132" text-anchor="middle">retry 2: 60 s</text>
-  <text class="badt" x="780" y="164" text-anchor="end" font-size="13">error after 180 s, thread held the whole time</text>
+  <text class="badt" x="780" y="164" text-anchor="end" font-size="13">error after 180 s, thread held throughout</text>
 
   <!-- row 2 -->
   <text class="tx" x="28" y="214">Budget</text><text class="sm" x="28" y="232">15 s, 1 retry</text>
@@ -61,8 +61,8 @@
   <!-- row 3 -->
   <text class="tx" x="28" y="300">Breaker open</text><text class="sm" x="28" y="318">fail fast</text>
   <rect class="ok" x="150" y="284" width="6" height="30" rx="2"/>
-  <text class="okt" x="166" y="304" font-size="13">rejected in ms, fallback at once: no thread, no tokens spent</text>
+  <text class="okt" x="196" y="304" font-size="13">rejected in ms, fallback at once: no thread, no tokens spent</text>
 
-  <text class="sub" x="28" y="400">Illustrative numbers. 60 s timeout and max-retries 2 are the Spring AI Anthropic defaults; the SDK retries</text>
-  <text class="sub" x="28" y="418">timeouts, 429 and 5xx, so the wall clock can reach timeout × (retries + 1). Streaming shows tokens early but needs the same budget.</text>
+  <text class="sub" x="28" y="398">Illustrative. 60 s timeout and max-retries 2 are the Spring AI Anthropic defaults; the SDK retries timeouts,</text>
+  <text class="sub" x="28" y="416">429 and 5xx, so wall clock can reach timeout × (retries + 1). Streaming shows tokens early, same budget applies.</text>
 </svg>

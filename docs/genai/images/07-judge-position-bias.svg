@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Swapping answer order exposes LLM-judge position bias</title>
+  <desc id="d">The same two answers, A and B, are shown to an LLM judge twice. In the first run A is shown first and the judge picks A. In the second run B is shown first and the judge picks B. Because the verdict follows the position rather than the content, the pair is recorded as a tie, not a win. Only a verdict that survives the swap counts as a win. Below, a checklist of judge hygiene: swap or randomise order, a concrete rubric with one property per call, do not reward length, use a judge from a different model family than the model under test, return structured output, and calibrate the judge against human labels before trusting it. Simplified: real judges are position-consistent on many pairs and inconsistent on close ones.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:15px;font-weight:700}
+    .tx{fill:#334155;font-size:13px}
+    .sm{fill:#334155;font-size:12px}
+    .sub{fill:#64748b;font-size:13px}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bw{fill:#fffbeb;stroke:#d97706}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}.ah{fill:#64748b}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .box{fill:#111827;stroke:#475569}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bw{fill:#451a03;stroke:#fbbf24}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.ah{fill:#94a3b8}
+    }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker>
+  </defs>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">Pairwise LLM judge: does the verdict survive a swap?</text>
+  <text class="sub" x="28" y="62">Same question, same two answers, only the order changes.</text>
+
+  <!-- run 1 -->
+  <text class="h2" x="28" y="94">Run 1</text>
+  <rect class="bp" x="90" y="76" width="120" height="30" rx="6"/><text class="prit" x="150" y="96" text-anchor="middle">1st: answer A</text>
+  <rect class="bt" x="220" y="76" width="120" height="30" rx="6"/><text class="teat" x="280" y="96" text-anchor="middle">2nd: answer B</text>
+  <line class="ln" x1="340" y1="91" x2="388" y2="91" marker-end="url(#ar)"/>
+  <rect class="box" x="392" y="76" width="96" height="30" rx="6"/><text class="h2" x="440" y="96" text-anchor="middle">Judge</text>
+  <line class="ln" x1="488" y1="91" x2="530" y2="91" marker-end="url(#ar)"/>
+  <text class="prit" x="538" y="96">"A is better"</text>
+
+  <!-- run 2 -->
+  <text class="h2" x="28" y="146">Run 2</text>
+  <rect class="bt" x="90" y="128" width="120" height="30" rx="6"/><text class="teat" x="150" y="148" text-anchor="middle">1st: answer B</text>
+  <rect class="bp" x="220" y="128" width="120" height="30" rx="6"/><text class="prit" x="280" y="148" text-anchor="middle">2nd: answer A</text>
+  <line class="ln" x1="340" y1="143" x2="388" y2="143" marker-end="url(#ar)"/>
+  <rect class="box" x="392" y="128" width="96" height="30" rx="6"/><text class="h2" x="440" y="148" text-anchor="middle">Judge</text>
+  <line class="ln" x1="488" y1="143" x2="530" y2="143" marker-end="url(#ar)"/>
+  <text class="teat" x="538" y="148">"B is better"</text>
+
+  <rect class="bw" x="90" y="176" width="686" height="44" rx="8" stroke-width="1.5"/>
+  <text class="wrnt" x="106" y="196" font-size="14">Verdict follows position, not content → record a tie.</text>
+  <text class="sm" x="106" y="212">Count a win only when both orders agree; track the swap-consistency rate as a health metric for the judge itself.</text>
+
+  <!-- checklist -->
+  <rect class="box" x="24" y="240" width="752" height="140" rx="10"/>
+  <text class="h2" x="40" y="264">Judge hygiene checklist</text>
+  <text class="tx" x="40" y="290"><tspan class="okt">✓</tspan> Swap or randomise order per case</text>
+  <text class="tx" x="40" y="314"><tspan class="okt">✓</tspan> Concrete rubric, one property per call</text>
+  <text class="tx" x="40" y="338"><tspan class="okt">✓</tspan> Tell it not to reward length (verbosity bias)</text>
+  <text class="tx" x="400" y="290"><tspan class="okt">✓</tspan> Different model family than the system under test</text>
+  <text class="tx" x="400" y="314"><tspan class="okt">✓</tspan> Structured output: {"pass": bool, "reason": …}</text>
+  <text class="tx" x="400" y="338"><tspan class="okt">✓</tspan> Calibrate on human-labelled cases first</text>
+  <text class="sub" x="40" y="366">Biases named in Zheng et al. 2023 (MT-Bench): position, verbosity, self-enhancement.</text>
+</svg>

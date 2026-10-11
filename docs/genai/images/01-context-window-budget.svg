@@ -78,12 +78,12 @@
   <rect class="win" x="40" y="150" width="660.0" height="56" rx="4"/>
   <line class="ln" x1="700.0" y1="144" x2="700.0" y2="214" stroke-dasharray="4 3"/>
   <rect class="bp" x="28" y="262" width="16" height="16" rx="3" stroke-width="1.5"/><text class="sm" x="50" y="275">system prompt</text>
-  <rect class="bt" x="155.8" y="262" width="16" height="16" rx="3" stroke-width="1.5"/><text class="sm" x="177.8" y="275">tools / summary</text>
-  <rect class="bw" x="296.8" y="262" width="16" height="16" rx="3" stroke-width="1.5"/><text class="sm" x="318.8" y="275">retrieved docs</text>
-  <rect class="bm" x="431.2" y="262" width="16" height="16" rx="3" stroke-width="1.5"/><text class="sm" x="453.2" y="275">conversation turns</text>
-  <rect class="bo" x="592.0" y="262" width="16" height="16" rx="3" stroke-width="1.5"/><text class="sm" x="614.0" y="275">output (max_tokens)</text>
-  <rect class="bb" x="759.4" y="262" width="16" height="16" rx="3" stroke-width="1.5"/><text class="sm" x="781.4" y="275">overflow</text>
+  <rect class="bt" x="161.60000000000002" y="262" width="16" height="16" rx="3" stroke-width="1.5"/><text class="sm" x="183.60000000000002" y="275">tools / summary</text>
+  <rect class="bw" x="309.6" y="262" width="16" height="16" rx="3" stroke-width="1.5"/><text class="sm" x="331.6" y="275">docs</text>
+  <rect class="bm" x="378.40000000000003" y="262" width="16" height="16" rx="3" stroke-width="1.5"/><text class="sm" x="400.40000000000003" y="275">turns</text>
+  <rect class="bo" x="454.40000000000003" y="262" width="16" height="16" rx="3" stroke-width="1.5"/><text class="sm" x="476.40000000000003" y="275">output reserve</text>
+  <rect class="bb" x="595.2" y="262" width="16" height="16" rx="3" stroke-width="1.5"/><text class="sm" x="617.2" y="275">overflow</text>
   <text class="tx" x="28" y="316">Long before the hard limit, quality drops: facts buried mid-context are recalled less reliably</text>
   <text class="tx" x="28" y="336">("lost in the middle", "context rot"). Curate what goes in; a bigger window is not a free pass.</text>
-  <text class="sub" x="28" y="372">Simplified numbers. Current Claude models have a 1M-token window and up to 128K output tokens; the arithmetic is the same.</text>
+  <text class="sub" x="28" y="372">Simplified numbers. Current Claude models: 1M-token window, up to 128K output tokens. Same arithmetic.</text>
 </svg>

@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Wrapping flexbox vs auto-fit grid when the container shrinks</title>
+  <desc id="d">Five cards laid out twice. The top row uses flexbox with flex-wrap: wrap and flex: 1 1 160px. The bottom row uses grid with grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)), with a 10px gap in both. The container alternates between 720px and 520px wide. At 720px both fit four cards per line, but the flex version stretches card 5 across the whole second line while the grid keeps card 5 in the first column at the same width as the cards above. At 520px both fit three per line; flex stretches cards 4 and 5 to half the width each, while grid keeps them aligned under columns one and two. Flexbox sizes each line independently from its content; grid sizes columns once and every row shares them.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;font-size:12.5px;fill:#334155}
+    .cont{fill:none;stroke:#94a3b8;stroke-width:1.5;stroke-dasharray:6 5}
+    .bf{fill:#eef2ff;stroke:#4f46e5}.bg{fill:#f0fdfa;stroke:#0ea5a4}
+    .it{fill:#334155;font-size:14px;font-weight:700}
+    .wrnt{fill:#b45309;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.mono,.it{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .cont{stroke:#64748b}
+      .bf{fill:#1e1b4b;stroke:#818cf8}.bg{fill:#042f2e;stroke:#2dd4bf}
+      .wrnt{fill:#fbbf24}.okt{fill:#4ade80}
+    }
+    .a{opacity:0;animation:12s infinite linear}
+    @keyframes wide{0%{opacity:1}42%{opacity:1}46%,96%{opacity:0}100%{opacity:1}}
+    @keyframes narrow{0%,46%{opacity:0}50%,92%{opacity:1}96%,100%{opacity:0}}
+    .wide{animation-name:wide}.narrow{animation-name:narrow}
+    @media (prefers-reduced-motion: reduce){ .a{animation:none} .wide{opacity:0} .narrow{opacity:1} }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="468" rx="14"/>
+  <text class="h" x="28" y="40">Same five cards, container shrinking</text>
+  <text class="h2" x="28" y="80">Flexbox</text>
+  <text class="mono" x="100" y="80">flex-wrap: wrap; gap: 10px; &gt; * { flex: 1 1 160px }</text>
+  <text class="h2" x="28" y="262">Grid</text>
+  <text class="mono" x="100" y="262">grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px</text>
+  <g class="a wide">
+    <rect class="cont" x="32" y="118" width="736" height="116" rx="8"/>
+    <text class="sub" x="772" y="112" text-anchor="end">container 720px: 4 per row</text>
+    <rect class="bf" x="40.0" y="126" width="172.5" height="40" rx="6" stroke-width="1.2"/><text class="it" x="126.2" y="151" text-anchor="middle">1</text>
+    <rect class="bf" x="222.5" y="126" width="172.5" height="40" rx="6" stroke-width="1.2"/><text class="it" x="308.8" y="151" text-anchor="middle">2</text>
+    <rect class="bf" x="405.0" y="126" width="172.5" height="40" rx="6" stroke-width="1.2"/><text class="it" x="491.2" y="151" text-anchor="middle">3</text>
+    <rect class="bf" x="587.5" y="126" width="172.5" height="40" rx="6" stroke-width="1.2"/><text class="it" x="673.8" y="151" text-anchor="middle">4</text>
+    <rect class="bf" x="40.0" y="176" width="720.0" height="40" rx="6" stroke-width="1.2"/><text class="it" x="400.0" y="201" text-anchor="middle">5</text>
+    <rect class="cont" x="32" y="298" width="736" height="116" rx="8"/>
+    <text class="sub" x="772" y="292" text-anchor="end">container 720px: 4 tracks</text>
+    <rect class="bg" x="40.0" y="306" width="172.5" height="40" rx="6" stroke-width="1.2"/><text class="it" x="126.2" y="331" text-anchor="middle">1</text>
+    <rect class="bg" x="222.5" y="306" width="172.5" height="40" rx="6" stroke-width="1.2"/><text class="it" x="308.8" y="331" text-anchor="middle">2</text>
+    <rect class="bg" x="405.0" y="306" width="172.5" height="40" rx="6" stroke-width="1.2"/><text class="it" x="491.2" y="331" text-anchor="middle">3</text>
+    <rect class="bg" x="587.5" y="306" width="172.5" height="40" rx="6" stroke-width="1.2"/><text class="it" x="673.8" y="331" text-anchor="middle">4</text>
+    <rect class="bg" x="40.0" y="356" width="172.5" height="40" rx="6" stroke-width="1.2"/><text class="it" x="126.2" y="381" text-anchor="middle">5</text>
+  </g>
+  <g class="a narrow">
+    <rect class="cont" x="32" y="118" width="536" height="116" rx="8"/>
+    <text class="sub" x="572" y="112" text-anchor="end">container 520px: 3 per row</text>
+    <rect class="bf" x="40.0" y="126" width="166.7" height="40" rx="6" stroke-width="1.2"/><text class="it" x="123.3" y="151" text-anchor="middle">1</text>
+    <rect class="bf" x="216.7" y="126" width="166.7" height="40" rx="6" stroke-width="1.2"/><text class="it" x="300.0" y="151" text-anchor="middle">2</text>
+    <rect class="bf" x="393.3" y="126" width="166.7" height="40" rx="6" stroke-width="1.2"/><text class="it" x="476.7" y="151" text-anchor="middle">3</text>
+    <rect class="bf" x="40.0" y="176" width="255.0" height="40" rx="6" stroke-width="1.2"/><text class="it" x="167.5" y="201" text-anchor="middle">4</text>
+    <rect class="bf" x="305.0" y="176" width="255.0" height="40" rx="6" stroke-width="1.2"/><text class="it" x="432.5" y="201" text-anchor="middle">5</text>
+    <rect class="cont" x="32" y="298" width="536" height="116" rx="8"/>
+    <text class="sub" x="572" y="292" text-anchor="end">container 520px: 3 tracks</text>
+    <rect class="bg" x="40.0" y="306" width="166.7" height="40" rx="6" stroke-width="1.2"/><text class="it" x="123.3" y="331" text-anchor="middle">1</text>
+    <rect class="bg" x="216.7" y="306" width="166.7" height="40" rx="6" stroke-width="1.2"/><text class="it" x="300.0" y="331" text-anchor="middle">2</text>
+    <rect class="bg" x="393.3" y="306" width="166.7" height="40" rx="6" stroke-width="1.2"/><text class="it" x="476.7" y="331" text-anchor="middle">3</text>
+    <rect class="bg" x="40.0" y="356" width="166.7" height="40" rx="6" stroke-width="1.2"/><text class="it" x="123.3" y="381" text-anchor="middle">4</text>
+    <rect class="bg" x="216.7" y="356" width="166.7" height="40" rx="6" stroke-width="1.2"/><text class="it" x="300.0" y="381" text-anchor="middle">5</text>
+  </g>
+  <text class="wrnt" x="28" y="440" font-size="14">Flex: each line shares its own free space, so the last line stretches.</text>
+  <text class="okt" x="28" y="460" font-size="14">Grid: columns are sized once and every row lines up under them.</text>
+</svg>

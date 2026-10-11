@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Layout thrashing versus batched reads and writes</title>
+  <desc id="d">Two timelines of one frame on the main thread, against a dashed 16.7 millisecond frame budget for a 60 hertz display. In the top lane, code loops over four cards and, for each one, reads offsetHeight and then writes style.height. After the first write every read finds layout dirty, so the browser runs a forced synchronous layout three times inside the loop, and then the frame's own style, layout and paint. The work ends well past the budget line, so a frame is dropped. In the bottom lane the same code first reads all four heights, then writes all four, so there is no forced layout; the frame does one style and layout pass and one paint and finishes well inside the budget. Blocks appear in order as the frame runs. Simplified: durations are illustrative, not measured.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .lbl{fill:#0f172a;font-size:15px;font-weight:700}
+    .tx{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .code{fill:#334155;font-size:12px;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace}
+    .lane{fill:#ffffff;stroke:#cbd5e1;stroke-width:1.2}
+    .on{fill:#ffffff;font-size:12px;font-weight:700}
+    .rd{fill:#0ea5a4}.wr{fill:#d97706}.fl{fill:#dc2626}.ly{fill:#4f46e5}.pt{fill:#16a34a}
+    .over{fill:#dc2626;opacity:.12}
+    .badt{fill:#dc2626;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .bud{stroke:#dc2626;stroke-width:2;stroke-dasharray:6 5;fill:none}
+    .ax{stroke:#94a3b8;stroke-width:1.2;fill:none}
+    .sep{stroke:#ffffff;stroke-width:1}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.lbl{fill:#f1f5f9}.tx,.code{fill:#e2e8f0}.sub{fill:#94a3b8}
+      .lane{fill:#111827;stroke:#475569}
+      .on{fill:#0f172a}
+      .rd{fill:#2dd4bf}.wr{fill:#fbbf24}.fl{fill:#f87171}.ly{fill:#818cf8}.pt{fill:#4ade80}
+      .over{fill:#f87171;opacity:.18}
+      .badt{fill:#f87171}.okt{fill:#4ade80}
+      .bud{stroke:#f87171}.ax{stroke:#64748b}.sep{stroke:#111827}
+    }
+    .a{opacity:0;animation:14s infinite linear}
+    @keyframes w1{0%,3%{opacity:0}5%,90%{opacity:1}94%,100%{opacity:0}} .w1{animation-name:w1}
+    @keyframes w2{0%,9%{opacity:0}11%,90%{opacity:1}94%,100%{opacity:0}} .w2{animation-name:w2}
+    @keyframes w3{0%,15%{opacity:0}17%,90%{opacity:1}94%,100%{opacity:0}} .w3{animation-name:w3}
+    @keyframes w4{0%,21%{opacity:0}23%,90%{opacity:1}94%,100%{opacity:0}} .w4{animation-name:w4}
+    @keyframes w5{0%,27%{opacity:0}29%,90%{opacity:1}94%,100%{opacity:0}} .w5{animation-name:w5}
+    @keyframes w6{0%,33%{opacity:0}35%,90%{opacity:1}94%,100%{opacity:0}} .w6{animation-name:w6}
+    @keyframes r1{0%,45%{opacity:0}47%,90%{opacity:1}94%,100%{opacity:0}} .r1{animation-name:r1}
+    @keyframes r2{0%,51%{opacity:0}53%,90%{opacity:1}94%,100%{opacity:0}} .r2{animation-name:r2}
+    @keyframes r3{0%,57%{opacity:0}59%,90%{opacity:1}94%,100%{opacity:0}} .r3{animation-name:r3}
+    @keyframes r4{0%,63%{opacity:0}65%,90%{opacity:1}94%,100%{opacity:0}} .r4{animation-name:r4}
+    @media (prefers-reduced-motion: reduce){ .a{animation:none;opacity:1} }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="438" rx="14"/>
+  <text class="h" x="28" y="40">One frame on the main thread: interleaved vs batched DOM access</text>
+  <rect class="rd" x="28" y="56" width="14" height="14" rx="3"/><text class="tx" x="48" y="68">read offsetHeight</text>
+  <rect class="wr" x="168" y="56" width="14" height="14" rx="3"/><text class="tx" x="188" y="68">write style.height</text>
+  <rect class="fl" x="310" y="56" width="14" height="14" rx="3"/><text class="tx" x="330" y="68">forced synchronous layout</text>
+  <rect class="ly" x="510" y="56" width="14" height="14" rx="3"/><text class="tx" x="530" y="68">style + layout</text>
+  <rect class="pt" x="640" y="56" width="14" height="14" rx="3"/><text class="tx" x="660" y="68">paint</text>
+
+  <!-- Lane 1: thrashing -->
+  <text class="lbl" x="28" y="112"><tspan class="badt">✗</tspan> Interleaved</text>
+  <text class="code" x="28" y="132">for (card of cards) {</text>
+  <text class="code" x="28" y="148">  h = card.offsetHeight</text>
+  <text class="code" x="28" y="164">  card.style.height=h+8</text>
+  <text class="code" x="28" y="180">}</text>
+  <rect class="lane" x="168" y="100" width="604" height="88" rx="8"/>
+  <rect class="over" x="504" y="101" width="102" height="86"/>
+  <g class="a w1"><rect class="rd" x="170" y="124" width="12" height="40"/><rect class="wr" x="182" y="124" width="12" height="40"/></g>
+  <g class="a w2"><rect class="fl" x="194" y="124" width="80" height="40"/><text class="on" x="234" y="148" text-anchor="middle">forced</text>
+    <rect class="rd" x="274" y="124" width="12" height="40"/><rect class="wr" x="286" y="124" width="12" height="40"/></g>
+  <g class="a w3"><rect class="fl" x="298" y="124" width="80" height="40"/><text class="on" x="338" y="148" text-anchor="middle">forced</text>
+    <rect class="rd" x="378" y="124" width="12" height="40"/><rect class="wr" x="390" y="124" width="12" height="40"/></g>
+  <g class="a w4"><rect class="fl" x="402" y="124" width="80" height="40"/><text class="on" x="442" y="148" text-anchor="middle">forced</text>
+    <rect class="rd" x="482" y="124" width="12" height="40"/><rect class="wr" x="494" y="124" width="12" height="40"/></g>
+  <g class="a w5"><rect class="ly" x="506" y="124" width="60" height="40"/><text class="on" x="536" y="148" text-anchor="middle">layout</text>
+    <rect class="pt" x="566" y="124" width="40" height="40"/><text class="on" x="586" y="148" text-anchor="middle">paint</text></g>
+  <g class="a w6"><text class="tx" x="616" y="141"><tspan class="badt">~22 ms:</tspan></text><text class="tx" x="616" y="159">frame dropped</text></g>
+
+  <!-- Lane 2: batched -->
+  <text class="lbl" x="28" y="242"><tspan class="okt">✓</tspan> Batched</text>
+  <text class="code" x="28" y="262">hs = cards.map(c =&gt;</text>
+  <text class="code" x="28" y="278">  c.offsetHeight)</text>
+  <text class="code" x="28" y="294">cards.forEach((c, i) =&gt;</text>
+  <text class="code" x="28" y="310">  c.style.height=…)</text>
+  <rect class="lane" x="168" y="230" width="604" height="88" rx="8"/>
+  <g class="a r1"><rect class="rd" x="170" y="254" width="48" height="40"/><line class="sep" x1="182" y1="254" x2="182" y2="294"/><line class="sep" x1="194" y1="254" x2="194" y2="294"/><line class="sep" x1="206" y1="254" x2="206" y2="294"/></g>
+  <g class="a r2"><rect class="wr" x="218" y="254" width="48" height="40"/><line class="sep" x1="230" y1="254" x2="230" y2="294"/><line class="sep" x1="242" y1="254" x2="242" y2="294"/><line class="sep" x1="254" y1="254" x2="254" y2="294"/></g>
+  <g class="a r3"><rect class="ly" x="266" y="254" width="60" height="40"/><text class="on" x="296" y="278" text-anchor="middle">layout</text>
+    <rect class="pt" x="326" y="254" width="40" height="40"/><text class="on" x="346" y="278" text-anchor="middle">paint</text></g>
+  <g class="a r4"><text class="tx" x="378" y="271"><tspan class="okt">~10 ms:</tspan> one layout,</text><text class="tx" x="378" y="289">time left for input</text></g>
+
+  <!-- Budget and axis -->
+  <line class="bud" x1="504" y1="92" x2="504" y2="330"/>
+  <text class="badt" x="508" y="226" font-size="13">16.7 ms budget (60 Hz)</text>
+  <line class="ax" x1="170" y1="344" x2="770" y2="344"/>
+  <g class="sub" font-size="12" text-anchor="middle">
+    <line class="ax" x1="170" y1="340" x2="170" y2="348"/><text x="170" y="364">0</text>
+    <line class="ax" x1="250" y1="340" x2="250" y2="348"/><text x="250" y="364">4</text>
+    <line class="ax" x1="330" y1="340" x2="330" y2="348"/><text x="330" y="364">8</text>
+    <line class="ax" x1="410" y1="340" x2="410" y2="348"/><text x="410" y="364">12</text>
+    <line class="ax" x1="490" y1="340" x2="490" y2="348"/><text x="490" y="364">16</text>
+    <line class="ax" x1="570" y1="340" x2="570" y2="348"/><text x="570" y="364">20</text>
+    <line class="ax" x1="650" y1="340" x2="650" y2="348"/><text x="650" y="364">24 ms</text>
+  </g>
+  <text class="sub" x="28" y="400">Each read after a write finds layout dirty and forces the browser to lay out now. Read everything first, then write.</text>
+  <text class="sub" x="28" y="420">Durations are illustrative; real cost grows with the size of the DOM being laid out.</text>
+</svg>
