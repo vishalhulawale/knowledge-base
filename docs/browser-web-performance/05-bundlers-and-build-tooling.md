@@ -17,7 +17,7 @@ tags: [browser-web-performance, P1]
 
 Browsers can load ES modules natively, so why build at all? Because real apps are written in TypeScript and JSX, import thousands of files from `node_modules` (often CommonJS), and must ship as little JavaScript as possible. Unbundled, a deep import tree becomes a **waterfall** of round trips: the browser only discovers `b.js` after parsing `a.js`. Rolldown's maintainers note that HTTP/2 doesn't remove this cost: browsers and servers cap concurrent streams (around 100 by default), each request has fixed overhead, and native ESM can't tree-shake.
 
-History in one paragraph: **Browserify** (2011) brought CommonJS to the browser; **webpack** (2012) made *everything* (CSS, images) a module and added code splitting and HMR; **Rollup** (2015) popularised ES-module tree shaking for libraries; **Parcel** went zero-config; **esbuild** (Go, 2020) showed builds could be 10–100x faster; **Vite** (2020) used native ESM in dev; then Rust rewrites arrived (**SWC**, **Rspack**, **Turbopack**, **Rolldown**/**Oxc**). In February 2025 the React team **deprecated Create React App** (a webpack wrapper) and pointed new apps to frameworks or to Vite, Parcel or Rsbuild.
+History in brief: **webpack** made *everything* (CSS, images) a module and added code splitting and HMR; **Rollup** popularised ES-module tree shaking; **esbuild** (Go) showed builds could be orders of magnitude faster; **Vite** used native ESM in dev; then came Rust rewrites (**SWC**, **Rspack**, **Turbopack**, **Rolldown**/**Oxc**). In February 2025 the React team **deprecated Create React App** (a webpack wrapper) and pointed new apps to frameworks or to Vite, Parcel or Rsbuild.
 
 The build directly shapes what the [Core Web Vitals page](04-core-web-vitals-and-performance-optimisation.md) measures: bundle size and chunking drive LCP and INP, and file naming drives how well [HTTP caching](06-browser-storage-cookies-and-caching.md) works.
 
@@ -76,14 +76,14 @@ sequenceDiagram
 
 Vite splits the work into **dependencies** (rarely change; pre-bundled once, converting CommonJS/UMD to ESM and collapsing many-file packages into one request) and **source** (served on demand as native ESM, transformed per request). Startup is near-instant regardless of app size and HMR stays fast because only the edited module (and its HMR boundary) is replaced.
 
-For production Vite **bundles**, because unbundled ESM is a request waterfall. Until Vite 7 that meant two tools: esbuild for dev transforms and pre-bundling, Rollup for the build, with two plugin pipelines that sometimes behaved differently. **Vite 8** ships **Rolldown**, a Rust bundler with Rollup's plugin API, using **Oxc** for parsing, transforming and minifying, and **Lightning CSS** for CSS minification. Reported production build reductions in the announcement include Linear (46 s → 6 s) and Beehiiv (64%). A compatibility layer maps old `esbuild` and `build.rollupOptions` settings; new configs use `build.rolldownOptions`, and the object form of `manualChunks` is gone in favour of `codeSplitting`.
+For production Vite **bundles**, because unbundled ESM is a request waterfall. Until Vite 7 that meant two tools: esbuild for dev transforms and pre-bundling, Rollup for the build, with two plugin pipelines that sometimes behaved differently. **Vite 8** ships **Rolldown**, a Rust bundler with Rollup's plugin API, using **Oxc** for parsing, transforming and minifying, and **Lightning CSS** for CSS minification. Linear reported its production build dropping from 46 s to 6 s. A compatibility layer maps old `esbuild` and `build.rollupOptions` settings; new configs use `build.rolldownOptions`, and the object form of `manualChunks` is gone in favour of `codeSplitting`.
 
 ![Animation: on the left, a bundle-first dev server reads all 1,200 modules into a bundle before the page can load, so the progress bar fills before "server ready". On the right, Vite pre-bundles dependencies, is ready at once, and the browser requests only the five modules the current route needs; an edit to Button.tsx then sends one HMR update](images/05-dev-server-models.svg){ loading=lazy }
 *Watch when "ready" appears in each column: after building everything on the left, immediately on the right.*
 
 The unbundled model has its own ceiling: a page importing thousands of modules makes thousands of dev requests. Vite 8.1 (June 2026) added an experimental **bundled dev mode** (`experimental.bundledDev`), now that Rolldown is fast enough to bundle in dev; the team reports about 15x faster startup on a 10,000-component test app.
 
-Two Vite defaults worth knowing: production output targets **Baseline Widely Available** browsers (Chrome/Edge 111, Firefox 114, Safari 16.4 for Vite 8; `@vitejs/plugin-legacy` for older ones), and only `VITE_`-prefixed env variables reach client code, inlined at build time.
+Also know: production output targets **Baseline Widely Available** browsers (Chrome/Edge 111, Firefox 114, Safari 16.4 in Vite 8), and only `VITE_`-prefixed env variables reach client code, inlined at build time.
 
 ### Long-term caching and hash cascades
 
@@ -94,7 +94,7 @@ The deploy contract is simple: hashed assets get `Cache-Control: public, max-age
 
 ### Module Federation and the rest of the field
 
-**Module Federation** lets one build expose modules that another, independently deployed build loads at runtime through a `remoteEntry.js` (or an `mf-manifest.json` in MF 2.0), negotiating shared dependencies such as React as singletons. It started in webpack 5 and is now maintained as the `@module-federation/*` packages: **MF 2.0 went stable in February 2026** (`@module-federation/enhanced` 2.x), adding a manifest, runtime plugins, type hints, tree shaking of shared dependencies and SSR. Rspack supports it natively and Vite through `@module-federation/vite`. The micro-frontend side is covered in [Micro-frontends: approaches & trade-offs](../frontend-architecture/01-micro-frontends-approaches-and-trade-offs.md) and [shared dependencies](../frontend-architecture/02-shared-dependencies-routing-and-communication-between-micro.md).
+**Module Federation** lets one build expose modules that another, independently deployed build loads at runtime through a `remoteEntry.js` (or an `mf-manifest.json` in MF 2.0), negotiating shared dependencies such as React as singletons. It started in webpack 5 and now lives in the cross-bundler `@module-federation/*` packages: **MF 2.0 went stable in February 2026**, adding a manifest, runtime plugins, type hints, shared-dependency tree shaking and SSR. Rspack supports it natively, Vite via `@module-federation/vite`. The micro-frontend side is covered in [Micro-frontends: approaches & trade-offs](../frontend-architecture/01-micro-frontends-approaches-and-trade-offs.md) and [shared dependencies](../frontend-architecture/02-shared-dependencies-routing-and-communication-between-micro.md).
 
 | Tool (Oct 2026) | Written in | Dev model | Config style | Best fit |
 |---|---|---|---|---|
@@ -191,11 +191,10 @@ npx source-map-explorer dist/assets/*.js
 
 ## Real-world usage
 
-- **Migrations to Vite and Rust bundlers** are the dominant 2024–2026 story: CRA's deprecation moved many React apps to Vite; companies cited in the Vite 8 announcement (Linear, Ramp, Mercedes-Benz.io, Beehiiv) cut build times by 38–87%; Rspack reports 5 million weekly downloads, much of it webpack estates switching for speed without rewriting config.
-- **Module Federation at enterprise scale.** Banking, insurance and healthcare portals use a federated shell to let teams deploy independently; MF 2.0's manifest and type hints address its two classic pains, cache-busting `remoteEntry.js` and missing types across repos.
+- **Migrations to Vite and Rust bundlers** dominate 2024–2026: CRA's deprecation moved many React apps to Vite, Linear's production build fell from 46 s to 6 s on Rolldown, and Rspack reports 5 million weekly downloads, largely webpack estates switching without rewriting config.
+- **Module Federation at enterprise scale.** Banking, insurance and healthcare portals use a federated shell so teams deploy independently.
 - **Stale-chunk errors after deploys.** A user with an old tab clicks a lazy route, the old chunk is gone, and `ChunkLoadError` (webpack) or "Failed to fetch dynamically imported module" (Vite) appears. Fix with `no-cache` on HTML, keeping the previous release's assets for a while, and a reload-on-preload-error handler.
 - **Leaked secrets and source.** Anything in a client bundle is public: `VITE_*`/`process.env` values are inlined at build time, and public source maps reveal original code. In regulated domains (PHI, PCI) the build pipeline is part of the threat model (see [frontend CI/CD and monorepos](../frontend-architecture/06-frontend-ci-cd-and-monorepos.md)).
-- **Supply chain.** Build tools run arbitrary plugin code with your CI credentials; lockfiles, pinned versions and reviewing new plugins matter as much as for backend dependencies.
 
 ## Trade-offs & production gotchas
 
@@ -211,19 +210,18 @@ npx source-map-explorer dist/assets/*.js
     Importing from a package's CommonJS build, `import * as _ from 'lodash'` instead of `lodash-es` named imports, Babel converting ES modules to CommonJS before the bundler sees them, or a package without `"sideEffects": false` all keep dead code. Check the treemap, not the config.
 
 !!! warning "Gotcha: dev works, prod breaks"
-    With Vite, dev and production historically ran through different tools (esbuild vs Rollup), so CommonJS interop or CSS ordering bugs appeared only after `vite build`. Rolldown narrows the gap but doesn't close it (dev is still unbundled by default). Always run `vite build && vite preview` in CI before deploying.
+    Dev is unbundled and production is bundled, so CommonJS interop or CSS ordering bugs can appear only after `vite build` (Rolldown narrows the gap; it doesn't close it). Run `vite build && vite preview` in CI.
 
-!!! tip "Measure the build like a service"
-    Track bundle size per route in CI with a budget (fail the PR on regression), keep build time and cache hit rate on a dashboard, and run a bundle analyzer when a dependency is added.
+!!! tip "Budgets"
+    Fail the PR when a route's bundle exceeds its size budget, and look at the analyzer whenever a dependency is added.
 
 ## How this connects to my experience
 
 - **Where I used it:** not a ★ subtopic, but closely tied to OptumRx Meteor (Publicis Sapient), where I **"built the ReactJS application from the ground up and established a micro-frontend architecture"** and **"established engineering standards around testing, CI/CD, code quality, and deployment practices"** (GitLab CI/CD on the resume). Which bundler the app used (webpack 5, Vite, Rspack), and whether micro-frontends were composed with Module Federation: *[confirm]*.
 - **Talking points:**
     - Why route-level code splitting plus a shared vendor chunk kept initial JavaScript small for a 750K+ user healthcare portal. Actual bundle sizes or LCP gains: *[confirm]*.
-    - For micro-frontends: sharing React, the router and the Material UI design system as singletons so each MFE doesn't ship its own copy; versioning `remoteEntry.js` with `no-cache` *[confirm mechanism]*.
-    - Build standards I'd set as tech lead: bundle budgets in CI, `tsc --noEmit` alongside the bundler, no secrets in `VITE_*`/`process.env`, hidden source maps uploaded to error tracking.
-    - If the app was on webpack: how I'd evaluate Vite 8 or Rspack 2 (measure cold start, HMR and CI build time; check plugin and MF support; migrate behind a branch build).
+    - Micro-frontends: React, router and the Material UI design system shared as singletons so each MFE doesn't ship its own copy *[confirm mechanism]*.
+    - Build standards as tech lead: bundle budgets in CI, `tsc --noEmit` beside the bundler, no secrets in `VITE_*`/`process.env`, hidden source maps.
 - **Likely follow-up chain:** "Why is Vite faster than webpack in dev?" → native ESM, only requested files transformed, deps pre-bundled → "Then why bundle for production at all?" → waterfalls, request overhead, tree shaking, compression → "Your MFE remote deployed and users got blank screens. What happened?" → stale `remoteEntry.js` or chunks, shared React version mismatch; cache headers, keep old assets, singleton `requiredVersion`.
 
 ## Interview questions
@@ -244,30 +242,23 @@ npx source-map-explorer dist/assets/*.js
 
     **Common wrong answer:** "The minifier removes functions that are never called at runtime."
 
-??? question "Q3. Loaders vs plugins in webpack?"
-    **Answer:** Loaders transform individual files as they're loaded into the graph (`ts-loader`, `css-loader`), chained right to left per rule. Plugins hook into the compiler and compilation lifecycle to do anything else: generate HTML, extract CSS, define constants, analyse or rewrite chunks, Module Federation. Vite and Rolldown merge both into one plugin interface with hooks like `resolveId`, `load` and `transform`.
-
-    **Interviewer listens for:** per-file vs whole-build, Rollup-style hooks as the alternative.
-
-    **Common wrong answer:** "They're the same thing configured in different places."
-
 ### Intermediate
 
-??? question "Q4. Why is Vite's dev server faster than webpack's, and what changed in Vite 8?"
-    **Answer:** webpack bundles the whole app before serving, so start-up grows with app size. Vite pre-bundles only dependencies and serves source as native ESM, transforming each file when the browser requests it, so start-up is near-constant and HMR replaces one module. Vite 8 replaced esbuild (dev) plus Rollup (build) with one Rust bundler, Rolldown, using Oxc, giving one plugin pipeline and much faster production builds. Vite 8.1 added an experimental bundled dev mode for very large apps where the number of dev requests becomes the bottleneck.
+??? question "Q3. Why is Vite's dev server faster than webpack's, and what changed in Vite 8?"
+    **Answer:** webpack bundles the whole app before serving, so start-up grows with app size. Vite pre-bundles only dependencies and serves source as native ESM, transforming each file on request, so start-up is near-constant and HMR replaces one module. Vite 8 replaced esbuild (dev) plus Rollup (build) with one Rust bundler, Rolldown (with Oxc): one plugin pipeline, much faster builds. Vite 8.1 added an experimental bundled dev mode for apps so large that dev request counts hurt.
 
     **Interviewer listens for:** on-demand transforms, dep pre-bundling, one bundler in Vite 8, knowing the unbundled model's limit.
 
     **Common wrong answer:** "Vite is faster because it's written in Rust" (the dev speed came from the architecture first).
 
-??? question "Q5. How do you set up long-term caching of static assets?"
+??? question "Q4. How do you set up long-term caching of static assets?"
     **Answer:** Content-hashed file names, `Cache-Control: max-age=31536000, immutable` on them, `no-cache` on `index.html`. Keep hashes stable: deterministic module IDs, a separate runtime chunk, a vendor chunk for slow-changing libraries, and in Vite 8.1 optionally the chunk import map to stop hash cascades. Keep the previous release's assets deployed for a while and handle chunk-load errors with a reload.
 
     **Interviewer listens for:** HTML not cached, cascade awareness, stale-chunk handling.
 
     **Common wrong answer:** "Add `?v=build-number` to every file."
 
-??? question "Q6. What is Module Federation and where does it stand today?"
+??? question "Q5. What is Module Federation and where does it stand today?"
     **Answer:** A runtime mechanism that lets a host load modules exposed by independently deployed remotes, negotiating shared dependencies (React as a singleton with version ranges). It began in webpack 5; the `@module-federation` project now maintains it across bundlers, with MF 2.0 stable since February 2026 (manifest, runtime plugins, type hints, shared-dependency tree shaking). Rspack supports it natively, Vite through `@module-federation/vite`.
 
     **Interviewer listens for:** runtime vs build-time composition, shared singletons, cross-bundler status.
@@ -276,15 +267,15 @@ npx source-map-explorer dist/assets/*.js
 
 ### Senior
 
-??? question "Q7. The CI build of a large webpack app takes 12 minutes. How do you bring it down?"
-    **Answer:** Profile first (`--profile`, speed measure, see which loaders dominate). Enable `cache: { type: 'filesystem' }` and persist it between CI runs; replace Babel/ts-loader transforms with SWC or esbuild loaders and move type-checking to a parallel `tsc --noEmit` job; skip source maps or use cheaper ones where not needed; build only affected packages in a monorepo with a remote cache. If that's not enough, trial Rspack (webpack-compatible, Rust) or Vite 8 on a branch and compare like-for-like.
+??? question "Q6. The CI build of a large webpack app takes 12 minutes. How do you bring it down?"
+    **Answer:** Profile first (which loaders dominate). Persist `cache: { type: 'filesystem' }` between CI runs; swap Babel/ts-loader for SWC or esbuild loaders and type-check in a parallel `tsc --noEmit` job; use cheaper source maps; build only affected packages with a remote cache. If still slow, trial Rspack or Vite 8 on a branch and compare like-for-like.
 
     **Interviewer listens for:** measure first, caching, transform cost, type-check separation, migration as an option with evidence.
 
     **Common wrong answer:** "Just give the runner more CPU."
 
-??? question "Q8. How would you choose between webpack, Vite and Rspack for a new enterprise React platform with micro-frontends?"
-    **Answer:** Requirements first: runtime composition and independent deploys (Module Federation), SSR needs, plugin needs, team familiarity. Vite 8 is the default for a new SPA (fast DX, Rolldown builds) and works with MF through the Vite plugin; Rspack or webpack is safer when MF is central and you want the reference implementation, or when migrating an existing webpack estate. Run a spike measuring dev start, HMR, prod build time and bundle output on a realistic app, and standardise one toolchain across MFEs.
+??? question "Q7. How would you choose between webpack, Vite and Rspack for a new enterprise React platform with micro-frontends?"
+    **Answer:** Requirements first: runtime composition (Module Federation), SSR, plugin needs, team familiarity. Vite 8 is the default for a new SPA and supports MF through a plugin; Rspack or webpack is safer when MF is central or when migrating a webpack estate. Spike on a realistic app (dev start, HMR, build time, output size) and standardise one toolchain across MFEs.
 
     **Interviewer listens for:** criteria, not fashion; MF maturity per tool; evidence via a spike.
 
@@ -292,14 +283,14 @@ npx source-map-explorer dist/assets/*.js
 
 ### Scenario-based
 
-??? question "Q9. After a deploy, some users see a blank screen with 'Failed to fetch dynamically imported module'. Why, and how do you fix it?"
+??? question "Q8. After a deploy, some users see a blank screen with 'Failed to fetch dynamically imported module'. Why, and how do you fix it?"
     **Answer:** They have an old `index.html` or old entry chunk that references hashed chunks removed by the new deploy (or a CDN served a stale HTML). Fix: `no-cache` on HTML, keep the last one or two releases' assets on the CDN, handle `vite:preloadError` / `ChunkLoadError` by reloading once, and for MFEs make `remoteEntry.js` or the manifest non-cacheable.
 
     **Interviewer listens for:** HTML caching, overlap of releases, graceful recovery.
 
     **Common wrong answer:** "Tell users to clear their cache."
 
-??? question "Q10. The main bundle grew 400 KB after a small feature PR. How do you investigate?"
+??? question "Q9. The main bundle grew 400 KB after a small feature PR. How do you investigate?"
     **Answer:** Compare bundle-analyzer treemaps for the two builds. Typical causes: a new dependency imported eagerly in a shared module, a namespace or CommonJS import defeating tree shaking (`lodash` vs `lodash-es`), a heavy library (charts, date, PDF) not behind a dynamic `import()`, or duplicate versions of a package. Fix the import, lazy-load the feature, dedupe the lockfile, and add a CI size budget so it can't happen silently again.
 
     **Interviewer listens for:** analyzer-driven, tree-shaking and splitting causes, prevention with budgets.
@@ -316,7 +307,6 @@ npx source-map-explorer dist/assets/*.js
 | Caching | `[contenthash]` + `immutable`; HTML `no-cache`; runtime chunk; beware hash cascade |
 | webpack 5 | Loaders + plugins, bundled dev, filesystem cache, Module Federation origin; 5.111 (Sep 2026) |
 | Vite 8 | Native ESM dev + dep pre-bundling; Rolldown + Oxc for everything since Mar 2026; `build.rolldownOptions` |
-| Rspack / Turbopack | Rust; webpack-compatible / Next.js default |
 | Module Federation | Runtime remotes, shared singletons; MF 2.0 stable Feb 2026, works in webpack, Rspack, Vite |
 | Env vars | `VITE_*` and `process.env.*` are inlined: never secrets |
 

@@ -1,28 +1,28 @@
 ---
 title: "LLM fundamentals: tokens, context window, temperature, hallucination"
-description: How a large language model turns text into tokens, predicts one token at a time inside a fixed context window, how temperature and top-p shape sampling, and why models hallucinate, with the engineering consequences for cost, latency, limits and reliability.
+description: How an LLM turns text into tokens and predicts one token at a time inside a fixed context window, how temperature and top-p shape sampling, and why models hallucinate, with the consequences for cost, limits and reliability.
 tags: [genai, P1]
 ---
 
 # LLM fundamentals: tokens, context window, temperature, hallucination
 
 !!! abstract "Key takeaways"
-    - An LLM is a **next-token predictor**. Text is split into **tokens** (subword pieces from a BPE-style tokenizer, about **4 characters of English per token**), the model scores every token in its vocabulary, one is chosen, appended, and the loop repeats until a stop condition. Everything is priced, rate-limited and capped **in tokens**, and every model family has its own tokenizer.
-    - The **context window** is one budget for **input + output** (system prompt, tool definitions, history, documents, thinking and the answer). The API is **stateless**: you resend the history on every call. Current Claude models have a **1M-token window and up to 128K output tokens**; quality degrades well before the limit (**"lost in the middle"**, **context rot**).
-    - **Temperature** divides the logits before softmax: low T sharpens the distribution (near-greedy), high T flattens it. **Top-p** (nucleus) keeps the smallest set of tokens covering p of the probability mass. **Temperature 0 is not a determinism guarantee**, and the newest Claude models reject `temperature`/`top_p`/`top_k` altogether (400): you steer with prompts and effort instead.
-    - A **hallucination** is fluent output that is not supported by the input or by the facts. It comes from the training objective (predict plausible text) and from evaluations that reward guessing over "I don't know". Lower temperature does **not** fix it.
-    - Engineering defences: **ground** the model in retrieved sources (RAG), allow and reward "I don't know", ask for **quotes and citations** and verify them, validate structured output, check `stop_reason`, and keep a **human or rule-based check** where errors are costly (healthcare, banking, legal).
+    - An LLM is a **next-token predictor**. Text is split into **tokens** (subword pieces, about **4 characters of English each**); the model scores every vocabulary token, one is picked and appended, and the loop repeats. Price, rate limits and size limits are all **in tokens**, and each model family has its own tokenizer.
+    - The **context window** is one budget for **input + output** (system prompt, tools, history, documents, thinking, the answer). The API is **stateless**: you resend history every call. Current Claude models: **1M-token window, up to 128K output**. Quality drops long before the limit (**lost in the middle**, **context rot**).
+    - **Temperature** divides logits before softmax: low T is near-greedy, high T flattens the distribution. **Top-p** keeps the smallest set of tokens covering p of the mass. **T = 0 is not deterministic**, and the newest Claude models reject `temperature`/`top_p`/`top_k` (400).
+    - A **hallucination** is fluent output not supported by the input or the facts. It comes from the training objective and from evaluations that reward guessing over "I don't know". Lowering temperature does **not** fix it.
+    - Defences: **ground** answers in retrieved sources, allow "I don't know", require **quotes/citations** and verify them, validate structured output, check `stop_reason`, and keep humans on high-stakes decisions.
 
 ## Why it matters
 
-Every GenAI interview for a backend or lead role starts here, because every production problem with LLMs traces back to these four ideas:
+Most production problems with LLMs trace back to these four ideas:
 
-- **Cost and latency** are proportional to tokens. Output tokens are slower (generated one at a time) and usually several times more expensive than input tokens: for example, Claude Opus 5.5 lists $4 per million input tokens and $20 per million output tokens.
-- **Limits and failures** are expressed in tokens: "prompt is too long", truncated answers (`max_tokens`), rate limits in tokens per minute.
-- **Reproducibility** depends on sampling. Tests that compare LLM output byte-for-byte are flaky by design.
-- **Trust** depends on hallucination. A chatbot that invents a refund policy or a lawyer's brief that cites invented cases are not model bugs you can patch; they are system-design failures.
+- **Cost and latency scale with tokens.** Output tokens are generated one at a time and usually cost several times more than input (Claude Opus 5.5: $4 per million input, $20 per million output).
+- **Failures are expressed in tokens:** "prompt is too long", answers cut off at `max_tokens`, rate limits in tokens per minute.
+- **Reproducibility depends on sampling**, so byte-for-byte snapshot tests are flaky by design.
+- **Trust depends on hallucination.** A chatbot inventing a refund policy is a system-design failure, not a model bug you can patch.
 
-Before transformers (2017), language models were RNN/LSTM-based with short effective memory. The transformer's self-attention lets every token attend to every other token in the window, which is what made long, coherent generation possible and also why context is a scarce resource: attention cost and "attention budget" grow with the number of tokens.
+The transformer's self-attention (2017) lets every token attend to every other token in the window. That made long, coherent generation possible, and it is also why context is a scarce resource.
 
 ## Core concepts
 
@@ -37,102 +37,96 @@ flowchart LR
     E --> F{"Stop? end of turn, stop sequence, max_tokens, window full"}
     F -->|no| G["Append chosen token to the context"]
     G --> C
-    F -->|yes| H["Detokenize and return, with usage and stop_reason"]
+    F -->|yes| H["Detokenize, return text, usage and stop_reason"]
 ```
-*Notice that the model only ever predicts the next token. Each output token is fed back as input, so output length drives latency, and the window must hold the prompt plus everything generated.*
+*Notice that each output token is fed back as input: output length drives latency, and the window must hold the prompt plus everything generated.*
 
-The model has no memory between calls and no database lookup. Whatever it "knows" is either baked into its weights at training time (with a **knowledge cutoff**) or present in the current context window.
+The model has no memory between calls. What it "knows" is either in its weights (frozen at a **knowledge cutoff**) or in the current context.
 
 ### Tokens
 
-A **tokenizer** maps text to integer IDs from a fixed vocabulary (tens to hundreds of thousands of entries). Most modern tokenizers use **byte-pair encoding (BPE)** or a close relative: start from bytes, repeatedly merge the most frequent adjacent pairs, so common words become one token and rare words split into pieces ("authorization" → "author" + "ization"). Working on bytes means any input can be encoded; there are no unknown words.
+A **tokenizer** maps text to integer IDs from a fixed vocabulary. Most use **byte-pair encoding (BPE)** or a relative: start from bytes and repeatedly merge the most frequent adjacent pairs, so common words become one token and rare words split ("authorization" → "author" + "ization"). Working on bytes means any input can be encoded.
 
 ![A sentence split into nine subword tokens with integer IDs, followed by three bars comparing relative token counts for English prose, code and JSON, and IDs, numbers or non-Latin scripts](images/01-tokenization.svg){ loading=lazy }
-*The model never sees letters, only IDs; that is why spelling, counting characters and long-number arithmetic are surprisingly hard for it.*
-
-Rules of thumb engineers use:
+*The model sees IDs, not letters, which is why spelling, counting characters and long-number arithmetic are surprisingly hard for it.*
 
 | Content | Rough cost | Why |
 |---|---|---|
 | English prose | ~4 characters, ~0.75 words per token | Common words are single tokens |
-| Code, JSON, YAML | More tokens per character | Punctuation, indentation, camelCase splits |
+| Code, JSON, YAML | More tokens per character | Punctuation, indentation, camelCase |
 | UUIDs, hashes, long numbers | Many tokens | No frequent merges to exploit |
-| Non-English scripts (e.g. Devanagari) | Often several times English for the same meaning | Fewer merges learned for them |
-| Images, PDFs | Converted to tokens too | Count against the same window and bill |
+| Non-English scripts | Often several times English | Fewer merges learned for them |
+| Images, PDFs | Converted to tokens | Same window, same bill |
 
-Two practical consequences:
-
-1. **Count with the provider's tokenizer.** Token counts are model-specific. OpenAI's `tiktoken` does not match Claude's tokenizer; for Claude use the `POST /v1/messages/count_tokens` endpoint. Even within one vendor, tokenizers change: Anthropic notes that the tokenizer introduced with Claude Opus 4.7 produces roughly 1x–1.35x as many tokens for the same text as earlier models, so re-baseline cost when you migrate.
-2. **Design prompts and payloads for tokens, not characters.** Sending a 5,000-row JSON array "just in case" costs real money on every call and dilutes attention.
+Two consequences. First, **count with the provider's tokenizer**: OpenAI's `tiktoken` does not match Claude's, so use `POST /v1/messages/count_tokens` and the `usage` field on responses. Tokenizers also change between generations; Anthropic notes the tokenizer introduced with Opus 4.7 uses roughly 1x–1.35x as many tokens for the same text, so re-baseline cost on migration. Second, **design payloads for tokens**: a 5,000-row JSON dump "just in case" is paid for on every call and dilutes attention.
 
 ### The context window
 
-The **context window** is the maximum number of tokens the model can attend to in one request, **including its own output for that turn**. Everything counts: system prompt, tool definitions, every message (including tool results, images, documents), extended-thinking tokens and the answer.
+The **context window** is the maximum number of tokens the model can attend to in one request, **including its own output**. System prompt, tool definitions, every message and tool result, images, thinking tokens and the answer all count.
 
 ![Animation: a 200K-token context window bar fills with system prompt, tool definitions, retrieved documents and three conversation turns, then a reserved output block; a fourth turn pushes the output reservation past the limit in red; finally compaction replaces the old turns with a short summary and everything fits again](images/01-context-window-budget.svg){ loading=lazy }
 *Watch the output reservation: `max_tokens` lives in the same budget as the prompt, so a growing history eventually squeezes out the answer.*
 
-Key behaviours for Claude (other vendors are similar in spirit; check their docs):
+Claude specifics (other vendors are similar in spirit):
 
-- Current Claude models (Opus 5.5, Sonnet 5.5, Haiku 5.5 and the 4.6+ generation) have a **1M-token** window, and one request can generate up to **128K** output tokens. Older models such as Haiku 4.5 have 200K.
-- If the **input alone** exceeds the window, the API returns **400 `invalid_request_error`** ("prompt is too long").
-- On Claude 4.5 and newer, if input + `max_tokens` exceeds the window the request is accepted; if generation actually hits the limit it stops with **`stop_reason: "model_context_window_exceeded"`**, distinct from `max_tokens` (your own output cap).
+- Current models (Opus 5.5, Sonnet 5.5, Haiku 5.5 and the 4.6+ generation) have a **1M-token** window and up to **128K** output tokens per request; older ones such as Haiku 4.5 have 200K.
+- If the **input alone** exceeds the window: **400 `invalid_request_error`** ("prompt is too long").
+- On Claude 4.5+, input + `max_tokens` may exceed the window; if generation actually reaches it, the response stops with **`stop_reason: "model_context_window_exceeded"`**, distinct from `max_tokens` (your output cap).
 - **Prompt caching** makes a repeated prefix cheaper and faster, but cached tokens **still occupy the window**.
-- Chat UIs hide the statelessness by trimming or summarising old turns. In your own service you choose: sliding window, summarisation (**compaction**), or retrieval of only the relevant pieces (RAG, see [RAG architecture](04-rag-architecture.md)).
 
-**Bigger is not automatically better.** Liu et al. ("Lost in the Middle", TACL 2024) showed accuracy is highest when the relevant fact is at the **start or end** of a long input and drops when it is buried in the middle (a U-shaped curve). Anthropic calls the general effect **context rot**: as token count grows, recall and accuracy degrade, because attention is spread across n² token pairs. Curate what goes in; put instructions and the question where the model will weigh them (long documents first, question last is a common pattern; see [Prompt engineering & structured output](02-prompt-engineering-and-structured-output.md)).
+Because the API is stateless, your service decides what to resend: a sliding window, a summary of old turns (**compaction**), or only the relevant pieces via retrieval (see [RAG architecture](04-rag-architecture.md)).
+
+**Bigger is not automatically better.** "Lost in the Middle" (Liu et al., TACL 2024) found accuracy is highest when the relevant fact is at the **start or end** of a long input and drops in the middle. Anthropic calls the general effect **context rot**: recall degrades as token count grows, because attention is spread over n² token pairs. Curate the context and put long documents first and the question last (see [Prompt engineering & structured output](02-prompt-engineering-and-structured-output.md)).
 
 ### Temperature, top-p and top-k
 
-At each step the model outputs **logits** (raw scores). Softmax turns them into probabilities, and **temperature T** rescales them first: `p_i = exp(z_i / T) / Σ exp(z_j / T)`.
+At each step the model emits **logits**; softmax turns them into probabilities after dividing by **temperature T**: `p_i = exp(z_i / T) / Σ exp(z_j / T)`.
 
-- **T → 0**: the top token gets almost all the mass, effectively **greedy decoding**. Good for extraction and classification.
-- **T = 1**: the model's learned distribution.
-- **T > 1**: flatter; unlikely and nonsensical tokens get real probability. More "creative", more errors.
+- **T → 0**: the top token takes almost all the mass (**greedy**). Good for extraction and classification.
+- **T = 1**: the learned distribution.
+- **T > 1**: flatter; unlikely and nonsensical tokens get real odds.
 
 ![Animation: five candidate next tokens with fixed logits; at temperature 0.2 approved has 98 percent, at 1.0 it has 55 percent, at 1.8 it has 40 percent and the nonsense token purple rises to 4.4 percent](images/01-temperature-sampling.svg){ loading=lazy }
 *The ranking never changes; temperature only decides how often a lower-ranked token is picked.*
 
-**Top-p (nucleus sampling)**, from Holtzman et al. (ICLR 2020), samples only from the smallest set of tokens whose cumulative probability reaches p (e.g. 0.9), cutting the long unreliable tail. **Top-k** keeps a fixed number of candidates. Vendors generally advise tuning temperature *or* top-p, not both.
+**Top-p (nucleus sampling)**, from Holtzman et al. (ICLR 2020), samples only from the smallest set of tokens whose cumulative probability reaches p, cutting the unreliable tail. **Top-k** keeps a fixed number of candidates. The usual advice is to tune temperature *or* top-p, not both.
 
-Things interviewers probe:
+What interviewers probe:
 
-- **Ranges differ by vendor.** OpenAI's chat API accepts temperature 0–2; Anthropic's accepted 0–1 on models that still allow it.
-- **The newest Claude models remove sampling parameters.** On Claude Opus 4.7 and later Opus models (including Opus 5.5) and the Fable family, sending `temperature`, `top_p` or `top_k` returns **400**; Sonnet 5.5 and Haiku 5.5 reject non-default values. Steering is done with the prompt, structured outputs and the `effort` setting. Code written "temperature=0 everywhere" breaks on migration.
-- **T = 0 ≠ deterministic.** Anthropic states explicitly that temperature 0 never guaranteed identical outputs. Batching, floating-point non-associativity on GPUs, and backend changes all perturb logits. Design tests around properties (schema valid, contains X, judged correct), not exact strings.
+- **Ranges differ by vendor**: OpenAI's chat API takes 0–2; Anthropic took 0–1 on models that still accept it.
+- **The newest Claude models remove sampling parameters.** On Opus 4.7 and later Opus models (including Opus 5.5), sending `temperature`, `top_p` or `top_k` returns **400**; Sonnet 5.5 and Haiku 5.5 reject non-default values. You steer with the prompt, structured outputs and the `effort` setting, so "temperature=0 everywhere" code breaks on migration.
+- **T = 0 ≠ deterministic.** Anthropic states that temperature 0 never guaranteed identical outputs: batching, GPU floating-point effects and backend updates all perturb logits. Test properties, not exact strings.
 
 ### Hallucination
 
-A **hallucination** is output that is fluent and confident but **not supported** by the provided context (*intrinsic*, e.g. a summary that contradicts the document) or by the facts of the world (*extrinsic*, e.g. an invented API method, citation or policy).
+A **hallucination** is confident output **not supported** by the provided context (*intrinsic*: a summary contradicting its document) or by the world (*extrinsic*: an invented API, citation or policy).
 
 ```mermaid
 flowchart TD
     A["Training objective: predict plausible next tokens"] --> H["Confident but unsupported answer"]
     B["Evals score a guess above I don't know"] --> H
-    C["Knowledge cutoff or a rare fact barely seen in training"] --> H
+    C["Knowledge cutoff or a rare fact"] --> H
     D["Missing, conflicting or buried context"] --> H
-    E["Prompt pressure: answer in one word, always answer"] --> H
-    H --> M1["Ground: RAG with sources in context"]
-    H --> M2["Permit abstention: say I don't know"]
-    H --> M3["Quote first, cite, then verify each claim"]
-    H --> M4["Validate: schema, rules, tool lookups, human review"]
+    E["Prompt pressure: always answer, one word only"] --> H
+    H --> M1["Ground: retrieved sources in context"]
+    H --> M2["Permit abstention: UNKNOWN is valid"]
+    H --> M3["Quote first, cite, verify each claim"]
+    H --> M4["Validate: schema, rules, lookups, human review"]
 ```
-*Notice that most causes are about incentives and missing information, not randomness, which is why lowering temperature barely helps.*
+*Notice that the causes are incentives and missing information, not randomness, which is why lowering temperature barely helps.*
 
-Why it happens: the model is trained to continue text plausibly, not to know when it doesn't know. Kalai et al. (OpenAI, "Why Language Models Hallucinate", 2025) argue that hallucinations arise from ordinary statistical pressure in pretraining and **persist because most benchmarks grade like multiple-choice exams**: a guess can score, "I don't know" cannot, so models learn to guess. Their proposed fix is to change how evaluations score abstention.
+Kalai et al. ("Why Language Models Hallucinate", OpenAI, 2025) argue that hallucinations arise from ordinary statistical pressure in pretraining and **persist because benchmarks grade like multiple-choice exams**: a guess can score, "I don't know" cannot. Practical mitigations, most of them in Anthropic's guidance:
 
-Mitigations that work in practice (Anthropic's guidance lists most of these):
-
-1. **Give the model the facts**: retrieval (RAG), tool calls to authoritative systems, and an instruction to answer **only** from the supplied material.
-2. **Allow "I don't know"** explicitly, and make the calling code handle that outcome.
-3. **Quote, then answer**: for long documents, extract verbatim quotes first and reason only from them; ask for **citations** and drop any claim without a supporting quote.
-4. **Verify**: best-of-N consistency checks, a second-pass verifier, deterministic validators (does the cited claim ID exist? does the drug code exist in the formulary?).
-5. **Constrain the output** with schemas and enums so the model can't invent a field or a status (see [Prompt engineering & structured output](02-prompt-engineering-and-structured-output.md)).
-6. **Measure** with evals and keep humans in the loop for high-stakes decisions (see [AI-assisted development, evaluation & responsible AI](07-ai-assisted-development-evaluation-and-responsible-ai.md)).
+1. **Supply the facts** through retrieval or tool calls to authoritative systems, and instruct the model to answer **only** from them.
+2. **Allow "I don't know"** and make the calling code handle it.
+3. **Quote, then answer**: extract verbatim quotes first; require citations and drop claims without one.
+4. **Verify** with deterministic checks (does the cited ID exist?), best-of-N consistency or a verifier pass.
+5. **Constrain output** with schemas and enums so the model can't invent fields or statuses.
+6. **Measure** with an eval suite and keep humans on high-stakes decisions (see [AI-assisted development, evaluation & responsible AI](07-ai-assisted-development-evaluation-and-responsible-ai.md)).
 
 ## In practice: code & configuration
 
-A typical mistake is treating the LLM like a deterministic function: hard-coded sampling, no token budget, no stop-reason handling. The example uses the official Anthropic Java SDK (Spring AI wraps the same ideas; see [Spring AI & LLM API integration](05-spring-ai-and-llm-api-integration.md)).
+The classic mistake is treating the LLM as a deterministic function. The example uses the official Anthropic Java SDK; Spring AI wraps the same ideas (see [Spring AI & LLM API integration](05-spring-ai-and-llm-api-integration.md)).
 
 === "❌ Common mistake"
     ```java
@@ -141,20 +135,20 @@ A typical mistake is treating the LLM like a deterministic function: hard-coded 
         .model("claude-opus-5-5")
         .temperature(0.0)                 // 400 on Opus 4.7+: sampling params were removed
         .maxTokens(256L)                  // tiny cap: long summaries silently truncated
-        .addUserMessage(String.join("\n", allNotesForMember)) // unbounded history, no budget
+        .addUserMessage(String.join("\n", allNotesForMember)) // unbounded input, no budget
         .build();
 
     Message response = client.messages().create(params);
     String summary = response.content().get(0).text().get().text(); // ignores stop_reason
-    // ... stored as if it were a verified fact, no grounding or check
+    // ... stored as a verified fact, no grounding or check
     ```
 
 === "✅ Correct approach"
     ```java
-    // 1) Budget tokens before calling, 2) ground and allow abstention, 3) check why it stopped.
+    // 1) Budget tokens, 2) ground and allow abstention, 3) check why it stopped.
     private static final long INPUT_BUDGET = 150_000;   // our own cap, well below the 1M window
 
-    String notes = notesRetriever.relevantNotes(memberId, question); // retrieve, don't dump everything
+    String notes = notesRetriever.relevantNotes(memberId, question); // retrieve, don't dump
     String prompt = """
         <notes>
         %s
@@ -169,182 +163,171 @@ A typical mistake is treating the LLM like a deterministic function: hard-coded 
             .addUserMessage(prompt)
             .build()).inputTokens();
     if (inputTokens > INPUT_BUDGET) {
-        throw new ContextBudgetExceededException(inputTokens); // trim, summarise or narrow retrieval
+        throw new ContextBudgetExceededException(inputTokens); // narrow retrieval or summarise
     }
 
     Message response = client.messages().create(MessageCreateParams.builder()
         .model("claude-opus-5-5")
         .maxTokens(4_000L)                 // room for quotes plus the answer
-        .addUserMessage(prompt)            // no temperature: steer with the prompt instead
+        .addUserMessage(prompt)            // no temperature: steer with the prompt
         .build());
 
     StopReason reason = response.stopReason().orElseThrow();
     if (StopReason.MAX_TOKENS.equals(reason)
             || StopReason.MODEL_CONTEXT_WINDOW_EXCEEDED.equals(reason)) {
-        throw new TruncatedAnswerException(reason);   // never store half an answer
+        throw new TruncatedAnswerException(reason);   // never persist half an answer
     }
     String answer = response.content().stream()
         .flatMap(b -> b.text().stream())
         .map(TextBlock::text)
         .collect(Collectors.joining());
-    summaryValidator.requireQuotesPresentIn(answer, notes); // verify citations really exist
+    summaryValidator.requireQuotesPresentIn(answer, notes); // citations must exist in the source
     log.info("llm usage in={} out={}", response.usage().inputTokens(), response.usage().outputTokens());
     ```
 
-What changed: the request has a **token budget**, retrieval limits the context to what matters, the prompt **grounds** the model and gives it a legitimate "UNKNOWN" exit, there are no sampling parameters the model would reject, `stop_reason` is checked so truncated output is never persisted, quotes are verified against the source, and **usage is logged** for cost tracking.
+The fixed version budgets tokens, retrieves only what matters, gives the model a legitimate `UNKNOWN` exit, drops parameters the model rejects, never stores truncated output, verifies quotes and logs usage for cost tracking.
 
 ## Real-world usage
 
-- **Legal: Mata v. Avianca (S.D.N.Y., June 2023).** Lawyers filed a brief citing cases that ChatGPT had invented and kept defending them when questioned; Judge Castel fined the lawyers and their firm $5,000. The court said using AI is not improper; failing to check is.
-- **Customer service: Moffatt v. Air Canada (BC Civil Resolution Tribunal, February 2024).** The airline's chatbot told a customer he could claim a bereavement fare retroactively, contradicting the actual policy. The tribunal rejected the argument that the chatbot was responsible for its own statements and held the airline liable for what its website said. Lesson: an LLM answer to a customer is your company's answer.
-- **Long-context products** (document Q&A, code assistants) rely on retrieval and compaction rather than stuffing the window, because of cost, latency and context rot.
-- **Healthcare and banking:** hallucinated dosages, coverage rules or account balances are safety and compliance incidents, not UX bugs. Typical controls: answer only from retrieved, access-controlled sources; structured output validated against reference data; audit logging of prompts and responses (with PHI/PII handling); human review for decisions.
+- **Mata v. Avianca (S.D.N.Y., June 2023):** lawyers filed a brief citing cases ChatGPT had invented and kept defending them; the court fined the lawyers and their firm $5,000, noting that using AI is not improper but failing to check is.
+- **Moffatt v. Air Canada (BC Civil Resolution Tribunal, February 2024):** the airline's chatbot said a bereavement fare could be claimed retroactively, contrary to policy. The tribunal rejected the idea that the chatbot was responsible for its own statements: the company owns what its bot says.
+- **Long-context products** (document Q&A, coding assistants) lean on retrieval and compaction rather than stuffing the window, for cost, latency and context rot.
+- **Healthcare and banking:** a hallucinated dosage, coverage rule or balance is a safety or compliance incident. Typical controls: answers only from access-controlled sources, validated structured output, audit logs with PHI/PII handling, human review for decisions.
 
 ## Trade-offs & production gotchas
 
 | Option | Pros | Cons | Use when |
 |---|---|---|---|
-| Stuff the whole document into a large window | Simple, no retrieval pipeline | Cost per call, latency, lost-in-the-middle, PHI over-sharing | One-off analysis of a single long document |
-| Retrieve relevant chunks (RAG) | Cheaper, fresher, citable, access control per chunk | Retrieval misses cause wrong answers | Q&A over a large or changing corpus |
-| Sliding window / summarise old turns | Bounded cost for long chats | Loses detail from early turns | Long conversations, agents |
-| Low temperature / low effort | Consistent, cheaper | Less variety, still not deterministic | Extraction, classification, routing |
-| High temperature / multiple samples | Diversity for brainstorming, best-of-N | More errors and nonsense | Creative drafts, generating candidates to rank |
-| Bigger model | Better reasoning, fewer errors | Higher cost and latency | Hard reasoning; measure before defaulting |
+| Whole document in a large window | Simple, no pipeline | Cost per call, latency, lost in the middle, over-sharing | One-off analysis of one long document |
+| Retrieve relevant chunks (RAG) | Cheaper, fresher, citable, per-chunk access control | Retrieval misses cause wrong answers | Q&A over a large or changing corpus |
+| Summarise or trim old turns | Bounded cost for long chats | Loses early detail | Long conversations, agents |
+| Low temperature / low effort | Consistent, cheaper | Still not deterministic | Extraction, classification, routing |
+| Higher temperature, several samples | Diversity, best-of-N | More errors | Brainstorming, candidates to rank |
 
-!!! warning "Gotcha: output is the expensive, slow part"
-    Latency is roughly time-to-first-token plus output tokens × per-token generation time, and output tokens cost several times more than input. Asking for "a detailed explanation" in a hot path can multiply both. Set `max_tokens` to what the use case needs, ask for concise structured output, and stream long answers.
+!!! warning "Gotcha: output is the slow, expensive part"
+    Latency ≈ time to first token + output tokens × per-token time, and output costs more than input. Set `max_tokens` to what the use case needs, ask for concise structured output and stream long answers.
 
-!!! warning "Gotcha: token estimates from the wrong tokenizer"
-    Estimating Claude cost with `tiktoken` (or characters ÷ 4) under-counts code, JSON and non-English text, and tokenizers change between model generations. Use the provider's token-counting endpoint and the `usage` field on each response, and alert on tokens per request.
+!!! warning "Gotcha: the wrong tokenizer"
+    Estimating Claude cost with `tiktoken` or characters ÷ 4 under-counts code, JSON and non-English text. Use the token-counting endpoint and the response `usage`, and alert on tokens per request.
 
-!!! warning "Gotcha: snapshot tests on LLM output"
-    Even at temperature 0, outputs vary across runs and model versions. Assert properties (schema valid, required fields present, quotes found in the source, judged correct by an eval), not exact strings.
-
-!!! tip "Treat the model like an untrusted, probabilistic upstream"
-    Timeouts, retries with backoff on 429/5xx, a circuit breaker, validation of every response and a fallback path: the same resilience patterns you would apply to any flaky third-party API, plus content checks.
+!!! tip "Treat the model as an untrusted, probabilistic upstream"
+    Timeouts, retries with backoff on 429/5xx, a circuit breaker, a fallback path and validation of every response: the resilience you'd give any flaky third-party API, plus content checks.
 
 ## How this connects to my experience
 
-- **Where I used it:** not a resume claim; position as transferable knowledge. Whether I have used LLM APIs or AI coding assistants on OptumRx Meteor or elsewhere: *[confirm]*. The closest fit is **owning the GraphQL Consumer Service end-to-end** on OptumRx Meteor (healthcare, 750K+ users, integration layer between 5 upstream systems and downstream consumers): an LLM call is architecturally another upstream with latency, quotas, cost and unreliable output, which is exactly what that service handled.
+- **Where I used it:** not a resume claim; position as transferable knowledge. Any hands-on use of LLM APIs or AI coding assistants at Publicis Sapient or elsewhere: *[confirm]*. The closest fit is **owning the GraphQL Consumer Service end-to-end** on OptumRx Meteor (healthcare, 750K+ users, integration layer between 5 upstream systems and downstream consumers): an LLM is architecturally another upstream with latency, quotas, cost and unreliable output.
 - **Talking points:**
-    - In healthcare, hallucination is a patient-safety and compliance risk: I would only let a model answer from retrieved, authorised data (the same OAuth2/PingFederate-backed access rules the APIs already enforce), validate structured output against reference data, and keep humans on decisions.
-    - Cost and latency control map to things I already did: **Redis caching** of frequent queries ≈ prompt/response caching; **Kafka retry and DLQ** ≈ retry/backoff and dead-lettering failed LLM jobs for asynchronous workloads such as summarisation.
-    - Token budgets as a non-functional requirement, like payload-size limits on GraphQL queries: count, cap, log `usage`, alert.
-- **Likely follow-up chain:** "What is a token and why do you care?" → billing, limits, latency; count with the provider's tokenizer → "The context window is 1M; why not send everything?" → cost, latency, lost-in-the-middle, data minimisation for PHI; use retrieval → "How do you stop it inventing a coverage rule?" → grounding with citations, permission to say UNKNOWN, schema plus validation against the source system, eval suite, human review for anything that drives a decision.
+    - In healthcare, hallucination is a safety and compliance risk: answer only from retrieved, authorised data (the same OAuth2/PingFederate access rules the APIs enforce), validate structured output, keep humans on decisions.
+    - Familiar levers: **Redis caching** of frequent queries ≈ prompt and response caching; **Kafka retry and DLQ** ≈ retry/backoff and dead-lettering failed asynchronous LLM jobs.
+    - Token budgets as a non-functional requirement, like payload limits on GraphQL queries: count, cap, log `usage`, alert.
+- **Likely follow-up chain:** "What is a token and why care?" → billing, limits, latency; count with the provider's tokenizer → "The window is 1M, why not send everything?" → cost, latency, lost in the middle, data minimisation for PHI; retrieve instead → "How do you stop it inventing a coverage rule?" → grounding with citations, `UNKNOWN` allowed, schema validation against the source system, evals, human review.
 
 ## Interview questions
 
 ### Fundamentals
 
 ??? question "Q1. What is a token, and why do engineers care about token counts?"
-    **Answer:** A token is the unit the model reads and writes: an integer ID for a subword piece produced by a tokenizer (usually BPE). In English, one token is about 4 characters or three-quarters of a word; code, JSON, IDs and non-English text use more. Engineers care because pricing (separately for input and output), rate limits, latency (output is generated token by token) and the context window are all measured in tokens. Count with the provider's own tokenizer or token-counting API, since tokenizers differ by vendor and even by model generation.
+    **Answer:** The unit the model reads and writes: an integer ID for a subword piece from a tokenizer (usually BPE). In English, about 4 characters or 0.75 words; code, JSON, IDs and non-English text use more. Pricing (input and output separately), rate limits, latency and the context window are all measured in tokens. Count with the provider's tokenizer, since tokenizers differ by vendor and model generation.
 
-    **Interviewer listens for:** subword/BPE, rough ratio, input vs output pricing, model-specific tokenizers.
+    **Interviewer listens for:** subword/BPE, rough ratio, input vs output pricing, model-specific counts.
 
-    **Common wrong answer:** "A token is a word." That under-counts code and non-English text and leads to wrong cost estimates.
+    **Common wrong answer:** "A token is a word." That under-counts code and non-English text.
 
 ??? question "Q2. What is the context window, and what counts against it?"
-    **Answer:** The maximum number of tokens the model can attend to in one request, including the output it generates. The system prompt, tool definitions, all prior messages, tool results, documents and images, thinking tokens and the answer all count. The API is stateless, so the client resends the conversation every turn and the history keeps growing. When the input alone is too large, Claude returns a 400; when generation hits the window it stops with `model_context_window_exceeded`.
+    **Answer:** The maximum tokens the model attends to in one request, including its output: system prompt, tool definitions, messages, tool results, documents, images, thinking and the answer. The API is stateless, so the client resends history and it keeps growing. On Claude, input that is too long gets a 400; generation that hits the window stops with `model_context_window_exceeded`.
 
-    **Interviewer listens for:** output counts too, statelessness, what happens at the limit.
+    **Interviewer listens for:** output counts, statelessness, behaviour at the limit.
 
-    **Common wrong answer:** "It's the model's memory of past conversations." The model has no memory between calls; only what you send is in context.
+    **Common wrong answer:** "It's the model's memory of past conversations." Only what you send is in context.
 
-??? question "Q3. What does temperature do? What about top-p?"
-    **Answer:** Temperature divides the logits before softmax. Low values sharpen the distribution towards the top token (near-greedy, consistent); high values flatten it so less likely tokens are sampled more often (diverse, more errors). Top-p samples from the smallest set of tokens whose cumulative probability reaches p, cutting off the tail; top-k keeps a fixed number of candidates. Tune one of temperature or top-p, not both. Some newer models (recent Claude Opus models) no longer accept these parameters at all.
+??? question "Q3. What do temperature and top-p do?"
+    **Answer:** Temperature divides logits before softmax: low values sharpen towards the top token, high values flatten so unlikely tokens are sampled more. Top-p samples from the smallest set of tokens whose cumulative probability reaches p; top-k keeps k candidates. Tune one, not both. The newest Claude models no longer accept these parameters.
 
-    **Interviewer listens for:** softmax/logits, greedy at low T, nucleus definition, "one or the other".
+    **Interviewer listens for:** logits and softmax, greedy at low T, nucleus definition.
 
-    **Common wrong answer:** "Temperature controls how smart or accurate the model is." It only reshapes the sampling distribution.
+    **Common wrong answer:** "Temperature controls how accurate the model is."
 
 ??? question "Q4. What is a hallucination, and why do LLMs hallucinate?"
-    **Answer:** Fluent, confident output not supported by the provided context or by reality: invented citations, APIs, policies or numbers. Models are trained to produce plausible continuations, not to verify facts; rare facts and anything after the knowledge cutoff are weakly represented; and training and benchmarks reward a guess over "I don't know" (the argument of Kalai et al., 2025). Missing or buried context and prompts that force an answer make it worse.
+    **Answer:** Fluent, confident output unsupported by the context or reality: invented citations, APIs, policies, numbers. Models are trained to produce plausible text, not verified facts; rare and post-cutoff facts are weakly represented; and training and benchmarks reward a guess over "I don't know" (Kalai et al., 2025). Missing or buried context and prompts that force an answer make it worse.
 
     **Interviewer listens for:** plausibility vs truth, cutoff, incentives to guess, intrinsic vs extrinsic.
 
-    **Common wrong answer:** "It's caused by high temperature; set it to 0." Greedy decoding still produces confident wrong answers.
+    **Common wrong answer:** "It's caused by high temperature; set it to 0."
 
 ### Intermediate
 
-??? question "Q5. Is temperature 0 deterministic? How do you test LLM features then?"
-    **Answer:** No. Even at temperature 0, hosted models can return different outputs because of batching, GPU floating-point non-determinism and model or infrastructure updates; Anthropic says explicitly that temperature 0 never guaranteed identical outputs, and its newest models remove the parameter. Test properties instead: schema validation, required fields, citations that exist in the source, rule checks, and an evaluation set scored by code or an LLM judge, run in CI with thresholds rather than exact-match snapshots.
+??? question "Q5. Is temperature 0 deterministic? How do you test LLM features?"
+    **Answer:** No: batching, GPU floating-point effects and model or infrastructure updates change outputs, and Anthropic says temperature 0 never guaranteed identical results. Test properties instead: schema validity, required fields, citations present in the source, rule checks, and an eval set scored by code or an LLM judge, run in CI with thresholds.
 
-    **Interviewer listens for:** sources of non-determinism, property-based or eval-based testing.
+    **Interviewer listens for:** sources of non-determinism, property- and eval-based tests.
 
     **Common wrong answer:** "Yes, temperature 0 always returns the same text."
 
 ??? question "Q6. The model supports 1M tokens. Why not put the whole knowledge base in every prompt?"
-    **Answer:** Cost and latency scale with input tokens on every call; accuracy drops as context grows and facts in the middle are recalled less reliably (lost in the middle, context rot); you can't cite or access-control what you didn't select; and it over-shares sensitive data. Retrieve the relevant pieces (RAG), cache stable prefixes, and reserve big windows for genuine single-document tasks.
+    **Answer:** Cost and latency scale with input on every call; accuracy drops with length and for facts in the middle; you can't cite or access-control what you didn't select; and it over-shares sensitive data. Retrieve the relevant pieces, cache stable prefixes, and keep large windows for genuine single-document tasks.
 
-    **Interviewer listens for:** cost per call, lost-in-the-middle, access control, caching doesn't free window space.
+    **Interviewer listens for:** cost per call, lost in the middle, access control, caching doesn't free window space.
 
     **Common wrong answer:** "Bigger context is always better now."
 
 ??? question "Q7. How do you estimate and control the cost of an LLM feature?"
-    **Answer:** Cost ≈ input tokens × input price + output tokens × output price, per call, times call volume. Measure real `usage` from responses, not character estimates. Levers: shorter system prompts and tool lists, retrieval instead of dumping data, prompt caching for stable prefixes, a capped `max_tokens` and concise structured output, smaller or lower-effort models where quality holds, batch APIs for offline work, and response caching for repeated questions. Track tokens per request and per tenant, with budgets and alerts.
+    **Answer:** Cost ≈ input tokens × input price + output tokens × output price, times volume, measured from response `usage`. Levers: shorter prompts and tool lists, retrieval instead of dumps, prompt caching, capped `max_tokens` and concise output, smaller or lower-effort models where evals show quality holds, batch APIs for offline work. Budget and alert per feature or tenant, and judge cost per completed task, not per request.
 
-    **Interviewer listens for:** output priced higher, measured usage, caching, model choice by measurement.
+    **Interviewer listens for:** output priced higher, measured usage, caching, evidence-based model choice.
 
-    **Common wrong answer:** "Just use the cheapest model." Cost per completed task matters; a cheap model that needs retries isn't cheaper.
+    **Common wrong answer:** "Just use the cheapest model."
 
 ### Senior
 
-??? question "Q8. Design the guardrails for an LLM that answers members' questions about prescription coverage."
-    **Answer:** Answer only from retrieved, authorised sources (plan documents, formulary, the member's claims via the existing APIs with the member's token, never broader access). Instruct the model to quote sources and return `UNKNOWN` when unsupported; return structured output (answer, citations, confidence category) and validate citations against the retrieved text and codes against reference data. Escalate to a human for coverage decisions, refuse medical advice, log prompts and responses with PHI controls, rate-limit and monitor. Run an eval suite of real questions (including adversarial ones) before every prompt or model change. Remember Air Canada: the company owns what the bot says.
+??? question "Q8. Design guardrails for an LLM that answers members' questions about prescription coverage."
+    **Answer:** Answer only from retrieved, authorised sources (plan documents, formulary, the member's claims via existing APIs with the member's own token). Require quotes and allow `UNKNOWN`; return structured output and validate citations and codes against reference data. Route coverage decisions to humans, refuse medical advice, log with PHI controls, rate-limit and monitor, and run an eval suite (including adversarial questions) before every prompt or model change.
 
-    **Interviewer listens for:** grounding plus access control, abstention, validation, human-in-the-loop, evals, audit.
+    **Interviewer listens for:** grounding with access control, abstention, validation, human in the loop, evals, audit.
 
     **Common wrong answer:** "Add 'do not hallucinate' to the system prompt."
 
-??? question "Q9. A long-running chat starts giving worse answers and then fails. What is happening and what do you do?"
-    **Answer:** The resent history is growing: quality degrades with context length, early instructions get diluted, and eventually input plus `max_tokens` no longer fits (400 "prompt is too long", or `model_context_window_exceeded`/`max_tokens` truncation). Fix: track tokens per turn; compact (summarise older turns, or use server-side compaction where available), drop stale tool results, keep stable instructions in the system prompt, retrieve rather than carry large documents, and handle the stop reasons explicitly instead of persisting truncated answers.
+??? question "Q9. A long chat gets worse and then fails. What is happening?"
+    **Answer:** The resent history keeps growing: quality degrades with length, early instructions are diluted, and eventually input plus `max_tokens` no longer fits (400, `model_context_window_exceeded` or `max_tokens` truncation). Track tokens per turn, compact or trim old turns and stale tool results, keep stable instructions in the system prompt, retrieve rather than carry documents, and handle stop reasons explicitly.
 
-    **Interviewer listens for:** statelessness, both failure modes, compaction or trimming, stop-reason handling.
+    **Interviewer listens for:** statelessness, both failure modes, compaction, stop-reason handling.
 
-    **Common wrong answer:** "Increase `max_tokens`." That reserves more of the window and can make it fail sooner.
+    **Common wrong answer:** "Increase `max_tokens`." That reserves more of the window.
 
 ### Scenario-based
 
 ??? question "Q10. After migrating to a newer Claude model, every request returns 400. What do you check?"
-    **Answer:** Breaking parameter changes first. On the newest Claude models `temperature`, `top_p` and `top_k` are rejected, fixed thinking budgets (`budget_tokens`) and assistant prefill are removed, and some tool-choice modes changed. Read the error message, strip the removed parameters and steer with the prompt, effort and structured outputs instead. Then re-baseline token counts (the tokenizer may have changed), cost and evals before switching traffic.
+    **Answer:** Read the error, then check removed parameters: on the newest models `temperature`/`top_p`/`top_k`, fixed thinking budgets and assistant prefill are rejected. Remove them and steer with the prompt, effort and structured outputs. Then re-baseline token counts (the tokenizer may have changed), cost and evals before shifting traffic.
 
-    **Interviewer listens for:** reading the error, removed sampling params, tokenizer re-baseline, eval before rollout.
+    **Interviewer listens for:** removed sampling params, tokenizer re-baseline, eval before rollout.
 
-    **Common wrong answer:** "Roll back and stay on the old model forever."
-
-??? question "Q11. Your summarisation job stores summaries that end mid-sentence for some long cases. Why?"
-    **Answer:** The response stopped because of `max_tokens` (the output cap) or the context window, and the code took the text without checking `stop_reason`. Check it on every response: on `max_tokens` retry with a larger cap or ask for a shorter format; on a window overflow, reduce the input (retrieve, chunk then merge). Route repeated failures to a dead-letter queue for review rather than persisting partial output.
-
-    **Interviewer listens for:** `stop_reason` handling, sizing the output, chunking, DLQ.
-
-    **Common wrong answer:** "The model is lazy; add 'please write the full summary'."
+    **Common wrong answer:** "Roll back and stay on the old model."
 
 ## Cheat sheet
 
 | Concept | Remember |
 |---|---|
-| Token | Subword ID from BPE-style tokenizer; ~4 chars / 0.75 words of English |
-| Counting | Model-specific; use `count_tokens` and response `usage`, not `tiktoken` for Claude |
-| Context window | Input + output + thinking; stateless API resends history; Claude current: 1M in, 128K out |
+| Token | Subword ID from a BPE-style tokenizer; ~4 chars / 0.75 words of English |
+| Counting | Model-specific; `count_tokens` and response `usage`, not `tiktoken`, for Claude |
+| Context window | Input + output + thinking; stateless; Claude current: 1M in, 128K out |
 | Overflow | Input too long → 400; generation hits limit → `model_context_window_exceeded` |
-| Long context | Lost in the middle, context rot: curate, retrieve, put the question last |
-| Temperature | softmax(logits / T); low = sharp, high = flat; T = 0 is not deterministic |
-| Top-p / top-k | Keep tokens covering p of the mass / keep k tokens; tune one knob |
-| Newer Claude models | Reject `temperature`/`top_p`/`top_k` (400); steer with prompt and effort |
-| Hallucination | Plausible but unsupported; caused by objective, cutoff, guess-rewarding evals |
-| Mitigation | Ground (RAG), allow UNKNOWN, quote and cite, validate, eval, human review |
-| Cost | Output tokens cost more and are slower; cap `max_tokens`, cache prefixes |
+| Long context | Lost in the middle, context rot: curate, retrieve, question last |
+| Temperature | softmax(logits / T); low = sharp, high = flat; T = 0 not deterministic |
+| Top-p / top-k | Tokens covering p of the mass / k tokens; tune one knob |
+| Newer Claude models | `temperature`/`top_p`/`top_k` → 400; steer with prompt and effort |
+| Hallucination | Plausible but unsupported; objective, cutoff, guess-rewarding evals |
+| Mitigation | Ground, allow UNKNOWN, quote and cite, validate, eval, human review |
+| Cost | Output costs more and is slower; cap `max_tokens`, cache prefixes |
 
 ## Sources
-1. [Anthropic: Context windows](https://platform.claude.com/docs/en/build-with-claude/context-windows): what counts toward the window, 1M / 128K sizes, overflow behaviour (400 vs `model_context_window_exceeded`), context rot.
-2. [Anthropic: Token counting](https://platform.claude.com/docs/en/build-with-claude/token-counting) and [Models overview](https://platform.claude.com/docs/en/about-claude/models/overview): `count_tokens`, model-specific token counts, current models and per-token pricing.
-3. [Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide): `temperature`/`top_p`/`top_k` removed on Opus 4.7 and later, temperature 0 never guaranteed identical outputs, new tokenizer token-count change.
-4. [Anthropic: Reduce hallucinations](https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations): allow "I don't know", quote-first grounding, citations, best-of-N and verification.
-5. [Anthropic Engineering: Effective context engineering for AI agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) (September 2025): context rot, attention budget, n² token relationships.
-6. [Liu et al., "Lost in the Middle: How Language Models Use Long Contexts", TACL 2024](https://aclanthology.org/2024.tacl-1.9/): U-shaped accuracy by position of relevant information.
-7. [Kalai, Nachum, Vempala, Zhang, "Why Language Models Hallucinate" (arXiv 2509.04664, 2025)](https://arxiv.org/abs/2509.04664): hallucinations from training statistics and guess-rewarding evaluations.
+1. [Anthropic: Context windows](https://platform.claude.com/docs/en/build-with-claude/context-windows): what counts, 1M / 128K sizes, 400 vs `model_context_window_exceeded`, context rot.
+2. [Anthropic: Token counting](https://platform.claude.com/docs/en/build-with-claude/token-counting) and [Models overview](https://platform.claude.com/docs/en/about-claude/models/overview): `count_tokens`, current models and pricing.
+3. [Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide): sampling parameters removed from Opus 4.7 on, temperature 0 never guaranteed identical outputs, tokenizer change.
+4. [Anthropic: Reduce hallucinations](https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations): "I don't know", quote-first grounding, citations, best-of-N.
+5. [Anthropic Engineering: Effective context engineering for AI agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) (September 2025): context rot, attention budget, n² relationships.
+6. [Liu et al., "Lost in the Middle: How Language Models Use Long Contexts", TACL 2024](https://aclanthology.org/2024.tacl-1.9/): U-shaped accuracy by position.
+7. [Kalai, Nachum, Vempala, Zhang, "Why Language Models Hallucinate" (arXiv 2509.04664, 2025)](https://arxiv.org/abs/2509.04664): statistical origins of hallucination and guess-rewarding evaluations.
 8. [Holtzman et al., "The Curious Case of Neural Text Degeneration", ICLR 2020](https://arxiv.org/abs/1904.09751): nucleus (top-p) sampling.
-9. [Sennrich, Haddow, Birch, "Neural Machine Translation of Rare Words with Subword Units", ACL 2016](https://aclanthology.org/P16-1162/): byte-pair encoding for subword tokenization.
-10. [openai/tiktoken README](https://github.com/openai/tiktoken): BPE properties and the ~4 bytes per token average.
-11. [Moffatt v. Air Canada, 2024 BCCRT 149](https://decisions.civilresolutionbc.ca/crt/crtd/en/525448/1/document.do): company liable for its chatbot's incorrect policy statement.
-12. [Mata v. Avianca, Inc. (S.D.N.Y. 2023), coverage by LawSites](https://www.lawnext.com/2023/06/court-imposes-sanctions-on-lawyers-who-filed-bogus-cases-after-relying-on-chatgpt-for-legal-research.html): sanctions for AI-fabricated case citations.
+9. [Sennrich, Haddow, Birch, "Neural Machine Translation of Rare Words with Subword Units", ACL 2016](https://aclanthology.org/P16-1162/): BPE for subword tokenization.
+10. [openai/tiktoken README](https://github.com/openai/tiktoken): BPE properties, ~4 bytes per token on average.
+11. [Moffatt v. Air Canada, 2024 BCCRT 149](https://decisions.civilresolutionbc.ca/crt/crtd/en/525448/1/document.do): company liable for its chatbot's statements.
+12. [LawSites: sanctions in Mata v. Avianca (June 2023)](https://www.lawnext.com/2023/06/court-imposes-sanctions-on-lawyers-who-filed-bogus-cases-after-relying-on-chatgpt-for-legal-research.html): $5,000 sanction for AI-fabricated citations.
