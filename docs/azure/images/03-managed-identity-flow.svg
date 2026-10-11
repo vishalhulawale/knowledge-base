@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 434" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Managed identity token flow</title>
+  <desc id="d">Animation of five steps between four participants: your app, the local identity endpoint, Microsoft Entra ID and Key Vault. Step 1, the app asks the local endpoint for a token for the vault.azure.net resource. Step 2, the platform uses a credential it holds and rotates to get a token from Entra ID. Step 3, a JWT with the vault as audience and the identity's object ID returns to the app. Step 4, the app calls Key Vault to get a secret with the bearer token. Step 5, Key Vault checks the Key Vault Secrets User role and returns the value. A note says the AWS analogue is an instance profile or ECS task role, IMDS, STS temporary credentials and Secrets Manager.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:15s infinite linear}
+    @keyframes s0{0%,99.99%{opacity:1}100%,100%{opacity:0}}.s0{animation-name:s0}
+    @keyframes c0{0%,17.99%{opacity:1}18%,100%{opacity:0}}.c0{animation-name:c0}
+    @keyframes s1{0%,17.99%{opacity:0}18%,100%{opacity:1}}.s1{animation-name:s1}
+    @keyframes c1{0%,17.99%{opacity:0}18%,35.99%{opacity:1}36%,100%{opacity:0}}.c1{animation-name:c1}
+    @keyframes s2{0%,35.99%{opacity:0}36%,100%{opacity:1}}.s2{animation-name:s2}
+    @keyframes c2{0%,35.99%{opacity:0}36%,53.99%{opacity:1}54%,100%{opacity:0}}.c2{animation-name:c2}
+    @keyframes s3{0%,53.99%{opacity:0}54%,100%{opacity:1}}.s3{animation-name:s3}
+    @keyframes c3{0%,53.99%{opacity:0}54%,71.99%{opacity:1}72%,100%{opacity:0}}.c3{animation-name:c3}
+    @keyframes s4{0%,71.99%{opacity:0}72%,100%{opacity:1}}.s4{animation-name:s4}
+    @keyframes c4{0%,71.99%{opacity:0}72%,100%{opacity:1}}.c4{animation-name:c4}
+    @media (prefers-reduced-motion: reduce){.k{animation:none;opacity:0}.s0,.s1,.s2,.s3,.s4,.c4{opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="432" rx="14"/>
+  <text class="h" x="28" y="40">Managed identity: reading a Key Vault secret with no secret</text><text class="sub" x="28" y="62">An app on App Service, a VM or an AKS pod with workload identity. Steps light up in order.</text><rect class="bp" x="30" y="82" width="160" height="52" rx="8" stroke-width="1.5"/><text class="sm" x="110" y="104" text-anchor="middle" font-weight="700">Your app</text><text class="sm" x="110" y="122" text-anchor="middle">Spring Boot</text><line class="grid dash" x1="110" y1="134" x2="110" y2="352"/><rect class="bm" x="220" y="82" width="160" height="52" rx="8" stroke-width="1.5"/><text class="sm" x="300" y="104" text-anchor="middle" font-weight="700">Local identity</text><text class="sm" x="300" y="122" text-anchor="middle">endpoint (IMDS)</text><line class="grid dash" x1="300" y1="134" x2="300" y2="352"/><rect class="bt" x="410" y="82" width="160" height="52" rx="8" stroke-width="1.5"/><text class="sm" x="490" y="104" text-anchor="middle" font-weight="700">Microsoft Entra ID</text><text class="sm" x="490" y="122" text-anchor="middle">token service</text><line class="grid dash" x1="490" y1="134" x2="490" y2="352"/><rect class="bw" x="600" y="82" width="160" height="52" rx="8" stroke-width="1.5"/><text class="sm" x="680" y="104" text-anchor="middle" font-weight="700">Key Vault</text><text class="sm" x="680" y="122" text-anchor="middle">data plane</text><line class="grid dash" x1="680" y1="134" x2="680" y2="352"/><g class="k s0"><line class="lnp" x1="114" y1="170" x2="296" y2="170" marker-end="url(#arp)"/><text class="sm" x="205" y="162" text-anchor="middle" style="font-size:12px">1. token for vault.azure.net</text></g><g class="k s1"><line class="lnt" x1="304" y1="206" x2="486" y2="206" marker-end="url(#art)"/><text class="sm" x="395" y="198" text-anchor="middle" style="font-size:12px">2. platform-held credential</text></g><g class="k s2"><line class="lno" x1="486" y1="242" x2="114" y2="242" marker-end="url(#aro)"/><text class="sm" x="300" y="234" text-anchor="middle" style="font-size:12px">3. JWT: aud=vault, oid=identity</text></g><g class="k s3"><line class="lnp" x1="114" y1="278" x2="676" y2="278" marker-end="url(#arp)"/><text class="sm" x="395" y="270" text-anchor="middle" style="font-size:12px">4. GET /secrets/db-pass + Bearer</text></g><g class="k s4"><line class="lno" x1="676" y1="314" x2="114" y2="314" marker-end="url(#aro)"/><text class="sm" x="395" y="306" text-anchor="middle" style="font-size:12px">5. RBAC check: Secrets User → value</text></g><g class="k c0"><text class="tx" x="28" y="384" style="font-size:14px">The SDK (DefaultAzureCredential) calls a local endpoint; nothing is read from config.</text></g><g class="k c1"><text class="tx" x="28" y="384" style="font-size:14px">The platform holds and rotates the identity's credential. You never see it.</text></g><g class="k c2"><text class="tx" x="28" y="384" style="font-size:14px">A short-lived access token comes back and is cached until near expiry.</text></g><g class="k c3"><text class="tx" x="28" y="384" style="font-size:14px">The token goes to the Key Vault data plane over TLS, ideally via a private endpoint.</text></g><g class="k c4"><text class="tx" x="28" y="384" style="font-size:14px">Key Vault checks the data-plane role on the vault or the secret, then returns the value.</text></g><text class="sub" x="28" y="414">AWS analogue: instance profile or ECS task role → IMDS → STS temporary credentials → Secrets Manager.</text>
+</svg>
