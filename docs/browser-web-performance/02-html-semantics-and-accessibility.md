@@ -369,3 +369,4 @@ expect(results.violations).toEqual([]);
 9. [EDUCAUSE Review: DOJ and HHS extend deadlines to 2027–2028](https://er.educause.edu/articles/2026/6/doj-and-hhs-extend-web-accessibility-deadlines-to-2027-2028) and [Duane Morris alert](https://www.duanemorris.com/alerts/doj_extends_ada_title_ii_digital_accessibility_deadlines_one_year_0426.html): ADA Title II and HHS 504 dates.
 10. [Directive (EU) 2019/882, European Accessibility Act](https://eur-lex.europa.eu/eli/dir/2019/882/oj): scope and the June 2025 date.
 11. [axe-core](https://github.com/dequelabs/axe-core) and [Playwright accessibility testing](https://playwright.dev/docs/accessibility-testing): CI integration.
+12. [WHO: Disability fact sheet](https://www.who.int/news-room/fact-sheets/detail/disability-and-health): about 1.3 billion people (16%) have a significant disability.

@@ -57,8 +57,8 @@ flowchart LR
 - **`ChatModel`**: one interface per provider with `call(Prompt)` and `stream(Prompt)` (a Reactor `Flux`). In 2.0 it returns the raw model response; it no longer runs tools.
 - **`ChatClient`**: the fluent API (`prompt().system(...).user(...).call().content()`), built from an auto-configured, prototype-scoped `ChatClient.Builder`. Defaults (system prompt, options, advisors, tools) are set once on the builder.
 - **Options**: immutable, builder-based in 2.0 (`AnthropicChatOptions.builder()`), with defaults in the options class (Anthropic: model `claude-haiku-4-5`, `maxTokens` 4096, 60 s timeout, 2 retries). The `.options` segment disappeared from property keys (`spring.ai.anthropic.chat.model`).
-- **Advisors**: interceptors (`CallAdvisor`, `StreamAdvisor`) ordered by `getOrder()`; lower order runs first on the way in, last on the way out. Built-ins include `MessageChatMemoryAdvisor`, `QuestionAnswerAdvisor` and `RetrievalAugmentationAdvisor` (RAG, see [RAG architecture](04-rag-architecture.md)), `SimpleLoggerAdvisor` and `SafeGuardAdvisor`.
-- **Starters**: `spring-ai-starter-model-anthropic`, `-openai`, and so on, plus the Spring AI BOM. MCP clients and servers (`@McpTool`) are part of core in 2.0.
+- **Advisors**: ordered interceptors (lower order runs first on the way in, last on the way out): `MessageChatMemoryAdvisor`, `QuestionAnswerAdvisor` / `RetrievalAugmentationAdvisor` ([RAG](04-rag-architecture.md)), `SimpleLoggerAdvisor`, `SafeGuardAdvisor`.
+- **Starters**: `spring-ai-starter-model-anthropic`, `-openai`, … plus the BOM; MCP (`@McpTool`) is in core in 2.0.
 
 ### The tool-calling loop
 
@@ -235,10 +235,10 @@ The fix: one shared client, no parameters the model rejects, `effort` for cost/q
     `temperature`, `topP`, `topK`, `thinkingEnabled(budget)`, `thinkingDisabled()` and `ToolChoiceAny`/`ToolChoiceTool` are all rejected with HTTP 400 by Claude Opus 5.5; it uses adaptive thinking with `effort` (default `medium`) instead. Spring AI passes options through, so the failure appears only at runtime. Keep an integration test per configured model.
 
 !!! warning "Gotcha: retries multiply"
-    The SDK retries 429, 5xx and timeouts (2 by default). Wrapping the call in `@Retryable` or a Resilience4j retry multiplies attempts (3 × 3 = 9 calls), amplifies load on an already overloaded provider, and stretches latency to timeout × attempts. Retry in **one** layer and honour `retry-after`.
+    The SDK already retries 429, 5xx and timeouts (2 by default). Adding `@Retryable` or a Resilience4j retry multiplies attempts (3 × 3 = 9), hammers an overloaded provider and stretches latency. Retry in **one** layer and honour `retry-after`.
 
 !!! warning "Gotcha: one chat call is not one API call"
-    Tool loops, `validateSchema()` retries and RAG query rewriting each add model calls. Budget per **completed request**: read `usage` from `ChatResponse` metadata (`responseEntity(...)` gives you both), export `gen_ai.client.token.usage` via Micrometer, and alert on cost per feature.
+    Tool loops, `validateSchema()` retries and RAG query rewriting add model calls. Budget per **completed request**: read `usage` (via `responseEntity(...)`), export `gen_ai.client.token.usage` via Micrometer, alert on cost per feature.
 
 !!! tip "Cost levers in order"
     Prompt caching for the stable prefix (`cache-options.strategy`), a bounded memory window, the right model per route (a small model such as Claude Haiku 5.5 for classification), lower `effort` where quality holds, `max-tokens` sized to the output, and the Batches API for offline work. See [LLM observability & cost control](../fde-applied-llm/07-llm-observability-latency-budgets-and-token-cost-control.md).
