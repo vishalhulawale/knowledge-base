@@ -1718,43 +1718,43 @@
           "title": "LLM fundamentals: tokens, context window, temperature, hallucination",
           "slug": "01-llm-fundamentals-tokens-context-window-temperature-hallucina",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Prompt engineering & structured output",
           "slug": "02-prompt-engineering-and-structured-output",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Embeddings & vector databases",
           "slug": "03-embeddings-and-vector-databases",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "RAG architecture",
           "slug": "04-rag-architecture",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Spring AI & LLM API integration",
           "slug": "05-spring-ai-and-llm-api-integration",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Agents & tool calling",
           "slug": "06-agents-and-tool-calling",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "AI-assisted development, evaluation & responsible AI",
           "slug": "07-ai-assisted-development-evaluation-and-responsible-ai",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
@@ -1768,37 +1768,37 @@
           "title": "Browser rendering pipeline, reflow vs repaint",
           "slug": "01-browser-rendering-pipeline-reflow-vs-repaint",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "HTML semantics & accessibility (WCAG, ARIA)",
           "slug": "02-html-semantics-and-accessibility",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "CSS layout: box model, flexbox, grid, specificity",
           "slug": "03-css-layout-box-model-flexbox-grid-specificity",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Core Web Vitals & performance optimisation",
           "slug": "04-core-web-vitals-and-performance-optimisation",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Bundlers & build tooling (Vite, Webpack)",
           "slug": "05-bundlers-and-build-tooling",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Browser storage, cookies & caching",
           "slug": "06-browser-storage-cookies-and-caching",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },

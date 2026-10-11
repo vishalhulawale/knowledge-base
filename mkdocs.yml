@@ -282,6 +282,12 @@ nav:
           - "Frontend CI/CD & Monorepos": frontend-architecture/06-frontend-ci-cd-and-monorepos.md
       - "Browser, HTML/CSS & Web Performance":
           - Overview: browser-web-performance/index.md
+          - "Browser rendering pipeline, reflow vs repaint": browser-web-performance/01-browser-rendering-pipeline-reflow-vs-repaint.md
+          - "HTML semantics & accessibility (WCAG, ARIA)": browser-web-performance/02-html-semantics-and-accessibility.md
+          - "CSS layout: box model, flexbox, grid, specificity": browser-web-performance/03-css-layout-box-model-flexbox-grid-specificity.md
+          - "Core Web Vitals & performance optimisation": browser-web-performance/04-core-web-vitals-and-performance-optimisation.md
+          - "Bundlers & build tooling (Vite, Webpack)": browser-web-performance/05-bundlers-and-build-tooling.md
+          - "Browser storage, cookies & caching": browser-web-performance/06-browser-storage-cookies-and-caching.md
       - "Next.js & SSR":
           - Overview: nextjs-ssr/index.md
   - "Data":
@@ -444,6 +450,13 @@ nav:
   - "GenAI":
       - "GenAI for Engineers":
           - Overview: genai/index.md
+          - "LLM fundamentals: tokens, context window, temperature, hallucination": genai/01-llm-fundamentals-tokens-context-window-temperature-hallucina.md
+          - "Prompt engineering & structured output": genai/02-prompt-engineering-and-structured-output.md
+          - "Embeddings & vector databases": genai/03-embeddings-and-vector-databases.md
+          - "RAG architecture": genai/04-rag-architecture.md
+          - "Spring AI & LLM API integration": genai/05-spring-ai-and-llm-api-integration.md
+          - "Agents & tool calling": genai/06-agents-and-tool-calling.md
+          - "AI-assisted development, evaluation & responsible AI": genai/07-ai-assisted-development-evaluation-and-responsible-ai.md
   - "Python":
       - "Python":
           - Overview: python/index.md
