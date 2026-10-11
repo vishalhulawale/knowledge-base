@@ -179,15 +179,15 @@
   <rect class="pri bar" x="42" y="300" width="314" height="14" rx="7"/>
   <g class="a bund"><rect class="bp" x="42" y="326" width="200" height="30" rx="6"/><text class="mono" x="54" y="346">in-memory bundle.js</text></g>
   <g class="a rdyL"><text class="okt" x="356" y="346" text-anchor="end" font-size="15">Server ready</text></g>
-  <g class="a editL"><rect class="bw" x="42" y="372" width="314" height="30" rx="6"/><text class="sm" x="54" y="391">Edit Button.tsx: rebuild affected chunk</text></g>
-  <g class="a hmrL"><text class="wrnt" x="42" y="426" font-size="13">then push the update (cost grows with chunk size)</text></g>
-  <g class="a pre"><rect class="bt" x="432" y="296" width="226" height="26" rx="6"/><text class="mono" x="442" y="314">node_modules → .vite/deps</text></g>
+  <g class="a editL"><rect class="bw" x="42" y="394" width="314" height="26" rx="6"/><text class="sm" x="54" y="412">Edit Button.tsx: rebuild affected chunk</text></g>
+  <g class="a hmrL"><text class="wrnt" x="42" y="440" font-size="13">then push the update (cost grows with chunk size)</text></g>
+  <g class="a pre"><rect class="bt" x="432" y="296" width="206" height="26" rx="6"/><text class="mono" x="442" y="314">node_modules → .vite/deps</text></g>
   <g class="a rdyR"><text class="okt" x="746" y="315" text-anchor="end" font-size="15">Server ready</text></g>
-  <g class="a r0"><text class="mono" x="432" y="340">GET main.tsx</text></g>
-  <g class="a r1"><text class="mono" x="538" y="340">GET App.tsx</text></g>
-  <g class="a r2"><text class="mono" x="644" y="340">GET routes.tsx</text></g>
-  <g class="a r3"><text class="mono" x="432" y="360">GET Claims.tsx</text></g>
-  <g class="a r4"><text class="mono" x="538" y="360">GET Button.tsx</text></g>
-  <g class="a edit"><rect class="bw" x="432" y="372" width="314" height="30" rx="6"/><text class="sm" x="444" y="391">Edit Button.tsx: re-transform 1 file</text></g>
-  <g class="a hmr"><text class="okt" x="432" y="426" font-size="13">HMR swaps 1 module (cost stays flat)</text></g>
+  <g class="a r0"><text class="mono" x="432" y="344">GET main.tsx</text></g>
+  <g class="a r1"><text class="mono" x="592" y="344">GET App.tsx</text></g>
+  <g class="a r2"><text class="mono" x="432" y="360">GET routes.tsx</text></g>
+  <g class="a r3"><text class="mono" x="592" y="360">GET Claims.tsx</text></g>
+  <g class="a r4"><text class="mono" x="432" y="376">GET Button.tsx</text></g>
+  <g class="a edit"><rect class="bw" x="432" y="394" width="314" height="26" rx="6"/><text class="sm" x="444" y="412">Edit Button.tsx: re-transform 1 file</text></g>
+  <g class="a hmr"><text class="okt" x="432" y="440" font-size="13">HMR swaps 1 module (cost stays flat)</text></g>
 </svg>

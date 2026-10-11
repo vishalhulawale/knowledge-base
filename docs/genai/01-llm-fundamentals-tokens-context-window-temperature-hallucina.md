@@ -45,7 +45,7 @@ The model has no memory between calls and no database lookup. Whatever it "knows
 
 ### Tokens
 
-A **tokenizer** maps text to integer IDs from a fixed vocabulary (often 100K–200K entries). Most modern tokenizers use **byte-pair encoding (BPE)** or a close relative: start from bytes, repeatedly merge the most frequent adjacent pairs, so common words become one token and rare words split into pieces ("authorization" → "author" + "ization"). Working on bytes means any input can be encoded; there are no unknown words.
+A **tokenizer** maps text to integer IDs from a fixed vocabulary (tens to hundreds of thousands of entries). Most modern tokenizers use **byte-pair encoding (BPE)** or a close relative: start from bytes, repeatedly merge the most frequent adjacent pairs, so common words become one token and rare words split into pieces ("authorization" → "author" + "ization"). Working on bytes means any input can be encoded; there are no unknown words.
 
 ![A sentence split into nine subword tokens with integer IDs, followed by three bars comparing relative token counts for English prose, code and JSON, and IDs, numbers or non-Latin scripts](images/01-tokenization.svg){ loading=lazy }
 *The model never sees letters, only IDs; that is why spelling, counting characters and long-number arithmetic are surprisingly hard for it.*
@@ -57,7 +57,7 @@ Rules of thumb engineers use:
 | English prose | ~4 characters, ~0.75 words per token | Common words are single tokens |
 | Code, JSON, YAML | More tokens per character | Punctuation, indentation, camelCase splits |
 | UUIDs, hashes, long numbers | Many tokens | No frequent merges to exploit |
-| Non-English scripts (e.g. Devanagari) | Often 2–4x English for the same meaning | Less training-data weight in the merges |
+| Non-English scripts (e.g. Devanagari) | Often several times English for the same meaning | Fewer merges learned for them |
 | Images, PDFs | Converted to tokens too | Count against the same window and bill |
 
 Two practical consequences:

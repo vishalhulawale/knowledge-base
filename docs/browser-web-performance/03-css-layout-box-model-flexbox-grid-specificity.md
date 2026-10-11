@@ -7,11 +7,11 @@ tags: [browser-web-performance, P1]
 # CSS layout: box model, flexbox, grid, specificity
 
 !!! abstract "Key takeaways"
-    - Every element is a **box**: content, padding, border, margin. `width` means the **content** width by default (`content-box`); with `box-sizing: border-box` it includes padding and border. Vertical margins of block siblings **collapse**, but never inside flex or grid containers.
+    - Every element is a **box**: content, padding, border, margin. By default `width` is the **content** width; with `box-sizing: border-box` it includes padding and border. Vertical block margins **collapse**, never inside flex or grid.
     - **Flexbox is one-dimensional and content-first**: items share free space along one axis using `flex: <grow> <shrink> <basis>`. **Grid is two-dimensional and layout-first**: you define tracks and items snap to them. **Subgrid** lets nested elements reuse the parent's tracks.
     - The cascade decides in order: **origin and importance → context → inline style → cascade layers → specificity → scope proximity → order of appearance**. Layers come **before** specificity, so a one-class unlayered rule beats an ID selector inside a layer.
     - Specificity is a triple **(IDs, classes/attributes/pseudo-classes, types/pseudo-elements)**, compared column by column. `:is()`, `:not()`, `:has()` and nesting take the weight of their most specific argument; `:where()` is always **0-0-0**.
-    - Modern defaults (all Baseline): **`@layer`** and `:where()` instead of `!important` wars, **container queries** for components that adapt to their slot, **`:has()`** instead of JS-managed parent classes, **subgrid** for aligned card internals. `@scope` and container *style* queries are only newly Baseline (2026).
+    - Modern, Baseline tools: **`@layer`** and `:where()` instead of `!important` wars, **container queries** for components, **`:has()`** instead of JS-managed parent classes, **subgrid** for aligned cards. `@scope` and container *style* queries are newly Baseline (2026).
 
 ## Why it matters
 
@@ -57,7 +57,7 @@ Use `gap` instead of child margins, and `margin-inline-start: auto` to push an i
 Grid defines **tracks** (rows and columns) first; items are placed into the cells. Key tools:
 
 - `fr` shares leftover space; `minmax(min, max)` bounds a track; `repeat(auto-fit, minmax(240px, 1fr))` creates as many columns as fit: a responsive card grid with no media query. `auto-fill` keeps empty tracks; `auto-fit` collapses them so filled tracks stretch.
-- `grid-template-areas` names regions (`"header header" "nav main"`), which reads like a picture of the layout.
+- `grid-template-areas` names regions, so the declaration reads like a picture of the layout.
 - **Subgrid** (`grid-template-rows: subgrid`) makes a nested grid reuse its parent's tracks, so titles, bodies and buttons inside sibling cards line up even when their content heights differ (Baseline since September 2023).
 
 The difference between the two models shows when content wraps:
@@ -151,7 +151,7 @@ Any `utilities` rule beats any `components` rule whatever their specificity, and
 
 ## In practice: code & configuration
 
-Overriding a component library is where most specificity pain appears. MUI with Emotion injects its styles at runtime, and teams historically fought it with IDs and `!important`.
+Most specificity pain comes from overriding a component library such as MUI, whose Emotion styles are injected at runtime.
 
 === "❌ Common mistake"
     ```css
@@ -218,7 +218,7 @@ Subgrid for aligned card internals, with a same-cascade fallback for older brows
 
 ## Real-world usage
 
-- **Design systems and component libraries** are the main users of `@layer` and `:where()`: library defaults with zero or layered specificity let product teams override with a single class. Tailwind CSS v4 emits its output in `theme`, `base`, `components` and `utilities` layers, and MUI added an opt-in `@layer mui` so the two can coexist without `!important`.
+- **Design systems** use `@layer` and `:where()` so product teams override defaults with a single class. Tailwind CSS v4 emits `theme`, `base`, `components` and `utilities` layers, and MUI added an opt-in `@layer mui` so the two coexist without `!important`.
 - **Micro-frontends** share one document, so one team's global selector can restyle another team's widget. Defences: CSS Modules or CSS-in-JS generated class names, no global resets inside remotes, Shadow DOM for web components, and a shell that owns the layer order (see [Micro-frontends](../frontend-architecture/01-micro-frontends-approaches-and-trade-offs.md) and [Design systems](../frontend-architecture/04-design-systems-and-component-libraries.md)).
 - **Dashboards and portals** (healthcare member portals, banking back-office screens): grid page shells, and panels that must work both full-width and in a drawer, the container-query use case.
 - **Known failure modes:** `overflow: hidden` used to hide a flex overflow bug, clipping focus rings and dropdowns; `order` or `flex-direction: row-reverse` making visual order differ from tab order (an accessibility failure under WCAG 2.4.3, see [HTML semantics & accessibility](02-html-semantics-and-accessibility.md)); `100vw` widths causing horizontal scroll because they include the scrollbar.

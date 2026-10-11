@@ -17,7 +17,7 @@ tags: [genai, P1]
 
 Most enterprise GenAI work is not training models; it is **integrating** a hosted model into an existing service: a claims assistant behind a REST or GraphQL API, a ticket classifier on a Kafka consumer, a summariser in a batch job. Interviewers for senior Java roles want to know whether you can do that the way you would integrate a payment gateway: with typed contracts, failure handling, cost control, security and observability, not a `RestTemplate` call and a string concatenation.
 
-Before frameworks, teams called provider REST APIs directly (OpenAI's Chat Completions, Anthropic's Messages API) with hand-written JSON, or used the vendor's SDK. That works for one model and one feature. It gets messy with the fourth feature: every team re-implements prompt templates, the tool-calling loop, JSON parsing, chat history and metrics, and switching or mixing providers means a rewrite. Spring AI (and LangChain4j, its main Java alternative) apply the familiar Spring idea, a portable API plus auto-configuration, the way Spring Data did for databases.
+Calling a provider's REST API or SDK directly works for one feature. By the fourth, every team has re-implemented prompt templates, the tool-calling loop, JSON parsing, chat history and metrics, and changing provider means a rewrite. Spring AI (and LangChain4j, the main Java alternative) applies the Spring Data idea: a portable API plus auto-configuration.
 
 ## Core concepts
 
@@ -28,7 +28,7 @@ Whatever the provider, a chat API call has the same shape. Using Anthropic's Mes
 - **Request**: `model`, `max_tokens` (a hard cap on output), a `system` prompt, the full `messages` history (alternating `user`/`assistant`), optional `tools` (JSON Schema per tool) and output settings (structured output schema, effort).
 - **Response**: content blocks (`text`, `tool_use`, `thinking`), a `stop_reason` (`end_turn`, `max_tokens`, `tool_use`, `refusal`, …) and `usage` (input, output and cache read/write tokens), which is your bill.
 - **Statelessness**: the API remembers nothing. "Chat memory" is your code resending history, so every turn costs more input tokens than the last (see [LLM fundamentals](01-llm-fundamentals-tokens-context-window-temperature-hallucina.md) for context windows).
-- **Errors**: 400 (invalid request, including unsupported parameters), 401/403, 413 (too large), **429** rate limit with a `retry-after` header, **529** overloaded and other 5xx. The official SDKs retry connection errors, 408, 409, 429 and 5xx with exponential backoff (2 retries by default).
+- **Errors**: 400 (including unsupported parameters), 413 (too large), **429** rate limit with `retry-after`, **529** overloaded and other 5xx. The official SDKs retry connection errors, 408, 409, 429 and 5xx with backoff (2 retries by default).
 
 Three ways to call it from Java:
 
@@ -87,7 +87,7 @@ sequenceDiagram
 ![Animation: a controller sends a prompt with a conversation id through the memory advisor; call 1 goes to the Claude API, which answers with stop reason tool_use; the ToolCallingAdvisor runs the getClaimStatus tool method; call 2 sends the tool result; the API answers end_turn with the final text, which returns to the controller; the memory advisor then saves only the user message and the final answer](images/05-advisor-chain-tool-loop.svg){ loading=lazy }
 *Watch where memory sits: outside the tool loop by default (order +200 vs +300), so the stored history holds whole turns, never a dangling tool call.*
 
-Guard rails that matter in production: `ToolCallingManager` caps calls per tool and in total per turn (`maxCallsPerTool`, `maxTotalToolCalls`, then `ToolCallLimitExceededException`); `ToolContext` passes tenant or user ids to tools **without** sending them to the model; and `returnDirect` returns a tool's result straight to the caller. Tools are a privilege boundary: a prompt-injected document can ask the model to call them, so authorise inside the tool, not in the prompt (more in [Agents & tool calling](06-agents-and-tool-calling.md)).
+Production guard rails: `ToolCallingManager` caps calls per tool and per turn (`maxCallsPerTool`, `maxTotalToolCalls`), and `ToolContext` passes tenant or user ids to tools **without** sending them to the model. Tools are a privilege boundary: injected text can ask the model to call them, so authorise inside the tool (see [Agents & tool calling](06-agents-and-tool-calling.md)).
 
 ### Structured output
 
@@ -95,11 +95,11 @@ Guard rails that matter in production: `ToolCallingManager` caps calls per tool 
 
 ### Chat memory
 
-`ChatMemory` (default `MessageWindowChatMemory`, a 20-message sliding window that evicts whole turns and keeps system messages) plus a `ChatMemoryRepository` (in-memory, JDBC, Redis, Cassandra, Neo4j). `MessageChatMemoryAdvisor` loads history for a `ChatMemory.CONVERSATION_ID` and saves the new exchange. In-memory storage is per JVM, so behind a load balancer use a shared repository. The window is a cost and context-window control, not just a feature: every remembered message is re-billed input on each turn.
+`MessageChatMemoryAdvisor` loads and saves history per `ChatMemory.CONVERSATION_ID` through a `ChatMemory` (default `MessageWindowChatMemory`: a 20-message window that evicts whole turns) and a `ChatMemoryRepository` (in-memory, JDBC, Redis, …). Behind a load balancer use a shared repository. The window is also a cost control: every remembered message is re-billed on each turn.
 
 ### Streaming
 
-`.stream().content()` returns `Flux<String>` (server-sent events from the provider) so a UI can show tokens as they arrive; time to first token is often under a second while the full answer takes many. In Spring MVC return the `Flux` or an `SseEmitter`. Streaming does not shorten the total time, so it needs the same timeout budget, and it complicates structured output (`.entity()` is call-only) and token accounting.
+`.stream().content()` returns a `Flux<String>` of tokens (server-sent events from the provider), so a UI shows text within a second or so. It does not shorten total time, so it needs the same timeout budget, and `.entity()` is call-only.
 
 ## In practice: code & configuration
 
@@ -210,17 +210,16 @@ spring:
     }
     ```
 
-What changed and why: one shared `ChatClient` (connection pool reuse); no sampling parameters the model rejects; quality traded with `effort`; user input confined to the user turn; tools that authorise with data the model never sees; a typed, schema-enforced result; a concurrency cap, a short timeout and a fallback. For a circuit breaker add Resilience4j around `summarise` (see [Resilience patterns](../microservices/06-resilience-circuit-breaker-retry-bulkhead-timeout-rate-limit.md)).
+The fix: one shared client, no parameters the model rejects, `effort` for cost/quality, user text kept in the user turn, tools that authorise server-side, a schema-enforced result, and a concurrency cap, short timeout and fallback. Add a Resilience4j circuit breaker around `summarise` (see [Resilience patterns](../microservices/06-resilience-circuit-breaker-retry-bulkhead-timeout-rate-limit.md)).
 
 ![Three timelines for a slow provider: with defaults, three 60 second attempts hold the thread for 180 seconds; with a 15 second timeout and one retry, the fallback answers at about 32 seconds; with the breaker open the fallback answers immediately](images/05-timeout-retry-budget.svg){ loading=lazy }
 *The defaults are reasonable for a batch job and terrible for a request thread: decide the budget per use case.*
 
 ## Real-world usage
 
-- **Patterns that ship**: summarisation and drafting behind a human review step, classification and extraction on a Kafka consumer (latency hidden, retries via retry topics and a DLQ), RAG assistants over internal docs, and agent-style tool use for read-only lookups first.
-- **Gateways**: larger organisations put an **LLM gateway** (often OpenAI- or Anthropic-compatible) between services and providers for keys, quotas per team, PII redaction, logging and model routing. Spring AI can target it via `base-url`.
-- **Cloud routes**: regulated teams often reach Claude through Amazon Bedrock (`spring-ai-starter-model-bedrock-converse`) or Google Vertex AI, to keep traffic in their cloud account and region; the Anthropic starter also exposes `inference-geo` for data residency.
-- **Failure modes seen in practice**: provider overload (529) during launches, rate-limit storms from unbounded parallel batch jobs, runaway tool loops burning tokens, `max_tokens` truncation producing invalid JSON, and prompts with PHI landing in logs through debug logging.
+- **Patterns that ship**: drafting and summarising behind human review, classification on a Kafka consumer (latency hidden, retry topics and a DLQ), RAG assistants over internal docs, and read-only tool lookups first.
+- **Gateways and cloud routes**: larger organisations put an **LLM gateway** in front of providers for keys, per-team quotas, redaction and routing (Spring AI points at it via `base-url`); regulated teams often reach Claude through Amazon Bedrock or Vertex AI to stay in their cloud account and region.
+- **Failure modes**: 529 overloads during launches, rate-limit storms from unbounded batch jobs, runaway tool loops, `max_tokens` truncation producing invalid JSON, and PHI in debug logs.
 - **Healthcare and banking**: send the minimum data, redact before the call, check the provider agreement (BAA for PHI, data retention, zero-retention options), and keep an audit trail of prompts and outputs with access controls (see [Guardrails](../fde-applied-llm/06-guardrails-prompt-injection-pii-phi-redaction-grounding-chec.md)).
 
 ## Trade-offs & production gotchas
@@ -231,8 +230,6 @@ What changed and why: one shared `ChatClient` (connection pool reuse); no sampli
 | Streaming `stream()` | Fast first token, better UX | Same total time; harder JSON and accounting | Chat UIs |
 | Native structured output | Provider guarantees shape | Newer models only; schema rules | Machine-consumed results |
 | Prompt-only structured output + `validateSchema()` | Portable | Extra calls on failure | Older or mixed providers |
-| Memory window (`MessageWindowChatMemory`) | Bounded cost | Forgets early context | Most chat features |
-| Summarising memory / session store | Long conversations | Extra LLM calls, complexity | Long-running assistants |
 
 !!! warning "Gotcha: 1.x and blog config on new models"
     `temperature`, `topP`, `topK`, `thinkingEnabled(budget)`, `thinkingDisabled()` and `ToolChoiceAny`/`ToolChoiceTool` are all rejected with HTTP 400 by Claude Opus 5.5; it uses adaptive thinking with `effort` (default `medium`) instead. Spring AI passes options through, so the failure appears only at runtime. Keep an integration test per configured model.
@@ -250,10 +247,9 @@ What changed and why: one shared `ChatClient` (connection pool reuse); no sampli
 
 - **Where I used it:** not a resume claim; position as transferable integration knowledge. Whether I have built anything on Spring AI or an LLM API, at work or in a side project: *[confirm]*. The closest real fits are **owning the GraphQL Consumer Service** on OptumRx Meteor, an integration layer over **5 upstream systems** (an LLM provider is one more slow, rate-limited upstream with a contract), **Redis caching** of frequent queries, **Kafka workflows with retry and DLQ**, and **secure APIs with OAuth2/PingFederate**. At Deloitte I **integrated AWS Personalize** (a managed ML service) and used **IAM, KMS and Secrets Manager**, the same controls an LLM API key and PHI-bearing prompts need.
 - **Talking points:**
-    - "I'd treat the model like any upstream in the GraphQL layer: timeout budget, single retry layer, bulkhead, circuit breaker, fallback, and per-call metrics."
-    - Healthcare data: minimum necessary data in prompts, redaction, no prompt logging in prod, provider BAA and retention checks.
-    - Async by default where latency allows: put LLM enrichment on a Kafka consumer with retry topics and a DLQ, as in the Meteor event workflows.
-    - Caching: exact-match caching of deterministic prompts in Redis (cross-tenant isolation in the key), plus provider prompt caching for the shared prefix.
+    - Treat the model like any upstream in the GraphQL layer: timeout budget, one retry layer, bulkhead, breaker, fallback, per-call metrics.
+    - Healthcare data: minimum necessary data, redaction, no prompt logging in prod, BAA and retention checks.
+    - Async where latency allows: LLM enrichment on a Kafka consumer with retry topics and a DLQ, as in the Meteor workflows.
 - **Likely follow-up chain:** "How would you add an AI summary to your claims API?" → `ChatClient` with a fixed system prompt, a typed `ClaimSummary`, tools that call existing services with the user's permissions → "What if the provider is down or slow?" → 15–20 s budget, one retry layer, `@ConcurrencyLimit`/bulkhead, breaker, deterministic fallback, async for non-interactive paths → "How do you control cost?" → token metrics per feature, prompt caching, memory window, model routing, `effort`.
 
 ## Interview questions
@@ -290,14 +286,7 @@ What changed and why: one shared `ChatClient` (connection pool reuse); no sampli
 
     **Common wrong answer:** "Ask nicely in the prompt and parse with a regex."
 
-??? question "Q5. How do you implement chat memory, and what are its costs?"
-    **Answer:** `MessageChatMemoryAdvisor` with a `ChatMemory` (default 20-message window) and a shared `ChatMemoryRepository` (JDBC or Redis, not in-memory behind a load balancer), keyed by `CONVERSATION_ID`. Every remembered message is resent and billed on each turn and consumes context window, so bound it by messages or tokens, summarise long histories, and never mix conversation ids across users.
-
-    **Interviewer listens for:** stateless API, shared store, bounded window, tenant isolation.
-
-    **Common wrong answer:** "Store everything forever for better answers."
-
-??? question "Q6. Your LLM calls see frequent 429s. What do you do?"
+??? question "Q5. Your LLM calls see frequent 429s. What do you do?"
     **Answer:** Read the rate-limit headers (Spring AI exposes them via `getRateLimit()`), respect `retry-after`, retry in one layer only, cap concurrency with a bulkhead or `@ConcurrencyLimit`, smooth batch jobs with a queue, cut tokens (caching, smaller history), route simple tasks to a smaller model, and request higher limits. Separate interactive and batch quotas so a batch job can't starve users.
 
     **Interviewer listens for:** backpressure, not more retries; token as well as request limits.
@@ -306,14 +295,14 @@ What changed and why: one shared `ChatClient` (connection pool reuse); no sampli
 
 ### Senior
 
-??? question "Q7. Spring AI, the vendor SDK, or LangChain4j: how do you choose?"
+??? question "Q6. Spring AI, the vendor SDK, or LangChain4j: how do you choose?"
     **Answer:** Spring AI in Spring Boot services that need several building blocks (tools, memory, RAG, vector stores, observability) or provider portability. The vendor SDK when you are on one provider and need the newest features the day they ship. LangChain4j outside Spring or for its `@AiService` style. Portability is partial anyway: options, model behaviour and prompts differ by model, so plan an eval suite per model, not a config switch.
 
     **Interviewer listens for:** trade-offs, feature lag, honest view of portability.
 
     **Common wrong answer:** "Spring AI lets us swap providers with one property."
 
-??? question "Q8. How do you make an LLM-backed endpoint production-ready in a regulated domain?"
+??? question "Q7. How do you make an LLM-backed endpoint production-ready in a regulated domain?"
     **Answer:** Secrets in a vault with rotation; minimum necessary data, PII/PHI redaction, provider BAA and retention checks; no prompt/completion logging in prod, but an access-controlled audit trail; timeouts, single retry layer, bulkhead, breaker, fallback; tools authorise with server-side context; structured, validated output; Micrometer metrics for latency, tokens and cost per feature; evals before model or prompt changes; and a human in the loop for consequential decisions.
 
     **Interviewer listens for:** security, resilience, observability and evaluation together.
@@ -322,14 +311,14 @@ What changed and why: one shared `ChatClient` (connection pool reuse); no sampli
 
 ### Scenario-based
 
-??? question "Q9. After upgrading to a new Claude model, every request fails with HTTP 400. What happened?"
+??? question "Q8. After upgrading to a new Claude model, every request fails with HTTP 400. What happened?"
     **Answer:** Most likely options the new model rejects: `temperature`/`top_p`/`top_k`, a fixed thinking budget or disabled thinking, or forced `tool_choice` (all 400 on Claude Opus 5.5), often set in a shared `defaultOptions` or properties file. Read the error body, remove them, use `effort` for the cost/quality trade-off, and add an integration test per configured model so the next upgrade fails in CI, not prod.
 
     **Interviewer listens for:** reading the 400 body, model-specific options, test per model.
 
     **Common wrong answer:** "Roll back the Spring AI version."
 
-??? question "Q10. An AI summary endpoint has p99 latency of 90 s and occasionally returns truncated JSON. Fix it."
+??? question "Q9. An AI summary endpoint has p99 latency of 90 s and occasionally returns truncated JSON. Fix it."
     **Answer:** Latency: check for retries stacked across layers, the 60 s default timeout × attempts, tool loops and `validateSchema()` retries adding calls, and huge histories; set a per-use-case budget, one retry layer, a concurrency cap and fallback, stream if it's interactive, or move it async. Truncation: `stop_reason: max_tokens`; raise `max-tokens`, shrink the requested output, and use native structured output with validation.
 
     **Interviewer listens for:** count the calls, budgets, `max_tokens` stop reason.
