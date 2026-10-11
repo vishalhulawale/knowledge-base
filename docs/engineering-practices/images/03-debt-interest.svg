@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 416" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Debt interest over time</title>
+  <desc id="d">A line chart of feature work delivered per sprint over twelve sprints. A team that never pays down debt starts at 10 and declines steadily to 5.5 as interest accumulates. A team spending about 20 percent of capacity on debt starts at about 8 and rises slowly to 9. The lines cross around sprint 5; the shaded area after that is the interest saved. Illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="414" rx="14"/>
+  <text class="h" x="28" y="40">Unpaid debt compounds; a steady paydown holds speed</text><text class="sub" x="28" y="62">Feature work delivered per sprint, relative. Illustrative.</text><line class="grid" x1="90" y1="330" x2="748" y2="330"/><text class="sub" x="80" y="334" text-anchor="end">4</text><line class="grid" x1="90" y1="250" x2="748" y2="250"/><text class="sub" x="80" y="254" text-anchor="end">6</text><line class="grid" x1="90" y1="170" x2="748" y2="170"/><text class="sub" x="80" y="174" text-anchor="end">8</text><line class="grid" x1="90" y1="90" x2="748" y2="90"/><text class="sub" x="80" y="94" text-anchor="end">10</text><text class="sub" x="100" y="352" text-anchor="middle">1</text><text class="sub" x="158" y="352" text-anchor="middle">2</text><text class="sub" x="216" y="352" text-anchor="middle">3</text><text class="sub" x="274" y="352" text-anchor="middle">4</text><text class="sub" x="332" y="352" text-anchor="middle">5</text><text class="sub" x="390" y="352" text-anchor="middle">6</text><text class="sub" x="448" y="352" text-anchor="middle">7</text><text class="sub" x="506" y="352" text-anchor="middle">8</text><text class="sub" x="564" y="352" text-anchor="middle">9</text><text class="sub" x="622" y="352" text-anchor="middle">10</text><text class="sub" x="680" y="352" text-anchor="middle">11</text><text class="sub" x="738" y="352" text-anchor="middle">12</text><text class="sm" x="419" y="372" text-anchor="middle">sprint</text><path class="tea" opacity="0.18" d="M 332 146.0 L 390 142.0 L 448 138.0 L 506 138.0 L 564 134.0 L 622 134.0 L 680 130.0 L 738 130.0 L 738 270.0 L 680 258.0 L 622 242.0 L 564 226.0 L 506 210.0 L 448 190.0 L 390 170.0 L 332 150.0 Z"/><path class="lnb" d="M 100 90.0 L 158 98.0 L 216 114.0 L 274 130.0 L 332 150.0 L 390 170.0 L 448 190.0 L 506 210.0 L 564 226.0 L 622 242.0 L 680 258.0 L 738 270.0" style="stroke-width:3"/><path class="lnt" d="M 100 162.0 L 158 158.0 L 216 154.0 L 274 150.0 L 332 146.0 L 390 142.0 L 448 138.0 L 506 138.0 L 564 134.0 L 622 134.0 L 680 130.0 L 738 130.0" style="stroke-width:3"/><text class="badt" x="734" y="294" text-anchor="end" style="font-size:13px">never pays down</text><text class="teat" x="734" y="118" text-anchor="end" style="font-size:13px">~20% capacity on debt</text><text class="teat" x="536" y="184" style="font-size:13px">interest saved</text><line class="lnw dash" x1="308.8" y1="92" x2="308.8" y2="332"/><text class="wrnt" x="314.8" y="104" style="font-size:12px">crossover ~ sprint 5</text><text class="sm" x="28" y="396">Interest is paid on every change near the debt, so the red line keeps bending down while the code keeps changing.</text>
+</svg>

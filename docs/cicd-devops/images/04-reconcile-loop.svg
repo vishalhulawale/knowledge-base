@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 396" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">GitOps reconcile loop</title>
+  <desc id="d">Animation: Git says replicas 3 and the cluster runs three pods, so Argo CD shows Synced. Someone runs kubectl scale to 5 replicas; two extra pods appear and the application turns OutOfSync. Self-heal scales the deployment back to 3 and it is Synced again. Later a merged pull request changes Git to replicas 4; the application turns OutOfSync, auto-sync scales to 4 pods and it returns to Synced. Timings illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:14s infinite linear}
+    @keyframes p1{0%{opacity:1}51.99%{opacity:1}52%{opacity:0}100%{opacity:0}}.p1{animation-name:p1}
+    @keyframes p2{0%{opacity:0}51.99%{opacity:0}52%{opacity:1}100%{opacity:1}}.p2{animation-name:p2}
+    @keyframes p3{0%{opacity:1}19.99%{opacity:1}20%{opacity:0}35.99%{opacity:0}36%{opacity:1}51.99%{opacity:1}52%{opacity:0}67.99%{opacity:0}68%{opacity:1}100%{opacity:1}}.p3{animation-name:p3}
+    @keyframes p4{0%{opacity:0}19.99%{opacity:0}20%{opacity:1}35.99%{opacity:1}36%{opacity:0}51.99%{opacity:0}52%{opacity:1}67.99%{opacity:1}68%{opacity:0}100%{opacity:0}}.p4{animation-name:p4}
+    @keyframes p5{0%{opacity:0}26.99%{opacity:0}27%{opacity:1}35.99%{opacity:1}36%{opacity:0}100%{opacity:0}}.p5{animation-name:p5}
+    @keyframes p6{0%{opacity:0}57.99%{opacity:0}58%{opacity:1}67.99%{opacity:1}68%{opacity:0}100%{opacity:0}}.p6{animation-name:p6}
+    @keyframes p7{0%{opacity:0}19.99%{opacity:0}20%{opacity:1}35.99%{opacity:1}36%{opacity:0}100%{opacity:0}}.p7{animation-name:p7}
+    @keyframes p8{0%{opacity:0}67.99%{opacity:0}68%{opacity:1}100%{opacity:1}}.p8{animation-name:p8}
+    @keyframes p9{0%{opacity:0}13.99%{opacity:0}14%{opacity:1}35.99%{opacity:1}36%{opacity:0}100%{opacity:0}}.p9{animation-name:p9}
+    @keyframes p10{0%{opacity:0}67.99%{opacity:0}68%{opacity:1}100%{opacity:1}}.p10{animation-name:p10}
+    @keyframes mv{0%{transform:translateX(0)}100%{transform:translateX(720px)}}
+    .dot{animation:mv 14s infinite linear}
+    @media (prefers-reduced-motion: reduce){.k{animation:none}.p2,.p3,.p8,.p10{opacity:1}.dot{animation:none;transform:translateX(720px)}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="394" rx="14"/>
+  <text class="h" x="28" y="40">Self-heal: the cluster follows Git, not kubectl</text><text class="sub" x="28" y="62">Argo CD with automated sync and selfHeal. Timings illustrative.</text><rect class="box" x="30" y="110" width="200" height="150" rx="10" stroke-width="1.4"/><text class="lbl" x="130" y="136" text-anchor="middle">Git: envs/prod</text><g class="k p1"><text class="mono" x="130" y="186" text-anchor="middle" xml:space="preserve" style="font-size:16px">replicas: 3</text></g><g class="k p2"><text class="mono" x="130" y="186" text-anchor="middle" xml:space="preserve" style="font-size:16px">replicas: 4</text><text class="teat" x="130" y="214" text-anchor="middle" style="font-size:13px">commit a91c (PR merged)</text></g><rect class="bp" x="300" y="110" width="200" height="150" rx="10" stroke-width="1.4"/><text class="lbl" x="400" y="136" text-anchor="middle">Argo CD</text><line class="ln" x1="232" y1="185" x2="296" y2="185" marker-end="url(#ar)"/><line class="ln" x1="502" y1="185" x2="566" y2="185" marker-end="url(#ar)"/><g class="k p3"><rect class="okf" x="345" y="166" width="110" height="30" rx="6"/><text class="on13" x="400" y="186" text-anchor="middle">Synced</text></g><g class="k p4"><rect class="wrnf" x="335" y="166" width="130" height="30" rx="6"/><text class="on13" x="400" y="186" text-anchor="middle">OutOfSync</text></g><g class="k p5"><text class="prit" x="400" y="230" text-anchor="middle" style="font-size:13px">self-heal: scale to 3</text></g><g class="k p6"><text class="prit" x="400" y="230" text-anchor="middle" style="font-size:13px">auto-sync: scale to 4</text></g><rect class="box" x="570" y="110" width="200" height="150" rx="10" stroke-width="1.4"/><text class="lbl" x="670" y="136" text-anchor="middle">Cluster: claims-api</text><circle class="okf" cx="610" cy="186" r="14"/><circle class="okf" cx="650" cy="186" r="14"/><circle class="okf" cx="690" cy="186" r="14"/><g class="k p7"><circle class="wrnf" cx="730" cy="186" r="14"/><circle class="wrnf" cx="610" cy="226" r="14"/></g><g class="k p8"><circle class="okf" cx="730" cy="186" r="14"/></g><g class="k p9"><rect class="badf" x="560" y="280" width="220" height="30" rx="6"/><text class="on13" x="670" y="300" text-anchor="middle">kubectl scale --replicas=5</text></g><g class="k p10"><text class="teat" x="400" y="300" text-anchor="middle" style="font-size:14px">kubectl scale to 5 was reverted; only the Git commit stuck</text></g><line class="ln" x1="40" y1="350" x2="760" y2="350"/><circle class="mutf" cx="40" cy="350" r="5"/><text class="sub" x="40" y="374" text-anchor="start" style="font-size:12px">3 pods, Synced</text><circle class="mutf" cx="184" cy="350" r="5"/><text class="sub" x="184" y="374" text-anchor="middle" style="font-size:12px">manual scale</text><circle class="mutf" cx="299.2" cy="350" r="5"/><text class="sub" x="299.2" y="374" text-anchor="middle" style="font-size:12px">reverted</text><circle class="mutf" cx="414.4" cy="350" r="5"/><text class="sub" x="414.4" y="374" text-anchor="middle" style="font-size:12px">Git commit</text><circle class="mutf" cx="529.6" cy="350" r="5"/><text class="sub" x="529.6" y="374" text-anchor="middle" style="font-size:12px">4 pods</text><g class="dot"><circle class="pri" cx="40" cy="350" r="7"/></g>
+</svg>

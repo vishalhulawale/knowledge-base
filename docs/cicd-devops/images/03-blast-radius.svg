@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 412" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Blast radius of state</title>
+  <desc id="d">Animation in two panels. On the left, one state file holds network, data and services for both dev and prod. A bad apply aimed at dev services turns that cell red, then the red spreads to every other cell, because one plan and one lock cover everything. On the right, each environment and layer has its own state in separate dev and prod accounts, and the same bad apply turns only the dev services state red while the other five stay green. Illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:14s infinite linear}
+    @keyframes p1{0%{opacity:0}47.99%{opacity:0}48%{opacity:1}100%{opacity:1}}.p1{animation-name:p1}
+    @keyframes p2{0%{opacity:0}29.99%{opacity:0}30%{opacity:1}100%{opacity:1}}.p2{animation-name:p2}
+    @keyframes p3{0%{opacity:0}17.99%{opacity:0}18%{opacity:1}100%{opacity:1}}.p3{animation-name:p3}
+    @keyframes p4{0%{opacity:0}53.99%{opacity:0}54%{opacity:1}100%{opacity:1}}.p4{animation-name:p4}
+    @keyframes p5{0%{opacity:0}59.99%{opacity:0}60%{opacity:1}100%{opacity:1}}.p5{animation-name:p5}
+    @keyframes p6{0%{opacity:0}41.99%{opacity:0}42%{opacity:1}100%{opacity:1}}.p6{animation-name:p6}
+    @keyframes p7{0%{opacity:0}59.99%{opacity:0}60%{opacity:1}100%{opacity:1}}.p7{animation-name:p7}
+    @keyframes p8{0%{opacity:0}17.99%{opacity:0}18%{opacity:1}100%{opacity:1}}.p8{animation-name:p8}
+    @keyframes p9{0%{opacity:0}59.99%{opacity:0}60%{opacity:1}100%{opacity:1}}.p9{animation-name:p9}
+    @keyframes p10{0%{opacity:0}7.99%{opacity:0}8%{opacity:1}100%{opacity:1}}.p10{animation-name:p10}
+    @media (prefers-reduced-motion: reduce){.k{animation:none}.p1,.p2,.p3,.p4,.p5,.p6,.p7,.p8,.p9,.p10{opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="410" rx="14"/>
+  <text class="h" x="28" y="40">One bad apply: how far does it reach?</text><text class="sub" x="28" y="62">Illustrative. The bad change is aimed at dev services in both layouts.</text><rect class="box" x="20" y="80" width="370" height="290" rx="10" stroke-width="1.2"/><text class="h2" x="205" y="106" text-anchor="middle">One state for everything</text><rect class="bm" x="40" y="120" width="330" height="190" rx="8" stroke-width="1.6"/><text class="sub" x="205" y="140" text-anchor="middle">terraform.tfstate (1 lock, 1 plan)</text><rect class="bo" x="52" y="152" width="96" height="64" rx="8" stroke-width="1.5"/><text class="sm" x="100" y="180" text-anchor="middle">dev</text><text class="sm" x="100" y="198" text-anchor="middle">network</text><g class="k p1"><rect class="bb" x="52" y="152" width="96" height="64" rx="8" stroke-width="1.5"/><text class="sm" x="100" y="180" text-anchor="middle">dev</text><text class="sm" x="100" y="198" text-anchor="middle">network</text></g><rect class="bo" x="158" y="152" width="96" height="64" rx="8" stroke-width="1.5"/><text class="sm" x="206" y="180" text-anchor="middle">dev</text><text class="sm" x="206" y="198" text-anchor="middle">data</text><g class="k p2"><rect class="bb" x="158" y="152" width="96" height="64" rx="8" stroke-width="1.5"/><text class="sm" x="206" y="180" text-anchor="middle">dev</text><text class="sm" x="206" y="198" text-anchor="middle">data</text></g><rect class="bo" x="264" y="152" width="96" height="64" rx="8" stroke-width="1.5"/><text class="sm" x="312" y="180" text-anchor="middle">dev</text><text class="sm" x="312" y="198" text-anchor="middle">services</text><g class="k p3"><rect class="bb" x="264" y="152" width="96" height="64" rx="8" stroke-width="1.5"/><text class="sm" x="312" y="180" text-anchor="middle">dev</text><text class="sm" x="312" y="198" text-anchor="middle">services</text></g><rect class="bo" x="52" y="228" width="96" height="64" rx="8" stroke-width="1.5"/><text class="sm" x="100" y="256" text-anchor="middle">prod</text><text class="sm" x="100" y="274" text-anchor="middle">network</text><g class="k p4"><rect class="bb" x="52" y="228" width="96" height="64" rx="8" stroke-width="1.5"/><text class="sm" x="100" y="256" text-anchor="middle">prod</text><text class="sm" x="100" y="274" text-anchor="middle">network</text></g><rect class="bo" x="158" y="228" width="96" height="64" rx="8" stroke-width="1.5"/><text class="sm" x="206" y="256" text-anchor="middle">prod</text><text class="sm" x="206" y="274" text-anchor="middle">data</text><g class="k p5"><rect class="bb" x="158" y="228" width="96" height="64" rx="8" stroke-width="1.5"/><text class="sm" x="206" y="256" text-anchor="middle">prod</text><text class="sm" x="206" y="274" text-anchor="middle">data</text></g><rect class="bo" x="264" y="228" width="96" height="64" rx="8" stroke-width="1.5"/><text class="sm" x="312" y="256" text-anchor="middle">prod</text><text class="sm" x="312" y="274" text-anchor="middle">services</text><g class="k p6"><rect class="bb" x="264" y="228" width="96" height="64" rx="8" stroke-width="1.5"/><text class="sm" x="312" y="256" text-anchor="middle">prod</text><text class="sm" x="312" y="274" text-anchor="middle">services</text></g><g class="k p7"><text class="badt" x="205" y="340" text-anchor="middle" style="font-size:14px">plan touches everything; lock blocks all teams</text></g><rect class="box" x="410" y="80" width="370" height="290" rx="10" stroke-width="1.2"/><text class="h2" x="595" y="106" text-anchor="middle">A state per env and layer</text><rect class="bm" x="426" y="120" width="338" height="88" rx="8" stroke-dasharray="5 4"/><text class="sub" x="436" y="136">dev account</text><rect class="bm" x="426" y="216" width="338" height="88" rx="8" stroke-dasharray="5 4"/><text class="sub" x="436" y="232">prod account</text><rect class="bo" x="438" y="142" width="98" height="58" rx="8" stroke-width="1.5"/><text class="sm" x="487" y="167" text-anchor="middle">dev</text><text class="sm" x="487" y="185" text-anchor="middle">network</text><rect class="bo" x="546" y="142" width="98" height="58" rx="8" stroke-width="1.5"/><text class="sm" x="595" y="167" text-anchor="middle">dev</text><text class="sm" x="595" y="185" text-anchor="middle">data</text><rect class="bo" x="654" y="142" width="98" height="58" rx="8" stroke-width="1.5"/><text class="sm" x="703" y="167" text-anchor="middle">dev</text><text class="sm" x="703" y="185" text-anchor="middle">services</text><g class="k p8"><rect class="bb" x="654" y="142" width="98" height="58" rx="8" stroke-width="1.5"/><text class="sm" x="703" y="167" text-anchor="middle">dev</text><text class="sm" x="703" y="185" text-anchor="middle">services</text></g><rect class="bo" x="438" y="238" width="98" height="58" rx="8" stroke-width="1.5"/><text class="sm" x="487" y="263" text-anchor="middle">prod</text><text class="sm" x="487" y="281" text-anchor="middle">network</text><rect class="bo" x="546" y="238" width="98" height="58" rx="8" stroke-width="1.5"/><text class="sm" x="595" y="263" text-anchor="middle">prod</text><text class="sm" x="595" y="281" text-anchor="middle">data</text><rect class="bo" x="654" y="238" width="98" height="58" rx="8" stroke-width="1.5"/><text class="sm" x="703" y="263" text-anchor="middle">prod</text><text class="sm" x="703" y="281" text-anchor="middle">services</text><g class="k p9"><text class="okt" x="595" y="340" text-anchor="middle" style="font-size:14px">only dev services is affected</text></g><g class="k p10"><text class="wrnt" x="400" y="396" text-anchor="middle" style="font-size:14px">bad apply aimed at dev services</text></g>
+</svg>

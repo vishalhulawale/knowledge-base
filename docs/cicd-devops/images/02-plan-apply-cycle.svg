@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 416" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Plan and apply cycle</title>
+  <desc id="d">Animation in four steps. First, terraform plan reads the configuration, which says size large, the state at serial 4 and the real infrastructure, which is small, and proposes one in-place update with exit code 2. Second, apply changes the real object to large and writes state serial 5. Third, someone edits the object in the console to xlarge. Fourth, the next plan notes that objects changed outside of Terraform and proposes changing xlarge back to large, with exit code 2 signalling drift. A footnote says a plan saved at serial 4 is refused as stale after step two. Resource names are illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:14s infinite linear}
+    @keyframes p1{0%{opacity:1}23.99%{opacity:1}24%{opacity:0}100%{opacity:0}}.p1{animation-name:p1}
+    @keyframes p2{0%{opacity:0}23.99%{opacity:0}24%{opacity:1}45.99%{opacity:1}46%{opacity:0}100%{opacity:0}}.p2{animation-name:p2}
+    @keyframes p3{0%{opacity:0}45.99%{opacity:0}46%{opacity:1}69.99%{opacity:1}70%{opacity:0}100%{opacity:0}}.p3{animation-name:p3}
+    @keyframes p4{0%{opacity:0}69.99%{opacity:0}70%{opacity:1}100%{opacity:1}}.p4{animation-name:p4}
+    @keyframes p5{0%{opacity:1}35.99%{opacity:1}36%{opacity:0}100%{opacity:0}}.p5{animation-name:p5}
+    @keyframes p6{0%{opacity:0}35.99%{opacity:0}36%{opacity:1}100%{opacity:1}}.p6{animation-name:p6}
+    @keyframes p7{0%{opacity:1}35.99%{opacity:1}36%{opacity:0}100%{opacity:0}}.p7{animation-name:p7}
+    @keyframes p8{0%{opacity:0}35.99%{opacity:0}36%{opacity:1}51.99%{opacity:1}52%{opacity:0}100%{opacity:0}}.p8{animation-name:p8}
+    @keyframes p9{0%{opacity:0}51.99%{opacity:0}52%{opacity:1}100%{opacity:1}}.p9{animation-name:p9}
+    @keyframes p10{0%{opacity:0}1.99%{opacity:0}2%{opacity:1}23.99%{opacity:1}24%{opacity:0}69.99%{opacity:0}70%{opacity:1}81.99%{opacity:1}82%{opacity:0}100%{opacity:0}}.p10{animation-name:p10}
+    @keyframes p11{0%{opacity:0}1.99%{opacity:0}2%{opacity:1}23.99%{opacity:1}24%{opacity:0}69.99%{opacity:0}70%{opacity:1}81.99%{opacity:1}82%{opacity:0}100%{opacity:0}}.p11{animation-name:p11}
+    @keyframes p12{0%{opacity:0}1.99%{opacity:0}2%{opacity:1}23.99%{opacity:1}24%{opacity:0}69.99%{opacity:0}70%{opacity:1}81.99%{opacity:1}82%{opacity:0}100%{opacity:0}}.p12{animation-name:p12}
+    @keyframes p13{0%{opacity:0}27.99%{opacity:0}28%{opacity:1}43.99%{opacity:1}44%{opacity:0}100%{opacity:0}}.p13{animation-name:p13}
+    @keyframes p14{0%{opacity:0}7.99%{opacity:0}8%{opacity:1}23.99%{opacity:1}24%{opacity:0}100%{opacity:0}}.p14{animation-name:p14}
+    @keyframes p15{0%{opacity:0}27.99%{opacity:0}28%{opacity:1}45.99%{opacity:1}46%{opacity:0}100%{opacity:0}}.p15{animation-name:p15}
+    @keyframes p16{0%{opacity:0}45.99%{opacity:0}46%{opacity:1}69.99%{opacity:1}70%{opacity:0}100%{opacity:0}}.p16{animation-name:p16}
+    @keyframes p17{0%{opacity:0}75.99%{opacity:0}76%{opacity:1}100%{opacity:1}}.p17{animation-name:p17}
+    @media (prefers-reduced-motion: reduce){.k{animation:none}.p4,.p6,.p9,.p12,.p17{opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="414" rx="14"/>
+  <text class="h" x="28" y="40">plan reads three things, apply writes one</text><text class="sub" x="28" y="62">Serial numbers as in the page's lab; resource names illustrative.</text><g class="k p1"><text class="prit" x="400" y="92" text-anchor="middle" style="font-size:15px">1. plan: refresh real objects, diff with config and state</text></g><g class="k p2"><text class="prit" x="400" y="92" text-anchor="middle" style="font-size:15px">2. apply: provider changes the object, state is written</text></g><g class="k p3"><text class="prit" x="400" y="92" text-anchor="middle" style="font-size:15px">3. someone edits the object in the console</text></g><g class="k p4"><text class="prit" x="400" y="92" text-anchor="middle" style="font-size:15px">4. next plan reports drift, exit code 2</text></g><rect class="box" x="40" y="120" width="230" height="64" rx="8" stroke-width="1.4"/><text class="lbl" x="155" y="146" text-anchor="middle">Configuration (.tf)</text><text class="mono" x="155" y="168" text-anchor="middle" xml:space="preserve">size = "large"</text><rect class="box" x="40" y="210" width="230" height="64" rx="8" stroke-width="1.4"/><text class="lbl" x="155" y="236" text-anchor="middle">State backend</text><rect class="box" x="40" y="300" width="230" height="64" rx="8" stroke-width="1.4"/><text class="lbl" x="155" y="326" text-anchor="middle">Real infrastructure</text><g class="k p5"><text class="mono" x="155" y="258" text-anchor="middle" xml:space="preserve">serial 4</text></g><g class="k p6"><text class="mono" x="155" y="258" text-anchor="middle" xml:space="preserve">serial 5</text></g><g class="k p7"><text class="mono" x="155" y="348" text-anchor="middle" xml:space="preserve">size = "small"</text></g><g class="k p8"><text class="mono" x="155" y="348" text-anchor="middle" xml:space="preserve">size = "large"</text></g><g class="k p9"><text class="badt" x="155" y="348" text-anchor="middle" style="font-size:13px">size = "xlarge"  (console)</text></g><rect class="bp" x="330" y="200" width="150" height="84" rx="8" stroke-width="1.5"/><text class="lbl" x="405" y="236" text-anchor="middle">terraform</text><text class="lbl" x="405" y="258" text-anchor="middle">plan / apply</text><g class="k p10"><line class="lnp" x1="272" y1="152" x2="326" y2="236" marker-end="url(#arp)"/></g><g class="k p11"><line class="lnp" x1="272" y1="242" x2="326" y2="242" marker-end="url(#arp)"/></g><g class="k p12"><line class="lnp" x1="272" y1="332" x2="326" y2="236" marker-end="url(#arp)"/></g><g class="k p13"><line class="lnt" x1="326" y1="262" x2="272" y2="332" marker-end="url(#art)"/><line class="lnt" x1="326" y1="252" x2="272" y2="248" marker-end="url(#art)"/></g><rect class="box" x="530" y="120" width="240" height="244" rx="8" stroke-width="1.4"/><text class="sub" x="650" y="144" text-anchor="middle">output</text><line class="ln" x1="482" y1="242" x2="526" y2="242" marker-end="url(#ar)"/><g class="k p14"><text class="wrnt" x="650" y="176" text-anchor="middle" style="font-size:14px">~ update in-place</text><text class="sm" x="650" y="202" text-anchor="middle" style="font-size:14px">size: small → large</text><text class="sm" x="650" y="254" text-anchor="middle" style="font-size:14px">Plan: 0 add, 1 change</text><text class="wrnt" x="650" y="280" text-anchor="middle" style="font-size:14px">exit code 2</text></g><g class="k p15"><text class="okt" x="650" y="176" text-anchor="middle" style="font-size:14px">Applying…</text><text class="sm" x="650" y="202" text-anchor="middle" style="font-size:14px">Apply complete!</text><text class="sm" x="650" y="228" text-anchor="middle" style="font-size:14px">0 added, 1 changed</text><text class="okt" x="650" y="280" text-anchor="middle" style="font-size:14px">state serial 4 → 5</text></g><g class="k p16"><text class="sub" x="650" y="176" text-anchor="middle" style="font-size:14px">(nothing runs)</text><text class="sm" x="650" y="228" text-anchor="middle" style="font-size:14px">state still says</text><text class="sub" x="650" y="254" text-anchor="middle" style="font-size:14px">size = "large"</text></g><g class="k p17"><text class="badt" x="650" y="176" text-anchor="middle" style="font-size:14px">Note: Objects have</text><text class="sm" x="650" y="202" text-anchor="middle" style="font-size:14px">changed outside</text><text class="sm" x="650" y="228" text-anchor="middle" style="font-size:14px">of Terraform</text><text class="sm" x="650" y="254" text-anchor="middle" style="font-size:14px">~ size: xlarge → large</text><text class="badt" x="650" y="280" text-anchor="middle" style="font-size:14px">exit code 2: drift</text></g><text class="sm" x="28" y="396">A plan file saved at serial 4 is refused after step 2: "Saved plan is stale".</text>
+</svg>

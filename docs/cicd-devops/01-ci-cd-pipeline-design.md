@@ -17,8 +17,6 @@ tags: [cicd-devops, P2]
 
 Every change to production passes through the pipeline, so its design decides how often you can release, how quickly a bad change is caught, and what an attacker gets if they compromise it. Slow pipelines push teams into big batches, and big batches make failures bigger. The DORA research ties delivery performance to throughput (deployment frequency, change lead time, failed-deployment recovery time) and instability (change fail rate, deployment rework rate, the fifth metric DORA added recently). Pipeline design moves all five.
 
-Interviewers ask this as a design question ("design CI/CD for 30 microservices"), as a debugging question ("the pipeline takes 40 minutes"), and as a security question ("how does your pipeline authenticate to AWS?").
-
 ## Core concepts
 
 ### CI, continuous delivery, continuous deployment
@@ -29,7 +27,7 @@ Interviewers ask this as a design question ("design CI/CD for 30 microservices")
 | Continuous delivery | Everything up to a production-ready, deployable artifact, often an automatic deploy to staging | Someone clicks "deploy to prod" | Build once, automated environments, rollback |
 | Continuous deployment | Every green change goes to production | None | Strong automated tests, progressive delivery, observability, feature flags |
 
-A regulated healthcare or banking team usually practises continuous delivery with an approval step on the production environment, because change management wants a named approver. That's fine as long as the approval is a click on an already-tested artifact, not a fresh build.
+Regulated healthcare and banking teams usually practise continuous delivery with a named approver on production. That's fine as long as the approval promotes an already-tested artifact rather than triggering a fresh build.
 
 ### The shape of a good pipeline
 
@@ -75,7 +73,7 @@ Rebuilding for each environment invites drift: a base image tag moves, a depende
 | Skip what didn't change | `rules: changes:` | `on.push.paths` | `when { changeset }` |
 | Cancel superseded runs | `interruptible: true` | `concurrency: cancel-in-progress` | `disableConcurrentBuilds(abortPrevious: true)` |
 
-![Stage-by-stage execution versus a DAG: with stages, lint, unit tests, integration tests and image build each wait for the slowest job in the stage before, totalling about 14 minutes; with needs, the image build starts once unit tests finish and the pipeline completes in about 9 minutes](images/01-stages-vs-dag.svg){ loading=lazy }
+![Stage-by-stage execution versus a DAG: with stages, integration tests, the image build and the dev deploy each wait for the whole previous stage, so the pipeline finishes at 13 minutes and lint sits idle; with needs, the image build starts as soon as unit tests finish, in parallel with integration tests, and the pipeline finishes at 9 minutes](images/01-stages-vs-dag.svg){ loading=lazy }
 *Notice the idle gaps in the top row: with plain stages every job waits for the slowest job of the previous stage.*
 
 ### The pipeline as an attack surface
@@ -100,7 +98,6 @@ A CI runner that can deploy to production holds production power. The main contr
 | Serialise deploys | `resource_group:` | `concurrency:` group | `lock` (Lockable Resources plugin) |
 | Cloud auth | `id_tokens:` (OIDC) | `id-token: write` + cloud login actions | credentials plugin, or OIDC via plugins |
 
-Jenkins is the most flexible and the most work: you run and patch the controller, manage plugins and their CVEs, and keep Groovy shared libraries maintainable. GitLab CI and GitHub Actions are YAML-first and hosted, which is why many teams migrate off Jenkins. Jenkins still fits heavily customised, on-prem or air-gapped estates.
 
 ## In practice: code & configuration
 
@@ -235,7 +232,6 @@ In Jenkins the equivalent is a declarative `Jenkinsfile` that calls a shared lib
 - **Platform templates.** Organisations with dozens of services publish one versioned pipeline template (GitLab CI/CD component, GitHub reusable workflow, Jenkins shared library). Each service repo has a ten-line file that includes it. Standards (scans, quality gates, signing) change in one place.
 - **Monorepos** use path filters and build tools with dependency graphs (Nx, Bazel, Gradle) so a change rebuilds only affected projects.
 - **Regulated domains** (healthcare, banking) keep an audit trail: who approved which digest into production and when. Protected environments and deployment history give that for free if prod deploys only happen through the pipeline.
-- **Known failures:** the CircleCI breach (January 2023) forced customers to rotate every stored secret, and the `tj-actions` compromise (2025) leaked secrets from public build logs. Both are arguments for OIDC and pinned dependencies.
 
 ## Trade-offs & production gotchas
 

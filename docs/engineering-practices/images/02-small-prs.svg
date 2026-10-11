@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 404" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Big PR versus small PRs</title>
+  <desc id="d">Animation: bars grow along a timeline of working hours. A single 1,200-line pull request waits 14 hours for a reviewer, gets a one-hour skim and an approval at hour 15. The same change split into three stacked 400-line pull requests is reviewed and merged one after another: the first at hour 2, the second at hour 4 and the third at hour 5.5, each actually read. Illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .gr{transform-box:fill-box;transform-origin:left center;animation:14s infinite linear}
+    .k{opacity:0;animation:14s infinite linear}
+    @keyframes g1{0%,4%{transform:scaleX(0)}57.2%,100%{transform:scaleX(1)}}.g1{animation-name:g1}
+    @keyframes g1t{0%,57.19%{opacity:0}57.2%,100%{opacity:1}}.g1t{animation-name:g1t}
+    @keyframes g2{0%,57.2%{transform:scaleX(0)}61%,100%{transform:scaleX(1)}}.g2{animation-name:g2}
+    @keyframes d3{0%,60.99%{opacity:0}61%,100%{opacity:1}}.d3{animation-name:d3}
+    @keyframes g4{0%,4%{transform:scaleX(0)}7.8%,100%{transform:scaleX(1)}}.g4{animation-name:g4}
+    @keyframes g5{0%,7.8%{transform:scaleX(0)}11.6%,100%{transform:scaleX(1)}}.g5{animation-name:g5}
+    @keyframes d6{0%,11.59%{opacity:0}11.6%,100%{opacity:1}}.d6{animation-name:d6}
+    @keyframes g7{0%,11.6%{transform:scaleX(0)}15.4%,100%{transform:scaleX(1)}}.g7{animation-name:g7}
+    @keyframes g8{0%,15.4%{transform:scaleX(0)}19.2%,100%{transform:scaleX(1)}}.g8{animation-name:g8}
+    @keyframes d9{0%,19.19%{opacity:0}19.2%,100%{opacity:1}}.d9{animation-name:d9}
+    @keyframes g10{0%,19.2%{transform:scaleX(0)}21.1%,100%{transform:scaleX(1)}}.g10{animation-name:g10}
+    @keyframes g11{0%,21.1%{transform:scaleX(0)}24.9%,100%{transform:scaleX(1)}}.g11{animation-name:g11}
+    @keyframes d12{0%,24.89%{opacity:0}24.9%,100%{opacity:1}}.d12{animation-name:d12}
+    @media (prefers-reduced-motion: reduce){.gr,.k{animation:none}.gr{transform:none}.k{opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="402" rx="14"/>
+  <text class="h" x="28" y="40">One big PR vs three stacked small PRs</text><text class="sub" x="28" y="62">Working hours after the first PR is opened. Same 1,200 lines of change. Illustrative.</text><line class="grid" x1="170" y1="80" x2="170" y2="304"/><text class="sub" x="170" y="322" text-anchor="middle">0 h</text><line class="grid" x1="282" y1="80" x2="282" y2="304"/><text class="sub" x="282" y="322" text-anchor="middle">4 h</text><line class="grid" x1="394" y1="80" x2="394" y2="304"/><text class="sub" x="394" y="322" text-anchor="middle">8 h</text><line class="grid" x1="506" y1="80" x2="506" y2="304"/><text class="sub" x="506" y="322" text-anchor="middle">12 h</text><line class="grid" x1="618" y1="80" x2="618" y2="304"/><text class="sub" x="618" y="322" text-anchor="middle">16 h</text><line class="grid" x1="730" y1="80" x2="730" y2="304"/><text class="sub" x="730" y="322" text-anchor="middle">20 h</text><text class="lbl" x="28" y="104">1 PR · 1,200 lines</text><rect class="wrnf gr g1" x="170" y="88" width="392" height="26" rx="4"/><g class="k g1t"><text class="on13" x="366" y="106" text-anchor="middle">waiting for a reviewer with a free afternoon</text></g><rect class="pri gr g2" x="562" y="88" width="28" height="26" rx="4"/><g class="k d3"><circle class="wrnf" cx="602" cy="101" r="7"/><text class="wrnt" x="616" y="106" style="font-size:12px">skim + LGTM</text></g><text class="lbl" x="28" y="186">PR 1 · 400 lines</text><rect class="wrnf gr g4" x="170" y="168" width="28" height="26" rx="4"/><rect class="pri gr g5" x="198" y="168" width="28" height="26" rx="4"/><g class="k d6"><circle class="okf" cx="238" cy="181" r="7"/><text class="okt" x="252" y="186" style="font-size:12px">read + merged</text></g><text class="lbl" x="28" y="232">PR 2 · 400 lines</text><rect class="wrnf gr g7" x="226" y="214" width="28" height="26" rx="4"/><rect class="pri gr g8" x="254" y="214" width="28" height="26" rx="4"/><g class="k d9"><circle class="okf" cx="294" cy="227" r="7"/><text class="okt" x="308" y="232" style="font-size:12px">read + merged</text></g><text class="lbl" x="28" y="278">PR 3 · 400 lines</text><rect class="wrnf gr g10" x="282" y="260" width="14" height="26" rx="4"/><rect class="pri gr g11" x="296" y="260" width="28" height="26" rx="4"/><g class="k d12"><circle class="okf" cx="336.0" cy="273" r="7"/><text class="okt" x="350" y="278" style="font-size:12px">read + merged</text></g><rect class="wrnf" x="28" y="338" width="14" height="14" rx="3"/><text class="sm" x="48" y="350">waiting</text><rect class="pri" x="120" y="338" width="14" height="14" rx="3"/><text class="sm" x="140" y="350">being reviewed</text><text class="sm" x="28" y="384">Stacked: all merged by hour 5.5, each actually read. Big PR: merged at hour 15 after a skim.</text>
+</svg>

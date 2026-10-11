@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 404" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Branch drift over ten days</title>
+  <desc id="d">Animation: a cursor moves across ten working days. In the top lane, a long-lived feature branch runs beside trunk while teammates commit to trunk; five conflicting edits build up unseen and are all discovered together when the branch merges on day 10. In the bottom lane, the same work merges to trunk in a small change every day, and each of the five conflicts is found and fixed the same day. Illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:14s infinite linear}
+    .cur{animation:14s infinite linear}
+    @keyframes cur{0%,4%{transform:translateX(0)}79%,100%{transform:translateX(620px)}}.cur{animation-name:cur}
+    @keyframes a1{0%,11.49%{opacity:0}11.5%,100%{opacity:1}}.a1{animation-name:a1}
+    @keyframes a2{0%,18.99%{opacity:0}19%,100%{opacity:1}}.a2{animation-name:a2}
+    @keyframes a3{0%,26.49%{opacity:0}26.5%,100%{opacity:1}}.a3{animation-name:a3}
+    @keyframes a4{0%,33.99%{opacity:0}34%,100%{opacity:1}}.a4{animation-name:a4}
+    @keyframes a5{0%,41.49%{opacity:0}41.5%,100%{opacity:1}}.a5{animation-name:a5}
+    @keyframes a6{0%,48.99%{opacity:0}49%,100%{opacity:1}}.a6{animation-name:a6}
+    @keyframes a7{0%,56.49%{opacity:0}56.5%,100%{opacity:1}}.a7{animation-name:a7}
+    @keyframes a8{0%,63.99%{opacity:0}64%,100%{opacity:1}}.a8{animation-name:a8}
+    @keyframes a9{0%,71.49%{opacity:0}71.5%,100%{opacity:1}}.a9{animation-name:a9}
+    @keyframes amerge{0%,79.99%{opacity:0}80%,100%{opacity:1}}.amerge{animation-name:amerge}
+    @keyframes b1{0%,11.49%{opacity:0}11.5%,100%{opacity:1}}.b1{animation-name:b1}
+    @keyframes b2{0%,18.99%{opacity:0}19%,100%{opacity:1}}.b2{animation-name:b2}
+    @keyframes b3{0%,26.49%{opacity:0}26.5%,100%{opacity:1}}.b3{animation-name:b3}
+    @keyframes b4{0%,33.99%{opacity:0}34%,100%{opacity:1}}.b4{animation-name:b4}
+    @keyframes b5{0%,41.49%{opacity:0}41.5%,100%{opacity:1}}.b5{animation-name:b5}
+    @keyframes b6{0%,48.99%{opacity:0}49%,100%{opacity:1}}.b6{animation-name:b6}
+    @keyframes b7{0%,56.49%{opacity:0}56.5%,100%{opacity:1}}.b7{animation-name:b7}
+    @keyframes b8{0%,63.99%{opacity:0}64%,100%{opacity:1}}.b8{animation-name:b8}
+    @keyframes b9{0%,71.49%{opacity:0}71.5%,100%{opacity:1}}.b9{animation-name:b9}
+    @keyframes bend{0%,79.99%{opacity:0}80%,100%{opacity:1}}.bend{animation-name:bend}
+    @media (prefers-reduced-motion: reduce){.k,.cur{animation:none}.k{opacity:1}.cur{transform:translateX(620px)}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="402" rx="14"/>
+  <text class="h" x="28" y="40">Same work, two ways to integrate it</text><text class="sub" x="28" y="62">Ten working days. Five conflicting edits happen in both lanes. Illustrative.</text><text class="lbl" x="28" y="98">Long-lived feature branch: merge on day 10</text><line class="ln" x1="100" y1="130" x2="750" y2="130"/><text class="sub" x="756" y="134">trunk</text><path class="lnp dash" d="M 110 130 Q 130 170 160 170 L 690 170"/><text class="prit" x="164" y="192" style="font-size:12px">feature/new-pricing</text><g class="k a1"><circle class="mutf" cx="172" cy="130" r="6"/><circle class="pri" cx="186" cy="170" r="6"/></g><g class="k a2"><circle class="mutf" cx="234" cy="130" r="6"/><circle class="pri" cx="248" cy="170" r="6"/><circle class="wrnf" cx="248" cy="150" r="5" opacity="0.55"/></g><g class="k a3"><circle class="mutf" cx="296" cy="130" r="6"/><circle class="pri" cx="310" cy="170" r="6"/></g><g class="k a4"><circle class="mutf" cx="358" cy="130" r="6"/><circle class="pri" cx="372" cy="170" r="6"/><circle class="wrnf" cx="372" cy="150" r="5" opacity="0.55"/></g><g class="k a5"><circle class="mutf" cx="420" cy="130" r="6"/><circle class="pri" cx="434" cy="170" r="6"/><circle class="wrnf" cx="434" cy="150" r="5" opacity="0.55"/></g><g class="k a6"><circle class="mutf" cx="482" cy="130" r="6"/><circle class="pri" cx="496" cy="170" r="6"/></g><g class="k a7"><circle class="mutf" cx="544" cy="130" r="6"/><circle class="pri" cx="558" cy="170" r="6"/><circle class="wrnf" cx="558" cy="150" r="5" opacity="0.55"/></g><g class="k a8"><circle class="mutf" cx="606" cy="130" r="6"/><circle class="pri" cx="620" cy="170" r="6"/></g><g class="k a9"><circle class="mutf" cx="668" cy="130" r="6"/><circle class="pri" cx="682" cy="170" r="6"/><circle class="wrnf" cx="682" cy="150" r="5" opacity="0.55"/></g><g class="k amerge"><path class="lnb" d="M 690 170 Q 720 170 730 134" marker-end="url(#arb)"/><circle class="badf" cx="248" cy="150" r="6"/><circle class="badf" cx="372" cy="150" r="6"/><circle class="badf" cx="434" cy="150" r="6"/><circle class="badf" cx="558" cy="150" r="6"/><circle class="badf" cx="682" cy="150" r="6"/><rect class="bb" x="450" y="196" width="300" height="24" rx="6"/><text class="badt" x="600" y="213" text-anchor="middle" style="font-size:13px">Day 10: 5 conflicts found at once</text></g><text class="lbl" x="28" y="254">Trunk-based: a small merge every day</text><line class="ln" x1="100" y1="300" x2="750" y2="300"/><text class="sub" x="756" y="304">trunk</text><g class="k b1"><path class="lnp" d="M 150 300 Q 158 278 168 278 Q 176 278 180 296" marker-end="url(#arp)"/></g><g class="k b2"><path class="lnp" d="M 212 300 Q 220 278 230 278 Q 238 278 242 296" marker-end="url(#arp)"/><circle class="okf" cx="226" cy="318" r="5"/></g><g class="k b3"><path class="lnp" d="M 274 300 Q 282 278 292 278 Q 300 278 304 296" marker-end="url(#arp)"/></g><g class="k b4"><path class="lnp" d="M 336 300 Q 344 278 354 278 Q 362 278 366 296" marker-end="url(#arp)"/><circle class="okf" cx="350" cy="318" r="5"/></g><g class="k b5"><path class="lnp" d="M 398 300 Q 406 278 416 278 Q 424 278 428 296" marker-end="url(#arp)"/><circle class="okf" cx="412" cy="318" r="5"/></g><g class="k b6"><path class="lnp" d="M 460 300 Q 468 278 478 278 Q 486 278 490 296" marker-end="url(#arp)"/></g><g class="k b7"><path class="lnp" d="M 522 300 Q 530 278 540 278 Q 548 278 552 296" marker-end="url(#arp)"/><circle class="okf" cx="536" cy="318" r="5"/></g><g class="k b8"><path class="lnp" d="M 584 300 Q 592 278 602 278 Q 610 278 614 296" marker-end="url(#arp)"/></g><g class="k b9"><path class="lnp" d="M 646 300 Q 654 278 664 278 Q 672 278 676 296" marker-end="url(#arp)"/><circle class="okf" cx="660" cy="318" r="5"/></g><g class="k bend"><text class="okt" x="540" y="252" text-anchor="middle" style="font-size:13px">5 small conflicts, each fixed the same day</text></g><text class="sub" x="110" y="350" text-anchor="middle">day 0</text><text class="sub" x="234" y="350" text-anchor="middle">day 2</text><text class="sub" x="358" y="350" text-anchor="middle">day 4</text><text class="sub" x="482" y="350" text-anchor="middle">day 6</text><text class="sub" x="606" y="350" text-anchor="middle">day 8</text><text class="sub" x="730" y="350" text-anchor="middle">day 10</text><g class="cur"><line class="lnw" x1="110" y1="84" x2="110" y2="334" style="stroke-width:1.5"/></g><text class="sm" x="28" y="384">Merge pain grows with branch age: the conflicts are the same, but found late they arrive together and tangled.</text>
+</svg>

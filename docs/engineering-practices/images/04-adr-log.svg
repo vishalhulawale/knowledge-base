@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 396" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Append-only ADR log</title>
+  <desc id="d">Animation: an ADR log with ADR-0001 record architecture decisions, ADR-0004 use GraphQL as the integration layer and ADR-0007 cache reference data in-process, all accepted. ADR-0009 Kafka retry topics and a DLQ is added. ADR-0012 Redis cache-aside for reference data appears as proposed in a pull request, then is accepted, and ADR-0007 changes to superseded by 0012, with a link between the two. The old decision's text is unchanged. Titles are illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:15s infinite linear}
+    @keyframes r3{0%,11.99%{opacity:0}12%,100%{opacity:1}}.r3{animation-name:r3}
+    @keyframes r4{0%,31.99%{opacity:0}32%,100%{opacity:1}}.r4{animation-name:r4}
+    @keyframes s0_0{0%,99.99%{opacity:1}100%,100%{opacity:0}}.s0_0{animation-name:s0_0}
+    @keyframes s1_0{0%,99.99%{opacity:1}100%,100%{opacity:0}}.s1_0{animation-name:s1_0}
+    @keyframes s3_12{0%,11.99%{opacity:0}12%,100%{opacity:1}}.s3_12{animation-name:s3_12}
+    @keyframes s2_0{0%,63.99%{opacity:1}64%,100%{opacity:0}}.s2_0{animation-name:s2_0}
+    @keyframes s2_64{0%,63.99%{opacity:0}64%,100%{opacity:1}}.s2_64{animation-name:s2_64}
+    @keyframes s4_32{0%,31.99%{opacity:0}32%,51.99%{opacity:1}52%,100%{opacity:0}}.s4_32{animation-name:s4_32}
+    @keyframes s4_52{0%,51.99%{opacity:0}52%,100%{opacity:1}}.s4_52{animation-name:s4_52}
+    @keyframes lnk{0%,63.99%{opacity:0}64%,100%{opacity:1}}.lnk{animation-name:lnk}
+    @keyframes c0{0%,11.99%{opacity:1}12%,100%{opacity:0}}.c0{animation-name:c0}
+    @keyframes c1{0%,11.99%{opacity:0}12%,31.99%{opacity:1}32%,100%{opacity:0}}.c1{animation-name:c1}
+    @keyframes c2{0%,31.99%{opacity:0}32%,51.99%{opacity:1}52%,100%{opacity:0}}.c2{animation-name:c2}
+    @keyframes c3{0%,51.99%{opacity:0}52%,63.99%{opacity:1}64%,100%{opacity:0}}.c3{animation-name:c3}
+    @keyframes c4{0%,63.99%{opacity:0}64%,100%{opacity:1}}.c4{animation-name:c4}
+    @media (prefers-reduced-motion: reduce){.k{animation:none;opacity:0}.r3{opacity:1}.r4{opacity:1}.s0_0{opacity:1}.s1_0{opacity:1}.s3_12{opacity:1}.s2_64{opacity:1}.s4_52{opacity:1}.lnk{opacity:1}.c4{opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="394" rx="14"/>
+  <text class="h" x="28" y="40">An ADR log is append-only</text><text class="sub" x="28" y="62">Decisions are superseded, never rewritten. Titles illustrative.</text><rect class="box" x="28" y="90" width="720" height="40" rx="8" stroke-width="1.2"/><text class="mono" x="44" y="116" xml:space="preserve">ADR-0001</text><text class="tx" x="140" y="116">Record architecture decisions</text><rect class="box" x="28" y="140" width="720" height="40" rx="8" stroke-width="1.2"/><text class="mono" x="44" y="166" xml:space="preserve">ADR-0004</text><text class="tx" x="140" y="166">Use GraphQL as the integration layer</text><rect class="box" x="28" y="190" width="720" height="40" rx="8" stroke-width="1.2"/><text class="mono" x="44" y="216" xml:space="preserve">ADR-0007</text><text class="tx" x="140" y="216">Cache reference data in-process</text><g class="k r3"><rect class="box" x="28" y="240" width="720" height="40" rx="8" stroke-width="1.2"/><text class="mono" x="44" y="266" xml:space="preserve">ADR-0009</text><text class="tx" x="140" y="266">Kafka retry topics and a DLQ</text></g><g class="k r4"><rect class="box" x="28" y="290" width="720" height="40" rx="8" stroke-width="1.2"/><text class="mono" x="44" y="316" xml:space="preserve">ADR-0012</text><text class="tx" x="140" y="316">Redis cache-aside for reference data</text></g><g class="k s0_0"><rect class="okf" x="566" y="98" width="170" height="24" rx="6"/><text class="on13" x="651" y="115" text-anchor="middle">Accepted</text></g><g class="k s1_0"><rect class="okf" x="566" y="148" width="170" height="24" rx="6"/><text class="on13" x="651" y="165" text-anchor="middle">Accepted</text></g><g class="k s3_12"><rect class="okf" x="566" y="248" width="170" height="24" rx="6"/><text class="on13" x="651" y="265" text-anchor="middle">Accepted</text></g><g class="k s2_0"><rect class="okf" x="566" y="198" width="170" height="24" rx="6"/><text class="on13" x="651" y="215" text-anchor="middle">Accepted</text></g><g class="k s2_64"><rect class="bm" x="566" y="198" width="170" height="24" rx="6"/><text class="sm" x="651" y="215" text-anchor="middle">Superseded by 0012</text></g><g class="k s4_32"><rect class="wrnf" x="566" y="298" width="170" height="24" rx="6"/><text class="on13" x="651" y="315" text-anchor="middle">Proposed (in PR)</text></g><g class="k s4_52"><rect class="okf" x="566" y="298" width="170" height="24" rx="6"/><text class="on13" x="651" y="315" text-anchor="middle">Accepted</text></g><g class="k lnk"><path class="lnp" d="M 750 310 C 778 290 778 210 752 196" marker-end="url(#arp)"/><text class="sub" x="560" y="352"></text></g><g class="k c0"><text class="sm" x="28" y="372" font-weight="600">Three accepted decisions in the log.</text></g><g class="k c1"><text class="sm" x="28" y="372" font-weight="600">ADR-0009 added when the retry policy is decided.</text></g><g class="k c2"><text class="sm" x="28" y="372" font-weight="600">ADR-0012 opened as Proposed in a PR, reviewed with the code.</text></g><g class="k c3"><text class="sm" x="28" y="372" font-weight="600">ADR-0012 accepted.</text></g><g class="k c4"><text class="sm" x="28" y="372" font-weight="600">ADR-0007 marked superseded; both link to each other. Its text is unchanged.</text></g>
+</svg>
