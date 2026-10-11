@@ -15,11 +15,11 @@ tags: [browser-web-performance, P1]
 
 ## Why it matters
 
-Layout bugs are the most common front-end defects: a card that overflows on a long URL, a button that inherits the wrong colour from a third-party stylesheet, a footer that refuses to align across cards. Most come from three misunderstandings: what `width` measures, how flex items grow and shrink, and how the cascade picks a winner.
+Most layout bugs (a card overflowing on a long URL, a button taking the wrong colour from a third-party stylesheet, footers that won't align across cards) come from three misunderstandings: what `width` measures, how flex items grow and shrink, and how the cascade picks a winner.
 
 Tables and floats were hacks for page layout; flexbox (Baseline 2015) and grid (2017) replaced them. A second wave followed: cascade layers (2022), container queries and subgrid (2023), `:has()` and native nesting (Dec 2023). Interviewers use the topic to check whether you reason from first principles or stopped at Bootstrap-era CSS.
 
-Layout also affects performance: changing geometry triggers **layout (reflow)** for the affected subtree, which is covered in [Browser rendering pipeline, reflow vs repaint](01-browser-rendering-pipeline-reflow-vs-repaint.md); unreserved space for late content causes layout shift, covered in [Core Web Vitals](04-core-web-vitals-and-performance-optimisation.md).
+Geometry changes trigger **layout (reflow)** ([rendering pipeline](01-browser-rendering-pipeline-reflow-vs-repaint.md)), and unreserved space causes layout shift ([Core Web Vitals](04-core-web-vitals-and-performance-optimisation.md)).
 
 ## Core concepts
 
@@ -81,7 +81,7 @@ flowchart TD
 
 ### Responsive components: container queries
 
-Media queries ask about the **viewport**; container queries ask about the **element's container**. A card used in a narrow sidebar and a wide main column can now lay itself out correctly in both, without knowing where it lives.
+Media queries ask about the **viewport**; container queries ask about the **element's container**, so a card can lay itself out correctly in a narrow sidebar and a wide main column.
 
 ```css
 .card-slot { container: card / inline-size; }   /* name + type: query width only */
@@ -143,7 +143,7 @@ Special cases interviewers probe:
 @import url("vendor/datepicker.css") layer(vendor);  /* third-party CSS boxed into a layer */
 ```
 
-Any rule in `utilities` beats any rule in `components`, whatever the selectors' specificity, and unlayered rules beat all layers. Inside a layer, `:where()` keeps selectors flat so they compete only on meaningful signals. `revert-layer` rolls a property back to the value from the previous layer. Cascade layers are Baseline since March 2022.
+Any `utilities` rule beats any `components` rule whatever their specificity, and unlayered rules beat all layers. Inside a layer, `:where()` keeps selectors flat; `revert-layer` rolls back to the previous layer's value. Baseline since March 2022.
 
 `@scope (.card) to (.content) { … }` limits rules to a subtree and adds **scope proximity**: on a specificity tie, the closer scope root wins (useful for nested themes). It is Baseline only since March 2026, so treat it as progressive enhancement.
 
@@ -220,7 +220,7 @@ Subgrid for aligned card internals, with a same-cascade fallback for older brows
 
 - **Design systems and component libraries** are the main users of `@layer` and `:where()`: library defaults with zero or layered specificity let product teams override with a single class. Tailwind CSS v4 emits its output in `theme`, `base`, `components` and `utilities` layers, and MUI added an opt-in `@layer mui` so the two can coexist without `!important`.
 - **Micro-frontends** share one document, so one team's global selector can restyle another team's widget. Defences: CSS Modules or CSS-in-JS generated class names, no global resets inside remotes, Shadow DOM for web components, and a shell that owns the layer order (see [Micro-frontends](../frontend-architecture/01-micro-frontends-approaches-and-trade-offs.md) and [Design systems](../frontend-architecture/04-design-systems-and-component-libraries.md)).
-- **Dashboards and portals** (healthcare member portals, banking back-office screens) are grid-heavy: page shells with `grid-template-areas`, data panels that must work in a full-width page and in a drawer, which is exactly the container-query use case.
+- **Dashboards and portals** (healthcare member portals, banking back-office screens): grid page shells, and panels that must work both full-width and in a drawer, the container-query use case.
 - **Known failure modes:** `overflow: hidden` used to hide a flex overflow bug, clipping focus rings and dropdowns; `order` or `flex-direction: row-reverse` making visual order differ from tab order (an accessibility failure under WCAG 2.4.3, see [HTML semantics & accessibility](02-html-semantics-and-accessibility.md)); `100vw` widths causing horizontal scroll because they include the scrollbar.
 
 ## Trade-offs & production gotchas
@@ -235,20 +235,20 @@ Subgrid for aligned card internals, with a same-cascade fallback for older brows
 | `@layer` + `:where()` | Priority by intent, not selector weight | Must declare order early; unlayered CSS beats all layers | New design systems, taming vendor CSS |
 
 !!! warning "Gotcha: unlayered CSS beats every layer"
-    Adopting layers gradually can backfire: your old unlayered stylesheet now beats **everything** you move into layers, including utilities. Put legacy CSS into its own low-priority layer (`@import url(legacy.css) layer(legacy)`) rather than leaving it unlayered.
+    When adopting layers gradually, the old unlayered stylesheet beats **everything** you move into layers. Import legacy CSS into a low layer instead: `@import url(legacy.css) layer(legacy)`.
 
 !!! warning "Gotcha: flex items won't shrink below their content"
-    `min-width: auto` on flex items (and `minmax(auto, …)` behaviour on grid items) means a long token blows out the layout. Add `min-inline-size: 0` on the item or use `minmax(0, 1fr)` tracks, and `overflow-wrap: anywhere` for user-supplied strings such as IDs and URLs.
+    Automatic minimum sizes let one long token blow out the layout. Use `min-inline-size: 0` on flex items, `minmax(0, 1fr)` grid tracks, and `overflow-wrap: anywhere` for user-supplied IDs and URLs.
 
 ## How this connects to my experience
 
-- **Where I used it:** not a ★ resume claim; position as transferable knowledge. The closest fit is OptumRx Meteor at Publicis Sapient: **"Built the ReactJS application from the ground up and established a micro-frontend architecture"**, with **Material UI** and **Storybook** listed in my frontend skills. Layout and style isolation between micro-frontends are the CSS problems that architecture creates.
+- **Where I used it:** not a ★ resume claim; position as transferable knowledge. The closest fit is OptumRx Meteor at Publicis Sapient: **"Built the ReactJS application from the ground up and established a micro-frontend architecture"**, with **Material UI** and **Storybook** listed in my frontend skills.
 - **Talking points:**
     - How MUI theming and overrides were done (theme `components` overrides, `sx`, `styled`) and whether we hit specificity fights with Emotion: *[confirm]*.
     - How styles were isolated between micro-frontends (CSS Modules, Emotion cache per remote, naming prefixes): *[confirm]*.
     - Responsive layout approach on the member-facing app (MUI `Grid`, breakpoints, any container queries): *[confirm]*.
     - What I'd do today: a shell-owned `@layer` order with MUI in `@layer mui`, design tokens as custom properties, container queries for widgets that render in more than one slot, Storybook stories at several container widths.
-- **Likely follow-up chain:** "Your button override isn't applying, why?" → check the Styles pane: origin, `!important`, layer, then specificity → "How would you stop this across 5 teams' MFEs?" → shell declares layer order, libraries in low layers, scoped class names, no global resets in remotes, visual regression per MFE → "Why not just add `!important`?" → it inverts layer order, escalates, and can't be overridden by normal rules or consumers.
+- **Likely follow-up chain:** "Your button override isn't applying, why?" → check the Styles pane: origin, `!important`, layer, then specificity → "How would you stop this across several teams' MFEs?" → shell declares layer order, libraries in low layers, scoped class names, no global resets in remotes, visual regression per MFE → "Why not just add `!important`?" → it inverts layer order, escalates, and can't be overridden by normal rules or consumers.
 
 ## Interview questions
 

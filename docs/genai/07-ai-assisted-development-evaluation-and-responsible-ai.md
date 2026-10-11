@@ -203,29 +203,26 @@ class ToolPolicy {
 
 ## Real-world usage
 
-- **Air Canada (2024):** a tribunal held the airline liable for its chatbot inventing a bereavement-refund policy, rejecting the argument that the bot was "a separate legal entity". You own what your model says, which is why faithfulness evals and citations matter.
-- **Samsung (2023):** after engineers pasted internal code into ChatGPT, the company restricted generative AI tools on company devices. Most enterprises now route coding assistants through enterprise contracts with no training on customer data.
-- **Healthcare and banking:** clinical or claims decisions stay with humans (the AI drafts, summarises or retrieves), PHI goes only to providers under a BAA, and model and prompt versions are logged for audit, in the same spirit as model-risk management in banking.
+- **Air Canada (2024):** a tribunal held the airline liable for its chatbot inventing a bereavement-refund policy, rejecting the argument that the bot was "a separate legal entity". You own what your model says.
+- **Samsung (2023):** after engineers pasted internal code into ChatGPT, the company restricted generative AI tools on company devices.
+- **Healthcare and banking:** clinical, claims and credit decisions stay with humans (AI drafts, summarises, retrieves), PHI goes only to providers under a BAA, and model and prompt versions are logged for audit, as model-risk management expects.
 
 ## Trade-offs & production gotchas
 
 | Option | Pros | Cons | Use when |
 |---|---|---|---|
-| Code-based graders | Deterministic, free, fast | Only checks structure and facts you can compute | Always first: schema, citations, numbers, refusals |
-| LLM-as-judge | Scales to open-ended text | Biased, costly, drifts with judge model version | Faithfulness and rubric checks, after calibration |
-| Human review | Highest validity | Slow and expensive | Calibration sets, high-stakes domains, sampled production |
 | Offline golden set in CI | Catches regressions before release | Only as good as its coverage | Every prompt, model or retriever change |
 | Online evaluation | Real traffic, real failure modes | Users see the failures first | After canary; feeds new golden cases |
 | Guardrail models (input/output screens) | Cheap extra layer | False positives; bypassable alone | Defence in depth, never the only control |
 
 !!! warning "Gotcha: silent model upgrades"
-    Pinning `model: latest`-style aliases means the provider can change behaviour under you. Pin explicit model versions, and treat a model upgrade like a dependency upgrade: run the full eval suite, compare per-metric, canary.
+    With a floating `latest`-style alias the provider can change behaviour under you. Pin model versions and treat upgrades like dependency upgrades: full eval suite, per-metric comparison, canary.
 
 !!! warning "Gotcha: the eval leaks into the prompt"
-    Tuning prompts against the same 50 cases until they pass overfits, just like tuning against the test set in ML. Keep a held-out split you don't look at while iterating, and refresh cases from production.
+    Tuning prompts against the same 50 cases until they pass overfits, like tuning on the test set in ML. Keep a held-out split and refresh cases from production.
 
 !!! tip "Log for evaluation from day one"
-    Store prompt version, model ID, retrieved document IDs, tool calls, latency, token cost and user feedback per request (with PHI redaction). That log is your future golden set, your audit trail and your cost dashboard.
+    Store prompt version, model ID, document IDs, tool calls, latency, cost and feedback per request (PHI redacted): it becomes your golden set, audit trail and cost dashboard.
 
 ## How this connects to my experience
 
