@@ -7,15 +7,15 @@ tags: [genai, P1]
 # Spring AI & LLM API integration
 
 !!! abstract "Key takeaways"
-    - An LLM API is a **stateless, slow, metered, rate-limited HTTP dependency**. Each request carries the whole conversation; latency is seconds, not milliseconds; you pay per input and output token; and 429 (rate limit) and 529/5xx (overloaded) errors are normal. Treat it like any other flaky upstream: timeouts, bounded retries, concurrency limits, a circuit breaker and a fallback.
+    - An LLM API is a **stateless, slow, metered, rate-limited HTTP dependency**: each request carries the whole conversation, latency is seconds, you pay per token, and 429/529 errors are normal. Give it timeouts, one retry layer, a concurrency cap, a circuit breaker and a fallback.
     - **Spring AI 2.0** (GA June 2026, current 2.0.1; Spring Boot 4.x, Spring Framework 7, Jackson 3) gives you one portable API over providers. **`ChatClient`** is the user-facing fluent API; **`ChatModel`** is the low-level, per-provider building block. Core providers now wrap the **vendor SDKs** (Anthropic Java SDK, OpenAI Java SDK, Google GenAI SDK).
-    - Cross-cutting behaviour runs in an ordered **advisor chain**: chat memory, RAG (`QuestionAnswerAdvisor`), logging, guardrails, and in 2.0 the **`ToolCallingAdvisor`** (order +300), which owns the tool-call loop. `ChatModel.call()` no longer executes tools for you.
+    - Cross-cutting behaviour runs in an ordered **advisor chain** (memory, RAG, logging, guardrails); in 2.0 the **`ToolCallingAdvisor`** owns the tool-call loop and `ChatModel.call()` no longer executes tools.
     - **Structured output**: `.entity(MyRecord.class)` maps the reply to a Java type. `useProviderStructuredOutput()` sends the JSON Schema to the provider as a hard constraint; `validateSchema()` adds a validate-and-retry loop.
-    - Model-specific options bite: current Claude models (e.g. Claude Opus 5.5) **reject** `temperature`/`top_p`/`top_k`, fixed thinking budgets and forced `tool_choice` with a 400, so 1.x-era config copied from blog posts breaks. Pin options per model and test against the real API.
+    - Options are model-specific: Claude Opus 5.5 **rejects** `temperature`/`top_p`/`top_k`, thinking budgets and forced `tool_choice` with a 400, so tutorial config breaks. Pin options per model and test against the real API.
 
 ## Why it matters
 
-Most enterprise GenAI work is not training models; it is **integrating** a hosted model into an existing service: a claims assistant behind a REST or GraphQL API, a ticket classifier on a Kafka consumer, a summariser in a batch job. Interviewers for senior Java roles want to know whether you can do that the way you would integrate a payment gateway: with typed contracts, failure handling, cost control, security and observability, not a `RestTemplate` call and a string concatenation.
+Most enterprise GenAI work is **integrating** a hosted model into an existing service: a claims assistant behind an API, a classifier on a Kafka consumer, a batch summariser. Senior Java interviews test whether you do it like integrating a payment gateway, with typed contracts, failure handling, cost control, security and observability, not a `RestTemplate` call and string concatenation.
 
 Calling a provider's REST API or SDK directly works for one feature. By the fourth, every team has re-implemented prompt templates, the tool-calling loop, JSON parsing, chat history and metrics, and changing provider means a rewrite. Spring AI (and LangChain4j, the main Java alternative) applies the Spring Data idea: a portable API plus auto-configuration.
 
@@ -287,7 +287,7 @@ The fix: one shared client, no parameters the model rejects, `effort` for cost/q
     **Common wrong answer:** "Ask nicely in the prompt and parse with a regex."
 
 ??? question "Q5. Your LLM calls see frequent 429s. What do you do?"
-    **Answer:** Read the rate-limit headers (Spring AI exposes them via `getRateLimit()`), respect `retry-after`, retry in one layer only, cap concurrency with a bulkhead or `@ConcurrencyLimit`, smooth batch jobs with a queue, cut tokens (caching, smaller history), route simple tasks to a smaller model, and request higher limits. Separate interactive and batch quotas so a batch job can't starve users.
+    **Answer:** Read the rate-limit headers (`getRateLimit()` in Spring AI), honour `retry-after`, retry in one layer, cap concurrency, queue batch work, cut tokens (caching, shorter history), route simple tasks to a smaller model, and separate interactive and batch quotas so batch can't starve users.
 
     **Interviewer listens for:** backpressure, not more retries; token as well as request limits.
 
@@ -296,14 +296,14 @@ The fix: one shared client, no parameters the model rejects, `effort` for cost/q
 ### Senior
 
 ??? question "Q6. Spring AI, the vendor SDK, or LangChain4j: how do you choose?"
-    **Answer:** Spring AI in Spring Boot services that need several building blocks (tools, memory, RAG, vector stores, observability) or provider portability. The vendor SDK when you are on one provider and need the newest features the day they ship. LangChain4j outside Spring or for its `@AiService` style. Portability is partial anyway: options, model behaviour and prompts differ by model, so plan an eval suite per model, not a config switch.
+    **Answer:** Spring AI in Boot services needing several building blocks (tools, memory, RAG, vector stores, observability) or several providers. The vendor SDK for one provider and day-one features. LangChain4j outside Spring. Portability is partial: options, behaviour and prompts differ per model, so plan evals per model, not a config switch.
 
     **Interviewer listens for:** trade-offs, feature lag, honest view of portability.
 
     **Common wrong answer:** "Spring AI lets us swap providers with one property."
 
 ??? question "Q7. How do you make an LLM-backed endpoint production-ready in a regulated domain?"
-    **Answer:** Secrets in a vault with rotation; minimum necessary data, PII/PHI redaction, provider BAA and retention checks; no prompt/completion logging in prod, but an access-controlled audit trail; timeouts, single retry layer, bulkhead, breaker, fallback; tools authorise with server-side context; structured, validated output; Micrometer metrics for latency, tokens and cost per feature; evals before model or prompt changes; and a human in the loop for consequential decisions.
+    **Answer:** Vaulted, rotated keys; minimum necessary data, PHI redaction, BAA and retention checks; no prompt logging in prod but an access-controlled audit trail; timeout, one retry layer, bulkhead, breaker, fallback; tools that authorise server-side; validated structured output; token and cost metrics per feature; evals before model or prompt changes; human review for consequential decisions.
 
     **Interviewer listens for:** security, resilience, observability and evaluation together.
 
@@ -319,7 +319,7 @@ The fix: one shared client, no parameters the model rejects, `effort` for cost/q
     **Common wrong answer:** "Roll back the Spring AI version."
 
 ??? question "Q9. An AI summary endpoint has p99 latency of 90 s and occasionally returns truncated JSON. Fix it."
-    **Answer:** Latency: check for retries stacked across layers, the 60 s default timeout × attempts, tool loops and `validateSchema()` retries adding calls, and huge histories; set a per-use-case budget, one retry layer, a concurrency cap and fallback, stream if it's interactive, or move it async. Truncation: `stop_reason: max_tokens`; raise `max-tokens`, shrink the requested output, and use native structured output with validation.
+    **Answer:** Count the calls: stacked retries, the 60 s default timeout × attempts, tool loops and `validateSchema()` retries, huge histories. Set a budget, one retry layer, a concurrency cap and fallback; stream or go async. Truncation is `stop_reason: max_tokens`: raise `max-tokens`, ask for less, use native structured output.
 
     **Interviewer listens for:** count the calls, budgets, `max_tokens` stop reason.
 
