@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 490" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Gateway fan-out</title>
+  <desc id="d">A refill service and a claims service publish events once to a backplane such as Kafka or Redis pub/sub. The backplane delivers every event to three gateway pods, which hold three, two and three open client connections behind an L7 load balancer, and each pod pushes only to the users connected to it. An optional session registry maps users to pods so an event can be routed to one pod instead of broadcast. A note says heartbeats every 20 seconds keep connections under the load balancer idle timeout of 60 seconds on AWS ALB, and that on deploy pods drain, close with code 1001 and clients reconnect with jitter and resume from the last event ID.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="488" rx="14"/>
+  <text class="h" x="28" y="40">Fan-out across WebSocket or SSE gateways</text><text class="sub" x="28" y="62">Each pod holds only its own connections, so every event must reach every pod.</text><rect class="box" x="28" y="110" width="150" height="52" rx="8" stroke-width="1.5"/><text class="lbl" x="103" y="141" text-anchor="middle">Refill service</text><rect class="box" x="28" y="190" width="150" height="52" rx="8" stroke-width="1.5"/><text class="lbl" x="103" y="221" text-anchor="middle">Claims service</text><rect class="bt" x="220" y="140" width="150" height="74" rx="8" stroke-width="1.5"/><text class="sm" x="295" y="164" text-anchor="middle" font-weight="700">Backplane</text><text class="sm" x="295" y="182" text-anchor="middle">Kafka or</text><text class="sm" x="295" y="200" text-anchor="middle">Redis pub/sub</text><line class="ln" x1="180" y1="136" x2="218" y2="160" marker-end="url(#ar)"/><line class="ln" x1="180" y1="216" x2="218" y2="196" marker-end="url(#ar)"/><text class="sub" x="28" y="272">publish once</text><rect class="bp" x="420" y="92" width="150" height="64" rx="8" stroke-width="1.5"/><text class="sm" x="495" y="119" text-anchor="middle" font-weight="700">Gateway pod 1</text><text class="sm" x="495" y="139" text-anchor="middle">3 open connections</text><line class="lnt" x1="372" y1="177" x2="418" y2="124" marker-end="url(#art)"/><rect class="bp" x="420" y="192" width="150" height="64" rx="8" stroke-width="1.5"/><text class="sm" x="495" y="219" text-anchor="middle" font-weight="700">Gateway pod 2</text><text class="sm" x="495" y="239" text-anchor="middle">2 open connections</text><line class="lnt" x1="372" y1="177" x2="418" y2="224" marker-end="url(#art)"/><rect class="bp" x="420" y="292" width="150" height="64" rx="8" stroke-width="1.5"/><text class="sm" x="495" y="319" text-anchor="middle" font-weight="700">Gateway pod 3</text><text class="sm" x="495" y="339" text-anchor="middle">3 open connections</text><line class="lnt" x1="372" y1="177" x2="418" y2="324" marker-end="url(#art)"/><rect class="bw" x="220" y="300" width="150" height="56" rx="8" stroke-width="1.5"/><text class="sm" x="295" y="323" text-anchor="middle" font-weight="700">Session registry</text><text class="sm" x="295" y="343" text-anchor="middle">user → pod</text><line class="ln dash" x1="420" y1="142" x2="372" y2="324" style="stroke-width:1.2"/><line class="ln dash" x1="420" y1="242" x2="372" y2="324" style="stroke-width:1.2"/><line class="ln dash" x1="420" y1="342" x2="372" y2="324" style="stroke-width:1.2"/><text class="sub" x="220" y="376" style="font-size:12px">optional: route to one pod</text><text class="sub" x="220" y="392" style="font-size:12px">instead of broadcasting</text><rect class="bm" x="600" y="86" width="60" height="282" rx="10" stroke-width="1.2"/><text class="lbl" x="630" y="220" text-anchor="middle">L7</text><text class="lbl" x="630" y="238" text-anchor="middle">LB</text><line class="lnp" x1="572" y1="124" x2="598" y2="124"/><line class="lnp" x1="662" y1="124" x2="712" y2="104" style="stroke-width:1.5"/><circle class="pri" cx="722" cy="104" r="9"/><line class="lnp" x1="662" y1="124" x2="712" y2="124" style="stroke-width:1.5"/><circle class="pri" cx="722" cy="124" r="9"/><line class="lnp" x1="662" y1="124" x2="712" y2="144" style="stroke-width:1.5"/><circle class="pri" cx="722" cy="144" r="9"/><text class="sub" x="740" y="129" style="font-size:12px">users</text><line class="lnp" x1="572" y1="224" x2="598" y2="224"/><line class="lnp" x1="662" y1="224" x2="712" y2="204" style="stroke-width:1.5"/><circle class="pri" cx="722" cy="204" r="9"/><line class="lnp" x1="662" y1="224" x2="712" y2="224" style="stroke-width:1.5"/><circle class="pri" cx="722" cy="224" r="9"/><text class="sub" x="740" y="229" style="font-size:12px">users</text><line class="lnp" x1="572" y1="324" x2="598" y2="324"/><line class="lnp" x1="662" y1="324" x2="712" y2="304" style="stroke-width:1.5"/><circle class="pri" cx="722" cy="304" r="9"/><line class="lnp" x1="662" y1="324" x2="712" y2="324" style="stroke-width:1.5"/><circle class="pri" cx="722" cy="324" r="9"/><line class="lnp" x1="662" y1="324" x2="712" y2="344" style="stroke-width:1.5"/><circle class="pri" cx="722" cy="344" r="9"/><text class="sub" x="740" y="329" style="font-size:12px">users</text><rect class="bo" x="28" y="412" width="744" height="58" rx="10" stroke-width="1.2"/><text class="sm" x="44" y="436">Heartbeat every 20 s keeps connections under the LB idle timeout (ALB default 60 s).</text><text class="sm" x="44" y="456">On deploy: drain, close with 1001, clients reconnect with jitter and resume from the last ID.</text>
+</svg>

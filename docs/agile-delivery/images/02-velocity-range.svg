@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 414" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Velocity planning range</title>
+  <desc id="d">A bar chart of completed story points for six Sprints: 26, 31, 22, 29, 34 and 27. A teal band from 25 to 31 marks the planning range, from the average of the three lowest Sprints to the average of the three highest. A dashed amber line marks the mean of about 28. A note says to scale the range by capacity and forecast 23 to 28 points rather than a single number. Illustrative team.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="412" rx="14"/>
+  <text class="h" x="28" y="40">Plan from a velocity range, not an average</text><text class="sub" x="28" y="62">Completed story points in the last six Sprints. Illustrative team.</text><line class="grid" x1="90" y1="330" x2="560" y2="330"/><text class="sub" x="80" y="334" text-anchor="end">0</text><line class="grid" x1="90" y1="270" x2="560" y2="270"/><text class="sub" x="80" y="274" text-anchor="end">10</text><line class="grid" x1="90" y1="210" x2="560" y2="210"/><text class="sub" x="80" y="214" text-anchor="end">20</text><line class="grid" x1="90" y1="150" x2="560" y2="150"/><text class="sub" x="80" y="154" text-anchor="end">30</text><line class="grid" x1="90" y1="90" x2="560" y2="90"/><text class="sub" x="80" y="94" text-anchor="end">40</text><rect class="tea" x="90" y="144" width="470" height="36" rx="0" opacity="0.2"/><rect class="pri" x="130" y="174" width="50" height="156" rx="3" opacity="0.85"/><text class="on" x="155" y="316" text-anchor="middle">26</text><text class="sub" x="155" y="350" text-anchor="middle">S1</text><rect class="pri" x="208" y="144" width="50" height="186" rx="3" opacity="0.85"/><text class="on" x="233" y="316" text-anchor="middle">31</text><text class="sub" x="233" y="350" text-anchor="middle">S2</text><rect class="pri" x="286" y="198" width="50" height="132" rx="3" opacity="0.85"/><text class="on" x="311" y="316" text-anchor="middle">22</text><text class="sub" x="311" y="350" text-anchor="middle">S3</text><rect class="pri" x="364" y="156" width="50" height="174" rx="3" opacity="0.85"/><text class="on" x="389" y="316" text-anchor="middle">29</text><text class="sub" x="389" y="350" text-anchor="middle">S4</text><rect class="pri" x="442" y="126" width="50" height="204" rx="3" opacity="0.85"/><text class="on" x="467" y="316" text-anchor="middle">34</text><text class="sub" x="467" y="350" text-anchor="middle">S5</text><rect class="pri" x="520" y="168" width="50" height="162" rx="3" opacity="0.85"/><text class="on" x="545" y="316" text-anchor="middle">27</text><text class="sub" x="545" y="350" text-anchor="middle">S6</text><line class="lnw dash" x1="90" y1="161" x2="560" y2="161"/><line class="ln" x1="90" y1="330" x2="560" y2="330"/><rect class="bt" x="580" y="120" width="196" height="94" rx="8" stroke-width="1.5"/><text class="sm" x="594" y="162">avg of 3 lowest Sprints</text><text class="sm" x="594" y="180">to avg of 3 highest</text><text class="teat" x="594" y="144" style="font-size:14px">Planning range 25–31</text><rect class="bw" x="580" y="232" width="196" height="58" rx="8" stroke-width="1.5"/><text class="sm" x="594" y="274">a single number hides noise</text><text class="wrnt" x="594" y="256" style="font-size:14px">Mean ≈ 28</text><text class="sm" x="28" y="394">Scale the range by this Sprint's capacity (leave, on-call) and forecast 23–28, not "28".</text>
+</svg>

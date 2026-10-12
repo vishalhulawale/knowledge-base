@@ -264,3 +264,14 @@ Mock-interview results and revision schedule, updated by the `learn-topic` skill
 | 2026-10-12 | Compliance: 03 Audit logging & retention | — (studied, mock skipped) | Confirm: Meteor app-level audit log (reads audited?); CCKM audit/reporting; CloudTrail/retention/lifecycle at ConvergeHealth | 2026-10-13 |
 | 2026-10-12 | Search/NoSQL: 01 Elasticsearch internals | — (studied, mock skipped) | Confirm: ConvergeHealth ES — searchable fields, access control, analyzers, feed (events vs batch), managed vs self-hosted, shard layout | 2026-10-13 |
 | 2026-10-12 | Search/NoSQL: 02 DynamoDB single-table design | — (studied, mock skipped) | Confirm: DynamoDB vs RDS tables/keys at ConvergeHealth; single-table or per-entity; Streams vs SQS/SNS downstream | 2026-10-13 |
+| 2026-10-12 | Agile: 01 Scrum vs Kanban | — (studied, mock skipped) | Confirm: Meteor sprint length + Product Owner; how prod support was handled (lane vs reserved capacity) | 2026-10-13 |
+| 2026-10-12 | Agile: 02 Estimation & planning | — (studied, mock skipped) | Confirm: estimation technique; support share of capacity; a spike example; a re-forecast story | 2026-10-13 |
+| 2026-10-12 | Agile: 03 Release & risk management | — (studied, mock skipped) | Confirm: Meteor release cadence, UAT, go/no-go owner; coordination with 5 upstreams; PHI readiness checks; a release called off | 2026-10-13 |
+| 2026-10-12 | Next.js: 01 Rendering strategies | — (studied, mock skipped) | Confirm: OptumRx app CSR SPA? bundler? any SSR | 2026-10-13 |
+| 2026-10-12 | Next.js: 02 App Router & RSC | — (studied, mock skipped) | Confirm: no Next.js on OptumRx (transferable) | 2026-10-13 |
+| 2026-10-12 | Next.js: 03 Data fetching & caching | — (studied, mock skipped) | Confirm: Meteor Redis TTLs/invalidation; Kafka-triggered eviction? | 2026-10-13 |
+| 2026-10-12 | Real-time: 01 gRPC & Protobuf | — (studied, mock skipped) | Confirm: any gRPC upstream; Avro/Protobuf + Schema Registry for Kafka | 2026-10-13 |
+| 2026-10-12 | Real-time: 02 WebSockets vs SSE vs long polling | — (studied, mock skipped) | Confirm: live updates on OptumRx app (subscriptions, SSE, polling) | 2026-10-13 |
+| 2026-10-12 | Real-time: 03 Webhooks design | — (studied, mock skipped) | Confirm: SNS HTTPS subscriptions / third-party webhooks at Deloitte or OptumRx | 2026-10-13 |
+| 2026-10-12 | Service Mesh: 01 Sidecar vs ambient | — (studied, mock skipped) | Confirm: Meteor runtime platform + any mesh; App Mesh on ConvergeHealth? | 2026-10-13 |
+| 2026-10-12 | Service Mesh: 02 12-factor & cloud native | — (studied, mock skipped) | Confirm: ConvergeHealth secret loading; Liquibase at startup vs pipeline; Meteor build-once/structured-log standards | 2026-10-13 |

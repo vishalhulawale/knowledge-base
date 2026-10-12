@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Per-endpoint delivery lanes</title>
+  <desc id="d">Animation: an outbox row is fanned out into four per-endpoint queues, A to D, whose deliveries pass through an egress proxy. Endpoints A and C answer 200 quickly and keep receiving deliveries. Endpoint B times out after 15 seconds and is retried after 5 seconds, then fails with 503 and is retried after 5 minutes, then times out again with the next retry in 30 minutes, without slowing A or C. Endpoint D's hostname resolves to 169.254.169.254, the cloud metadata address, so the proxy blocks it as an SSRF attempt. Every attempt is logged so it can be replayed.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    @keyframes mv{0%{transform:translateX(0);opacity:1}30%{transform:translateX(150px)}40%,92%{transform:translateX(150px);opacity:1}93%,100%{transform:translateX(150px);opacity:0}}
+    @keyframes ok{0%,39.9%{opacity:0}40%,92%{opacity:1}93%,100%{opacity:0}}
+    .mv{animation:mv 7s infinite linear}.okk{opacity:0;animation:ok 7s infinite linear}
+    .c2{animation-delay:-2.5s}
+    @keyframes mb{0%{transform:translateX(0);opacity:1}10%{transform:translateX(150px);opacity:1}28%{transform:translateX(150px);opacity:1}28.1%,33%{transform:translateX(0);opacity:0}33.1%{transform:translateX(0);opacity:1}43%{transform:translateX(150px);opacity:1}61%{transform:translateX(150px);opacity:1}61.1%,66%{transform:translateX(0);opacity:0}66.1%{transform:translateX(0);opacity:1}76%{transform:translateX(150px);opacity:1}94%{transform:translateX(150px);opacity:1}94.1%,100%{transform:translateX(0);opacity:0}}
+    .mb{animation:mb 14s infinite linear}
+    @keyframes md{0%{transform:translateX(0);opacity:1}25%,90%{transform:translateX(34px);opacity:1}91%,100%{transform:translateX(34px);opacity:0}}
+    @keyframes bd{0%,24.9%{opacity:0}25%,90%{opacity:1}91%,100%{opacity:0}}
+    .md{animation:md 7s infinite linear}.bd{opacity:0;animation:bd 7s infinite linear}
+    .k{opacity:0;animation:14s infinite linear}
+    @keyframes a1{0%,9.99%{opacity:0}10%,32.99%{opacity:1}33%,100%{opacity:0}}.a1{animation-name:a1}
+    @keyframes a2{0%,42.99%{opacity:0}43%,65.99%{opacity:1}66%,100%{opacity:0}}.a2{animation-name:a2}
+    @keyframes a3{0%,75.99%{opacity:0}76%,100%{opacity:1}}.a3{animation-name:a3}
+    @media (prefers-reduced-motion: reduce){.mv,.mb,.md{animation:none;opacity:1}.mv,.mb{transform:translateX(150px)}.md{transform:translateX(34px)}.okk,.bd{animation:none;opacity:1}.k{animation:none}.a1{opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="458" rx="14"/>
+  <text class="h" x="28" y="40">Per-endpoint delivery lanes</text><text class="sub" x="28" y="62">One event fans out to four endpoints. Each lane has its own queue and retry state.</text><rect class="bm" x="28" y="196" width="96" height="60" rx="8" stroke-width="1.5"/><text class="sm" x="76" y="221" text-anchor="middle" font-weight="700">Outbox</text><text class="sm" x="76" y="241" text-anchor="middle">same tx</text><rect class="bm" x="146" y="196" width="122" height="60" rx="8" stroke-width="1.5"/><text class="sm" x="207" y="221" text-anchor="middle" font-weight="700">Fan-out</text><text class="sm" x="207" y="241" text-anchor="middle">per subscription</text><line class="ln" x1="126" y1="226" x2="144" y2="226" marker-end="url(#ar)"/><rect class="bt" x="478" y="86" width="84" height="300" rx="10" stroke-width="1.2"/><text class="teat" x="520" y="140" text-anchor="middle">egress</text><text class="teat" x="520" y="158" text-anchor="middle">proxy</text><path class="ln" d="M270,226 C284,226 282,104 296,104" marker-end="url(#ar)" style="stroke-width:1.5"/><rect class="bp" x="298" y="86" width="140" height="36" rx="8" stroke-width="1.5"/><text class="sm" x="368" y="109" text-anchor="middle">queue A</text><line class="grid" x1="440" y1="104" x2="616" y2="104" style="stroke-width:2"/><rect class="box" x="618" y="86" width="154" height="36" rx="8" stroke-width="1.2"/><text class="sm" x="626" y="103" style="font-size:12px">endpoint A</text><text class="sub" x="626" y="117" style="font-size:10.5px">api.pharmacy-a.example</text><path class="ln" d="M270,226 C284,226 282,184 296,184" marker-end="url(#ar)" style="stroke-width:1.5"/><rect class="bp" x="298" y="166" width="140" height="36" rx="8" stroke-width="1.5"/><text class="sm" x="368" y="189" text-anchor="middle">queue B</text><line class="grid" x1="440" y1="184" x2="616" y2="184" style="stroke-width:2"/><rect class="box" x="618" y="166" width="154" height="36" rx="8" stroke-width="1.2"/><text class="sm" x="626" y="183" style="font-size:12px">endpoint B</text><text class="sub" x="626" y="197" style="font-size:10.5px">slow-partner.example</text><path class="ln" d="M270,226 C284,226 282,264 296,264" marker-end="url(#ar)" style="stroke-width:1.5"/><rect class="bp" x="298" y="246" width="140" height="36" rx="8" stroke-width="1.5"/><text class="sm" x="368" y="269" text-anchor="middle">queue C</text><line class="grid" x1="440" y1="264" x2="616" y2="264" style="stroke-width:2"/><rect class="box" x="618" y="246" width="154" height="36" rx="8" stroke-width="1.2"/><text class="sm" x="626" y="263" style="font-size:12px">endpoint C</text><text class="sub" x="626" y="277" style="font-size:10.5px">hooks.clinic-c.example</text><path class="ln" d="M270,226 C284,226 282,344 296,344" marker-end="url(#ar)" style="stroke-width:1.5"/><rect class="bp" x="298" y="326" width="140" height="36" rx="8" stroke-width="1.5"/><text class="sm" x="368" y="349" text-anchor="middle">queue D</text><line class="grid" x1="440" y1="344" x2="616" y2="344" style="stroke-width:2"/><rect class="box" x="618" y="326" width="154" height="36" rx="8" stroke-width="1.2"/><text class="sm" x="626" y="343" style="font-size:12px">endpoint D</text><text class="sub" x="626" y="357" style="font-size:10.5px">resolves to 169.254.169.254</text><g class="mv"><circle class="okf" cx="452" cy="104" r="8"/></g><g class="okk"><text class="okt" x="568" y="96" style="font-size:12px">200 ✓</text></g><g class="mv c2"><circle class="okf" cx="452" cy="264" r="8"/></g><g class="okk c2"><text class="okt" x="568" y="256" style="font-size:12px">200 ✓</text></g><g class="mb"><circle class="wrnf" cx="452" cy="184" r="8"/></g><g class="k a1"><text class="badt" x="296" y="218" style="font-size:12.5px">✕ timeout 15 s → retry in 5 s</text></g><g class="k a2"><text class="badt" x="296" y="218" style="font-size:12.5px">✕ 503 → retry in 5 min</text></g><g class="k a3"><text class="badt" x="296" y="218" style="font-size:12.5px">✕ timeout → retry in 30 min</text></g><g class="md"><circle class="badf" cx="452" cy="344" r="8"/></g><g class="bd"><text class="badt" x="566" y="378" style="font-size:12.5px">blocked: link-local IP (SSRF)</text></g><text class="sm" x="28" y="418">B's timeouts and backoff stay in lane B; A and C keep delivering at full speed.</text><text class="sm" x="28" y="438">Every attempt is logged with status and latency, so any delivery can be replayed.</text>
+</svg>

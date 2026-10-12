@@ -220,8 +220,13 @@ nav:
           - "REST vs GraphQL vs gRPC": api-design/08-rest-vs-graphql-vs-grpc.md
       - "Real-time & Inter-service Communication":
           - Overview: realtime-communication/index.md
+          - "gRPC & Protocol Buffers": realtime-communication/01-grpc-and-protocol-buffers.md
+          - "WebSockets vs SSE vs Long Polling": realtime-communication/02-websockets-vs-sse-vs-long-polling.md
+          - "Webhooks Design": realtime-communication/03-webhooks-design.md
       - "Service Mesh & Cloud-Native Platform":
           - Overview: service-mesh-cloud-native/index.md
+          - "Service mesh concepts (Istio/Linkerd), sidecar vs ambient": service-mesh-cloud-native/01-service-mesh-concepts-sidecar-vs-ambient.md
+          - "12-factor apps & cloud-native principles": service-mesh-cloud-native/02-12-factor-apps-and-cloud-native-principles.md
   - "Messaging":
       - "Apache Kafka & Event-Driven Architecture":
           - Overview: kafka/index.md
@@ -295,6 +300,9 @@ nav:
           - "Browser storage, cookies & caching": browser-web-performance/06-browser-storage-cookies-and-caching.md
       - "Next.js & SSR":
           - Overview: nextjs-ssr/index.md
+          - "Rendering strategies: CSR, SSR, SSG, ISR": nextjs-ssr/01-rendering-strategies-csr-ssr-ssg-isr.md
+          - "App Router & React Server Components": nextjs-ssr/02-app-router-and-react-server-components.md
+          - "Data fetching & caching in Next.js": nextjs-ssr/03-data-fetching-and-caching-in-next-js.md
   - "Data":
       - "PostgreSQL / SQL":
           - Overview: postgresql-sql/index.md
@@ -475,6 +483,9 @@ nav:
           - "DORA Metrics & Engineering Effectiveness": engineering-practices/05-dora-metrics-and-engineering-effectiveness.md
       - "Agile Delivery & Estimation":
           - Overview: agile-delivery/index.md
+          - "Scrum vs Kanban": agile-delivery/01-scrum-vs-kanban.md
+          - "Estimation Techniques & Planning": agile-delivery/02-estimation-techniques-and-planning.md
+          - "Release & Risk Management": agile-delivery/03-release-and-risk-management.md
   - "GenAI":
       - "GenAI for Engineers":
           - Overview: genai/index.md

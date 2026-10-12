@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 490" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Protobuf wire encoding</title>
+  <desc id="d">A Refill message with int32 qty = 1 set to 150 and string id = 2 set to rx42 encodes to nine bytes: 08 96 01 12 04 72 78 34 32, compared with 23 bytes for the same data as compact JSON. Byte 08 is the tag for field 1 with wire type 0, and 96 01 is 150 as a varint. Byte 12 is the tag for field 2 with wire type 2, meaning length-delimited, 04 is the length, and the last four bytes are the UTF-8 characters r, x, 4 and 2. Panels explain that the tag splits into field number (shift right by 3) and wire type (low 3 bits), and that a varint stores 7 bits per byte with a continuation bit.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="488" rx="14"/>
+  <text class="h" x="28" y="40">How Protobuf encodes a message</text><text class="sub" x="28" y="62">Two fields, nine bytes. Only field numbers and values travel; names never do.</text><rect class="bm" x="28" y="80" width="340" height="104" rx="10" stroke-width="1"/><text class="mono" x="44" y="106" xml:space="preserve">message Refill {</text><text class="mono" x="44" y="127" xml:space="preserve">  int32  qty = 1;   // 150</text><text class="mono" x="44" y="148" xml:space="preserve">  string id  = 2;   // "rx42"</text><text class="mono" x="44" y="169" xml:space="preserve">}</text><rect class="box" x="392" y="80" width="380" height="104" rx="10" stroke-width="1"/><text class="lbl" x="408" y="106">Same data as JSON: 23 bytes</text><text class="mono" x="408" y="130" xml:space="preserve">{"qty":150,"id":"rx42"}</text><rect class="mutf" x="408" y="146" width="322" height="12" rx="3"/><rect class="pri" x="408" y="164" width="126" height="12" rx="3"/><text class="prit" x="544" y="175" style="font-size:13px">Protobuf: 9 bytes</text><rect class="pri" x="28" y="212" width="74" height="44" rx="8"/><text class="on" x="65" y="240" text-anchor="middle" style="font-size:18px">08</text><text class="sub" x="65" y="286" text-anchor="middle">tag</text><rect class="tea" x="110" y="212" width="74" height="44" rx="8"/><text class="on" x="147" y="240" text-anchor="middle" style="font-size:18px">96</text><rect class="tea" x="192" y="212" width="74" height="44" rx="8"/><text class="on" x="229" y="240" text-anchor="middle" style="font-size:18px">01</text><rect class="pri" x="274" y="212" width="74" height="44" rx="8"/><text class="on" x="311" y="240" text-anchor="middle" style="font-size:18px">12</text><text class="sub" x="311" y="286" text-anchor="middle">tag</text><rect class="wrnf" x="356" y="212" width="74" height="44" rx="8"/><text class="on" x="393" y="240" text-anchor="middle" style="font-size:18px">04</text><text class="sub" x="393" y="286" text-anchor="middle">len</text><rect class="okf" x="438" y="212" width="74" height="44" rx="8"/><text class="on" x="475" y="240" text-anchor="middle" style="font-size:18px">72</text><text class="sub" x="475" y="286" text-anchor="middle">'r'</text><rect class="okf" x="520" y="212" width="74" height="44" rx="8"/><text class="on" x="557" y="240" text-anchor="middle" style="font-size:18px">78</text><text class="sub" x="557" y="286" text-anchor="middle">'x'</text><rect class="okf" x="602" y="212" width="74" height="44" rx="8"/><text class="on" x="639" y="240" text-anchor="middle" style="font-size:18px">34</text><text class="sub" x="639" y="286" text-anchor="middle">'4'</text><rect class="okf" x="684" y="212" width="74" height="44" rx="8"/><text class="on" x="721" y="240" text-anchor="middle" style="font-size:18px">32</text><text class="sub" x="721" y="286" text-anchor="middle">'2'</text><text class="teat" x="188" y="286" text-anchor="middle" style="font-size:13px">varint 150</text><path class="ln" d="M28,298 L28,306 L266,306 L266,298"/><text class="lbl" x="147" y="326" text-anchor="middle">field 1 = 150</text><path class="ln" d="M274,298 L274,306 L758,306 L758,298"/><text class="lbl" x="516" y="326" text-anchor="middle">field 2 = "rx42"</text><rect class="bp" x="28" y="350" width="360" height="92" rx="10" stroke-width="1.2"/><text class="lbl" x="44" y="374">Tag byte 0x12 = 00010 010</text><text class="sm" x="44" y="398">field number = 0x12 &gt;&gt; 3 = 2</text><text class="sm" x="44" y="418">wire type = 0x12 &amp; 7 = 2 (LEN)</text><rect class="bt" x="412" y="350" width="360" height="92" rx="10" stroke-width="1.2"/><text class="lbl" x="428" y="374">Varint 150 = 1 0010110 in binary</text><text class="sm" x="428" y="398">low 7 bits + 'more' bit set → 0x96</text><text class="sm" x="428" y="418">remaining bit → 0x01</text><text class="sm" x="28" y="470">Renaming a field is free on the wire; renumbering or reusing a number breaks every reader.</text>
+</svg>

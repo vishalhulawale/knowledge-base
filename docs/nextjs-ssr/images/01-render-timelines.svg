@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 412" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Rendering strategy timelines</title>
+  <desc id="d">Animation: a time cursor sweeps across three lanes. Client-side rendering shows nothing until the JavaScript downloads and runs and the API data arrives, then content and interactivity appear together at about 1,900 ms. Server-side rendering shows content at about 650 ms after the server render, then downloads JavaScript and hydrates, becoming interactive at about 1,900 ms. Static generation or ISR serves HTML from the CDN, showing content at about 150 ms and becoming interactive after hydration at about 1,400 ms. Timings are illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:14s infinite linear}
+    .cur{animation:cur 14s infinite linear}
+    @keyframes cur{0%{transform:translateX(0)}80%,100%{transform:translateX(590px)}}
+    @keyframes s0{0%,0.29%{opacity:0}0.3%,98.99%{opacity:1}99%,100%{opacity:0}}.s0{animation-name:s0}
+    @keyframes s1{0%,4.99%{opacity:0}5%,98.99%{opacity:1}99%,100%{opacity:0}}.s1{animation-name:s1}
+    @keyframes s2{0%,39.99%{opacity:0}40%,98.99%{opacity:1}99%,100%{opacity:0}}.s2{animation-name:s2}
+    @keyframes s3{0%,63.3233%{opacity:0}63.3333%,98.99%{opacity:1}99%,100%{opacity:0}}.s3{animation-name:s3}
+    @keyframes s4{0%,0.29%{opacity:0}0.3%,98.99%{opacity:1}99%,100%{opacity:0}}.s4{animation-name:s4}
+    @keyframes s5{0%,21.6567%{opacity:0}21.6667%,98.99%{opacity:1}99%,100%{opacity:0}}.s5{animation-name:s5}
+    @keyframes s6{0%,49.99%{opacity:0}50%,98.99%{opacity:1}99%,100%{opacity:0}}.s6{animation-name:s6}
+    @keyframes s7{0%,21.6567%{opacity:0}21.6667%,98.99%{opacity:1}99%,100%{opacity:0}}.s7{animation-name:s7}
+    @keyframes s8{0%,63.3233%{opacity:0}63.3333%,98.99%{opacity:1}99%,100%{opacity:0}}.s8{animation-name:s8}
+    @keyframes s9{0%,0.29%{opacity:0}0.3%,98.99%{opacity:1}99%,100%{opacity:0}}.s9{animation-name:s9}
+    @keyframes s10{0%,3.99%{opacity:0}4%,98.99%{opacity:1}99%,100%{opacity:0}}.s10{animation-name:s10}
+    @keyframes s11{0%,33.3233%{opacity:0}33.3333%,98.99%{opacity:1}99%,100%{opacity:0}}.s11{animation-name:s11}
+    @keyframes s12{0%,4.99%{opacity:0}5%,98.99%{opacity:1}99%,100%{opacity:0}}.s12{animation-name:s12}
+    @keyframes s13{0%,46.6567%{opacity:0}46.6667%,98.99%{opacity:1}99%,100%{opacity:0}}.s13{animation-name:s13}
+    @media (prefers-reduced-motion: reduce){.k{animation:none;opacity:1}.cur{animation:none;opacity:0}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="410" rx="14"/>
+  <text class="h" x="28" y="40">Same page, three strategies: when is it visible, when does it work?</text><text class="sub" x="28" y="62">Illustrative timings for a mid-range phone; milliseconds from navigation start.</text><line class="grid" x1="170" y1="84" x2="170" y2="340"/><text class="sub" x="170" y="360" text-anchor="middle">0 ms</text><line class="grid" x1="317.5" y1="84" x2="317.5" y2="340"/><text class="sub" x="317.5" y="360" text-anchor="middle">600 ms</text><line class="grid" x1="465" y1="84" x2="465" y2="340"/><text class="sub" x="465" y="360" text-anchor="middle">1200 ms</text><line class="grid" x1="612.5" y1="84" x2="612.5" y2="340"/><text class="sub" x="612.5" y="360" text-anchor="middle">1800 ms</text><line class="grid" x1="760" y1="84" x2="760" y2="340"/><text class="sub" x="760" y="360" text-anchor="middle">2400 ms</text><text class="lbl" x="28" y="119">CSR</text><rect class="bm" x="170" y="100" width="590" height="28" rx="6"/><g class="k s0"><rect class="mutf" x="171" y="101" width="34.875" height="26" rx="5"/></g><g class="k s1"><rect class="pri" x="207.875" y="101" width="256.125" height="26" rx="5"/><text class="on13" x="335.938" y="119" text-anchor="middle">download + run JS</text></g><g class="k s2"><rect class="wrnf" x="466" y="101" width="170.083" height="26" rx="5"/><text class="on13" x="551.042" y="119" text-anchor="middle">API data</text></g><g class="k s3"><rect class="okf" x="635.083" y="94" width="4" height="50" rx="1"/><text class="okt" x="631.083" y="148" text-anchor="end" style="font-size:13px">content + interactive</text></g><text class="lbl" x="28" y="201">SSR</text><rect class="bm" x="170" y="182" width="590" height="28" rx="6"/><g class="k s4"><rect class="mutf" x="171" y="183" width="157.792" height="26" rx="5"/><text class="on13" x="249.896" y="201" text-anchor="middle">server render (TTFB)</text></g><g class="k s5"><rect class="pri" x="330.792" y="183" width="206.958" height="26" rx="5"/><text class="on13" x="434.271" y="201" text-anchor="middle">download + run JS</text></g><g class="k s6"><rect class="tea" x="539.75" y="183" width="96.3333" height="26" rx="5"/><text class="on13" x="587.917" y="201" text-anchor="middle">hydrate</text></g><g class="k s7"><rect class="okf" x="327.792" y="176" width="4" height="50" rx="1"/><text class="okt" x="335.792" y="230" text-anchor="start" style="font-size:13px">content</text></g><g class="k s8"><rect class="tea" x="635.083" y="176" width="4" height="50" rx="1"/><text class="teat" x="631.083" y="230" text-anchor="end" style="font-size:13px">interactive</text></g><text class="lbl" x="28" y="283">SSG / ISR</text><rect class="bm" x="170" y="264" width="590" height="28" rx="6"/><g class="k s9"><rect class="mutf" x="171" y="265" width="27.5" height="26" rx="5"/></g><g class="k s10"><rect class="pri" x="200.5" y="265" width="214.333" height="26" rx="5"/><text class="on13" x="307.667" y="283" text-anchor="middle">download + run JS</text></g><g class="k s11"><rect class="tea" x="416.833" y="265" width="96.3333" height="26" rx="5"/><text class="on13" x="465" y="283" text-anchor="middle">hydrate</text></g><g class="k s12"><rect class="okf" x="204.875" y="258" width="4" height="50" rx="1"/><text class="okt" x="212.875" y="312" text-anchor="start" style="font-size:13px">content (CDN)</text></g><g class="k s13"><rect class="tea" x="512.167" y="258" width="4" height="50" rx="1"/><text class="teat" x="520.167" y="312" text-anchor="start" style="font-size:13px">interactive</text></g><g class="cur"><line class="lnw" x1="170" y1="84" x2="170" y2="340" style="stroke-width:2"/></g><text class="sm" x="28" y="392">Server rendering moves 'content' left; only less JavaScript or cheaper hydration moves 'interactive'.</text>
+</svg>

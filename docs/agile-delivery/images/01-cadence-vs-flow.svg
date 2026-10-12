@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 398" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Cadence versus flow</title>
+  <desc id="d">Animation: a cursor moves across twenty working days. In the Scrum lane, two two-week Sprints each deliver five items together at their end, on day 10 and day 20. In the Kanban lane, ten items are delivered one at a time on days 2, 4, 5, 7, 9, 11, 13, 14, 16 and 18. Both deliver ten items, but Kanban's first feedback comes on day 2 rather than day 10. Illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:14s infinite linear}
+    .cur{animation:14s infinite linear}
+    @keyframes cur{0%,4%{transform:translateX(0)}80%,100%{transform:translateX(580px)}}.cur{animation-name:cur}
+    @keyframes s0{0%,41.49%{opacity:0}41.5%,100%{opacity:1}}.s0{animation-name:s0}
+    @keyframes s1{0%,79.49%{opacity:0}79.5%,100%{opacity:1}}.s1{animation-name:s1}
+    @keyframes f0{0%,11.59%{opacity:0}11.6%,100%{opacity:1}}.f0{animation-name:f0}
+    @keyframes f1{0%,19.19%{opacity:0}19.2%,100%{opacity:1}}.f1{animation-name:f1}
+    @keyframes f2{0%,22.99%{opacity:0}23%,100%{opacity:1}}.f2{animation-name:f2}
+    @keyframes f3{0%,30.59%{opacity:0}30.6%,100%{opacity:1}}.f3{animation-name:f3}
+    @keyframes f4{0%,38.19%{opacity:0}38.2%,100%{opacity:1}}.f4{animation-name:f4}
+    @keyframes f5{0%,45.79%{opacity:0}45.8%,100%{opacity:1}}.f5{animation-name:f5}
+    @keyframes f6{0%,53.39%{opacity:0}53.4%,100%{opacity:1}}.f6{animation-name:f6}
+    @keyframes f7{0%,57.19%{opacity:0}57.2%,100%{opacity:1}}.f7{animation-name:f7}
+    @keyframes f8{0%,64.79%{opacity:0}64.8%,100%{opacity:1}}.f8{animation-name:f8}
+    @keyframes f9{0%,72.39%{opacity:0}72.4%,100%{opacity:1}}.f9{animation-name:f9}
+    @media (prefers-reduced-motion: reduce){.k,.cur{animation:none}.k{opacity:1}.cur{transform:translateX(580px)}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="396" rx="14"/>
+  <text class="h" x="28" y="40">Cadence vs flow: when does value land?</text><text class="sub" x="28" y="62">Same 10 items over four weeks (20 working days). Illustrative.</text><text class="lbl" x="28" y="100">Scrum</text><text class="sub" x="28" y="118">2-week Sprints</text><rect class="bp" x="132" y="88" width="286" height="30" rx="6" stroke-width="1.2"/><text class="prit" x="275" y="108" text-anchor="middle" style="font-size:13px">Sprint 1</text><rect class="bp" x="422" y="88" width="286" height="30" rx="6" stroke-width="1.2"/><text class="prit" x="565" y="108" text-anchor="middle" style="font-size:13px">Sprint 2</text><g class="k s0"><circle class="pri" cx="410" cy="140" r="5.5"/><circle class="pri" cx="396" cy="140" r="5.5"/><circle class="pri" cx="382" cy="140" r="5.5"/><circle class="pri" cx="410" cy="154" r="5.5"/><circle class="pri" cx="396" cy="154" r="5.5"/><text class="prit" x="366" y="144" text-anchor="end" style="font-size:12px">5 items</text></g><g class="k s1"><circle class="pri" cx="700" cy="140" r="5.5"/><circle class="pri" cx="686" cy="140" r="5.5"/><circle class="pri" cx="672" cy="140" r="5.5"/><circle class="pri" cx="700" cy="154" r="5.5"/><circle class="pri" cx="686" cy="154" r="5.5"/><text class="prit" x="656" y="144" text-anchor="end" style="font-size:12px">5 items</text></g><text class="sm" x="130" y="184">Feedback arrives in batches at each Sprint Review.</text><text class="lbl" x="28" y="236">Kanban</text><text class="sub" x="28" y="254">continuous pull</text><line class="ln" x1="130" y1="250" x2="710" y2="250"/><g class="k f0"><circle class="tea" cx="188" cy="250" r="7"/></g><g class="k f1"><circle class="tea" cx="246" cy="250" r="7"/></g><g class="k f2"><circle class="tea" cx="275" cy="250" r="7"/></g><g class="k f3"><circle class="tea" cx="333" cy="250" r="7"/></g><g class="k f4"><circle class="tea" cx="391" cy="250" r="7"/></g><g class="k f5"><circle class="tea" cx="449" cy="250" r="7"/></g><g class="k f6"><circle class="tea" cx="507" cy="250" r="7"/></g><g class="k f7"><circle class="tea" cx="536" cy="250" r="7"/></g><g class="k f8"><circle class="tea" cx="594" cy="250" r="7"/></g><g class="k f9"><circle class="tea" cx="652" cy="250" r="7"/></g><text class="sm" x="130" y="284">Each item is delivered when it is done; first feedback on day 2, not day 10.</text><line class="grid" x1="130" y1="318" x2="710" y2="318"/><line class="ln" x1="130" y1="314" x2="130" y2="322"/><text class="sub" x="130" y="340" text-anchor="middle">day 0</text><line class="ln" x1="275" y1="314" x2="275" y2="322"/><text class="sub" x="275" y="340" text-anchor="middle">day 5</text><line class="ln" x1="420" y1="314" x2="420" y2="322"/><text class="sub" x="420" y="340" text-anchor="middle">day 10</text><line class="ln" x1="565" y1="314" x2="565" y2="322"/><text class="sub" x="565" y="340" text-anchor="middle">day 15</text><line class="ln" x1="710" y1="314" x2="710" y2="322"/><text class="sub" x="710" y="340" text-anchor="middle">day 20</text><g class="cur"><line class="lnw" x1="130" y1="78" x2="130" y2="322" style="stroke-width:1.5"/></g><text class="sm" x="28" y="378">Both deliver 10 items. Kanban spreads delivery out; its lead time is set by WIP, not by the calendar.</text>
+</svg>

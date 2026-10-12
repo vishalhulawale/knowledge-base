@@ -2032,19 +2032,19 @@
           "title": "Rendering strategies: CSR, SSR, SSG, ISR",
           "slug": "01-rendering-strategies-csr-ssr-ssg-isr",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "App Router & React Server Components",
           "slug": "02-app-router-and-react-server-components",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Data fetching & caching in Next.js",
           "slug": "03-data-fetching-and-caching-in-next-js",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
@@ -2058,19 +2058,19 @@
           "title": "gRPC & Protocol Buffers",
           "slug": "01-grpc-and-protocol-buffers",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "WebSockets vs SSE vs long polling",
           "slug": "02-websockets-vs-sse-vs-long-polling",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Webhooks design",
           "slug": "03-webhooks-design",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
@@ -2084,13 +2084,13 @@
           "title": "Service mesh concepts (Istio/Linkerd), sidecar vs ambient",
           "slug": "01-service-mesh-concepts-sidecar-vs-ambient",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "12-factor apps & cloud-native principles",
           "slug": "02-12-factor-apps-and-cloud-native-principles",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
@@ -2104,19 +2104,19 @@
           "title": "Scrum vs Kanban",
           "slug": "01-scrum-vs-kanban",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Estimation techniques & planning",
           "slug": "02-estimation-techniques-and-planning",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Release & risk management",
           "slug": "03-release-and-risk-management",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },

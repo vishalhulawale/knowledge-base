@@ -4,8 +4,8 @@
 
 | # | Subtopic | Resume link | Status |
 |---|---|---|---|
-| 1 | gRPC & Protocol Buffers |  | :material-progress-clock: To do |
-| 2 | WebSockets vs SSE vs long polling |  | :material-progress-clock: To do |
-| 3 | Webhooks design |  | :material-progress-clock: To do |
+| 1 | [gRPC & Protocol Buffers](01-grpc-and-protocol-buffers.md) |  | :material-check-circle: Done |
+| 2 | [WebSockets vs SSE vs long polling](02-websockets-vs-sse-vs-long-polling.md) |  | :material-check-circle: Done |
+| 3 | [Webhooks design](03-webhooks-design.md) |  | :material-check-circle: Done |
 
 ★ = tied to a resume claim; expect deep follow-up questions.
