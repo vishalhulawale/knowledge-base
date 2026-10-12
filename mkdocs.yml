@@ -173,6 +173,9 @@ nav:
           - "Schema Migration with Liquibase/Flyway": jpa-hibernate/06-schema-migration-with-liquibase-flyway.md
       - "Reactive Programming & Spring WebFlux":
           - Overview: reactive-webflux/index.md
+          - "Reactive Streams & Project Reactor (Mono/Flux)": reactive-webflux/01-reactive-streams-and-project-reactor.md
+          - "Backpressure": reactive-webflux/02-backpressure.md
+          - "WebFlux vs MVC vs virtual threads \u2014 when to choose": reactive-webflux/03-webflux-vs-mvc-vs-virtual-threads-when-to-choose.md
   - "Architecture":
       - "Microservices Architecture & Patterns":
           - Overview: microservices/index.md
@@ -480,6 +483,8 @@ nav:
   - "Python":
       - "Python":
           - Overview: python/index.md
+          - "Python Essentials for Java Developers": python/01-python-essentials-for-java-developers.md
+          - "Common Python Interview Questions": python/02-common-python-interview-questions.md
   - "Leadership":
       - "Leadership & Behavioral":
           - Overview: leadership-behavioral/index.md

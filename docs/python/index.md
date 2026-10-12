@@ -4,7 +4,7 @@
 
 | # | Subtopic | Resume link | Status |
 |---|---|---|---|
-| 1 | Python essentials for Java developers |  | :material-progress-clock: To do |
-| 2 | Common Python interview questions |  | :material-progress-clock: To do |
+| 1 | [Python essentials for Java developers](01-python-essentials-for-java-developers.md) |  | :material-check-circle: Done |
+| 2 | [Common Python interview questions](02-common-python-interview-questions.md) |  | :material-check-circle: Done |
 
 ★ = tied to a resume claim; expect deep follow-up questions.

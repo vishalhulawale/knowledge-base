@@ -254,3 +254,8 @@ Mock-interview results and revision schedule, updated by the `learn-topic` skill
 | 2026-10-11 | Data Modelling: 05 Polyglot persistence | — (studied, mock skipped) | Confirm: GraphQL partial-failure reporting; Redis invalidation; Kafka read models; ES sync at ConvergeHealth | 2026-10-12 |
 | 2026-10-12 | Messaging: 01 RabbitMQ exchanges, queues, routing | — (studied, mock skipped) | Confirm: which project used RabbitMQ (Skills-only on resume?), exchange + queue types; else present as transferable | 2026-10-13 |
 | 2026-10-12 | Messaging: 02 Kafka vs RabbitMQ vs SQS ★ | — (studied, mock skipped) | Confirm: Meteor consumer-group count + any replay used; ConvergeHealth SQS FIFO vs standard, Lambda vs container consumers | 2026-10-13 |
+| 2026-10-12 | Python: 01 Essentials for Java developers | — (studied, mock skipped) | Confirm: whether/where Python was used for real (scripts, Lambda, ConvergeHealth data tooling) — else present as transferable | 2026-10-13 |
+| 2026-10-12 | Python: 02 Common interview questions | — (studied, mock skipped) | Practise: predict outputs for mutable default, late-binding lambdas, is vs ==, MRO | 2026-10-13 |
+| 2026-10-12 | Reactive: 01 Reactive Streams & Reactor | — (studied, mock skipped) | Confirm: GraphQL service upstream clients — WebClient, CompletableFuture or blocking | 2026-10-13 |
+| 2026-10-12 | Reactive: 02 Backpressure | — (studied, mock skipped) | Confirm: Kafka consumer settings (max.poll.records, concurrency, lag alerts); per-upstream bulkheads | 2026-10-13 |
+| 2026-10-12 | Reactive: 03 WebFlux vs MVC vs virtual threads | — (studied, mock skipped) | Confirm: Consumer Service stack (MVC/WebFlux, Java + Boot versions, virtual threads on?) | 2026-10-13 |

@@ -1986,13 +1986,13 @@
           "title": "Python essentials for Java developers",
           "slug": "01-python-essentials-for-java-developers",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Common Python interview questions",
           "slug": "02-common-python-interview-questions",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
@@ -2006,19 +2006,19 @@
           "title": "Reactive Streams & Project Reactor (Mono/Flux)",
           "slug": "01-reactive-streams-and-project-reactor",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Backpressure",
           "slug": "02-backpressure",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "WebFlux vs MVC vs virtual threads — when to choose",
           "slug": "03-webflux-vs-mvc-vs-virtual-threads-when-to-choose",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
