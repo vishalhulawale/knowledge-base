@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 486" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Query then fetch</title>
+  <desc id="d">Animation. A coordinating node receives a search for the top 3 hits and sends the query to three shards. Each shard returns its own top 3 document IDs with scores: shard 0 has d12 9.1, d4 8.6 and d31 3.0; shard 1 has d7 8.4, d19 5.5 and d2 4.1; shard 2 has d25 6.9, d8 2.9 and d40 2.2. The coordinator merges the nine candidates and keeps d12, d4 and d7 as the global top 3, then fetches those documents from shards 0 and 1 only, and returns three documents to the client. Shard 2 is not asked again. Scores are illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:15s infinite linear}
+    @keyframes qa{0%,2.99%{opacity:0}3%,25.99%{opacity:1}26%,100%{opacity:0}}.qa{animation-name:qa}
+    @keyframes sl{0%,25.99%{opacity:0}26%,96.99%{opacity:1}97%,100%{opacity:0}}.sl{animation-name:sl}
+    @keyframes ra{0%,25.99%{opacity:0}26%,49.99%{opacity:1}50%,100%{opacity:0}}.ra{animation-name:ra}
+    @keyframes mg{0%,49.99%{opacity:0}50%,96.99%{opacity:1}97%,100%{opacity:0}}.mg{animation-name:mg}
+    @keyframes tp{0%,57.99%{opacity:0}58%,96.99%{opacity:1}97%,100%{opacity:0}}.tp{animation-name:tp}
+    @keyframes fa{0%,71.99%{opacity:0}72%,96.99%{opacity:1}97%,100%{opacity:0}}.fa{animation-name:fa}
+    @keyframes ca{0%,83.99%{opacity:0}84%,96.99%{opacity:1}97%,100%{opacity:0}}.ca{animation-name:ca}
+    @keyframes c1{0%,25.99%{opacity:1}26%,100%{opacity:0}}.c1{animation-name:c1}
+    @keyframes c2{0%,25.99%{opacity:0}26%,49.99%{opacity:1}50%,100%{opacity:0}}.c2{animation-name:c2}
+    @keyframes c3{0%,49.99%{opacity:0}50%,71.99%{opacity:1}72%,100%{opacity:0}}.c3{animation-name:c3}
+    @keyframes c4{0%,71.99%{opacity:0}72%,100%{opacity:1}}.c4{animation-name:c4}
+    @media (prefers-reduced-motion: reduce){.k{animation:none;opacity:1}.qa,.ra,.c1,.c2,.c3{opacity:0}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="484" rx="14"/>
+  <text class="h" x="28" y="40">Query then fetch: top 3 across three shards</text><text class="sub" x="28" y="62">size = 3. Each shard returns only IDs and scores; documents are fetched afterwards. Scores illustrative.</text><rect class="box" x="28" y="196" width="92" height="52" rx="8" stroke-width="1.5"/><text class="lbl" x="74" y="227" text-anchor="middle">Client</text><rect class="bp" x="170" y="96" width="220" height="284" rx="10" stroke-width="1.5"/><text class="lbl" x="280" y="120" text-anchor="middle">Coordinating node</text><rect class="box" x="540" y="86" width="232" height="92" rx="10" stroke-width="1.5"/><text class="lbl" x="554" y="108">Shard 0</text><g class="k sl"><text class="mono" x="560" y="142" xml:space="preserve">d12</text><text class="sub" x="560" y="160">9.1</text><text class="mono" x="630" y="142" xml:space="preserve">d4</text><text class="sub" x="630" y="160">8.6</text><text class="mono" x="700" y="142" xml:space="preserve">d31</text><text class="sub" x="700" y="160">3.0</text></g><g class="k qa"><line class="lnp" x1="392" y1="200" x2="536" y2="132" marker-end="url(#arp)"/></g><g class="k ra"><line class="lnt dash" x1="538" y1="140" x2="394" y2="230" marker-end="url(#art)"/></g><g class="k fa"><line class="lnw" x1="392" y1="300" x2="536" y2="152" marker-end="url(#arw)"/></g><rect class="box" x="540" y="192" width="232" height="92" rx="10" stroke-width="1.5"/><text class="lbl" x="554" y="214">Shard 1</text><g class="k sl"><text class="mono" x="560" y="248" xml:space="preserve">d7</text><text class="sub" x="560" y="266">8.4</text><text class="mono" x="630" y="248" xml:space="preserve">d19</text><text class="sub" x="630" y="266">5.5</text><text class="mono" x="700" y="248" xml:space="preserve">d2</text><text class="sub" x="700" y="266">4.1</text></g><g class="k qa"><line class="lnp" x1="392" y1="200" x2="536" y2="238" marker-end="url(#arp)"/></g><g class="k ra"><line class="lnt dash" x1="538" y1="246" x2="394" y2="230" marker-end="url(#art)"/></g><g class="k fa"><line class="lnw" x1="392" y1="300" x2="536" y2="258" marker-end="url(#arw)"/></g><rect class="box" x="540" y="298" width="232" height="92" rx="10" stroke-width="1.5"/><text class="lbl" x="554" y="320">Shard 2</text><g class="k sl"><text class="mono" x="560" y="354" xml:space="preserve">d25</text><text class="sub" x="560" y="372">6.9</text><text class="mono" x="630" y="354" xml:space="preserve">d8</text><text class="sub" x="630" y="372">2.9</text><text class="mono" x="700" y="354" xml:space="preserve">d40</text><text class="sub" x="700" y="372">2.2</text></g><g class="k qa"><line class="lnp" x1="392" y1="200" x2="536" y2="344" marker-end="url(#arp)"/></g><g class="k ra"><line class="lnt dash" x1="538" y1="352" x2="394" y2="230" marker-end="url(#art)"/></g><g class="k fa"><text class="sub" x="700" y="320" text-anchor="middle" style="font-size:12px">not fetched</text></g><g class="k qa"><text class="prit" x="466" y="160" text-anchor="middle" style="font-size:13px">top 3?</text></g><g class="k ra"><text class="teat" x="466" y="270" text-anchor="middle" style="font-size:13px">IDs + scores</text></g><g class="k fa"><text class="wrnt" x="470" y="396" text-anchor="middle" style="font-size:13px">fetch d12, d4 · d7</text></g><g class="k mg"><text class="sub" x="184" y="144" style="font-size:12px">merge 3 × 3 = 9 candidates</text><text class="mono" x="200" y="168" xml:space="preserve">d12</text><text class="mono" x="300" y="168" xml:space="preserve">9.1</text><text class="mono" x="200" y="192" xml:space="preserve">d4</text><text class="mono" x="300" y="192" xml:space="preserve">8.6</text><text class="mono" x="200" y="216" xml:space="preserve">d7</text><text class="mono" x="300" y="216" xml:space="preserve">8.4</text><text class="mono" x="200" y="240" xml:space="preserve">d25</text><text class="mono" x="300" y="240" xml:space="preserve">6.9</text><text class="mono" x="200" y="264" xml:space="preserve">d19</text><text class="mono" x="300" y="264" xml:space="preserve">5.5</text><text class="mono" x="200" y="288" xml:space="preserve">d2</text><text class="mono" x="300" y="288" xml:space="preserve">4.1</text><text class="mono" x="200" y="312" xml:space="preserve">d31</text><text class="mono" x="300" y="312" xml:space="preserve">3.0</text><text class="mono" x="200" y="336" xml:space="preserve">d8</text><text class="mono" x="300" y="336" xml:space="preserve">2.9</text><text class="mono" x="200" y="360" xml:space="preserve">d40</text><text class="mono" x="300" y="360" xml:space="preserve">2.2</text></g><g class="k tp"><rect class="tea" x="186" y="152" width="188" height="22" rx="5"/><text class="on13" x="200" y="168">d12</text><text class="on13" x="300" y="168">9.1</text><rect class="tea" x="186" y="176" width="188" height="22" rx="5"/><text class="on13" x="200" y="192">d4</text><text class="on13" x="300" y="192">8.6</text><rect class="tea" x="186" y="200" width="188" height="22" rx="5"/><text class="on13" x="200" y="216">d7</text><text class="on13" x="300" y="216">8.4</text></g><g class="k ca"><line class="lno" x1="168" y1="236" x2="124" y2="228" marker-end="url(#aro)"/><text class="okt" x="74" y="272" text-anchor="middle" style="font-size:13px">3 documents</text></g><g class="k qa"><line class="lnp" x1="122" y1="214" x2="166" y2="200" marker-end="url(#arp)"/></g><g class="k c1"><text class="lbl" x="28" y="440" style="font-size:15px">1. Query phase: ask one copy of every shard for its top from + size = 3</text></g><g class="k c2"><text class="lbl" x="28" y="440" style="font-size:15px">2. Each shard returns only IDs and scores of its own top 3</text></g><g class="k c3"><text class="lbl" x="28" y="440" style="font-size:15px">3. Coordinator merges 9 candidates and keeps the global top 3</text></g><g class="k c4"><text class="lbl" x="28" y="440" style="font-size:15px">4. Fetch phase: get only d12, d4 (shard 0) and d7 (shard 1); shard 2 isn’t asked again</text></g><text class="sm" x="28" y="466">At page 500 every shard would return from + size = 10,000 candidates to merge.</text>
+</svg>

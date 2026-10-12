@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Retention by record class</title>
+  <desc id="d">A timeline from day 0 to 7 years, compressed after one year, with a bar per record class. Debug and application logs end at 30 days. The SIEM hot copy of audit events ends at 90 days. PCI audit logs run 12 months with the first 3 months immediately available, and a dashed legal hold extends them to about 3 years. HIPAA documentation runs 6 years and SOX-related records 7 years. Storage tiers below move from hot search to warm to an Object Lock archive. Every bar ends in automated, audited deletion. The schedule is illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="418" rx="14"/>
+  <text class="h" x="28" y="40">Retention by record class</text><text class="sub" x="28" y="62">Illustrative schedule; the axis is compressed after one year. Confirm periods with counsel.</text><line class="grid" x1="200" y1="84" x2="200" y2="316"/><text class="sub" x="200" y="332" text-anchor="middle">0</text><line class="grid" x1="260" y1="84" x2="260" y2="316"/><text class="sub" x="260" y="332" text-anchor="middle">30 d</text><line class="grid" x1="320" y1="84" x2="320" y2="316"/><text class="sub" x="320" y="332" text-anchor="middle">90 d</text><line class="grid" x1="420" y1="84" x2="420" y2="316"/><text class="sub" x="420" y="332" text-anchor="middle">1 y</text><line class="grid" x1="533.333" y1="84" x2="533.333" y2="316"/><text class="sub" x="533.333" y="332" text-anchor="middle">3 y</text><line class="grid" x1="703.333" y1="84" x2="703.333" y2="316"/><text class="sub" x="703.333" y="332" text-anchor="middle">6 y</text><line class="grid" x1="760" y1="84" x2="760" y2="316"/><text class="sub" x="760" y="332" text-anchor="middle">7 y</text><text class="sm" x="28" y="115" font-weight="700">Debug / app logs</text><rect class="tea" x="200" y="96" width="60" height="26" rx="5" fill-opacity="0.55"/><text class="sub" x="268" y="114">operational need</text><text class="sm" x="28" y="157" font-weight="700">Audit, SIEM hot copy</text><rect class="pri" x="200" y="138" width="120" height="26" rx="5" fill-opacity="0.55"/><text class="sub" x="328" y="156">search + daily review</text><text class="sm" x="28" y="199" font-weight="700">PCI audit logs</text><rect class="pri" x="200" y="180" width="220" height="26" rx="5" fill-opacity="0.55"/><rect class="pri" x="200" y="180" width="120" height="26" rx="5"/><text class="on13" x="206" y="198" style="font-size:11px">3 mo instantly</text><text class="sub" x="428" y="198">PCI 10.5.1</text><text class="sm" x="28" y="241" font-weight="700">HIPAA documentation</text><rect class="tea" x="200" y="222" width="503.333" height="26" rx="5" fill-opacity="0.55"/><text class="sm" x="695.333" y="240" text-anchor="end" style="font-size:12px;font-weight:700">164.316: 6 years</text><text class="sm" x="28" y="283" font-weight="700">SOX-related records</text><rect class="tea" x="200" y="264" width="560" height="26" rx="5" fill-opacity="0.55"/><text class="sm" x="752" y="282" text-anchor="end" style="font-size:12px;font-weight:700">7-year policy</text><rect class="bw" x="420" y="184" width="113.333" height="18" rx="4" stroke-width="1.5" stroke-dasharray="5 4"/><text class="wrnt" x="428" y="198" style="font-size:12px">legal hold</text><rect class="bp" x="201" y="344" width="118" height="28" rx="5" stroke-width="1.2"/><text class="sm" x="260" y="363" text-anchor="middle">hot search</text><rect class="bt" x="321" y="344" width="98" height="28" rx="5" stroke-width="1.2"/><text class="sm" x="370" y="363" text-anchor="middle">warm / IA</text><rect class="bm" x="421" y="344" width="338" height="28" rx="5" stroke-width="1.2"/><text class="sm" x="590" y="363" text-anchor="middle">archive (Object Lock, Glacier)</text><text class="sm" x="28" y="363" font-weight="700">Storage tier</text><text class="sm" x="28" y="400">Every bar ends in automated, audited deletion. Only a legal hold moves the end, until it is released.</text>
+</svg>

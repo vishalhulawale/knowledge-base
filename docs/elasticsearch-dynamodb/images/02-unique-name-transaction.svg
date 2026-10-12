@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Uniqueness with transactions</title>
+  <desc id="d">Animation. Request A sends TransactWriteItems with two puts, the dataset item DS#d5 and the marker item ORG#o1#NAME#readmissions-2024, each conditional on attribute_not_exists. Both conditions pass and both items appear in the table. Request B then sends the same transaction for dataset DS#d6 with the same marker. The marker condition fails, the whole transaction is cancelled with reasons None and ConditionalCheckFailed, and the DS#d6 item is not written. The service returns a 409 saying the name is already used.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:15s infinite linear}
+    @keyframes a1{0%,2.99%{opacity:0}3%,96.99%{opacity:1}97%,100%{opacity:0}}.a1{animation-name:a1}
+    @keyframes a2{0%,17.99%{opacity:0}18%,96.99%{opacity:1}97%,100%{opacity:0}}.a2{animation-name:a2}
+    @keyframes b1{0%,37.99%{opacity:0}38%,96.99%{opacity:1}97%,100%{opacity:0}}.b1{animation-name:b1}
+    @keyframes b2{0%,55.99%{opacity:0}56%,96.99%{opacity:1}97%,100%{opacity:0}}.b2{animation-name:b2}
+    @keyframes b3{0%,71.99%{opacity:0}72%,96.99%{opacity:1}97%,100%{opacity:0}}.b3{animation-name:b3}
+    @keyframes k1{0%,37.99%{opacity:1}38%,100%{opacity:0}}.k1{animation-name:k1}
+    @keyframes k2{0%,37.99%{opacity:0}38%,71.99%{opacity:1}72%,100%{opacity:0}}.k2{animation-name:k2}
+    @keyframes k3{0%,71.99%{opacity:0}72%,100%{opacity:1}}.k3{animation-name:k3}
+    @media (prefers-reduced-motion: reduce){.k{animation:none;opacity:1}.k1,.k2{opacity:0}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="438" rx="14"/>
+  <text class="h" x="28" y="40">Unique name with a marker item and a transaction</text><text class="sub" x="28" y="62">Two requests create “Readmissions 2024” in org o1 at nearly the same time.</text><g class="k a1"><rect class="bt" x="28" y="84" width="404" height="118" rx="10" stroke-width="1.5"/><text class="lbl" x="42" y="106">Request A: TransactWriteItems</text><text class="mono" x="42" y="130" xml:space="preserve">Put PK=DS#d5  SK=META</text><text class="mono" x="42" y="148" xml:space="preserve">    if attribute_not_exists(PK)</text><text class="mono" x="42" y="172" xml:space="preserve">Put PK=ORG#o1#NAME#readmissions-2024</text><text class="mono" x="42" y="190" xml:space="preserve">    if attribute_not_exists(PK)</text></g><g class="k b1"><rect class="bp" x="28" y="232" width="404" height="118" rx="10" stroke-width="1.5"/><text class="lbl" x="42" y="254">Request B: TransactWriteItems</text><text class="mono" x="42" y="278" xml:space="preserve">Put PK=DS#d6  SK=META</text><text class="mono" x="42" y="296" xml:space="preserve">    if attribute_not_exists(PK)</text><text class="mono" x="42" y="320" xml:space="preserve">Put PK=ORG#o1#NAME#readmissions-2024</text><text class="mono" x="42" y="338" xml:space="preserve">    if attribute_not_exists(PK)</text></g><rect class="bm" x="470" y="84" width="302" height="280" rx="10" stroke-width="1.2"/><text class="lbl" x="484" y="106">Table</text><rect class="box" x="482" y="118" width="278" height="28" rx="5" stroke-width="1"/><text class="mono" x="492" y="137" xml:space="preserve">DS#d1   META</text><g class="k a2"><rect class="okf" x="482" y="154" width="278" height="28" rx="5"/><text class="on13" x="492" y="173">DS#d5   META</text><rect class="okf" x="482" y="190" width="278" height="28" rx="5"/><text class="on13" x="492" y="209">ORG#o1#NAME#readmissions-2024</text><line class="lno" x1="434" y1="140" x2="478" y2="170" marker-end="url(#aro)"/></g><g class="k a2"><text class="okt" x="418" y="106" text-anchor="end" style="font-size:14px">A: committed</text></g><g class="k b2"><line class="lnb" x1="434" y1="300" x2="478" y2="210" marker-end="url(#arb)"/><circle cx="740" cy="204" r="11" class="badf"/><text class="on13" x="740" y="209" text-anchor="middle">×</text></g><g class="k b2"><rect class="bb" x="482" y="236" width="278" height="28" rx="5" stroke-width="1.5" stroke-dasharray="5 4"/><text class="badt" x="492" y="255" style="font-size:13px">DS#d6   META</text><text class="badt" x="754" y="255" text-anchor="end" style="font-size:12px">not written</text></g><g class="k b3"><text class="badt" x="484" y="296" style="font-size:13px">TransactionCanceledException</text><text class="sub" x="484" y="314" style="font-size:12px">cancellation reasons:</text><text class="mono" x="484" y="332" xml:space="preserve">[None, ConditionalCheckFailed]</text><text class="sm" x="484" y="354">→ 409 “name already used in o1”</text></g><g class="k k1"><text class="lbl" x="28" y="394" style="font-size:14px">A's transaction: both conditions pass, so the dataset and its name marker commit together.</text></g><g class="k k2"><text class="lbl" x="28" y="394" style="font-size:14px">B's transaction: the marker already exists, so its condition fails…</text></g><g class="k k3"><text class="lbl" x="28" y="394" style="font-size:14px">…and the whole transaction is cancelled: B's dataset item is never written.</text></g><text class="sm" x="28" y="420">No read-before-write, no race: DynamoDB checks both conditions atomically. Transactions cost 2× WCU.</text>
+</svg>

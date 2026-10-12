@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 372" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Hash-chained audit records</title>
+  <desc id="d">Animation: six audit records in a chain, each showing the previous record's hash and its own. A verifier recomputes the hashes from left to right and each record turns green. Then record 3's action is edited, so it now hashes to a different value; the verifier turns records 3 to 6 red because every later link depends on it. A signed checkpoint of the head hash, kept in a separate log-archive account, means recomputing the chain after an edit can't hide it. Hashes are shortened to four characters.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:15s infinite linear}
+    @keyframes g0{0%,2.99%{opacity:0}3%,39.99%{opacity:1}40%,100%{opacity:0}}.g0{animation-name:g0}
+    @keyframes g1{0%,8.99%{opacity:0}9%,39.99%{opacity:1}40%,100%{opacity:0}}.g1{animation-name:g1}
+    @keyframes g2{0%,14.99%{opacity:0}15%,39.99%{opacity:1}40%,100%{opacity:0}}.g2{animation-name:g2}
+    @keyframes r2{0%,57.99%{opacity:0}58%,100%{opacity:1}}.r2{animation-name:r2}
+    @keyframes g3{0%,20.99%{opacity:0}21%,39.99%{opacity:1}40%,100%{opacity:0}}.g3{animation-name:g3}
+    @keyframes r3{0%,62.99%{opacity:0}63%,100%{opacity:1}}.r3{animation-name:r3}
+    @keyframes g4{0%,26.99%{opacity:0}27%,39.99%{opacity:1}40%,100%{opacity:0}}.g4{animation-name:g4}
+    @keyframes r4{0%,67.99%{opacity:0}68%,100%{opacity:1}}.r4{animation-name:r4}
+    @keyframes g5{0%,32.99%{opacity:0}33%,39.99%{opacity:1}40%,100%{opacity:0}}.g5{animation-name:g5}
+    @keyframes r5{0%,72.99%{opacity:0}73%,100%{opacity:1}}.r5{animation-name:r5}
+    @keyframes t{0%,43.99%{opacity:0}44%,100%{opacity:1}}.t{animation-name:t}
+    @keyframes m{0%,2.99%{opacity:0}3%,39.99%{opacity:1}40%,100%{opacity:0}}.m{animation-name:m}
+    @keyframes bad{0%,57.99%{opacity:0}58%,100%{opacity:1}}.bad{animation-name:bad}
+    @media (prefers-reduced-motion: reduce){.k{animation:none;opacity:0}.t,.bad,.r2,.r3,.r4,.r5{opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="370" rx="14"/>
+  <text class="h" x="28" y="40">Hash-chained audit records</text><text class="sub" x="28" y="62">Each record stores the previous record's hash. Hashes shortened to 4 characters.</text><rect class="box" x="28" y="96" width="110" height="96" rx="8" stroke-width="1.5"/><text class="lbl" x="38" y="118">#1</text><text class="mono" x="38" y="142" xml:space="preserve">prev 0000</text><text class="mono" x="38" y="162" xml:space="preserve">hash 9c1e</text><text class="sub" x="38" y="182" style="font-size:11px">user, action, ref</text><line class="ln" x1="138" y1="144" x2="152" y2="144" marker-end="url(#ar)"/><g class="k g0"><rect class="bo" x="28" y="96" width="110" height="96" rx="8" stroke-width="2.5" fill-opacity="0"/><circle class="okf" cx="124" cy="112" r="7"/></g><rect class="box" x="154" y="96" width="110" height="96" rx="8" stroke-width="1.5"/><text class="lbl" x="164" y="118">#2</text><text class="mono" x="164" y="142" xml:space="preserve">prev 9c1e</text><text class="mono" x="164" y="162" xml:space="preserve">hash 4a7d</text><text class="sub" x="164" y="182" style="font-size:11px">user, action, ref</text><line class="ln" x1="264" y1="144" x2="278" y2="144" marker-end="url(#ar)"/><g class="k g1"><rect class="bo" x="154" y="96" width="110" height="96" rx="8" stroke-width="2.5" fill-opacity="0"/><circle class="okf" cx="250" cy="112" r="7"/></g><rect class="box" x="280" y="96" width="110" height="96" rx="8" stroke-width="1.5"/><text class="lbl" x="290" y="118">#3</text><text class="mono" x="290" y="142" xml:space="preserve">prev 4a7d</text><text class="mono" x="290" y="162" xml:space="preserve">hash e04b</text><text class="sub" x="290" y="182" style="font-size:11px">user, action, ref</text><line class="ln" x1="390" y1="144" x2="404" y2="144" marker-end="url(#ar)"/><g class="k g2"><rect class="bo" x="280" y="96" width="110" height="96" rx="8" stroke-width="2.5" fill-opacity="0"/><circle class="okf" cx="376" cy="112" r="7"/></g><g class="k r2"><rect class="bb" x="280" y="96" width="110" height="96" rx="8" stroke-width="2.5" fill-opacity="0"/><circle class="badf" cx="376" cy="112" r="7"/></g><rect class="box" x="406" y="96" width="110" height="96" rx="8" stroke-width="1.5"/><text class="lbl" x="416" y="118">#4</text><text class="mono" x="416" y="142" xml:space="preserve">prev e04b</text><text class="mono" x="416" y="162" xml:space="preserve">hash 71f2</text><text class="sub" x="416" y="182" style="font-size:11px">user, action, ref</text><line class="ln" x1="516" y1="144" x2="530" y2="144" marker-end="url(#ar)"/><g class="k g3"><rect class="bo" x="406" y="96" width="110" height="96" rx="8" stroke-width="2.5" fill-opacity="0"/><circle class="okf" cx="502" cy="112" r="7"/></g><g class="k r3"><rect class="bb" x="406" y="96" width="110" height="96" rx="8" stroke-width="2.5" fill-opacity="0"/><circle class="badf" cx="502" cy="112" r="7"/></g><rect class="box" x="532" y="96" width="110" height="96" rx="8" stroke-width="1.5"/><text class="lbl" x="542" y="118">#5</text><text class="mono" x="542" y="142" xml:space="preserve">prev 71f2</text><text class="mono" x="542" y="162" xml:space="preserve">hash b83c</text><text class="sub" x="542" y="182" style="font-size:11px">user, action, ref</text><line class="ln" x1="642" y1="144" x2="656" y2="144" marker-end="url(#ar)"/><g class="k g4"><rect class="bo" x="532" y="96" width="110" height="96" rx="8" stroke-width="2.5" fill-opacity="0"/><circle class="okf" cx="628" cy="112" r="7"/></g><g class="k r4"><rect class="bb" x="532" y="96" width="110" height="96" rx="8" stroke-width="2.5" fill-opacity="0"/><circle class="badf" cx="628" cy="112" r="7"/></g><rect class="box" x="658" y="96" width="110" height="96" rx="8" stroke-width="1.5"/><text class="lbl" x="668" y="118">#6</text><text class="mono" x="668" y="142" xml:space="preserve">prev b83c</text><text class="mono" x="668" y="162" xml:space="preserve">hash 2d90</text><text class="sub" x="668" y="182" style="font-size:11px">user, action, ref</text><g class="k g5"><rect class="bo" x="658" y="96" width="110" height="96" rx="8" stroke-width="2.5" fill-opacity="0"/><circle class="okf" cx="754" cy="112" r="7"/></g><g class="k r5"><rect class="bb" x="658" y="96" width="110" height="96" rx="8" stroke-width="2.5" fill-opacity="0"/><circle class="badf" cx="754" cy="112" r="7"/></g><g class="k t"><rect class="bw" x="270" y="196" width="130" height="46" rx="8" stroke-width="1.5"/><text class="wrnt" x="335" y="215" text-anchor="middle" style="font-size:12px">edited: action</text><text class="wrnt" x="335" y="233" text-anchor="middle" style="font-size:12px">now hashes to 5f61</text></g><g class="k m"><text class="okt" x="28" y="272" style="font-size:15px">Verifier recomputes each hash: all match.</text></g><g class="k bad"><text class="badt" x="28" y="272" style="font-size:15px">Record 3 no longer matches; every later link fails too.</text></g><rect class="bp" x="28" y="292" width="744" height="62" rx="8" stroke-width="1.5"/><text class="sm" x="44" y="316" font-weight="700">Signed checkpoint (KMS key), stored in the log-archive account: head = 2d90 at seq 6</text><text class="sm" x="44" y="338">Recomputing the chain after an edit gives a different head, so the signature exposes it.</text>
+</svg>

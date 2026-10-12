@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Breach notification clock</title>
+  <desc id="d">Animation: a cursor moves along a 60-day timeline. At day 0 the breach is discovered, or should have been known. Around day 4 the business associate tells the covered entity; a business associate agreement may set a shorter limit. Around day 12 a four-factor risk assessment checks whether the PHI was secured by encryption or the probability of compromise is low. Day 60 is the outer deadline to notify individuals, HHS if 500 or more are affected, and the media if more than 500 residents of one state are affected. Breaches under 500 go to HHS in an annual log within 60 days of year end, and properly encrypted PHI is not reportable. Intermediate days are illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:15s infinite linear}
+    @keyframes cur{0%{transform:translateX(0)}75%,100%{transform:translateX(630px)}}
+    .cur{animation:cur 15s infinite linear}
+    @keyframes e0{0%,0.99%{opacity:0}1%,96.99%{opacity:1}97%,100%{opacity:0}}.e0{animation-name:e0}
+    @keyframes e1{0%,7.24%{opacity:0}7.25%,96.99%{opacity:1}97%,100%{opacity:0}}.e1{animation-name:e1}
+    @keyframes e2{0%,19.74%{opacity:0}19.75%,96.99%{opacity:1}97%,100%{opacity:0}}.e2{animation-name:e2}
+    @keyframes e3{0%,73.99%{opacity:0}74%,96.99%{opacity:1}97%,100%{opacity:0}}.e3{animation-name:e3}
+    @media (prefers-reduced-motion: reduce){.k{animation:none;opacity:1}.cur{animation:none;opacity:0}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="378" rx="14"/>
+  <text class="h" x="28" y="40">The breach notification clock (HIPAA)</text><text class="sub" x="28" y="62">Deadlines are outer limits: the rule says without unreasonable delay. Intermediate days illustrative.</text><line class="grid" x1="70" y1="92" x2="70" y2="256"/><text class="sub" x="70" y="274" text-anchor="middle">day 0</text><line class="grid" x1="175" y1="92" x2="175" y2="256"/><text class="sub" x="175" y="274" text-anchor="middle">day 10</text><line class="grid" x1="280" y1="92" x2="280" y2="256"/><text class="sub" x="280" y="274" text-anchor="middle">day 20</text><line class="grid" x1="385" y1="92" x2="385" y2="256"/><text class="sub" x="385" y="274" text-anchor="middle">day 30</text><line class="grid" x1="490" y1="92" x2="490" y2="256"/><text class="sub" x="490" y="274" text-anchor="middle">day 40</text><line class="grid" x1="595" y1="92" x2="595" y2="256"/><text class="sub" x="595" y="274" text-anchor="middle">day 50</text><line class="grid" x1="700" y1="92" x2="700" y2="256"/><text class="sub" x="700" y="274" text-anchor="middle">day 60</text><line class="ln" x1="70" y1="250" x2="700" y2="250" style="stroke-width:3"/><g class="cur"><line class="lnt" x1="70" y1="86" x2="70" y2="258" style="stroke-width:2.5"/></g><g class="k e0"><line class="ln dash" x1="70" y1="112" x2="70" y2="242"/><circle class="pri" cx="70.0" cy="250" r="7"/><text class="badt" x="78" y="104" style="font-size:14px">Discovery</text><text class="sub" x="78" y="122">(or when you should have known)</text></g><g class="k e1"><line class="ln dash" x1="112" y1="158" x2="112" y2="242"/><circle class="pri" cx="112.0" cy="250" r="7"/><text class="prit" x="120" y="150" style="font-size:14px">BA tells covered entity</text><text class="sub" x="120" y="168">BAA may set a shorter limit</text></g><g class="k e2"><line class="ln dash" x1="196" y1="204" x2="196" y2="242"/><circle class="pri" cx="196.0" cy="250" r="7"/><text class="wrnt" x="204" y="196" style="font-size:14px">Four-factor risk assessment</text><text class="sub" x="204" y="214">secured (encrypted) PHI? low probability?</text></g><g class="k e3"><rect class="bb" x="470" y="96" width="236" height="104" rx="10" stroke-width="1.5"/><text class="badt" x="482" y="120" style="font-size:14px">Day 60: outer deadline</text><text class="sm" x="482" y="142">Individuals: always</text><text class="sm" x="482" y="160">HHS: now, if 500 or more</text><text class="sm" x="482" y="178">Media: if &gt;500 in one state</text><circle class="badf" cx="700.0" cy="250" r="8"/></g><rect class="bm" x="28" y="296" width="744" height="66" rx="8"/><text class="sm" x="44" y="320" font-weight="700">Fewer than 500 affected:</text><text class="sm" x="222" y="320">individuals still within 60 days; HHS via an annual log, within 60 days of year end.</text><text class="sm" x="44" y="346" font-weight="700">Encrypted per HHS/NIST guidance, key not compromised:</text><text class="sm" x="424" y="346">not unsecured PHI, so no notification.</text>
+</svg>

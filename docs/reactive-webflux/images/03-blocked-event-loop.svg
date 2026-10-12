@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Blocked event loop</title>
+  <desc id="d">Two timelines of one Reactor Netty event-loop thread serving connections A, B, C and D over one second. In the non-blocking case the thread handles short slices for A, B, C and D in turn, registers I/O and returns, then handles each reply later. When A runs a blocking JDBC query on the loop, the thread is held for 800 milliseconds and B, C and D, along with health checks, wait even though they are ready. A footer lists the fixes: a non-blocking driver such as R2DBC, moving the call to boundedElastic, or Spring MVC with virtual threads. The times are illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="398" rx="14"/>
+  <text class="h" x="28" y="40">One blocking call stalls the event loop</text><text class="sub" x="28" y="62">One event-loop thread serving four connections, A to D. Times are illustrative.</text><line class="grid" x1="150" y1="84" x2="150" y2="330"/><text class="sub" x="150" y="348" text-anchor="middle">0 ms</text><line class="grid" x1="274" y1="84" x2="274" y2="330"/><text class="sub" x="274" y="348" text-anchor="middle">200 ms</text><line class="grid" x1="398" y1="84" x2="398" y2="330"/><text class="sub" x="398" y="348" text-anchor="middle">400 ms</text><line class="grid" x1="522" y1="84" x2="522" y2="330"/><text class="sub" x="522" y="348" text-anchor="middle">600 ms</text><line class="grid" x1="646" y1="84" x2="646" y2="330"/><text class="sub" x="646" y="348" text-anchor="middle">800 ms</text><line class="grid" x1="770" y1="84" x2="770" y2="330"/><text class="sub" x="770" y="348" text-anchor="middle">1000 ms</text><text class="okt" x="28" y="122" style="font-size:14px">Non-blocking</text><text class="sub" x="28" y="140" style="font-size:11px">reactor-http-nio-1</text><rect class="bm" x="150" y="100" width="620" height="34" rx="6" stroke-width="1"/><rect class="pri" x="150" y="102" width="12.4" height="30" rx="4"/><rect class="tea" x="165.5" y="102" width="12.4" height="30" rx="4"/><rect class="wrnf" x="181" y="102" width="12.4" height="30" rx="4"/><rect class="okf" x="196.5" y="102" width="12.4" height="30" rx="4"/><rect class="pri" x="286.4" y="102" width="12.4" height="30" rx="4"/><rect class="tea" x="301.9" y="102" width="12.4" height="30" rx="4"/><rect class="wrnf" x="317.4" y="102" width="12.4" height="30" rx="4"/><rect class="okf" x="332.9" y="102" width="12.4" height="30" rx="4"/><text class="sm" x="150" y="162">Each slice is short: register I/O, return, handle the reply later.</text><text class="badt" x="28" y="242" style="font-size:14px">Blocking call</text><text class="sub" x="28" y="260" style="font-size:11px">reactor-http-nio-1</text><rect class="bm" x="150" y="220" width="620" height="34" rx="6" stroke-width="1"/><rect class="pri" x="150" y="222" width="496" height="30" rx="4"/><text class="on13" x="398" y="242" text-anchor="middle">A: blocking JDBC query</text><rect class="bb" x="165.5" y="264" width="480.5" height="22" rx="4" stroke-width="1"/><text class="badt" x="175.5" y="280" style="font-size:12px">B, C, D ready but waiting for the thread</text><text class="sm" x="150" y="310">A holds the thread for 800 ms; B, C and D (and health checks) wait.</text><text class="sm" x="28" y="380">Fix: non-blocking driver (R2DBC), move the call to boundedElastic, or use MVC with virtual threads.</text>
+</svg>

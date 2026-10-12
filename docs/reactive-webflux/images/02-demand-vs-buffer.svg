@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Buffer versus demand</title>
+  <desc id="d">Animation: on the left, a producer emitting one item per tick feeds a consumer that handles one item every three ticks with no backpressure, so the buffer fills cell after cell past the heap budget and ends in OutOfMemoryError. On the right, the consumer requests four items, the producer emits items 1 to 4 and then pauses because demand is zero, the consumer requests four more and items 5 to 8 follow, so no more than four items are ever held in memory. The rates are illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:14s infinite linear}
+    @keyframes lb0{0%,5.99%{opacity:0}6%,100%{opacity:1}}.lb0{animation-name:lb0}
+    @keyframes lb1{0%,12.99%{opacity:0}13%,100%{opacity:1}}.lb1{animation-name:lb1}
+    @keyframes lb2{0%,19.99%{opacity:0}20%,100%{opacity:1}}.lb2{animation-name:lb2}
+    @keyframes lb3{0%,26.99%{opacity:0}27%,100%{opacity:1}}.lb3{animation-name:lb3}
+    @keyframes lb4{0%,33.99%{opacity:0}34%,100%{opacity:1}}.lb4{animation-name:lb4}
+    @keyframes lb5{0%,40.99%{opacity:0}41%,100%{opacity:1}}.lb5{animation-name:lb5}
+    @keyframes lb6{0%,47.99%{opacity:0}48%,100%{opacity:1}}.lb6{animation-name:lb6}
+    @keyframes lb7{0%,54.99%{opacity:0}55%,100%{opacity:1}}.lb7{animation-name:lb7}
+    @keyframes lb8{0%,61.99%{opacity:0}62%,100%{opacity:1}}.lb8{animation-name:lb8}
+    @keyframes lb9{0%,68.99%{opacity:0}69%,100%{opacity:1}}.lb9{animation-name:lb9}
+    @keyframes lb10{0%,75.99%{opacity:0}76%,100%{opacity:1}}.lb10{animation-name:lb10}
+    @keyframes lb11{0%,82.99%{opacity:0}83%,100%{opacity:1}}.lb11{animation-name:lb11}
+    @keyframes oom{0%,89.99%{opacity:0}90%,100%{opacity:1}}.oom{animation-name:oom}
+    @keyframes rb0{0%{opacity:0}3.99%{opacity:0}4%{opacity:1}43.99%{opacity:1}44%{opacity:0}53.99%{opacity:0}54%{opacity:1}93.99%{opacity:1}94%{opacity:0}100%{opacity:0}}.rb0{animation-name:rb0}
+    @keyframes rn0a{0%,3.99%{opacity:0}4%,43.99%{opacity:1}44%,100%{opacity:0}}.rn0a{animation-name:rn0a}
+    @keyframes rn0b{0%,53.99%{opacity:0}54%,93.99%{opacity:1}94%,100%{opacity:0}}.rn0b{animation-name:rn0b}
+    @keyframes rb1{0%{opacity:0}9.99%{opacity:0}10%{opacity:1}43.99%{opacity:1}44%{opacity:0}59.99%{opacity:0}60%{opacity:1}93.99%{opacity:1}94%{opacity:0}100%{opacity:0}}.rb1{animation-name:rb1}
+    @keyframes rn1a{0%,9.99%{opacity:0}10%,43.99%{opacity:1}44%,100%{opacity:0}}.rn1a{animation-name:rn1a}
+    @keyframes rn1b{0%,59.99%{opacity:0}60%,93.99%{opacity:1}94%,100%{opacity:0}}.rn1b{animation-name:rn1b}
+    @keyframes rb2{0%{opacity:0}15.99%{opacity:0}16%{opacity:1}43.99%{opacity:1}44%{opacity:0}65.99%{opacity:0}66%{opacity:1}93.99%{opacity:1}94%{opacity:0}100%{opacity:0}}.rb2{animation-name:rb2}
+    @keyframes rn2a{0%,15.99%{opacity:0}16%,43.99%{opacity:1}44%,100%{opacity:0}}.rn2a{animation-name:rn2a}
+    @keyframes rn2b{0%,65.99%{opacity:0}66%,93.99%{opacity:1}94%,100%{opacity:0}}.rn2b{animation-name:rn2b}
+    @keyframes rb3{0%{opacity:0}21.99%{opacity:0}22%{opacity:1}43.99%{opacity:1}44%{opacity:0}71.99%{opacity:0}72%{opacity:1}93.99%{opacity:1}94%{opacity:0}100%{opacity:0}}.rb3{animation-name:rb3}
+    @keyframes rn3a{0%,21.99%{opacity:0}22%,43.99%{opacity:1}44%,100%{opacity:0}}.rn3a{animation-name:rn3a}
+    @keyframes rn3b{0%,71.99%{opacity:0}72%,93.99%{opacity:1}94%,100%{opacity:0}}.rn3b{animation-name:rn3b}
+    @keyframes rm0{0%,27.99%{opacity:1}28%,100%{opacity:0}}.rm0{animation-name:rm0}
+    @keyframes rm1{0%,27.99%{opacity:0}28%,43.99%{opacity:1}44%,100%{opacity:0}}.rm1{animation-name:rm1}
+    @keyframes rm2{0%,43.99%{opacity:0}44%,49.99%{opacity:1}50%,100%{opacity:0}}.rm2{animation-name:rm2}
+    @keyframes rm3{0%,49.99%{opacity:0}50%,77.99%{opacity:1}78%,100%{opacity:0}}.rm3{animation-name:rm3}
+    @keyframes rm4{0%,77.99%{opacity:0}78%,93.99%{opacity:1}94%,100%{opacity:0}}.rm4{animation-name:rm4}
+    @keyframes rm5{0%,93.99%{opacity:0}94%,100%{opacity:1}}.rm5{animation-name:rm5}
+    @media (prefers-reduced-motion: reduce){.k{animation:none;opacity:1}.rn0b,.rn1b,.rn2b,.rn3b,.rm0,.rm2,.rm3,.rm4,.rm5{opacity:0}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="438" rx="14"/>
+  <text class="h" x="28" y="40">Unbounded buffer vs demand</text><text class="sub" x="28" y="62">Producer: 1 item per tick. Consumer: 1 item per 3 ticks. Illustrative.</text><rect class="box" x="28" y="80" width="360" height="340" rx="10" stroke-width="1.2"/><text class="badt" x="44" y="106" style="font-size:15px">No backpressure: request(∞)</text><rect class="bt" x="44" y="122" width="120" height="40" rx="8" stroke-width="1.5"/><text class="lbl" x="104" y="147" text-anchor="middle">Producer</text><rect class="bp" x="252" y="344" width="120" height="40" rx="8" stroke-width="1.5"/><text class="lbl" x="312" y="369" text-anchor="middle">Consumer</text><text class="sub" x="44" y="196">buffer</text><rect class="box" x="412" y="80" width="360" height="340" rx="10" stroke-width="1.2"/><text class="okt" x="428" y="106" style="font-size:15px">Backpressure: request(4)</text><rect class="bt" x="428" y="122" width="120" height="40" rx="8" stroke-width="1.5"/><text class="lbl" x="488" y="147" text-anchor="middle">Producer</text><rect class="bp" x="636" y="344" width="120" height="40" rx="8" stroke-width="1.5"/><text class="lbl" x="696" y="369" text-anchor="middle">Consumer</text><text class="sub" x="428" y="196">buffer</text><rect class="bm" x="44" y="206" width="48" height="40" rx="6" stroke-width="1" stroke-dasharray="4 4"/><g class="k lb0"><rect class="wrnf" x="44" y="206" width="48" height="40" rx="6"/><text class="on13" x="68" y="231" text-anchor="middle">1</text></g><rect class="bm" x="44" y="256" width="48" height="40" rx="6" stroke-width="1" stroke-dasharray="4 4"/><g class="k lb1"><rect class="wrnf" x="44" y="256" width="48" height="40" rx="6"/><text class="on13" x="68" y="281" text-anchor="middle">2</text></g><rect class="bm" x="100" y="206" width="48" height="40" rx="6" stroke-width="1" stroke-dasharray="4 4"/><g class="k lb2"><rect class="wrnf" x="100" y="206" width="48" height="40" rx="6"/><text class="on13" x="124" y="231" text-anchor="middle">3</text></g><rect class="bm" x="100" y="256" width="48" height="40" rx="6" stroke-width="1" stroke-dasharray="4 4"/><g class="k lb3"><rect class="wrnf" x="100" y="256" width="48" height="40" rx="6"/><text class="on13" x="124" y="281" text-anchor="middle">4</text></g><rect class="bm" x="156" y="206" width="48" height="40" rx="6" stroke-width="1" stroke-dasharray="4 4"/><g class="k lb4"><rect class="wrnf" x="156" y="206" width="48" height="40" rx="6"/><text class="on13" x="180" y="231" text-anchor="middle">5</text></g><rect class="bm" x="156" y="256" width="48" height="40" rx="6" stroke-width="1" stroke-dasharray="4 4"/><g class="k lb5"><rect class="wrnf" x="156" y="256" width="48" height="40" rx="6"/><text class="on13" x="180" y="281" text-anchor="middle">6</text></g><rect class="bm" x="212" y="206" width="48" height="40" rx="6" stroke-width="1" stroke-dasharray="4 4"/><g class="k lb6"><rect class="wrnf" x="212" y="206" width="48" height="40" rx="6"/><text class="on13" x="236" y="231" text-anchor="middle">7</text></g><rect class="bm" x="212" y="256" width="48" height="40" rx="6" stroke-width="1" stroke-dasharray="4 4"/><g class="k lb7"><rect class="wrnf" x="212" y="256" width="48" height="40" rx="6"/><text class="on13" x="236" y="281" text-anchor="middle">8</text></g><rect class="bm" x="268" y="206" width="48" height="40" rx="6" stroke-width="1" stroke-dasharray="4 4"/><g class="k lb8"><rect class="badf" x="268" y="206" width="48" height="40" rx="6"/><text class="on13" x="292" y="231" text-anchor="middle">9</text></g><rect class="bm" x="268" y="256" width="48" height="40" rx="6" stroke-width="1" stroke-dasharray="4 4"/><g class="k lb9"><rect class="badf" x="268" y="256" width="48" height="40" rx="6"/><text class="on13" x="292" y="281" text-anchor="middle">10</text></g><rect class="bm" x="324" y="206" width="48" height="40" rx="6" stroke-width="1" stroke-dasharray="4 4"/><g class="k lb10"><rect class="badf" x="324" y="206" width="48" height="40" rx="6"/><text class="on13" x="348" y="231" text-anchor="middle">11</text></g><rect class="bm" x="324" y="256" width="48" height="40" rx="6" stroke-width="1" stroke-dasharray="4 4"/><g class="k lb11"><rect class="badf" x="324" y="256" width="48" height="40" rx="6"/><text class="on13" x="348" y="281" text-anchor="middle">12</text></g><line class="lnb dash" x1="264" y1="200" x2="264" y2="302"/><text class="badt" x="270" y="314" style="font-size:12px">heap budget</text><g class="k oom"><text class="badt" x="44" y="336" style="font-size:16px">OutOfMemoryError</text></g><text class="sm" x="44" y="404">Grows by 2 items every 3 ticks.</text><rect class="bm" x="428" y="206" width="48" height="40" rx="6" stroke-width="1" stroke-dasharray="4 4"/><g class="k rb0"><rect class="okf" x="428" y="206" width="48" height="40" rx="6"/></g><g class="k rn0a"><text class="on13" x="452" y="231" text-anchor="middle">1</text></g><g class="k rn0b"><text class="on13" x="452" y="231" text-anchor="middle">5</text></g><rect class="bm" x="484" y="206" width="48" height="40" rx="6" stroke-width="1" stroke-dasharray="4 4"/><g class="k rb1"><rect class="okf" x="484" y="206" width="48" height="40" rx="6"/></g><g class="k rn1a"><text class="on13" x="508" y="231" text-anchor="middle">2</text></g><g class="k rn1b"><text class="on13" x="508" y="231" text-anchor="middle">6</text></g><rect class="bm" x="540" y="206" width="48" height="40" rx="6" stroke-width="1" stroke-dasharray="4 4"/><g class="k rb2"><rect class="okf" x="540" y="206" width="48" height="40" rx="6"/></g><g class="k rn2a"><text class="on13" x="564" y="231" text-anchor="middle">3</text></g><g class="k rn2b"><text class="on13" x="564" y="231" text-anchor="middle">7</text></g><rect class="bm" x="596" y="206" width="48" height="40" rx="6" stroke-width="1" stroke-dasharray="4 4"/><g class="k rb3"><rect class="okf" x="596" y="206" width="48" height="40" rx="6"/></g><g class="k rn3a"><text class="on13" x="620" y="231" text-anchor="middle">4</text></g><g class="k rn3b"><text class="on13" x="620" y="231" text-anchor="middle">8</text></g><g class="k rm0"><text class="tx" x="428" y="284" style="font-size:14px">Demand 4: producer emits 1 to 4.</text></g><g class="k rm1"><text class="wrnt" x="428" y="284" style="font-size:14px">Demand 0: producer pauses.</text></g><g class="k rm2"><text class="okt" x="428" y="284" style="font-size:14px">Consumer done: request(4).</text></g><g class="k rm3"><text class="tx" x="428" y="284" style="font-size:14px">Demand 4: producer emits 5 to 8.</text></g><g class="k rm4"><text class="wrnt" x="428" y="284" style="font-size:14px">Demand 0: producer pauses.</text></g><g class="k rm5"><text class="okt" x="428" y="284" style="font-size:14px">Consumer done: request(4).</text></g><text class="sm" x="428" y="404">Never more than 4 items in memory.</text><line class="lno" x1="488" y1="164" x2="488" y2="200" marker-end="url(#aro)"/><line class="lnb" x1="104" y1="164" x2="104" y2="200" marker-end="url(#arb)"/><path class="lnp dash" d="M696,342 L696,300 L662,300 L662,176 L552,176" marker-end="url(#arp)"/><text class="prit" x="670" y="236" style="font-size:12px">request(4)</text>
+</svg>
