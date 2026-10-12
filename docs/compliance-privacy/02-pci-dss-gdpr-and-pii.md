@@ -201,7 +201,7 @@ For data you can't rewrite (backups, event logs, archives), encrypt each subject
 
 ## Real-world usage
 
-- **British Airways (2018):** attackers modified a JavaScript file on the payment page to skim about 400,000 customers' card details; the UK ICO fined BA £20 million under GDPR. PCI DSS v4 requirements 6.4.3 and 11.6.1 target exactly this.
+- **British Airways (2018):** attackers modified a JavaScript file on the payment page to skim the personal and card details of about 430,000 customers and staff; the UK ICO fined BA £20 million under GDPR. PCI DSS v4 requirements 6.4.3 and 11.6.1 target exactly this.
 - **Target (2013):** attackers entered through an HVAC vendor's credentials and installed malware on point-of-sale terminals, taking 40 million cards: the textbook case for segmentation and third-party access control.
 - **Meta (2023):** €1.2 billion from the Irish DPC for EU–US transfers under SCCs without sufficient protection against US surveillance; the reason transfer impact assessments and the Data Privacy Framework matter.
 - **Stripe, Adyen, Braintree** and similar providers sell scope reduction: hosted fields and tokens keep merchants on SAQ A or SAQ A-EP.
@@ -347,6 +347,6 @@ For data you can't rewrite (backups, event logs, archives), encrypt each subject
 7. [NIST SP 800-122: Guide to Protecting the Confidentiality of PII](https://csrc.nist.gov/pubs/sp/800/122/final): PII definition, linked and linkable information.
 8. [European Commission: adequacy decision for the EU-US Data Privacy Framework](https://commission.europa.eu/law/law-topic/data-protection/international-dimension-data-protection/eu-us-data-transfers_en): transfers since July 2023.
 9. [EDPB: 1.2 billion euro fine for Facebook as a result of EDPB binding decision](https://www.edpb.europa.eu/news/news/2023/12-billion-euro-fine-facebook-result-edpb-binding-decision_en): Meta transfer fine.
-10. [ICO: Penalty notice for British Airways](https://ico.org.uk/action-weve-taken/enforcement/british-airways/): payment-page skimming, £20 million fine.
+10. [Herbert Smith Freehills Kramer: ICO fines British Airways £20 million for its 2018 data breach](https://www.hsfkramer.com/notes/data/2020-10/the-not-so-mega-mega-fine-ico-fines-british-airways-20-million-for-its-2018-data-breach): payment-page skimming, Art. 5 and 32 infringements, £20 million fine (ICO penalty notice summarised).
 11. [California Privacy Protection Agency: CCPA regulations](https://cppa.ca.gov/regulations/): CCPA/CPRA rights.
 12. [MeitY: Digital Personal Data Protection Rules, 2025](https://www.meity.gov.in/data-protection-framework): India DPDP Act and phased rules.

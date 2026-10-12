@@ -1966,13 +1966,13 @@
           "title": "Elasticsearch: inverted index, analyzers, relevance, sharding",
           "slug": "01-elasticsearch-inverted-index-analyzers-relevance-sharding",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "DynamoDB data modelling & single-table design",
           "slug": "02-dynamodb-data-modelling-and-single-table-design",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
@@ -2130,19 +2130,19 @@
           "title": "HIPAA & PHI handling",
           "slug": "01-hipaa-and-phi-handling",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "PCI-DSS, GDPR & PII",
           "slug": "02-pci-dss-gdpr-and-pii",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Audit logging & data retention",
           "slug": "03-audit-logging-and-data-retention",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },

@@ -333,6 +333,8 @@ nav:
           - "Polyglot Persistence in Microservices": data-modelling/05-polyglot-persistence-in-microservices.md
       - "Elasticsearch & DynamoDB":
           - Overview: elasticsearch-dynamodb/index.md
+          - "Elasticsearch: Inverted Index, Analyzers, Relevance, Sharding": elasticsearch-dynamodb/01-elasticsearch-inverted-index-analyzers-relevance-sharding.md
+          - "DynamoDB Data Modelling & Single-Table Design": elasticsearch-dynamodb/02-dynamodb-data-modelling-and-single-table-design.md
   - "Cloud & DevOps":
       - "AWS":
           - Overview: aws/index.md
@@ -399,6 +401,9 @@ nav:
           - "Password Hashing & Secrets Management": cryptography-key-management/07-password-hashing-and-secrets-management.md
       - "Compliance & Data Privacy":
           - Overview: compliance-privacy/index.md
+          - "HIPAA & PHI handling": compliance-privacy/01-hipaa-and-phi-handling.md
+          - "PCI-DSS, GDPR & PII": compliance-privacy/02-pci-dss-gdpr-and-pii.md
+          - "Audit logging & data retention": compliance-privacy/03-audit-logging-and-data-retention.md
   - "System Design":
       - "System Design \u2014 HLD":
           - Overview: system-design/index.md
