@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 402" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">DLX retry loop</title>
+  <desc id="d">Animation: a message travels from exchange rx to the refills queue and the consumer, where it fails. The consumer rejects it without requeue, so it goes to the dead-letter exchange rx.dlx, which routes it to refills.wait, a queue with a 30 second TTL and no consumers. When the TTL expires it is dead-lettered back to rx and retried. After the third failure it goes to refills.parked for a human, and an alert fires. Delays are illustrative.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:16s infinite linear}
+    @keyframes s0{0%,12.49%{opacity:1}12.5%,100%{opacity:0}}.s0{animation-name:s0}
+    @keyframes s1{0%,12.49%{opacity:0}12.5%,24.99%{opacity:1}25%,100%{opacity:0}}.s1{animation-name:s1}
+    @keyframes s2{0%,24.99%{opacity:0}25%,37.49%{opacity:1}37.5%,100%{opacity:0}}.s2{animation-name:s2}
+    @keyframes s3{0%,37.49%{opacity:0}37.5%,49.99%{opacity:1}50%,100%{opacity:0}}.s3{animation-name:s3}
+    @keyframes s4{0%,49.99%{opacity:0}50%,62.49%{opacity:1}62.5%,100%{opacity:0}}.s4{animation-name:s4}
+    @keyframes s5{0%,62.49%{opacity:0}62.5%,74.99%{opacity:1}75%,100%{opacity:0}}.s5{animation-name:s5}
+    @keyframes s6{0%,74.99%{opacity:0}75%,87.49%{opacity:1}87.5%,100%{opacity:0}}.s6{animation-name:s6}
+    @keyframes s7{0%,87.49%{opacity:0}87.5%,100%{opacity:1}}.s7{animation-name:s7}
+    @media (prefers-reduced-motion: reduce){.k{animation:none;opacity:0}.s3{opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="400" rx="14"/>
+  <text class="h" x="28" y="40">Retry with a dead-letter exchange and a TTL wait queue</text><text class="sub" x="28" y="62">The wait queue has no consumers. TTL expiry dead-letters the message back. Delays illustrative.</text><rect class="bp" x="40" y="100" width="140" height="54" rx="8" stroke-width="1.5"/><text class="sm" x="110" y="132" text-anchor="middle">Exchange rx</text><rect class="box" x="250" y="100" width="150" height="54" rx="8" stroke-width="1.5"/><text class="sm" x="325" y="132" text-anchor="middle">Queue refills</text><rect class="box" x="470" y="100" width="150" height="54" rx="8" stroke-width="1.5"/><text class="sm" x="545" y="132" text-anchor="middle">Consumer</text><rect class="bp" x="470" y="236" width="150" height="54" rx="8" stroke-width="1.5"/><text class="sm" x="545" y="268" text-anchor="middle">DLX rx.dlx</text><rect class="bw" x="250" y="236" width="150" height="54" rx="8" stroke-width="1.5"/><text class="sm" x="325" y="259" text-anchor="middle">refills.wait</text><text class="sm" x="325" y="277" text-anchor="middle">TTL 30 s</text><rect class="bb" x="650" y="236" width="126" height="54" rx="8" stroke-width="1.5"/><text class="sm" x="713" y="268" text-anchor="middle">refills.parked</text><line class="ln" x1="180" y1="127" x2="248" y2="127" marker-end="url(#ar)"/><line class="ln" x1="400" y1="127" x2="468" y2="127" marker-end="url(#ar)"/><line class="lnb" x1="545" y1="154" x2="545" y2="234" marker-end="url(#arb)"/><text class="sub" x="553" y="192">reject,</text><text class="sub" x="553" y="208">requeue=false</text><line class="lnw" x1="470" y1="263" x2="402" y2="263" marker-end="url(#arw)"/><path class="lnw dash" d="M 300 236 C 300 196 110 196 110 156" marker-end="url(#arw)"/><text class="wrnt" x="132" y="214" style="font-size:12px">TTL expires →</text><text class="wrnt" x="132" y="230" style="font-size:12px">dead-letter back</text><path class="lnb dash" d="M 620 127 C 712 127 712 180 712 234" marker-end="url(#arb)"/><text class="badt" x="632" y="112" style="font-size:12px">attempt 3 fails</text><g class="k s0"><circle class="tea" cx="325" cy="160" r="11"/><text class="on13" x="325" y="164" text-anchor="middle">m</text><text class="tx" x="28" y="352" style="font-size:15px">1/8  Attempt 1 waits in the work queue</text></g><g class="k s1"><circle class="tea" cx="545" cy="80" r="11"/><text class="on13" x="545" y="84" text-anchor="middle">m</text><text class="badt" x="28" y="352" style="font-size:15px">2/8  Attempt 1 fails (bad downstream response)</text></g><g class="k s2"><circle class="tea" cx="545" cy="306" r="11"/><text class="on13" x="545" y="310" text-anchor="middle">m</text><text class="tx" x="28" y="352" style="font-size:15px">3/8  Rejected without requeue → DLX, x-death count = 1</text></g><g class="k s3"><circle class="tea" cx="325" cy="306" r="11"/><text class="on13" x="325" y="310" text-anchor="middle">m</text><text class="wrnt" x="28" y="352" style="font-size:15px">4/8  Waits 30 s in refills.wait. Nobody consumes it.</text></g><g class="k s4"><circle class="tea" cx="110" cy="80" r="11"/><text class="on13" x="110" y="84" text-anchor="middle">m</text><text class="wrnt" x="28" y="352" style="font-size:15px">5/8  TTL expires → dead-lettered back to rx</text></g><g class="k s5"><circle class="tea" cx="545" cy="80" r="11"/><text class="on13" x="545" y="84" text-anchor="middle">m</text><text class="badt" x="28" y="352" style="font-size:15px">6/8  Attempt 2 fails, waits again (x-death = 2)</text></g><g class="k s6"><circle class="tea" cx="545" cy="80" r="11"/><text class="on13" x="545" y="84" text-anchor="middle">m</text><text class="badt" x="28" y="352" style="font-size:15px">7/8  Attempt 3 fails: count reached the limit</text></g><g class="k s7"><circle class="tea" cx="713" cy="306" r="11"/><text class="on13" x="713" y="310" text-anchor="middle">m</text><text class="badt" x="28" y="352" style="font-size:15px">8/8  Parked for a human. Alert fires. No hot loop.</text></g><text class="sm" x="28" y="382">RabbitMQ 4.3 quorum queues can do this natively: x-delayed-retry-type, -min, -max.</text>
+</svg>

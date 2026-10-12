@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 402" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="t">Topic exchange routing</title>
+  <desc id="d">Animation: a producer publishes four messages in turn to a topic exchange named claims, which has three bindings: claims.*.eu to the eu-claims queue, claims.# to the all-claims queue and #.eu to the eu-ops queue. claims.created.eu matches all three and is copied three times. claims.paid.us matches only claims.#. audit.login.eu matches only #.eu. billing.run matches nothing and is dropped unless the publisher sets mandatory or the exchange has an alternate exchange.</desc>
+  <style>
+    .card{fill:#f8fafc;stroke:#e2e8f0}
+    .h{fill:#0f172a;font-size:20px;font-weight:700}
+    .h2{fill:#0f172a;font-size:16px;font-weight:700}
+    .lbl{fill:#334155;font-size:15px;font-weight:600}
+    .tx{fill:#334155;font-size:14px}
+    .sm{fill:#334155;font-size:13px}
+    .sub{fill:#64748b;font-size:13px}
+    .mono{fill:#0f172a;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .box{fill:#ffffff;stroke:#cbd5e1}
+    .bm{fill:#f1f5f9;stroke:#cbd5e1}
+    .grid{stroke:#e2e8f0;stroke-width:1}
+    .pri{fill:#4f46e5}.tea{fill:#0ea5a4}.okf{fill:#16a34a}.badf{fill:#dc2626}.wrnf{fill:#d97706}.mutf{fill:#94a3b8}
+    .on{fill:#ffffff;font-size:14px;font-weight:700}
+    .on13{fill:#ffffff;font-size:13px;font-weight:700}
+    .prit{fill:#4f46e5;font-weight:700}.teat{fill:#0f766e;font-weight:700}.okt{fill:#16a34a;font-weight:700}
+    .badt{fill:#dc2626;font-weight:700}.wrnt{fill:#b45309;font-weight:700}
+    .ln{stroke:#64748b;stroke-width:2;fill:none}
+    .lnp{stroke:#4f46e5;stroke-width:2.5;fill:none}.lnt{stroke:#0ea5a4;stroke-width:2.5;fill:none}
+    .lno{stroke:#16a34a;stroke-width:2.5;fill:none}.lnb{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lnw{stroke:#d97706;stroke-width:2.5;fill:none}
+    .dash{stroke-dasharray:6 5}
+    .ah{fill:#64748b}.ahp{fill:#4f46e5}.aht{fill:#0ea5a4}.aho{fill:#16a34a}.ahb{fill:#dc2626}.ahw{fill:#d97706}
+    .bp{fill:#eef2ff;stroke:#4f46e5}.bt{fill:#f0fdfa;stroke:#0ea5a4}.bo{fill:#f0fdf4;stroke:#16a34a}
+    .bb{fill:#fef2f2;stroke:#dc2626}.bw{fill:#fffbeb;stroke:#d97706}
+    @media (prefers-color-scheme: dark){
+      .card{fill:#1f2430;stroke:#334155}
+      .h,.h2{fill:#f1f5f9}.lbl,.tx,.sm{fill:#e2e8f0}.sub{fill:#94a3b8}.mono{fill:#e2e8f0}
+      .box{fill:#111827;stroke:#475569}.bm{fill:#1e293b;stroke:#475569}.grid{stroke:#334155}
+      .pri{fill:#818cf8}.tea{fill:#2dd4bf}.okf{fill:#4ade80}.badf{fill:#f87171}.wrnf{fill:#fbbf24}.mutf{fill:#64748b}
+      .on,.on13{fill:#0f172a}
+      .prit{fill:#818cf8}.teat{fill:#5eead4}.okt{fill:#4ade80}.badt{fill:#f87171}.wrnt{fill:#fbbf24}
+      .ln{stroke:#94a3b8}.lnp{stroke:#818cf8}.lnt{stroke:#2dd4bf}.lno{stroke:#4ade80}.lnb{stroke:#f87171}.lnw{stroke:#fbbf24}
+      .ah{fill:#94a3b8}.ahp{fill:#818cf8}.aht{fill:#2dd4bf}.aho{fill:#4ade80}.ahb{fill:#f87171}.ahw{fill:#fbbf24}
+      .bp{fill:#1e1b4b;stroke:#818cf8}.bt{fill:#042f2e;stroke:#2dd4bf}.bo{fill:#052e16;stroke:#4ade80}
+      .bb{fill:#450a0a;stroke:#f87171}.bw{fill:#451a03;stroke:#fbbf24}
+    }
+
+    .k{opacity:0;animation:16s infinite linear}
+    @keyframes m0{0%,24.99%{opacity:1}25%,100%{opacity:0}}.m0{animation-name:m0}
+    @keyframes m1{0%,24.99%{opacity:0}25%,49.99%{opacity:1}50%,100%{opacity:0}}.m1{animation-name:m1}
+    @keyframes m2{0%,49.99%{opacity:0}50%,74.99%{opacity:1}75%,100%{opacity:0}}.m2{animation-name:m2}
+    @keyframes m3{0%,74.99%{opacity:0}75%,100%{opacity:1}}.m3{animation-name:m3}
+    @media (prefers-reduced-motion: reduce){.k{animation:none;opacity:0}.m0{opacity:1}}
+  </style>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0L10,5L0,10z"/></marker><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahp" d="M0,0L10,5L0,10z"/></marker><marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aht" d="M0,0L10,5L0,10z"/></marker><marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aho" d="M0,0L10,5L0,10z"/></marker><marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahb" d="M0,0L10,5L0,10z"/></marker><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahw" d="M0,0L10,5L0,10z"/></marker></defs>
+  <rect class="card" x="1" y="1" width="798" height="400" rx="14"/>
+  <text class="h" x="28" y="40">Topic exchange: one publish, zero to three copies</text><text class="sub" x="28" y="62">* matches exactly one word, # matches zero or more. The producer only picks a routing key.</text><rect class="box" x="28" y="170" width="150" height="56" rx="8" stroke-width="1.5"/><text class="lbl" x="103" y="203" text-anchor="middle">Producer</text><line class="ln" x1="178" y1="198" x2="268" y2="198" marker-end="url(#ar)"/><rect class="bp" x="270" y="160" width="150" height="76" rx="8" stroke-width="1.5"/><text class="sm" x="345" y="193" text-anchor="middle">Exchange "claims"</text><text class="sm" x="345" y="213" text-anchor="middle">type: topic</text><path class="ln" d="M 420 198 C 470 198 470 110 520 110"/><line class="ln" x1="520" y1="110" x2="604" y2="110" marker-end="url(#ar)"/><rect class="bm" x="506" y="84" width="96" height="20" rx="4"/><text class="mono" x="554" y="99" text-anchor="middle" xml:space="preserve" style="font-size:11px">claims.*.eu</text><rect class="box" x="606" y="86" width="166" height="48" rx="8" stroke-width="1.5"/><text class="lbl" x="618" y="115">eu-claims</text><path class="ln" d="M 420 198 C 470 198 470 198 520 198"/><line class="ln" x1="520" y1="198" x2="604" y2="198" marker-end="url(#ar)"/><rect class="bm" x="506" y="172" width="96" height="20" rx="4"/><text class="mono" x="554" y="187" text-anchor="middle" xml:space="preserve" style="font-size:11px">claims.#</text><rect class="box" x="606" y="174" width="166" height="48" rx="8" stroke-width="1.5"/><text class="lbl" x="618" y="203">all-claims</text><path class="ln" d="M 420 198 C 470 198 470 286 520 286"/><line class="ln" x1="520" y1="286" x2="604" y2="286" marker-end="url(#ar)"/><rect class="bm" x="506" y="260" width="96" height="20" rx="4"/><text class="mono" x="554" y="275" text-anchor="middle" xml:space="preserve" style="font-size:11px">#.eu</text><rect class="box" x="606" y="262" width="166" height="48" rx="8" stroke-width="1.5"/><text class="lbl" x="618" y="291">eu-ops</text><g class="k m0"><rect class="tea" x="40" y="120" width="126" height="26" rx="6"/><text class="on13" x="103" y="138" text-anchor="middle" style="font-size:11.5px">claims.created.eu</text><text class="sub" x="28" y="270">Message 1 of 4</text><path class="lnt" d="M 420 198 C 470 198 470 110 520 110"/><line class="lnt" x1="520" y1="110" x2="604" y2="110" marker-end="url(#art)"/><rect class="tea" x="706" y="97" width="56" height="26" rx="6"/><text class="on13" x="734" y="115" text-anchor="middle">copy</text><path class="lnt" d="M 420 198 C 470 198 470 198 520 198"/><line class="lnt" x1="520" y1="198" x2="604" y2="198" marker-end="url(#art)"/><rect class="tea" x="706" y="185" width="56" height="26" rx="6"/><text class="on13" x="734" y="203" text-anchor="middle">copy</text><path class="lnt" d="M 420 198 C 470 198 470 286 520 286"/><line class="lnt" x1="520" y1="286" x2="604" y2="286" marker-end="url(#art)"/><rect class="tea" x="706" y="273" width="56" height="26" rx="6"/><text class="on13" x="734" y="291" text-anchor="middle">copy</text><text class="teat" x="28" y="352" style="font-size:15px">3 copies: matches claims.*.eu, claims.# and #.eu</text></g><g class="k m1"><rect class="tea" x="40" y="120" width="126" height="26" rx="6"/><text class="on13" x="103" y="138" text-anchor="middle" style="font-size:11.5px">claims.paid.us</text><text class="sub" x="28" y="270">Message 2 of 4</text><text class="sub" x="734" y="115" text-anchor="middle">no</text><path class="lnt" d="M 420 198 C 470 198 470 198 520 198"/><line class="lnt" x1="520" y1="198" x2="604" y2="198" marker-end="url(#art)"/><rect class="tea" x="706" y="185" width="56" height="26" rx="6"/><text class="on13" x="734" y="203" text-anchor="middle">copy</text><text class="sub" x="734" y="291" text-anchor="middle">no</text><text class="teat" x="28" y="352" style="font-size:15px">1 copy: only claims.# matches (us is not eu)</text></g><g class="k m2"><rect class="tea" x="40" y="120" width="126" height="26" rx="6"/><text class="on13" x="103" y="138" text-anchor="middle" style="font-size:11.5px">audit.login.eu</text><text class="sub" x="28" y="270">Message 3 of 4</text><text class="sub" x="734" y="115" text-anchor="middle">no</text><text class="sub" x="734" y="203" text-anchor="middle">no</text><path class="lnt" d="M 420 198 C 470 198 470 286 520 286"/><line class="lnt" x1="520" y1="286" x2="604" y2="286" marker-end="url(#art)"/><rect class="tea" x="706" y="273" width="56" height="26" rx="6"/><text class="on13" x="734" y="291" text-anchor="middle">copy</text><text class="teat" x="28" y="352" style="font-size:15px">1 copy: only #.eu matches (starts with audit)</text></g><g class="k m3"><rect class="tea" x="40" y="120" width="126" height="26" rx="6"/><text class="on13" x="103" y="138" text-anchor="middle" style="font-size:11.5px">billing.run</text><text class="sub" x="28" y="270">Message 4 of 4</text><text class="sub" x="734" y="115" text-anchor="middle">no</text><text class="sub" x="734" y="203" text-anchor="middle">no</text><text class="sub" x="734" y="291" text-anchor="middle">no</text><text class="badt" x="28" y="352" style="font-size:15px">0 copies: dropped, unless mandatory=true or an alternate exchange</text></g><text class="sm" x="28" y="382">Adding a queue is just a new binding; the producer code doesn't change.</text>
+</svg>

@@ -236,6 +236,8 @@ nav:
           - "Performance Tuning, Consumer Lag & Monitoring": kafka/12-performance-tuning-consumer-lag-and-monitoring.md
       - "Messaging Alternatives":
           - Overview: messaging-alternatives/index.md
+          - "RabbitMQ: exchanges, queues, routing": messaging-alternatives/01-rabbitmq-exchanges-queues-routing.md
+          - "Kafka vs RabbitMQ vs SQS \u2014 choosing": messaging-alternatives/02-kafka-vs-rabbitmq-vs-sqs-choosing.md
   - "GraphQL":
       - "GraphQL":
           - Overview: graphql/index.md

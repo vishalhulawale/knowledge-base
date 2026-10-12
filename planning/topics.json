@@ -1946,13 +1946,13 @@
           "title": "RabbitMQ: exchanges, queues, routing",
           "slug": "01-rabbitmq-exchanges-queues-routing",
           "resume": false,
-          "status": "todo"
+          "status": "done"
         },
         {
           "title": "Kafka vs RabbitMQ vs SQS — choosing",
           "slug": "02-kafka-vs-rabbitmq-vs-sqs-choosing",
           "resume": true,
-          "status": "todo"
+          "status": "done"
         }
       ]
     },
