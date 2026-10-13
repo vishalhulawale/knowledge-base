@@ -49,7 +49,9 @@ Stories needed, by how many page actions depend on them:
 
 Every page already has 2–3 hand-made figures, most animated, and reviewers scored media 4.7/5 with only 15 targeted additions. The animations are CSS-animated SVGs: they play like GIFs but stay sharp at any zoom, follow light/dark mode, honour reduced-motion settings and are 5–20 KB instead of 0.5–3 MB. Recommendation: keep SVG as the format and spend effort on the 15 missing figures below (rebalance storm, downstream outage pause-vs-DLQ, cache stampede, CAP partition, expand/contract schema, cloud KMS rotation comparison and similar). If you want real .gif files too (for example to paste into notes), they can be exported from the same SVGs.
 
-## Wave 0: correctness fixes
+## Wave 0: correctness fixes — DONE 2026-10-13
+
+*All 49 applied after checking each against official docs or by running the code; none rejected. Also fixed while there: a retry-loop bug (401 on the last attempt), RFC 10017 replacing "IETF draft" on 5 pages, the 90%-utilisation wording, and one resume paraphrase.*
 
 - **testing/07-tdd-coverage-and-quality-gates** (Core concepts → Mutation testing (Mermaid diagram)): Diagram says 'Source: if (days >= 7)' with mutants 'days > 7' and 'days <= 7', but the page's RefillPolicy and the SVG use 'days <= 7'. Change to source 'days <= 7' with mutants 'days < 7', 'days > 7', 'return true', matching 07-coverage-vs-mutation.svg; the caption about exactly-7 then stays correct.
 - **performance-engineering/01-performance-methodology-measure-profi** (Key takeaways (bullet 5)): Takeaway says 'Plan to run below about 70–80%' while §6 and the cheat sheet say 'target about 60–75% at peak'. Align to one range (60–75% at peak).

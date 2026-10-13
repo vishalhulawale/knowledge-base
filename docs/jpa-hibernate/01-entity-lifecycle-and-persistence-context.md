@@ -204,7 +204,7 @@ spring:
     class Member {
         @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
         private Long id;
-        @Version private long version;               // optimistic locking + "is new" detection
+        @Version private Long version;               // optimistic locking + "is new" detection (null = new)
         private String email;
         private String phone;
 
@@ -213,7 +213,7 @@ spring:
         void changeEmail(String email) { this.email = email; }
         void updateContact(String email, String phone) { this.email = email; this.phone = phone; }
         Long getId() { return id; }
-        long getVersion() { return version; }
+        Long getVersion() { return version; }
         String getEmail() { return email; }
 
         @Override public boolean equals(Object o) {  // id-based equals, constant hashCode (Hibernate guidance)
