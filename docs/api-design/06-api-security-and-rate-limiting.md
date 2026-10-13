@@ -79,7 +79,7 @@ flowchart LR
 - **Mass assignment:** binding `@RequestBody MemberEntity` lets a client set `role`, `verified` or `balance`. Bind to a request record with only allowed fields.
 - **Injection:** parameterised queries and the ORM's binding; never concatenate filters or sort fields into SQL; allow-list sort/filter fields.
 - **SSRF:** if the API fetches URLs (webhooks, imports, image proxies), allow-list hosts, resolve and block private/link-local ranges (including `169.254.169.254`), and disable redirects.
-- **Size limits:** max body size (`server.tomcat.max-swallow-size`, gateway limits), max page size, max array lengths, upload size limits, and GraphQL depth/complexity limits.
+- **Size limits:** max body size (`spring.servlet.multipart.max-file-size` / `max-request-size` for uploads, `server.tomcat.max-http-form-post-size` for form posts, and a gateway/ingress body limit or a servlet filter for JSON bodies; `server.tomcat.max-swallow-size` only caps how much of an aborted upload Tomcat reads), max page size, max array lengths, upload size limits, and GraphQL depth/complexity limits.
 
 ### Transport and headers
 

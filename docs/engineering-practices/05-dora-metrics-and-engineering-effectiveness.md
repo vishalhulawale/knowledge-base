@@ -144,7 +144,7 @@ WITH prod AS (
 )
 SELECT
   p.service,
-  count(*) / 13.0                                               AS deploys_per_week,
+  count(DISTINCT p.id) / 13.0                                   AS deploys_per_week,
   percentile_cont(0.5) WITHIN GROUP (
       ORDER BY extract(epoch FROM p.finished_at - c.committed_at) / 3600)
                                                                 AS median_lead_time_h,
@@ -157,8 +157,9 @@ FROM prod p
 JOIN deployment_changes c ON c.deployment_id = p.id
 LEFT JOIN recoveries r    ON r.deployment_id = p.id
 GROUP BY p.service;
--- Caveat: the join repeats each deployment once per commit, so rate columns are
--- commit-weighted here; compute rates from `prod` alone in a real report.
+-- Caveat: the join repeats each deployment once per commit, so frequency uses
+-- count(DISTINCT p.id) and the rate columns are commit-weighted here; compute
+-- rates from `prod` alone in a real report.
 ```
 
 ### Emitting deploy events from the pipeline (GitLab CI)

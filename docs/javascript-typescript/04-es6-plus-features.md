@@ -133,8 +133,9 @@ sequenceDiagram
 | `??=`/`||=`/`&&=`, `replaceAll`, `Promise.any` | ES2021 | |
 | Class fields, `#private`, top-level await, `at()`, `Object.hasOwn`, `Error.cause` | ES2022 | |
 | `toSorted`, `toReversed`, `toSpliced`, `with`, `findLast` | ES2023 | Non-mutating array methods |
-| `Object.groupBy`, `Map.groupBy`, `Promise.withResolvers`, `Array.fromAsync`* | ES2024 | *ES2024/2025 by engine |
+| `Object.groupBy`, `Map.groupBy`, `Promise.withResolvers` | ES2024 | |
 | Iterator helpers, Set methods (`union`, `intersection`...), `Promise.try`, `RegExp.escape`, JSON modules, `Float16Array` | ES2025 | |
+| `Array.fromAsync` | ES2026 | Already shipped in modern engines before standardisation |
 | Temporal | Stage 4 (2026) | Replaces `Date` for real date/time work; TypeScript 6.0 ships its types |
 | `structuredClone` | Web/Node API | Deep clone (see copying page) |
 

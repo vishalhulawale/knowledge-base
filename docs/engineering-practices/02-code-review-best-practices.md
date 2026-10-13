@@ -26,7 +26,7 @@ Review has a cost. Every hour a PR waits is an hour of context lost by the autho
 - **Code health over time:** readable, consistent, simple code that the next person can change safely.
 - **Knowledge transfer:** at least two people understand every change; juniors learn the codebase and its norms; seniors learn what juniors find confusing. Bacchelli and Bird's study at Microsoft (ICSE 2013) found finding defects was the top *expectation*, but outcomes were dominated by knowledge transfer, team awareness and alternative solutions. Google's case study (Sadowski et al., ICSE-SEIP 2018, 9 million changes) reports education, maintaining norms, gatekeeping and accident prevention as the motivations.
 - **Catching defects early:** cheaper than catching them in test or production, especially logic, concurrency, security and data-migration issues that tests didn't cover.
-- **Compliance evidence:** separation of duties ("nobody ships their own change unreviewed"). PCI DSS v4.0 requirement 6.2.3, for example, expects bespoke software to be reviewed before release *[verify the exact clause for the audit regime you name]*.
+- **Compliance evidence:** separation of duties ("nobody ships their own change unreviewed"). PCI DSS v4.0 requirement 6.2.3, for example, requires bespoke and custom software to be reviewed before release to production or to customers, to identify and correct potential coding vulnerabilities.
 
 ### Machines first, humans second
 
@@ -78,7 +78,7 @@ sequenceDiagram
 ```
 *Notice the waits, not the work. Most PR cycle time is time spent waiting for CI or for a person, which is why review SLAs and small PRs shorten lead time more than faster typing does.*
 
-![Animation: one 1,200-line PR waits two days for review, gets a skim and a single approval; the same work split into three stacked PRs of about 400 lines each is reviewed and merged one after another within the same day](images/02-small-prs.svg){ loading=lazy }
+![Animation: one 1,200-line PR waits 14 hours for review, gets a one-hour skim and a single approval at hour 15; the same work split into three stacked PRs of about 400 lines each is reviewed and merged one after another at hours 2, 4 and 5.5](images/02-small-prs.svg){ loading=lazy }
 *Splitting doesn't add review work; it removes the waiting and the skimming.*
 
 ### Comments that teach without blocking

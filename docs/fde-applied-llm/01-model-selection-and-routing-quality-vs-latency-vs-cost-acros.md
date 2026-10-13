@@ -51,7 +51,7 @@ Prices and names change every few months. Treat this table as the *shape* of the
 
 | Provider | Tiers today (examples) | Serving surfaces | Notes for deployments |
 |---|---|---|---|
-| **Anthropic** | Claude Opus 5.5 (`claude-opus-5-5`, $4/$20 per 1M input/output tokens), Claude Sonnet 5.5 (`claude-sonnet-5-5`, $2/$10), Claude Haiku 5.5 (`claude-haiku-5-5`, $0.10/$0.50 for prompts up to 100K tokens, $0.50/$2.50 beyond) for fast/cheap work | Claude API, Amazon Bedrock, Google Vertex AI, Microsoft Foundry | 1M-token context on Opus 5.5, Sonnet 5.5 and Haiku 5.5; effort levels `low`→`max` (Anthropic models table, October 2026) |
+| **Anthropic** | Claude Opus 5.5 (`claude-opus-5-5`, $4/$20 per 1M input/output tokens), Claude Sonnet 5.5 (`claude-sonnet-5-5`, $2/$10), Claude Haiku 5.5 (`claude-haiku-5-5`, $0.10/$0.50 for prompts up to 100K tokens, $0.50/$2.50 beyond *[verify]*) for fast/cheap work | Claude API, Amazon Bedrock, Google Vertex AI, Microsoft Foundry | 1M-token context on Opus 5.5, Sonnet 5.5 and Haiku 5.5; effort levels `low`→`max` (Anthropic models table, October 2026) |
 | **OpenAI** | GPT-5.5 family (third-party trackers list ~$5/$30 per 1M; Pro variant much higher), smaller "mini/nano" tiers | OpenAI API, Azure (Foundry) | Responses API is the primary surface; reasoning effort parameter; Batch and Flex tiers at about half price |
 | **Google** | Gemini 3.5 Flash (GA June 2026), Gemini 3.1 Pro (preview), Flash-Lite tiers | Gemini API, Vertex AI | Implicit caching on by default; Gemini 2.5 family reported to be shut down mid-October 2026 *[verify]* |
 | **Open-weight** | Llama, Mistral, Qwen, DeepSeek and others | Self-hosted (vLLM, TGI), Bedrock, Vertex, Azure | Full data control and fine-tuning; you own GPUs, scaling and safety |

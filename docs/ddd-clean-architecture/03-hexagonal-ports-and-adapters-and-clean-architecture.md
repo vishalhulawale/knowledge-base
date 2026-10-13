@@ -223,9 +223,14 @@ The usual violation is a "service" that knows about HTTP clients, JPA entities a
     // --- configuration: wire the plain-Java core with Spring at the edge
     @Configuration
     class OrderingConfig {
-        @Bean @Transactional
-        PlaceOrderUseCase placeOrder(OrderRepository o, PaymentGateway p, OrderEvents e) {
-            return new PlaceOrderService(o, p, e);
+        // @Transactional on a @Bean method would only wrap this factory call,
+        // so wrap the plain-Java service in a transactional decorator instead
+        @Bean
+        PlaceOrderUseCase placeOrder(OrderRepository o, PaymentGateway p, OrderEvents e,
+                                     PlatformTransactionManager txManager) {
+            PlaceOrderUseCase core = new PlaceOrderService(o, p, e);
+            TransactionTemplate tx = new TransactionTemplate(txManager);
+            return cmd -> tx.execute(status -> core.place(cmd));
         }
     }
     ```

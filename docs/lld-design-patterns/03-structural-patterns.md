@@ -91,7 +91,7 @@ Spring AOP specifics:
 
 - JDK dynamic proxies (interface-based) or **CGLIB** (subclass-based, the default in Spring Boot).
 - `final` classes and methods can't be proxied by CGLIB.
-- Only `public` methods are intercepted by default.
+- `private` methods are never intercepted. Since Spring Framework 6.0, CGLIB (class-based) proxies also apply `@Transactional` to `protected` and package-private methods; JDK (interface-based) proxies still only intercept `public` interface methods.
 - **Self-invocation fixes:** move the method to another bean (best), inject a self-reference through `ObjectProvider`, use `TransactionTemplate` programmatically, or use AspectJ weaving.
 
 ### Facade
@@ -323,7 +323,7 @@ class AuditService {
     - Use `TransactionTemplate`.
     - Use AspectJ compile/load-time weaving.
 
-    It also doesn't apply to non-public methods with proxy-based AOP.
+    It also never applies to `private` methods. Since Spring Framework 6.0, CGLIB proxies do apply it to `protected` and package-private methods (before 6.0 only `public` ones).
 
     **Interviewer listens for:** a precise cause plus fixes.
 
@@ -395,7 +395,7 @@ class AuditService {
 | Composite | Tree, uniform treatment | Rule groups, UI trees |
 | Bridge | Two independent hierarchies | JDBC API vs drivers, Notification × Channel |
 | Flyweight | Share immutable state | `Integer.valueOf` cache, `String.intern` |
-| Spring traps | Self-invocation, `final`, non-public methods | Move to another bean / `TransactionTemplate` |
+| Spring traps | Self-invocation, `final`, `private` methods | Move to another bean / `TransactionTemplate` |
 
 ## Sources
 1. Gamma et al., *Design Patterns* (GoF): structural patterns.

@@ -201,11 +201,11 @@ lock_timeout = 5s
 
 ## How this connects to my experience
 
-- **Where I used it:** not ★. Spring `@Transactional` services with relational databases (Deloitte RDS services, Coriolis CCKM, Johnson Controls user management), and MongoDB multi-document transactions at OptumRx, whose snapshot semantics are similar to REPEATABLE READ. *[confirm where non-default isolation or retries were used]*
+- **Where I used it:** not ★. Spring `@Transactional` services with relational databases (Deloitte RDS services, Coriolis CCKM, Johnson Controls user management), and MongoDB at OptumRx *[confirm whether multi-document transactions were used]*, whose multi-document transactions have snapshot semantics similar to REPEATABLE READ. *[confirm where non-default isolation or retries were used]*
 - **Talking points:**
     - "I don't rely on `@Transactional` alone for concurrent updates: I use atomic conditional updates, `@Version`, row locks, or constraints depending on the invariant."
     - "For invariants across several rows I either lock the rows the decision depends on or use SERIALIZABLE with a retry wrapper."
-    - "Transactions stay short and never span HTTP or Kafka calls; we used the outbox pattern for events."
+    - "Transactions stay short and never span HTTP or Kafka calls; for events I'd use the transactional outbox pattern."
 - **Likely follow-up chain:** "What does ACID mean?" → "Isolation levels and anomalies?" → "What's PostgreSQL's default and what does it allow?" (lost update, write skew) → "How do you prevent write skew?" (locks, constraints, SERIALIZABLE + retry) → "How do you retry correctly?"
 
 ## Interview questions

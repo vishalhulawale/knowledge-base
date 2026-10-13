@@ -136,7 +136,7 @@ class CacheConfig {
     CachingConfigurer cachingConfigurer() {
         return new CachingConfigurer() {
             @Override public CacheErrorHandler errorHandler() {
-                return new LenientCacheErrorHandler();            // log + carry on to the method
+                return new LoggingCacheErrorHandler();            // Spring 5.3.16+: log + carry on to the method
             }
         };
     }

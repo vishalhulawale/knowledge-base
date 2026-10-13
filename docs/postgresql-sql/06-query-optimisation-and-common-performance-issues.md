@@ -215,7 +215,7 @@ spring.datasource.hikari.data-source-properties.options=-c statement_timeout=500
 - **Where I used it:** not ★. Relational databases at Deloitte (RDS, plus Elasticsearch for search) and elsewhere; at OptumRx the same method applies to MongoDB (`explain()`, profiler, compound indexes) and to the GraphQL layer's upstream calls (N+1 batching with DataLoader). *[confirm a performance issue you diagnosed end to end]*
 - **Talking points:**
     - "My order is: rank by total time, reproduce with real parameters, read the plan, fix the access path, verify with the same plan, then add a guard test."
-    - "Half of database load problems I've seen came from the application side: N+1 queries, missing batching, or fetching whole entities for list screens."
+    - "In my experience, many database load problems come from the application side: N+1 queries, missing batching, or fetching whole entities for list screens."
     - "For search-like features I use trigram indexes for small cases and a search engine (Elasticsearch, as at Deloitte) for real full-text needs."
 - **Likely follow-up chain:** "An endpoint is slow, what do you do?" → method → "The plan shows a seq scan" → index / predicate rewrite → "It still picks the wrong plan" (statistics, generic plans) → "What server settings matter?" → "How do you stop regressions?"
 

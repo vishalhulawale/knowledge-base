@@ -322,7 +322,7 @@ kafka-consumer-groups.sh --bootstrap-server broker:9092 --describe --group fulfi
 
     **Common wrong answer:** Treating them as the same feature, or claiming KIP-848 is the default for consumers in 4.0 (it's GA but opt-in).
 
-??? question "Q14. commitSync vs commitAsync: when do you use each, and what exactly do you commit?"
+??? question "Q9. commitSync vs commitAsync: when do you use each, and what exactly do you commit?"
     **Answer:** `commitSync()` blocks and retries until it succeeds or hits an unrecoverable error, so it's safe but adds latency per commit. `commitAsync()` doesn't block and does **not** retry, because a retry could land after a later commit and move the offset backwards. The usual pattern is `commitAsync()` in the loop and a final `commitSync()` in `onPartitionsRevoked` and on shutdown. In both cases the offset you commit is **last processed + 1** (the next record to read). In Spring Kafka you rarely call these yourself: the container commits according to `AckMode` (default `BATCH`), and `syncCommits` (default true) picks sync vs async.
 
     **Interviewer listens for:** why async isn't retried (ordering of commits); the sync commit on revoke/close; the off-by-one on the committed offset; knowing Spring's container does this for you.
@@ -331,28 +331,28 @@ kafka-consumer-groups.sh --bootstrap-server broker:9092 --describe --group fulfi
 
 ### Senior
 
-??? question "Q9. Your consumer calls a slow external API. How do you avoid rebalance storms and still scale?"
+??? question "Q10. Your consumer calls a slow external API. How do you avoid rebalance storms and still scale?"
     **Answer:** Bound processing time: lower `max.poll.records`, set strict timeouts and circuit breakers on the API, and use pause/resume of partitions while waiting. Increase partitions and concurrency if the API can take more load. Or move to per-key parallel processing (Parallel Consumer) or async with careful offset tracking. Push slow retries to retry topics rather than blocking.
 
     **Interviewer listens for:** bounding the time between polls first; back-pressure with pause/resume; not committing ahead of unfinished async work; retry topics instead of blocking retries.
 
     **Common wrong answer:** "Just raise `max.poll.interval.ms` to an hour" as the only fix, or "hand it to a thread pool" with no offset story.
 
-??? question "Q10. How do you achieve effectively-exactly-once when consuming into Postgres?"
+??? question "Q11. How do you achieve effectively-exactly-once when consuming into Postgres?"
     **Answer:** Either dedupe (processed-event table with a unique eventId, written in the same transaction as the business update), or store the consumed offsets in the same DB transaction and on partition assignment `seek()` to the stored offset instead of using Kafka commits. Kafka transactions alone don't cover external DBs.
 
     **Interviewer listens for:** atomicity between the business write and the dedupe/offset record; Kafka EOS scope is Kafka-to-Kafka only; `seek()` on assignment.
 
     **Common wrong answer:** "Turn on `isolation.level=read_committed` and idempotent producer" as if that covered the database.
 
-??? question "Q11. Lag spikes every time you deploy. Why, and how do you fix it?"
+??? question "Q12. Lag spikes every time you deploy. Why, and how do you fix it?"
     **Answer:** Rolling restarts cause repeated eager rebalances: the default assignor list is `[RangeAssignor, CooperativeStickyAssignor]`, so Range (eager) is used unless you change it, and each pod leaving and joining stops the whole group, twice per pod. Fixes: `CooperativeStickyAssignor` (a live group needs two rolling bounces to migrate) or `group.protocol=consumer` (KIP-848), static membership with stable instance IDs and a session timeout that covers a pod restart, graceful shutdown so in-flight records finish and offsets are committed on revoke, and proper readiness probes plus a sane `maxSurge`/`maxUnavailable` so pods don't flap. Some lag during a deploy is expected; the goal is a short dip, not a stall.
 
     **Interviewer listens for:** root cause is the protocol plus pod churn, not throughput; several concrete mitigations and their limits; graceful shutdown.
 
     **Common wrong answer:** "Add more consumers" or "increase partitions".
 
-??? question "Q15. What actually changes for you when you move a group to the KIP-848 consumer protocol?"
+??? question "Q13. What actually changes for you when you move a group to the KIP-848 consumer protocol?"
     **Answer:** You set `group.protocol=consumer` on the clients (brokers on 4.0+; the client default is still `classic`). Assignment moves from the client-side group leader to the group coordinator, so `partition.assignment.strategy` goes away and you optionally pick a server-side assignor with `group.remote.assignor` (`uniform` or `range`). `session.timeout.ms` and `heartbeat.interval.ms` are no longer client settings: the broker's `group.consumer.session.timeout.ms` (45s) and `group.consumer.heartbeat.interval.ms` (5s) apply, and leaving the old client properties in place fails at startup with a `ConfigException`. Rebalances become per-member reconciliations with no stop-the-world phase. `max.poll.interval.ms`, offset commits, static membership and `ConsumerRebalanceListener` still work the same way. An existing classic group can be migrated online with a rolling restart. Kafka Streams is not covered by this protocol (it has its own, KIP-1071).
 
     **Interviewer listens for:** which configs disappear and where they moved; broker-side assignment; that it's opt-in and can be rolled out without downtime; you'd test it in a lower environment and watch rebalance metrics first.
@@ -361,14 +361,14 @@ kafka-consumer-groups.sh --bootstrap-server broker:9092 --describe --group fulfi
 
 ### Scenario-based
 
-??? question "Q12. Lag is growing on all partitions. Walk through diagnosis."
+??? question "Q14. Lag is growing on all partitions. Walk through diagnosis."
     **Answer:** Start with `kafka-consumer-groups.sh --describe`: check whether it's throughput or a stall (is the committed offset moving?) and whether the group state is Stable or stuck rebalancing. Check for rebalance loops (logs, `--describe --members`). Look at processing time per record and downstream latency, GC pauses and CPU. Are consumers fewer than partitions? Did input traffic spike? Then fix: scale consumers up to the partition count, optimise processing (batching DB writes), add partitions for future traffic, or temporarily shed non-critical work.
 
     **Interviewer listens for:** a structured approach: stall vs slow, then rebalance loop, then per-record latency, then capacity; evidence before action; knowing a poison pill shows as lag on one partition, not all.
 
     **Common wrong answer:** Jumping straight to "scale up consumers" without checking whether they're already at the partition count or stuck.
 
-??? question "Q13. A bug corrupted data processed over the last 6 hours. How do you reprocess?"
+??? question "Q15. A bug corrupted data processed over the last 6 hours. How do you reprocess?"
     **Answer:** Deploy the fix. Stop the group, then reset offsets to a timestamp 6 hours back (`--reset-offsets --to-datetime`), or run a separate replay group writing to a corrected sink. This requires topic retention ≥ 6h and idempotent and version-aware consumers so reprocessing doesn't double-apply. Communicate the downstream impact.
 
     **Interviewer listens for:** the group must be stopped for a reset; retention must still hold the data; idempotent/versioned writes; a replay group as the safer option; stakeholder communication.

@@ -283,7 +283,7 @@ Rough method: `partitions ≥ max(target throughput / per-partition producer thr
 
     **Common wrong answer:** "Because it keeps everything in memory."
 
-??? question "Q8a. How do `replication.factor`, the ISR, `min.insync.replicas` and `acks` relate?"
+??? question "Q9. How do `replication.factor`, the ISR, `min.insync.replicas` and `acks` relate?"
     **Answer:** `replication.factor` is how many copies exist. The **ISR** is the subset currently caught up (it shrinks and grows at runtime). `acks` is a *producer* setting: `0` = don't wait, `1` = leader has appended, `all` = every current ISR member has it. `min.insync.replicas` is a *topic/broker* setting that says how small the ISR may get before `acks=all` writes are rejected. So `acks=all` means "all in-sync replicas", not "all replicas": with RF=3 and the ISR shrunk to just the leader, `acks=all` is satisfied by one copy unless min ISR ≥ 2 forbids it.
 
     **Interviewer listens for:** which setting lives where (producer vs topic), that `acks=all` is relative to the *current* ISR, and that min ISR is ignored for `acks=0/1`.
@@ -299,26 +299,26 @@ Rough method: `partitions ≥ max(target throughput / per-partition producer thr
 
     **Common wrong answer:** "Consumers rebalance." A broker failure changes partition leadership, not group membership (unless the failed broker was the group coordinator, in which case clients just find the new coordinator).
 
-??? question "Q11. How would you size a cluster and partitions for 50K msgs/s of 2KB?"
+??? question "Q11. What is the leader epoch and why isn't the high watermark enough for follower truncation?"
+    **Answer:** The HW is propagated to followers asynchronously (in the *next* fetch response), so a follower's HW can lag the true HW. If a follower restarted and truncated to its own stale HW, then became leader before re-fetching, it would have thrown away a committed record: data loss, or logs that diverge between replicas. KIP-101 fixed this with the **leader epoch**: a monotonically increasing number bumped on each leader change and stored in every record batch, plus a per-replica epoch → start-offset checkpoint. On becoming a follower, a replica asks the leader for the end offset of its last known epoch (`OffsetsForLeaderEpoch`) and truncates only what actually diverges. Epochs also let brokers and clients fence stale leaders (`FENCED_LEADER_EPOCH`).
+
+    **Interviewer listens for:** HW propagation is asynchronous, the specific failure it caused, and epoch-based truncation and fencing.
+
+    **Common wrong answer:** "A returning replica truncates to its high watermark" (pre-0.11 behaviour).
+
+??? question "Q12. How would you size a cluster and partitions for 50K msgs/s of 2KB?"
     **Answer:** That's ~100 MB/s ingress, and RF=3 means ~300 MB/s written across the cluster, plus consumer egress × number of groups. Measure per-partition throughput (often ~10 MB/s producer-side, consumer-dependent) to get ~12–24 partitions with headroom. Size brokers by disk throughput, network and retention (100 MB/s × 7 days × 3 ≈ 180 TB). Spread across 3 AZs. Validate with load tests (`kafka-producer-perf-test.sh`). Compression typically cuts the disk and network numbers substantially, and tiered storage (KIP-405) can move older segments to object storage. Keep disk and network utilisation low enough that the cluster still copes with one broker (or one AZ) down.
 
     **Interviewer listens for:** a method (throughput → bytes → replication → retention → headroom), not a magic number; N+1 capacity planning.
 
     **Common wrong answer:** quoting a partition count without stating assumptions about message size, retention or consumer speed.
 
-??? question "Q12. When would you consider follower fetching?"
+??? question "Q13. When would you consider follower fetching?"
     **Answer:** Multi-AZ clusters where consumers in each AZ read from a local replica (set `client.rack` and a rack-aware replica selector on brokers). It cuts cross-AZ cost and latency. The broker setting is `replica.selector.class=org.apache.kafka.common.replica.RackAwareReplicaSelector`, with `broker.rack` set on every broker. The trade-off is slightly higher end-to-end latency: a follower only serves up to its own high watermark, which trails the leader's. Producers still always write to the leader.
 
     **Interviewer listens for:** both the client and the broker side of the configuration, and that consistency is preserved because followers serve only committed data.
 
     **Common wrong answer:** "Followers can serve stale or uncommitted data" or "producers can write to followers".
-
-??? question "Q11a. What is the leader epoch and why isn't the high watermark enough for follower truncation?"
-    **Answer:** The HW is propagated to followers asynchronously (in the *next* fetch response), so a follower's HW can lag the true HW. If a follower restarted and truncated to its own stale HW, then became leader before re-fetching, it would have thrown away a committed record: data loss, or logs that diverge between replicas. KIP-101 fixed this with the **leader epoch**: a monotonically increasing number bumped on each leader change and stored in every record batch, plus a per-replica epoch → start-offset checkpoint. On becoming a follower, a replica asks the leader for the end offset of its last known epoch (`OffsetsForLeaderEpoch`) and truncates only what actually diverges. Epochs also let brokers and clients fence stale leaders (`FENCED_LEADER_EPOCH`).
-
-    **Interviewer listens for:** HW propagation is asynchronous, the specific failure it caused, and epoch-based truncation and fencing.
-
-    **Common wrong answer:** "A returning replica truncates to its high watermark" (pre-0.11 behaviour).
 
 ??? question "Q14. How do you secure a Kafka cluster that carries PHI?"
     **Answer:** In layers:

@@ -41,7 +41,7 @@ flowchart TD
     C --> CODE["8. Code the core path<br/>(runnable early)"]
     CODE --> T["9. Tests + walkthrough + extension twist"]
 ```
-*Notice that steps 1–7 should take roughly a third of the time. They make step 8 fast and the twist in step 9 a small change instead of a rewrite.*
+*Notice that steps 1–7 should take about a third to a half of the time, with coding started by minute 20. They make step 8 fast and the twist in step 9 a small change instead of a rewrite.*
 
 ![A 45-minute timeline: 20 minutes of design split into clarify 5, entities 5, classes and patterns 5, APIs 3 and state 2; 15 minutes coding the core path; 10 minutes for tests and walkthrough 5 and the extension twist 5](images/06-lld-time-budget.svg){ loading=lazy }
 *Notice the hard edge at minute 20: if coding hasn't started by then, there's no time left to run it or absorb the twist.*
@@ -118,6 +118,7 @@ classDiagram
         -Map~SeatId,SeatStatus~ seats
         +hold(Set~SeatId~, UserId, Instant) Hold
         +confirm(HoldId, Instant) Booking
+        +release(Set~SeatId~)
         +releaseExpired(Instant) int
     }
     class Hold {
@@ -130,6 +131,7 @@ classDiagram
     class Booking {
         <<record>>
         BookingId id
+        ShowId showId
         Set~SeatId~ seats
         Money total
     }
@@ -210,6 +212,15 @@ classDiagram
             }
         }
 
+        public void release(Set<String> seatIds) {            // compensation, e.g. payment declined
+            lock.lock();
+            try {
+                seatIds.forEach(s -> seats.put(s, SeatStatus.AVAILABLE));
+            } finally {
+                lock.unlock();
+            }
+        }
+
         private void releaseExpiredLocked(Instant now) {
             holds.values().removeIf(h -> {
                 boolean expired = h.expiresAt().isBefore(now);
@@ -233,7 +244,12 @@ classDiagram
             Show show = shows.get(showId);
             Set<String> seats = show.confirm(holdId, clock.instant());
             Money total = pricing.price(show, seats);
-            payments.charge(pay, total, holdId);                   // holdId doubles as idempotency key
+            try {
+                payments.charge(pay, total, holdId);               // holdId doubles as idempotency key
+            } catch (PaymentDeclinedException e) {
+                show.release(seats);                               // a declined payment must not leave seats BOOKED
+                throw e;
+            }
             return new Booking(UUID.randomUUID().toString(), showId, seats, total);
         }
     }
@@ -395,7 +411,7 @@ classDiagram
 | APIs | Domain names, value-object params, explicit failures, immutable returns |
 | Concurrency | Invariants named. Atomic per aggregate (JVM) or DB constraints (cluster). Holds with TTL |
 | Testability | Injected `Clock`, in-memory repositories behind interfaces, runnable driver |
-| Timebox | Model ≤ 1/3 of the time, runnable core by the midpoint, leave room for the twist |
+| Timebox | Model in about a third to a half of the time (code by minute 20 of 45), runnable core by the midpoint, leave room for the twist |
 
 ## Sources
 1. Craig Larman, *Applying UML and Patterns* (GRASP: Information Expert, Creator, Controller, Low Coupling, High Cohesion).

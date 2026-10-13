@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
   <title id="t">Decorators: one call through Metrics, Retry, Cache and HTTP</title>
-  <desc id="d">Four decorators nested like an onion, all implementing the same PricingClient interface: Metrics wraps Retry, which wraps Cache, which wraps the HTTP client. One call: Metrics starts a timer, Retry makes attempt 1, Cache misses, HTTP returns 503. Retry backs off and makes attempt 2, Cache misses again, HTTP returns 200, Cache stores the result, and Metrics records the total time, 340 ms including the retry. Swapping the order changes the behaviour: with Cache outside Retry, a cache hit would skip retries and metrics entirely.</desc>
+  <desc id="d">Four decorators nested like an onion, all implementing the same PricingClient interface: Metrics wraps Retry, which wraps Cache, which wraps the HTTP client. One call: Metrics starts a timer, Retry makes attempt 1, Cache misses, HTTP returns 503. Retry backs off and makes attempt 2, Cache misses again, HTTP returns 200, Cache stores the result, and Metrics records the total time, 340 ms including the retry. Swapping the order changes the behaviour: with Cache outside Retry, a cache hit would skip retries and the HTTP call.</desc>
   <style>
     .card{fill:#f8fafc;stroke:#e2e8f0}
     .h{fill:#0f172a;font-size:20px;font-weight:700}

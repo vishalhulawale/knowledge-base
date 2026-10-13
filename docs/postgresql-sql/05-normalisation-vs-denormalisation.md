@@ -220,7 +220,7 @@ When a counter must be exact, update it **in the same transaction** as the chang
 
 ## How this connects to my experience
 
-- **Where I used it:** not ★. Relational schemas on RDS/PostgreSQL/MySQL (Deloitte, Coriolis, Johnson Controls) and document modelling in MongoDB at OptumRx, where embed-vs-reference is the same trade-off; Elasticsearch at Deloitte is a classic denormalised read model fed from the system of record. *[confirm specific schemas you designed]*
+- **Where I used it:** not ★. Relational schemas on RDS at Deloitte (Coriolis and Johnson Controls *[confirm]*) and document modelling in MongoDB at OptumRx, where embed-vs-reference is the same trade-off; Elasticsearch at Deloitte is a classic denormalised read model fed from the system of record. *[confirm specific schemas you designed]*
 - **Talking points:**
     - "I start normalised with real constraints, then denormalise only where measurements show a read problem, with a defined sync mechanism and staleness."
     - "Historical facts like the copay paid or the plan at claim time are stored with the transaction on purpose."

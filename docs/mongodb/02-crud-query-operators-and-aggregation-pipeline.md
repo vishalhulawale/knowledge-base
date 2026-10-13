@@ -331,8 +331,8 @@ db.claims.aggregate([
 
 ### Scenario-based
 
-??? question "Q13. A report shows claims 'with a denied line over £100', but finance says the count is too high. What's likely wrong?"
-    **Answer:** The query probably used dot notation on the array (`{"lines.status": "DENIED", "lines.amount": {$gt: 100}}`), which matches claims where one line is denied and a *different* line is over £100. Rewrite with `$elemMatch` so both conditions apply to the same line. In an aggregation, `$unwind` then `$match`, or `$filter` the array. Verify with a few sample documents and compare counts (on this page's data the difference was 319 vs 125). Also check null handling if a field can be missing.
+??? question "Q13. A report shows claims 'with a denied line over $100', but finance says the count is too high. What's likely wrong?"
+    **Answer:** The query probably used dot notation on the array (`{"lines.status": "DENIED", "lines.amount": {$gt: 100}}`), which matches claims where one line is denied and a *different* line is over $100. Rewrite with `$elemMatch` so both conditions apply to the same line. In an aggregation, `$unwind` then `$match`, or `$filter` the array. Verify with a few sample documents and compare counts (on this page's data the difference was 319 vs 125). Also check null handling if a field can be missing.
 
     **Interviewer listens for:** identifying array semantics as the root cause and verifying the fix.
 

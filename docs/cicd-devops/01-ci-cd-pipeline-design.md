@@ -161,9 +161,10 @@ A CI runner that can deploy to production holds production power. The main contr
       script: ./mvnw -B verify -Dsurefire.skip=true   # Testcontainers ITs
 
     image:
-      stage: build
+      stage: test                            # needs may point to the same or an earlier stage
       needs: [unit]
       rules: [{ if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH }]
+      # Google archived kaniko in 2025: use a maintained fork (e.g. Chainguard's) or BuildKit/buildah
       image: gcr.io/kaniko-project/executor:debug
       script:
         - /kaniko/executor --context . --destination $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA

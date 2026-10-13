@@ -351,7 +351,7 @@ If asked "have you tuned GC in production?" and the true answer is no, say: "We 
 ??? question "Q5. What is the difference between a minor/young GC, a mixed GC and a Full GC in G1?"
     **Answer:** A young GC evacuates Eden and Survivor regions. A mixed GC, which happens after a concurrent marking cycle, evacuates young regions plus a selected set of old regions with the most garbage. A Full GC is an STW compaction of the whole heap, used as a fallback when G1 cannot free memory fast enough. In a healthy G1 application Full GCs should not appear.
 
-    **Interviewer listens for:** young evacuates Eden/Survivor, mixed adds selected old regions, Full is a single-threaded-like whole-heap fallback.
+    **Interviewer listens for:** young evacuates Eden/Survivor, mixed adds selected old regions, Full is a stop-the-world whole-heap compaction (parallel since Java 10, JEP 307), used only as a fallback.
 
     **Common wrong answer:** "A mixed GC is the same as a Full GC."
 

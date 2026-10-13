@@ -258,7 +258,7 @@ The last line matters: if "not found" was cached for an id that's then created, 
 
 ## How this connects to my experience
 
-- **Resume bullet (OptumRx):** "Implemented Redis-based caching for frequently accessed queries and UI reference data." Also at OptumRx: "Kafka-based async processing with retry mechanisms and DLQ handling" (the same thinking about protecting downstream systems).
+- **Resume bullet (OptumRx):** "Implemented Redis-based caching for frequently accessed queries and UI reference data." Also at OptumRx: "Designed Kafka-based event-driven workflows with retry and DLQ handling." (the same thinking about protecting downstream systems).
 - **How to talk about it:** reference data and frequent queries are exactly the hot keys that stampede when they expire at peak time. The defences to describe are TTL jitter, a single loader per key (`@Cacheable(sync = true)` or a Redis lock), and refreshing reference data in the background rather than waiting for expiry. *[confirm which of these you actually implemented; if none, present them as what you would add, not what you did]*
 - **Talking points:**
     - "Every cache design question is really: what does the database see when the cache doesn't answer?"

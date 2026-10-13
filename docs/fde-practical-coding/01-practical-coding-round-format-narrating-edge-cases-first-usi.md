@@ -185,20 +185,23 @@ A typical 45-minute prompt: *"Here's an export of transactions. Return the total
           - empty input -> {}
           - duplicate transaction ids -> count once (exports re-send rows)
           - status "refunded" -> excluded; amounts are strings like "12.50"
-          - missing customer_id or unparseable amount -> skipped and reported, not a crash
+          - missing id or customer_id, unparseable or NaN/Infinity amount
+            -> skipped and reported, not a crash
         """
         totals: dict[str, Decimal] = defaultdict(Decimal)
         seen: set[str] = set()
         for row in rows:
             tx_id, customer = row.get("id"), row.get("customer_id")
-            if not customer or tx_id in seen:
-                continue
+            if not tx_id or not customer or tx_id in seen:
+                continue                      # no id: can't dedupe, so reject it
             if row.get("status") == "refunded":
                 continue
             try:
                 amount = Decimal(str(row.get("amount", "")).strip())
             except InvalidOperation:
                 continue                      # in the real job: log + count rejects
+            if not amount.is_finite():        # Decimal("NaN") parses without error
+                continue
             seen.add(tx_id)
             totals[customer] += amount
         return dict(totals)
@@ -221,7 +224,9 @@ from totals import customer_totals
           {"id": "t1", "customer_id": "c1", "amount": "5"}], {"c1": Decimal("5")}),        # duplicate id
         ([{"id": "t1", "customer_id": "c1", "amount": "5", "status": "refunded"}], {}),    # refund excluded
         ([{"id": "t1", "customer_id": None, "amount": "5"},
-          {"id": "t2", "customer_id": "c2", "amount": "abc"}], {}),                        # bad rows skipped
+          {"id": "t2", "customer_id": "c2", "amount": "abc"},
+          {"id": "t3", "customer_id": "c3", "amount": "NaN"},
+          {"customer_id": "c4", "amount": "5"}], {}),                                      # bad rows skipped
         ([{"id": "t1", "customer_id": "c1", "amount": " 7.5 "}], {"c1": Decimal("7.5")}),  # whitespace
     ],
     ids=["empty", "decimal", "duplicate", "refund", "bad-rows", "whitespace"],

@@ -151,8 +151,11 @@ sequenceDiagram
 
     function RefillButton() {
       const { showBoundary } = useErrorBoundary();
-      const m = useMutation({ mutationFn: api.refill, onError: e => toast.error("Refill failed. Try again.") });
-      return <button onClick={() => m.mutate()}>Refill</button>;   // expected errors handled locally
+      const m = useMutation({
+        mutationFn: api.refill,
+        onError: e => isExpected(e) ? toast.error("Refill failed. Try again.") : showBoundary(e), // e.g. 4xx vs bug/500
+      });
+      return <button onClick={() => m.mutate()}>Refill</button>;   // expected errors local, unexpected to the boundary
     }
     ```
 

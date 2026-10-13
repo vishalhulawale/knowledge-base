@@ -11,7 +11,7 @@ tags: [cryptography-key-management, P0]
     - A **certificate** binds a public key to names (the **SAN** list) and is signed by a CA. Clients build a **chain** leaf → intermediate → trusted root. A server that omitted its intermediate failed with "**unable to verify the first certificate**" (code 21). A wrong hostname failed in both OpenSSL and Java ("No subject alternative names matching IP address 127.0.0.2"), and expiry failed with "certificate has expired".
     - Java's default trust store doesn't know private CAs: "**PKIX path building failed / unable to find valid certification path**". The fix is a trust store containing the private root (HTTP 200 over TLS 1.3 afterwards), **never** a trust-all `TrustManager`.
     - **mTLS:** the server requires a client certificate signed by a trusted CA. Without one, the connection failed with TLS alert **116 "certificate required"**. It's the standard for service-to-service identity (service meshes, PingFederate/OAuth client authentication, bank and partner APIs).
-    - Operate certificates as a lifecycle: short validity (90 days now, heading to 47 days for public certs), **automated renewal** (ACME/Let's Encrypt, cert-manager, ACM, Key Vault), monitoring expiry, protected private keys (KMS/HSM), and a CA hierarchy with an offline root.
+    - Operate certificates as a lifecycle: short validity (public TLS maximum 200 days since March 2026, 100 days from March 2027 and 47 days from March 2029; Let's Encrypt already issues 90-day certs), **automated renewal** (ACME/Let's Encrypt, cert-manager, ACM, Key Vault), monitoring expiry, protected private keys (KMS/HSM), and a CA hierarchy with an offline root.
 
 ## Why it matters
 
@@ -104,7 +104,7 @@ Validation steps a client performs: build a path to a trust anchor, check each s
 | CRL | CA publishes a signed list of revoked serials | Large, cached. Fine for private PKI |
 | OCSP | Client asks the CA's responder about one cert | Privacy and latency issues. Let's Encrypt ended OCSP in 2025 in favour of CRLs |
 | OCSP stapling | Server attaches a signed OCSP response | Avoids client lookups |
-| Short-lived certificates | Expire before revocation matters | The industry direction (public TLS validity falling to 47 days by 2029) |
+| Short-lived certificates | Expire before revocation matters | The industry direction (public TLS maximum 200 days since March 2026, falling to 100 days in 2027 and 47 days in 2029) |
 
 Many clients soft-fail on revocation checks, so in practice short lifetimes plus fast key rotation are the dependable controls.
 
@@ -308,7 +308,7 @@ java -Djavax.net.debug=ssl:handshake -jar app.jar            # JSSE handshake tr
     **Common wrong answer:** "The root certificate should be sent so the client can trust it."
 
 ??? question "Q8. How does certificate revocation work, and why are short-lived certificates preferred?"
-    **Answer:** CRLs are signed lists of revoked serials published by the CA. OCSP lets clients ask a responder about one certificate, and stapling has the server attach the response. In practice revocation is unreliable: clients often soft-fail when responders are unreachable, CRLs are large, and OCSP raises privacy and latency concerns (Let's Encrypt ended OCSP in 2025). Short-lived certificates (90 days today, heading to 47 days for public TLS, hours to days in service meshes) limit the exposure window automatically, provided renewal is fully automated.
+    **Answer:** CRLs are signed lists of revoked serials published by the CA. OCSP lets clients ask a responder about one certificate, and stapling has the server attach the response. In practice revocation is unreliable: clients often soft-fail when responders are unreachable, CRLs are large, and OCSP raises privacy and latency concerns (Let's Encrypt ended OCSP in 2025). Short-lived certificates (public TLS maximum 200 days since March 2026, falling to 47 days by 2029; 90 days from Let's Encrypt; hours to days in service meshes) limit the exposure window automatically, provided renewal is fully automated.
 
     **Interviewer listens for:** the mechanisms, their weaknesses, and the short-lived trend with automation.
 
@@ -369,7 +369,7 @@ java -Djavax.net.debug=ssl:handshake -jar app.jar            # JSSE handshake tr
 | Certificate | Public key + SAN names + validity + EKU, signed by issuer; hostname check uses **SAN** |
 | Chain | Serve leaf + intermediates; root in trust store (missing intermediate → code 21) |
 | Java error | PKIX path building failed → fix trust store / chain, never trust-all |
-| Revocation | CRL / OCSP / stapling; soft-fail; short-lived certs preferred (90 → 47 days) |
+| Revocation | CRL / OCSP / stapling; soft-fail; short-lived certs preferred (public max 200 → 100 → 47 days, 2026–2029) |
 | mTLS | CertificateRequest → client cert + CertificateVerify; no cert → alert 116; still authorise |
 | Spring Boot | SSL bundles, `client-auth: need`, `reload-on-update` |
 | Automation | ACME/Let's Encrypt, cert-manager, ACM, Key Vault, AWS Private CA, mesh |

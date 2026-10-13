@@ -644,7 +644,7 @@ Rules: retry **only idempotent operations** (GET, PUT, DELETE, or POST with an i
 
     **Interviewer listens for:** groups mechanics including the `Default` trap, and a judgement on readability.
 
-    **Common wrong answer:** "Use two copies of the DTO with duplicated fields."
+    **Common wrong answer:** "Leave `id` unconstrained and check it with if-statements in the controller," or "Request only `OnCreate`," which silently skips all `Default` constraints.
 
 ## Cheat sheet
 

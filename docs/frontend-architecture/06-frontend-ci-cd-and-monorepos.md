@@ -16,7 +16,7 @@ tags: [frontend-architecture, P0]
 
 ## Why it matters
 
-My resume says I "defined CI/CD standards" at OptumRx and built the React app with micro-frontends, and lists GitLab CI/CD and Jenkins. Senior frontend interviews ask how you keep CI fast as the codebase grows, monorepo or polyrepo for MFEs and a design system, how you deploy without breaking users mid-session, how you roll back, and what quality gates you put in the pipeline.
+My resume says I "established engineering standards around testing, CI/CD, code quality, and deployment practices" at OptumRx and built the React app with micro-frontends, and lists GitLab CI/CD and Jenkins. Senior frontend interviews ask how you keep CI fast as the codebase grows, monorepo or polyrepo for MFEs and a design system, how you deploy without breaking users mid-session, how you roll back, and what quality gates you put in the pipeline.
 
 Measurements on this page come from Turborepo 2.11 with npm workspaces on Node 22, using five small packages whose build takes 1.5 s each, run while writing this page.
 
@@ -311,7 +311,7 @@ export default [
 
 ## How this connects to my experience
 
-- **Resume facts:** OptumRx: "Built the ReactJS application from the ground up and established a micro-frontend architecture" and defined CI/CD standards while leading 8–10 engineers. Skills: GitLab CI/CD, Jenkins, Docker, Terraform, AWS (Deloitte: EKS, Terraform). Coriolis: GitLab CI/CD for Spring Boot services.
+- **Resume facts:** OptumRx: "Built the ReactJS application from the ground up and established a micro-frontend architecture" and "Established engineering standards around testing, CI/CD, code quality, and deployment practices" while leading 8–10 engineers. Skills: GitLab CI/CD, Jenkins, Docker, Terraform, AWS (Deloitte: EKS, Terraform). Coriolis: GitLab CI/CD for Spring Boot services.
 - **How to talk about it:** CI/CD standards for the team (pipeline stages, quality gates, branch and review rules), how the React MFEs were built and deployed independently, and how shared code (design system, utilities) was managed. *[confirm: monorepo or separate repos for the MFEs, which CI system the frontend used, where the frontend was hosted (CDN, containers on EKS/AKS), how remotes were discovered (manifest, env config), test stages (unit, E2E, visual), deployment frequency, rollback process, feature flags]*
 - **Not used directly (unless confirmed):** Turborepo/Nx remote caching. Position it as knowledge of how to scale CI for a monorepo.
 - **Talking points:**

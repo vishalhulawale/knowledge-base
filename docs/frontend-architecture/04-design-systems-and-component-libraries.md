@@ -363,7 +363,7 @@ npx changeset publish    # publishes changed packages to the registry
 
 ## How this connects to my experience
 
-- **Resume facts:** frontend skills list "ReactJS, Redux, React Query, **Material UI, Storybook**". OptumRx: "Built the ReactJS application from the ground up and established a micro-frontend architecture", leading 8–10 engineers on an app serving 750K+ users. Also "defined CI/CD standards".
+- **Resume facts:** frontend skills list "ReactJS, Redux, React Query, **Material UI, Storybook**". OptumRx: "Built the ReactJS application from the ground up and established a micro-frontend architecture", leading 8–10 engineers on an app serving 750K+ users. Also "Established engineering standards around testing, CI/CD, code quality, and deployment practices."
 - **How to talk about it:** an MUI theme as the base of the app's look (palette, typography, component defaults), shared components developed and documented in Storybook, and consistency across micro-frontends through a shared theme and shared dependencies. *[confirm: was there a separate design-system package or a shared folder, who owned it, Figma alignment with designers, theme structure, which components were wrapped, Storybook usage (docs only, interaction tests, visual regression, a11y addon), how MUI versions were kept aligned across MFEs, WCAG target]*
 - **Talking points:**
     - "I theme MUI centrally with tokens, component defaults and overrides, so feature teams don't restyle components locally."

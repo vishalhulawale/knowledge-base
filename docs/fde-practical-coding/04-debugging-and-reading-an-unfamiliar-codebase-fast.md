@@ -251,7 +251,7 @@ def test_day_is_utc_not_local():
     What the failures look like along the way, and what they tell you:
 
     - Before any fix: test 1 returns `{}`. One row in, nothing counted: the row is skipped (`[1:]`).
-    - After removing `[1:]`: test 1 passes, but tests 2–4 report `{'2026-03-02': 3}`. **A count that grows across tests** is the fingerprint of shared mutable state: the default `{}` is evaluated once, when the function is defined (Python FAQ: "Why are default values shared between objects?").
+    - After removing `[1:]`: test 1 passes, but tests 2 and 3 report `{'2026-03-02': 3}`, and test 4 shows the leaked count plus a new key: `{'2026-03-02': 3, '2026-03-03': 1}`. **A count that grows across tests** is the fingerprint of shared mutable state: the default `{}` is evaluated once, when the function is defined (Python FAQ: "Why are default values shared between objects?").
     - After fixing the default: test 3 fails with `{}`. `timedelta(days=1, minutes=10).seconds` is `600`, so a 24-hour delivery looks like 10 minutes.
     - After `total_seconds()`: test 4 reports `{'2026-03-03': 1}`. The string slice takes the *local* date from the offset timestamp.
     - Siblings to mention: any other `.seconds`, any other `[:10]` date slicing, any other mutable defaults (`grep -n "=\[\]\|={}" -r .`).

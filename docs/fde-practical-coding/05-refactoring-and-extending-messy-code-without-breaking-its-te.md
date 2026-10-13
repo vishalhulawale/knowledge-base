@@ -287,7 +287,8 @@ def de(sub, **flags):
 @pytest.mark.parametrize("order, expected", [
     (de(50), 62), (de(50, express=True), 72),
     (de(80), 92),                       # threshold is "over 80", so 80 still pays
-    (de(80.01), 80.01), (de(90, express=True), 100),
+    (de(80.01), 80.01),
+    (de(90, express=True), 100),        # ASSUMPTION: CA-style rule, express over 80 pays 22 - 12; confirm
     (de(90, coupon="SHIP5"), 90),       # coupon never makes shipping negative
 ])
 def test_germany(order, expected):
@@ -297,6 +298,7 @@ def test_germany(order, expected):
 Final state: the 2 original tests, the 84-case golden master and 6 new DE tests all pass. Things to point out:
 
 - The quirks have **names** now (`free_express_too`, the CA comment). The next engineer can see them and the product owner can decide.
+- DE express over 80 is an **assumption**: `fee()` applies the CA "pay the difference" rule to any country, so it costs 10, but the spec only promises free *standard* shipping. Ask aloud: "Should DE express over 80 pay 22 or 10?" and change the test to match the answer.
 - Adding France next sprint is one line plus its tests.
 - `calc` still uses floats because the original did; changing money to `Decimal` is a **behaviour change** (rounding could differ) and belongs in a separate, agreed step. Mention it; don't sneak it in.
 

@@ -56,7 +56,7 @@ flowchart TD
 - Choose the key from **access patterns and retention**, not just size. Every hot query should filter by it.
 - Keep partition counts reasonable (tens to a few thousand); create future partitions ahead of time (cron job or `pg_partman`), and keep a `DEFAULT` partition for safety.
 - Indexes defined on the parent are created on every partition. Global uniqueness across partitions is only possible when the partition key is part of the constraint.
-- `DETACH PARTITION … CONCURRENTLY` (PostgreSQL 14+) detaches without blocking queries on the parent.
+- `DETACH PARTITION … CONCURRENTLY` (PostgreSQL 14+) detaches without blocking queries on the parent, but it can't run inside a transaction block and isn't allowed when the table has a `DEFAULT` partition; with a default, use a plain `DETACH PARTITION` (brief `ACCESS EXCLUSIVE` lock on the parent).
 
 ### Partitioning vs sharding
 
@@ -200,7 +200,8 @@ CREATE TABLE claim_event_default PARTITION OF claim_event DEFAULT;
 CREATE INDEX ON claim_event (member_id, created_at);   -- created on every partition
 
 -- Retention: instant, no bloat
-ALTER TABLE claim_event DETACH PARTITION claim_event_2024_09 CONCURRENTLY;
+-- (no CONCURRENTLY here: PostgreSQL rejects it when the table has a DEFAULT partition)
+ALTER TABLE claim_event DETACH PARTITION claim_event_2024_09;
 DROP TABLE claim_event_2024_09;                        -- or archive it to cold storage first
 ```
 
@@ -358,7 +359,7 @@ DROP TABLE claim_event_2024_09;                        -- or archive it to cold 
 | Partitioning | RANGE / LIST / HASH; parent holds no rows; DEFAULT partition |
 | Pruning | Only when queries filter on the key (Feb query → Feb partition) |
 | Constraints | Unique/PK must include the partition key |
-| Retention | `DETACH PARTITION … CONCURRENTLY` + `DROP` (~10 ms) |
+| Retention | `DETACH PARTITION` + `DROP` (~10 ms); `CONCURRENTLY` only without a DEFAULT partition, outside a transaction |
 | Sharding | Across servers (Citus); partitioning is within one |
 | Streaming replication | WAL to read-only standbys; `pg_basebackup -R`; monitor `pg_stat_replication` |
 | Lag | Async: 198/200 immediate reads missed; bulk insert → 30 MB behind |

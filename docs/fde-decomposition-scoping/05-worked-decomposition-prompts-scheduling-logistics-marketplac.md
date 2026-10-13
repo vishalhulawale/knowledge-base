@@ -11,7 +11,7 @@ tags: [fde-decomposition-scoping, P0]
     - Each archetype has one **core algorithm or rule** that carries the decision: interval overlap, greedy assignment under capacity, filter-then-score matching, metrics over an event log. Build that first; it's the Must.
     - Each also has a **natural seam**: constraints as a list of functions (scheduling), a cost function (logistics), a scoring function plus a state machine (marketplace), KPI definitions as data (dashboard). Interviewer twists almost always land on that seam.
     - Hard constraints **filter**; soft preferences **score**. Mixing them is the most common modelling bug in matching and scheduling prompts.
-    - Drill one archetype a day against a 45-minute timer: frame in 5–8 minutes, skeleton by minute 15, core rule by 35, twist by 50.
+    - Drill one archetype a day against a 45-minute timer: frame in 5–8 minutes, skeleton by minute 15, core rule by 30, twist by 40, summary at 45.
 
 ## Why it matters
 
