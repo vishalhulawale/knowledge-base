@@ -272,7 +272,7 @@ class OrdersClient:
                     raise
                 delay = self._backoff(attempt)
             else:
-                if r.status_code == 401 and not refreshed:
+                if r.status_code == 401 and not refreshed and attempt < self.max_attempts - 1:
                     self.tokens.get(force=True)   # token revoked/rotated early: refresh ONCE
                     refreshed = True
                     continue
@@ -327,7 +327,7 @@ late = [o["id"] for o in client.iter_orders(status="late")]
 Points worth saying aloud as you write it:
 
 - "Retries live in **one** method so the policy is in one place and I can't accidentally nest them."
-- "The 401 refresh uses up one attempt, and it can happen only once."
+- "The 401 refresh uses up one attempt and can happen only once. If the 401 arrives on the last attempt there is nothing left to retry, so it surfaces as an `ApiError(401)`."
 - "A retried page request repeats the **same cursor**, so a 429 can't skip a page."
 - "For a refund, the idempotency key is created **once per logical refund**, outside the retry loop. If the caller has a business identity, a deterministic key like `refund-{order_id}-{n}` is even better, because it survives a process restart."
 

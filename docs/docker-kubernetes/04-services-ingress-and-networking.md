@@ -81,7 +81,7 @@ Measured:
 | LoadBalancer | External (cloud LB) | L4 exposure (NLB / Azure LB). One LB per Service costs money |
 | ExternalName | Inside (CNAME) | Alias an external host (managed DB, legacy service) |
 
-Useful fields: `sessionAffinity: ClientIP`, `internalTrafficPolicy: Local` and `externalTrafficPolicy: Local` (keep traffic on the node, preserving the client IP, at the risk of uneven spread), `trafficDistribution: PreferClose` (topology-aware routing, beta), and `publishNotReadyAddresses` for StatefulSet peer discovery.
+Useful fields: `sessionAffinity: ClientIP`, `internalTrafficPolicy: Local` and `externalTrafficPolicy: Local` (keep traffic on the node, preserving the client IP, at the risk of uneven spread), `trafficDistribution: PreferClose` (topology-aware routing, GA in 1.33), and `publishNotReadyAddresses` for StatefulSet peer discovery.
 
 ### kube-proxy and the data path
 

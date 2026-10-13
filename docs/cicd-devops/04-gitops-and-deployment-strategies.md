@@ -141,7 +141,7 @@ Git must not contain plain secrets. Options: **External Secrets Operator** (Git 
     # secrets via ExternalSecret -> AWS Secrets Manager; nothing sensitive in Git
     ```
 
-A canary with automated analysis using Argo Rollouts:
+A canary with automated analysis using Argo Rollouts. The community ingress-nginx controller was retired in March 2026 (no more fixes or security patches), so new setups route canary traffic through the Gateway API plugin or a service mesh; `trafficRouting.nginx` is only for clusters still on the legacy controller.
 
 ```yaml
 apiVersion: argoproj.io/v1alpha1
@@ -155,8 +155,11 @@ spec:
     canary:
       canaryService: claims-api-canary
       stableService: claims-api-stable
-      trafficRouting:
-        nginx: { stableIngress: claims-api }     # exact weights, not pod ratios
+      trafficRouting:                            # exact weights, not pod ratios
+        plugins:
+          argoproj-labs/gatewayAPI:              # Gateway API traffic-router plugin
+            httpRoute: claims-api                # HTTPRoute with stable + canary backends
+        # legacy: nginx: { stableIngress: claims-api }  (ingress-nginx, retired March 2026)
       analysis:
         templates: [ { templateName: error-rate } ]
         startingStep: 1                          # analysis runs in the background from step 1

@@ -124,7 +124,7 @@ flowchart TB
 
 ### The 90-second positioning pitch (structure)
 
-1. **Who:** "Lead engineer, 9+ years, healthcare, banking and cloud security, mostly in client-facing services."
+1. **Who:** "Lead engineer, 9+ years, healthcare, banking and cloud security, mostly in client-facing services." *[confirm: which banking project or client; the resume summary says Banking but no listed project shows it, so drop "banking" if there is no story behind it]*
 2. **FDE-shaped proof:** "On OptumRx Meteor I own the GraphQL integration layer in front of five upstream systems for an app with 750K+ users, plus the team of 8–10 that builds it."
 3. **The customer half:** "I run stakeholder communication, release and production support, so I'm used to working inside someone else's systems and constraints."
 4. **Why FDE now:** "I want to own outcomes end to end with the customer, and feed what I learn back into a product, rather than hand over at the end of a statement of work."

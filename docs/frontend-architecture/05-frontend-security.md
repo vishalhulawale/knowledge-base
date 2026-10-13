@@ -494,7 +494,7 @@ export async function api(path: string, init: RequestInit = {}) {
 2. [React docs: dangerouslySetInnerHTML](https://react.dev/reference/react-dom/components/common#dangerously-setting-the-inner-html) and [React 19 release notes](https://react.dev/blog/2024/12/05/react-19).
 3. [MDN: Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP), [web.dev: Mitigate XSS with a strict CSP](https://web.dev/articles/strict-csp) and [Trusted Types](https://web.dev/articles/trusted-types).
 4. Weichselbaum et al., *CSP Is Dead, Long Live CSP!* (ACM CCS 2016), on allowlist bypasses.
-5. [IETF draft: OAuth 2.0 for Browser-Based Applications](https://datatracker.ietf.org/doc/draft-ietf-oauth-browser-based-apps/), [RFC 9700: OAuth 2.0 Security Best Current Practice](https://www.rfc-editor.org/rfc/rfc9700) and [RFC 7636: PKCE](https://www.rfc-editor.org/rfc/rfc7636).
+5. [RFC 10017: OAuth 2.0 for Browser-Based Applications](https://datatracker.ietf.org/doc/rfc10017/), [RFC 9700: OAuth 2.0 Security Best Current Practice](https://www.rfc-editor.org/rfc/rfc9700) and [RFC 7636: PKCE](https://www.rfc-editor.org/rfc/rfc7636).
 6. [MDN: SameSite cookies](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#samesitesamesite-value) and [Chromium SameSite updates (Lax + POST)](https://www.chromium.org/updates/same-site/).
 7. [Spring Security reference: CSRF for single-page applications](https://docs.spring.io/spring-security/reference/servlet/exploits/csrf.html#csrf-integration-javascript-spa).
 8. [DOMPurify](https://github.com/cure53/DOMPurify).

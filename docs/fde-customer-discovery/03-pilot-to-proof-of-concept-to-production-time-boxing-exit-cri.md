@@ -116,7 +116,7 @@ flowchart LR
 ```
 *Notice that the impact is the pilot group's change minus the comparison group's change. A plain before/after comparison would credit the tool for a quiet month or blame it for a busy one.*
 
-![Animation: a line chart where the pilot group falls from 50 to 28 hours a day and the comparison group drifts to 44, so the effect is about 16, not the naive 22](images/03-comparison-group.svg){ loading=lazy }
+![Animation: a line chart where the 4-clerk pilot group falls from 17 to 8 hours a day and the comparison group drifts from 16 to 15, so the effect is about 8 (about 47%), not the naive 9](images/03-comparison-group.svg){ loading=lazy }
 *Subtract the purple line's drift before claiming the teal line's drop.*
 
 ### LLM-specific stage design
@@ -137,7 +137,7 @@ PILOT: Prior-auth intake assistant · 8 weeks · decision 2026-12-04 · decider:
 
 | Criterion                         | Baseline | Go threshold | Stop signal (by wk 4)   | Source            |
 |-----------------------------------|----------|--------------|-------------------------|-------------------|
-| Chasing hrs/day (pilot vs control)| 17 vs 16 | -50% vs ctrl | < -15% vs ctrl          | Case-system events|
+| Chasing hrs/day (pilot vs control)| 17 vs 16 | -40% vs ctrl | reduction < 15% vs ctrl | Case-system events|
 | Adoption (incomplete reqs via tool)| 0%      | >= 80%       | < 40%                   | Tool logs         |
 | Missing-doc recall / precision    | n/a      | 95% / 85%    | < 85% recall            | 300-case eval set |
 | Wrong-provider outreach           | 0.4%     | <= 0.4%      | > 1%                    | Weekly sample     |

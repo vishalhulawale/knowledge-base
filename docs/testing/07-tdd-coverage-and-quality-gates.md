@@ -78,8 +78,8 @@ A mutation tool makes small changes to your code (flip `>` to `>=`, replace a re
 
 ```mermaid
 flowchart LR
-    S["Source: if (days >= 7)"] --> M1["Mutant 1: days > 7"]
-    S --> M2["Mutant 2: days <= 7"]
+    S["Source: if (days <= 7)"] --> M1["Mutant 1: days < 7"]
+    S --> M2["Mutant 2: days > 7"]
     S --> M3["Mutant 3: return true"]
     M1 --> T{"Run covering tests"}
     M2 --> T

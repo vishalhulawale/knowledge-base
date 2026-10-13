@@ -68,24 +68,24 @@ sequenceDiagram
     participant SHP as Shipping
     O->>INV: ReserveStock(order 42)
     INV-->>O: Reserved
-    O->>PAY: Charge(order 42)  [pivot: point of no return]
+    O->>PAY: Charge(order 42)  (compensatable: refund)
     PAY-->>O: Charged
     O->>SHP: CreateShipment(order 42)
     SHP-->>O: FAILED (address invalid)
-    Note over O: steps after the pivot should be retriable,<br/>or we compensate backwards
+    Note over O: no pivot reached yet, so<br/>we compensate backwards
     O->>PAY: Refund(order 42)  (compensation)
     O->>INV: ReleaseStock(order 42)  (compensation)
     O->>O: Order → CANCELLED (notify customer)
 ```
 *Notice that compensations are **semantic undo** (refund, release), not rollbacks. Some effects can't be undone (an email was sent), so you order steps to put **compensatable steps first**, then the **pivot**, then **retriable steps** that are expected to eventually succeed.*
 
-![Animation: Reserve stock and the pivot Charge card succeed, Create shipment fails, then Refund and Release stock run in reverse order and the order ends cancelled](images/06-saga-compensation.svg){ loading=lazy }
+![Animation: Reserve stock and Charge card (both compensatable) succeed, Create shipment fails, then Refund and Release stock run in reverse order and the order ends cancelled](images/06-saga-compensation.svg){ loading=lazy }
 *Watch the direction change: once shipping fails, the saga walks back through the completed steps, newest first.*
 
 **Step types** (Richardson):
 
 - **Compensatable:** can be undone (reserve stock → release).
-- **Pivot:** the go/no-go point. After it, the saga must complete (charge the card).
+- **Pivot:** the go/no-go point. After it, the saga must complete, so it can't be compensated (e.g. capture the payment once shipment is validated).
 - **Retriable:** after the pivot, guaranteed to succeed eventually with retries (create shipment, send confirmation).
 
 ### Choreography vs orchestration
@@ -185,7 +185,8 @@ It's common in payments (authorise/capture/void) and booking (hold/confirm/relea
         public record Result(boolean success, String failedStep, List<String> compensated, boolean needsManualReview) {}
     }
 
-    // Usage: compensatable steps first, pivot (charge) next, retriable steps last.
+    // Usage: all three steps are compensatable. A pivot (e.g. capture payment) would come after them,
+    // followed by retriable steps that are never compensated.
     Saga.Result r = new Saga()
         .step("reserve", () -> inventory.reserve(orderId, items), () -> inventory.release(orderId))
         .step("charge",  () -> payments.charge(orderId, total, "order-" + orderId),   // idempotency key

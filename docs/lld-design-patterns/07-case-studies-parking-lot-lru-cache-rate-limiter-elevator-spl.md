@@ -180,7 +180,7 @@ All the code below compiles on Java 21 (verified). It shows the cores interviewe
 
 === "❌ Common mistake"
     ```java
-    // "LRU" with a list scan: O(n) get/put; and a rate limiter with a non-atomic check.
+    // "LRU" with a list scan: O(n) get/put.
     class SlowLru<K, V> {
         private final Map<K, V> map = new HashMap<>();
         private final List<K> order = new ArrayList<>();
@@ -271,7 +271,7 @@ public final class Elevator {
     public enum Direction { UP, DOWN, IDLE }
     private int floor;
     private Direction direction = Direction.IDLE;
-    private final TreeSet<Integer> stops = new TreeSet<>();
+    private final TreeSet<Integer> stops = new TreeSet<>();   // one set: every stop treated as a car call
 
     public Elevator(int startFloor) { this.floor = startFloor; }
 
@@ -299,6 +299,8 @@ public final class Elevator {
     }
 }
 ```
+
+This single-set version treats every stop as a car call, so from floor 3 going up with stops {5, 8, 6, 2} it stops at 5, 6 and 8, then 2. To serve a down hall call at 6 only on the downward sweep (as in the figure above), keep separate `upStops` and `downStops` sets and pick from the set that matches the current direction.
 
 Splitwise debt simplification (greedy):
 

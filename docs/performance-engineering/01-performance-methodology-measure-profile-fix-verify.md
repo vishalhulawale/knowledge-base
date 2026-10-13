@@ -11,7 +11,7 @@ tags: [performance-engineering, P1]
     - Start from a **number someone cares about**: "p99 of `POST /claims` under 400 ms at 300 req/s", not "make it faster". Averages hide the slow requests users feel; use percentiles.
     - **Never guess the bottleneck.** Use a method (RED per service, USE per resource, then drill down and profile) instead of the *streetlight anti-method* of running whatever tool you know.
     - **Amdahl's law**: the speed-up from a fix is capped by the share of time that part takes. Making a 5% step 10× faster saves under 5%. **Little's law** (`concurrency = throughput × latency`) sizes pools and explains queueing.
-    - Latency **explodes near saturation**: queueing time grows as `1 / (1 − utilisation)`, so a resource at 90% busy adds about 10× its service time in waiting. Plan to run below about 70–80%.
+    - Latency **explodes near saturation**: response time grows as `1 / (1 − utilisation)`, so at 90% busy a request takes about 10× its service time (about 9× of that is waiting). Plan for about 60–75% at peak.
 
 ## Why it matters
 
@@ -335,7 +335,7 @@ A recurring failure mode in incident reviews: a fix was applied under pressure, 
 ### Senior
 
 ??? question "Q7. Why does latency rise sharply before CPU reaches 100%?"
-    **Answer:** Queueing. As utilisation ρ rises, the chance an arriving request finds the resource busy rises, and waiting time grows roughly as 1/(1 − ρ): about 2× service time at 50%, 5× at 80%, 10× at 90%. Bursty arrivals make it worse and the tail rises first. Hence capacity targets of about 60–75% at peak, and alerts on saturation (queue length, pending connections) not just utilisation.
+    **Answer:** Queueing. As utilisation ρ rises, the chance an arriving request finds the resource busy rises, and time in the system grows roughly as 1/(1 − ρ): about 2× service time at 50%, 5× at 80%, 10× at 90%. Bursty arrivals make it worse and the tail rises first. Hence capacity targets of about 60–75% at peak, and alerts on saturation (queue length, pending connections) not just utilisation.
 
     **Interviewer listens for:** the queueing curve, burstiness, tail first, saturation as the leading indicator.
 

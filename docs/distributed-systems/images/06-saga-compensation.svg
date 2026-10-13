@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 396" role="img" aria-labelledby="t d" font-family="Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif">
 <title id="t">Saga compensation running backwards</title>
-<desc id="d">Animation of an orchestrated order saga. Reserve stock succeeds, then the pivot step Charge card succeeds, then Create shipment fails because the address is invalid. The saga then runs compensations in reverse order: Refund undoes the charge, then Release stock undoes the reservation, and the order ends as cancelled with the customer notified.</desc>
+<desc id="d">Animation of an orchestrated order saga. Reserve stock succeeds, then Charge card succeeds (both steps are compensatable, so no pivot has been passed), then Create shipment fails because the address is invalid. The saga then runs compensations in reverse order: Refund undoes the charge, then Release stock undoes the reservation, and the order ends as cancelled with the customer notified.</desc>
 <style>
 .card{fill:#f8fafc;stroke:#e2e8f0}.cv{fill:#f8fafc}
 .h{fill:#0f172a;font-size:20px;font-weight:700}
@@ -51,7 +51,7 @@
 
 <text class="h" x="28" y="40">Saga: a failed step runs compensations backwards</text>
 <text class="sub" x="28" y="62">Order 42. Each step commits locally; when shipping fails, earlier steps are undone in reverse.</text>
-<text class="sm tm b" x="140" y="108" text-anchor="middle">compensatable</text><text class="sm tm b" x="400" y="108" text-anchor="middle">pivot</text><text class="sm tm b" x="660" y="108" text-anchor="middle">after the pivot</text>
+<text class="sm tm b" x="140" y="108" text-anchor="middle">compensatable</text><text class="sm tm b" x="400" y="108" text-anchor="middle">compensatable: refund</text><text class="sm tm b" x="660" y="108" text-anchor="middle">compensatable: cancel</text>
 <!-- forward base -->
 <rect class="slot" x="40" y="118" width="200" height="56" rx="10"/><text class="lbl" x="140" y="151" text-anchor="middle">Reserve stock</text>
 <rect class="slot" x="300" y="118" width="200" height="56" rx="10" stroke-width="2.5"/><text class="lbl" x="400" y="151" text-anchor="middle">Charge card</text>

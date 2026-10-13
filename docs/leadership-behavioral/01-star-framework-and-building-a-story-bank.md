@@ -69,9 +69,9 @@ flowchart TB
         S3["S3: Kafka retry/DLQ workflow design (OptumRx)"]
         S4["S4: Engineering standards rollout:<br/>testing, CI/CD, code quality (OptumRx)"]
         S5["S5: Mentoring 5+ engineers (OptumRx)"]
-        S6["S6: Terraform automation +<br/>AWS security controls (Deloitte)"]
-        S7["S7: Key rotation + HSM integration (CCKM)"]
-        S8["S8: JWT/SSO end-to-end +<br/>monolith migration (Johnson Controls)"]
+        S8["S8: Terraform automation +<br/>AWS security controls (Deloitte)"]
+        S9["S9: Key rotation + HSM integration (CCKM)"]
+        S10["S10: JWT/SSO end-to-end +<br/>monolith migration (Johnson Controls)"]
     end
     subgraph Competencies
         C1["Ownership / delivery"]
@@ -91,9 +91,9 @@ flowchart TB
     S4 --> C3
     S4 --> C4
     S5 --> C3
-    S6 --> C1
-    S7 --> C2
     S8 --> C1
+    S9 --> C2
+    S10 --> C1
 ```
 *Notice that every story connects to several competencies, so you need fewer stories than questions. The stories come from real resume bullets. The details (numbers, conflicts, mistakes) are yours to fill in.*
 

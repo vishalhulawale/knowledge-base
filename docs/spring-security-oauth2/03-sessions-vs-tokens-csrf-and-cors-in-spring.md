@@ -276,7 +276,7 @@ await fetch("/api/orders", {
 
 - **Real CSRF incidents.** The 2008 Princeton paper by Zeller and Felten showed working CSRF attacks against ING Direct (moving money out of accounts), YouTube, MetaFilter and The New York Times. It is the reason frameworks now ship CSRF protection switched on.
 - **Browser defaults changed the picture.** Chrome made `SameSite=Lax` the default for cookies without the attribute in 2020. That removed a large class of blind CSRF, but frameworks and OWASP still treat tokens as the main control.
-- **BFF pattern for SPAs.** The IETF draft "OAuth 2.0 for Browser-Based Applications" recommends a backend for frontend that keeps tokens out of the browser. Spring Cloud Gateway with `oauth2Login` and the `TokenRelay` filter is a common way to build this.
+- **BFF pattern for SPAs.** RFC 10017, "OAuth 2.0 for Browser-Based Applications", recommends a backend for frontend that keeps tokens out of the browser. Spring Cloud Gateway with `oauth2Login` and the `TokenRelay` filter is a common way to build this.
 - **Banking and healthcare.** These domains usually require short idle timeouts and immediate logout or revocation. PCI DSS v4.0, for example, requires re-authentication after 15 minutes of inactivity. Server-side sessions, or short-lived access tokens with a server-side refresh token, satisfy this much more easily than long-lived JWTs in the browser.
 - **API gateways.** Many organisations handle CORS once at the gateway or ingress. Then the services must *not* add CORS headers again, or the browser sees a duplicated `Access-Control-Allow-Origin` and rejects the response.
 
@@ -489,5 +489,5 @@ await fetch("/api/orders", {
 4. [OWASP Cross-Site Request Forgery Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html): synchronizer token, double-submit cookie, `SameSite` and Fetch Metadata as layered defences.
 5. [MDN: Cross-Origin Resource Sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS): simple vs preflighted requests, credentialed requests, header reference, `Max-Age` caps.
 6. [MDN: Set-Cookie, SameSite attribute](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Set-Cookie#samesitesamesite-value): `Strict`, `Lax`, `None` semantics and cookie prefixes.
-7. [IETF draft: OAuth 2.0 for Browser-Based Applications](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps): BFF pattern and token storage guidance for SPAs.
+7. [RFC 10017: OAuth 2.0 for Browser-Based Applications](https://datatracker.ietf.org/doc/rfc10017/): BFF pattern and token storage guidance for SPAs.
 8. [Zeller and Felten, "Cross-Site Request Forgeries: Exploitation and Prevention" (Princeton, 2008), announcement with link to the paper](https://freedom-to-tinker.com/2008/09/29/popular-websites-vulnerable-cross-site-request-forgery-attacks/): the ING Direct, YouTube and New York Times CSRF cases.

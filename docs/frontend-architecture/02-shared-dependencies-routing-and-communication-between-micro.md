@@ -353,5 +353,5 @@ export default function ClaimsApp({ basename }: { basename: string }) {
 4. [single-spa: Applications, activeWhen and utility modules](https://single-spa.js.org/docs/module-types).
 5. [React Router: createBrowserRouter and basename](https://reactrouter.com/start/data/routing).
 6. [MDN: CustomEvent](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent) and [BroadcastChannel](https://developer.mozilla.org/en-US/docs/Web/API/BroadcastChannel).
-7. [OAuth 2.0 for Browser-Based Apps (IETF draft, BFF pattern)](https://datatracker.ietf.org/doc/draft-ietf-oauth-browser-based-apps/).
+7. [RFC 10017: OAuth 2.0 for Browser-Based Applications (BFF pattern)](https://datatracker.ietf.org/doc/rfc10017/).
 8. Demonstrations on this page: webpack 5.111 Module Federation with React 19 in headless Chromium, run while writing this page (loose vs strict singleton version mismatch, custom event communication).

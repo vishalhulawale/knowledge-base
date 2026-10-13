@@ -348,5 +348,5 @@ KeyResolver userKeyResolver() {
 3. [Spring Cloud Gateway reference](https://docs.spring.io/spring-cloud-gateway/reference/index.html): WebFlux and Web MVC servers, route predicates and filters, RequestRateLimiter, CircuitBreaker, TokenRelay.
 4. [Amazon API Gateway developer guide](https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html): managed gateway features, throttling, usage plans.
 5. [GraphQL DataLoader](https://github.com/graphql/dataloader): batching and caching per request.
-6. [OAuth 2.0 for Browser-Based Applications (IETF draft)](https://datatracker.ietf.org/doc/draft-ietf-oauth-browser-based-apps/): BFF as the recommended pattern for browser apps.
+6. [RFC 10017: OAuth 2.0 for Browser-Based Applications](https://datatracker.ietf.org/doc/rfc10017/): BFF as the recommended pattern for browser apps.
 7. Chris Richardson, *Microservices Patterns* (Manning, 2018): API gateway and API composition.

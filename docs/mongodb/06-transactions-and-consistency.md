@@ -243,7 +243,7 @@ try (ClientSession session = client.startSession()) {
 
 ## How this connects to my experience
 
-- **Where I used it:** not ★. MongoDB microservices at OptumRx, alongside Kafka-based async processing with retries and DLQ. The same consistency concerns (atomic state changes, idempotent retries, publishing events reliably) apply. *[confirm whether you used multi-document transactions, an outbox, or relied on single-document atomicity and idempotent Kafka consumers]*
+- **Where I used it:** not ★. MongoDB microservices at OptumRx, alongside Kafka-based event-driven workflows with retry and DLQ handling. The same consistency concerns (atomic state changes, idempotent retries, publishing events reliably) apply. *[confirm whether you used multi-document transactions, an outbox, or relied on single-document atomicity and idempotent Kafka consumers]*
 - **Talking points:**
     - "I model data so the invariant fits in one document where possible. Conditional updates give check-and-set without transactions."
     - "When an invariant spans documents, I use a transaction with the callback API for retries, keep it short, and never put side effects inside. Events go through an outbox."

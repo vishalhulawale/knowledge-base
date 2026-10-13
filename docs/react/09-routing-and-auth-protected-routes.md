@@ -376,5 +376,5 @@ function safeReturnTo(raw: string | null): string {
 3. [React Router: Upgrading from v7 to v8](https://reactrouter.com/upgrading/v7): requirements, removed `react-router-dom`, future flags.
 4. [React Router: Data mode route object (loader, action, lazy)](https://reactrouter.com/start/data/route-object).
 5. [React Router: Error boundaries](https://reactrouter.com/how-to/error-boundary).
-6. [OAuth 2.0 for Browser-Based Applications (IETF draft)](https://datatracker.ietf.org/doc/draft-ietf-oauth-browser-based-apps/): BFF and token storage guidance.
+6. [RFC 10017: OAuth 2.0 for Browser-Based Applications](https://datatracker.ietf.org/doc/rfc10017/): BFF and token storage guidance.
 7. [OWASP: Unvalidated Redirects and Forwards](https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html).

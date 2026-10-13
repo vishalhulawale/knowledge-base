@@ -75,7 +75,7 @@ A demo is a story with a proof in the middle. Structure:
 2. **Persona and "before":** "This is Priya's queue at 9 a.m." Show the real pain, briefly.
 3. **The "after" moment:** the one interaction that makes them lean forward. Get there within the first few minutes.
 4. **Proof:** their data (or realistic data if they can't share yet), the eval result, the edge case handled well, and one case where it says "I'm not sure" (that builds more trust than a flawless run).
-5. **Impact and ask:** "If this holds for all 12 clerks, that's about 50 hours a day. We propose an 8-week pilot with this team."
+5. **Impact and ask:** "If this holds for all 12 clerks, that's about 24 hours a day saved. We propose an 8-week pilot with this team."
 
 Demo rules:
 
@@ -146,7 +146,7 @@ DEMO: Prior-auth intake assistant · audience: VP UM, COO delegate · 12 min
 5:00  Proof       Eval on 300 of their past cases: recall 96%, precision 88%.
                    Pilot plan with control group.
 7:00  Safety      Runs in their Azure tenant; no auto-denials; audit log.
-8:00  Impact      50 h/day at full roll-out; cost per request ~$1.40 vs ~$3.10.
+8:00  Impact      ~24 h/day saved at full roll-out; cost per request ~$1.40 vs ~$3.10.
                    Assumptions on one slide.
 9:00  Ask         "Approve an 8-week pilot with 4 clerks; decision on Dec 4.
                    We need a security contact by Friday."
@@ -160,7 +160,7 @@ FALLBACK: recorded run (same path) on laptop + screenshots in the deck.
 STATUS — Intake assistant pilot · Week 5 of 8 · 2026-11-06
 Headline: AT RISK (improving). Results on track; security review is the risk.
 
-Metric vs target     Chasing hours, pilot vs control: -41% (target -50% by wk 8)
+Metric vs target     Chasing hours, pilot vs control: -41% (target -40% by wk 8)
                      Adoption: 78% of incomplete requests (target 80%)
                      Guardrails: 0 auto-denials; outreach errors 0.3% (base 0.4%)
 Top risks            1. Security review not started by customer IT -> production
@@ -239,7 +239,7 @@ Next week            Fix top-2 failure modes from QA sample; prep decision deck.
     - "With architects I went deep on GraphQL schema design, caching and Kafka retry/DLQ trade-offs; with client stakeholders I talked about what users would see and when." *[confirm example]*
     - Executive exposure: *[confirm whether you presented to client directors or VPs; if not, say so and point to sprint reviews and release communication]*.
     - Prepare one 30-second and one 3-minute explanation of the GraphQL Consumer Service (integration layer between 5 upstreams and multiple consumers) for an executive and for an engineer.
-- **Likely follow-up chain:** "Explain your current system to me as if I were the CEO." → "Now as if I were a staff engineer." → "How do you handle a question you can't answer in a client meeting?" → "Tell me about a demo that went wrong." Answer: business value of serving 750K+ users reliably → schema federation, caching and DLQ details → "I don't know, here's how I'll find out by X" → a real story *[confirm]* with the fallback and the follow-up.
+- **Likely follow-up chain:** "Explain your current system to me as if I were the CEO." → "Now as if I were a staff engineer." → "How do you handle a question you can't answer in a client meeting?" → "Tell me about a demo that went wrong." Answer: business value of serving 750K+ users reliably → schema design, caching and DLQ details → "I don't know, here's how I'll find out by X" → a real story *[confirm]* with the fallback and the follow-up.
 
 ## Interview questions
 

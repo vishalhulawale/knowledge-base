@@ -8,7 +8,7 @@ tags: [fde-customer-discovery, P0]
 
 !!! abstract "Key takeaways"
     - **A scope brief is a shared understanding written down**, one to two pages, signed by the sponsor before building starts. It is not a contract (that's the SOW). It is what you point at when scope starts to drift.
-    - **Success criteria are measurable, baselined and owned:** "reduce incomplete-request chasing from ~50 to ≤25 staff-hours/day in the pilot team by week 8, measured from case-system timestamps". Add **guardrails** (what must not get worse) and an **eval threshold** for LLM features.
+    - **Success criteria are measurable, baselined and owned:** "reduce incomplete-request chasing from ~17 to ≤8 staff-hours/day in the 4-clerk pilot team by week 8, measured from case-system timestamps". Add **guardrails** (what must not get worse) and an **eval threshold** for LLM features.
     - **Assumptions are risks with an owner and a date.** "Customer provides a de-identified sample of 500 cases by week 1 (owner: data lead)". When one breaks, the plan changes, and everyone already agreed that it would.
     - **Out of scope is the most valuable section.** List the things people will ask for ("letter generation", "mobile", "other regions") with "not in this phase" and where they'll go instead.
     - **Fix time, flex scope.** Time-box the engagement, rank the scope (must / should / won't), name the decision-maker, and write down how changes get approved.

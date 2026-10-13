@@ -247,9 +247,9 @@ Not ★. Position it through the read-model and audit needs in the projects.
 ??? question "Q3. Are CQRS and event sourcing the same thing?"
     **Answer:** No. CQRS can use a normal database on the write side. Event sourcing usually needs CQRS because querying event streams directly is impractical.
 
-    **Common wrong answer:** treating them as one pattern.
-
     **Interviewer listens for:** independent patterns, ES usually needs CQRS, CQRS without ES is common.
+
+    **Common wrong answer:** "We use CQRS, so we are event-sourced." They are separate patterns: CQRS splits reads from writes, event sourcing is how state is stored.
 
 ### Intermediate
 
